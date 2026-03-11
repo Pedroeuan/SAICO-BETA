@@ -406,8 +406,6 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
         $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
-        
-        
         // Guardar en el modelo
         $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
         $Grupo_Juntas_Detalles_Re->save();
@@ -436,51 +434,88 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
 
-        /* Fotos y Comentarios */
-        $imageCount = $request->input('imageCount'); // Número de imágenes
-        if($imageCount>=1)
-        {
-        $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
+        /* Imagenes */
+        $imagenesGuardadas = [];
 
-        foreach ($request->images_base64 as $index => $base64Image) {
-            $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-            $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
-            // Decodificar Base64
-            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-            
-            // Crear un nombre único para la imagen
-            $imageName = 'imagen_' . time() . '_' . $index . '.png';
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
 
-            // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
-            
-            // Guardar la imagen en la ruta personalizada
-            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+        /* IMAGENES REFERENCIA 1 */
+        if ($request->has('ref1_images_old')) {
 
-            // Guardar la ruta en el array con su comentario correspondiente
-            $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                //'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
-                //'una_hoja' => $request->imagen_hoja[$index] ?? 0, // 👈 AQUÍ
-            ];
+            foreach ($request->ref1_images_old as $index => $oldImage) {
+
+                $base64Image = $request->ref1_images_base64[$index] ?? null;
+
+                if ($base64Image) {
+
+                    // eliminar imagen anterior
+                    Storage::delete(str_replace('storage/', 'public/', $oldImage));
+
+                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+
+                    $imageName = 'ref1_' . uniqid() . '.png';
+
+                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+                    $imagenesGuardadas[] = [
+                        'tipo' => 'ref1',
+                        'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                    ];
+
+                } else {
+
+                    // mantener imagen anterior
+                    $imagenesGuardadas[] = [
+                        'tipo' => 'ref1',
+                        'ruta' => $oldImage,
+                    ];
+                }
+            }
         }
 
-        // Convertir el array de fotos a JSON
-        $Fotos = json_encode($imagenesGuardadas); 
 
-        // Guardar en la base de datos
-        $Fotos_Reportes->idReportes = $idReportes;
-        $Fotos_Reportes->Fotos_Reportes = $Fotos;
-        $Fotos_Reportes->save();
-    }else{
-        $imagenesGuardadas = [];
+        /* IMAGENES REFERENCIA 2 */
+        if ($request->has('ref2_images_old')) {
+
+            foreach ($request->ref2_images_old as $index => $oldImage) {
+
+                $base64Image = $request->ref2_images_base64[$index] ?? null;
+
+                if ($base64Image) {
+
+                    Storage::delete(str_replace('storage/', 'public/', $oldImage));
+
+                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+
+                    $imageName = 'ref2_' . uniqid() . '.png';
+
+                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+                    $imagenesGuardadas[] = [
+                        'tipo' => 'ref2',
+                        'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                    ];
+
+                } else {
+
+                    $imagenesGuardadas[] = [
+                        'tipo' => 'ref2',
+                        'ruta' => $oldImage,
+                    ];
+                }
+            }
+        }
+
+
         $Fotos = json_encode($imagenesGuardadas);
-        $Fotos = json_encode($imagenesGuardadas); 
+
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
-    }
+
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
@@ -540,23 +575,39 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Detalles_Generales.Folio' => 'nullable|string',
             'Detalles_Generales.Equipo' => 'nullable|string',
             'Detalles_Generales.Partida' => 'nullable|string',
+            'Detalles_Generales.Ubicacion' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.H_Inspeccion' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Stndr_refe' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.NS_EQUIPO' => 'nullable|string',
+
             'Datos_Equipo.FEC_CAL' => 'nullable|string',
             'Datos_Equipo.CER_POR' => 'nullable|string',
             'Datos_Equipo.RAN_MED' => 'nullable|string',
+
+            'Datos_Equipo.Stndr_refe1' => 'nullable|string',
+            'Datos_Equipo.termograma1' => 'nullable|string',
+            'Datos_Equipo.emisividad1' => 'nullable|string',
+
+            'Datos_Equipo.Stndr_refe2' => 'nullable|string',
+            'Datos_Equipo.termograma2' => 'nullable|string',
+            'Datos_Equipo.emisividad2' => 'nullable|string',
+
             'Datos_Equipo.Observaciones' => 'nullable|string',
+
             'Datos_Equipo.voltaje' => 'nullable|string',
             'Datos_Equipo.CARGA_AMP' => 'nullable|string',
+            'Datos_Equipo.Recomendaciones' => 'nullable|string',
+
+            'Datos_Equipo.severidad' => 'nullable|string',
+            'Datos_Equipo.Nota' => 'nullable|string',
             'Datos_Equipo.Recomendaciones' => 'nullable|string',
 
             //Validar el campo NumFirmas
@@ -570,7 +621,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
@@ -640,7 +691,87 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
+        /* Imágenes */
+        $fotosActuales = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
+        $nuevasImagenes = [];
 
+        if ($request->has('ref1_images_base64')) {
+
+            foreach ($request->ref1_images_base64 as $index => $base64Image) {
+
+                if ($base64Image) {
+
+                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+
+                    $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                    $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+                    $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+
+                    $imageName = 'ref1_' . time() . '_' . $index . '.png';
+
+                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+                    $nuevasImagenes[] = [
+                        'tipo' => 'ref1',
+                        'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}"
+                    ];
+
+                } else {
+
+                    if(isset($request->ref1_images_old[$index])){
+
+                        $nuevasImagenes[] = [
+                            'tipo' => 'ref1',
+                            'ruta' => $request->ref1_images_old[$index]
+                        ];
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        if ($request->has('ref2_images_base64')) {
+
+            foreach ($request->ref2_images_base64 as $index => $base64Image) {
+
+                if ($base64Image) {
+
+                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+
+                    $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+                    $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+                    $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+
+                    $imageName = 'ref2_' . time() . '_' . $index . '.png';
+
+                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+
+                    $nuevasImagenes[] = [
+                        'tipo' => 'ref2',
+                        'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}"
+                    ];
+
+                } else {
+
+                    if(isset($request->ref2_images_old[$index])){
+
+                        $nuevasImagenes[] = [
+                            'tipo' => 'ref2',
+                            'ruta' => $request->ref2_images_old[$index]
+                        ];
+
+                    }
+
+                }
+
+            }
+
+        }
         /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
@@ -673,130 +804,6 @@ class FOR_01_PRO_INS_16Controller extends Controller
                 'Firmas' => $Firmas4
             ]);
         } 
-
-        /* Fotos y Comentarios */
-        // Obtener los valores necesarios para la ruta personalizada
-        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-        $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
-
-        // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
-
-        // Obtener las imágenes existentes
-        $existingImages = $request->input('existing_images', []);
-        $comments = $request->input('comments', []);
-        $imagesBase64 = $request->input('images_base64', []);
-        $deletedImages = $request->input('deleted_images', []);
-
-        //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
-
-        // **1️⃣ Eliminar imágenes marcadas para borrar**
-        foreach ($deletedImages as $index) {
-            if (isset($existingImages[$index])) {
-                $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
-
-                // Eliminar del almacenamiento
-                if (Storage::exists($rutaImagen)) {
-                    Storage::delete($rutaImagen);
-                    Log::info("Imagen eliminada: {$rutaImagen}");
-                } else {
-                    //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
-                }
-
-                // Eliminar de `existingImages` para que no se guarde en la BD
-                unset($existingImages[$index]);
-            }
-        }
-
-        // **Reiniciar el array antes de procesar imágenes**
-        $imagenesGuardadas = [];
-
-        // **Evitar duplicados en las rutas ya guardadas**
-        $rutasGuardadas = [];
-
-        // **2️⃣ Procesar imágenes existentes**
-        foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
-                // **Reemplazo de imagen existente**
-                $newImage = $request->file("replace_images.$index");
-
-                // Eliminar imagen anterior si existe
-                $rutaImagenPublic = str_replace('storage/', 'public/', $ruta);
-                if (Storage::exists($rutaImagenPublic)) {
-                    Storage::delete($rutaImagenPublic);
-                }
-
-                // Guardar la nueva imagen
-                $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
-                $path = $newImage->storeAs($rutaCarpeta, $imageName);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
-                }
-            } elseif (!empty($imagesBase64[$index])) {
-                // **Procesar imágenes en Base64**
-                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imagesBase64[$index]));
-                $imageName = 'imagen_' . time() . '_' . $index . '.png';
-                $path = "{$rutaCarpeta}/{$imageName}";
-
-                // Guardar la imagen
-                Storage::put($path, $image);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva;
-                }
-            } else {
-                // **Mantener la imagen existente**
-                if (!in_array($ruta, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $ruta,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $ruta;
-                }
-            }
-        }
-
-        // **3️⃣ Procesar nuevas imágenes Base64**
-        foreach ($imagesBase64 as $index => $base64Image) {
-            if (!empty($base64Image)) {
-                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-                $imageName = 'imagen_' . time() . '_' . $index . '.png';
-                $path = "{$rutaCarpeta}/{$imageName}";
-
-                // Guardar la imagen en el almacenamiento
-                Storage::put($path, $image);
-                $rutaNueva = str_replace('public/', 'storage/', $path);
-
-                // Verificar si ya existe en el array
-                if (!in_array($rutaNueva, $rutasGuardadas)) {
-                    $imagenesGuardadas[] = [
-                        'ruta' => $rutaNueva,
-                        'comentario' => $comments[$index] ?? '',
-                    ];
-                    $rutasGuardadas[] = $rutaNueva;
-                }
-            }
-        }
-
-        // **4️⃣ Guardar las imágenes actualizadas en la BD**
-        $Fotos_Reportes->update([
-            'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)), // Se usa array reindexado
-        ]);
-
-        //Log::info('Imágenes finales guardadas en BD:', ['imagenesGuardadas' => $imagenesGuardadas]);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];

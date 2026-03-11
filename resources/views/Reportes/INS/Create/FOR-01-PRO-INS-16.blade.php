@@ -359,10 +359,10 @@
                         </div>
                     </div>
 
-                        <!--IMAGENES CON COMENTARIOS-->
+                        <!--IMAGENES 1-->
                         <div class="form-group">
-                            <label for="imageCount">Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
+                            <label>Número de imágenes a subir:</label>
+                            <select class="form-control" id="imageCount1" name="imageCount1">
                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                 @for ($i = 1; $i <= 2; $i++)
                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -370,7 +370,7 @@
                             </select>
                         </div>
 
-                        <div id="imageFieldsContainer" class="row">
+                        <div id="imageFieldsContainer1" class="row"></div>
                             <!-- Aquí se agregarán dinámicamente los campos -->
                         </div>
 
@@ -431,7 +431,47 @@
                             </div>
                         </div>
                         
-                    
+                        <!--IMAGENES 2-->
+                        <div class="form-group">
+                            <label>Número de imágenes a subir:</label>
+                            <select class="form-control" id="imageCount2" name="imageCount2">
+                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
+                                @for ($i = 1; $i <= 2; $i++)
+                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div id="imageFieldsContainer2" class="row"></div>
+                            <!-- Aquí se agregarán dinámicamente los campos -->
+                        </div>
+
+                        <!-- Modal para recortar la imagen -->
+                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="img-container">
+                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label>Termograma</label>
@@ -447,29 +487,6 @@
                     <br>
                     <br>
                     <br>
-                    <div class="modal fade" id="cropperModal">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-
-                                <div class="modal-header">
-                                    <h5>Recortar Imagen</h5>
-                                </div>
-
-                                <div class="modal-body">
-                                    <img id="cropperImage" style="max-width:100%">
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                    <button type="button" class="btn btn-info" id="rotateLeft">⟲ Rotar -90°</button>
-                                    <button type="button" class="btn btn-info" id="rotateRight">⟳ Rotar +90°</button>
-                                    <button type="button" class="btn btn-primary" id="cropImage">Recortar y Guardar</button>
-                                    <button type="button" class="btn btn-success" id="saveImage">Guardar Sin Recortar</button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 

@@ -310,7 +310,7 @@
                                 class="form-control inputForm @error('Datos_Equipo.Stndr_refe1') is-invalid @enderror"
                                 name="Datos_Equipo[Stndr_refe1]"
                                 placeholder="IMAGEN DE REFERENCIA"
-                                value="{{ old('Datos_Equipo.Stndr_refe1', $Datos_Equipo['Stndr_refe1'] ?? '') }}">
+                                value="{{ old('Datos_Equipo.Stndr_refe1', 'IMAGEN DE REFERENCIA . . .') }}">
 
                             @error('Datos_Equipo.Stndr_refe1')
                                 <div class="invalid-feedback">
@@ -319,20 +319,45 @@
                             @enderror
                         </div>
                     </div>
-                    
-                    {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div> --}}
 
-                    <div style="margin-bottom: 2px;"></div>
-                        <div class="form-group">
-                            <label>Número de imágenes a subir:</label>
-                            <select class="form-control imageCount" data-target="1">
-                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                <option value="1">1 Imagen</option>
-                                <option value="2" selected>2 Imagenes</option>
-                            </select>
+                        <!--IMAGENES 1-->
+                        <div id="imageFieldsContainer1" class="row">
+
+                        @foreach($Fotos1 as $index => $foto)
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>Imagen {{ $index+1 }}</label>
+
+                                <input type="file"
+                                    class="form-control image-input"
+                                    id="ref1_image{{$index+1}}"
+                                    accept="image/*">
+
+                                <div class="image-preview mt-2" id="ref1_image{{$index+1}}-preview">
+
+                                    <img src="{{ asset($foto['ruta']) }}"
+                                        class="img-fluid img-thumbnail">
+
+                                </div>
+
+                                <input type="hidden"
+                                    name="ref1_images_base64[{{$index}}]"
+                                    id="ref1_image{{$index+1}}-base64">
+
+                                <input type="hidden"
+                                    name="ref1_images_old[{{$index}}]"
+                                    value="{{ $foto['ruta'] }}">
+
+                            </div>
+
                         </div>
 
-                        <div id="imageFieldsContainer1" class="row"></div>
+                        @endforeach
+
+                        </div>
 
                         <div class="row mt-3">
                             <div class="col-md-6">
@@ -349,36 +374,86 @@
                         <br>
                         <br>
                         <br>
-                        <!-- IMAGEN DE REFERENCIA 2-->
                         <div class="col-12">
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                            <input type="text"
-                                class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror"
-                                name="Datos_Equipo[Stndr_refe2]"
-                                placeholder="IMAGEN DE REFERENCIA"
-                                value="{{ old('Datos_Equipo.Stndr_refe2', $Datos_Equipo['Stndr_refe2'] ?? '')}}">
+                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
+                                <input type="text"
+                                    class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror"
+                                    name="Datos_Equipo[Stndr_refe2]"
+                                    placeholder="IMAGEN DE REFERENCIA"
+                                    value="{{ old('Datos_Equipo.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
 
-                            @error('Datos_Equipo.Stndr_refe2')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                @error('Datos_Equipo.Stndr_refe2')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                         </div>
-                    </div>
-                    
-                    {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">IMAGEN DE REFERENCIA SCR-TS2/FRONTAL</div> --}}
+                        
+                        <!--IMAGENES 2-->
+                        <div id="imageFieldsContainer2" class="row">
 
-                    <div style="margin-bottom: 2px;"></div>
-                    <div class="form-group">
-                        <label>Número de imágenes a subir:</label>
-                        <select class="form-control imageCount" data-target="2">
-                            <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                            <option value="1">1 Imagen</option>
-                            <option value="2" selected>2 Imagenes</option>
-                        </select>
-                    </div>
+                        @foreach($Fotos2 as $index => $foto)
 
-                    <div id="imageFieldsContainer2" class="row"></div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>Imagen {{ $index+1 }}</label>
+
+                                <input type="file"
+                                    class="form-control image-input"
+                                    id="ref2_image{{$index+1}}"
+                                    accept="image/*">
+
+                                <div class="image-preview mt-2" id="ref2_image{{$index+1}}-preview">
+
+                                    <img src="{{ asset($foto['ruta']) }}"
+                                        class="img-fluid img-thumbnail">
+
+                                </div>
+
+                                <input type="hidden"
+                                    name="ref2_images_base64[{{$index}}]"
+                                    id="ref2_image{{$index+1}}-base64">
+
+                                <input type="hidden"
+                                    name="ref2_images_old[{{$index}}]"
+                                    value="{{ $foto['ruta'] }}">
+
+                            </div>
+
+                        </div>
+
+                        @endforeach
+
+                        </div>
+
+                        <!-- Modal para recortar la imagen -->
+                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Recortar Imagen</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="img-container">
+                                            <img id="cropperImage" src="" style="max-width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
+                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
+                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
+                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     <div class="row mt-3">
                         <div class="col-md-6">
@@ -395,29 +470,6 @@
                     <br>
                     <br>
                     <br>
-                    <div class="modal fade" id="cropperModal">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-
-                                <div class="modal-header">
-                                    <h5>Recortar Imagen</h5>
-                                </div>
-
-                                <div class="modal-body">
-                                    <img id="cropperImage" style="max-width:100%">
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                    <button type="button" class="btn btn-info" id="rotateLeft">⟲ Rotar -90°</button>
-                                    <button type="button" class="btn btn-info" id="rotateRight">⟳ Rotar +90°</button>
-                                    <button type="button" class="btn btn-primary" id="cropImage">Recortar y Guardar</button>
-                                    <button type="button" class="btn btn-success" id="saveImage">Guardar Sin Recortar</button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
@@ -453,23 +505,27 @@
                                                         <tr>
                                                             <td class="text-success">
                                                                 <label>
-                                                                    <input type="radio" name="Datos_Equipo[severidad]" value="bueno" checked>
+                                                                    <input type="radio" 
+                                                                        name="Datos_Equipo[severidad]" 
+                                                                        value="bueno" 
+                                                                        {{ isset($Datos_Equipo['severidad']) && $Datos_Equipo['severidad'] == 'bueno' ? 'checked' : '' }}>
                                                                     <strong>BUENO</strong>
                                                                 </label>
                                                             </td>
                                                             <td>
-                                                            {{--<td class="text-success"> --}}
                                                                 El equipo se encuentra en condiciones de operación óptimas.
                                                             </td>
 
                                                             <td class="text-warning">
                                                                 <label>
-                                                                    <input type="radio" name="Datos_Equipo[severidad]" value="preventivo">
+                                                                    <input type="radio" 
+                                                                        name="Datos_Equipo[severidad]" 
+                                                                        value="preventivo"
+                                                                        {{ isset($Datos_Equipo['severidad']) && $Datos_Equipo['severidad'] == 'preventivo' ? 'checked' : '' }}>
                                                                     <strong>PREVENTIVO</strong>
                                                                 </label>
                                                             </td>
                                                             <td>
-                                                            {{--<td class="text-warning">--}}
                                                                 Media anomalía, programar el paro del equipo para su reparación.
                                                             </td>
                                                         </tr>
@@ -477,23 +533,26 @@
                                                         <tr>
                                                             <td style="color:#d4b000;">
                                                                 <label>
-                                                                    <input type="radio" name="Datos_Equipo[severidad]" value="moderado">
+                                                                    <input type="radio" 
+                                                                        name="Datos_Equipo[severidad]" 
+                                                                        value="moderado"
+                                                                        {{ isset($Datos_Equipo['severidad']) && $Datos_Equipo['severidad'] == 'moderado' ? 'checked' : '' }}>
                                                                     <strong>MODERADO</strong>
                                                                 </label>
                                                             </td>
                                                             <td>
-                                                            {{--<td style="color:#d4b000;">--}}
-                                                                Ligera anomalía, mantener en observación y programar reparación.
-                                                            </td>
+                                                                Ligera anomalía, mantener en observación y programar reparación.                                                            </td>
 
                                                             <td class="text-danger">
                                                                 <label>
-                                                                    <input type="radio" name="Datos_Equipo[severidad]" value="no_aceptable">
+                                                                    <input type="radio" 
+                                                                        name="Datos_Equipo[severidad]" 
+                                                                        value="no_aceptable"
+                                                                        {{ isset($Datos_Equipo['severidad']) && $Datos_Equipo['severidad'] == 'no_aceptable' ? 'checked' : '' }}>
                                                                     <strong>NO ACEPTABLE</strong>
                                                                 </label>
                                                             </td>
                                                             <td>
-                                                            {{--<td class="text-danger">--}}
                                                                 Anomalía severa, se recomienda parar el equipo para su intervención.
                                                             </td>
                                                         </tr>
@@ -761,7 +820,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create-For-01-16_17.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit-For-01-16_17.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">

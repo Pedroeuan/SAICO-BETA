@@ -1,119 +1,19 @@
-    /*check del cliente, si y no */
-document.addEventListener('DOMContentLoaded', function () {
-
-    const radios = document.querySelectorAll('input[name="TieneCliente"]');
-    const select = document.getElementById('campoClienteSelect');
-    const input  = document.getElementById('campoClienteInput');
-
-    function toggleCliente() {
-        const valor = document.querySelector('input[name="TieneCliente"]:checked').value;
-
-        if (valor === 'si') {
-            // Mostrar select
-            select.style.display = 'block';
-            input.style.display  = 'none';
-
-            input.value = '';   // limpiar input
-
-        } else {
-            // Mostrar input vacío
-            select.style.display = 'none';
-            input.style.display  = 'block';
-
-            select.value = '';  // limpiar select
-            input.value  = '';  // aseguramos vacío
-            input.focus();      // cursor automático
-        }
-    }
-
-    radios.forEach(radio => {
-        radio.addEventListener('change', toggleCliente);
-    });
-
-    toggleCliente(); // ejecutar al cargar
-});
-
-    /*check del contrato, si y no */
-document.addEventListener("DOMContentLoaded", function () {
-
-    const radios = document.getElementsByName("TieneContrato");
-    const campoContrato = document.getElementById("campoContrato");
-
-    radios.forEach(radio => {
-        radio.addEventListener("change", async function () {
-
-            // 💾 Guardar selección
-            sessionStorage.setItem("TieneContrato", this.value);
-
-            if (this.value === "si") {
-                campoContrato.readOnly = false;
-                campoContrato.required = true;
-                campoContrato.value = "";
-                campoContrato.placeholder = "Ejemplo: 640853841";
-                return;
-            }
-
-            if (this.value === "no") {
-                campoContrato.readOnly = true;
-                campoContrato.required = false;
-                campoContrato.placeholder = "Generando contrato interno...";
-
-                try {
-                    const response = await fetch('/api/siguiente-contrato-interno');
-                    const data = await response.json();
-
-                    const nuevoContrato = data.siguiente;
-                    campoContrato.value = nuevoContrato;
-
-                } catch (error) {
-                    console.error("Error al obtener el contrato interno:", error);
-                    alert("No se pudo generar el contrato interno");
-                }
-            }
-        });
-    });
-
-    // 🔄 Restaurar selección al recargar
-    const seleccionado = sessionStorage.getItem("TieneContrato");
-
-    if (seleccionado) {
-        const radioGuardado = [...radios].find(r => r.value === seleccionado);
-
-        if (radioGuardado) {
-            radioGuardado.checked = true;
-            radioGuardado.dispatchEvent(new Event("change"));
-        }
-    }
-});
-
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
-        if (element.tagName !== 'TEXTAREA') {
-            element.addEventListener('keydown', function (event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    }
-                });
-            }
-        });
-    });
-    
-    $('#dynamicTable').on('keydown', 'input', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-        }
-    });
-
-    $('#preFillBtn').click(function() {
-        $('#dynamicTable tbody tr').each(function() {
-            $(this).find('input').each(function() {
-                if ($(this).val() === '') {
-                    $(this).val('----');
+        document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+            if (element.tagName !== 'TEXTAREA') {
+                element.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        }
+                    });
                 }
             });
         });
-        saveData(document.querySelectorAll("form")[1].id);
+        $('#dynamicTable').on('keydown', 'input', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
     });
 
     /* Imágenes */
@@ -202,48 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (cropper) cropper.destroy();
     });
 
-function initImageUploader(selectId, containerId, prefix) {
-
-    const imageCountSelect = document.getElementById(selectId);
-    const container = document.getElementById(containerId);
-    const cropperImage = document.getElementById('cropperImage');
-
-    imageCountSelect.addEventListener('change', function () {
-
-        const count = parseInt(this.value);
-        container.innerHTML = '';
-
-        for (let i = 1; i <= count; i++) {
-
-            const col = document.createElement('div');
-            col.classList.add('col-md-6');
-
-            col.innerHTML = `
-                <div class="form-group">
-
-                    <label>Imagen ${i}</label>
-
-                    <input type="file"
-                        class="form-control image-input"
-                        id="${prefix}_image${i}"
-                        accept="image/*">
-
-                    <div class="image-preview mt-2"
-                        id="${prefix}_image${i}-preview"></div>
-
-                    <input type="hidden"
-                        name="${prefix}_images_base64[]"
-                        id="${prefix}_image${i}-base64">
-
-                </div>
-            `;
-
-            container.appendChild(col);
-        }
-
-        activateImageEvents();
-    });
-}
 
 function activateImageEvents(){
 
@@ -288,13 +146,29 @@ function activateImageEvents(){
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-
-    initImageUploader('imageCount1','imageFieldsContainer1','ref1');
-
-    initImageUploader('imageCount2','imageFieldsContainer2','ref2');
-
+    activateImageEvents();
 });
 
+    /*llenado de campos vacios*/
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputFields = document.querySelectorAll(".default-input");
+
+        inputFields.forEach(input => {
+            input.addEventListener("input", function () {
+                const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
+                if (isNaN(column)) return; // Evitar errores si no es válido
+
+                //document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row)").forEach(row => {
+                    document.querySelectorAll("#dynamicTable tbody tr:not(.titulo-row):not(.long-row)").forEach(row => {
+                    const cellInputs = row.querySelectorAll("td input");
+                    const cellInput = cellInputs[column - 0]; // Ajustar al índice base 0
+                    if (cellInput) {
+                        cellInput.value = input.value;
+                    }
+                });
+            });
+        });
+    });
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
@@ -338,7 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         });
-
 
         // Botón rellenar campos vacíos
         const rellenarBtn = form.querySelector("#preFormBtn");
@@ -388,6 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+
     /*Selección de Firmas */
     document.addEventListener('DOMContentLoaded', function() {
     const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
@@ -397,12 +271,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const firmas3 = document.getElementById('firmas3');
     const firmas4 = document.getElementById('firmas4');
 
-
     //numFirmasSelect.value = numFirmasLocal;
-
-    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
-    
-
+    //numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
     numFirmasSelect.addEventListener('change', function() {
         if (this.value == '1') {
             firmas1.style.display = 'block';
@@ -454,61 +324,3 @@ document.addEventListener("DOMContentLoaded", function () {
         firmas4.style.display = 'block';
     }
     });
-
-    /*Envio de formulario */
-/* Envio de formulario */
-$(document).ready(function () {
-
-    $('form').submit(function(e) {
-
-        // ============================
-        // VALIDAR CLIENTE SELECCIONADO
-        // ============================
-        let tieneCliente   = $('input[name="TieneCliente"]:checked').val();
-        let clienteSelect  = $('#campoClienteSelect').val();
-        let clienteInput   = $('#campoClienteInput').val();
-
-        // Si seleccionó "SI", debe elegir un cliente del select
-        if (tieneCliente === 'si' && 
-            (clienteSelect === null || clienteSelect === 'Seleccione un Cliente')) {
-
-            e.preventDefault();
-
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cliente requerido',
-                text: 'Por favor seleccione un cliente válido.',
-            });
-
-            $('#campoClienteSelect').focus();
-            return;
-        }
-
-        // Si seleccionó "NO", debe escribir un cliente
-        if (tieneCliente === 'no' && clienteInput.trim() === '') {
-
-            e.preventDefault();
-
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cliente requerido',
-                text: 'Por favor ingrese el nombre del cliente.',
-            });
-
-            $('#campoClienteInput').focus();
-            return;
-        }
-
-        // ============================
-        // CONTINUA ENVIO NORMAL
-        // ============================
-        updateTitulos();
-
-        sessionStorage.clear();
-
-        let submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Guardando...');
-        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-    });
-
-});
