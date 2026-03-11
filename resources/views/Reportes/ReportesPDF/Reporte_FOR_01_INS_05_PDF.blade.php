@@ -44,38 +44,7 @@
                     font-family: 'arial', sans-serif;
                     /*background-color: rgb(45, 78, 226);*/
                 }
-            @else
-                header {
-                    position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
-                    left: 0;
-                    right: 0;
-                    height: auto; /* Permite que el header crezca dinámicamente */
-                    text-align: center;
-                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
-                    font-family: 'arial', sans-serif;
-                }
 
-                footer {
-                    position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
-                    left: 0;
-                    right: 0;
-                    height: auto;
-                    text-align: center;
-                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
-                    font-family: 'arial', sans-serif;
-                }
-
-                body {
-                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
-                    margin: 0;
-                    padding-top: 235px; /* Altura del header */
-                    padding-bottom: 95px; /* Altura del footer */
-                    font-family: 'arial', sans-serif;
-                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
-                }
-                @endif
 
                 .datosgenerales{
                     border: 0px !important;
@@ -468,7 +437,7 @@
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
                                 </tr>
-                            @else
+                            @elseif( $numFirmas == 4)
                             <!-- 4 Firmas -->
                                 <tr>
                                     <td style="width: 15px;"></td>
