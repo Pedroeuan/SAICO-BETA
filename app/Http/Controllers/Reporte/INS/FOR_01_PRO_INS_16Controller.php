@@ -435,80 +435,41 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Firmas_Reportes->save();
 
         /* Imagenes */
-        $imagenesGuardadas = [];
-
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
         $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
-
-        /* IMAGENES REFERENCIA 1 */
-        if ($request->has('ref1_images_old')) {
-
-            foreach ($request->ref1_images_old as $index => $oldImage) {
-
-                $base64Image = $request->ref1_images_base64[$index] ?? null;
-
-                if ($base64Image) {
-
-                    // eliminar imagen anterior
-                    Storage::delete(str_replace('storage/', 'public/', $oldImage));
-
-                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-
-                    $imageName = 'ref1_' . uniqid() . '.png';
-
-                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
-
-                    $imagenesGuardadas[] = [
-                        'tipo' => 'ref1',
-                        'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                    ];
-
-                } else {
-
-                    // mantener imagen anterior
-                    $imagenesGuardadas[] = [
-                        'tipo' => 'ref1',
-                        'ruta' => $oldImage,
-                    ];
-                }
-            }
+        if (!Storage::exists($rutaCarpeta)) {
+            Storage::makeDirectory($rutaCarpeta);
         }
 
+        $imagenesGuardadas = [];
 
-        /* IMAGENES REFERENCIA 2 */
-        if ($request->has('ref2_images_old')) {
+        for ($i = 1; $i <= 4; $i++) {
 
-            foreach ($request->ref2_images_old as $index => $oldImage) {
+            $base64 = $request->input("imagen{$i}_base64");
 
-                $base64Image = $request->ref2_images_base64[$index] ?? null;
+            if ($base64) {
 
-                if ($base64Image) {
+                // limpiar encabezado base64
+                $base64 = preg_replace('/^data:image\/\w+;base64,/', '', $base64);
 
-                    Storage::delete(str_replace('storage/', 'public/', $oldImage));
+                // decodificar
+                $image = base64_decode($base64);
 
-                    $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+                // nombre único
+                $nombreImagen = "imagen{$i}_" . uniqid() . ".png";
 
-                    $imageName = 'ref2_' . uniqid() . '.png';
+                // guardar imagen
+                Storage::put("{$rutaCarpeta}/{$nombreImagen}", $image);
 
-                    Storage::put("{$rutaCarpeta}/{$imageName}", $image);
-
-                    $imagenesGuardadas[] = [
-                        'tipo' => 'ref2',
-                        'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                    ];
-
-                } else {
-
-                    $imagenesGuardadas[] = [
-                        'tipo' => 'ref2',
-                        'ruta' => $oldImage,
-                    ];
-                }
+                // guardar ruta
+                $imagenesGuardadas[] = [
+                    'imagen' => $i,
+                    'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$nombreImagen}"
+                ];
             }
         }
-
 
         $Fotos = json_encode($imagenesGuardadas);
 

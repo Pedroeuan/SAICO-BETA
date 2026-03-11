@@ -117,184 +117,133 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* Imágenes */
-    let cropper;
-    let currentInput;
+    document.addEventListener("DOMContentLoaded", function () {
+        let cropper = null;
+        let currentInput = null;
 
-    // Botón: Rotar -90° (Antihorario)
-    document.getElementById('rotateLeftBtn').addEventListener('click', function () {
-        if (cropper) cropper.rotate(-90);
-    });
+        const cropperImage = document.getElementById('cropperImage');
 
-    // Botón: Rotar +90° (Horario)
-    document.getElementById('rotateRightBtn').addEventListener('click', function () {
-        if (cropper) cropper.rotate(90);
-    });
+        /* ROTAR */
+        document.getElementById('rotateLeftBtn').addEventListener('click', () => {
+            if (cropper) cropper.rotate(-90);
+        });
 
-    // Botón: Cancelar
-    document.getElementById('cancelBtn').addEventListener('click', function () {
-        $('#cropperModal').modal('hide');
-    });
+        document.getElementById('rotateRightBtn').addEventListener('click', () => {
+            if (cropper) cropper.rotate(90);
+        });
 
-    // Botón: Guardar sin recortar (manteniendo rotación)
-    document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        /* CANCELAR */
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            $('#cropperModal').modal('hide');
+        });
 
-        try {
-            // Obtener los datos de la imagen original (incluyendo rotación)
-            const imageData = cropper.getImageData();
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+        /* GUARDAR SIN RECORTAR */
+        document.getElementById('saveWithoutCropBtn').addEventListener('click', () => {
 
-            // Ajustar el tamaño del lienzo según las dimensiones de la imagen rotada
-            if (Math.abs(cropper.getData().rotate) % 180 === 90) {
-                canvas.width = imageData.naturalHeight;
-                canvas.height = imageData.naturalWidth;
-            } else {
-                canvas.width = imageData.naturalWidth;
-                canvas.height = imageData.naturalHeight;
-            }
+            if (!cropper) return;
 
-            // Dibujar la imagen rotada en el lienzo
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate((imageData.rotate * Math.PI) / 180);
-            ctx.drawImage(
-                cropper.element, // Aquí usamos el elemento de la imagen directamente
-                -imageData.naturalWidth / 2,
-                -imageData.naturalHeight / 2,
-                imageData.naturalWidth,
-                imageData.naturalHeight
-            );
+            const canvas = cropper.getCroppedCanvas({
+                width: cropper.getImageData().naturalWidth,
+                height: cropper.getImageData().naturalHeight
+            });
 
-            // Convertir el lienzo a base64
             const base64data = canvas.toDataURL();
+
             const previewDiv = document.getElementById(`${currentInput.id}-preview`);
             previewDiv.innerHTML = `
-                <img src="${base64data}" class="img-fluid img-thumbnail" />
-                <span class="badge bg-success">¡Guardado!</span>
+                <img src="${base64data}" class="img-fluid img-thumbnail">
+                <span class="badge bg-success">Guardado</span>
             `;
+
             document.getElementById(`${currentInput.id}-base64`).value = base64data;
 
-            // Cerrar el modal
             $('#cropperModal').modal('hide');
-        } catch (error) {
-            console.error('Error al guardar la imagen sin recortar:', error);
-        }
-    });
-
-    // Botón: Recortar y guardar
-    document.getElementById('cropImageBtn').addEventListener('click', function () {
-        if (cropper && currentInput) {
-            const croppedCanvas = cropper.getCroppedCanvas();
-            if (croppedCanvas) {
-                const base64data = croppedCanvas.toDataURL();
-                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
-                previewDiv.innerHTML = `
-                    <img src="${base64data}" class="img-fluid img-thumbnail" />
-                    <span class="badge bg-success">¡Recortado!</span>
-                `;
-                document.getElementById(`${currentInput.id}-base64`).value = base64data;
-            }
-        }
-        $('#cropperModal').modal('hide');
-    });
-
-    // Destruir Cropper al cerrar el modal
-    $('#cropperModal').on('hidden.bs.modal', function () {
-        if (cropper) cropper.destroy();
-    });
-
-function initImageUploader(selectId, containerId, prefix) {
-
-    const imageCountSelect = document.getElementById(selectId);
-    const container = document.getElementById(containerId);
-    const cropperImage = document.getElementById('cropperImage');
-
-    imageCountSelect.addEventListener('change', function () {
-
-        const count = parseInt(this.value);
-        container.innerHTML = '';
-
-        for (let i = 1; i <= count; i++) {
-
-            const col = document.createElement('div');
-            col.classList.add('col-md-6');
-
-            col.innerHTML = `
-                <div class="form-group">
-
-                    <label>Imagen ${i}</label>
-
-                    <input type="file"
-                        class="form-control image-input"
-                        id="${prefix}_image${i}"
-                        accept="image/*">
-
-                    <div class="image-preview mt-2"
-                        id="${prefix}_image${i}-preview"></div>
-
-                    <input type="hidden"
-                        name="${prefix}_images_base64[]"
-                        id="${prefix}_image${i}-base64">
-
-                </div>
-            `;
-
-            container.appendChild(col);
-        }
-
-        activateImageEvents();
-    });
-}
-
-function activateImageEvents(){
-
-    const cropperImage = document.getElementById('cropperImage');
-
-    document.querySelectorAll('.image-input').forEach(input => {
-
-        input.addEventListener('change', function(e){
-
-            const file = e.target.files[0];
-            if(!file) return;
-
-            currentInput = e.target;
-
-            const reader = new FileReader();
-
-            reader.onload = function(event){
-
-                if(cropper) cropper.destroy();
-
-                cropperImage.src = event.target.result;
-
-                $('#cropperModal').modal('show');
-
-                cropper = new Cropper(cropperImage,{
-                    aspectRatio: 4/3,
-                    viewMode:1,
-                    autoCropArea:1,
-                    minContainerWidth: 760,
-                    minContainerHeight: 600,
-                    responsive:true
-                });
-
-            };
-
-            reader.readAsDataURL(file);
 
         });
 
+        /* RECORTAR */
+        document.getElementById('cropImageBtn').addEventListener('click', () => {
+
+            if (!cropper) return;
+
+            const canvas = cropper.getCroppedCanvas();
+
+            const base64data = canvas.toDataURL();
+
+            const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+
+            previewDiv.innerHTML = `
+                <img src="${base64data}" class="img-fluid img-thumbnail">
+                <span class="badge bg-success">Recortado</span>
+            `;
+
+            document.getElementById(`${currentInput.id}-base64`).value = base64data;
+
+            $('#cropperModal').modal('hide');
+
+        });
+
+
+        /* DESTRUIR AL CERRAR */
+        $('#cropperModal').on('hidden.bs.modal', function () {
+
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+
+        });
+
+
+        /* ACTIVAR INPUTS */
+        function activateImageEvents(){
+
+            document.querySelectorAll('.image-input').forEach(input => {
+
+                input.addEventListener('change', function(e){
+
+                    const file = e.target.files[0];
+                    if(!file) return;
+
+                    currentInput = e.target;
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(event){
+
+                        cropperImage.src = event.target.result;
+
+                        $('#cropperModal').modal('show');
+
+                    };
+
+                    reader.readAsDataURL(file);
+
+                });
+
+            });
+
+        }
+
+        /* CREAR CROPPER CUANDO EL MODAL ABRA */
+        $('#cropperModal').on('shown.bs.modal', function () {
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(cropperImage,{
+                aspectRatio: 4 / 3,
+                viewMode: 1,
+                autoCropArea: 1,
+                minContainerWidth: 760,
+                minContainerHeight: 600,
+                responsive: true
+            });
+
+        });
+        activateImageEvents();
     });
-
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    initImageUploader('imageCount1','imageFieldsContainer1','ref1');
-
-    initImageUploader('imageCount2','imageFieldsContainer2','ref2');
-
-});
-
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
@@ -316,7 +265,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem(`${formId}_${input.name}`, input.value);
             });
         });
-
 
         textareas.forEach(textarea => {
             // Verificar si es textarea de comentarios (tiene name="comments[]" y id)
@@ -346,7 +294,12 @@ document.addEventListener("DOMContentLoaded", function () {
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
                     if (input.value.trim() === "") {
-                        input.value = "---";
+                        if (input.type === "date") {
+                            // poner fecha actual
+                            input.value = new Date().toISOString().split('T')[0];
+                        } else if (input.type !== "file") {
+                            input.value = "---";
+                        }
                         localStorage.setItem(`${formId}_${input.name}`, input.value);
                     }
                 });

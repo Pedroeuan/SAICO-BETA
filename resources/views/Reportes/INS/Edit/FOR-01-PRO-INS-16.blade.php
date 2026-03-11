@@ -304,6 +304,20 @@
                     
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
+                    @php
+
+                    $imagenesPorNumero = [];
+
+                    if($Fotos_Comentarios){
+                        foreach($Fotos_Comentarios as $foto){
+                            $imagenesPorNumero[$foto['imagen']] = $foto['ruta'];
+                        }
+
+                    }
+
+                    //dd($imagenesPorNumero);
+
+                    @endphp
                     <div class="col-12">
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
                             <input type="text"
@@ -320,54 +334,56 @@
                         </div>
                     </div>
 
-                        <!--IMAGENES 1-->
-                        <div id="imageFieldsContainer1" class="row">
-
-                        @foreach($Fotos1 as $index => $foto)
-
-                        <div class="col-md-6">
-
+                        <!--IMAGEN 1-->
+                        <div class="col-sm-6">
                             <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Imagen 1</label>
+                                <input type="file" class="form-control image-input" id="imagen1" name="imagen1" accept="image/*">
+                                <div id="imagen1-preview" class="mt-2"></div>
+                                <input type="hidden" id="imagen1-base64" name="imagen1_base64">
+                                @if(isset($imagenesPorNumero[1]))
 
-                                <label>Imagen {{ $index+1 }}</label>
+                                <div class="mt-2">
 
-                                <input type="file"
-                                    class="form-control image-input"
-                                    id="ref1_image{{$index+1}}"
-                                    accept="image/*">
-
-                                <div class="image-preview mt-2" id="ref1_image{{$index+1}}-preview">
-
-                                    <img src="{{ asset($foto['ruta']) }}"
-                                        class="img-fluid img-thumbnail">
+                                <img src="{{ asset($imagenesPorNumero[1]) }}"
+                                    class="img-thumbnail"
+                                    style="max-width:250px;">
 
                                 </div>
 
-                                <input type="hidden"
-                                    name="ref1_images_base64[{{$index}}]"
-                                    id="ref1_image{{$index+1}}-base64">
-
-                                <input type="hidden"
-                                    name="ref1_images_old[{{$index}}]"
-                                    value="{{ $foto['ruta'] }}">
-
+                                @endif
                             </div>
-
                         </div>
 
-                        @endforeach
+                        <!--IMAGEN 2-->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Imagen 2</label>
+                                <input type="file" class="form-control image-input" id="imagen2" name="imagen2" accept="image/*">
+                                <div id="imagen2-preview" class="mt-2"></div>
+                                <input type="hidden" id="imagen2-base64" name="imagen2_base64">
+                                @if(isset($imagenesPorNumero[2]))
 
+                                <div class="mt-2">
+
+                                <img src="{{ asset($imagenesPorNumero[2]) }}"
+                                    class="img-thumbnail"
+                                    style="max-width:250px;">
+
+                                </div>
+
+                                @endif
+                            </div>
                         </div>
-
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <label>Termograma</label>
-                                <input type="text" class="form-control" name="Datos_Equipo[termograma1]" value="{{old('Datos_Equipo.termograma1', $Datos_Equipo['termograma1'] ?? '')}}">
+                                <input type="text" class="form-control inputForm" name="Datos_Equipo[termograma1]" value="{{old('Datos_Equipo.termograma1', $Datos_Equipo['termograma1'] ?? '')}}">
                             </div>
 
                             <div class="col-md-6">
                                 <label>Emisividad</label>
-                                <input type="text" class="form-control" name="Datos_Equipo[emisividad1]" value="{{old('Datos_Equipo.emisividad1', $Datos_Equipo['emisividad1'] ?? '')}}">
+                                <input type="text" class="form-control inputForm" name="Datos_Equipo[emisividad1]" value="{{old('Datos_Equipo.emisividad1', $Datos_Equipo['emisividad1'] ?? '')}}">
                             </div>
                         </div>
                         <br>
@@ -390,45 +406,38 @@
                             </div>
                         </div>
                         
-                        <!--IMAGENES 2-->
-                        <div id="imageFieldsContainer2" class="row">
-
-                        @foreach($Fotos2 as $index => $foto)
-
-                        <div class="col-md-6">
-
+                        <!--IMAGEN 3-->
+                        <div class="col-sm-6">
                             <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Imagen 3</label>
+                                <input type="file" class="form-control image-input" id="imagen3" name="imagen3" accept="image/*">
+                                <div id="imagen3-preview" class="mt-2"></div>
+                                <input type="hidden" id="imagen3-base64" name="imagen3_base64">
+                                @if(isset($imagenesPorNumero[3]))
 
-                                <label>Imagen {{ $index+1 }}</label>
+                                <img src="{{ asset($imagenesPorNumero[3]) }}"
+                                    class="img-thumbnail mt-2"
+                                    style="max-width:250px;">
 
-                                <input type="file"
-                                    class="form-control image-input"
-                                    id="ref2_image{{$index+1}}"
-                                    accept="image/*">
-
-                                <div class="image-preview mt-2" id="ref2_image{{$index+1}}-preview">
-
-                                    <img src="{{ asset($foto['ruta']) }}"
-                                        class="img-fluid img-thumbnail">
-
-                                </div>
-
-                                <input type="hidden"
-                                    name="ref2_images_base64[{{$index}}]"
-                                    id="ref2_image{{$index+1}}-base64">
-
-                                <input type="hidden"
-                                    name="ref2_images_old[{{$index}}]"
-                                    value="{{ $foto['ruta'] }}">
-
+                                @endif
                             </div>
-
                         </div>
+                        <!--IMAGEN 4-->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Imagen 4</label>
+                                <input type="file" class="form-control image-input" id="imagen4" name="imagen4" accept="image/*">
+                                <div id="imagen4-preview" class="mt-2"></div>
+                                <input type="hidden" id="imagen4-base64" name="imagen4_base64">
+                                @if(isset($imagenesPorNumero[4]))
 
-                        @endforeach
+                                <img src="{{ asset($imagenesPorNumero[4]) }}"
+                                    class="img-thumbnail mt-2"
+                                    style="max-width:250px;">
 
+                                @endif
+                            </div>
                         </div>
-
                         <!-- Modal para recortar la imagen -->
                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
@@ -458,12 +467,12 @@
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label>Termograma</label>
-                            <input type="text" class="form-control" name="Datos_Equipo[termograma2]" value="{{old('Datos_Equipo.termograma2', $Datos_Equipo['termograma2'] ?? '')}}">
+                            <input type="text" class="form-control inputForm" name="Datos_Equipo[termograma2]" value="{{old('Datos_Equipo.termograma2', $Datos_Equipo['termograma2'] ?? '')}}">
                         </div>
 
                         <div class="col-md-6">
                             <label>Emisividad</label>
-                            <input type="text" class="form-control" name="Datos_Equipo[emisividad2]" value="{{old('Datos_Equipo.emisividad2', $Datos_Equipo['emisividad2'] ?? '')}}">
+                            <input type="text" class="form-control inputForm" name="Datos_Equipo[emisividad2]" value="{{old('Datos_Equipo.emisividad2', $Datos_Equipo['emisividad2'] ?? '')}}">
                         </div>
                     </div>
                     <br>

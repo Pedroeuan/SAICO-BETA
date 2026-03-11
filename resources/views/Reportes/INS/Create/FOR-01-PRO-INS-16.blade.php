@@ -359,56 +359,34 @@
                         </div>
                     </div>
 
-                        <!--IMAGENES 1-->
-                        <div class="form-group">
-                            <label>Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount1" name="imageCount1">
-                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 2; $i++)
-                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                @endfor
-                            </select>
+                        <!--IMAGEN 1-->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Imagen 1</label>
+                                <input type="file" class="form-control image-input" id="imagen1" name="imagen1" accept="image/*">
+                                <div id="imagen1-preview" class="mt-2"></div>
+                                <input type="hidden" id="imagen1-base64" name="imagen1_base64">
+                            </div>
                         </div>
-
-                        <div id="imageFieldsContainer1" class="row"></div>
-                            <!-- Aquí se agregarán dinámicamente los campos -->
-                        </div>
-
-                        <!-- Modal para recortar la imagen -->
-                        <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Recortar Imagen</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="img-container">
-                                            <img id="cropperImage" src="" style="max-width: 100%;">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
-                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
-                                        <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
-                                        <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
-                                    </div>
-                                </div>
+                        <!--IMAGEN 2-->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Imagen 2</label>
+                                <input type="file" class="form-control image-input" id="imagen2" name="imagen2" accept="image/*">
+                                <div id="imagen2-preview" class="mt-2"></div>
+                                <input type="hidden" id="imagen2-base64" name="imagen2_base64">
                             </div>
                         </div>
 
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <label>Termograma</label>
-                                <input type="text" class="form-control" name="Datos_Equipo[termograma1]" value="{{old('Datos_Equipo.termograma1')}}">
+                                <input type="text" class="form-control inputForm" name="Datos_Equipo[termograma1]" value="{{old('Datos_Equipo.termograma1')}}">
                             </div>
 
                             <div class="col-md-6">
                                 <label>Emisividad</label>
-                                <input type="text" class="form-control" name="Datos_Equipo[emisividad1]" value="{{old('Datos_Equipo.emisividad1')}}">
+                                <input type="text" class="form-control inputForm" name="Datos_Equipo[emisividad1]" value="{{old('Datos_Equipo.emisividad1')}}">
                             </div>
                         </div>
                         <br>
@@ -431,20 +409,36 @@
                             </div>
                         </div>
                         
-                        <!--IMAGENES 2-->
-                        <div class="form-group">
-                            <label>Número de imágenes a subir:</label>
-                            <select class="form-control" id="imageCount2" name="imageCount2">
-                                <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
-                                @for ($i = 1; $i <= 2; $i++)
-                                    <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
-                                @endfor
-                            </select>
+                        <!--IMAGEN 3-->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Imagen 3</label>
+                                <input type="file" class="form-control image-input" id="imagen3" name="imagen3" accept="image/*">
+                                <div id="imagen3-preview" class="mt-2"></div>
+                                <input type="hidden" id="imagen3-base64" name="imagen3_base64">
+                            </div>
+                        </div>
+                        <!--IMAGEN 4-->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Imagen 4</label>
+                                <input type="file" class="form-control image-input" id="imagen4" name="imagen4" accept="image/*">
+                                <div id="imagen4-preview" class="mt-2"></div>
+                                <input type="hidden" id="imagen4-base64" name="imagen4_base64">
+                            </div>
                         </div>
 
-                        <div id="imageFieldsContainer2" class="row"></div>
-                            <!-- Aquí se agregarán dinámicamente los campos -->
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label>Termograma</label>
+                            <input type="text" class="form-control inputForm" name="Datos_Equipo[termograma2]" value="{{old('Datos_Equipo.termograma2')}}">
                         </div>
+
+                        <div class="col-md-6">
+                            <label>Emisividad</label>
+                            <input type="text" class="form-control inputForm" name="Datos_Equipo[emisividad2]" value="{{old('Datos_Equipo.emisividad2')}}">
+                        </div>
+                    </div>
 
                         <!-- Modal para recortar la imagen -->
                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -471,18 +465,6 @@
                                 </div>
                             </div>
                         </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <label>Termograma</label>
-                            <input type="text" class="form-control" name="Datos_Equipo[termograma2]" value="{{old('Datos_Equipo.termograma2')}}">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label>Emisividad</label>
-                            <input type="text" class="form-control" name="Datos_Equipo[emisividad2]" value="{{old('Datos_Equipo.emisividad2')}}">
-                        </div>
-                    </div>
                     <br>
                     <br>
                     <br>
@@ -833,8 +815,8 @@
 <script src="{{ asset('js/Reportes_Create-For-01-16_17.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
 
