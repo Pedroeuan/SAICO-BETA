@@ -684,6 +684,74 @@ class FOR_01_PRO_INS_16Controller extends Controller
                 'Firmas' => $Firmas4
             ]);
         } 
+        
+        /* Imagenes */
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+
+        if (!Storage::exists($rutaCarpeta)) {
+            Storage::makeDirectory($rutaCarpeta);
+        }
+
+        $imagenesGuardadas = [];
+
+        for ($i = 1; $i <= 4; $i++) {
+
+            $base64 = $request->input("imagen{$i}_base64");
+            $imagenOld = $request->input("imagen{$i}_old");
+
+            /* SI EL USUARIO SUBIÓ UNA NUEVA IMAGEN */
+            if ($base64) {
+
+                // limpiar encabezado base64
+                $base64 = preg_replace('/^data:image\/\w+;base64,/', '', $base64);
+
+                // decodificar
+                $image = base64_decode($base64);
+
+                // nombre único
+                $nombreImagen = "imagen{$i}_" . uniqid() . ".png";
+
+                // guardar nueva imagen
+                Storage::put("{$rutaCarpeta}/{$nombreImagen}", $image);
+
+                // opcional: borrar imagen anterior
+                if ($imagenOld) {
+
+                    $rutaAnterior = str_replace('storage/', 'public/', $imagenOld);
+
+                    if (Storage::exists($rutaAnterior)) {
+                        Storage::delete($rutaAnterior);
+                    }
+                }
+
+                // guardar nueva ruta
+                $imagenesGuardadas[] = [
+                    'imagen' => $i,
+                    'ruta' => "storage/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos/{$nombreImagen}"
+                ];
+
+            } 
+            /* SI NO CAMBIÓ LA IMAGEN */
+            elseif ($imagenOld) {
+
+                $imagenesGuardadas[] = [
+                    'imagen' => $i,
+                    'ruta' => $imagenOld
+                ];
+            }
+        }
+
+        $Fotos = json_encode($imagenesGuardadas);
+
+        $Fotos_Reportes->update([
+                'Fotos_Reportes' => $Fotos
+        ]);
+        /*$Fotos_Reportes->idReportes = $idReportes;
+        $Fotos_Reportes->Fotos_Reportes = $Fotos;
+        $Fotos_Reportes->save();*/
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];

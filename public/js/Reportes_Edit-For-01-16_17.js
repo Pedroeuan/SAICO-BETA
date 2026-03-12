@@ -37,6 +37,10 @@
 
     // Botón: Guardar sin recortar (manteniendo rotación)
     document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        const oldPreview = document.getElementById(`${currentInput.id}-old-preview`);
+        if(oldPreview){
+            oldPreview.style.display = "none";
+        }
 
         try {
             // Obtener los datos de la imagen original (incluyendo rotación)
@@ -82,6 +86,10 @@
 
     // Botón: Recortar y guardar
     document.getElementById('cropImageBtn').addEventListener('click', function () {
+        const oldPreview = document.getElementById(`${currentInput.id}-old-preview`);
+        if(oldPreview){
+            oldPreview.style.display = "none";
+        }
         if (cropper && currentInput) {
             const croppedCanvas = cropper.getCroppedCanvas();
             if (croppedCanvas) {
@@ -119,6 +127,12 @@ function activateImageEvents(){
             const reader = new FileReader();
 
             reader.onload = function(event){
+
+                // ocultar imagen anterior
+                const oldPreview = document.getElementById(`${currentInput.id}-old-preview`);
+                if(oldPreview){
+                    oldPreview.style.display = "none";
+                }
 
                 if(cropper) cropper.destroy();
 
