@@ -78,7 +78,16 @@
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
-
+                    <!--IMAGEN 5-->
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Imagen Principal</label>
+                            <input type="file" class="form-control image-input" id="imagen5" name="imagen5" accept="image/*">
+                            <div id="imagen5-preview" class="mt-2"></div>
+                            <input type="hidden" id="imagen5-base64" name="imagen5_base64">
+                        </div>
+                    </div>
+                    <P>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Fecha:</label>

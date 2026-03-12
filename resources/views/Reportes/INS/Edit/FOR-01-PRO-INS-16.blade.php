@@ -59,7 +59,14 @@
         }
     </style>
 @endsection
-
+    @php
+        $imagenesPorNumero = [];
+        if($Fotos_Comentarios){
+            foreach($Fotos_Comentarios as $foto){
+                $imagenesPorNumero[$foto['imagen']] = $foto['ruta'];
+                }
+            }
+    @endphp
 @section('content')
 <br>
 <br>
@@ -74,13 +81,29 @@
         <div class="card-body w-100">
             <form id="FOR-01-PRO-INS-16" action="{{route('Reportes_FOR_01_PRO_INS_16.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                 @csrf
-                @php 
-                //dd($Detalles_Generales['Cliente']);
-                @endphp
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
+
+                    <!--IMAGEN 5-->
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="form-group">
+                            <label class="col-form-label">Imagen 5</label>
+                            <input type="file" class="form-control image-input" id="imagen5" name="imagen5" accept="image/*">
+                            <!-- preview de nueva imagen -->
+                            <div id="imagen5-preview" class="mt-2"></div>
+                            <!-- base64 que se enviará al controlador -->
+                            <input type="hidden" id="imagen5-base64" name="imagen5_base64">
+                            <!-- ruta de imagen existente -->
+                            <input type="hidden" name="imagen5_old" value="{{ $imagenesPorNumero[5] ?? '' }}">
+                            <!-- mostrar imagen actual -->
+                            @if(isset($imagenesPorNumero[5]))
+                            <img id="imagen5-old-preview" src="{{ asset($imagenesPorNumero[5]) }}" class="img-fluid rounded shadow-sm mt-2" style="max-width:250px;">
+                            @endif
+
+                        </div>
+                    </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -304,18 +327,6 @@
                     
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
-                    @php
-
-                    $imagenesPorNumero = [];
-
-                    if($Fotos_Comentarios){
-                        foreach($Fotos_Comentarios as $foto){
-                            $imagenesPorNumero[$foto['imagen']] = $foto['ruta'];
-                        }
-
-                    }
-
-                    @endphp
                     <div class="col-12">
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
                             <input type="text"
@@ -335,20 +346,14 @@
                     <!--IMAGEN 1-->
                     <div class="col-sm-6">
                         <div class="form-group">
-
                             <label class="col-form-label">Imagen 1</label>
-
                             <input type="file" class="form-control image-input" id="imagen1" name="imagen1" accept="image/*">
-
                             <!-- preview de nueva imagen -->
                             <div id="imagen1-preview" class="mt-2"></div>
-
                             <!-- base64 que se enviará al controlador -->
                             <input type="hidden" id="imagen1-base64" name="imagen1_base64">
-
                             <!-- ruta de imagen existente -->
                             <input type="hidden" name="imagen1_old" value="{{ $imagenesPorNumero[1] ?? '' }}">
-
                             <!-- mostrar imagen actual -->
                             @if(isset($imagenesPorNumero[1]))
                             <img id="imagen1-old-preview" src="{{ asset($imagenesPorNumero[1]) }}" class="img-fluid rounded shadow-sm mt-2" style="max-width:250px;">

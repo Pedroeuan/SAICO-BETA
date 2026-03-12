@@ -445,7 +445,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
         $imagenesGuardadas = [];
 
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
 
             $base64 = $request->input("imagen{$i}_base64");
 
@@ -697,7 +697,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
         $imagenesGuardadas = [];
 
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
 
             $base64 = $request->input("imagen{$i}_base64");
             $imagenOld = $request->input("imagen{$i}_old");
