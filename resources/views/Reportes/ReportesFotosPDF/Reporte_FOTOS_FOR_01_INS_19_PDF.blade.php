@@ -12,35 +12,7 @@
                     2.2cm; /* izquierdo */
                 }
 
-                @if ($totalFotos <=4)
-                header {
-                    width: 100%;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
-                    height: auto; /* Permite crecer según el contenido */
-                    text-align: center;
-                    /*background-color: rgb(226, 45, 45);*/
-                    font-family: 'arial', sans-serif;
-                }
-
-                footer {
-                    position: fixed;
-                    bottom: 30px;
-                    left: 0;
-                    right: 0;
-                    height: auto;
-                    text-align: center;
-                    /*background-color: rgb(7, 231, 18);*/
-                    font-family: 'arial', sans-serif;
-                }
-
-                body {
-                    margin: -30px, 0; /* Ajusta el margen de la página */
-                    padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
-                    font-family: 'arial', sans-serif;
-                    /*background-color: rgb(45, 78, 226);*/
-                }
-            @else
-                header {
+            header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
@@ -53,7 +25,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: 30px; /* Ajusta la posición */
+                    bottom: -30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -63,14 +35,13 @@
                 }
 
                 body {
-                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
-                    margin: 0;
-                    padding-top: 110px; /* Altura del header */
-                    padding-bottom: 95px; /* Altura del footer */
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin: 0;*/
+                    padding-top: 0px; /* Altura del header */
+                    padding-bottom: 0px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
-                @endif
 
                 .datosgenerales{
                     border: 0px !important;
@@ -80,7 +51,17 @@
                     font-size: 9px !important;
                     font-family: 'arial', sans-serif;
                 } 
-                
+                .datosgenerales2{
+                    border: 0px !important;
+                    text-align: center;
+                    border-collapse: collapse;
+                    width: 100%;
+                    font-size: 9px !important;
+                } 
+                .datosgenerales2 th,
+                .datosgenerales2 td {
+                    padding: 5px 5px; /* Más espacio interno */
+                }
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
@@ -147,7 +128,7 @@
         }
 
         .foto-container {
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
             width: 312px;  /* Fija el ancho de la celda */
             height: 170px; /* Fija la altura de la celda */
             border: 1px solid black; 
@@ -166,37 +147,6 @@
             align-items: center;
         }
 
-        .foto-container-full {
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
-            width: 312px;  /* Fija el ancho de la celda */
-            height: 170px; /* Fija la altura de la celda */
-            border: 1px solid black; 
-            vertical-align: middle;
-        }
-
-        .foto-container-full img {
-            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
-            object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 332.5px;  /* Ajusta el ancho de la celda */
-            height: 170px; /* Ajusta la altura de la celda */
-            vertical-align: middle;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Estilo para los comentarios full */
-        .comment-full { 
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 7px; /* Espaciado entre el borde y el texto */
-            margin-top: 0px; /* Espacio entre la imagen y el comentario */
-            text-align: center; /* Centrar el texto */
-            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
-            max-width: 100%; /* Para que el texto no desborde */
-            word-wrap: break-word; /* Permite que el texto se ajuste */
-        }
-
         /* Estilo para los comentarios */
         .comment { 
             border-top: 1px solid black; /* Borde superior de 2px en color negro */
@@ -211,7 +161,7 @@
         .empty-comment {
             margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
             border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 0px; /* Espaciado entre el borde y el texto */
+            padding-top: 42px; /* Espaciado entre el borde y el texto del comentario de las vacios*/
         }
         
         .empty-box {
@@ -238,6 +188,31 @@
 
         .cross-line::after {
             transform: rotate(-27deg);
+        }
+        .foto-container[colspan="2"] img {
+            width: 100%;
+            height: 23%;
+        }
+
+        /* ===== Imagen que ocupa una hoja completa ===== */
+        .foto-full {
+            width: 100% !important;
+            height: 435px !important;
+        }
+
+        .foto-full img {
+            width: 100% !important;
+            height: 404px !important;
+            object-fit: contain; /* no recorta */
+        }
+
+        .foto-full .comment {
+            margin-top: 0px;
+            font-size: 12px;
+        }
+        .celdaGris{
+            background-color: #DBDBDB;
+            /*font-size: 6px;*/
         }
             </style>
         </head>
@@ -268,35 +243,6 @@
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
-
-                <table class="datosgenerales">
-
-                    <thead class="encabezadoAzul">
-                        <tr><th colspan="4">DATOS GENERALES</th></tr>
-                    </thead>  
-
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
-
-                    <tbody>
-                        <tr>
-                            <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
-                            <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>CLIENTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
-                            <th>CONTRATO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="margin-bottom: 6px;"></div>
             </header>
             
             <footer>
@@ -452,60 +398,190 @@
                     </table>
             </footer>
 
+                @php
+                    $chunks = [];
+                    $grupoActual = [];
+                    foreach ($Fotos as $foto) {
+                        // Si la imagen es de hoja completa
+                        if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
+                            // Guardar grupo previo (si existe)
+                            if (!empty($grupoActual)) {
+                                $chunks[] = $grupoActual;
+                                $grupoActual = [];
+                            }
+                            // La imagen va SOLA
+                            $chunks[] = [$foto];
+                            continue;
+                        }
+                        // Imagen normal
+                        $grupoActual[] = $foto;
+                        if (count($grupoActual) == 4) {
+                            $chunks[] = $grupoActual;
+                            $grupoActual = [];
+                        }
+                    }
+                    if (!empty($grupoActual)) {
+                        $chunks[] = $grupoActual;
+                    }
+                @endphp
+                
+        @foreach($chunks as $fotosGrupo)
             <div class="content">
+                
+                <div style="margin-bottom: 0px;"></div>
+
+                <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
+                    <tbody>
+                        <tr>
+                            <th style="width: 12%;">FECHA:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
+                            <th style="width: 15%;">NO. REPORTE:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>CLIENTE:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
+                            <th>CONTRATO:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>PROYECTO: </th>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-bottom: 6px;"></div>
+
                 <table class="datosgenerales">
                     <thead class="encabezadoAzul">
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
-                    </thead>
-                    <thead><tr class="sinBordeth"><th></th></tr></thead>
-                    <tbody>
-                        {{-- Cada foto marcada ocupa una hoja completa --}}
-                        @foreach($FotosMarcadas as $foto)
-                            <table class="imagenes-reporte" style="width:100%;">
-                                <tr>
-                                    <td class="foto-container-full" style="width:100%;height:100%;">
-                                        <img src="{{ $foto['path'] }}" alt="Foto marcada" style="width:100%;height:200px;object-fit:contain;">
-                                        <p class="comment-full">{{ $foto['comment'] }}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div style="page-break-after: always;"></div>
-                        @endforeach
+                    </thead>  
+                </table>
+                    @php
+                        $esHojaCompleta = (
+                            count($fotosGrupo) == 1 &&
+                            !empty($fotosGrupo[0]['una_hoja']) &&
+                            $fotosGrupo[0]['una_hoja'] == 1
+                        );
 
-                        {{-- Las fotos normales en grupos de 4 por hoja --}}
-                        @php
-                            $chunks = array_chunk($FotosNormales, 4);
-                        @endphp
-                        @foreach($chunks as $fotosGrupo)
+                        $mostrarDetallesJunta = (
+                            $esHojaCompleta &&
+                            !empty($fotosGrupo[0]['detalles_junta']) &&
+                            $fotosGrupo[0]['detalles_junta'] == 1 &&
+                            !empty($fotosGrupo[0]['datos_junta'])
+                        );
+                    @endphp
+
                             <table class="imagenes-reporte">
                                 <tr>
+                                @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
+                                    {{-- 3 imágenes: 2 arriba, 1 abajo --}}
+                                    <td class="foto-container">
+                                        <img src="{{ $fotosGrupo[0]['path'] }}">
+                                        <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
+                                    </td>
+                                    <td class="foto-container">
+                                        <img src="{{ $fotosGrupo[1]['path'] }}">
+                                        <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
+                                    </td>
+                                    </tr><tr>
+                                    <td class="foto-container" colspan="2">
+                                        <img src="{{ $fotosGrupo[2]['path'] }}">
+                                        <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
+                                    </td>
+                                @else
                                     @foreach($fotosGrupo as $index => $foto)
-                                        <td class="foto-container">
-                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                            <p class="comment">{{ $foto['comment'] }}</p>
-                                        </td>
-                                        @if(($index + 1) % 2 == 0)
-                                            </tr><tr>
+                                        {{-- Caso 1 imagen: ocupa toda la hoja --}}
+                                        @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
+                                            <td class="foto-container foto-full" colspan="2">
+                                                <img src="{{ $foto['path'] }}">
+                                                <p class="comment">{{ $foto['comment'] }}</p>
+                                            </td>
+                                        @else
+                                            <td class="foto-container">
+                                                <img src="{{ $foto['path'] }}">
+                                                <p class="comment">{{ $foto['comment'] }}</p>
+                                            </td>
+                                            @if(($index + 1) % 2 == 0)
+                                                </tr><tr>
+                                            @endif
                                         @endif
                                     @endforeach
-                                    @for($i = count($fotosGrupo); $i < 4; $i++)
-                                        <td class="foto-container empty-box">
-                                            <div class="cross-line"></div>
-                                            <p class="empty-comment">&nbsp;</p>
+                                @endif
+
+                                {{-- Relleno cuando NO es hoja completa y faltan imágenes --}}
+                                @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
+                                    @php $faltantes = 4 - count($fotosGrupo); @endphp
+                                    @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
+                                        @for($i = 0; $i < $faltantes; $i++)
+                                            <td class="foto-container empty-box">
+                                                <div class="cross-line"></div>
+                                                <div class="empty-comment"></div>
+                                            </td>
+                                            @if((count($fotosGrupo) + $i + 1) % 2 == 0)
+                                                </tr><tr>
+                                            @endif
+                                        @endfor
+                                    @elseif(count($fotosGrupo) == 3)
+                                        </tr><tr>
+                                        <td class="foto-container" colspan="2">
+                                            <img src="{{ $fotosGrupo[2]['path'] }}">
+                                            <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
                                         </td>
-                                        @if(($i + 1) % 2 == 0)
-                                            </tr><tr>
-                                        @endif
-                                    @endfor
+                                    @endif
+                                @endif
+
                                 </tr>
                             </table>
-                            @if (!$loop->last)
-                                <div style="page-break-after: always;"></div>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
 
+                                @if($mostrarDetallesJunta)
+
+                                    <table class="datosgenerales2" style="margin-top: 10px;">
+
+                                        <tbody>
+                                            <tr>
+                                                <th class="celdaGris" style="width: 15%;">JUNTA / ELEMENTO:</th>
+                                                <td class="lineaInferior" colspan="3">{{ $foto['datos_junta']['junta'] ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="celdaGris">NO. DE INDICACION:</th>
+                                                <td class="lineaInferior">{{ $foto['datos_junta']['no_indicacion'] ?? '' }}</td>
+                                                <th class="celdaGris" style="width: 18%;">TIPO DE INDICACION:</th>
+                                                <td class="lineaInferior">{{ $foto['datos_junta']['tipo_indicacion'] ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="celdaGris">LONGITUD: </th>
+                                                <td class="lineaInferior">{{ $foto['datos_junta']['longitud'] ?? '' }}</td>
+                                                <th class="celdaGris">PROFUNDIDAD: </th>
+                                                <td class="lineaInferior">{{ $foto['datos_junta']['profundidad'] ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="celdaGris">NIVEL DE REFERENCIA: </th>
+                                                <td class="lineaInferior">{{ $foto['datos_junta']['nivel_referencia'] ?? '' }}</td>
+                                                <th class="celdaGris">DISTANCIA DEL NIVEL DE REFERENCIA: </th>
+                                                <td class="lineaInferior">{{ $foto['datos_junta']['distancia_nivel'] ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="celdaGris">DIRECCIÓN DE LA SONDA: </th>
+                                                <td class="lineaInferior">{{ $foto['datos_junta']['direccion_sonda'] ?? '' }}</td>
+                                                <th class="celdaGris">RECUBRIMIENTO: </th>
+                                                <td class="lineaInferior">{{ $foto['datos_junta']['recubrimiento'] ?? '' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                @endif
+                        </div>
+            @if(!$loop->last)
+                <div style="page-break-after: always;"></div>
+            @endif
+        @endforeach
         </body>
     </html>

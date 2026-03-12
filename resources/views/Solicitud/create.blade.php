@@ -68,72 +68,83 @@
             <h5><i class="icon fas fa-info"></i> Importante</h5>
             <p>Selecciona en el boton de "Solicitar" <button type="button" class="btn btn-success"><i class="fas fa-plus-circle"></i></button> para agregar un equipo o consumible</p>
         </div>
-        <div class="box-body">
-            <table id="tablaInventario" class="table table-bordered table-striped dt-responsive tablas">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Num. Económico</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>NS</th>
-                        <th>Stock</th>
-                        <th>Disponibilidad</th>
-                        <th>Fecha calibración</th>
-                        <th>Ver Presentación</th>
-                        <th>Solicitar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($generalConCertificados as $general_eyc)
-                    <tr id="row-{{ $general_eyc->idGeneral_EyC }}">
-                        <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
-                        <td scope="row">{{$general_eyc->No_economico}}</td>
-                        <td scope="row">{{$general_eyc->Marca}}</td>
-                        <td scope="row">{{$general_eyc->Modelo}}</td>
-                        <td scope="row">{{$general_eyc->Serie}}</td>
-                        <td scope="row">{{$general_eyc->almacen->Stock}}</td>
-                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></td>
-                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
-                                <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></td>
-                        @endif
-
-                        <td scope="row">
-                        @if($general_eyc->certificados)
-                            @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
-                                @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
-                                        SIN FECHA ASIGNADA
+        <div class="box">
+            <div class="box-body d-flex justify-content-center">
+                <div style="display: inline-block;">
+                    <table id="tablaInventario" class="table table-bordered table-striped dt-responsive tablas">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Num. Económico</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>NS</th>
+                                <th>Stock</th>
+                                <th>Disponibilidad</th>
+                                <th>Fecha calibración</th>
+                                <th>Ver Presentación</th>
+                                <th>Solicitar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($generalConCertificados as $general_eyc)
+                            <tr id="row-{{ $general_eyc->idGeneral_EyC }}">
+                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                                <td scope="row">{{$general_eyc->No_economico}}</td>
+                                <td scope="row">{{$general_eyc->Marca}}</td>
+                                <td scope="row">{{$general_eyc->Modelo}}</td>
+                                <td scope="row">{{$general_eyc->Serie}}</td>
+                                <td scope="row">{{$general_eyc->almacen->Stock}}</td>
+                                        @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
+                                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                            @elseif($general_eyc->Disponibilidad_Estado=='Equipo Disponible')
+                                                <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
+                                            @elseif($general_eyc->Disponibilidad_Estado=='NO DISPONIBLE' )
+                                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                            @elseif($general_eyc->Disponibilidad_Estado=='Equipo Fuera de Servicio')
+                                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></td>
+                                            @elseif($general_eyc->Disponibilidad_Estado=='FUERA DE SERVICIO/BAJA')
+                                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                            @elseif($general_eyc->Disponibilidad_Estado=='Equipo en Resguardo')
+                                                <td scope="row"><button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></td>
+                                            @elseif($general_eyc->Disponibilidad_Estado=='En Servicio')
+                                                <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En Servicio <i class="far fa-clock" aria-hidden="true"></i></td>
+                                            @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
+                                                <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
+                                        @endif
+                                <td scope="row">
+                                @if($general_eyc->certificados)
+                                    @if($general_eyc->Tipo =='EQUIPOS' || $general_eyc->Tipo == 'BLOCK Y PROBETA')
+                                        @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
+                                                SIN FECHA ASIGNADA
+                                            @else
+                                                {{$general_eyc->certificados->Fecha_calibracion}}
+                                        @endif
                                     @else
-                                        {{$general_eyc->certificados->Fecha_calibracion}}
+                                        N/A
+                                    @endif
                                 @endif
-                            @else
-                                N/A
-                            @endif
-                        @endif
-                        </td>
+                                </td>
 
-                        <td scope="row">
-                            @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                    <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                                @elseif($general_eyc->Foto == 'ESPERA DE DATO')
-                                    <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
-                            @endif
-                        </td>
+                                <td scope="row">
+                                    @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                    @endif
+                                </td>
 
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-success btnAgregarInventario" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btnAgregarInventario" data-id="{{ $general_eyc->idGeneral_EyC }}"><i class="fas fa-plus-circle"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <br><br>
         <!-- Alerta (oculta por defecto) -->
@@ -311,7 +322,11 @@ function consultarCantidadAlmacen(id, callback) {
         url: '/Obtener/CantidadAlmacen/' + id,
         method: 'GET',
         success: function(data) {
-            callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+            //callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+            //callback(null, data.Unidad); // Asume que la respuesta contiene un campo "Unidad"
+            const cantidad = data.Cantidad || 0;
+            const unidad = data.Unidad || ''; 
+            callback(null, cantidad, unidad); // 👈 Enviamos los 2 valores en una sola llamada
         },
         error: function(error) {
             callback(error);
@@ -365,7 +380,7 @@ $(document).ready(function() {
             return;
         }
 
-        consultarCantidadAlmacen(rowId, function(error, Cantidad) {
+        consultarCantidadAlmacen(rowId, function(error, Cantidad, unidad) {
             if (error || Cantidad <= 0) {
                 Swal.fire({
                     icon: 'error',
@@ -395,7 +410,7 @@ $(document).ready(function() {
                     <td>${marca}</td>
                     <td>${ultimaCalibracion}</td>
                     <td>${cantidadInput}</td>
-                    <td><input type="text" class="form-control" name="unidad[]" value="EN ESPERA DE DATOS" required></td>
+                    <td><input type="text" class="form-control" name="unidad[]" value="${unidad}" required></td>
                     <td>
                         <input type="hidden" name="general_eyc_id[]" value="${rowId}">
                         <button type="button" class="btn btn-danger btnQuitarElemento"><i class="fas fa-minus-circle"></i></button>

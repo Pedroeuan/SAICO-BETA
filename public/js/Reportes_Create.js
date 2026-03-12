@@ -1,3 +1,90 @@
+    /*check del cliente, si y no */
+document.addEventListener('DOMContentLoaded', function () {
+
+    const radios = document.querySelectorAll('input[name="TieneCliente"]');
+    const select = document.getElementById('campoClienteSelect');
+    const input  = document.getElementById('campoClienteInput');
+
+    function toggleCliente() {
+        const valor = document.querySelector('input[name="TieneCliente"]:checked').value;
+
+        if (valor === 'si') {
+            // Mostrar select
+            select.style.display = 'block';
+            input.style.display  = 'none';
+
+            input.value = '';   // limpiar input
+
+        } else {
+            // Mostrar input vacío
+            select.style.display = 'none';
+            input.style.display  = 'block';
+
+            select.value = '';  // limpiar select
+            input.value  = '';  // aseguramos vacío
+            input.focus();      // cursor automático
+        }
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', toggleCliente);
+    });
+
+    toggleCliente(); // ejecutar al cargar
+});
+
+    /*check del contrato, si y no */
+document.addEventListener("DOMContentLoaded", function () {
+
+    const radios = document.getElementsByName("TieneContrato");
+    const campoContrato = document.getElementById("campoContrato");
+
+    radios.forEach(radio => {
+        radio.addEventListener("change", async function () {
+
+            // 💾 Guardar selección
+            sessionStorage.setItem("TieneContrato", this.value);
+
+            if (this.value === "si") {
+                campoContrato.readOnly = false;
+                campoContrato.required = true;
+                campoContrato.value = "";
+                campoContrato.placeholder = "Ejemplo: 640853841";
+                return;
+            }
+
+            if (this.value === "no") {
+                campoContrato.readOnly = true;
+                campoContrato.required = false;
+                campoContrato.placeholder = "Generando contrato interno...";
+
+                try {
+                    const response = await fetch('/api/siguiente-contrato-interno');
+                    const data = await response.json();
+
+                    const nuevoContrato = data.siguiente;
+                    campoContrato.value = nuevoContrato;
+
+                } catch (error) {
+                    console.error("Error al obtener el contrato interno:", error);
+                    alert("No se pudo generar el contrato interno");
+                }
+            }
+        });
+    });
+
+    // 🔄 Restaurar selección al recargar
+    const seleccionado = sessionStorage.getItem("TieneContrato");
+
+    if (seleccionado) {
+        const radioGuardado = [...radios].find(r => r.value === seleccionado);
+
+        if (radioGuardado) {
+            radioGuardado.checked = true;
+            radioGuardado.dispatchEvent(new Event("change"));
+        }
+    }
+});
 
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
@@ -141,11 +228,16 @@
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
                         
                         <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="imagen_hoja[]" id="imagenHoja${i}" value="${i}">
+                            <input type="checkbox"
+                                class="form-check-input imagen-hoja-checkbox"
+                                data-index="${i}"
+                                id="imagenHoja${i}">
                             <label class="form-check-label" for="imagenHoja${i}">
                                 Imagen en una hoja
                             </label>
                         </div>
+
+                        <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">
 
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
@@ -155,24 +247,12 @@
                 `;
                 container.appendChild(col);
             }
-            
-            // Agregar eventos de eliminación a los botones
-            /*document.querySelectorAll('.remove-image').forEach(button => {
-                button.addEventListener('click', function () {
-                    const index = this.getAttribute('data-index');
-                    const fieldToRemove = document.getElementById(`image-container-${index}`);
-                    if (fieldToRemove) {
-                        fieldToRemove.remove();
-                        imageCountSelect.value = parseInt(imageCountSelect.value) - 1 || 0; // Decrementar el contador
-                        document.getElementById('msgImgNoSave').classList.remove('d-none');
-                        // Actualizar el localStorage
-                        localStorage.setItem(document.querySelectorAll("form")[1].id+'_imageCount', imageCountSelect.value);
-                    } else {
-                        alert('No se pudo encontrar el campo de imagen para eliminar.');
-                    }
-                    
+            document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const index = this.dataset.index;
+                    document.getElementById(`imagenHojaValue${index}`).value = this.checked ? 1 : 0;
                 });
-            });*/
+            });
 
             // Agregar eventos de eliminación a los botones
             document.querySelectorAll('.remove-image').forEach(button => {
@@ -237,95 +317,72 @@
     /*Juntas-Resultados */
     function updateRowNumbers() {
         let count = 0;
+
         $('#dynamicTable tbody tr').each(function () {
-            if (!$(this).hasClass('titulo-row')) {
-                count++;
-                $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
+
+            // ⛔ Ignorar títulos y longitudes
+            if ($(this).hasClass('titulo-row') || $(this).hasClass('long-row')) {
+                return;
             }
+
+            count++;
+            $(this).find('td:first').html(`${count} <input type="hidden" value="${count}">`);
         });
+
         rowCountGlobal = count;
     }
 
-    // Función para actualizar los títulos en el campo oculto
+    // Función para actualizar los títulos en el campo oculto (excluye longitudes)
     function updateTitulos() {
         var titulos = [];
-        // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-            titulos.push($(this).val());
+        $('.titulo-row').not('.long-row').each(function() {
+            const id = $(this).data('titulo');
+            const text = $(this).find('.titulo-text').val() || '';
+            titulos.push({ id: id, text: text });
         });
-
-        // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
+        $('#titulos_hidden').val(JSON.stringify(titulos));
     }
 
-    /*Guarda en sesionstorage */
-    /*function saveData() {
-        const data = [];
-        
-        $('#dynamicTable tbody tr').each(function () {
-            const tr = $(this);
-            const isTitulo = tr.hasClass('titulo-row');
-            const tituloId = tr.attr('data-titulo');
-            
-            if (isTitulo) {
-                const tituloText = tr.find('input[name="titulos[]"]').val().trim();
-                data.push({
-                    type: 'titulo',
-                    id: tituloId,
-                    text: tituloText
-                });
-            } else {
-                const inputs = tr.find('input').map(function () {
-                    return $(this).val();
-                }).get();
+    function saveData(formId) {
+    const titles = $('.titulo-row').not('.long-row').map(function() {
+        return { id: $(this).data('titulo'), text: $(this).find('.titulo-text').val() };
+    }).get();
 
-                data.push({
-                    type: 'fila',
-                    titulo: tituloId,
-                    rowNumber: tr.index() + 1, // o cualquier contador que estés usando
-                    inputs: inputs
-                });
-            }
-        });
-
-        sessionStorage.setItem('dynamicTableData', JSON.stringify(data));
-    }*/
-
-
-
-    function saveData(formKey) {
-    const data = [];
-    console.log('Saving data for form:', formKey);
-    
-    $('#dynamicTable tbody tr').each(function () {
-        const tr = $(this);
-        const isTitulo = tr.hasClass('titulo-row');
-        const tituloId = tr.attr('data-titulo');
-        
-        if (isTitulo) {
-            const tituloText = tr.find('input[name="titulos[]"]').val().trim();
-            data.push({
-                type: 'titulo',
-                id: tituloId,
-                text: tituloText
-            });
-        } else {
-            const inputs = tr.find('input').map(function () {
-                return $(this).val();
+    const rows = $('#dynamicTable tbody tr')
+        .not('.titulo-row, .long-row')
+        .map(function() {
+            const id = $(this).data('titulo');
+            const values = $(this).find('input[type="text"]').map(function(){ 
+                return $(this).val(); 
             }).get();
+            return { titleId: id, values };
+        }).get();
 
-            data.push({
-                type: 'fila',
-                titulo: tituloId,
-                rowNumber: tr.index() + 1,
-                inputs: inputs
-            });
-        }
-    });
+    const longs = $('.long-row').map(function(){
+        return { 
+            titleId: $(this).data('titulo'),
+            text: $(this).find('.long-text').val() 
+        };
+    }).get();
 
-    // Usa la clave dinámica
-    sessionStorage.setItem(`dynamicTableData_${formKey}`, JSON.stringify(data));
-}
+    // Dedupe by id+text para evitar entradas repetidas en sessionStorage
+    function dedupe(arr){
+        const seen = new Set();
+        return arr.filter(item => {
+            const key = (item.id || '') + '||' + (item.text || '');
+            if(seen.has(key)) return false; seen.add(key); return true;
+        });
+    }
+
+    const uniqueTitles = dedupe(titles);
+    const uniqueLongs = dedupe(longs);
+
+    sessionStorage.setItem('dynamicTableData', JSON.stringify({
+            titles: uniqueTitles,
+            rows,
+            longs
+        }));
+    }
 
     // Escuchar en tiempo real y guarda en el momento que se cambia un input
     $('#dynamicTable').on('input', 'input', function () {
@@ -334,56 +391,37 @@
     });
 
     // Evento para eliminar un título
-    $('#dynamicTable').on('click', '.btnEliminarTitulo', function () {
-        let tituloRow = $(this).closest('tr');
-        let tituloId = tituloRow.data('titulo');
-        
-        // Eliminar la fila del título
-        tituloRow.remove();
-        
-        // Eliminar todas las filas que tengan el mismo data-titulo
-        $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
-
-        updateRowNumbers(); // Si quieres actualizar el contador global
-        saveData(document.querySelectorAll("form")[1].id);
+    $(document).on('click', '.btnEliminarTitulo', function () {
+        const tr = $(this).closest('tr.titulo-row');
+        const id = tr.data('titulo');
+        // eliminar filas del mismo id
+        $('#dynamicTable tbody tr').filter(function () {
+            return $(this).data('titulo') === id;
+        }).remove();
+        tr.remove();
+        updateTitulos();
+        saveData($(this).closest('form').attr('id'));
     });
 
     /*Cambia el data-titulo y guarda en sesionstorage */
-    $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
-        const input = $(this);
-        const text = input.val().trim();
-        const safeTitulo = text !== '' ? text.replace(/\s+/g, '_').toLowerCase() : 'sin_titulo';
-
-        const tr = input.closest('tr');
-        const oldTitulo = tr.attr('data-titulo');
-
-        // Cambia el data-titulo del título
-        tr.attr('data-titulo', safeTitulo);
-
-        // Cambia el data-titulo de las filas asociadas a este título
-        $(`#dynamicTable tbody tr[data-titulo="${oldTitulo}"]:not(.titulo-row)`).each(function () {
-            $(this).attr('data-titulo', safeTitulo);
-
-            // Actualiza solo el valor entre corchetes en los names
-            $(this).find('input').each(function () {
-                let name = $(this).attr('name');
-                if (name) {
-                    // Solo reemplaza el valor entre corchetes que coincide exactamente con oldTitulo
-                    name = name.replace(/\[([^\]]+)\]/, function(match, p1) {
-                        return p1 === oldTitulo ? `[${safeTitulo}]` : match;
-                    });
-                    $(this).attr('name', name);
-                }
-            });
-        });
-
+    $(document).on('input', '.titulo-row .titulo-text', function () {
         updateTitulos();
         saveData(document.querySelectorAll("form")[1].id);
     });
 
     $('#dynamicTable').on('click', '.btnEliminar', function() {
-        $(this).closest('tr').remove();
+
+        const $tr = $(this).closest('tr');
+        const esLongitud = $tr.hasClass('long-row');
+
+        $tr.remove();
         updateRowNumbers();
+
+        // 👉 Solo recalcular si NO estamos borrando una longitud
+        if (!esLongitud) {
+            verificarYAgregarLongitud();
+        }
+
         saveData(document.querySelectorAll("form")[1].id);
     });
 
@@ -397,17 +435,6 @@
         });
         saveData(document.querySelectorAll("form")[1].id);
     });
-
-    // Función para actualizar los títulos en el campo oculto
-    function updateTitulos() {
-        var titulos = [];
-            // Recolectar todos los títulos en el array
-        $('.titulo-row input[type="text"]').each(function() {
-        titulos.push($(this).val());
-        });
-            // Asignar los títulos al campo oculto
-        $('#titulos_hidden').val(JSON.stringify(titulos)); // Almacena los títulos como un JSON
-    }
 
     /*llenado de campos vacios*/
     document.addEventListener("DOMContentLoaded", function () {
@@ -472,16 +499,6 @@
             }
         });
 
-        /* selects.forEach(select => {
-            const stored = localStorage.getItem(`${formId}_${select.name}`);
-            console.log(''+stored);
-
-            if (stored !== null) select.value = stored;
-
-            select.addEventListener("change", () => {
-                localStorage.setItem(`${formId}_${select.name}`, select.value);
-            });
-        });*/
 
         // Botón rellenar campos vacíos
         const rellenarBtn = form.querySelector("#preFormBtn");
@@ -489,7 +506,12 @@
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
                     if (input.value.trim() === "") {
-                        input.value = "---";
+                        if (input.type === "date") {
+                            // poner fecha actual
+                            input.value = new Date().toISOString().split('T')[0];
+                        } else if (input.type !== "file") {
+                            input.value = "---";
+                        }
                         localStorage.setItem(`${formId}_${input.name}`, input.value);
                     }
                 });
@@ -597,3 +619,76 @@
         firmas4.style.display = 'block';
     }
     });
+
+    /*Envio de formulario */
+/* Envio de formulario */
+$(document).ready(function () {
+
+    $('form').submit(function(e) {
+
+        // ============================
+        // VALIDAR CLIENTE SELECCIONADO
+        // ============================
+        let tieneCliente   = $('input[name="TieneCliente"]:checked').val();
+        let clienteSelect  = $('#campoClienteSelect').val();
+        let clienteInput   = $('#campoClienteInput').val();
+
+        // Si seleccionó "SI", debe elegir un cliente del select
+        if (tieneCliente === 'si' && 
+            (clienteSelect === null || clienteSelect === 'Seleccione un Cliente')) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cliente requerido',
+                text: 'Por favor seleccione un cliente válido.',
+            });
+
+            $('#campoClienteSelect').focus();
+            return;
+        }
+
+        // Si seleccionó "NO", debe escribir un cliente
+        if (tieneCliente === 'no' && clienteInput.trim() === '') {
+
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Cliente requerido',
+                text: 'Por favor ingrese el nombre del cliente.',
+            });
+
+            $('#campoClienteInput').focus();
+            return;
+        }
+
+        // ============================
+        // VALIDAR QUE LA TABLA NO ESTE VACIA
+        // ============================
+        if ($('#dynamicTable tbody tr').length === 0) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Advertencia',
+                text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+            });
+
+            return;
+        }
+
+        // ============================
+        // CONTINUA ENVIO NORMAL
+        // ============================
+        updateTitulos();
+
+        sessionStorage.clear();
+
+        let submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Guardando...');
+        submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+    });
+
+});

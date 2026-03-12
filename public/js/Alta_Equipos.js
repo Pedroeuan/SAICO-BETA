@@ -27,7 +27,6 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
-
 function actualizarTabla() {
     $.ajax({
         url: '/obtenerDatos/Actualizados', // Ruta que devuelve los datos actualizados
@@ -46,16 +45,28 @@ function actualizarTabla() {
                 var disponibilidad = '';
                 switch(item.Disponibilidad_Estado) {
                     case 'DISPONIBLE':
-                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-success">Disponible <i class="fa fa-check" aria-hidden="true"></i></button>';
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></button>';
+                        break;
+                    case 'Equipo Disponible':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-success">Equipo Disponible<i class="fa fa-check" aria-hidden="true"></i></button>';
                         break;
                     case 'NO DISPONIBLE':
-                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning">No Disponible <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning">No Disponible<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
+                        break;
+                    case 'Equipo Fuera de Servicio':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning">Equipo Fuera de Servicio<i class="fa fa-exclamation-triangle" aria-hidden="true"></i></button>';
                         break;
                     case 'FUERA DE SERVICIO/BAJA':
-                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio <i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-danger">Fuera de servicio<i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        break;
+                    case 'Equipo en Resguardo':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-danger">Equipo en Resguardo<i class="fa fa-ban" aria-hidden="true"></i></button>';
+                        break;
+                    case 'En Servicio':
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></button>';
                         break;
                     case 'ESPERA DE DATO':
-                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-info">Espera de Dato <i class="far fa-clock" aria-hidden="true"></i></button>';
+                        disponibilidad = '<button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></button>';
                         break;
                 }
 
@@ -136,7 +147,11 @@ function actualizarTabla() {
                 url: '/Obtener/CantidadAlmacen/' + id,
                 method: 'GET',
                 success: function(data) {
-                    callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "cantidad"
+                    //callback(null, data.Cantidad); // Asume que la respuesta contiene un campo "Cantidad"
+                    //callback(null, data.Unidad); // Asume que la respuesta contiene un campo "Unidad"
+                    const cantidad = data.Cantidad || 0;
+                    const unidad = data.Unidad || ''; 
+                    callback(null, cantidad, unidad); // 👈 Enviamos los 2 valores en una sola llamada
                 },
                 error: function(error) {
                     callback(error);
@@ -166,7 +181,7 @@ $(document).on('click', '.btnAgregar', function() {
     }
 
     // Consultar la cantidad en el almacén antes de agregar la fila
-    consultarCantidadAlmacen(id, function(error, cantidad) {
+    consultarCantidadAlmacen(id, function(error, cantidad, unidad) {
         if (error) {
             alert('Error al obtener cantidad de almacén.');
             button.prop('disabled', false); // Habilitar el botón en caso de error
@@ -185,7 +200,7 @@ $(document).on('click', '.btnAgregar', function() {
                 <td>${row.find('td').eq(2).text()}</td>
                 <td>${row.find('td').eq(7).text()}</td>
                 <td>${cantidadInput}</td>
-                <td><input type="text" class="form-control unidad" name="unidad_${id}" value="EN ESPERA DE DATOS" required></td>
+                <td><input type="text" class="form-control unidad" name="unidad_${id}" value="${unidad}" required></td>
                 <td><button type="button" class="btn btn-danger btnEliminar" data-id="${id}"><i class="fas fa-minus-circle" aria-hidden="true"></i></button></td>
             </tr>
         `;
@@ -479,18 +494,45 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
         if (!numeroEconomico) camposVacios.push('Número Económico');
         if (!marca) camposVacios.push('Marca');
         if (!modelo) camposVacios.push('Modelo');
-        if (!serie) camposVacios.push('Número de Serie');
+        if (!serie || serie === '') camposVacios.push('Número de Serie');
 
         if (camposVacios.length > 0) {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -591,18 +633,45 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
         if (!numeroEconomico) camposVacios.push('Número Económico');
         if (!marca) camposVacios.push('Marca');
         if (!modelo) camposVacios.push('Modelo');
-        if (!serie) camposVacios.push('Número de Serie');
+        if (!serie || serie === '') camposVacios.push('Número de Serie');
 
         if (camposVacios.length > 0) {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -703,6 +772,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -722,6 +794,31 @@ document.addEventListener('DOMContentLoaded', function() {
             guardarContinuarButton.disabled = false;
             return;
         }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
         // Si la serie es exactamente '---', se envía como null para no validarla
         if (serie === '---') {
             serie = null; // También podrías usar '' si prefieres
@@ -815,6 +912,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var stock = formData.get('Stock');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -826,6 +926,30 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -892,6 +1016,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var marca = formData.get('Marca');
         var modelo = formData.get('Modelo');
         var serie = formData.get('Serie');
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
+        var iso = formData.get('ISO');
 
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
@@ -904,6 +1031,30 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!iso || iso === 'Elige el tipo de ISO') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "9001 / 17025".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -1006,6 +1157,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var modelo = formData.get('Modelo');
         var stock = formData.get('Stock');
 
+        // Validación de disponibilidad
+        var disponibilidad = formData.get('Disponibilidad_Estado');
+
         var camposVacios = [];
         if (!nombre) camposVacios.push('Nombre');
         if (!marca) camposVacios.push('Marca');
@@ -1016,6 +1170,18 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete los siguientes campos: ' + camposVacios.join(', '),
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            finalizarButton.disabled = false;
+            guardarContinuarButton.disabled = false;
+            return;
+        }
+
+        if (!disponibilidad || disponibilidad === 'Elige un Tipo') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, selecciona una opción válida en "Disponibilidad / Estatus".',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
@@ -1317,3 +1483,77 @@ document.getElementById('kitForm').addEventListener('submit', function() {
         localStorage.removeItem('kitForm_' + input.name);
     });
 });
+$(document).ready(function() {
+    function setDisponibilidadBgColor(select) {
+        var val = $(select).val();
+        var bg = '';
+        var color = 'white';
+        // Solo para opciones del laboratorio
+        if (val === 'Equipo Disponible' || val === 'Nuevo') {
+            bg = '#28a745'; // verde
+            color = 'white';
+        } else if (val === 'Equipo Fuera de Servicio' || val === 'Usado') {
+            bg = '#eeff07ff'; // amarillo
+            color = 'black';
+        } else if (val === 'En Servicio') {
+            bg = '#dca735'; // naranja
+            color = 'white';
+        }else if (val === 'Equipo en Resguardo' || val === 'Terminado') {
+            bg = '#dc3545'; // rojo
+            color = 'white';
+        } else {
+            bg = 'white';
+            color = 'black';
+        }
+        $(select).css({
+            'background-color': bg,
+            'color': color
+        });
+    }
+
+    $('select[name="Disponibilidad_Estado"]').each(function() {
+        setDisponibilidadBgColor(this);
+    }).on('change', function() {
+        setDisponibilidadBgColor(this);
+    });
+});
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const stockTotal = document.getElementById('stockTotal');
+        const stockUsado = document.getElementById('stockUsado');
+        const stockNuevo = document.getElementById('stockNuevo');
+
+        function updateStock(source) {
+            const total = parseInt(stockTotal.value) || 0;
+                                                    
+            if (source === 'usado') {
+            const usado = parseInt(stockUsado.value) || 0;
+            if (usado <= total) {
+                stockNuevo.value = total - usado;
+            } else {
+                stockUsado.value = total;
+                stockNuevo.value = 0;
+            }
+            } else if (source === 'nuevo') {
+            const nuevo = parseInt(stockNuevo.value) || 0;
+            if (nuevo <= total) {
+                stockUsado.value = total - nuevo;
+            } else {
+                stockNuevo.value = total;
+                stockUsado.value = 0;
+            }
+            } else if (source === 'total') {
+            const usado = parseInt(stockUsado.value) || 0;
+            if (usado <= total) {
+                stockNuevo.value = total - usado;
+            } else {
+                stockUsado.value = total;
+                stockNuevo.value = 0;
+            }
+            }
+            }
+
+            stockTotal.addEventListener('input', () => updateStock('total'));
+            stockUsado.addEventListener('input', () => updateStock('usado'));
+            stockNuevo.addEventListener('input', () => updateStock('nuevo'));
+    });

@@ -68,11 +68,21 @@
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
-
                         <div class="form-group">
                             <label for="inputSubject">Rol</label>
                             <select class="form-control select2 @error('RolUsuario') is-invalid @enderror" style="width: 100%;" name="RolUsuario">
                                 <option selected disabled>Selecciona un perfil</option>
+                                @if($rol=='Administrador')
+                                <!--<option value="Super Administrador" @if($Usuario->rol == 'Super Administrador') selected="selected" @endif> Super Administrador</option>-->
+                                <option value="Administrador" @if($Usuario->rol == 'Administrador') selected="selected" @endif> Administrador</option>
+                                <option value="Cliente" @if($Usuario->rol == 'Cliente') selected="selected" @endif> Cliente</option>
+                                <option value="Ventas" @if($Usuario->rol == 'Ventas') selected="selected" @endif> Ventas</option>
+                                <option value="Técnicos" @if($Usuario->rol == 'Técnicos') selected="selected" @endif> Técnicos</option>
+                                <option value="Planeación" @if($Usuario->rol == 'Planeación') selected="selected" @endif> Planeación</option>
+                                <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
+                                <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
+                                <option value="Tics" @if($Usuario->rol == 'Tics') selected="selected" @endif> Tics</option>
+                                @else
                                 <option value="Super Administrador" @if($Usuario->rol == 'Super Administrador') selected="selected" @endif> Super Administrador</option>
                                 <option value="Administrador" @if($Usuario->rol == 'Administrador') selected="selected" @endif> Administrador</option>
                                 <option value="Cliente" @if($Usuario->rol == 'Cliente') selected="selected" @endif> Cliente</option>
@@ -80,6 +90,10 @@
                                 <option value="Técnicos" @if($Usuario->rol == 'Técnicos') selected="selected" @endif> Técnicos</option>
                                 <option value="Planeación" @if($Usuario->rol == 'Planeación') selected="selected" @endif> Planeación</option>
                                 <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
+                                <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
+                                <option value="Tics" @if($Usuario->rol == 'Tics') selected="selected" @endif> Tics</option>
+                                @endif
+
                             </select>
                             @error('RolUsuario')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -90,12 +104,64 @@
                             <label for="inputSubject">Estatus</label>
                             <select class="form-control select2 @error('Estatus') is-invalid @enderror" style="width: 100%;" name="Estatus">
                                 <option selected disabled>Selecciona un Estatus</option>
+                                @if($Usuario->Estatus == 'ALTA')
                                 <option value="ALTA" @if($Usuario->Estatus == 'ALTA') selected="selected" @endif>ALTA</option>
                                 <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @elseif($Usuario->Estatus == 'ALTA2')
+                                <option value="ALTA2" @if($Usuario->Estatus == 'ALTA2') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @elseif($Usuario->Estatus == 'ALTA3')
+                                <option value="ALTA3" @if($Usuario->Estatus == 'ALTA3') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @elseif($Usuario->Estatus == 'ALTA4')
+                                <option value="ALTA4" @if($Usuario->Estatus == 'ALTA4') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @elseif($Usuario->Estatus == 'ALTA5')
+                                <option value="ALTA5" @if($Usuario->Estatus == 'ALTA5') selected="selected" @endif>ALTA</option>
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                @else
+                                <option value="BAJA" @if($Usuario->Estatus == 'BAJA') selected="selected" @endif>BAJA</option>
+                                <option value="ALTA" @if($Usuario->Estatus == 'ALTA') selected="selected" @endif>ALTA</option>
+                                @endif 
                             </select>
                             @error('Estatus')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        <hr>
+                        <h5>Documentación para Vehículos</h5>
+
+                        <div class="form-group">
+                            <label>Número de Licencia</label>
+                            <input type="text" name="licencia_numero" class="form-control" value="{{ $Usuario->licencia_numero }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha vencimiento licencia</label>
+                            <input type="date" name="licencia_vencimiento" class="form-control" value="@if($Usuario->licencia_vencimiento == '2001-01-01') {{ '' }} @else  {{ $Usuario->licencia_vencimiento }} @endif">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Licencia actual:</label>
+                            @if($Usuario->licencia_pdf && $Usuario->licencia_pdf != 'ESPERA DE DATO')
+                                <br>
+                                <a href="{{ asset('storage/'.$Usuario->licencia_pdf) }}" target="_blank">Ver Licencia Actual</a>
+                                @else
+                                <p>No se ha subido una licencia.</p>
+                            @endif
+                            <input type="file" name="licencia_pdf" class="form-control" accept="application/pdf">
+                        </div>
+
+                        <div class="form-group">
+                            <label>CV actual:</label>
+                            @if($Usuario->cv_pdf && $Usuario->cv_pdf != 'ESPERA DE DATO')
+                                <br>
+                                <a href="{{ asset('storage/'.$Usuario->cv_pdf) }}" target="_blank">Ver CV Actual </a>
+                            @else
+                                <p>No se ha subido un CV.</p>
+                            @endif
+                            <input type="file" name="cv_pdf" class="form-control" accept="application/pdf">
                         </div>
 
                         <div class="form-group">

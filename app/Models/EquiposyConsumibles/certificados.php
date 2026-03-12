@@ -13,7 +13,11 @@ class certificados extends Model
         'No_certificado',
         'Certificado_Actual',
         'Fecha_calibracion',
-        'Prox_fecha_calibracion'
+        'Prox_fecha_calibracion',
+        'Fecha_verificacion',
+        'Prox_fecha_verificacion',
+        'Fecha_mantenimiento',
+        'Prox_fecha_mantenimiento',
     ];
     protected $table = 'certificados';
     protected $primaryKey = 'idGeneral_EyC';
@@ -37,6 +41,11 @@ class certificados extends Model
     public function getFormattedDateAttribute()
     {
         return \Carbon\Carbon::parse($this->attributes['Fecha_calibracion'])->format('d-m-Y');
+    }
+
+    public function getFormattedDate2Attribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Prox_fecha_calibracion'])->format('d-m-Y');
     }
     
 }

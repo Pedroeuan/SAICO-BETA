@@ -57,6 +57,13 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        .border-primary {
+            border: 2px solid #007bff !important; /* azul brillante */
+        }
+        .border-secondary {
+            border: 1px solid #6c757d !important; /* gris */
+        }
+
     </style>
 @endsection
 
@@ -158,8 +165,6 @@
                             @enderror
                         </div>
                     </div>
-
-
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -294,7 +299,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '')}}">>
+                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -314,10 +319,8 @@
 
                         <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                         <!--***************************************** INICIO RESULTADOS *****************************************-->
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA</div>
-                                    
-                        <!--IMAGENES CON COMENTARIOS-->
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA / SEÑAL DE REFERENCIA</div>
+                                        <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -394,26 +397,18 @@
                                             </div>
                                         </div>
 
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
-                        </div>
-                    </div>
-
-
-                    <!-- Select para elegir el número de firmas -->
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
-                        <div class="col-sm-15">
-                            <div class="form-group">
-                                <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                    <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
-                                    <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
-                                    <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
-                                    <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
-                                </select>
-                            </div>
-                        </div>
+                                <!-- Select para elegir el número de firmas -->
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
+                                    <div class="col-sm-15">
+                                        <div class="form-group">
+                                            <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
+                                                <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
+                                                <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
+                                                <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
+                                            </select>
+                                        </div>
+                                    </div>
                         
                                         <!-- 1 DOS FIRMAS-->
                                         <div id="firmas1" class="col-12">
@@ -651,6 +646,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
-
+    // 🟢 Selecciona automáticamente el número de imágenes existentes
+    /*document.addEventListener("DOMContentLoaded", () => {
+        const existingCount = {{ count($Fotos_Comentarios) }};
+        const select = document.getElementById('imageCount');
+        if (select) select.value = existingCount;
+    });*/
 </script>
 @endsection

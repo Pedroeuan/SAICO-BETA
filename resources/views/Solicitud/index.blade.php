@@ -61,7 +61,9 @@
                         <tr>
                             <td scope="row">{{$solicitud->tecnico}}</td>
                             <td scope="row">{{$solicitud->folio}}</td>
-                            <td scope="row">{{$solicitud->formatted_date}}</td>
+                            <td data-order="{{ $solicitud->fecha_servicio }}">
+                                {{ $solicitud->formatted_date }}
+                            </td>
                             <td scope="row">{{$solicitud->Estatus}}</td>
                             @if($rol == 'Equipos' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                 @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
@@ -131,14 +133,14 @@
                                         </td>
                                     <!--PDF DE RESGUARDO-->
                                         <td>
-                                            @if ($solicitud->devolucion_pdf)
+                                            @if (empty($solicitud->devolucion_pdf) || in_array($solicitud->devolucion_pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                            @else ($solicitud->devolucion_pdf)
                                                 <a href="{{ asset('storage/' . $solicitud->devolucion_pdf) }}" target="_blank" class="btn btn-primary">
                                                     <i class="far fa-file-pdf"></i> 
                                                 </a>
-                                            @else
-                                                <span class="btn btn-secondary" style="cursor: not-allowed; background-color: gray; border-color: gray;">
-                                                    <i class="far fa-file-pdf"></i> 
-                                                </span>
                                             @endif
                                         </td>
 
@@ -256,6 +258,7 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
     let table = new DataTable('#tablaJs', {
+        order: [[2, 'desc']], // 👈 ORDENAR POR FECHA
         // options
         language: {
                         "decimal": "",
@@ -287,7 +290,7 @@
     //valor del id a eliminar
     var idSolicitud = $(this).attr("id-Solicitud");
     Swal.fire({
-        title: "Seguro de eliminar este elemento?",
+        title: "Seguro de eliminar esta Solicitud?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -352,6 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 </script>
 
 @endsection

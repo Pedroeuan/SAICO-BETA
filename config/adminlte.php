@@ -293,24 +293,24 @@ return [
     */
 
     'menu' => [
-            [
-            'type' => 'navbar-notification',
-            'id' => 'my-notification',                // An ID attribute (required).
-            'icon' => 'fa fa-bell',                  // A font awesome icon (required).
-            'icon_color' => 'danger',                // The initial icon color (optional).
-            'label' => 0,                             // The initial label for the badge (optional).
-            'label_color' => '',                // The initial badge color (optional).
-            'url' => 'notificacion/index',            // The url to access all notifications/elements (required).
-            'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
-            'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
-            'dropdown_flabel' => 'Todas las notificaciones', // The label for the dropdown footer link (optional).
-            /*'update_cfg' => [
-                'url' => 'notificaciones/update', // The url to periodically fetch new data (optional).
-                'period' => 60,                       // The update period for get new data (in seconds, optional).
-            ],*/
-        ],
-                // Sidebar Administrativo:
                 [
+                    'type' => 'navbar-notification', // Indica que este elemento es un ícono de notificaciones en la barra superior.
+                    'id' => 'my-notification',       // ID único para identificar este componente (requerido para actualizarlo vía JS/AJAX).
+                    'icon' => 'fa fa-bell',          // Icono FontAwesome que se mostrará como campana.
+                    'icon_color' => 'danger',        // Color inicial del icono (rojo = danger). Opcional.
+                    'label' => 0,                    // Número inicial que aparece como contador (badge). Puede empezar en 0.
+                    'label_color' => '',            // Color de la etiqueta del contador (badge). Ej: 'warning', 'info', 'success'.
+                    'url' => 'notificacion/index',   // Ruta a donde te lleva al hacer clic en "Ver todas".
+                    'topnav_right' => true,          // Lo coloca en la parte derecha del top navbar (si fuera "topnav" va del lado izquierdo).
+                    'dropdown_mode' => true,         // Activa el modo desplegable con lista de notificaciones.
+                    'dropdown_flabel' => 'Todas las notificaciones', // Texto del enlace al final del dropdown (footer).
+                    /*'update_cfg' => [
+                        'url' => 'notificaciones/update', // Ruta que AdminLTE usará para hacer AJAX y actualizar datos.
+                        'period' => 60,                   // Cada cuántos segundos consultar nuevas notificaciones.
+                    ],*/
+                ],
+                // Sidebar Administrativo:
+                /*[
                     'text' => 'REPORTES',
                     'icon' => 'fas fa-file-alt',
                     'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
@@ -399,7 +399,7 @@ return [
                             'url' => '/Reporte/FOR-INS-18/01/PDF',
                         ],
                     ],
-                ],
+                ],*/
         
         // Sidebar Administrativo:
         /*[
@@ -454,58 +454,58 @@ return [
                 //'topnav' => true,
                 'submenu' => [
                         [
-                            'text' => 'FOR-02-PRO-INS-02',
+                            'text' => 'FOR-PIMP-02_B/03',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_02_PRO_INS_02',
-                            'can' => 'equipos-access',
+                            'url' => '/Reporte/FOR_PIMP_02_B/03',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-03',
+                            'text' => 'FOR-PIMP-02_B/04',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_03',
-                            'can' => 'equipos-access',
+                            'url' => '/Reporte/FOR_PIMP_02_B/04',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-04',
+                            'text' => 'FOR-PIMP-03/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_04',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_03/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-02-PRO-INS-04',
+                            'text' => 'FOR-PIMP-07_B/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_02_PRO_INS_04',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_07_B/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-05',
+                            'text' => 'FOR-PIMP-05_B/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_05',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_05_B/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-06',
+                            'text' => 'FOR-PIMP-06_B/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_06',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_06_B/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-07',
+                            'text' => 'FOR-PIMP-04/02',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_07',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_04/02',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-08',
+                            'text' => 'FOR-PIMP-03/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_08',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_03/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-09',
+                            'text' => 'FOR-PIMP-04/03',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_09',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_04/03',
+                            'can' => '',
                         ],
                         [
                             'text' => 'FOR-01-PRO-INS-10',
@@ -627,20 +627,20 @@ return [
                 [
                     'text' => 'Equipos',
                     'icon' => 'fas fa-pencil-ruler',
-                    'can' => 'tecnicos-equipos-access',
+                    'can' => 'tecnicos-equipos-lab-access',
                     //'topnav' => true,
                     'submenu' => [
                         [
                             'text' => 'Inventario',
                             'icon' => 'far fa-clipboard',
                             'url' => 'inventario',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => ' Certificados',
                             'icon' => 'fa fa-certificate',
                             'url' => 'Historial_certificados/index',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => 'Clientes',
@@ -658,7 +658,7 @@ return [
                             'text' => 'Registro de altas',
                             'icon' => 'fas fa-edit',
                             'url' => 'registros/createEyC',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => 'Solicitar E y C',
@@ -670,7 +670,7 @@ return [
                             'text' => ' Ver E/S/D',
                             'icon' => 'fas fa-exchange-alt',
                             'url' => 'Historial_Almacen/index',
-                            'can' => 'equipos-access',
+                            'can' => 'equipos-lab-access',
                         ],
                         [
                             'text' => ' Ver Kits',
@@ -689,25 +689,67 @@ return [
                 ],
 
                  // Sidebar Administrativo:
-        [
-            'text' => 'Admin',
-            'icon' => 'fas fa-universal-access',
-            'can' => 'administrador-access',
-            //'topnav' => true,
-            'submenu' => [
                 [
-                    'text' => 'Ver usuarios',
-                    'icon' => 'fas fa-users',
-                    'url' => 'Admin/index',
+                    'text' => 'Admin',
+                    'icon' => 'fas fa-universal-access',
+                    'can' => 'administrador-access',
+                    //'topnav' => true,
+                    'submenu' => [
+                        [
+                            'text' => 'Ver usuarios',
+                            'icon' => 'fas fa-users',
+                            'url' => 'Admin/index',
+                        ],
+                        [
+                            'text' => 'Registro de usuarios',
+                            'icon' => 'fas fa-user-plus',
+                            'url' => 'Admin/create',
+                        ],
+                        
+                    ],
                 ],
                 [
-                    'text' => 'Registro de usuarios',
-                    'icon' => 'fas fa-user-plus',
-                    'url' => 'Admin/create',
+                    'text' => 'Solicitudes AD',
+                    'icon' => 'fas fa-file-alt',
+                    'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
+                    //'topnav' => true,
+                    'submenu' => [
+                        [
+                            'text' => 'Solicitar',
+                            'url' => '/ADsolicitud/create',
+                            //can => 'nombre-ruta'
+                        ],
+                        [
+                            'text' => 'Ver solicitudes',
+                            'url' => '/ADsolicitud/index',
+                            //can => 'nombre-ruta'
+                        ],
+                    ],
                 ],
-                
-            ],
-        ],
+                // Sidebar Vehiculo
+                [
+                    'text' => 'Gestión de Vehículos',
+                    'icon' => 'fas fa-car',
+                    'submenu'=> [
+                        [
+                            'text' => 'Vehículos',
+                            'icon' => 'fas fa-truck',
+                            'url' => '/vehiculos',
+                            'can' => 'vehiculos-admin-access'
+                        ],
+                        [
+                            'text' => 'Salidas de Vehículos',
+                            'icon' => 'fas fa-sign-out-alt',
+                            'url' => '/salidas-vehiculos',
+                        ],
+                        [
+                            'text' => 'Panel Vehícular',
+                            'url' => 'salidas-vehiculos/panel',
+                            'icon' => 'fas fa-chart-bar',
+                            'can' => 'vehiculos-admin-access'
+                        ],
+                    ],
+                ],
     ],//Final Menu
 
     /*

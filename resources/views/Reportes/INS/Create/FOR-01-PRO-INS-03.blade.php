@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+  @extends('adminlte::page')
 
 @section('title', 'FOR-01-PRO-INS-03')
 
@@ -111,34 +111,67 @@
                                         </div>
                                     </div>
 
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">
+                                ¿Cliente existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneCliente" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
+
+                            <!-- SELECT cuando es SI -->
+                            <select id="campoClienteSelect"
+                                    class="form-select"
+                                    name="Detalles_Generales[Cliente]">
+                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                @foreach($Clientes as $Cliente)
+                                    <option value="{{ $Cliente->Cliente }}">
+                                        {{ $Cliente->Cliente }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+
+                            <!-- INPUT cuando es NO -->
+                            <input type="text"
+                                id="campoClienteInput"
+                                class="form-control inputForm mt-2"
+                                name="Detalles_Generales[Cliente]"
+                                placeholder="Ingrese nombre del cliente"
+                                style="display:none;">
+                        </div>
+                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            
-                                            <div class="d-flex justify-content-between align-items-center w-100">
-                                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
-                                                <div class="form-check form-switch mb-0">
-                                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
-                                                </div>
-                                            </div>
+                                            <label class="col-form-label">
+                                                ¿Contrato existente?
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneContrato" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
 
-                                            
-                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
-                                            @error('Contrato')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
+                                            <!-- Input visible solo si es "SI" -->
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Detalles_Generales[Contrato]"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
-                                    
-
-                                    <!--div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
-                                            @error('Contrato')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -551,6 +584,7 @@
                                     </table>
                                     </div>
 
+                                    <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
@@ -863,14 +897,14 @@
                                             </select>
                                         </div>
 
-                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                        <!-- <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <h5><i class="icon fas fa-info"></i> Importante</h5>
                                             <p>
                                                 Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
                                                 y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
                                             </p>
-                                        </div>
+                                        </div> -->
 
                                         <div class="w-100">
                                             <div id="imageFieldsContainer" class="row">
@@ -958,9 +992,9 @@
         let rowCount = 0;
         let rowCountGlobal = 0;
 
-        function restoreData() {
-            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
-            if (savedData) {
+    function restoreData() {//-----------------------------------------------------------Reemplazar todo el resotedara
+        const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
+        if (!data) return;
                 // Restaurar contadores
                 tituloCount = savedData.filter(item => item.type === 'titulo').length;
                 rowCountGlobal = savedData.filter(item => item.type === 'fila').length;

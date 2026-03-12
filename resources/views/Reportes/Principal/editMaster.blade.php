@@ -98,6 +98,9 @@
         @include('Reportes.INS.Edit.FOR-02-PRO-INS-15')
     @elseif($Nombre_Formato == 'FOR-03-PRO-INS-15')
         @include('Reportes.INS.Edit.FOR-03-PRO-INS-15')
+        /*IM*/
+    @elseif($Nombre_Formato == 'FOR-PIMP-07_B/01') 
+        @include('Reportes.IM.Edit.FOR-PIMP-07_B_01')
     @endif
 @stop
 

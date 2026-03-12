@@ -57,6 +57,14 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        .bg-light {
+            background-color: #f9f9f9 !important;
+        }
+
+        .col-12.border {
+            border: 1px solid #ccc !important;
+        }
+
     </style>
 @endsection
 
@@ -111,15 +119,34 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Contrato</label>
-                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
-                            @error('Contrato')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">
+                                                Contrato
+
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneContrato" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
+
+                                            <!-- Input visible solo si es "SI" -->
+                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
+
+                                            <!-- Input oculto donde guardaremos el contrato interno -->
+                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
+
+                                            <!-- Texto para mostrar contrato interno -->
+                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
+                                                Contrato interno asignado: <b id="numeroInterno"></b>
+                                            </small>
+                                        </div>
+                                    </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -212,7 +239,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Trazabilidad</label>
                             <input type="text" class="form-control  inputForm @error('Trazabilidad') is-invalid @enderror" name="Detalles_Generales[Trazabilidad]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Trazabilidad')}}">
@@ -222,7 +249,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
                             <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
@@ -233,7 +260,7 @@
                     </div>
 
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Criterio de Evaluación</label>
                             <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
@@ -243,7 +270,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Accesorio</label>
                             <input type="text" class="form-control  inputForm @error('Accesorio') is-invalid @enderror" name="Detalles_Generales[Accesorio]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Accesorio')}}">
@@ -253,7 +280,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Tuberia</label>
                             <input type="text" class="form-control  inputForm @error('Tuberia') is-invalid @enderror" name="Detalles_Generales[Tuberia]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tuberia')}}">
@@ -263,7 +290,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Estructural</label>
                             <input type="text" class="form-control  inputForm @error('Estructural') is-invalid @enderror" name="Detalles_Generales[Estructural]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Estructural')}}">
@@ -291,7 +318,34 @@
 
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS Y AJUSTES DEL EQUIPO</div>
 
-                    <div style="margin-bottom: 2px;"></div>
+
+                                    <div style="margin-bottom: 5px;"></div>
+
+                                    <div class="alert alert-warning alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                        <p>Puedes Seleccionar un equipo, accesorio o block del menu o escribir directamente</p>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
+
+                                    <!-- Select para Equipos -->
+                                    <div class="col-sm-50 d-flex justify-content-center">
+                                        <div class="form-group text-center">
+                                            <label class="col-form-label" for="inputSuccess">Equipos:</label>
+                                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
+                                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                                    <option value="{{ $equipo->idGeneral_EyC }}"
+                                                            data-marca="{{ $equipo->Marca }}"
+                                                            data-modelo="{{ $equipo->Modelo }}"
+                                                            data-ns="{{ $equipo->Serie }}">
+                                                        {{ $equipo->Nombre_E_P_BP }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -317,7 +371,7 @@
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">MATRIZ DE DATOS OBTENIDA DE LA PIEZA / SEÑAL DE REFERENCIA</div>
                         
                         <p>
 
@@ -362,12 +416,12 @@
                             </div>
                         </div>
 
-                    <div class="col-sm-12">
+                    <!--<div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Observaciones:</label>
                             <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
                         </div>
-                    </div>
+                    </div>-->
 
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -475,7 +529,7 @@
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
 
                                     </tr>
-                                                                        
+
                                     <tr>
 
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
@@ -537,7 +591,7 @@
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
                                     </tr>
-                                                                        
+
                                     <tr>
 
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
@@ -602,14 +656,37 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create.js') }}"></script> <!--Se realiza el cambio a las imagenes que se tienene de foto y comentario-->
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <script>
+    /*Selects */
+    $(document).ready(function() {
+        function actualizarInputsE() {
+            var selectedOption = $('#equiposSelect').find('option:selected');
 
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
+        }
+
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
+        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+
+        // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
+        });
     /*FOR-01-PRO-INS-20*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-20');
@@ -645,6 +722,7 @@
                 //localStorage.clear();
             });
         });
+
     });
 </script>
 @endsection

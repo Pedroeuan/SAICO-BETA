@@ -293,7 +293,7 @@
                                     <th class="" style="width: 4%;">Cantidad</th>
                                     <th class="" style="width: 4%;">Unidad</th>
                                     <th class="" style="width: 20%;">Descripción</th>
-                                    <th class="" style="width: 10%;">No. ECO</th>
+                                    <th class="" style="width: 10%;">No / ID</th>
                                     <th class="">No. De Serie</th>
                                     <th class="">Marca</th>
                                     <th class="">Modelo</th>

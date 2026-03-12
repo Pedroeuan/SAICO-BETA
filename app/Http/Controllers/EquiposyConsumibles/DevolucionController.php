@@ -70,12 +70,6 @@ class DevolucionController extends Controller
         $solicitud = Solicitudes::where('idSolicitud', $id)->first();
         $EstadoSolicitud = $solicitud->Estatus;
 
-        // Extraer el prefijo (n letras antes del "-"), número y año del Folio base
-        /*preg_match('/^([A-Z]{4}-\d+)/', $folioBase, $matches);
-        if (count($matches) > 0) {
-            $folioPattern = $matches[1]; // Prefijo + número como "PROP-001"
-            $anioPattern = substr($folioBase, -2); // Año como "24" */
-            // Extraer prefijo (1 o más letras antes del "-"), número y año del Folio base
             preg_match('/^([A-Z]+-\d+)/', $folioBase, $matches);
             if (count($matches) > 0) {
                 $folioPattern = $matches[1]; // Ej: "P-001", "AB-001", "PROP-001", etc.
@@ -83,10 +77,9 @@ class DevolucionController extends Controller
 
             // Usar expresión regular para buscar folios similares
             $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
-
             // Obtener todos los idSolicitud de los folios similares
             $idsSolicitud = $foliosSimilares->pluck('idSolicitud')->toArray(); // Convertir a array
-
+            log::info('IDs de Solicitudes obtenidos para folios similares: ' . implode(', ', $idsSolicitud)); // Log para verificar los IDs obtenidos
             // Obtener los Folios asociados a cada idSolicitud desde la tabla manifiesto
             $foliosManifiestos = manifiesto::whereIn('idSolicitud', $idsSolicitud)
                 ->get(['idSolicitud', 'Folio'])
@@ -94,7 +87,7 @@ class DevolucionController extends Controller
 
             // Buscar esos idSolicitud en la tabla detalles_solicitud y contar idGeneral_EyC
             $detallesSolicitud = detalles_solicitud::whereIn('idSolicitud', $idsSolicitud)
-                ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(cantidad) as cantidad'))
+                ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(Cantidad) as cantidad'))
                 ->groupBy('idGeneral_EyC', 'idSolicitud')
                 ->get();
 
@@ -137,11 +130,9 @@ class DevolucionController extends Controller
             $datosManifiesto = [];
             $idsSolicitud = [];
         }
-
         $FechaActual = Carbon::now();
 
         $devoluciones = devolucion::where('idSolicitud', $id)->first();
-
         // Pasar los datos a la vista
         return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud','FechaActual','Nombre','EstadoSolicitud','devoluciones'));
     }
@@ -159,14 +150,29 @@ class DevolucionController extends Controller
         $cantidad = $request->input('cantidad');
         $folio = $request->input('folio'); // Obtener el Folio de la solicitud
         // Buscar el registro en General_EyC
-        $generalEyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+        //$generalEyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
+        $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
 
         if (!$generalEyC) {
             return response()->json(['error' => 'Elemento no encontrado'], 404);
         }
 
         // Cambiar el estado a "DISPONIBLE"
-        $generalEyC->Disponibilidad_Estado = 'DISPONIBLE';
+        //$generalEyC->Disponibilidad_Estado = 'DISPONIBLE';
+            if ($generalEyC) {
+                // Verificar si el equipo pertenece a la ISO 17025
+                if ($generalEyC->ISO->NombreISO == '17025') {
+                    // Cambiar disponibilidad a "EN SERVICIO"
+                    $generalEyC->update([
+                        'Disponibilidad_Estado' => 'Equipo Disponible',
+                    ]);
+                } else {
+                    // Para los demás, volver a "DISPONIBLE"
+                    $generalEyC->update([
+                        'Disponibilidad_Estado' => 'DISPONIBLE',
+                    ]);
+                }
+            }
         $generalEyC->save();
 
         // Actualizar la cantidad en Almacen
@@ -196,6 +202,70 @@ class DevolucionController extends Controller
 
         // Retornar respuesta exitosa
         return response()->json(['success' => 'Elemento devuelto exitosamente.']);
+    }
+
+    public function devolverTodo(Request $request)
+    {
+        //$idsSolicitud = $request->input('idSolicitudes');
+        $idsSolicitud = $request->json('idSolicitudes');
+        foreach ($idsSolicitud as $idSolicitud) {
+            $detalles = detalles_solicitud::where('idSolicitud', $idSolicitud)->get();
+            foreach ($detalles as $detalle) {
+                // reutilizamos devolverItem manualmente:
+                // Obtener el folio correcto
+                $folio = manifiesto::where('idSolicitud', $idSolicitud)->value('Folio');
+                $idGeneral_EyC = $detalle->idGeneral_EyC;
+                $Cantidad = $detalle->Cantidad;
+
+                $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
+
+                if (!$generalEyC) {
+                    return response()->json(['error' => 'Elemento no encontrado'], 404);
+                }
+
+                if ($generalEyC) {
+                // Verificar si el equipo pertenece a la ISO 17025
+                if ($generalEyC->ISO->NombreISO == '17025') {
+                    // Cambiar disponibilidad a "EN SERVICIO"
+                    $generalEyC->update([
+                        'Disponibilidad_Estado' => 'Equipo Disponible',
+                    ]);
+                } else {
+                    // Para los demás, volver a "DISPONIBLE"
+                    $generalEyC->update([
+                        'Disponibilidad_Estado' => 'DISPONIBLE',
+                    ]);
+                    }
+                }
+            $generalEyC->save();
+
+            // Actualizar la cantidad en Almacen
+            $almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
+            if ($almacen) {
+                $almacen->Stock += $Cantidad; // Devolver la cantidad al stock
+                $almacen->save();
+
+                // Buscar el registro en Manifiesto para obtener el campo 'Destino'
+                $manifiesto = manifiesto::where('Folio', $folio)->first();
+                // Obtener el campo 'Destino' para asignarlo a 'Tierra_Costafuera'
+                $tierraCostafuera = $manifiesto->Destino;
+
+                // Crear un registro en la tabla Historial_Almacen
+                $historialAlmacen = new Historial_Almacen;
+                $historialAlmacen->idAlmacen = $almacen->idAlmacen;
+                $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
+                $historialAlmacen->Tipo = 'DEVOLUCIÓN';
+                $historialAlmacen->Cantidad = $Cantidad;
+                $historialAlmacen->Fecha = now()->format('Y-m-d');
+                $historialAlmacen->Tierra_Costafuera = $tierraCostafuera; 
+
+                $historialAlmacen->Folio = $folio;
+                $historialAlmacen->save();
+                }
+            
+        }
+    }
+        return response()->json(['success' => 'Todos los elementos fueron devueltos correctamente.']);
     }
 
     /**

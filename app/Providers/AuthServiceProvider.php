@@ -54,11 +54,22 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('equipos-access', function ($user) {
-            return $user->rol === 'Equipos' || $user->rol === 'Super Administrador';
+            return $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Administrador';
+        });
+
+        Gate::define('equipos-lab-access', function ($user) {
+            return $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Administrador' || $user->rol === 'Laboratorio' || $user->rol === 'Tics';
+        });
+
+        Gate::define('tecnicos-equipos-lab-access', function ($user) {
+            return $user->rol === 'Técnicos' || $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Administrador' || $user->rol === 'Laboratorio' || $user->rol === 'Tics';
         });
 
         Gate::define('tecnicos-equipos-access', function ($user) {
-            return $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Técnicos';
+            return $user->rol === 'Técnicos' || $user->rol === 'Equipos' || $user->rol === 'Super Administrador' || $user->rol === 'Administrador';
+        });
+        Gate::define('vehiculos-admin-access', function($user) { // define los roles de vehiculos
+            return $user->rol === 'Administrador' || $user->rol === 'Super Administrador';
         });
         
     }

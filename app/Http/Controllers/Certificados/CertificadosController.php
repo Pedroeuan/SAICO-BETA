@@ -11,7 +11,9 @@ use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\EquiposyConsumibles\equipos;
 use App\Models\EquiposyConsumibles\certificados;
 use App\Models\EquiposyConsumibles\historial_certificado;
-
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
+use Illuminate\Support\Facades\Auth;
 
 class CertificadosController extends Controller
 {
@@ -20,9 +22,35 @@ class CertificadosController extends Controller
      */
     public function index()
     {
-        $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
+    // Obtener el usuario autenticado
+        $user = Auth::user();
+        $rol = $user->rol;
 
-        return view("certificados.index", compact('generalConCertificadosConHistorial'));
+        if ($rol === 'Laboratorio') {
+            // Solo equipos con ISO 17025
+            $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado', 'ISO'])
+                ->whereHas('ISO', function ($query) {
+                    $query->where('NombreISO', '17025');
+                })
+                ->get();
+        } elseif($rol === 'Equipos' || $rol === 'Administrador' || $rol === 'Super Administrador') {
+            // Solo equipos con ISO 9001
+            $generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado', 'ISO'])
+                ->whereHas('ISO', function ($query) {
+                    $query->where('NombreISO', '9001');
+                })
+                ->get();
+        }elseif($rol === 'Tics') {
+            //Todos los registros
+            $generalConCertificadosConHistorial = general_eyc::where('Tipo','TICS')
+                ->get();
+            }else{
+             //Todos los registros
+            $generalConCertificadosConHistorial = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion'])->get();
+        }
+        //$generalConCertificadosConHistorial = general_eyc::with(['certificados.historial_certificado'])->get();
+
+        return view("Certificados.index", compact('generalConCertificadosConHistorial'));
         
     }
 

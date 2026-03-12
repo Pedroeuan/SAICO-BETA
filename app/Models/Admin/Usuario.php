@@ -4,6 +4,7 @@ namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\solicitud_AD\solicitud_AD;
 
 class Usuario extends Model
 {
@@ -17,6 +18,11 @@ class Usuario extends Model
         'password',
         'rol',
         'Estatus',
+        'licencia_numero',
+        'licencia_vencimieno',
+        'licencia_pdf',
+        'cv_pdf',
+        'licencia_estatus',
     ];
     protected $table = 'users';
     protected $primaryKey = 'id';
@@ -25,5 +31,14 @@ class Usuario extends Model
     public function getFormattedDateAttribute()
     {
         return \Carbon\Carbon::parse($this->attributes['created_at'])->format('d-m-Y');
+    }
+    public function Solicitudes_AD()
+    {
+        return $this->belongsToMany(
+            Solicitud_AD::class,
+            'users_has_solicitud', // tabla pivote
+            'users_id',            // FK en pivote hacia User
+            'idsolicitud_AD'      // FK en pivote hacia SolicitudAD
+        );
     }
 }

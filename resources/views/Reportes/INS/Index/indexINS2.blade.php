@@ -43,6 +43,7 @@
                         <th>Fecha</th>
                         <th>PDF</th>
                         <th>Editar</th>
+                        <th>Siguiente Reporte</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
@@ -61,6 +62,9 @@
                             </td>  
                             <td>
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            </td>
+                            <td>
+                                <a href="{{ route('Next.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminarReportes" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -166,6 +170,23 @@ $(document).on("click", ".btnEliminarReportes", function() {
         } else if (result.isDenied) {
             Swal.fire("Cancelado", "", "error");
         }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btnSiguienteReporte').forEach(function(btn) {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault(); // Evita la navegación inmediata
+            let url = this.href; // Guarda la URL del enlace
+
+            // Deshabilitar el botón inmediatamente
+            this.setAttribute('disabled', 'true');
+            this.style.pointerEvents = 'none'; // Evita más clics en el botón
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; // Muestra el spinner de carga
+
+            // Redirigir de inmediato
+            window.location.href = url;
+        });
     });
 });
 </script>

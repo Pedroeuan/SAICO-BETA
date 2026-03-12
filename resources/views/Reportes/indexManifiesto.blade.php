@@ -56,7 +56,9 @@
                             <tr>
                                 <td scope="row">{{$solicitud->tecnico}}</td>
                                 <td scope="row">{{$solicitud->folio}}</td>
-                                <td scope="row">{{$solicitud->formatted_date}}</td>
+                                <td data-order="{{ $solicitud->FechaServicio }}">
+                                    {{ $solicitud->formatted_date }}
+                                </td>
                                 <td scope="row">{{$solicitud->Estatus}}</td>
 
                                 <div class="btn-group">
@@ -135,7 +137,7 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
     let table = new DataTable('#tablaJs', {
-        // options
+        order: [[2, 'desc']], // columna de fecha
         language: {
                         "decimal": "",
                         "emptyTable": "No hay datos disponibles en la tabla",

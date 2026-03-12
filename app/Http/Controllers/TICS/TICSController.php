@@ -26,6 +26,8 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
 
 class TICSController extends Controller
 {
@@ -50,16 +52,18 @@ class TICSController extends Controller
      */
     public function storeTICS(Request $request)
     {
-            $request->validate([
-                'Nombre_E_P_BP' => 'required|string|max:255',
-                'ID' => 'required|string|max:255',
-                'Marca' => 'required|string|max:255',
-                'Modelo' => 'required|string|max:255',
-                'Serie' => 'required|string|max:255',
-            ]);
-            $Clasificacion = 'N/A';
+    $validated = $request->validate([
+        'Nombre_E_P_BP' => 'required|string|max:255',
+        'ID' => 'required|string|max:255',
+        'Marca' => 'required|string|max:255',
+        'Modelo' => 'required|string|max:255',
+        'Serie' => 'required|string|max:255',
+        //'ISO' => 'required|in:9001,17025',
+        'Disponibilidad_Estado' => 'required|string|max:255',
+    ]);
+            $NA='N/A';
             // Limpia y normaliza el número económico
-            $noEconomico = $request->input('ID');
+            /*$noEconomico = $request->input('ID');
             $serie = Str::lower($request->input('Serie'));
             
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
@@ -72,8 +76,9 @@ class TICSController extends Controller
             ->exists();
 
             //$existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
             $existsSerie = false;
-            if($serie != '---'){
+            if ($serie !== '---') {
                 $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
             }
 
@@ -96,7 +101,7 @@ class TICSController extends Controller
                 return redirect()->back()->withErrors([
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
-            }
+            }*/
             //De esta manera, se valida que no existan duplicados en No_economico o Serie con variaciones en el formato y mayúsculas/minúsculas.
 
         /* Tabla General_EyC */
@@ -231,15 +236,28 @@ class TICSController extends Controller
         $generalConTICS->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
         $generalConTICS->save();
 
-        /* CLASIFICACIÓN */
-        /*$generalConclasificacion = new clasificacion;
-        $generalConclasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConclasificacion->save();*/
+        // Clasificación
+        $generalConClasificacion = new clasificacion;
+        $generalConClasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        $generalConClasificacion->NombreC =  $NA;
+        $generalConClasificacion->save();
 
-        /* ISO */
-        /*$generalConISO = new ISO;
+        // ISO
+        $generalConISO = new ISO;
         $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
-        $generalConISO->save();*/
+        if($request->input('ISO')=='Elige el tipo de ISO')
+        {
+            $generalConISO->NombreISO = $EsperaDato;
+        }else{
+            $generalConISO->NombreISO =  $request->input('ISO');
+        }
+        /*$generalConISO->Alcance = $NA;
+        $generalConISO->Frec_Cali_Mant_Prev = $NA;
+        $generalConISO->Frec_Mant_Inter_Time = $NA;
+        $generalConISO->Frec_Verificacion = $NA;
+        $generalConISO->Usado = $NA;
+        $generalConISO->Nuevo = $NA;*/
+        $generalConISO->save();
 
         /* Certificados */
         $generalConCertificados = new certificados;
@@ -304,6 +322,12 @@ class TICSController extends Controller
         }else{
             $generalConAlmacen->Stock = $request->input('Stock');
         }
+        if($request->input('Unidad')==null)
+        {
+            $generalConAlmacen->Unidad = $EsperaDato;
+        }else{
+            $generalConAlmacen->Unidad = $request->input('Unidad');
+        }
         $generalConAlmacen->save();
 
         /*Historial Almacen */
@@ -357,6 +381,8 @@ class TICSController extends Controller
             'Marca' => 'required|string|max:255',
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
+            'ISO' => 'required|in:9001,17025',
+            'Disponibilidad_Estado' => 'required|string|max:255',
         ]);
 
         // Obtener el equipo existente
@@ -370,9 +396,6 @@ class TICSController extends Controller
         $No_EF = $request->input('ID');
         $SerF = $request->input('Serie');
 
-        if (strcasecmp(trim($No_EF), trim($No_EBD)) == 0 &&
-        strcasecmp(trim($SerF), trim($SerBD)) == 0)
-        {
             // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
             $disponibilidadEstado = $request->input('Disponibilidad_Estado');
             if ($disponibilidadEstado == 'Elige un Tipo') {
@@ -458,143 +481,18 @@ class TICSController extends Controller
                 $generalEyC->save();
             }
 
-                    // Actualizar los datos del Almacen asociado
-        $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
-        $generalConAlmacen->update([
-            'Stock' => $request->input('Stock'),
-        ]);
-        }
-        else
-        {
-            // Limpia y normaliza el número económico
-            $noEconomico = $request->input('ID');
-            $serie = Str::lower($request->input('Serie'));
-            
-            // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
-            $noEconomicoLimpio = preg_replace('/^(ID\.?\s*ID[- ]?|ID[- ]?)/i', '', $noEconomico);// Elimina el prefijo
-            $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
-
-             // Verifica si el número económico ya existe (compara el número limpio)
-            $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(ID\\.\\s*ID-?|ID-?)', '')) = ?", [$noEconomicoLimpio])
-            ->where('Tipo', 'TICS')
-            ->exists();
-
-            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
-
-            //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
-            //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
-            if ($existsNo_Economico && $existsSerie)
-            {
-                return redirect()->back()->withErrors([
-                    'No_economico' => 'El No economico ya existe en la base de datos.',
-                    'Serie' => 'La Serie ya existe en la base de datos.',
-                ])->withInput();
-            }
-            else if ($existsNo_Economico) {
-                return redirect()->back()->withErrors([
-                    'No_economico' => 'El No economico ya existe en la base de datos.',
-                ])->withInput();
-            }
-            else if ($existsSerie)
-            {
-                return redirect()->back()->withErrors([
-                    'Serie' => 'La Serie ya existe en la base de datos.',
-                ])->withInput();
-            }
-            //De esta manera, se valida que no existan duplicados en No_economico o Serie con variaciones en el formato y mayúsculas/minúsculas.
-
-            // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
-            $disponibilidadEstado = $request->input('Disponibilidad_Estado');
-            if ($disponibilidadEstado == 'Elige un Tipo') {
-                $disponibilidadEstado = $EsperaDato;
-            }
-
-            // Actualizar los datos del equipo
-            $generalEyC ->update([
-                'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
-                'No_economico' => $request->input('ID'),
-                'Serie' => $request->input('Serie'),
-                'Marca' => $request->input('Marca'),
-                'Modelo' => $request->input('Modelo'),
-                'Ubicacion' => $request->input('Ubicacion'),
-                'Almacenamiento' => $request->input('Almacenamiento'),
-                'Comentario' => $request->input('Comentario'),
-                'SAT' => $request->input('SAT'),
-                'BMPRO' => $request->input('BMPRO'),
-                'Tipo' => $request->input('Tipo'),
-                'Disponibilidad_Estado' => $disponibilidadEstado,
-            ]);
-
-            // Actualizar los datos del equipo asociado
-            $generalConTICS = TICS::where('idGeneral_EyC', $id)->first();
-            // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
-            if ($request->hasFile('Factura') && $request->file('Factura')->isValid()) {
-                // Obtener la ruta del archivo anterior desde la base de datos
-                $rutaAnterior = $generalEyC->Factura;
-                // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
-                if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-                    Storage::disk('public')->delete($rutaAnterior);
-                }
-                // Guardar el nuevo archivo PDF
-                $pdf = $request->file('Factura');
-                // Obtener el último número consecutivo
-                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Facturas/Equipos'))
-                    ->filter(function ($file) {
-                        return preg_match('/^\d+_/', basename($file));
-                    })
-                    ->sort()
-                    ->last();
-                $lastNumber = 0;
-                if ($lastFile) {
-                    $lastNumber = (int)explode('_', basename($lastFile))[0];
-                }
-                // Incrementar el número consecutivo
-                $newNumber = $lastNumber + 1;
-                $newFileNameFactura = $newNumber . '_' . $pdf->getClientOriginalName();
-                
-                $pdfPath = $pdf->storeAs('Equipos y Consumibles/Facturas/Equipos/', $newFileNameFactura, 'public');
-                // Actualizar la ruta de la factura en la base de datos
-                $generalEyC->Factura = $pdfPath;
-                $generalEyC->save();
-            }
-            // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
-            if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
-                // Obtener la ruta del archivo anterior desde la base de datos
-                $rutaAnterior = $generalEyC->Foto;
-                // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
-                if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-                    Storage::disk('public')->delete($rutaAnterior);
-                }
-                // Guardar el nuevo archivo de imagen
-                $imagen = $request->file('Foto');
-                // Obtener el último número consecutivo
-                $lastFile = collect(Storage::disk('public')->files('Equipos y Consumibles/Foto/Equipos'))
-                    ->filter(function ($file) {
-                        return preg_match('/^\d+_/', basename($file));
-                    })
-                    ->sort()
-                    ->last();
-                $lastNumber = 0;
-                if ($lastFile) {
-                    $lastNumber = (int)explode('_', basename($lastFile))[0];
-                }
-                // Incrementar el número consecutivo
-                $newNumber = $lastNumber + 1;
-                $newFileNameFoto = $newNumber . '_' .  $imagen->getClientOriginalName();  
-                
-                $imagenPath = $imagen->storeAs('Equipos y Consumibles/Foto/Equipos/', $newFileNameFoto, 'public');
-                // Actualizar la ruta de la imagen en la base de datos
-                $generalEyC->Foto = $imagenPath;
-                $generalEyC->save();
-            }
-
             // Actualizar los datos del Almacen asociado
             $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
             $generalConAlmacen->update([
-                'Stock' => $request->input('Stock'),
+                'Unidad' => $request->input('Unidad'),
             ]);
-
-        }
+            
+            // Actualizar los datos de ISO
+            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+            $generalConISO->update([
+                'NombreISO' => $request->input('ISO'),
+            ]);
+        
             return redirect()->route('inventario');
     }
 

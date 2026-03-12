@@ -22,6 +22,8 @@ use App\Models\EquiposyConsumibles\herramientas;
 use App\Models\EquiposyConsumibles\historial_certificado;
 use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
+use App\Models\EquiposyConsumibles\clasificacion;
+use App\Models\EquiposyConsumibles\iso;
 
 class AccesoriosController extends Controller
 {
@@ -44,14 +46,17 @@ class AccesoriosController extends Controller
     /*ACCESORIOS*/
     public function storeAccesorios(Request $request)
     {
+        //dd($request->all());
         $request->validate([
             'Nombre_E_P_BP' => 'required|string|max:255',
             'No_economico' => 'required|string|max:255',
             'Marca' => 'required|string|max:255',
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
+            'ISO' => 'required|in:9001,17025',
+            'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
         ]);
-
+        $NA='N/A';
         // Limpia y normaliza el número económico
         $noEconomico = $request->input('No_economico');
         $serie = Str::lower($request->input('Serie'));
@@ -64,9 +69,9 @@ class AccesoriosController extends Controller
         ->where('Tipo', 'ACCESORIOS')
         ->exists();
 
-        //Verifica el duplicado de serie si el valor no es '---'
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
             $existsSerie = false;
-            if($serie != '---'){
+            if ($serie !== '---') {
                 $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
             }
 
@@ -196,7 +201,30 @@ class AccesoriosController extends Controller
     }
     }
     $general->save();
-    
+
+        // Clasificación
+        $generalConClasificacion = new clasificacion;
+        $generalConClasificacion->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        $generalConClasificacion->NombreC =  $NA;
+        $generalConClasificacion->save();
+
+        // ISO
+        $generalConISO = new ISO;
+        $generalConISO->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
+        if($request->input('ISO')=='Elige el tipo de ISO')
+        {
+            $generalConISO->NombreISO = $EsperaDato;
+        }else{
+            $generalConISO->NombreISO =  $request->input('ISO');
+        }
+        /*$generalConISO->Alcance = $NA;
+        $generalConISO->Frec_Cali_Mant_Prev = $NA;
+        $generalConISO->Frec_Mant_Inter_Time = $NA;
+        $generalConISO->Frec_Verificacion = $NA;
+        $generalConISO->Usado = $NA;
+        $generalConISO->Nuevo = $NA;*/
+        $generalConISO->save();
+
      /* Certificados */
     $generalConCertificados = new certificados;
     $generalConCertificados->idGeneral_EyC = $general->idGeneral_EyC; // Asigna la clave primaria del modelo principal al campo de relación
@@ -273,6 +301,12 @@ class AccesoriosController extends Controller
     }else{
         $generalConAlmacen->Stock = $request->input('Stock');
     }
+    if($request->input('Unidad')==null)
+    {
+        $generalConAlmacen->Unidad = $EsperaDato;
+    }else{
+        $generalConAlmacen->Unidad = $request->input('Unidad');
+    }
     $generalConAlmacen->save();
 
         /*Historial Almacen */
@@ -320,7 +354,7 @@ class AccesoriosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-        public function updateAccesorios(Request $request, $id)
+    public function updateAccesorios(Request $request, $id)
     {
         $request->validate([
             'Nombre_E_P_BP' => 'required|string|max:255',
@@ -328,6 +362,8 @@ class AccesoriosController extends Controller
             'Marca' => 'required|string|max:255',
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
+            'ISO' => 'required|in:9001,17025',
+            'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
         ]);
 
         // Obtener el equipo existente
@@ -402,7 +438,7 @@ class AccesoriosController extends Controller
             'Comentario' => $request->input('Comentario'),
             'SAT' => $request->input('SAT'),
             'BMPRO' => $request->input('BMPRO'),
-            'Tipo' => $request->input('Tipo'),
+            //'Tipo' => $request->input('Tipo'),
             'Disponibilidad_Estado' => $disponibilidadEstado,
         ]);
 
@@ -512,8 +548,14 @@ class AccesoriosController extends Controller
         $generalConAlmacen = almacen::where('idGeneral_EyC', $id)->first();
         $generalConAlmacen->update([
             'Stock' => $request->input('Stock'),
+            'Unidad' => $request->input('Unidad'),
         ]);
-        
+        // Actualizar los datos de ISO
+        $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
+        $generalConISO->update([
+            'NombreISO' => $request->input('ISO'),
+        ]);
+
         return redirect()->route('inventario');
     }
     /**

@@ -109,34 +109,33 @@
                                             @enderror
                                         </div>
                                     </div>
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            
-                                           <div class="d-flex justify-content-between align-items-center w-100">
-                                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
-                                                <div class="form-check form-switch mb-0">
-                                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
-                                                </div>
-                                            </div>
+                                            <label class="col-form-label">
+                                                Contrato
 
-                                            
-                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
-                                            @error('Contrato')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneContrato" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
+
+                                            <!-- Input visible solo si es "SI" -->
+                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
+
+                                            <!-- Input oculto donde guardaremos el contrato interno -->
+                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
+
+                                            <!-- Texto para mostrar contrato interno -->
+                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
+                                                Contrato interno asignado: <b id="numeroInterno"></b>
+                                            </small>
                                         </div>
                                     </div>
-
-                                    <!--div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
-                                            @error('Contrato')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </!div-->
 
                                     <div class="col-sm-4">
                                         <div class="form-group">

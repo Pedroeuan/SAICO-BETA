@@ -33,9 +33,632 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+/*PDF */
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class ReporteController extends Controller
 {
+        public function FOR_PIMP_02_B_03()
+    {
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+            //Detalles_Generales
+            //'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            //'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            //'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
+            //Fotos_Reportes
+            //'Fotos' => $Fotos,
+            //Total de Fotos
+            //'totalFotos' => $totalFotos,
+            //Numero de Firmas
+            //'numFirmas' => $numFirmas,
+            //Firmas
+            //'Firmas_Reportes' => $Firmas_Reportes,
+        ];
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_03_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Generar el PDF adicional en orientación vertical
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_02_B_03_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        //$pdf2Content = $pdf2->output();
+
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1;// + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }*/
+
+        return response($combinedPdf->Output('FOR_PIMP_02_B_03.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_03_PDF');
+    }
+
+        public function FOR_PIMP_02_B_04()
+    {
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+            //Detalles_Generales
+            //'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            //'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            //'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
+            //Fotos_Reportes
+            //'Fotos' => $Fotos,
+            //Total de Fotos
+            //'totalFotos' => $totalFotos,
+            //Numero de Firmas
+            //'numFirmas' => $numFirmas,
+            //Firmas
+            //'Firmas_Reportes' => $Firmas_Reportes,
+        ];
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_04_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Generar el PDF adicional en orientación vertical
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_02_B_04_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        //$pdf2Content = $pdf2->output();
+
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1;// + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }*/
+
+        return response($combinedPdf->Output('FOR_PIMP_02_B_04.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_04_PDF');
+    }
+
+        public function FOR_PIMP_07_B_01()
+    {
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+            //Detalles_Generales
+            //'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            //'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            //'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
+            //Fotos_Reportes
+            //'Fotos' => $Fotos,
+            //Total de Fotos
+            //'totalFotos' => $totalFotos,
+            //Numero de Firmas
+            //'numFirmas' => $numFirmas,
+            //Firmas
+            //'Firmas_Reportes' => $Firmas_Reportes,
+        ];
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_07_B_01_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Generar el PDF adicional en orientación vertical
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_07_B_01_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        //$pdf2Content = $pdf2->output();
+
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1;// + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }*/
+
+        return response($combinedPdf->Output('FOR_PIMP_07_B_01.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_07_B_01_PDF');
+    }
+
+            public function FOR_PIMP_03_01()
+    {
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+            //Detalles_Generales
+            //'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            //'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            //'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
+            //Fotos_Reportes
+            //'Fotos' => $Fotos,
+            //Total de Fotos
+            //'totalFotos' => $totalFotos,
+            //Numero de Firmas
+            //'numFirmas' => $numFirmas,
+            //Firmas
+            //'Firmas_Reportes' => $Firmas_Reportes,
+        ];
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_01_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Generar el PDF adicional en orientación vertical
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_07_B_01_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        //$pdf2Content = $pdf2->output();
+
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1;// + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }*/
+
+        return response($combinedPdf->Output('FOR_PIMP_03_01.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_01_PDF');
+    }
+
+        public function FOR_PIMP_05_B_01()
+    {
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+            //Detalles_Generales
+            //'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            //'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            //'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
+            //Fotos_Reportes
+            //'Fotos' => $Fotos,
+            //Total de Fotos
+            //'totalFotos' => $totalFotos,
+            //Numero de Firmas
+            //'numFirmas' => $numFirmas,
+            //Firmas
+            //'Firmas_Reportes' => $Firmas_Reportes,
+        ];
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_05_B_01_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Generar el PDF adicional en orientación vertical
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_02_B_04_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        //$pdf2Content = $pdf2->output();
+
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1;// + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }*/
+
+        return response($combinedPdf->Output('FOR_PIMP_05_B_01.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_05_B_01_PDF');
+    }
+
+        public function FOR_PIMP_06_B_01()
+    {
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+            //Detalles_Generales
+            //'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            //'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            //'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
+            //Fotos_Reportes
+            //'Fotos' => $Fotos,
+            //Total de Fotos
+            //'totalFotos' => $totalFotos,
+            //Numero de Firmas
+            //'numFirmas' => $numFirmas,
+            //Firmas
+            //'Firmas_Reportes' => $Firmas_Reportes,
+        ];
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_06_B_01_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Generar el PDF adicional en orientación vertical
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_02_B_03_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        //$pdf2Content = $pdf2->output();
+
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1;// + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }*/
+
+        return response($combinedPdf->Output('FOR_PIMP_06_B_01.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_03_PDF');
+    }
+
+        public function FOR_PIMP_04_02()
+    {
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+            //Detalles_Generales
+            //'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            //'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            //'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
+            //Fotos_Reportes
+            //'Fotos' => $Fotos,
+            //Total de Fotos
+            //'totalFotos' => $totalFotos,
+            //Numero de Firmas
+            //'numFirmas' => $numFirmas,
+            //Firmas
+            //'Firmas_Reportes' => $Firmas_Reportes,
+        ];
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_02_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Generar el PDF adicional en orientación vertical
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_02_B_04_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        //$pdf2Content = $pdf2->output();
+
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1;// + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }*/
+
+        return response($combinedPdf->Output('FOR_PIMP_04_02.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_04_PDF');
+    }
+
+        public function FOR_PIMP_04_03()
+    {
+
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+        
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+            //Detalles_Generales
+            //'Detalles_Generales' => $Detalles_Generales,
+            //Datos_Equipo
+            //'Datos_Equipo' => $Datos_Equipo,
+            //Grupo_Juntas_Detalles_Re
+            //'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            //Total de Juntas
+            /*'totalTitulos' => $totalTitulos,
+            'totalFilas' => $totalFilas,*/
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
+            //Fotos_Reportes
+            //'Fotos' => $Fotos,
+            //Total de Fotos
+            //'totalFotos' => $totalFotos,
+            //Numero de Firmas
+            //'numFirmas' => $numFirmas,
+            //Firmas
+            //'Firmas_Reportes' => $Firmas_Reportes,
+        ];
+
+        // Generar el PDF principal en orientación horizontal
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_03_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Generar el PDF adicional en orientación vertical
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_02_B_04_PDF', $data)->setPaper('letter', 'portrait');
+
+        // Combinar los PDFs
+        $pdf1Content = $pdf1->output();
+        //$pdf2Content = $pdf2->output();
+
+       // Crear objetos FPDI independientes para contar páginas
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+
+        // Ahora sí combinamos
+        $combinedPdf = new Fpdi();
+        $totalPageCount = $pageCount1;// + $pageCount2;
+
+        // Añadir páginas del primer PDF
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del segundo PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138, -265.5);
+            // Para que el conteo sea consecutivo
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }*/
+
+        return response($combinedPdf->Output('FOR_PIMP_04_03.PDF', 'I'), 200)
+            ->header('Content-Type', 'application/pdf');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_04_PDF');
+    }
+
+
+
     public function FOR_01_PRO_INS_02()
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-02');
@@ -124,6 +747,46 @@ class ReporteController extends Controller
         return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
     }
 
+    /*public function FOR_PIMP_07_B_01()
+    {
+        return view('Reportes.IM.Create.FOR-PIMP-07_B_01');
+    }*/
+    
+    public function obtenerSiguienteContratoInterno()
+    {
+    // Obtener TODOS los registros asegurando el orden correcto
+        $registros = reporte::orderBy('idReportes', 'DESC')->get();
+
+        $ultimoNumero = 0;
+
+        foreach ($registros as $r) {
+
+            // Decodificar JSON de la columna
+            $json = json_decode($r->Detalles_Generales, true);
+
+            if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
+
+                // Extraer el número final
+                $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
+
+                if ($n > $ultimoNumero) {
+                    $ultimoNumero = $n;
+                }
+
+                break; // Ya encontramos el más reciente
+            }
+        }
+
+        // Nuevo número consecutivo
+        $nuevoNumero = $ultimoNumero + 1;
+
+        // Crear contrato con padding de 4 dígitos
+        $siguiente = "AICO-INT-" . str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+
+        return response()->json([
+            'siguiente' => $siguiente
+        ]);
+    }
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {
@@ -135,15 +798,15 @@ class ReporteController extends Controller
         $Reportes = reporte::all();
         $reportesDetalles_Generales = [];
         foreach ($Reportes as $reporte) {
-            $detalles = json_decode($reporte->Detalles_Generales, true);
-            $reportesDetalles_Generales[] = [
-                'Contrato' => $detalles['Contrato'],
-                'Proyecto' => $detalles['Proyecto'],
-                'Cliente' => $detalles['Cliente'],
-                'Fecha' => $detalles['Fecha'],
-                'No_Reporte' => $detalles['No_Reporte'],
-                'idReportes' => $reporte->idReportes // Asumiendo que tienes un campo 'id' en tu modelo reporte
-            ];
+            $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
+$reportesDetalles_Generales[] = [
+    'Contrato' => $detalles['Contrato'] ?? '',
+    'Proyecto' => $detalles['Proyecto'] ?? '',
+    'Cliente' => $detalles['Cliente'] ?? '',
+    'Fecha' => $detalles['Fecha'] ?? '',
+    'No_Reporte' => $detalles['No_Reporte'] ?? '',
+    'idReportes' => $reporte->idReportes
+];
         }
         // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
         $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
@@ -227,12 +890,12 @@ class ReporteController extends Controller
         $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
         $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
-        //dd($Grupo_Juntas_Re);
+        
+        $imagenes = [];
+        if ($Fotos_Reporte && $Fotos_Reporte->Fotos_Reportes) {
+            $imagenes = json_decode($Fotos_Reporte->Fotos_Reportes, true);
+        }
 
-        //$titulos = array_column($Grupo_Juntas_Re['titulos_juntas'], 'titulo');
-
-        //$Juntas_resultados = $Grupo_Juntas_Re['resultados'];
-        //$Titulos_resultados = $Grupo_Juntas_Re['titulos'];
 
         // Obtener el numero de firmas
         $numFirmas = $Firmas ['numFirmas'];
@@ -275,7 +938,7 @@ class ReporteController extends Controller
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','numFirmas','Grupo_Juntas_Re'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re'));
 
     }
 
@@ -304,7 +967,7 @@ class ReporteController extends Controller
             "FOR-01-PRO-INS-17" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
             "FOR-01-PRO-INS-18" => "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
             "FOR-01-PRO-INS-19" => "INFORME DE INSPECCIÓN CON ACFM",
-            "FOR-01-PRO-INS-20" => "Informe de Análisis mediante Corriente Eddy Pulsada (PECT)",
+            "FOR-01-PRO-INS-20" => "Informe de ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT)",
             "FOR-01-PRO-INS-21" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
             "FOR-01-PRO-INS-22" => "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
         ];
@@ -459,8 +1122,11 @@ class ReporteController extends Controller
         $Prueba = prueba::where('idPrueba', $idPrueba)->first();
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
-    
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles'));
+
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
+
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes'));
     }
 
     public function indexINS2(Request $request)
@@ -473,7 +1139,7 @@ class ReporteController extends Controller
         if ($reportesEncontrados->isNotEmpty()) {
             return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados', 'contratoSeleccionado', 'Proyecto'));
         } else {
-            return "No se encontraron reportes con ese contrato.";
+            return redirect()->route('indexINS1');
         }
     }
 
@@ -629,6 +1295,79 @@ class ReporteController extends Controller
         ]);
 
     }
+
+    public function Next_Reporte($id)
+    {
+        DB::transaction(function () use ($id, &$nuevoId) {
+
+            // 1️ Obtener reporte original
+            $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
+
+            // 2️ Clonar reporte
+            $NuevoReporte = $ReporteOriginal->replicate();
+
+            // 3️ Decodificar JSON
+            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true);
+
+            $numeroActual = $Detalles_Generales['No_Reporte'];
+
+            preg_match('/^(\d{3})-(.*)$/', $numeroActual, $matches);
+
+            if ($matches) {
+                $nuevoNumero = str_pad(((int)$matches[1]) + 1, 3, '0', STR_PAD_LEFT);
+                $nuevoNoReporte = $nuevoNumero . '-' . $matches[2];
+            } else {
+                $nuevoNoReporte = $numeroActual . '-001';
+            }
+
+            // 4️ Reemplazar valores
+            $Detalles_Generales['No_Reporte'] = $nuevoNoReporte;
+            $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
+
+            $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
+            $NuevoReporte->Estatus = 'CREADO';
+
+            // 5️ Guardar nuevo reporte
+            $NuevoReporte->save();
+
+            $nuevoId = $NuevoReporte->idReportes;
+
+            // =====================================
+            // 🔹 CLONAR FIRMAS
+            // =====================================
+
+            $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
+
+            if ($FirmaOriginal) {
+
+                $NuevaFirma = $FirmaOriginal->replicate();
+                $NuevaFirma->idReportes = $nuevoId; // 👈 AQUÍ está la clave
+                $NuevaFirma->save();
+            }
+
+            // =====================================
+            //  CREAR FOTOS VACÍAS
+            // =====================================
+
+            Fotos_Reporte::create([
+                'idReportes' => $nuevoId,
+                'Fotos_Reportes' => json_encode([]),
+            ]);
+
+            // =====================================
+            //  CREAR JUNTAS VACÍAS
+            // =====================================
+
+            Grupo_Juntas_Detalles_Re::create([
+                'idReportes' => $nuevoId,
+                'Juntas_Grupo_Re' => json_encode([]),
+            ]);
+        });
+
+        return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
+    }
+
+
 
     /**
      * Display the specified resource.

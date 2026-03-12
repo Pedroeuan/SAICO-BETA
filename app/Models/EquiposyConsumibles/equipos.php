@@ -11,6 +11,7 @@ class equipos extends Model
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idEquipos',
         'idGeneral_EyC',
+        'Num_Reporte',
     ];
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 

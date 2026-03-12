@@ -39,7 +39,7 @@
                     <div class="col-7">
 
                         <div class="form-group">
-                            <label for="NombreUsuario">Nombre de Usuario</label>
+                            <label for="NombreUsuario">Nombre de Usuario cliente</label>
                             <input type="text" class="form-control @error('NombreUsuario') is-invalid @enderror" placeholder="Nombre del usuario" id="NombreUsuario" name="NombreUsuario" value="{{ old('NombreUsuario') }}">
                             @error('NombreUsuario')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -81,6 +81,8 @@
                                     <option value="Técnicos" {{ old('RolUsuario') == 'Técnicos' ? 'selected' : '' }}>Técnicos</option>
                                     <option value="Planeación" {{ old('RolUsuario') == 'Planeación' ? 'selected' : '' }}>Planeación</option>
                                     <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
+                                    <option value="Laboratorio" {{ old('RolUsuario') == 'Laboratorio' ? 'selected' : '' }}>Laboratorio</option>
+                                    <option value="Tics" {{ old('RolUsuario') == 'Tics' ? 'selected' : '' }}>Tics</option>
                                 @else
                                     <option value="Super Administrador" {{ old('RolUsuario') == 'Super Administrador' ? 'selected' : '' }}>Super Administrador</option>
                                     <option value="Administrador" {{ old('RolUsuario') == 'Administrador' ? 'selected' : '' }}>Administrador</option>
@@ -89,6 +91,8 @@
                                     <option value="Técnicos" {{ old('RolUsuario') == 'Técnicos' ? 'selected' : '' }}>Técnicos</option>
                                     <option value="Planeación" {{ old('RolUsuario') == 'Planeación' ? 'selected' : '' }}>Planeación</option>
                                     <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
+                                    <option value="Laboratorio" {{ old('RolUsuario') == 'Laboratorio' ? 'selected' : '' }}>Laboratorio</option>
+                                    <option value="Tics" {{ old('RolUsuario') == 'Tics' ? 'selected' : '' }}>Tics</option>
                                 @endif
                             </select>
                             @error('RolUsuario')
@@ -102,6 +106,28 @@
                             @error('Estatus')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+                        <hr>
+
+                        <h5>Documentación para Vehículos</h5>
+                        <div class="form-group">
+                            <label>Número de Licenica</label>
+                            <input type="text" name="licencia_numero" class="form-control" placeholder="Número de licencia">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha vencimeinto licencia</label>
+                            <input type="date" name="licencia_vencimeinto" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Subir PDF Licencia</label>
+                            <input type="file" name="licencia_pdf" class="form_control" accept="application/pdf">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subir CV (PDF)</label>
+                            <input type="file" name="cv_pdf" class="form-cotrol" accept="application/pdf">
                         </div>
 
                         <div class="form-group">

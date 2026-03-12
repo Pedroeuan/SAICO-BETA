@@ -110,33 +110,33 @@
                         </div>
                     </div>
 
-                     <div class="col-sm-4">
-                        <div class="form-group">
-                            
-                            <div class="d-flex justify-content-between align-items-center w-100">
-                                <label class="col-form-label mb-0" for="flexSwitchCheckDefault">Contrato</label>
-                                <div class="form-check form-switch mb-0">
-                                    <input title="Marcar si el contrato es interno" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="Detalles_Generales[Contrato_Activo]" value="1" {{ old('Detalles_Generales.Contrato_Activo') ? 'checked' : '' }}>
-                                </div>
-                            </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">
+                                                Contrato
 
-                            
-                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
-                            @error('Contrato')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneContrato" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
 
-                    <!--div-- class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Contrato</label>
-                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato')}}">
-                            @error('Contrato')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div-->
+                                            <!-- Input visible solo si es "SI" -->
+                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
+
+                                            <!-- Input oculto donde guardaremos el contrato interno -->
+                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
+
+                                            <!-- Texto para mostrar contrato interno -->
+                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
+                                                Contrato interno asignado: <b id="numeroInterno"></b>
+                                            </small>
+                                        </div>
+                                    </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -547,22 +547,22 @@
 
                             <tbody>
                             <!-- Filas dinámicas aparecerán aquí -->
-                            </tbody>
-                    </table>
+                                <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
+                                
+                                </tbody>
+                        </table>
                     </div>
-
-                    <p>
-
-                        <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                        <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                            <div>
-                                <label for="numRows">Número de Filas:</label>
-                                <select id="numRows" class="form-select">
-                                    @for ($i = 1; $i <= 500; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
+                    <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
+                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                        <div>
+                            <label for="numRows">Número de Filas:</label>
+                            <select id="numRows" class="form-select">
+                                @for ($i = 1; $i <= 500; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
 
                             <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 

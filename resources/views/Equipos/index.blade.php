@@ -35,6 +35,25 @@
         /*width: 70%;*/
         border: 1px solid black; 
     }
+
+    .dataTables_wrapper {
+        overflow-x: auto;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+    .box {
+        display: flex;
+        justify-content: center;
+    }
+
+    .box-body {
+        display: inline-block;
+    }
+
+    #tablaJs {
+        width: auto !important;
+    }
 </style>
 @endsection
 
@@ -43,10 +62,11 @@
 <br>
 <br>
 <!-- form start -->
-<form role="form">
-    <div class="box ">
-        <div class="box-body">
+    <div class="box">
+        <div class="box-body d-flex justify-content-center">
+        <div style="display: inline-block;">
         <h3 align="center">Inventario</h3>
+        <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
                     <thead>
                         <tr>
@@ -75,21 +95,23 @@
                     <tr>
                         <th>Categoria</th>
                         <th>Nombre</th>
-                        <th>Num. Económico / ID</th>
+                        <th>Numero/ID</th>
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
                         <th>Lote</th>
                         <th>Stock</th>
                         <th>Disponibilidad</th>
-                        <th>Fecha Calibración/Caducidad</th>
-                        <th>Hoja de Presentación</th>
+                        <th>Ubicación</th>
+                        <th>Prox.Fecha Calibración/Caducidad</th>
+                        <th>Días Restantes</th>
+                        <th>Presentación</th>
                         <th>Editar</th>
                         <th>Baja</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($generalConCertificadosConAlmacen as $general_eyc)
+                    @foreach ($generalConCertificadosConAlmacenConISOConClasificacion as $general_eyc)
                         <tr>
                             @if($general_eyc)
                                 <td scope="row">@if($general_eyc->Tipo === 'BLOCK Y PROBETA') BLOCK @else {{ $general_eyc->Tipo}} @endif</td>
@@ -116,18 +138,38 @@
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-warning" style="color:#ff8800; border:1 px;">En Servicio <i class="far fa-clock" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
-                                    @else
-                                        <td scope="row">*******CONTACTAR AL ADMINISTRADOR</td>
                                 @endif
-                            @endif 
+                            @endif
+                            <td>
+                                {{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}
+                            </td> 
                             @if($general_eyc->certificados)
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                             @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
                                                     <td scope="row">SIN FECHA ASIGNADA</td>
-                                                @else
+                                                    <td scope="row">-</td>
+                                                @elseif($general_eyc->Tipo=='CONSUMIBLES')
                                                     <td scope="row">{{$general_eyc->certificados->formatted_date}}</td>
+                                                    <td scope="row">
+                                                        {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) ) 
+                                                            <= 0 ? 'CADUCADO' : 
+                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) }}
+                                                    </td>
+                                                @else
+                                                    @if($general_eyc->certificados->Prox_fecha_calibracion == '2001-01-01')
+                                                    <td scope="row">SIN FECHA ASIGNADA</td>
+                                                    <td scope="row">-</td>
+                                                    @else
+                                                        <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
+                                                        <td scope="row">
+                                                            {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) ) 
+                                                                <= 0 ? 'VENCIDO' : 
+                                                                (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) }}
+                                                        </td>
+                                                    @endif
                                             @endif
                                         @else
+                                            <td scope="row">N/A</td>
                                             <td scope="row">N/A</td>
                                     @endif
                                         <td scope="row"> 
@@ -154,9 +196,10 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
-</form>
+
 @stop
 
 @section('js')
@@ -181,6 +224,10 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
+
+$('#tablaJs').on('draw.dt', function() {
+    $('.table-responsive').scrollLeft(0);
+});
 
 let table = new DataTable('#tablaJs', {
     // options
