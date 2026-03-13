@@ -141,7 +141,7 @@ class UsuariosController extends Controller
         // Obtener el nombre del usuario
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
-
+        
         return view('Admin.edit', compact('id','Usuario','rol'));
     }
 

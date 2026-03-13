@@ -139,7 +139,11 @@
 
                         <div class="form-group">
                             <label>Fecha vencimiento licencia</label>
-                            <input type="date" name="licencia_vencimiento" class="form-control" value="@if($Usuario->licencia_vencimiento == '2001-01-01') {{ '' }} @else  {{ $Usuario->licencia_vencimiento }} @endif">
+                            @if($Usuario->licencia_vencimiento == '2001-01-01')
+                                <input type="date" class="form-control inputForm" name="licencia_vencimiento">
+                            @else
+                                <input type="date" class="form-control inputForm" value="{{ $Usuario->licencia_vencimiento }}" name="licencia_vencimiento">
+                            @endif
                         </div>
 
                         <div class="form-group">

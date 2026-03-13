@@ -19,7 +19,7 @@ class Usuario extends Model
         'rol',
         'Estatus',
         'licencia_numero',
-        'licencia_vencimieno',
+        'licencia_vencimiento',
         'licencia_pdf',
         'cv_pdf',
         'licencia_estatus',
@@ -30,8 +30,9 @@ class Usuario extends Model
 
     public function getFormattedDateAttribute()
     {
-        return \Carbon\Carbon::parse($this->attributes['created_at'])->format('d-m-Y');
+        return \Carbon\Carbon::parse($this->attributes['licencia_vencimiento'])->format('d-m-Y');
     }
+
     public function Solicitudes_AD()
     {
         return $this->belongsToMany(
