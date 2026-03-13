@@ -797,16 +797,20 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
-            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
-            $totalFotos = count($fotos); // Contar el total de imágenes
-            $Fotos = [];
-        
-            foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
-                $Fotos[] = [
-                    'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
-                    'comment' => $foto['comentario'] ?? ''
-                ];
-            }
+                $Fotos = [];
+
+                if ($Fotos_Reportes && $Fotos_Reportes->Fotos_Reportes) {
+
+                    $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+
+                    foreach ($fotos as $foto) {
+
+                        $Fotos[$foto['imagen']] = storage_path(
+                            'app/public/' . str_replace('storage/', '', $foto['ruta'])
+                        );
+
+                    }
+                }
         }
 
         $data = [
@@ -825,7 +829,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             //Fotos_Reportes
             'Fotos' => $Fotos,
             //Total de Fotos
-            'totalFotos' => $totalFotos,
+            //'totalFotos' => $totalFotos,
             //Numero de Firmas
             'numFirmas' => $numFirmas,
             //Firmas

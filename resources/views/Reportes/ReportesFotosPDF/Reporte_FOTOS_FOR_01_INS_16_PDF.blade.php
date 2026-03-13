@@ -5,209 +5,201 @@
             <title>FORMATO FOR-01-INS-16</title>
             <style>
                 @page {
-                    margin: 
-                    3.0cm /* superior */
-                    1.2cm /* derecho */
-                    2.1cm /* inferior */
-                    2.2cm; /* izquierdo */
-                }
+                        margin: 
+                        3.0cm /* superior */
+                        1.2cm /* derecho */
+                        2.1cm /* inferior */
+                        2.2cm; /* izquierdo */
+                    }
 
-                @if ($totalFotos <=4)
                 header {
-                    width: 100%;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
-                    height: auto; /* Permite crecer según el contenido */
-                    text-align: center;
-                    /*background-color: rgb(226, 45, 45);*/
-                    font-family: 'arial', sans-serif;
-                }
+                        position: fixed;
+                        top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                        left: 0;
+                        right: 0;
+                        height: auto; /* Permite que el header crezca dinámicamente */
+                        text-align: center;
+                        /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                        font-family: 'arial', sans-serif;
+                    }
 
-                footer {
-                    position: fixed;
-                    bottom: 30px;
-                    left: 0;
-                    right: 0;
-                    height: auto;
-                    text-align: center;
-                    /*background-color: rgb(7, 231, 18);*/
-                    font-family: 'arial', sans-serif;
-                }
+                    footer {
+                        position: fixed;
+                        bottom: -30px; /* Ajusta la posición */
+                        left: 0;
+                        right: 0;
+                        height: auto;
+                        text-align: center;
+                        /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                        font-family: 'arial', sans-serif;
+                    }
 
-                body {
-                    margin: -30px, 0; /* Ajusta el margen de la página */
-                    padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
-                    font-family: 'arial', sans-serif;
-                    /*background-color: rgb(45, 78, 226);*/
-                }
-            @else
-                header {
-                    position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
-                    left: 0;
-                    right: 0;
-                    height: auto; /* Permite que el header crezca dinámicamente */
-                    text-align: center;
-                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
-                    font-family: 'arial', sans-serif;
-                }
+                    body {
+                        margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
+                        /*margin: 0;*/
+                        padding-top: 0px; /* Altura del header */
+                        padding-bottom: 0px; /* Altura del footer */
+                        font-family: 'arial', sans-serif;
+                        /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                    }
 
-                footer {
-                    position: fixed;
-                    bottom: 30px; /* Ajusta la posición */
-                    left: 0;
-                    right: 0;
-                    height: auto;
-                    text-align: center;
-                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
-                    font-family: 'arial', sans-serif;
-                }
-
-                body {
-                    /*margin-top: 320px; /* Ajusta para que el contenido no se sobreponga al header */
-                    margin: 0;
-                    padding-top: 235px; /* Altura del header */
-                    padding-bottom: 95px; /* Altura del footer */
-                    font-family: 'arial', sans-serif;
-                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
-                }
-                @endif
-
-                .datosgenerales{
-                    border: 0px !important;
-                    text-align: center;
-                    border-collapse: collapse;
-                    width: 100%;
-                    font-size: 9px !important;
-                    font-family: 'arial', sans-serif;
-                } 
-                
-                /*muestra solo la linea inferior de la celda*/
-                .lineaInferior{
-                    border-bottom: 1px solid black;
-                    text-align: center;
-                    font-size: 8px;
-                }
-
-                .tablaheader {
-                    border-collapse: collapse; 
-                    border-spacing: 0px;        /* Espacio entre celdas */
-                    width: 100%;
-                    text-align: center;
-                    font-size: 9px;
-                }
+                    .datosgenerales{
+                        border: 0px !important;
+                        text-align: center;
+                        border-collapse: collapse;
+                        width: 100%;
+                        font-size: 9px !important;
+                        font-family: 'arial', sans-serif;
+                    } 
                     
-                /* Aplica el borde a las celdas de la tabla */
-                .tablaheader th {
-                    /*width: 70%;*/
-                    border: 1px solid black; 
-                }
+                    /*muestra solo la linea inferior de la celda*/
+                    .lineaInferior{
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 8px;
+                    }
 
-        .encabezadoAzul{
-            text-align: center;
-            width: 100%;
-            font-size: 8px;
-            background-color: #305496;
-            color: #ffffff;
-            outline: 1px double #000000; /* Contorno externo */
-        }
+                    .tablaheader {
+                        border-collapse: collapse; 
+                        border-spacing: 0px;        /* Espacio entre celdas */
+                        width: 100%;
+                        text-align: center;
+                        font-size: 9px;
+                    }
+                        
+                    /* Aplica el borde a las celdas de la tabla */
+                    .tablaheader th {
+                        /*width: 70%;*/
+                        border: 1px solid black; 
+                    }
 
-        .border {
-            border: 1px solid black; 
-        }
+            .encabezadoAzul{
+                text-align: center;
+                width: 100%;
+                font-size: 8px;
+                background-color: #305496;
+                color: #ffffff;
+                outline: 1px double #000000; /* Contorno externo */
+            }
 
-        .sinBordetdth td, .sinBordetdth th {
-            border: 0px !important;
-            text-align: center;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        
-        .sinBordetd td {
-            border: 0px !important;
-            text-align: center;
-            border-collapse: collapse;
-            width: 100%;
-        }
+            .border {
+                border: 1px solid black; 
+            }
 
-        .sinBordeth th {
-            border: 0px !important;
-            text-align: left;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        /* ************** */
-        .imagenes-reporte {
-            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
-            width: 106%;
-            border-collapse: separate;
-            /*border-spacing: 20px; /* Espacio entre celdas */
-            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
-            margin-bottom: 0;
-            table-layout: fixed; /* Fija el ancho de las celdas */
-        }
+            .sinBordetdth td, .sinBordetdth th {
+                border: 0px !important;
+                text-align: center;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            .sinBordetd td {
+                border: 0px !important;
+                text-align: center;
+                border-collapse: collapse;
+                width: 100%;
+            }
 
-        .foto-container {
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
-            width: 312px;  /* Fija el ancho de la celda */
-            height: 170px; /* Fija la altura de la celda */
-            border: 1px solid black; 
-            vertical-align: middle;
-        }
+            .sinBordeth th {
+                border: 0px !important;
+                text-align: left;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            /* ************** */
+            .imagenes-reporte {
+                margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
+                width: 106%;
+                border-collapse: separate;
+                /*border-spacing: 20px; /* Espacio entre celdas */
+                border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
+                margin-bottom: 0;
+                table-layout: fixed; /* Fija el ancho de las celdas */
+            }
 
-        .foto-container img {
-            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
-            object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 332.5px;  /* Ajusta el ancho de la celda */
-            height: 170px; /* Ajusta la altura de la celda */
-            vertical-align: middle;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+            .foto-container {
+                padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
+                width: 312px;  /* Fija el ancho de la celda */
+                height: 170px; /* Fija la altura de la celda */
+                border: 1px solid black; 
+                vertical-align: middle;
+            }
 
-        /* Estilo para los comentarios */
-        .comment { 
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 7px; /* Espaciado entre el borde y el texto */
-            margin-top: 0px; /* Espacio entre la imagen y el comentario */
-            text-align: center; /* Centrar el texto */
-            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
-            max-width: 100%; /* Para que el texto no desborde */
-            word-wrap: break-word; /* Permite que el texto se ajuste */
-        }
-        /* Estilo para los "comentarios" en blanco */
-        .empty-comment {
-            margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 0px; /* Espaciado entre el borde y el texto */
-        }
-        
-        .empty-box {
-            background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
-        }
+            .foto-container img {
+                /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+                object-fit: cover; /* Llenar el espacio sin distorsionar */
+                width: 332.5px;  /* Ajusta el ancho de la celda */
+                height: 170px; /* Ajusta la altura de la celda */
+                vertical-align: middle;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
 
-        .cross-line {
-            width: 74%;
-            height: 0px; /* Ajusta según el tamaño de las imágenes */
-            position: relative;
-        }
+            /* Estilo para los comentarios */
+            .comment { 
+                border-top: 1px solid black; /* Borde superior de 2px en color negro */
+                padding-top: 7px; /* Espaciado entre el borde y el texto */
+                margin-top: 0px; /* Espacio entre la imagen y el comentario */
+                text-align: center; /* Centrar el texto */
+                /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
+                max-width: 100%; /* Para que el texto no desborde */
+                word-wrap: break-word; /* Permite que el texto se ajuste */
+            }
+            /* Estilo para los "comentarios" en blanco */
+            .empty-comment {
+                margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
+                border-top: 1px solid black; /* Borde superior de 2px en color negro */
+                padding-top: 42px; /* Espaciado entre el borde y el texto del comentario de las vacios*/
+            }
+            
+            .empty-box {
+                background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
+            }
 
-        .cross-line::before,
-        .cross-line::after {
-            content: "";
-            position: absolute;
-            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
-            left: -21px; /* Ajusta para alinear la línea */
-            width: 152.5%; /* Aumenta el ancho de la línea */
-            height: 100%;
-            border-top: 2px solid black;
-            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
-        }
+            .cross-line {
+                width: 74%;
+                height: 0px; /* Ajusta según el tamaño de las imágenes */
+                position: relative;
+            }
 
-        .cross-line::after {
-            transform: rotate(-27deg);
-        }
+            .cross-line::before,
+            .cross-line::after {
+                content: "";
+                position: absolute;
+                top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
+                left: -21px; /* Ajusta para alinear la línea */
+                width: 152.5%; /* Aumenta el ancho de la línea */
+                height: 100%;
+                border-top: 2px solid black;
+                transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
+            }
+
+            .cross-line::after {
+                transform: rotate(-27deg);
+            }
+            .foto-container[colspan="2"] img {
+                width: 100%;
+                height: 23%;
+            }
+
+            /* ===== Imagen que ocupa una hoja completa ===== */
+            .foto-full {
+                width: 100% !important;
+                height: 435px !important;
+            }
+
+            .foto-full img {
+                width: 100% !important;
+                height: 404px !important;
+                object-fit: contain; /* no recorta */
+            }
+
+            .foto-full .comment {
+                margin-top: 0px;
+                font-size: 12px;
+            }
             </style>
         </head>
         <body>
@@ -285,13 +277,13 @@
                             <th>LUGAR:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
                             <th>HORA DE INSPECCIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
+                            <td class="lineaInferior"></td>
                         </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
+                            <td class="lineaInferior"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -479,51 +471,7 @@
             </footer>
 
             <div class="content">
-                <table class="datosgenerales">
-                    <thead class="encabezadoAzul">
-                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
-                    </thead>  
 
-                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
-                        <tbody>
-                        @php
-                            $chunks = array_chunk($Fotos, 2); // Divide las imágenes en grupos de 2
-                        @endphp
-
-                        @foreach($chunks as $fotosGrupo)
-                            <table class="imagenes-reporte">
-                                <tr>
-                                    @foreach($fotosGrupo as $index => $foto)
-                                        <td class="foto-container">
-                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                            <p class="comment">{{ $foto['comment'] }}</p>
-                                        </td>
-                                        
-                                        @if(($index + 1) % 2 == 0)
-                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
-                                        @endif
-                                    @endforeach
-
-                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
-                                    @for($i = count($fotosGrupo); $i < 2; $i++)
-                                        <td class="foto-container empty-box">
-                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
-                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
-                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
-                                        @if(($i + 1) % 2 == 0)
-                                            </tr><tr> <!-- Mantiene la estructura -->
-                                        @endif
-                                    @endfor
-                                </tr>
-                            </table>
-
-                            {{-- Salto de página cada 4 imágenes --}}
-                            @if (!$loop->last)
-                                <div style="page-break-after: always;"></div>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
             </div>
 
         </body>
