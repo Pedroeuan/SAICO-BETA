@@ -82,6 +82,7 @@
                                 <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
                                 <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
                                 <option value="Tics" @if($Usuario->rol == 'Tics') selected="selected" @endif> Tics</option>
+                                <option value="SGI" @if($Usuario->rol == 'SGI') selected="selected" @endif> SGI</option>
                                 @else
                                 <option value="Super Administrador" @if($Usuario->rol == 'Super Administrador') selected="selected" @endif> Super Administrador</option>
                                 <option value="Administrador" @if($Usuario->rol == 'Administrador') selected="selected" @endif> Administrador</option>
@@ -92,6 +93,7 @@
                                 <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
                                 <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
                                 <option value="Tics" @if($Usuario->rol == 'Tics') selected="selected" @endif> Tics</option>
+                                <option value="SGI" @if($Usuario->rol == 'SGI') selected="selected" @endif> SGI</option>
                                 @endif
 
                             </select>
