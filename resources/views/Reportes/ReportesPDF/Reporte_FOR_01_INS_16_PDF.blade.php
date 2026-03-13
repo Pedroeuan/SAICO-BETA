@@ -261,7 +261,9 @@
                 <div style="margin-bottom: 4px;"></div>
 
             <div class="content">
-
+                @if(isset($Fotos[5]))
+                <img src="{{ $Fotos[5] }}" style="width:400px;">
+                @endif
             </div>
 
             <footer>
