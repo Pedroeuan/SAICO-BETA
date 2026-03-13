@@ -23,6 +23,8 @@ class Usuario extends Model
         'licencia_pdf',
         'cv_pdf',
         'licencia_estatus',
+        'created_at',
+        'updated_at'
     ];
     protected $table = 'users';
     protected $primaryKey = 'id';
