@@ -181,8 +181,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
-
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria AGREGAR "S" a clientes
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 

@@ -12,34 +12,37 @@
                     2.2cm; /* izquierdo */
                 }
 
-                @if ($totalFotos <=4)
-                header {
-                    width: 100%;
+            header {
+                    position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
-                    height: auto; /* Permite crecer según el contenido */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
-                    /*background-color: rgb(226, 45, 45);*/
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
                 }
 
                 footer {
                     position: fixed;
-                    bottom: 30px;
+                    bottom: -30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
                     text-align: center;
-                    /*background-color: rgb(7, 231, 18);*/
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
                 }
 
                 body {
-                    margin: -30px, 0; /* Ajusta el margen de la página */
-                    padding-bottom: 60px; /* Para que el contenido no se monte en el footer */
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin: 0;*/
+                    padding-top: 0px; /* Altura del header */
+                    padding-bottom: 0px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
-                    /*background-color: rgb(45, 78, 226);*/
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
-            @else
+
                 header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -70,7 +73,6 @@
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
-                @endif
 
                 .datosgenerales{
                     border: 0px !important;
@@ -147,7 +149,7 @@
         }
 
         .foto-container {
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
+            padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
             width: 312px;  /* Fija el ancho de la celda */
             height: 170px; /* Fija la altura de la celda */
             border: 1px solid black; 
@@ -180,7 +182,7 @@
         .empty-comment {
             margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
             border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 0px; /* Espaciado entre el borde y el texto */
+            padding-top: 42px; /* Espaciado entre el borde y el texto del comentario de las vacios*/
         }
         
         .empty-box {
@@ -207,6 +209,28 @@
 
         .cross-line::after {
             transform: rotate(-27deg);
+        }
+
+        .foto-container[colspan="2"] img {
+            width: 100%;
+            height: 23%;
+        }
+
+        /* ===== Imagen que ocupa una hoja completa ===== */
+        .foto-full {
+            width: 100% !important;
+            height: 435px !important;
+        }
+
+        .foto-full img {
+            width: 100% !important;
+            height: 404px !important;
+            object-fit: contain; /* no recorta */
+        }
+
+        .foto-full .comment {
+            margin-top: 0px;
+            font-size: 12px;
         }
             </style>
         </head>

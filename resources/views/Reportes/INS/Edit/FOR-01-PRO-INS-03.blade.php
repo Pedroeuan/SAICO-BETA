@@ -102,7 +102,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}" readonly>
                                             @error('Cliente')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -112,7 +112,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -520,50 +520,93 @@
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                             </thead>
-                                            @php
-                                                $contador = 1;
-                                            @endphp
                                             <tbody>
-                                                @foreach ($Grupo_Juntas_Re as $grupo)
-                                                    @php
-                                                        $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                        $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                                    @endphp
+                                                @php $contador = 1; @endphp
 
-                                                    @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                        <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
-                                                        <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
-                                                            <td colspan="11">
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                                            
-                                                                            <i class="fa fa-times"  aria-hidden="true"></i>
-                                                                        </button>
-                                                                    </td>
-                                                                </div>
+                                                @foreach ($Grupo_Juntas_Re as $index => $grupo)
+
+                                                @php
+                                                    $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
+
+                                                    /*$titleId = $esSinTitulo
+                                                        ? 'sin_titulo_' . $index   // 👈 único por bloque
+                                                        : 'titulo_' . $index;*/
+                                                    $titleId = $esSinTitulo
+                                                        ? 'sin_titulo'
+                                                        : 'titulo_' . $index;
+
+                                                @endphp
+
+                                                {{-- 🔹 TÍTULO --}}
+                                                @if (!$esSinTitulo)
+                                                <tr class="titulo-row" data-titulo="{{ $titleId }}">
+                                                    <td colspan="11">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <input type="text"
+                                                                class="form-control w-90 titulo-text"
+                                                                name="titulos_text[{{ $titleId }}]"
+                                                                value="{{ $grupo['titulos_juntas'] }}"
+                                                                placeholder="Ingrese título...">
+
+                                                            <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
+
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </td>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @endif
+
+                                                {{-- 🔹 FILAS --}}
+                                                @foreach ($grupo['resultados'] as $resultado)
+                                                <tr data-titulo="{{ $titleId }}">
+                                                    <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+
+                                                    <td><input type="text" class="form-control" name='No[{{ $titleId }}][]' value="{{ $resultado['No'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='componente[{{ $titleId }}][]' value="{{ $resultado['componente'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='no_indicacion[{{ $titleId }}][]' value="{{ $resultado['no_indicacion'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='tipo_indicacion[{{ $titleId }}][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='largo[{{ $titleId }}][]' value="{{ $resultado['largo'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='ancho[{{ $titleId }}][]' value="{{ $resultado['ancho'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='diametro[{{ $titleId }}][]' value="{{ $resultado['diametro'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='ht[{{ $titleId }}][]' value="{{ $resultado['ht'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='evaluacion[{{ $titleId }}][]' value="{{ $resultado['evaluacion'] }}"></td>
+                                                    <td><input type="text" class="form-control" name='long_inspeccionada[{{ $titleId }}][]' value="{{ $resultado['long_inspeccionada'] }}"></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger btnEliminar">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                @php $contador++; @endphp
+                                                @endforeach
+
+                                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
+                                                @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
+                                                    @foreach ($grupo['Long_Inspecc'] as $long)
+                                                        <tr class="long-row" data-titulo="{{ $titleId }}">
+                                                            <td colspan="10">Longitud Inspeccionada</td>
+
+                                                            <td>
+                                                                <input type="text"
+                                                                    class="form-control long-text"
+                                                                    name="Long_Inspecc[{{ $titleId }}][]"
+                                                                    value="{{ $long }}"
+                                                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                                            </td>
+
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-danger btnEliminar">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
                                                             </td>
                                                         </tr>
-                                                    @endif
-
-                                                    @foreach ($grupo['resultados'] as $resultado)
-                                                        <tr data-titulo="{{ $tituloKey }}">
-                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                            <td><input type="text" class="form-control" name='No[{{ $tituloKey }}][]' value="{{ $resultado['No'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='componente[{{ $tituloKey }}][]' value="{{ $resultado['componente'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='no_indicacion[{{ $tituloKey }}][]' value="{{ $resultado['no_indicacion'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='tipo_indicacion[{{ $tituloKey }}][]' value="{{ $resultado['tipo_indicacion'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='largo[{{ $tituloKey }}][]' value="{{ $resultado['largo'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='ancho[{{ $tituloKey }}][]' value="{{ $resultado['ancho'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='diametro[{{ $tituloKey }}][]' value="{{ $resultado['diametro'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='ht[{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='long_inspeccionada[{{ $tituloKey }}][]' value="{{ $resultado['long_inspeccionada'] }}"></td>
-                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                                                        </tr>
-                                                        @php $contador++; @endphp
                                                     @endforeach
+                                                @endif
+
                                                 @endforeach
                                             </tbody>
                                     </table>
@@ -874,7 +917,7 @@
                                         
                                         <p>
 
-                                        <!--IMAGENES CON COMENTARIOS-->
+                        <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -885,46 +928,57 @@
                                             </select>
                                         </div>
 
-                                        <div class="w-100">
-
-                                            @if(!empty($Fotos_Comentarios))
-                                                <div class="row">
-                                                    @foreach($Fotos_Comentarios as $index => $foto)
-                                                        <div class="col-sm-6" id="image-container-{{ $index }}">
-                                                            <div class="form-group">
-                                                                <!-- Vista previa de la imagen existente -->
-                                                                <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
-                                                                <div class="image-preview mt-2">
-                                                                    <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
-                                                                </div>
-
-                                                                <!-- Campo para seleccionar una nueva imagen -->
-                                                                <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
-
-                                                                <!-- Campo para el comentario -->
-                                                                <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
-
-                                                                <!-- Campo oculto para la imagen en base64 -->
-                                                                <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
-
-                                                                <!-- Campo oculto para mantener la ruta de la imagen existente -->
-                                                                <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
-
-                                                                <!-- Campo oculto para marcar imágenes eliminadas -->
-                                                                <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
-
-                                                                <!-- Botón de eliminación -->
-                                                                <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
+                                        @if(!empty($Fotos_Comentarios))
+                                            <div class="row">
+                                                @foreach($Fotos_Comentarios as $index => $foto)
+                                                    <div class="col-sm-6" id="image-container-{{ $index }}">
+                                                        <div class="form-group">
+                                                            <!-- Vista previa de la imagen existente -->
+                                                            <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
+                                                            <div class="image-preview mt-2">
+                                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
                                                             </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @else
-                                                <p>No hay imágenes disponibles.</p>
-                                            @endif
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox"
+                                                                    class="form-check-input imagen-hoja-checkbox"
+                                                                    data-index="{{ $index }}"
+                                                                    id="imagenHoja{{ $index }}"
+                                                                    {{ !empty($foto['una_hoja']) && $foto['una_hoja'] == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="imagenHoja{{ $index }}">
+                                                                    Imagen en una hoja
+                                                                </label>
+                                                            </div>
+                                                            
+                                                            <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}">
+                                                            <!-- Campo para seleccionar una nueva imagen -->
+                                                            <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
+                                                            <!-- Campo para el comentario -->
+                                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
+
+                                                            <!-- Campo oculto para la imagen en base64 -->
+                                                            <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
+
+                                                            <!-- Campo oculto para mantener la ruta de la imagen existente -->
+                                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
+
+                                                            <!-- Campo oculto para marcar imágenes eliminadas -->
+                                                            <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
+
+                                                            <!-- Botón de eliminación -->
+                                                            <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <p>No hay imágenes disponibles.</p>
+                                        @endif
+
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
-                                        
+
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -960,13 +1014,11 @@
                                                 <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
                                             </div>
                                         </div>
-
                                 </div>
                             </form>
                         </div>
                     </div>
                 </section>
-                <div id="tituloCountContainer" data-titulo-count="{{ $tituloIndex ?? 0 }}" style="display:none"></div>
 @stop
 
 
@@ -999,47 +1051,79 @@
 
 <script>
  /*Juntas-Resultados */
-    $(document).ready(function() {
-        let tituloCount = 0;
-        let rowCount = 0;
-        let rowCountGlobal = 0;
-
+$(document).ready(function() {
+    let tituloCount = $('.titulo-row').length;
+    //let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+    let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
+    let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+            <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="11">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
             </tr>
-            `;
+        `;
 
-            $('#dynamicTable tbody').append(newTitle);
-            updateTitulos();
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        });
+
+        $('#addLongBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
+                <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="10"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
         });
 
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().attr('data-titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
-            rowCountGlobal++;
+            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-            let newRow = `
-                <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+            let newRow = 
+                    `<tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
                     <td><input type="text" class="form-control" name="No[${lastTitle}][]" value="${rowCountGlobal}" placeholder="No. de Junta / Componente"></td>
                     <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. de Junta / Componente"></td>
                     <td><input type="text" class="form-control" name="no_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
@@ -1050,13 +1134,15 @@
                     <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                     <td><input type="text" class="form-control" name="long_inspeccionada[${lastTitle}][]" placeholder="Longitud Inspeccionada"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                </tr>`;
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                    </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
-        });
-        
+            verificarYAgregarLongitud();
+        }
+    );
+
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
@@ -1068,17 +1154,79 @@
                 });
                 return;
             }
-
+            // Actualizar el campo oculto con [{id,text},...]
+            updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-    });
+
+});
+
+    function verificarYAgregarLongitud() {
+
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+
+        let contadorBloque = 0;
+        let $ultimoElementoBloque = null;
+
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            // ❌ Ignorar longitudes existentes (no cuentan)
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+                return;
+            }
+
+            // ✅ Contar título o fila normal
+            if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+                contadorBloque++;
+                $ultimoElementoBloque = $row;
+            }
+            //-----------------------------------------Hacer ajuste de "N" filas por bloque
+            // 🎯 Cuando llegue a 15 → insertar longitud
+            if (contadorBloque === 15) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="10">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text"
+                                    class="form-control w-90 long-text"
+                                    name="Long_Inspecc[${lastTitle}][]"
+                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                // 👉 Evitar duplicados
+                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                    $ultimoElementoBloque.after(newLong);
+                }
+
+                // 🔄 Reiniciar contador para siguiente bloque
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+            }
+        });
+    }
     
     /*Selects */
         $(document).ready(function() {

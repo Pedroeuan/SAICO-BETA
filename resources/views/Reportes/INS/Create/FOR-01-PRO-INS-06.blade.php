@@ -121,6 +121,42 @@
                                         </div>
                                     </div>
 
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">
+                                ¿Cliente existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneCliente" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
+
+                            <!-- SELECT cuando es SI -->
+                            <select id="campoClienteSelect"
+                                    class="form-select"
+                                    name="ClienteSelect">
+                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                @foreach($Clientes as $Cliente)
+                                    <option value="{{ $Cliente->Cliente }}">
+                                        {{ $Cliente->Cliente }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- INPUT cuando es NO -->
+                            <input type="text"
+                                id="campoClienteInput"
+                                class="form-control inputForm mt-2"
+                                name="ClienteInput"
+                                placeholder="Ingrese nombre del cliente"
+                                style="display:none;">
+                        </div>
+                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
@@ -548,17 +584,17 @@
                                             </tr>
                                         </thead>
 
-                                            <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
-                                            </tbody>
+                                <tbody>
+                                <!-- Filas dinámicas aparecerán aquí -->
+                                <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
+                                
+                                </tbody>
                                     </table>
-                                    </div>
-                                    <input type="hidden" name="titulos_data" id="titulos_hidden">
-                                    <p>
-
-                                        <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                                        <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                                            <div>
+                                </div>
+                                <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
+                                <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                                <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                    <div>
                                                 <label for="numRows">Número de Filas:</label>
                                                 <select id="numRows" class="form-select">
                                                     @for ($i = 1; $i <= 500; $i++)
@@ -803,7 +839,7 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-select form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -811,21 +847,10 @@
                                             </select>
                                         </div>
 
-                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                            <p>
-                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
-                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
-                                            </p>
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
-                                        
-                                        <div class="w-100">
-                                            <div id="imageFieldsContainer" class="row">
-                                                <!-- Aquí se agregarán dinámicamente los campos -->
-                                            </div>
-                                        </div>
-                                        
+
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -900,172 +925,71 @@
 
 <script>
     /*Juntas-Resultados */
-    $(document).ready(function() {
-       let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+$(document).ready(function() {
+    let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
     
     function restoreData() {//-----------------------------------------------------------Reemplazar todo el resotedara
         const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
         if (!data) return;
-
-        // Helpers y configuración-CONFIGURAR CAMPOS DE ACUERDO A LOS NAMES DE CADA INPUT
-        const fieldNames = [
-        'ID',
-        'elemento',
-        'Ønom',
-        'Øext',
-        'nivel',
-        '12_00',
-        '01_00',
-        '01_30',
-        '02_00',
-        '03_00',
-        '04_00',
-        '04_30',
-        '05_00',
-        '06_00',
-        '07_00',
-        '07_30',
-        '08_00',
-        '09_00',
-        '10_00',
-        '10_30',
-        '11_00',
-        'tmin',
-        'tmax',
-        'tprom',
-        'observaciones'];
-        const placeholders = { //CONFIGURAR CAMPOS DE ACUERDO A LOS PLACEHOLDERS DE CADA INPUT
-        ID:'ID',
-        elemento:'elemento',
-        'Ønom': 'Ønom',
-        'Øext': 'Øext',
-        nivel: 'nivel',
-        '12_00':'12:00',
-        '01_00':'01:00',
-        '01_30':'01:30',
-        '02_00':'02:00',
-        '03_00':'03:00',
-        '04_00':'04:00',
-        '04_30':'04:30',
-        '05_00':'05:00',
-        '06_00':'06:00',
-        '07_00':'07:00',
-        '07_30':'07:30',
-        '08_00':'08:00',
-        '09_00':'09:00',
-        '10_00':'10:00',
-        '10_30':'10:30',
-        '11_00':'11:00',
-        tmin:'tmin',
-        tmax:'tmax',
-        tprom:'tprom',
-        observaciones:'observaciones'
-        };
-        function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
-
-        // Limpiar tabla y contadores
-        $('#dynamicTable tbody').empty();
-        tituloCount = 0;
-        rowCount = 0;
-        rowCountGlobal = 0;
-
-        // Recrear títulos (manteniendo el id único guardado)
-        (data.titles || []).forEach(function(t){
-            tituloCount++;
-            const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
-            const titleText = esc(t.text || '');
-
-            //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
-            const newTitle = `
-            <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="15">
-                <div class="d-flex justify-content-between align-items-center">
-                    <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                    <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
-                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                    </button></td>
-                </div>
-                </td>
-            </tr>
-            `;
-            $('#dynamicTable tbody').append(newTitle);
-        });
-
-        // Recrear filas (inserción debajo del título correspondiente)
-        (data.rows || []).forEach(function(r){
-            const titleId = r.titleId || 'sin_titulo';
-            const vals = r.values || r.fields || []; // acepta array u objeto
-
-            const inputsHtml = fieldNames.map(function(fn, idx){
-                const value = Array.isArray(vals) ? (vals[idx] || '') : (vals[fn] || '');
-                return `<td><input type="text" class="form-control" name="${fn}[${titleId}][]" value="${esc(value)}" placeholder="${esc(placeholders[fn] || '')}"></td>`;
-            }).join('');
-
-            const $newRow = $(`<tr data-titulo="${titleId}">
-                <td class="row-number">0 <input type="hidden" value="0"></td>
-                ${inputsHtml}
-                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-            </tr>`);
-
-            const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
-
-            if ($titleRow.length) {
-                // Si ya hay filas para ese título, insertar después de la última de ellas
-                const $lastRowSameTitle = $titleRow.nextAll(`tr[data-titulo="${titleId}"]:not(.titulo-row)`).last();
-                if ($lastRowSameTitle.length) {
-                    $lastRowSameTitle.after($newRow);
-                } else {
-                    $titleRow.after($newRow);
-                }
-            } else {
-                // Título no existe (sin_titulo u otro caso) -> agregar al final
-                $('#dynamicTable tbody').append($newRow);
-            }
-        });
-
-        // Recrear Longitudes guardadas (data.longs)
-        (data.longs || []).forEach(function(l){
-
-            const titleId = l.titleId || 'sin_titulo';
-            const value   = esc(l.text || '');
-
-            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
-            const newLong = `
-                <tr class="long-row" data-titulo="${titleId}">
-                    <td colspan="14">Longitud Inspeccionada</td>
-                    <td>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <input type="text"
-                                class="form-control w-90 long-text"
-                                name="Long_Inspecc[${titleId}][]"
-                                value="${value}"
-                                placeholder="Ingrese Longitud Inspeccionada...">
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminar">
-                                    <i class="fa fa-times"></i>
-                                </button>
+                //const tableData = JSON.parse(savedData);
+                // Restaurar contadores
+                tituloCount = data.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = data.filter(item => item.type === 'fila').length;
+                
+                data.forEach((item) => {
+                    if (item.type === 'titulo') {
+                        let newTitle = `
+                        <tr class="titulo-row" data-titulo="${item.id}">
+                            <td colspan="26">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
+                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ">
+                                        <i class="fa fa-times"  aria-hidden="true"></i>
+                                    </button></td>
+                                </div>
                             </td>
-                        </tr>`;//-----------------------------------------Hacer ajuste de las filas a poner contando titulos y longitudes
-            // 🔎 Buscar filas reales del bloque
-            const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
-            const $rowsBlock = $titleRow.nextUntil('.titulo-row');
+                        </tr>`;
+                        $('#dynamicTable tbody').append(newTitle);
+                    } else if (item.type === 'fila') {
+                        let newRow =
+                        `<tr data-titulo="${item.titulo}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
+                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
+                    <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Descripción del Elemento"></td>
+                    <td><input type="text" class="form-control" name="0nom[${lastTitle}][]" placeholder="Ønom"></td>
+                    <td><input type="text" class="form-control" name="0ext[${lastTitle}][]" placeholder="Øext"></td>
+                    <td><input type="text" class="form-control" name="nivel[${lastTitle}][]" placeholder="Nivel"></td>
+                    <td><input type="text" class="form-control" name="12_00[${lastTitle}][]" placeholder="12:00"></td>
+                    <td><input type="text" class="form-control" name="01_00[${lastTitle}][]" placeholder="01:00"></td>
+                    <td><input type="text" class="form-control" name="01_30[${lastTitle}][]" placeholder="01:30"></td>
+                    <td><input type="text" class="form-control" name="02_00[${lastTitle}][]" placeholder="02:00"></td>
+                    <td><input type="text" class="form-control" name="03_00[${lastTitle}][]" placeholder="SA"></td>
+                    <td><input type="text" class="form-control" name="04_00[${lastTitle}][]" placeholder="Tmin"></td>
+                    <td><input type="text" class="form-control" name="04_30[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)"></td>
+                    <td><input type="text" class="form-control" name="05_00[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="06_00[${lastTitle}][]" placeholder="Fotos"></td>
+                    <td><input type="text" class="form-control" name="07_00[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><input type="text" class="form-control" name="07_30[${lastTitle}][]" placeholder="Recomendaciones"></td>
+                    <td><input type="text" class="form-control" name="08_00[${lastTitle}][]" placeholder="Responsable de la Acción"></td>
+                    <td><input type="text" class="form-control" name="09_00[${lastTitle}][]" placeholder="Fecha de Cumplimiento"></td>
+                    <td><input type="text" class="form-control" name="10_00[${lastTitle}][]" placeholder="Estatus"></td>
+                    <td><input type="text" class="form-control" name="10_30[${lastTitle}][]" placeholder="Comentarios Adicionales"></td>
+                    <td><input type="text" class="form-control" name="11_00[${lastTitle}][]" placeholder="Seguimiento"></td>
+                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="Tmin"></td>
+                    <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="Tmax"></td>
+                    <td><input type="text" class="form-control" name="tprom[${lastTitle}][]" placeholder="Tprom"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                    </tr>`;
 
-            if ($rowsBlock.length >= 13) { // si hay al menos 13 filas en el bloque
-                const $nfila = $rowsBlock
-                    .not('.long-row')
-                    .eq(12); // fila índice 12 = fila 13 (0-based)
 
-                if ($nfila.length) { 
-                    $nfila.after(newLong);
-                } else {
-                    $rowsBlock.last().after(newLong);
-                }
-            } else {
-                // fallback: al final del bloque
-                $rowsBlock.last().after(newLong);
+                        $('#dynamicTable tbody').append(newRow);
+                    }
+                });
+                updateRowNumbers();
+                updateTitulos();
             }
 
         });
