@@ -11,8 +11,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use App\Services\Vehiculos\FlujoVehiculosTracker;
 
 
 class SalidaChecklistController extends Controller
@@ -187,18 +185,6 @@ class SalidaChecklistController extends Controller
                 'kilometraje_actual' => (int) $request->kilometraje,
             ]);
         });
-        $usuarioLogueado = Auth::user();
-        if ($usuarioLogueado) {
-            FlujoVehiculosTracker::track(
-                evento: 'checklist_salida_creado',
-                salidaVehiculoId: (int) $salida->id,
-                userId: (int) $usuarioLogueado->id,
-                rol: (string) ($usuarioLogueado->rol ?? ''),
-                paso: 'checklist_salida_ok',
-                pantalla: 'salidas.checklist.salida.store'
-            );
-        }
-
         return redirect()->route('salidas.index')->with('success', 'Checklist de salida registrado correctamente');
     }
 
@@ -292,26 +278,6 @@ class SalidaChecklistController extends Controller
                 'kilometraje_actual' => (int) $request->kilometraje,
             ]);
         });
-
-        $usuarioLogueado = Auth::user();
-        if ($usuarioLogueado) {
-            FlujoVehiculosTracker::track(
-                evento: 'checklist_entrada_creado',
-                salidaVehiculoId: (int) $salida->id,
-                userId: (int) $usuarioLogueado->id,
-                rol: (string) ($usuarioLogueado->rol ?? ''),
-                paso: 'checklist_entrada_ok',
-                pantalla: 'salidas.checklist.entrada.store'
-            );
-            FlujoVehiculosTracker::track(
-                evento: 'salida_finalizada',
-                salidaVehiculoId: (int) $salida->id,
-                userId: (int) $usuarioLogueado->id,
-                rol: (string) ($usuarioLogueado->rol ?? ''),
-                paso: 'finalizacion_por_checklist_entrada',
-                pantalla: 'salidas.checklist.entrada.store'
-            );
-        }
 
         return redirect()->route('salidas.index')->with('success', 'Checklist de entrada registrado correctamente');
     }
