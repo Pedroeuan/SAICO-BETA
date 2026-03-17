@@ -58,6 +58,7 @@
                         <input type="text" 
                             class="form-control inputForm mt-2 d-none" 
                             id="cliente_input"
+                            name="Cliente_manual"
                             placeholder="Escriba el nombre del cliente">
 
                         @error('Cliente')
@@ -267,10 +268,12 @@
         ============================== */
         function generarFolio(cliente) {
 
-            if (!cliente || cliente.length < 4) {
+            if (!cliente || cliente.trim() === '') {
                 folioInput.value = '';
                 return;
             }
+
+            cliente = cliente.trim();
 
             const clientePrefix = cliente.substring(0, 4).toUpperCase();
 
@@ -323,11 +326,7 @@
                 alert("Por favor, ingresa o selecciona un cliente.");
                 return;
             }
-
-            // Asegurar que el select tenga el valor final para Laravel
-            selectCliente.value = clienteFinal;
         });
-
 
         /* ==============================
         PREVENIR ENTER

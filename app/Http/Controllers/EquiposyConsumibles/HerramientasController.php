@@ -493,6 +493,7 @@ class HerramientasController extends Controller
         if ($disponibilidadEstado == 'Elige un Tipo') {
             $disponibilidadEstado = $EsperaDato;
         }
+
         // Actualizar los datos del equipo
         $generalEyC ->update([
             'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),

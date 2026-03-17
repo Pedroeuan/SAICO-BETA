@@ -100,13 +100,24 @@
                                         </div>
                                     </div>
 
+                                   <!-- check btton -->
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
-                                            @error('Cliente')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
+                                      <div class="form-group">
+                                        <label class="col-form-label">¿Cliente existente?
+                                            <span class="ml-3">
+                                                <label class="mr-2">
+                                                    <input type="radio" name="TieneCliente" value="si" checked> Sí</label>
+                                                    <label> <input type="radio" name="TieneCliente" value="no"> No </label>
+                                                 </span>
+                                                </label>
+                                                <!-- SELECT cuando es SI -->
+                                                 <select id="campoClienteSelect" class="form-select" name="ClienteSelect"> <option value="" selected disabled>Seleccione un Cliente</option>
+                                                 @foreach($Clientes as $Cliente)
+                                                 <option value="{{ $Cliente->Cliente }}"> {{ $Cliente->Cliente }}</option>
+                                                 @endforeach
+                                                </select>
+                                                <!-- INPUT cuando es NO -->
+                                                 <input type="text" id="campoClienteInput" class="form-control inputForm mt-2" name="ClienteInput" placeholder="Ingrese nombre del cliente" style="display:none;">
                                         </div>
                                     </div>
 
@@ -159,7 +170,6 @@
                                                     </label>
                                                 </span>
                                             </label>
-
                                             <!-- Input visible solo si es "SI" -->
                                             <input type="text"
                                                 id="campoContrato"
@@ -597,6 +607,8 @@
 
                                             <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
+                                            <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+
                                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                         </div>
 
@@ -979,34 +991,117 @@ $(document).ready(function() {
                 updateRowNumbers();
                 updateTitulos();
             }
+
+        });
+
+        // Reindexar numeración visible y actualizar contadores
+        function reindexRows(){
+            let idx = 0;
+            $('#dynamicTable tbody tr').not('.titulo-row, .long-row').each(function(){
+                idx++;
+
+                const td = $(this).find('td').eq(0);
+                const textNode = td.contents().filter(function(){ 
+                    return this.nodeType === 3; 
+                }).first();
+
+                if (textNode.length) {
+                    textNode[0].nodeValue = idx + ' ';
+                } else {
+                    const hidden = td.find('input[type="hidden"]').prop('outerHTML');
+                    td.html(idx + ' ' + hidden);
+                }
+
+                td.find('input[type="hidden"]').val(idx);
+            });
+
+            rowCountGlobal = idx;
+
+            const lastTitleId = $('.titulo-row').last().data('titulo');
+
+            rowCount = lastTitleId 
+                ? $('#dynamicTable tbody tr')
+                    .not('.titulo-row, .long-row')
+                    .filter(function(){
+                        return $(this).data('titulo') === lastTitleId;
+                    }).length 
+                : 0;
+        }
+        reindexRows();
+
+        // Actualizaciones finales y guardado
+        if (typeof updateTitulos === 'function') updateTitulos();
+        // Guardar con el form más cercano a la tabla (compatibilidad con tu saveData existente)
+        const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
+        //if (formId && typeof saveData === 'function') saveData(formId);
         }
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
+            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
+            
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="26">
+            <tr class="titulo-row" data-titulo="${titleId}">
+                <td colspan="14">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
             </tr>
-            `;
+        `;
 
-            $('#dynamicTable tbody').append(newTitle);
-            updateTitulos(); // Actualizar lista de títulos
-            saveData(document.querySelectorAll("form")[1].id);
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        //saveData(document.querySelectorAll("form")[1].id);
+        // Guardar de forma robusta: usar el form relativo o id explícito
+        saveData($(this).closest('form').attr('id'));
+        });
+
+        $('#addLongBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
+                <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="14"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]" placeholder="Ingrese Longitud Inspeccionada...">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+ 
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        //saveData(document.querySelectorAll("form")[1].id);
+        // Guardar de forma robusta: usar el form relativo o id explícito
+        saveData($(this).closest('form').attr('id'));
         });
 
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1043,122 +1138,124 @@ $(document).ready(function() {
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 
-                $('#dynamicTable tbody').append(newRow);
+                            $('#dynamicTable tbody').append(newRow);
             }
-            saveData(document.querySelectorAll("form")[1].id);
-        }
-    );
-
-        $('form').submit(function(e) {
-            // Validar que la tabla no esté vacía
-            if ($('#dynamicTable tbody tr').length === 0) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-                });
-                return;
-            }
-
-            // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
-            // Deshabilitar el botón de submit y cambiar el texto (opcional)
-            let submitButton = $(this).find('button[type="submit"]');
-            submitButton.prop('disabled', true).text('Guardando...');
-            // Opcional: Agregar un indicador de carga
-            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+            verificarYAgregarLongitud();
+            saveData($(this).closest('form').attr('id'));
         });
 
-            // Restaurar datos al cargar la página
+        // Restaurar datos al cargar la página
         restoreData();
     });
 
+    function verificarYAgregarLongitud() {
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
 
-    /*Selects */
+        let contadorBloque = 0;
+        let $ultimoElementoBloque = null;
+
+        $rows.each(function () {
+            const $row = $(this);
+
+            // Ignorar longitudes existentes
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+                return;
+            }
+
+            // Contar título o fila normal
+            contadorBloque++;
+            $ultimoElementoBloque = $row;
+
+            // Cuando llegue a 11, insertar longitud
+            if (contadorBloque === 11) {
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="26">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text"
+                                    class="form-control w-90 long-text"
+                                    name="Long_Inspecc[${lastTitle}][]"
+                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                <button type="button" class="btn btn-danger btnEliminar">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                // Evitar duplicados
+                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                    $ultimoElementoBloque.after(newLong);
+                }
+
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+            }
+        });
+    }
+
+    /* Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
+            const selectedOption = $('#equiposSelect').find('option:selected');
+            $('#marcaInputE').val(selectedOption.data('marca') || '');
+            $('#modeloInputE').val(selectedOption.data('modelo') || '');
+            $('#nsInputE').val(selectedOption.data('ns') || '');
         }
 
-        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
-        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
-
-        // Evento cuando se cambia la selección en el select
-        $('#equiposSelect').on('change', function() {
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id + '_equipos');
+        if (selectedOptionLocalE != null) {
+            $('#equiposSelect').val(selectedOptionLocalE);
             actualizarInputsE();
-        });
+        }
+        $('#equiposSelect').on('change', actualizarInputsE);
 
         function actualizarInputsA() {
-            var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputA').val(marca);
-            $('#modeloInputA').val(modelo);
-            $('#nsInputA').val(ns);
+            const selectedOption = $('#accesoriosSelect').find('option:selected');
+            $('#marcaInputA').val(selectedOption.data('marca') || '');
+            $('#modeloInputA').val(selectedOption.data('modelo') || '');
+            $('#nsInputA').val(selectedOption.data('ns') || '');
         }
 
-        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
-        selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
-
-        // Evento cuando se cambia la selección en el select
-        $('#accesoriosSelect').on('change', function() {
+        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id + '_accesorios');
+        if (selectedOptionLocalA != null) {
+            $('#accesoriosSelect').val(selectedOptionLocalA);
             actualizarInputsA();
-        });
-            
+        }
+        $('#accesoriosSelect').on('change', actualizarInputsA);
+
         function actualizarInputsbyp() {
-            var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputbyp').val(marca);
-            $('#modeloInputbyp').val(modelo);
-            $('#nsInputbyp').val(ns);
+            const selectedOption = $('#blockyprobetaSelect').find('option:selected');
+            $('#nombreInputbyp').val(selectedOption.data('nombre') || '');
+            $('#nsInputbyp').val(selectedOption.data('ns') || '');
         }
 
-        const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
-        selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
-
-        // Evento cuando se cambia la selección en el select
-        $('#blockyprobetaSelect').on('change', function() {
+        const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id + '_ByP');
+        if (selectedOptionLocalbyp != null) {
+            $('#blockyprobetaSelect').val(selectedOptionLocalbyp);
             actualizarInputsbyp();
-        });
+        }
+        $('#blockyprobetaSelect').on('change', actualizarInputsbyp);
     });
 
-        /*FOR-01-PRO-INS-06*/
+    /* FOR-01-PRO-INS-06 */
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-06');
         if (!form) return;
 
-        // Guardar en localStorage al escribir
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
-                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                if (el.closest('#dynamicTable')) return;
                 localStorage.setItem('FOR-01-PRO-INS-06_' + el.name, el.value);
             });
         });
 
-        // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
                 const value = localStorage.getItem('FOR-01-PRO-INS-06_' + el.name);
@@ -1166,15 +1263,11 @@ $(document).ready(function() {
             }
         });
 
-        // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
                 localStorage.removeItem('FOR-01-PRO-INS-06_' + el.name);
-                
             });
-            localStorage.clear();
         });
     });
-
 </script>
 @endsection

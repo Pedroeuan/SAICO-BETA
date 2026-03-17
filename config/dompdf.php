@@ -104,6 +104,7 @@ return [
             'file://' => ['rules' => []],
             'http://' => ['rules' => []],
             'https://' => ['rules' => []],
+            'data://' => ['rules' => []],
         ],
 
         /**

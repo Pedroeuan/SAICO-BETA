@@ -74,6 +74,16 @@
                         <div class="card-body w-100">
                             <form id="FOR-01-PRO-INS-06" action="{{ route('Reportes_FOR_01_PRO_INS_06.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <strong>No se pudo guardar la actualización.</strong>
+                                        <ul class="mb-0 mt-2">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -89,12 +99,17 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                   <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">No. Reporte</label>
-                                            <input type="text" class="form-control  inputForm @error('No_Reporte') is-invalid @enderror" name="Detalles_Generales[No_Reporte]"  placeholder="Ejemplo: 077-8DUCTOS-24" value="{{old('Detalles_Generales.No_Reporte', $Detalles_Generales['No_Reporte'] ?? '')}}">
-                                            @error('No_Reporte')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            <label class="col-form-label" for="inputSuccess">No. de Reporte</label>
+                                            <input type="text"
+                                                class="form-control inputForm @error('Detalles_Generales.No_Reporte') is-invalid @enderror"
+                                                name="Detalles_Generales[No_Reporte]"
+                                                placeholder="Ejemplo: 077-8DUCTOS-24"
+                                                value="{{ old('Detalles_Generales.No_Reporte', $Detalles_Generales['No_Reporte'] ?? '') }}"
+                                                readonly>
+                                            @error('Detalles_Generales.No_Reporte')
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
@@ -102,7 +117,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}" readonly>
                                             @error('Cliente')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -112,7 +127,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -523,68 +538,111 @@
                                                 <th></th> <!-- Para botón de eliminar -->
                                             </tr>
                                         </thead>
-                                            @php
-                                                $contador = 1;
-                                            @endphp
-                                        <tbody>
-                                            @foreach ($Grupo_Juntas_Re as $grupo)
-                                            @php
-                                                $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                            @endphp
-                                                @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
-                                                        <td colspan="26">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                            <tbody> 
+                                                
+                                            @php $contador = 1; @endphp
+
+                                                @foreach ($Grupo_Juntas_Re as $index => $grupo)
+
+                                                @php
+                                                    $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
+
+                                                    /*$titleId = $esSinTitulo
+                                                        ? 'sin_titulo_' . $index   //  único por bloque
+                                                        : 'titulo_' . $index;*/
+                                                    $titleId = $esSinTitulo
+                                                        ? 'sin_titulo'
+                                                        : 'titulo_' . $index;
+
+                                                @endphp
+
+                                                {{-- 🔹 TÍTULO --}}
+                                                @if (!$esSinTitulo)
+                                                <tr class="titulo-row" data-titulo="{{ $titleId }}">
+                                                    <td colspan="14">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <input type="text"
+                                                                class="form-control w-90 titulo-text"
+                                                                name="titulos_text[{{ $titleId }}]"
+                                                                value="{{ $grupo['titulos_juntas'] }}"
+                                                                placeholder="Ingrese título...">
+
+                                                            <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
+
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </td>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                                 @endif
 
-                                                @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr data-titulo="{{ $tituloKey }}">
+                                                        {{-- 🔹 FILAS --}}
+
+                                            @foreach ($grupo['resultados'] as $resultado)
+                                                <tr data-titulo="{{ $titleId }}">
                                                         <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name='ID[{{ $tituloKey }}][]' value="{{ $resultado['ID'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='elemento[{{ $tituloKey }}][]' value="{{ $resultado['elemento'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='Ønom[{{ $tituloKey }}][]' value="{{ $resultado['Ønom'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='Øext[{{ $tituloKey }}][]' value="{{ $resultado['Øext'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='nivel[{{ $tituloKey }}][]' value="{{ $resultado['nivel'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='12_00[{{ $tituloKey }}][]' value="{{ $resultado['12_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='01_00[{{ $tituloKey }}][]' value="{{ $resultado['01_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='01_30[{{ $tituloKey }}][]' value="{{ $resultado['01_30'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='02_00[{{ $tituloKey }}][]' value="{{ $resultado['02_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='03_00[{{ $tituloKey }}][]' value="{{ $resultado['03_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='04_00[{{ $tituloKey }}][]' value="{{ $resultado['04_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='04_30[{{ $tituloKey }}][]' value="{{ $resultado['04_30'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='05_00[{{ $tituloKey }}][]' value="{{ $resultado['05_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='06_00[{{ $tituloKey }}][]' value="{{ $resultado['06_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='07_00[{{ $tituloKey }}][]' value="{{ $resultado['07_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='07_30[{{ $tituloKey }}][]' value="{{ $resultado['07_30'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='08_00[{{ $tituloKey }}][]' value="{{ $resultado['08_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='09_00[{{ $tituloKey }}][]' value="{{ $resultado['09_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='10_00[{{ $tituloKey }}][]' value="{{ $resultado['10_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='10_30[{{ $tituloKey }}][]' value="{{ $resultado['10_30'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='11_00[{{ $tituloKey }}][]' value="{{ $resultado['11_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tmin[{{ $tituloKey }}][]' value="{{ $resultado['tmin'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tmax[{{ $tituloKey }}][]' value="{{ $resultado['tmax'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tprom[{{ $tituloKey }}][]' value="{{ $resultado['tprom'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='observaciones[{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ID[{{ $titleId}}][]' value="{{ $resultado['ID'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='elemento[{{ $titleId }}][]' value="{{ $resultado['elemento'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='Ønom[{{ $titleId }}][]' value="{{ $resultado['Ønom'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='Øext[{{ $titleId }}][]' value="{{ $resultado['Øext'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='nivel[{{ $titleId }}][]' value="{{ $resultado['nivel'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='12_00[{{ $titleId }}][]' value="{{ $resultado['12_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='01_00[{{ $titleId }}][]' value="{{ $resultado['01_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='01_30[{{ $titleId }}][]' value="{{ $resultado['01_30'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='02_00[{{ $titleId }}][]' value="{{ $resultado['02_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='03_00[{{ $titleId }}][]' value="{{ $resultado['03_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='04_00[{{ $titleId }}][]' value="{{ $resultado['04_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='04_30[{{ $titleId }}][]' value="{{ $resultado['04_30'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='05_00[{{ $titleId }}][]' value="{{ $resultado['05_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='06_00[{{ $titleId }}][]' value="{{ $resultado['06_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='07_00[{{ $titleId }}][]' value="{{ $resultado['07_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='07_30[{{ $titleId }}][]' value="{{ $resultado['07_30'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='08_00[{{ $titleId }}][]' value="{{ $resultado['08_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='09_00[{{ $titleId }}][]' value="{{ $resultado['09_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='10_00[{{ $titleId }}][]' value="{{ $resultado['10_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='10_30[{{ $titleId }}][]' value="{{ $resultado['10_30'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='11_00[{{ $titleId }}][]' value="{{ $resultado['11_00'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmin[{{ $titleId }}][]' value="{{ $resultado['tmin'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tmax[{{ $titleId }}][]' value="{{ $resultado['tmax'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='tprom[{{ $titleId }}][]' value="{{ $resultado['tprom'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='observaciones[{{ $titleId }}][]' value="{{ $resultado['observaciones'] }}"></td>
                                                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                     </tr>
                                                     @php $contador++; @endphp
                                                 @endforeach
-                                            @endforeach
-                                        </tbody>
 
+                                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
+                                                @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
+                                                    @foreach ($grupo['Long_Inspecc'] as $long)
+                                                        <tr class="long-row" data-titulo="{{ $titleId }}">
+                                                            <td colspan="13">Longitud Inspeccionada</td>
+
+                                                            <td>
+                                                                <input type="text"
+                                                                    class="form-control long-text"
+                                                                    name="Long_Inspecc[{{ $titleId }}][]"
+                                                                    value="{{ $long }}"
+                                                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                                            </td>
+
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-danger btnEliminar">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+
+                                                @endforeach
+           
+                                        </tbody>
                                     </table>
                                     </div>
-
+                                    <input type="hidden" id="titulos_hidden" name="titulos_hidden">
                                     <p>
 
                                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
@@ -602,6 +660,8 @@
 
                                             <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
+                                             <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+
                                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                         </div>
 
@@ -613,7 +673,7 @@
                                         </div>
 
                                         <!-- Select para elegir el número de firmas -->
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                                         <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
@@ -658,42 +718,34 @@
                                             <table class="table table-bordered table-striped dt-responsive tablas">
                                                 <thead>
                                                     <tr>
-
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizo" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vobo1" value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
-                                                    
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
                                                     </tr>
 
                                                     <tr>
-
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
                                                         <td></td>
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
-
                                                     </tr>
 
                                                     <tr>
-
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
                                                                                         
                                                     <tr>
-
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO', $Firmas['PUESTO_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
 
                                                     <tr>
-
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
-                                                    
                                                 </thead>                            
                                             </table>
                                         </div>
@@ -756,19 +808,19 @@
                                             </table>
                                         </div>
 
-                                        <!-- 4 CUATRO FIRMAS-->
+                                          <!-- 4 CUATRO FIRMAS-->
                                         <div id="firmas4" class="col-12" style="display: none;">
                                             <table class="table table-bordered table-striped dt-responsive tablas">
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizo" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vobo1" value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vobo2" value="{{old('Vobo2', $Firmas['Vobo2'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo2', $Firmas['Vobo2'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vobo3" value="{{old('Vobo3', $Firmas['Vobo3'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo3', $Firmas['Vobo3'] ?? '')}}"></th>
 
                                                     </tr>
 
@@ -786,25 +838,24 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO', $Firmas['NOMBRE_2DO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO', $Firmas['NOMBRE_2DO_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO', $Firmas['NOMBRE_3RO_ENCARGADO'] ?? '')}}"></td>
-
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO', $Firmas['NOMBRE_3RO_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
-                                                    
+                                                                                        
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO', $Firmas['PUESTO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO', $Firmas['PUESTO_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_2DO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO', $Firmas['PUESTO_2DO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_2DO_ENCARGADO]" placeholder="PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO', $Firmas['PUESTO_2DO_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_3RO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL TERCER ENCARGADO" value="{{old('PUESTO_3RO_ENCARGADO', $Firmas['PUESTO_3RO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_3RO_ENCARGADO]" placeholder="PUESTO DEL TERCER ENCARGADO" value="{{old('PUESTO_3RO_ENCARGADO', $Firmas['PUESTO_3RO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
 
@@ -812,11 +863,11 @@
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_2DO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO', $Firmas['EMPRESA_2DO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO', $Firmas['EMPRESA_2DO_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO', $Firmas['EMPRESA_3RO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO', $Firmas['EMPRESA_3RO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
                                                     
@@ -852,6 +903,11 @@
                                                                 <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
                                                             </div>
 
+                                                             <div class="form-check mt-2">
+                                                                <input type="checkbox"class="form-check-input imagen-hoja-checkbox" data-index="{{ $index }}"id="imagenHoja{{ $index }}"{{ !empty($foto['una_hoja']) && $foto['una_hoja'] == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="imagenHoja{{ $index }}">Imagen en una hoja</label>
+                                                            </div>
+                                                            <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}">
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
@@ -968,7 +1024,7 @@ $(document).ready(function() {
             const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+           <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="26">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
@@ -1027,9 +1083,35 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
         }
     );
 
+    $('#addLongBtn').click(function () {
+    const lastTitle = $('.titulo-row').length > 0
+        ? $('.titulo-row').last().data('titulo')
+        : 'sin_titulo';
+
+    const newLong = `
+        <tr class="long-row" data-titulo="${lastTitle}">
+            <td colspan="26">Longitud Inspeccionada</td>
+            <td>
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="text" class="form-control w-90 long-text"
+                        name="Long_Inspecc[${lastTitle}][]"
+                        placeholder="Ingrese Longitud Inspeccionada...">
+                    <button type="button" class="btn btn-danger btnEliminar">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `;
+
+    $('#dynamicTable tbody').append(newLong);
+});
+
+    
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
@@ -1053,8 +1135,68 @@ $(document).ready(function() {
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-    });
 
+});
+    function verificarYAgregarLongitud() {
+
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+
+        let contadorBloque = 0;
+        let $ultimoElementoBloque = null;
+
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            //  Ignorar longitudes existentes (no cuentan)
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+                return;
+            }
+
+            //  Contar título o fila normal
+            if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+                contadorBloque++;
+                $ultimoElementoBloque = $row;
+            }
+            //-----------------------------------------Hacer ajuste de "N" filas por bloque
+            //  Cuando llegue a 11 → insertar longitud
+            if (contadorBloque === 15) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="13">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text"
+                                    class="form-control w-90 long-text"
+                                    name="Long_Inspecc[${lastTitle}][]"
+                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                //  Evitar duplicados
+                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                    $ultimoElementoBloque.after(newLong);
+                }
+
+                //  Reiniciar contador para siguiente bloque
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+            }
+
+         });
+    }
 
     /*Selects */
     $(document).ready(function() {

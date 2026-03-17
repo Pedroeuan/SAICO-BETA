@@ -748,7 +748,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 /*ACCESORIOS*/
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('accesoriosForm');

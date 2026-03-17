@@ -1401,7 +1401,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="col-sm-4">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')

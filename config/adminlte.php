@@ -711,7 +711,7 @@ return [
                 [
                     'text' => 'Solicitudes AD',
                     'icon' => 'fas fa-file-alt',
-                    'can' => 'tecnicos-equipos-access',  // Define una política en Laravel para controlar el acceso
+                    'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
                     //'topnav' => true,
                     'submenu' => [
                         [
@@ -726,7 +726,30 @@ return [
                         ],
                     ],
                 ],
-
+                // Sidebar Vehiculo
+                [
+                    'text' => 'Gestión de Vehículos',
+                    'icon' => 'fas fa-car',
+                    'submenu'=> [
+                        [
+                            'text' => 'Vehículos',
+                            'icon' => 'fas fa-truck',
+                            'url' => '/vehiculos',
+                            'can' => 'vehiculos-admin-access'
+                        ],
+                        [
+                            'text' => 'Salidas de Vehículos',
+                            'icon' => 'fas fa-sign-out-alt',
+                            'url' => '/salidas-vehiculos',
+                        ],
+                        [
+                            'text' => 'Panel Vehícular',
+                            'url' => 'salidas-vehiculos/panel',
+                            'icon' => 'fas fa-chart-bar',
+                            'can' => 'vehiculos-admin-access'
+                        ],
+                    ],
+                ],
     ],//Final Menu
 
     /*

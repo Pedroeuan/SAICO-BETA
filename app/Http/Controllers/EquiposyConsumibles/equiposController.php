@@ -448,7 +448,7 @@ class equiposController extends Controller
     }
 
     /*Update Equipos*/
-    public function updateEquipos(Request $request, $id)
+    public function updateEquipos(Request $request, $id)// Actualizar los datos del equipo
     {
         $request->validate([
             'Nombre_E_P_BP' => 'required|string|max:255',
@@ -937,13 +937,19 @@ class equiposController extends Controller
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
             $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
             $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
-
+            
              // Verifica si el número económico ya existe (compara el número limpio)
             $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(no\\.\\s*eco-?|eco-?)', '')) = ?", [$noEconomicoLimpio])
             ->where('Tipo', 'EQUIPOS')
+            ->where('idGeneral_EyC', '!=', $id)
+            ->where('No_economico', '!=', $noEconomicoLimpio)  // ← EXCLUYE SU PROPIO REGISTRO
             ->exists();
 
-            $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
+            $existsSerie = false;
+            if ($serie !== '---') {
+                $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+            }
 
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
             //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
@@ -954,25 +960,25 @@ class equiposController extends Controller
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
             }
-            else if ($existsNo_Economico) {
+            elseif ($existsNo_Economico) {
                 return redirect()->back()->withErrors([
                     'No_economico' => 'El No economico ya existe en la base de datos.',
                 ])->withInput();
             }
-            else if ($existsSerie)
+            elseif ($existsSerie)
             {
                 return redirect()->back()->withErrors([
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
             }
             //De esta manera, se valida que no existan duplicados en No_economico o Serie con variaciones en el formato y mayúsculas/minúsculas.
-
+        }
+        
             // Verificar el valor de Disponibilidad_Estado y asignar 'ESPERA DE DATO' si es 'Elige un Tipo'
             $disponibilidadEstado = $request->input('Disponibilidad_Estado');
             if ($disponibilidadEstado == 'Elige un Tipo') {
                 $disponibilidadEstado = $EsperaDato;
             }
-
             // Actualizar los datos del equipo
             $generalEyC ->update([
                 'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
@@ -1023,6 +1029,7 @@ class equiposController extends Controller
                 $generalEyC->Factura = $pdfPath;
                 $generalEyC->save();
             }
+
             // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
             if ($request->hasFile('Foto') && $request->file('Foto')->isValid()) {
                 // Obtener la ruta del archivo anterior desde la base de datos
