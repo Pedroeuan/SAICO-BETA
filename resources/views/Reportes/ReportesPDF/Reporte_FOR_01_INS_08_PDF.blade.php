@@ -120,17 +120,41 @@
         }
 
         .datosresultados{
-            border-collapse: separate;  /*separate; No colapsar bordes */ /*collapse; Fusiona los bordes de las celdas */
-            border-spacing: 0px;        /* Espacio entre celdas */
+            border-collapse: collapse;
             width: 100%;
             text-align: center;
             font-size: 10px;
-            /*border : 1px solid black;*/
+            }
+        .datosresultados td, .datosresultados th {
+            border: .6px solid black;
+        }
+        .datosresultados .sinBordeth th{
+            border: 0 !important;
+        }
+        .datosresultados td.long-wrap{
+            border: 0 !important;
+            padding: 0 !important;
         }
 
-        .datosresultados td, .datosresultados th {
-            border: .1px solid black; /* Borde grueso de 2px */
+        .long-wrap{
+            border: none !important;
+            padding: 0 !important;
         }
+
+        .long-box{
+            width: 36%;
+            margin-left: auto;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .long-box td{
+            border: .6px solid black !important;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
         .celdaGris{
             background-color: #DBDBDB;
             font-size: 6px;
@@ -551,22 +575,12 @@
 
                 <div style="margin-bottom: 5px;"></div>
 
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">RESULTADOS</th>
-                        </tr>
-                </table>
                     <table class="datosresultados">
-
                         <thead class="encabezadoAzul">
                             <tr><th colspan="22">RESULTADOS</th></tr>
                         </thead>
 
-                            <thead><tr class="sinBordeth"><th colspan="20">
-                                </th></tr>
-                            </thead> <!-- Fila vacia -->
-                            <thead>
-                            <tr><th style="border:none;"></th></tr>
+                        <thead>
                             <tr class="celdaGris">
                                 <th style="width: 30px;" rowspan="2">ID</th>
                                 <th style="width: 40px;" rowspan="2">No. De Junta</th>
@@ -600,7 +614,7 @@
                                         {{-- 🔹 TÍTULO --}}
                                          @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
                                             <tr class="titulo-row">
-                                                <td colspan="13" style="border:.5px solid black;">
+                                                <td colspan="22" style="border:.5px solid black;">
                                                     {{ $grupo['titulos_juntas'] }}
                                                 </td>
                                             </tr>
@@ -614,6 +628,7 @@
                                                     <td>{{ $junta['lado_a'] }}</td>
                                                     <td>{{ $junta['lado_b'] }}</td>
                                                     <td>{{ $junta['diametro'] }}</td>
+                                                    <td>{{ $junta['no_indicacion'] ?? '' }}</td> 
                                                     <td>{{ $junta['tipo_indicacion'] }}</td>
                                                     <td>{{ $junta['Ang'] }}</td>
                                                     <td>{{ $junta['Gdb'] }}</td>
@@ -631,25 +646,26 @@
                                                     <td>{{ $junta['fotos'] }}</td>
                                                     <td>{{ $junta['observaciones'] }}</td>
                                                 </tr>
+
                                             @endforeach
 
                                             {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                            <tr class="sinBordetd">
-                                                <td colspan="16">
-                                                <th colspan="3">Longitud inspeccionada:</th>
-                                                <th colspan="3">
+                                            <tr>
+                                                <td colspan="16" style="border:0 !important;"></td>
+                                                <td colspan="4" style="border:.6px solid black; font-weight:bold; text-align:center;">
+                                                    Longitud inspeccionada:
+                                                </td>
+                                                <td colspan="2" style="border:.6px solid black; font-weight:bold; text-align:center;">
                                                     {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                                </th>
+                                                </td>
                                             </tr>
 
                                             {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
                                             <tr style="page-break-after: always;" class="sinBordetd">
-                                                <td colspan="13"></td>
+                                                <td colspan="22"></td>
                                         </tr>--}}
                                     </tbody>
-                            </table>
-
-                        <table>
+                        </table>
                     </div>
                     @if (!$loop->last)
                         <div style="page-break-after: always;"></div>

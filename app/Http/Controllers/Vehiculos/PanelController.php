@@ -254,6 +254,49 @@ class PanelController extends Controller
             : 0;
         $proyeccionAnual = round($promedioMensual * 12);
 
+        // COMPORTAMIENTO Y SEGMENTACION (por rol)
+        $inicioMesAnalitica = Carbon::now()->startOfMonth();
+        $filtroEventosMes = DB::table('salidas_eventos_flujo')
+            ->where('salidas_eventos_flujo.created_at', '>=', $inicioMesAnalitica);
+
+        $inicioFormCount = (clone $filtroEventosMes)->where('evento', 'inicio_form_salida')->count();
+        $salidaCreadaCount = (clone $filtroEventosMes)->where('evento', 'salida_creada')->count();
+        $checklistSalidaCount = (clone $filtroEventosMes)->where('evento', 'checklist_salida_creado')->count();
+        $checklistEntradaCount = (clone $filtroEventosMes)->where('evento', 'checklist_entrada_creado')->count();
+
+        $conversionInicioASalida = $inicioFormCount > 0
+            ? round(($salidaCreadaCount / $inicioFormCount) * 100, 2)
+            : 0;
+        $conversionSalidaAChecklistSalida = $salidaCreadaCount > 0
+            ? round(($checklistSalidaCount / $salidaCreadaCount) * 100, 2)
+            : 0;
+        $conversionChecklistSalidaAEntrada = $checklistSalidaCount > 0
+            ? round(($checklistEntradaCount / $checklistSalidaCount) * 100, 2)
+            : 0;
+
+        $demandaPorRol = (clone $filtroEventosMes)
+            ->where('evento', 'salida_creada')
+            ->selectRaw("COALESCE(NULLIF(TRIM(rol), ''), 'Sin rol') as rol, COUNT(*) as total")
+            ->groupBy('rol')
+            ->orderByDesc('total')
+            ->get();
+
+        $fidelidadUsuarios = (clone $filtroEventosMes)
+            ->leftJoin('users as u', 'u.id', '=', 'salidas_eventos_flujo.user_id')
+            ->whereIn('salidas_eventos_flujo.evento', [
+                'salida_creada',
+                'checklist_salida_creado',
+                'checklist_entrada_creado',
+                'salida_finalizada',
+            ])
+            ->selectRaw("COALESCE(NULLIF(TRIM(u.name), ''), 'Usuario N/A') as usuario")
+            ->selectRaw("COALESCE(NULLIF(TRIM(salidas_eventos_flujo.rol), ''), 'Sin rol') as rol")
+            ->selectRaw("COUNT(*) as total_eventos")
+            ->groupBy('usuario', 'rol')
+            ->orderByDesc('total_eventos')
+            ->limit(10)
+            ->get();
+
         return view('vehiculos.panel.index', compact(
             'totalVehiculos',
             'disponibles',
@@ -292,7 +335,16 @@ class PanelController extends Controller
             'checklistsCompletos',
             'checklistsIncompletos',
             'nivelChecklistsCompletos',
-            'proyeccionAnual'
+            'proyeccionAnual',
+            'inicioFormCount',
+            'salidaCreadaCount',
+            'checklistSalidaCount',
+            'checklistEntradaCount',
+            'conversionInicioASalida',
+            'conversionSalidaAChecklistSalida',
+            'conversionChecklistSalidaAEntrada',
+            'demandaPorRol',
+            'fidelidadUsuarios'
         ));
     }
 

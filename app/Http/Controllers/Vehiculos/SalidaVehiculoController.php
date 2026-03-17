@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Services\Vehiculos\FlujoVehiculosTracker;
 
 class SalidaVehiculoController extends Controller
 {
@@ -94,6 +95,17 @@ class SalidaVehiculoController extends Controller
      */
     public function create()
     {
+        $usuarioLogueado = Auth::user();
+        if ($usuarioLogueado) {
+            FlujoVehiculosTracker::track(
+                evento: 'inicio_form_salida',
+                userId: (int) $usuarioLogueado->id,
+                rol: (string) ($usuarioLogueado->rol ?? ''),
+                paso: 'form_create',
+                pantalla: 'salidas.create'
+            );
+        }
+
         $vehiculos = Vehiculo::where('estatus', 'disponible')
             ->where('documentacion_estatus', 'completa')
             ->whereDoesntHave('salidaActiva')
@@ -163,7 +175,8 @@ class SalidaVehiculoController extends Controller
     }
 
     //TRANSACCIÓN SEGURA
-    DB::transaction(function () use ($request, $vehiculo, $chofer, $usuarioLogueado,$fechaSalida,$ESPERADATO) {
+    $salidaCreada = null;
+    DB::transaction(function () use ($request, $vehiculo, $chofer, $usuarioLogueado,$fechaSalida,$ESPERADATO, &$salidaCreada) {
     //generacion de folio para evitar dependencia del formulario 
     $numReporte = 'SV-' . now()->format('Ymd-His') . '-' . strtoupper(\Illuminate\Support\Str::random(4));
 
@@ -183,7 +196,23 @@ class SalidaVehiculoController extends Controller
 
         $vehiculo->update([
             'estatus' => 'ocupado']);
+        $salidaCreada = $salida;
     });
+
+    if ($salidaCreada && $usuarioLogueado) {
+        FlujoVehiculosTracker::track(
+            evento: 'salida_creada',
+            salidaVehiculoId: (int) $salidaCreada->id,
+            userId: (int) $usuarioLogueado->id,
+            rol: (string) ($usuarioLogueado->rol ?? ''),
+            paso: 'store_ok',
+            pantalla: 'salidas.store',
+            metadata: [
+                'chofer_id' => (int) $chofer->id,
+                'vehiculo_id' => (int) $vehiculo->id,
+            ]
+        );
+    }
 
     return redirect()->route('salidas.index')->with('success', 'Salida registrada correctamente.');
 }
@@ -242,6 +271,21 @@ class SalidaVehiculoController extends Controller
         $salida->vehiculo->update([
             'estatus' => 'disponible']);
     });
+
+    $usuarioLogueado = Auth::user();
+    if ($usuarioLogueado) {
+        FlujoVehiculosTracker::track(
+            evento: 'salida_finalizada',
+            salidaVehiculoId: (int) $salida->id,
+            userId: (int) $usuarioLogueado->id,
+            rol: (string) ($usuarioLogueado->rol ?? ''),
+            paso: 'finalizar_ok',
+            pantalla: 'salidas.finalizar',
+            metadata: [
+                'duracion_minutos' => (int) $duracion,
+            ]
+        );
+    }
 
     return redirect()->route('salidas.index')->with('success', 'Salida finalizada correctamente.');
    }
