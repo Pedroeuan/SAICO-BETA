@@ -22,4 +22,13 @@ class ISO extends Model
     protected $primaryKey = 'idGeneral_EyC';
     public $timestamps = false; 
     use HasFactory;
+
+    public function getFormattedDateMAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Frec_Cali_Mant_Prev'])->format('d-m-Y');
+    }
+        public function getFormattedDate2MAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['Frec_Man_Inter_Time'])->format('d-m-Y');
+    }
 }

@@ -633,8 +633,27 @@ return [
                         [
                             'text' => 'Inventario',
                             'icon' => 'far fa-clipboard',
-                            'url' => 'inventario',
-                            'can' => 'equipos-lab-access',
+                            'submenu' => 
+                            [
+                                [
+                                    'text' => 'Completo',
+                                    'icon' => 'far fa-clipboard',
+                                    'url' => 'inventario?view=inventario',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                                [
+                                    'text' => 'Calibraciones',
+                                    'icon' => 'fas fa-tachometer-alt',
+                                    'url' => 'inventario?view=calibraciones',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                                [
+                                    'text' => 'Mantenimientos',
+                                    'icon' => 'fas fa-tools',
+                                    'url' => 'inventario?view=mantenimientos',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                            ],
                         ],
                         [
                             'text' => ' Certificados',

@@ -17,7 +17,6 @@
     max-height: 200px; /* Ajusta la altura según sea necesario */
     overflow-y: auto;
     }
-
     
     .tablaheader {
         border-collapse: collapse; 
@@ -62,7 +61,7 @@
     <div class="box">
         <div class="box-body d-flex justify-content-center">
         <div style="display: inline-block;">
-        <h3 align="center">Inventario</h3>
+        <h3 align="center">Mantenimientos</h3>
         <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
                     <thead>
@@ -100,15 +99,16 @@
                         <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Ubicación</th>
-                        <th>Prox.Fecha Calibración/Caducidad</th>
+                        <th>Prox.Fecha Mantenimiento</th>
                         <th>Días Restantes</th>
                         <th>Presentación</th>
-                        <th>Editar</th>
-                        <th>Baja</th>
+                        <!--<th>Editar</th>
+                        <th>Baja</th>-->
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($generalConCertificadosConAlmacenConISOConClasificacion as $general_eyc)
+                    @if($general_eyc->Tipo === 'EQUIPOS')
                         <tr>
                             @if($general_eyc)
                                 <td scope="row">@if($general_eyc->Tipo === 'BLOCK Y PROBETA') BLOCK @else {{ $general_eyc->Tipo}} @endif</td>
@@ -137,31 +137,39 @@
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
                                 @endif
                             @endif
+                            <!-- Ubicación -->
                             <td>
                                 {{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}
-                            </td> 
+                            </td>
+                            
                             @if($general_eyc->certificados)
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
-                                            @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
+                                            @if($general_eyc->certificados->Fecha_mantenimiento == '2001-01-01')
+                                            <!-- Proxima fecha de mantenimiento --> 
                                                     <td scope="row">SIN FECHA ASIGNADA</td>
+                                                    <!-- Días Restantes --> 
                                                     <td scope="row">-</td>
                                                 @elseif($general_eyc->Tipo=='CONSUMIBLES')
+                                                <!-- Proxima fecha de mantenimiento --> 
                                                     <td scope="row">{{$general_eyc->certificados->formatted_date}}</td>
+                                                    <!-- Días Restantes --> 
                                                     <td scope="row">
-                                                        {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) ) 
+                                                        {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_mantenimiento), false) ) 
                                                             <= 0 ? 'CADUCADO' : 
-                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) }}
+                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_mantenimiento), false) }}
                                                     </td>
                                                 @else
-                                                    @if($general_eyc->certificados->Prox_fecha_calibracion == '2001-01-01')
+                                                    @if($general_eyc->iso->Fre_Cali_Mant_Prev == '2001-01-01')
+                                                    <!-- Proxima fecha de mantenimiento -->
                                                     <td scope="row">SIN FECHA ASIGNADA</td>
+                                                    <!-- Días Restantes --> 
                                                     <td scope="row">-</td>
                                                     @else
-                                                        <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
+                                                        <td scope="row">{{$general_eyc->iso->formatted_date2}}</td>
                                                         <td scope="row">
-                                                            {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) ) 
+                                                            {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) ) 
                                                                 <= 0 ? 'VENCIDO' : 
-                                                                (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) }}
+                                                                (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) }}
                                                         </td>
                                                     @endif
                                             @endif
@@ -178,7 +186,7 @@
                                     @endif
                                         </td>
                             @endif
-                            <td>
+                            <!--<td>
                                 <div class="btn-group">
                                     <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                 </div>
@@ -189,7 +197,8 @@
                                     <button type="button" class="btn btn-info btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="far fa-thumbs-down" aria-hidden="true"></i></button>
                                 </div>
                             </td>
-                        </tr>
+                        </tr>-->
+                    @endif
                     @endforeach
                 </tbody>
             </table>
@@ -265,29 +274,20 @@ let table = new DataTable('#tablaJs', {
         }
     },
     language: {
-                    "decimal": "",
-                    "emptyTable": "No hay datos disponibles en la tabla",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "No se encontraron registros coincidentes",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Último",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    },
-                    "aria": {
-                        "sortAscending": ": activar para ordenar la columna ascendente",
-                        "sortDescending": ": activar para ordenar la columna descendente"
-                    }
-                }
+        "decimal": "",
+        "emptyTable": "No hay datos disponibles en la tabla",
+        "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+        "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+        "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+        "lengthMenu": "Mostrar _MENU_ entradas",
+        "search": "Buscar:",
+        "paginate": {
+            "first": "Primero",
+            "last": "Último",
+            "next": "Siguiente",
+            "previous": "Anterior"
+        }
+    }
 });
 
 

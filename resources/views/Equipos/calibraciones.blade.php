@@ -5,7 +5,6 @@
 
 
 @section('css')
-
 <style>
     #tablaJs td {
         text-align: center; /* Centra el contenido horizontalmente */
@@ -62,7 +61,7 @@
     <div class="box">
         <div class="box-body d-flex justify-content-center">
         <div style="display: inline-block;">
-        <h3 align="center">Inventario</h3>
+        <h3 align="center">Calibraciones</h3>
         <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
                     <thead>
@@ -86,7 +85,20 @@
                         </tr>
                     </tbody>
                 </table> -->
+                <!-- BOTONES DE FILTRADO -->
+                <div class="mb-3 text-center">
+                    <label>
+                        <input type="checkbox" id="checkEquipos" checked> Equipos
+                    </label>
 
+                    <label style="margin-left:20px;">
+                        <input type="checkbox" id="checkBlock" checked> Block
+                    </label>
+
+                    <label style="margin-left:20px;">
+                        <input type="checkbox" id="checkMes" checked> Mes Actual
+                    </label>
+                </div>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
@@ -100,15 +112,16 @@
                         <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Ubicación</th>
-                        <th>Prox.Fecha Calibración/Caducidad</th>
+                        <th>Prox.Fecha Calibración</th>
                         <th>Días Restantes</th>
                         <th>Presentación</th>
-                        <th>Editar</th>
-                        <th>Baja</th>
+                        <!-- <th>Editar</th>
+                        <th>Baja</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($generalConCertificadosConAlmacenConISOConClasificacion as $general_eyc)
+                    @if($general_eyc->Tipo === 'EQUIPOS' || $general_eyc->Tipo === 'BLOCK Y PROBETA' )
                         <tr>
                             @if($general_eyc)
                                 <td scope="row">@if($general_eyc->Tipo === 'BLOCK Y PROBETA') BLOCK @else {{ $general_eyc->Tipo}} @endif</td>
@@ -157,7 +170,9 @@
                                                     <td scope="row">SIN FECHA ASIGNADA</td>
                                                     <td scope="row">-</td>
                                                     @else
-                                                        <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
+                                                        <td data-fecha="{{$general_eyc->certificados->Prox_fecha_calibracion}}">
+                                                            {{$general_eyc->certificados->formatted_date2}}
+                                                        </td>
                                                         <td scope="row">
                                                             {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) ) 
                                                                 <= 0 ? 'VENCIDO' : 
@@ -178,7 +193,7 @@
                                     @endif
                                         </td>
                             @endif
-                            <td>
+                            <!-- <td>
                                 <div class="btn-group">
                                     <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                 </div>
@@ -188,8 +203,9 @@
                             <div class="btn-group">
                                     <button type="button" class="btn btn-info btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="far fa-thumbs-down" aria-hidden="true"></i></button>
                                 </div>
-                            </td>
+                            </td> -->
                         </tr>
+                    @endif
                     @endforeach
                 </tbody>
             </table>
@@ -289,7 +305,46 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
+// Filtro personalizado
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 
+    let mostrarEquipos = $('#checkEquipos').is(':checked');
+    let mostrarBlock = $('#checkBlock').is(':checked');
+    let filtrarMes = $('#checkMes').is(':checked');
+
+    let categoria = data[0];
+
+    // FILTRO POR CATEGORIA
+    let pasaCategoria = (
+        (mostrarEquipos && categoria.includes('EQUIPOS')) ||
+        (mostrarBlock && categoria.includes('BLOCK'))
+    );
+
+    if (!pasaCategoria) return false;
+
+    // FILTRO POR MES ACTUAL
+    if (filtrarMes) {
+
+        let nodo = table.row(dataIndex).node();
+        let fechaISO = nodo.cells[10].dataset.fecha;
+
+        if (!fechaISO) return false;
+
+        let fecha = new Date(fechaISO);
+        let hoy = new Date();
+
+        let mismoMes = fecha.getMonth() === hoy.getMonth();
+        let mismoAnio = fecha.getFullYear() === hoy.getFullYear();
+
+        return mismoMes && mismoAnio;
+    }
+
+    return true;
+});
+//Detectar cambios en los checkboxes
+$('#checkEquipos, #checkBlock, #checkMes').on('change', function () {
+    table.draw();
+});
 
 //$(".btnEliminarEquipo").on("click", function(){
 $(document).on("click", ".btnEliminarEquipo", function() {
