@@ -115,8 +115,8 @@
                         <th>Prox.Fecha Calibración</th>
                         <th>Días Restantes</th>
                         <th>Presentación</th>
-                        <!-- <th>Editar</th>
-                        <th>Baja</th> -->
+                        <th>Editar</th>
+                        <th>Baja</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -190,7 +190,7 @@
                                                 <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                         @endif
                                             </td>
-                                <!-- <td>
+                                <td>
                                     <div class="btn-group">
                                         <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                     </div>
@@ -200,7 +200,7 @@
                                 <div class="btn-group">
                                         <button type="button" class="btn btn-info btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="far fa-thumbs-down" aria-hidden="true"></i></button>
                                     </div>
-                                </td> -->
+                                </td>
                             </tr>
                         @endif
                     @endforeach

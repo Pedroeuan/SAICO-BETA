@@ -176,7 +176,7 @@
                                                         <!-- Días Restantes -->
                                                         <td scope="row">
                                                             {{ 
-                                                            ((int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) ) 
+                                                            ((int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false)) 
                                                                 <= 0 ? 'VENCIDO' : 
                                                             (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) 
                                                             }}

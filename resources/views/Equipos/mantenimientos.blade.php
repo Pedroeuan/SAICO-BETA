@@ -85,7 +85,12 @@
                         </tr>
                     </tbody>
                 </table> -->
-
+                <!-- BOTONES DE FILTRADO -->
+                <div class="mb-3 text-center">
+                    <label style="margin-left:20px;">
+                        <input type="checkbox" id="checkMes"> Mes Actual
+                    </label>
+                </div>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
@@ -105,8 +110,8 @@
                         <th>Prox.Fecha Mantenimiento</th>
                         <th>Días Restantes</th>
                         <th>Presentación</th>
-                        <!--<th>Editar</th>
-                        <th>Baja</th>-->
+                        <th>Editar</th>
+                        <th>Baja</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -183,7 +188,9 @@
                                                         <td scope="row">-</td>
                                                     @else
                                                         <!-- Proxima fecha de mantenimiento -->
-                                                        <td scope="row">{{$general_eyc->certificados->formatted_date6}}</td>
+                                                        <td scope="row" data-fecha="{{$general_eyc->certificados->Prox_fecha_mantenimiento}}">
+                                                            {{$general_eyc->certificados->formatted_date6}}
+                                                        </td>
                                                         <!-- Días Restantes --> 
                                                         <td scope="row">
                                                             {{ 
@@ -203,7 +210,7 @@
                                                 <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                         @endif
                                     </td>
-                            <!--<td>
+                            <td>
                                 <div class="btn-group">
                                     <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                 </div>
@@ -214,7 +221,7 @@
                                     <button type="button" class="btn btn-info btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="far fa-thumbs-down" aria-hidden="true"></i></button>
                                 </div>
                             </td>
-                        </tr>-->
+                        </tr>
                     @endif
                     @endforeach
                 </tbody>
@@ -242,7 +249,6 @@
 <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js"></script>
 <!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <!--sweet alert -->
@@ -306,7 +312,37 @@ let table = new DataTable('#tablaJs', {
         }
     }
 });
+// Filtro personalizado
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 
+    let filtrarMes = $('#checkMes').is(':checked');
+
+    let categoria = data[0];
+
+    // FILTRO POR MES ACTUAL
+    if (filtrarMes) {
+
+        let nodo = table.row(dataIndex).node();
+        let fechaISO = nodo.cells[13].dataset.fecha;
+        console.log("Fecha ISO:", fechaISO); // Verificar el valor de fechaISO
+
+        if (!fechaISO) return false;
+
+        let fecha = new Date(fechaISO);
+        let hoy = new Date();
+
+        let mismoMes = fecha.getMonth() === hoy.getMonth();
+        let mismoAnio = fecha.getFullYear() === hoy.getFullYear();
+
+        return mismoMes && mismoAnio;
+    }
+
+    return true;
+});
+//Detectar cambios en los checkboxes
+$('#checkMes').on('change', function () {
+    table.draw();
+});
 
 //$(".btnEliminarEquipo").on("click", function(){
 $(document).on("click", ".btnEliminarEquipo", function() {
