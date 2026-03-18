@@ -152,7 +152,6 @@
                                 @endif
                                 <!-- Ubicación-->
                                 <td>{{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}</td>
-                                @if($general_eyc->certificados)
                                         @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                                 @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
                                                         <td scope="row">SIN FECHA ASIGNADA</td>
@@ -191,7 +190,6 @@
                                                 <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                         @endif
                                             </td>
-                                @endif
                                 <!-- <td>
                                     <div class="btn-group">
                                         <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>

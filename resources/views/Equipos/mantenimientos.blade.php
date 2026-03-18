@@ -142,7 +142,7 @@
                             <!-- Ubicación -->
                             <td>{{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}</td>
                                         @if($general_eyc->iso->Frec_Cali_Mant_Prev == 'N/A' || $general_eyc->iso->Frec_Cali_Mant_Prev == 'ESPERA DE DATO')
-                                                    <!-- Mantenimiento PReventivo --> 
+                                                    <!-- Mantenimiento Preventivo --> 
                                                     <td scope="row">N/A / NO ASIGNADO</td>
                                             @else
                                                     <!-- Mantenimiento PReventivo -->
