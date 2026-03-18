@@ -51,6 +51,17 @@
     #tablaJs {
         width: auto !important;
     }
+    .toggle-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .toggle-container label {
+        font-size: 12px;
+        cursor: pointer;
+    }
 </style>
 @endsection
 
@@ -86,7 +97,25 @@
                         </tr>
                     </tbody>
                 </table> -->
+            <div class="mb-3 text-center toggle-container">
 
+                <label><input type="checkbox" class="toggle-col" data-col="0" checked> Categoria</label>
+                <label><input type="checkbox" class="toggle-col" data-col="1" checked> Nombre</label>
+                <label><input type="checkbox" class="toggle-col" data-col="2" checked> ID</label>
+                <label><input type="checkbox" class="toggle-col" data-col="3" checked> Marca</label>
+                <label><input type="checkbox" class="toggle-col" data-col="4" checked> Modelo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="5" checked> NS</label>
+                <label><input type="checkbox" class="toggle-col" data-col="6" checked> Lote</label>
+                <label><input type="checkbox" class="toggle-col" data-col="7" checked> Stock</label>
+                <label><input type="checkbox" class="toggle-col" data-col="8" checked> Disponibilidad</label>
+                <label><input type="checkbox" class="toggle-col" data-col="9" checked> Ubicación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="10" checked> Fecha</label>
+                <label><input type="checkbox" class="toggle-col" data-col="11" checked> Días</label>
+                <label><input type="checkbox" class="toggle-col" data-col="12" checked> Presentación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="13" checked> Editar</label>
+                <label><input type="checkbox" class="toggle-col" data-col="14" checked> Baja</label>
+
+            </div>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
@@ -256,6 +285,12 @@ $('#tablaJs').on('draw.dt', function() {
 });
 
 let table = new DataTable('#tablaJs', {
+        columnDefs: [
+        {
+            targets: [6, 10, 11], // columnas que quieres ocultar por default
+            visible: false
+        }
+    ],
     layout: {
         topStart: {
             pageLength: true,
@@ -265,13 +300,22 @@ let table = new DataTable('#tablaJs', {
                     text: 'Exportar a Excel',
                     title: 'Inventario',
                     exportOptions: {
-                        columns: [0,1,2,3,4,5,6,7,8,9,10,11,12]
+                        //columns: [0,1,2,3,4,5,6,7,8,9,10,11,12]
+                        //columns:':visible'
+                        columns: ':visible',
+                        modifier: {
+                            search: 'applied',
+                            order: 'applied'
+                        }
                     }
                 },
                 {
                     extend: 'print',
                     text: 'Imprimir',
-                    title: 'Inventario'
+                    title: 'Inventario',
+                        exportOptions: {
+                        columns: ':visible'
+                    }
                 }
             ]
         },
@@ -310,8 +354,23 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
+// Sincronizar estado inicial
+$('.toggle-col').each(function () {
 
+    let colIndex = $(this).data('col');
+    let isVisible = table.column(colIndex).visible();
 
+    $(this).prop('checked', isVisible);
+
+});
+// Mostrar / ocultar columnas
+$(document).on('change', '.toggle-col', function () {
+
+    let column = table.column($(this).data('col'));
+
+    column.visible($(this).is(':checked'));
+
+});
 //$(".btnEliminarEquipo").on("click", function(){
 $(document).on("click", ".btnEliminarEquipo", function() {
     //valor del id a eliminar
