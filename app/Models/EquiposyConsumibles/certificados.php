@@ -52,15 +52,18 @@ class certificados extends Model
     {
         return \Carbon\Carbon::parse($this->attributes['Fecha_verificacion'])->format('d-m-Y');
     }
-        public function getFormattedDate4Attribute()
+
+    public function getFormattedDate4Attribute()
     {
         return \Carbon\Carbon::parse($this->attributes['Prox_fecha_verificacion'])->format('d-m-Y');
     }
-            public function getFormattedDate5Attribute()
+
+    public function getFormattedDate5Attribute()
     {
         return \Carbon\Carbon::parse($this->attributes['Fecha_mantenimiento'])->format('d-m-Y');
     }
-                public function getFormattedDate6Attribute()
+    
+    public function getFormattedDate6Attribute()
     {
         return \Carbon\Carbon::parse($this->attributes['Prox_fecha_mantenimiento'])->format('d-m-Y');
     }

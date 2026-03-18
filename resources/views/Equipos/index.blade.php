@@ -154,8 +154,8 @@
                                                     </td>
                                                 @else
                                                     @if($general_eyc->certificados->Prox_fecha_calibracion == '2001-01-01')
-                                                    <td scope="row">SIN FECHA ASIGNADA</td>
-                                                    <td scope="row">-</td>
+                                                        <td scope="row">SIN FECHA ASIGNADA</td>
+                                                        <td scope="row">-</td>
                                                     @else
                                                         <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
                                                         <td scope="row">

@@ -95,10 +95,13 @@
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
-                        <th>Lote</th>
                         <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Ubicación</th>
+                        <th>Mantenimiento Preventivo</th>
+                        <th>Intervalo de Tiempo</th>
+                        <th>Numero de Reporte</th>
+                        <th>Fecha Mantenimiento</th>
                         <th>Prox.Fecha Mantenimiento</th>
                         <th>Días Restantes</th>
                         <th>Presentación</th>
@@ -117,7 +120,6 @@
                                 <td scope="row">{{$general_eyc->Marca}}</td>
                                 <td scope="row">{{$general_eyc->Modelo}}</td>
                                 <td scope="row">{{$general_eyc->Serie}}</td>
-                                <td scope="row">{{$general_eyc->almacen->Lote}}</td>
                                 <td scope="row">{{$general_eyc->almacen->Stock}}</td>
                                 @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
@@ -138,54 +140,69 @@
                                 @endif
                             @endif
                             <!-- Ubicación -->
-                            <td>
-                                {{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}
-                            </td>
-                            
-                            @if($general_eyc->certificados)
-                                    @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
+                            <td>{{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}</td>
+                                        @if($general_eyc->iso->Frec_Cali_Mant_Prev == 'N/A' || $general_eyc->iso->Frec_Cali_Mant_Prev == 'ESPERA DE DATO')
+                                                    <!-- Mantenimiento PReventivo --> 
+                                                    <td scope="row">N/A / NO ASIGNADO</td>
+                                            @else
+                                                    <!-- Mantenimiento PReventivo -->
+                                                    <td scope="row">{{$general_eyc->iso->Frec_Cali_Mant_Prev}}</td>
+                                            @endif
+                                            @if($general_eyc->iso->Frec_Man_Inter_Time == 'N/A' || $general_eyc->iso->Frec_Man_Inter_Time == 'ESPERA DE DATO')
+                                                    <!-- INTERVALO DE TIEMPO --> 
+                                                    <td scope="row">SIN INTERVALO ASIGNADO</td>
+                                            @else
+                                                    <!-- INTERVALO DE TIEMPO -->
+                                                    <td scope="row">{{$general_eyc->iso->Frec_Man_Inter_Time}}</td>
+                                            @endif
+                                            @if($general_eyc->equipos->Num_Reporte == 'ESPERA DE DATO')
+                                                    <!-- NUMERO DE REPORTE --> 
+                                                    <td scope="row">SIN REPORTE ASIGNADO</td>
+                                            @else
+                                                    <!-- NUMERO DE REPORTE -->
+                                                    <td scope="row">{{$general_eyc->equipos->Num_Reporte}}</td>
+                                            @endif
                                             @if($general_eyc->certificados->Fecha_mantenimiento == '2001-01-01')
-                                            <!-- Proxima fecha de mantenimiento --> 
+                                                    <!-- fecha de mantenimiento --> 
+                                                    <td scope="row">SIN FECHA ASIGNADA</td>
+                                            @else
+                                                    <!-- fecha de mantenimiento -->
+                                                    <td scope="row">{{$general_eyc->certificados->formatted_date5}}</td>
+                                            @endif
+                                            <!-- Prox Fecha de Mantenimiento -->
+                                            @if($general_eyc->certificados->Prox_fecha_mantenimiento == '2001-01-01')
+                                                    <!-- Proxima fecha de mantenimiento --> 
                                                     <td scope="row">SIN FECHA ASIGNADA</td>
                                                     <!-- Días Restantes --> 
                                                     <td scope="row">-</td>
-                                                @elseif($general_eyc->Tipo=='CONSUMIBLES')
-                                                <!-- Proxima fecha de mantenimiento --> 
-                                                    <td scope="row">{{$general_eyc->certificados->formatted_date}}</td>
-                                                    <!-- Días Restantes --> 
-                                                    <td scope="row">
-                                                        {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_mantenimiento), false) ) 
-                                                            <= 0 ? 'CADUCADO' : 
-                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_mantenimiento), false) }}
-                                                    </td>
-                                                @else
-                                                    @if($general_eyc->iso->Fre_Cali_Mant_Prev == '2001-01-01')
-                                                    <!-- Proxima fecha de mantenimiento -->
-                                                    <td scope="row">SIN FECHA ASIGNADA</td>
-                                                    <!-- Días Restantes --> 
-                                                    <td scope="row">-</td>
+                                            @else
+                                                    @if($general_eyc->certificados->Prox_fecha_mantenimiento == '2001-01-01')
+                                                        <!-- Proxima fecha de mantenimiento -->
+                                                        <td scope="row">SIN FECHA ASIGNADA</td>
+                                                        <!-- Días Restantes --> 
+                                                        <td scope="row">-</td>
                                                     @else
-                                                        <td scope="row">{{$general_eyc->iso->formatted_date2}}</td>
+                                                        <!-- Proxima fecha de mantenimiento -->
+                                                        <td scope="row">{{$general_eyc->certificados->formatted_date6}}</td>
+                                                        <!-- Días Restantes --> 
                                                         <td scope="row">
-                                                            {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) ) 
-                                                                <= 0 ? 'VENCIDO' : 
-                                                                (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) }}
+                                                            {{ 
+                                                                ((int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) ) <= 0 ? 'VENCIDO' : 
+                                                                (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) 
+                                                            }}
                                                         </td>
                                                     @endif
                                             @endif
-                                        @else
-                                            <td scope="row">N/A</td>
-                                            <td scope="row">N/A</td>
-                                    @endif
-                                        <td scope="row"> 
-                                    @if ($general_eyc->Foto != 'ESPERA DE DATO')
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
-                                        @elseif($general_eyc->Foto == 'ESPERA DE DATO')
-                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
-                                    @endif
-                                        </td>
-                            @endif
+
+                                    <!-- Presentación -->  
+                                    <td scope="row"> 
+                                        @if ($general_eyc->Foto != 'ESPERA DE DATO')
+                                                <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                                <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                            @elseif($general_eyc->Foto == 'ESPERA DE DATO')
+                                                <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                        @endif
+                                    </td>
                             <!--<td>
                                 <div class="btn-group">
                                     <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
