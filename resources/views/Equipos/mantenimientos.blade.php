@@ -327,7 +327,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 
         let nodo = table.row(dataIndex).node();
         let fechaISO = nodo.cells[13].dataset.fecha;
-        console.log("Fecha ISO:", fechaISO); // Verificar el valor de fechaISO
 
         if (!fechaISO) return false;
 

@@ -99,16 +99,16 @@
                     </tbody>
                 </table> -->
                 <div class="mb-3 text-center toggle-container">
-                <label><input type="checkbox" class="toggle-col" data-col="0" checked> Categoria</label>
-                <label><input type="checkbox" class="toggle-col" data-col="1" checked> ID</label>
-                <label><input type="checkbox" class="toggle-col" data-col="2" checked> Nombre</label>
-                <label><input type="checkbox" class="toggle-col" data-col="3" checked> Marca</label>
-                <label><input type="checkbox" class="toggle-col" data-col="4" checked> Modelo</label>
-                <label><input type="checkbox" class="toggle-col" data-col="5" checked> NS</label>
-                <label><input type="checkbox" class="toggle-col" data-col="6" checked> Lote</label>
-                <label><input type="checkbox" class="toggle-col" data-col="7" checked> Stock</label>
-                <label><input type="checkbox" class="toggle-col" data-col="8" checked> Disponibilidad</label>
-                <label><input type="checkbox" class="toggle-col" data-col="9" checked> Ubicación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="0" checked>Categoria</label>
+                <label><input type="checkbox" class="toggle-col" data-col="1" checked>ID</label>
+                <label><input type="checkbox" class="toggle-col" data-col="2" checked>Nombre</label>
+                <label><input type="checkbox" class="toggle-col" data-col="3" checked>Marca</label>
+                <label><input type="checkbox" class="toggle-col" data-col="4" checked>Modelo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="5" checked>NS</label>
+                <label><input type="checkbox" class="toggle-col" data-col="6" checked>Lote</label>
+                <label><input type="checkbox" class="toggle-col" data-col="7" checked>Stock</label>
+                <label><input type="checkbox" class="toggle-col" data-col="8" checked>Disponibilidad</label>
+                <label><input type="checkbox" class="toggle-col" data-col="9" checked>Ubicación</label>
                 <label><input type="checkbox" class="toggle-col" data-col="10" checked>Prox. Fecha Calibración/Caducidad</label>
                 <label><input type="checkbox" class="toggle-col" data-col="11" checked>Días Restantes Cal</label>
                 <label><input type="checkbox" class="toggle-col" data-col="12" checked>Mantenimiento Preventivo</label>
@@ -117,9 +117,9 @@
                 <label><input type="checkbox" class="toggle-col" data-col="15" checked>Fecha Mantenimiento</label>
                 <label><input type="checkbox" class="toggle-col" data-col="16" checked>Prox. Fecha Mantenimiento</label>
                 <label><input type="checkbox" class="toggle-col" data-col="17" checked>Días Restantes Man</label>
-                <label><input type="checkbox" class="toggle-col" data-col="18" checked> Presentación</label>
-                <label><input type="checkbox" class="toggle-col" data-col="19" checked> Editar</label>
-                <label><input type="checkbox" class="toggle-col" data-col="20" checked> Baja</label>
+                <label><input type="checkbox" class="toggle-col" data-col="18" checked>Presentación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="19" checked>Editar</label>
+                <label><input type="checkbox" class="toggle-col" data-col="20" checked>Baja</label>
                 <br>
                 <label><input type="checkbox" id="checkEquipos"> Equipos</label>
                 <label style="margin-left:20px;"><input type="checkbox" id="checkBlock"> Block</label>
@@ -197,12 +197,14 @@
                                 <!-- Fecha Calibración/Caducidad -->  
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                             @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
-                                                    <td scope="row">SIN FECHA ASIGNADA</td>
+                                                    <td scope="row" data-fecha="">SIN FECHA ASIGNADA</td>
                                                     <!-- Días Restantes -->  
                                                     <td scope="row">-</td>
                                                 @elseif($general_eyc->Tipo=='CONSUMIBLES')
                                                     <!-- Caducidad -->
-                                                    <td scope="row">{{$general_eyc->certificados->formatted_date}}</td>
+                                                    <td scope="row" data-fecha="{{$general_eyc->certificados->Fecha_calibracion}}">
+                                                        {{$general_eyc->certificados->formatted_date}}
+                                                    </td>
                                                     <!-- Días Restantes -->
                                                     <td scope="row">
                                                         {{ 
@@ -215,7 +217,7 @@
                                                     <!-- Prox.Fecha Calibración/Caducidad si no es Fecha_calibracion == '2001-01-01'-->
                                                     @if($general_eyc->certificados->Prox_fecha_calibracion == '2001-01-01')
                                                         <!-- Prox.Fecha Calibración/Caducidad -->
-                                                        <td scope="row">SIN FECHA ASIGNADA</td>
+                                                        <td scope="row" data-fecha="">SIN FECHA ASIGNADA</td>
                                                         <!-- Días Restantes -->
                                                         <td scope="row">-</td>
                                                     @else
@@ -235,7 +237,7 @@
                                             @endif
                                         @else
                                             <!-- Fecha Calibración/Caducidad --> 
-                                            <td scope="row">N/A</td>
+                                            <td scope="row" data-fecha="">N/A</td>
                                             <!-- Días Restantes --> 
                                             <td scope="row">N/A</td>
                                     @endif
@@ -274,7 +276,7 @@
                                     @endif
                                     @if($general_eyc->certificados->Fecha_mantenimiento == '2001-01-01')
                                         <!-- fecha de mantenimiento --> 
-                                        <td scope="row">SIN FECHA ASIGNADA / N/A</td>
+                                        <td scope="row" data-fecha="">SIN FECHA ASIGNADA / N/A</td>
                                     @else
                                         <!-- fecha de mantenimiento -->
                                         <td scope="row" data-fecha="{{$general_eyc->certificados->Fecha_mantenimiento}}">
@@ -285,18 +287,22 @@
                                         <!-- Prox Fecha de Mantenimiento -->
                                     @if($general_eyc->certificados->Prox_fecha_mantenimiento == '2001-01-01')
                                         <!-- Proxima fecha de mantenimiento --> 
-                                        <td scope="row">SIN FECHA ASIGNADA / N/A</td>
+                                        <td scope="row" data-fecha="">SIN FECHA ASIGNADA / N/A</td>
                                         <!-- Días Restantes --> 
                                         <td scope="row">-</td>
                                     @else
                                         @if($general_eyc->certificados->Prox_fecha_mantenimiento == '2001-01-01')
                                             <!-- Proxima fecha de mantenimiento -->
-                                            <td scope="row">SIN FECHA ASIGNADA / N/A</td>
+                                            <td scope="row" data-fecha="">SIN FECHA ASIGNADA / N/A</td>
                                             <!-- Días Restantes --> 
                                             <td scope="row">-</td>
                                         @else
                                             <!-- Proxima fecha de mantenimiento -->
                                             <td scope="row" data-fecha="{{$general_eyc->certificados->Prox_fecha_mantenimiento}}">
+                                                @php
+                                                //dd($general_eyc->certificados->Prox_fecha_mantenimiento); //FORMATO YYYY-MM-DD
+                                                //dd($general_eyc->certificados->formatted_date6); //FORMATO DD-MM-YYYY
+                                                @endphp
                                                 {{$general_eyc->certificados->formatted_date6}}
                                             </td>
                                             <!-- Días Restantes --> 
@@ -510,39 +516,69 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     }
 
     if (!pasaCategoria) return false;
-    // FILTRO POR MES ACTUAL
-    if (filtrarMes) {
 
-        let nodo = table.row(dataIndex).node();
+    // FILTRO POR MES ACTUAL
+    /*if (filtrarMes) {
         let hoy = new Date();
+        //console.log(hoy);
+        let mesActual = hoy.getMonth() + 1; // 1-12
+        console.log(mesActual);
+        let anioActual = hoy.getFullYear();
 
         let fechas = [];
+        let visibleCols = [10, 15, 16].filter(idx => table.column(idx).visible());
 
-        // Columna 10 → Calibración
-        if (nodo.cells[10] && nodo.cells[10].dataset.fecha) {
-            fechas.push(new Date(nodo.cells[10].dataset.fecha));
+        let nodo = table.row(dataIndex, {order:'applied', search:'applied'}).node();
+        if (nodo) {
+            $(nodo).find('td').each(function(i) {
+                if (visibleCols.includes(i)) {
+                    let fechaStr = $(this).data('fecha');
+                    if (fechaStr && /^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
+                        // Parsear manualmente para evitar problemas de zona horaria
+                        let partes = fechaStr.split('-');
+                        let anio = parseInt(partes[0], 10);
+                        let mes = parseInt(partes[1], 10);
+                        if (anio === anioActual && mes === mesActual) {
+                            fechas.push(true);
+                        }
+                    }
+                }
+            });
         }
 
-        // Columna 15 → Fecha mantenimiento
-        if (nodo.cells[15] && nodo.cells[15].dataset.fecha) {
-            fechas.push(new Date(nodo.cells[15].dataset.fecha));
-        }
+        // Si no hay fechas → mostrar (opcional)
+        if (fechas.length === 0) return true;
 
-        // Columna 16 → Prox mantenimiento
-        if (nodo.cells[16] && nodo.cells[16].dataset.fecha) {
-            fechas.push(new Date(nodo.cells[16].dataset.fecha));
-        }
+        return fechas.some(Boolean);
+    }*/
+    if (filtrarMes) {
 
-        // ❌ si no hay fechas → no pasa
-        if (fechas.length === 0) return false;
+        let hoy = new Date();
 
-        // ✔ si alguna coincide con el mes actual → pasa
-        return fechas.some(fecha =>
-            fecha.getMonth() === hoy.getMonth() &&
-            fecha.getFullYear() === hoy.getFullYear()
-        );
+        // Columnas de fechas
+        let columnasFecha = [10, 15, 16];
+
+        // Filtrar solo las que estén visibles (opcional pero recomendado)
+        columnasFecha = columnasFecha.filter(idx => table.column(idx).visible());
+
+        let coincide = columnasFecha.some(idx => {
+
+            let celda = table.cell(dataIndex, idx).node();
+            if (!celda) return false;
+
+            let fechaStr = celda.dataset.fecha;
+            if (!fechaStr) return false;
+
+            let fecha = new Date(fechaStr);
+
+            return (
+                fecha.getMonth() === hoy.getMonth() &&
+                fecha.getFullYear() === hoy.getFullYear()
+            );
+        });
+
+        return coincide;
     }
-
     return true;
 });
 
