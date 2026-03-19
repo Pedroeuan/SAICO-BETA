@@ -589,6 +589,8 @@
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
+                                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
 
                                         

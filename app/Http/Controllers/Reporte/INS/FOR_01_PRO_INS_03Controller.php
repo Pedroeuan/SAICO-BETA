@@ -491,7 +491,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
             $tituloText = $tituloObj['text']; // texto real
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -595,7 +595,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
     }
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
-        log::info("Valor de Cliente: " . $Cliente); // Agrega este log para verificar el valor de Cliente
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
@@ -791,7 +790,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-         $titulos_json = $request->input('titulos_data', '[]');
+        $titulos_json = $request->input('titulos_data', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
         $datosAgrupados = [];
         
@@ -849,7 +848,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
             $tituloText = $tituloObj['text']; // texto real
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -940,7 +939,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
                 // Eliminar del almacenamiento
                 if (Storage::exists($rutaImagen)) {
                     Storage::delete($rutaImagen);
-                    Log::info("Imagen eliminada: {$rutaImagen}");
+                    //Log::info("Imagen eliminada: {$rutaImagen}");
                 } else {
                     //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
                 }
