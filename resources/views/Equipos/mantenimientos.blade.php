@@ -146,12 +146,15 @@
                             @endif
                             <!-- Ubicación -->
                             <td>{{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}</td>
-                                        @if($general_eyc->iso->Frec_Cali_Mant_Prev == 'N/A' || $general_eyc->iso->Frec_Cali_Mant_Prev == 'ESPERA DE DATO')
-                                                    <!-- Mantenimiento Preventivo --> 
-                                                    <td scope="row">N/A / NO ASIGNADO</td>
+                                            @if($general_eyc->iso->Frec_Cali_Mant_Prev == 'ESPERA DE DATO')
+                                                <!-- Mantenimiento Preventivo --> 
+                                                <td scope="row">N/A / NO ASIGNADO</td>
+                                            @elseif($general_eyc->iso->Frec_Cali_Mant_Prev == 'N/A')
+                                                <!-- Mantenimiento Preventivo --> 
+                                                <td scope="row">N/A</td>
                                             @else
-                                                    <!-- Mantenimiento PReventivo -->
-                                                    <td scope="row">{{$general_eyc->iso->Frec_Cali_Mant_Prev}}</td>
+                                                <!-- Mantenimiento Preventivo -->
+                                                <td scope="row">{{$general_eyc->iso->Frec_Cali_Mant_Prev}}</td>
                                             @endif
                                             @if($general_eyc->iso->Frec_Man_Inter_Time == 'N/A' || $general_eyc->iso->Frec_Man_Inter_Time == 'ESPERA DE DATO')
                                                     <!-- INTERVALO DE TIEMPO --> 

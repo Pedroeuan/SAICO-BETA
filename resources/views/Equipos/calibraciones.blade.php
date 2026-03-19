@@ -271,7 +271,7 @@ let table = new DataTable('#tablaJs', {
             search: true
         },
         bottomStart: {
-            pageLength: true   // 👈 ESTE ES EL IMPORTANTE
+            pageLength: true 
         },
         bottomEnd: {
             paging: true

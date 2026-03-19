@@ -74,6 +74,7 @@
         <div class="box-body d-flex justify-content-center">
         <div style="display: inline-block;">
         <h3 align="center">Inventario</h3>
+        <h6 align="center">Filtro</h6>
         <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
                     <thead>
@@ -97,11 +98,10 @@
                         </tr>
                     </tbody>
                 </table> -->
-            <div class="mb-3 text-center toggle-container">
-
+                <div class="mb-3 text-center toggle-container">
                 <label><input type="checkbox" class="toggle-col" data-col="0" checked> Categoria</label>
-                <label><input type="checkbox" class="toggle-col" data-col="1" checked> Nombre</label>
-                <label><input type="checkbox" class="toggle-col" data-col="2" checked> ID</label>
+                <label><input type="checkbox" class="toggle-col" data-col="1" checked> ID</label>
+                <label><input type="checkbox" class="toggle-col" data-col="2" checked> Nombre</label>
                 <label><input type="checkbox" class="toggle-col" data-col="3" checked> Marca</label>
                 <label><input type="checkbox" class="toggle-col" data-col="4" checked> Modelo</label>
                 <label><input type="checkbox" class="toggle-col" data-col="5" checked> NS</label>
@@ -109,19 +109,32 @@
                 <label><input type="checkbox" class="toggle-col" data-col="7" checked> Stock</label>
                 <label><input type="checkbox" class="toggle-col" data-col="8" checked> Disponibilidad</label>
                 <label><input type="checkbox" class="toggle-col" data-col="9" checked> Ubicación</label>
-                <label><input type="checkbox" class="toggle-col" data-col="10" checked> Fecha</label>
-                <label><input type="checkbox" class="toggle-col" data-col="11" checked> Días</label>
-                <label><input type="checkbox" class="toggle-col" data-col="12" checked> Presentación</label>
-                <label><input type="checkbox" class="toggle-col" data-col="13" checked> Editar</label>
-                <label><input type="checkbox" class="toggle-col" data-col="14" checked> Baja</label>
+                <label><input type="checkbox" class="toggle-col" data-col="10" checked>Prox. Fecha Calibración/Caducidad</label>
+                <label><input type="checkbox" class="toggle-col" data-col="11" checked>Días Restantes Cal</label>
+                <label><input type="checkbox" class="toggle-col" data-col="12" checked>Mantenimiento Preventivo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="13" checked>Intervalo de Tiempo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="14" checked>Numero de Reporte</label>
+                <label><input type="checkbox" class="toggle-col" data-col="15" checked>Fecha Mantenimiento</label>
+                <label><input type="checkbox" class="toggle-col" data-col="16" checked>Prox. Fecha Mantenimiento</label>
+                <label><input type="checkbox" class="toggle-col" data-col="17" checked>Días Restantes Man</label>
+                <label><input type="checkbox" class="toggle-col" data-col="18" checked> Presentación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="19" checked> Editar</label>
+                <label><input type="checkbox" class="toggle-col" data-col="20" checked> Baja</label>
+                <br>
+                <label><input type="checkbox" id="checkEquipos"> Equipos</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkBlock"> Block</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkAccesorios"> Accesorios</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkHerramientas"> Herramientas</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkConsumibles"> Consumibles</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkMes"> Mes Actual</label>
 
             </div>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Categoria</th>
-                        <th>Nombre</th>
                         <th>Numero/ID</th>
+                        <th>Nombre</th>
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
@@ -130,7 +143,13 @@
                         <th>Disponibilidad</th>
                         <th>Ubicación</th>
                         <th>Prox.Fecha Calibración/Caducidad</th>
-                        <th>Días Restantes</th>
+                        <th>Días Restantes Cal</th>
+                        <th>Mantenimiento Preventivo</th>
+                        <th>Intervalo de Tiempo</th>
+                        <th>Numero de Reporte</th>
+                        <th>Fecha Mantenimiento</th>
+                        <th>Prox.Fecha Mantenimiento</th>
+                        <th>Días Restantes Man</th>
                         <th>Presentación</th>
                         <th>Editar</th>
                         <th>Baja</th>
@@ -141,10 +160,10 @@
                         <tr>
                                 <!-- Categoria --> 
                                 <td scope="row">@if($general_eyc->Tipo === 'BLOCK Y PROBETA') BLOCK @else {{ $general_eyc->Tipo}} @endif</td>
-                                <!-- Nombre --> 
-                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                                 <!-- Numero/ID --> 
                                 <td scope="row">{{$general_eyc->No_economico}}</td>
+                                <!-- Nombre --> 
+                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
                                 <!-- Marca --> 
                                 <td scope="row">{{$general_eyc->Marca}}</td>
                                 <!-- Modelo --> 
@@ -201,7 +220,9 @@
                                                         <td scope="row">-</td>
                                                     @else
                                                         <!-- Prox.Fecha Calibración/Caducidad -->
-                                                        <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
+                                                        <td scope="row" data-fecha="{{$general_eyc->certificados->Prox_fecha_calibracion}}">
+                                                            {{$general_eyc->certificados->formatted_date2}}
+                                                        </td>
                                                         <!-- Días Restantes -->
                                                         <td scope="row">
                                                             {{ 
@@ -217,6 +238,75 @@
                                             <td scope="row">N/A</td>
                                             <!-- Días Restantes --> 
                                             <td scope="row">N/A</td>
+                                    @endif
+
+                                    @if($general_eyc->iso->Frec_Cali_Mant_Prev == 'ESPERA DE DATO')
+                                        <!-- Mantenimiento Preventivo --> 
+                                        <td scope="row">NO ASIGNADO</td>
+                                    @elseif($general_eyc->iso->Frec_Cali_Mant_Prev == 'N/A')
+                                        <!-- Mantenimiento Preventivo --> 
+                                        <td scope="row">N/A</td>
+                                    @else
+                                        <!-- Mantenimiento Preventivo -->
+                                        <td scope="row">{{$general_eyc->iso->Frec_Cali_Mant_Prev}}</td>
+                                    @endif
+
+                                    @if($general_eyc->iso->Frec_Man_Inter_Time == 'N/A')
+                                        <!-- INTERVALO DE TIEMPO --> 
+                                        <td scope="row">N/A</td>
+                                    @elseif($general_eyc->iso->Frec_Man_Inter_Time ==  'ESPERA DE DATO')
+                                        <!-- INTERVALO DE TIEMPO --> 
+                                        <td scope="row">SIN INTERVALO ASIGNADO</td>
+                                    @else
+                                        <!-- INTERVALO DE TIEMPO -->
+                                        <td scope="row">{{$general_eyc->iso->Frec_Man_Inter_Time}}</td>
+                                    @endif
+
+                                    @if($general_eyc->equipos)
+                                        @if($general_eyc->equipos->Num_Reporte == 'ESPERA DE DATO')
+                                        <td scope="row">SIN REPORTE ASIGNADO</td>
+                                        @else
+                                            <!-- NUMERO DE REPORTE -->
+                                            <td scope="row">{{$general_eyc->equipos->Num_Reporte}}</td>
+                                        @endif
+                                    @else
+                                        <td scope="row">N/A</td>
+                                    @endif
+                                    @if($general_eyc->certificados->Fecha_mantenimiento == '2001-01-01')
+                                        <!-- fecha de mantenimiento --> 
+                                        <td scope="row">SIN FECHA ASIGNADA / N/A</td>
+                                    @else
+                                        <!-- fecha de mantenimiento -->
+                                        <td scope="row" data-fecha="{{$general_eyc->certificados->Fecha_mantenimiento}}">
+                                            {{$general_eyc->certificados->formatted_date5}}
+                                        </td>
+                                    @endif
+
+                                        <!-- Prox Fecha de Mantenimiento -->
+                                    @if($general_eyc->certificados->Prox_fecha_mantenimiento == '2001-01-01')
+                                        <!-- Proxima fecha de mantenimiento --> 
+                                        <td scope="row">SIN FECHA ASIGNADA / N/A</td>
+                                        <!-- Días Restantes --> 
+                                        <td scope="row">-</td>
+                                    @else
+                                        @if($general_eyc->certificados->Prox_fecha_mantenimiento == '2001-01-01')
+                                            <!-- Proxima fecha de mantenimiento -->
+                                            <td scope="row">SIN FECHA ASIGNADA / N/A</td>
+                                            <!-- Días Restantes --> 
+                                            <td scope="row">-</td>
+                                        @else
+                                            <!-- Proxima fecha de mantenimiento -->
+                                            <td scope="row" data-fecha="{{$general_eyc->certificados->Prox_fecha_mantenimiento}}">
+                                                {{$general_eyc->certificados->formatted_date6}}
+                                            </td>
+                                            <!-- Días Restantes --> 
+                                            <td scope="row">
+                                                {{
+                                                    ((int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) ) <= 0 ? 'VENCIDO' : 
+                                                    (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) 
+                                                }}
+                                            </td>
+                                        @endif
                                     @endif
                                     <!-- Presentación --> 
                                     <td scope="row"> 
@@ -287,7 +377,7 @@ $('#tablaJs').on('draw.dt', function() {
 let table = new DataTable('#tablaJs', {
         columnDefs: [
         {
-            targets: [6, 10, 11], // columnas que quieres ocultar por default
+            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20], // columnas que quieres ocultar por default
             visible: false
         }
     ],
@@ -354,6 +444,7 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
+validarCheckMes();
 // Sincronizar estado inicial
 $('.toggle-col').each(function () {
 
@@ -363,13 +454,118 @@ $('.toggle-col').each(function () {
     $(this).prop('checked', isVisible);
 
 });
-// Mostrar / ocultar columnas
+
+$('#checkMes').on('change', function () {
+
+    let colCalibracion = table.column(10).visible();
+    let colFechaMant = table.column(15).visible();
+    let colProxMant = table.column(16).visible();
+
+    // Validar si al menos una está visible
+    if (!colCalibracion && !colFechaMant && !colProxMant) {
+
+        // Quitar el check automáticamente
+        $(this).prop('checked', false);
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Atención',
+            text: 'Debes seleccionar al menos una columna de fechas (Calibración o Mantenimiento) para usar el filtro de Mes Actual.'
+        });
+
+        return;
+    }
+
+    // Si pasa la validación, redibuja la tabla
+    table.draw();
+});
+//Detectar cambios en los checkboxes
+$('#checkEquipos, #checkBlock, #checkAccesorios , #checkHerramientas , #checkConsumibles').on('change', function () {
+    table.draw();
+});
+// Filtro personalizado
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+
+    let mostrarEquipos = $('#checkEquipos').is(':checked');
+    let mostrarBlock = $('#checkBlock').is(':checked');
+    let mostrarAccesorios = $('#checkAccesorios').is(':checked');
+    let mostrarHerramientas = $('#checkHerramientas').is(':checked');
+    let mostrarConsumibles = $('#checkConsumibles').is(':checked');
+    let filtrarMes = $('#checkMes').is(':checked');
+
+    let categoria = data[0];
+
+    // FILTRO POR CATEGORIA
+    let pasaCategoria = (
+        (mostrarEquipos && categoria.includes('EQUIPOS')) ||
+        (mostrarBlock && categoria.includes('BLOCK')) ||
+        (mostrarAccesorios && categoria.includes('ACCESORIOS')) ||
+        (mostrarHerramientas && categoria.includes('HERRAMIENTAS')) ||
+        (mostrarConsumibles && categoria.includes('CONSUMIBLES'))
+    );
+
+    // Si NO hay ningún checkbox seleccionado → mostrar todo
+    if (!mostrarEquipos && !mostrarBlock && !mostrarAccesorios && !mostrarHerramientas && !mostrarConsumibles) {
+        pasaCategoria = true;
+    }
+
+    if (!pasaCategoria) return false;
+    // FILTRO POR MES ACTUAL
+    if (filtrarMes) {
+
+        let nodo = table.row(dataIndex).node();
+        let hoy = new Date();
+
+        let fechas = [];
+
+        // Columna 10 → Calibración
+        if (nodo.cells[10] && nodo.cells[10].dataset.fecha) {
+            fechas.push(new Date(nodo.cells[10].dataset.fecha));
+        }
+
+        // Columna 15 → Fecha mantenimiento
+        if (nodo.cells[15] && nodo.cells[15].dataset.fecha) {
+            fechas.push(new Date(nodo.cells[15].dataset.fecha));
+        }
+
+        // Columna 16 → Prox mantenimiento
+        if (nodo.cells[16] && nodo.cells[16].dataset.fecha) {
+            fechas.push(new Date(nodo.cells[16].dataset.fecha));
+        }
+
+        // ❌ si no hay fechas → no pasa
+        if (fechas.length === 0) return false;
+
+        // ✔ si alguna coincide con el mes actual → pasa
+        return fechas.some(fecha =>
+            fecha.getMonth() === hoy.getMonth() &&
+            fecha.getFullYear() === hoy.getFullYear()
+        );
+    }
+
+    return true;
+});
+
+function validarCheckMes() {
+    let colCalibracion = table.column(10).visible();
+    let colFechaMant = table.column(15).visible();
+    let colProxMant = table.column(16).visible();
+
+    let habilitar = colCalibracion || colFechaMant || colProxMant;
+
+    $('#checkMes').prop('disabled', !habilitar);
+
+    if (!habilitar) {
+        $('#checkMes').prop('checked', false);
+    }
+}
+
+// Ejecutar cuando cambian columnas
 $(document).on('change', '.toggle-col', function () {
-
     let column = table.column($(this).data('col'));
-
     column.visible($(this).is(':checked'));
 
+    validarCheckMes();
 });
 //$(".btnEliminarEquipo").on("click", function(){
 $(document).on("click", ".btnEliminarEquipo", function() {
