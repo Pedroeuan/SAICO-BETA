@@ -219,110 +219,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_10_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-        Log::info('*********************************************************');
-        Log::info('*********************************************************');
-        Log::info('*********************************************************');
-        Log::info('request completo:', $request->all());
-
-        $titulos = $request->input('titulos', []);
-        $datosAgrupados = [];
-        //Log::info('***********************SIN_TITULO***********************');
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
-        //Log::info('filasSinTitulo: ', ['filasSinTitulo' => $filasSinTitulo]);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        //Log::info('numFilasSinTitulo: ', ['numFilasSinTitulo' => $numFilasSinTitulo]);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'prof' => $request->input("prof.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
-                ];
-                //Log::info('***********************RESULTADOS_SIN_TITULO***********************');
-                //Log::info('resultados: ', ['resultados' => $resultados]);
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
-        }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            Log::info('***********************CON_TITULO***********************');
-            //$tituloKey = "titulo_" . $titulo;
-            //$tituloKey = $titulo;
-            //$tituloKey = strtolower($titulo); // <- opcional, si sabes que vienen en minúsculas
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            //Log::info('***********************tituloKey***********************');
-            Log::info('tituloKey: ', ['tituloKey' => $tituloKey]);
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
-            Log::info('filas: ', ['filas' => $filas]);
-            $numFilas = count($filas);
-        
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'tmax' => $request->input("tmax.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
-                ];
-                //Log::info("Todos los elemento_tubo:", $request->input("elemento_tubo"));
-
-                //Log::info('***********************RESULTADOS_CON_TITULO***********************');
-                //Log::info('resultados: ', ['resultados' => $resultados]);
-            }
-            
-            $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
-            ];
-        }
-    }
-
     public function FOR_02_PRO_INS_10_store(Request $request)
     {
         $Estatus = "CREADO";
@@ -546,7 +442,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 15;
+        $maxFilasPorBloque = 10;
 
         if (!empty($filasSinTitulo)) {
 
@@ -752,111 +648,6 @@ class FOR_02_PRO_INS_10Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_10_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-        Log::info('*********************************************************');
-        Log::info('*********************************************************');
-        Log::info('*********************************************************');
-        Log::info('request completo:', $request->all());
-
-        $titulos = $request->input('titulos', []);
-        $datosAgrupados = [];
-        //Log::info('***********************SIN_TITULO***********************');
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
-        //Log::info('filasSinTitulo: ', ['filasSinTitulo' => $filasSinTitulo]);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        //Log::info('numFilasSinTitulo: ', ['numFilasSinTitulo' => $numFilasSinTitulo]);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'nr' => $request->input("nr.$sinTituloKey.$i"),
-                    'ni' => $request->input("ni.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'prof' => $request->input("prof.$sinTituloKey.$i"),
-                    'la' => $request->input("la.$sinTituloKey.$i"),
-                    'lc' => $request->input("lc.$sinTituloKey.$i"),
-                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
-                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
-                ];
-                //Log::info('***********************RESULTADOS_SIN_TITULO***********************');
-                //Log::info('resultados: ', ['resultados' => $resultados]);
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
-        }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            Log::info('***********************CON_TITULO***********************');
-            //$tituloKey = "titulo_" . $titulo;
-            //$tituloKey = $titulo;
-            //$tituloKey = strtolower($titulo); // <- opcional, si sabes que vienen en minúsculas
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            //Log::info('***********************tituloKey***********************');
-            Log::info('tituloKey: ', ['tituloKey' => $tituloKey]);
-            $filas = $request->input("elemento_tubo.$tituloKey", []);
-            Log::info('filas: ', ['filas' => $filas]);
-            $numFilas = count($filas);
-        
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
-                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
-                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
-                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
-                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
-                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
-                    'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
-                    'nr' => $request->input("nr.$tituloKey.$i"),
-                    'ni' => $request->input("ni.$tituloKey.$i"),
-                    'ht' => $request->input("ht.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'la' => $request->input("la.$tituloKey.$i"),
-                    'lc' => $request->input("lc.$tituloKey.$i"),
-                    'tmax' => $request->input("tmax.$tituloKey.$i"),
-                    'tmin' => $request->input("tmin.$tituloKey.$i"),
-                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
-                ];
-                //Log::info("Todos los elemento_tubo:", $request->input("elemento_tubo"));
-
-                //Log::info('***********************RESULTADOS_CON_TITULO***********************');
-                //Log::info('resultados: ', ['resultados' => $resultados]);
-            }
-            
-            $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
-            ];
-        }
-    }
-
-
     public function FOR_02_PRO_INS_10_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
@@ -1025,7 +816,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 15;
+        $maxFilasPorBloque = 10;
 
         if (!empty($filasSinTitulo)) {
 
