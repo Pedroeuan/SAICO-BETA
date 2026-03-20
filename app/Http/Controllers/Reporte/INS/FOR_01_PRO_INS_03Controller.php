@@ -792,6 +792,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
 
         $titulos_json = $request->input('titulos_data', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
+        
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
