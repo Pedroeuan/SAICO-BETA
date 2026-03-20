@@ -1305,7 +1305,7 @@ function verificarYAgregarLongitud() {
         }
 
         // ✅ Contar título o fila normal
-        if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+        if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
             contadorBloque++;
             $ultimoElementoBloque = $row;
         }

@@ -1065,8 +1065,8 @@ $(document).ready(function() {
         const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
         //if (formId && typeof saveData === 'function') saveData(formId);
         }
-/*Recuperación información fin */
 
+        /*Recuperación información fin */
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1188,7 +1188,7 @@ function verificarYAgregarLongitud() {
         }
 
         // ✅ Contar título o fila normal
-        if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+        if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
             contadorBloque++;
             $ultimoElementoBloque = $row;
         }
