@@ -70,7 +70,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -345,6 +345,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
     
             /* Resultados Juntas */
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'componente' => 'nullable|array',
             'no_ind' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
