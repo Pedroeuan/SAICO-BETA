@@ -862,7 +862,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
-                        /*DETALLES GENERALES */
+            /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
             'Detalles_Generales.No_Reporte' => 'nullable|string',
@@ -1013,8 +1013,10 @@ class FOR_02_PRO_INS_10Controller extends Controller
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
+        
+        $titulos_json = $request->input('titulos_hidden', '[]');
+        $titulos = json_decode($titulos_json, true); // array asociativo
 
-        $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
