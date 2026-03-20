@@ -1527,10 +1527,10 @@ $(document).ready(function() {
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 10) { // si hay al menos 13 filas en el bloque
+            if ($rowsBlock.length >= 10) { 
                 const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(9); // fila índice 12 = fila 13 (0-based)
+                    .eq(9);
 
                 if ($nfila.length) { 
                     $nfila.after(newLong);
