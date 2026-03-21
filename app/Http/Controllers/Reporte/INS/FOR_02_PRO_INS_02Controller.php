@@ -356,7 +356,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
-            
+
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -754,7 +754,11 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'ht' => 'nullable|array',
             'evaluacion' => 'nullable|array',
             'longitud_inspeccionada' => 'nullable|array',
-    
+            
+            /* Longitudes inspeccionadas */
+            'Long_Inspecc' => 'nullable|array',
+            'Long_Inspecc.*' => 'nullable|array',
+            'Long_Inspecc.*.*' => 'nullable|string|max:255',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
