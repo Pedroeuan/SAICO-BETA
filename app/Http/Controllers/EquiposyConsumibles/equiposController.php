@@ -504,12 +504,12 @@ class equiposController extends Controller
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
             }
-            elseif ($existsNo_Economico) {
+            elseif ($existsNo_Economico && $existsSerie == true) {
                 return redirect()->back()->withErrors([
                     'No_economico' => 'El No economico ya existe en la base de datos.',
                 ])->withInput();
             }
-            elseif ($existsSerie)
+            elseif ($existsSerie && $existsNo_Economico == true)
             {
                 return redirect()->back()->withErrors([
                     'Serie' => 'La Serie ya existe en la base de datos.',
