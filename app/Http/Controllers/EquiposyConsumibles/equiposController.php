@@ -464,15 +464,13 @@ class equiposController extends Controller
         $generalEyC  = general_eyc::find($id);
 
         $EsperaDato ='ESPERA DE DATO';
-        Log::info('***********************');
+
         $No_EBD = $generalEyC->No_economico;
         $SerBD = $generalEyC->Serie;
-        Log::info('No_EBD: ', ['No_EBD' => $No_EBD]);
-        Log::info('SerBD: ', ['SerBD' => $SerBD]);
+
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
-        Log::info('No_EF: ', ['No_EF' => $No_EF]);
-        Log::info('SerF: ', ['SerF' => $SerF]);
+
         //Si el número económico O la serie son diferentes entre el formulario y la base de datos
         //Si el número económico cambió o la serie cambió, entonces entra al if
         if(strcasecmp(trim($No_EF), trim($No_EBD)) != 0 || strcasecmp(trim($SerF), trim($SerBD)) != 0)
