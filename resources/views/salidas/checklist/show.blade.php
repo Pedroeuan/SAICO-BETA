@@ -89,6 +89,7 @@
                                     <tr><th>Liquido limpia parabrisas</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->liquido_limpiaparabrisas ?? 'n/a')) }}</td></tr>
                                     <tr><th>Aceite</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->aceite ?? 'n/a')) }}</td></tr>
                                     <tr><th>Anticongelante</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->anticongelante ?? 'n/a')) }}</td></tr>
+                                    <tr><th>Liquido de frenos</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->liquido_frenos ?? 'n/a')) }}</td></tr>
                                     <tr><th>Estado general llantas</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->estado_llantas ?? 'n/a')) }}</td></tr>
                                     <tr><th>Delantera izquierda (calibracion)</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->llanta_delantera_izq_calibracion ?? 'n/a')) }}</td></tr>
                                     <tr><th>Delantera derecha (calibracion)</th><td>{{ ucfirst(str_replace('_', ' ', $checklist->condicion->llanta_delantera_der_calibracion ?? 'n/a')) }}</td></tr>

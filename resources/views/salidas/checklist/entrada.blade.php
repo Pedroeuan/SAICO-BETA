@@ -50,6 +50,15 @@ label {
 .mb-3 {
     margin-bottom: 10px !important;
 }
+
+.checklist-fluid-row label {
+    min-height: 40px;
+    line-height: 1.15;
+}
+.checklist-fluid-row .label-shift {
+    position: relative;
+    top: 6px;
+}
 </style>
 @endsection
 @section('content')
@@ -126,8 +135,8 @@ label {
             <input type="number" name="kilometraje" class="form-control" required value="{{ old('kilometraje') }}">
         </div>
 
-        <div class="row">
-            <div class="col-md-4 mb-3">
+        <div class="row checklist-fluid-row">
+            <div class="col-md-3 mb-3">
                 <label>Liquido limpia parabrisas</label>
                 <select name="liquido_limpiaparabrisas" class="form-control" required>
                     <option value="">Seleccione</option>
@@ -136,8 +145,8 @@ label {
                     <option value="no_hay" {{ old('liquido_limpiaparabrisas') === 'no_hay' ? 'selected' : '' }}>No hay</option>
                 </select>
             </div>
-            <div class="col-md-4 mb-3">
-                <label>Aceite</label>
+            <div class="col-md-3 mb-3">
+                <label class="label-shift">Aceite</label>
                 <select name="aceite" class="form-control" required>
                     <option value="">Seleccione</option>
                     <option value="suficiente" {{ old('aceite') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
@@ -145,13 +154,22 @@ label {
                     <option value="no_hay" {{ old('aceite') === 'no_hay' ? 'selected' : '' }}>No hay</option>
                 </select>
             </div>
-            <div class="col-md-4 mb-3">
-                <label>Anticongelante</label>
+            <div class="col-md-3 mb-3">
+                <label class="label-shift">Anticongelante</label>
                 <select name="anticongelante" class="form-control" required>
                     <option value="">Seleccione</option>
                     <option value="suficiente" {{ old('anticongelante') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
                     <option value="escaso" {{ old('anticongelante') === 'escaso' ? 'selected' : '' }}>Escaso</option>
                     <option value="no_hay" {{ old('anticongelante') === 'no_hay' ? 'selected' : '' }}>No hay</option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label class="label-shift">Liquido de frenos</label>
+                <select name="liquido_frenos" class="form-control" required>
+                    <option value="">Seleccione</option>
+                    <option value="suficiente" {{ old('liquido_frenos') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
+                    <option value="escaso" {{ old('liquido_frenos') === 'escaso' ? 'selected' : '' }}>Escaso</option>
+                    <option value="no_hay" {{ old('liquido_frenos') === 'no_hay' ? 'selected' : '' }}>No hay</option>
                 </select>
             </div>
         </div>
@@ -317,5 +335,3 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 @endsection
-
-
