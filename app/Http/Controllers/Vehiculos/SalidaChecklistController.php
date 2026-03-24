@@ -54,6 +54,7 @@ class SalidaChecklistController extends Controller
         $defaultLiquidoLimpiaparabrisas = null;
         $defaultAceite = null;
         $defaultAnticongelante = null;
+        $defaultLiquidoFrenos = null;
         $defaultEstadoLlantas = null;
         $defaultLlantaDelanteraIzq = null;
         $defaultLlantaDelanteraDer = null;
@@ -65,6 +66,7 @@ class SalidaChecklistController extends Controller
             $defaultLiquidoLimpiaparabrisas = $ultimaCondicion->condicion->liquido_limpiaparabrisas;
             $defaultAceite = $ultimaCondicion->condicion->aceite;
             $defaultAnticongelante = $ultimaCondicion->condicion->anticongelante;
+            $defaultLiquidoFrenos = $ultimaCondicion->condicion->liquido_frenos;
             $defaultEstadoLlantas = $ultimaCondicion->condicion->estado_llantas;
             $defaultLlantaDelanteraIzq = $ultimaCondicion->condicion->llanta_delantera_izq_calibracion;
             $defaultLlantaDelanteraDer = $ultimaCondicion->condicion->llanta_delantera_der_calibracion;
@@ -82,6 +84,7 @@ class SalidaChecklistController extends Controller
             'defaultLiquidoLimpiaparabrisas',
             'defaultAceite',
             'defaultAnticongelante',
+            'defaultLiquidoFrenos',
             'defaultEstadoLlantas',
             'defaultLlantaDelanteraIzq',
             'defaultLlantaDelanteraDer',
@@ -102,6 +105,7 @@ class SalidaChecklistController extends Controller
             'liquido_limpiaparabrisas' => 'required|in:suficiente,escaso,no_hay',
             'aceite' => 'required|in:suficiente,escaso,no_hay',
             'anticongelante' => 'required|in:suficiente,escaso,no_hay',
+            'liquido_frenos' => 'required|in:suficiente,escaso,no_hay',
             'estado_llantas' => 'required|in:buen_estado,regular,malo',
             'llanta_delantera_izq_calibracion' => 'required|in:baja,normal,alta',
             'llanta_delantera_der_calibracion' => 'required|in:baja,normal,alta',
@@ -131,6 +135,7 @@ class SalidaChecklistController extends Controller
                 'liquido_limpiaparabrisas' => $request->liquido_limpiaparabrisas,
                 'aceite' => $request->aceite,
                 'anticongelante' => $request->anticongelante,
+                'liquido_frenos' => $request->liquido_frenos,
                 'estado_llantas' => $request->estado_llantas,
                 'llanta_delantera_izq_calibracion' => $request->llanta_delantera_izq_calibracion,
                 'llanta_delantera_der_calibracion' => $request->llanta_delantera_der_calibracion,
@@ -226,6 +231,7 @@ class SalidaChecklistController extends Controller
             'liquido_limpiaparabrisas' => 'required|in:suficiente,escaso,no_hay',
             'aceite' => 'required|in:suficiente,escaso,no_hay',
             'anticongelante' => 'required|in:suficiente,escaso,no_hay',
+            'liquido_frenos' => 'required|in:suficiente,escaso,no_hay',
             'estado_llantas' => 'required|in:buen_estado,regular,malo',
             'llanta_delantera_izq_calibracion' => 'required|in:baja,normal,alta',
             'llanta_delantera_der_calibracion' => 'required|in:baja,normal,alta',
@@ -251,6 +257,7 @@ class SalidaChecklistController extends Controller
                 'liquido_limpiaparabrisas' => $request->liquido_limpiaparabrisas,
                 'aceite' => $request->aceite,
                 'anticongelante' => $request->anticongelante,
+                'liquido_frenos' => $request->liquido_frenos,
                 'estado_llantas' => $request->estado_llantas,
                 'llanta_delantera_izq_calibracion' => $request->llanta_delantera_izq_calibracion,
                 'llanta_delantera_der_calibracion' => $request->llanta_delantera_der_calibracion,
