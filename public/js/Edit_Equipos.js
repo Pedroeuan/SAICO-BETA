@@ -60,7 +60,6 @@ prevenirEnter('herramientasForm');
     /*Prevenir el Enter Kits*/
 prevenirEnter('kitForm');
 
-
     document.addEventListener('DOMContentLoaded', function() {
         const stockTotal = document.getElementById('stockTotal');
         const stockUsado = document.getElementById('stockUsado');
