@@ -33,63 +33,33 @@
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
+/*PREVENIR Enters*/
+function prevenirEnter(formId) {
+    document.getElementById(formId).addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+            event.preventDefault();
+        }
+    });
+}
 
-                /*Prevenir el Enter TICS*/
-    var equiposForm = document.getElementById('TICSForm');
-    if (equiposForm) {
-        equiposForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Equipos*/
-    var equiposForm = document.getElementById('equiposForm');
-    if (equiposForm) {
-        equiposForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Consumibles*/
-    var consumiblesForm = document.getElementById('consumiblesForm');
-    if (consumiblesForm) {
-        consumiblesForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Accesorios*/
-    var accesoriosForm = document.getElementById('accesoriosForm');
-    if (accesoriosForm) {
-        accesoriosForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Blocks*/
-    var blocksForm = document.getElementById('blocksForm');
-    if (blocksForm) {
-        blocksForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-        /*Prevenir el Enter Herramientas*/
-    var herramientasForm = document.getElementById('herramientasForm');
-    if (herramientasForm) {
-        herramientasForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    }
-});
+/*Prevenir el Enter Equipos*/
+prevenirEnter('equiposForm');
+
+    /*Prevenir el Enter Consumibles*/
+prevenirEnter('consumiblesForm');
+
+    /*Prevenir el Enter Accesorios*/
+prevenirEnter('accesoriosForm');
+
+    /*Prevenir el Enter Blocks*/
+prevenirEnter('blocksForm');
+
+    /*Prevenir el Enter Herramientas*/
+prevenirEnter('herramientasForm');
+
+    /*Prevenir el Enter Kits*/
+prevenirEnter('kitForm');
+
 
     document.addEventListener('DOMContentLoaded', function() {
         const stockTotal = document.getElementById('stockTotal');
