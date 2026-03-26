@@ -1206,7 +1206,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(126, -265.5);
+            $combinedPdf->SetXY(126, -273.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1217,7 +1217,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -265.5);
+            $combinedPdf->SetXY(138, -270.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }

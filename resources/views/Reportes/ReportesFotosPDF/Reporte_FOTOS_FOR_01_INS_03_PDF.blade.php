@@ -171,7 +171,7 @@
             top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
             left: -21px; /* Ajusta para alinear la línea */
             width: 152.5%; /* Aumenta el ancho de la línea */
-            height: 10
+            height: 100%;
             border-top: 2px solid black;
             transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
         }
