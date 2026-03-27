@@ -209,6 +209,17 @@
                                             <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                     @endif
                                 </td>
+                                <!-- No Certificado --> 
+                                <td scope="row">{{$general_eyc->certificados->No_certificado}}</td>
+                                <!-- Certificado Actual --> 
+                                <td scope="row"> 
+                                    @if ($general_eyc->certificados->Certificados_Actual != 'ESPERA DE DATO')
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->certificados->Certificados_Actual) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                        @elseif($general_eyc->certificados->Certificados_Actual == 'ESPERA DE DATO')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @endif
+                                </td> 
                                 <!-- Fecha Calibración/Caducidad -->  
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                             @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
@@ -398,7 +409,7 @@ $('#tablaJs').on('draw.dt', function() {
 let table = new DataTable('#tablaJs', {
         columnDefs: [
         {
-            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 23], // columnas que quieres ocultar por default
+            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23], // columnas que quieres ocultar por default
             visible: false
         }
     ],
@@ -478,9 +489,9 @@ $('.toggle-col').each(function () {
 
 $('#checkMes').on('change', function () {
 
-    let colCalibracion = table.column(10).visible();
-    let colFechaMant = table.column(15).visible();
-    let colProxMant = table.column(16).visible();
+    let colCalibracion = table.column(13).visible();
+    let colFechaMant = table.column(18).visible();
+    let colProxMant = table.column(19).visible();
 
     // Validar si al menos una está visible
     if (!colCalibracion && !colFechaMant && !colProxMant) {
