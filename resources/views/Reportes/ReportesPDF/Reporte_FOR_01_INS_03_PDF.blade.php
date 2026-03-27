@@ -10,7 +10,7 @@
 
                 header {
                     position: fixed;
-                    top: -68px;
+                    top: -42px; /* Sube el encabezado para que no se monte con "DATOS GENERALES" */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -29,8 +29,13 @@
                 }
 
                 body {
-                    margin: 0;
-                    padding: 0;
+                    /* Deja espacio exacto debajo del encabezado fijo */
+                    margin-top: 25px;
+                    margin-right: 0;
+                    margin-bottom: 0;
+                    margin-left: 0;
+                    padding-top: 0;
+                    padding-bottom: 0;
                     font-family: 'arial', sans-serif;
                 }
                   .content {
@@ -560,7 +565,7 @@
                                 {{-- 🔹 TÍTULO --}}
                                 @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
                                     <tr class="titulo-row">
-                                        <td colspan="14" style="border:.5px solid black;">
+                                        <td colspan="10" style="border:.5px solid black;">
                                             {{ $grupo['titulos_juntas'] }}
                                         </td>
                                     </tr>
@@ -592,7 +597,7 @@
 
                                 {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
                                 <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="14"></td>
+                                    <td colspan="10"></td>
                                 </tr>--}}
                             </tbody>
                     </table>
