@@ -109,17 +109,20 @@
                 <label><input type="checkbox" class="toggle-col" data-col="7" checked>Stock</label>
                 <label><input type="checkbox" class="toggle-col" data-col="8" checked>Disponibilidad</label>
                 <label><input type="checkbox" class="toggle-col" data-col="9" checked>Ubicación</label>
-                <label><input type="checkbox" class="toggle-col" data-col="10" checked>Prox. Fecha Calibración/Caducidad</label>
-                <label><input type="checkbox" class="toggle-col" data-col="11" checked>Días Restantes Cal</label>
-                <label><input type="checkbox" class="toggle-col" data-col="12" checked>Mantenimiento Preventivo</label>
-                <label><input type="checkbox" class="toggle-col" data-col="13" checked>Intervalo de Tiempo</label>
-                <label><input type="checkbox" class="toggle-col" data-col="14" checked>Numero de Reporte</label>
-                <label><input type="checkbox" class="toggle-col" data-col="15" checked>Fecha Mantenimiento</label>
-                <label><input type="checkbox" class="toggle-col" data-col="16" checked>Prox. Fecha Mantenimiento</label>
-                <label><input type="checkbox" class="toggle-col" data-col="17" checked>Días Restantes Man</label>
-                <label><input type="checkbox" class="toggle-col" data-col="18" checked>Presentación</label>
-                <label><input type="checkbox" class="toggle-col" data-col="19" checked>Editar</label>
-                <label><input type="checkbox" class="toggle-col" data-col="20" checked>Baja</label>
+                <label><input type="checkbox" class="toggle-col" data-col="10" checked>Factura</label>
+                <label><input type="checkbox" class="toggle-col" data-col="11" checked>No.Certificado</label>
+                <label><input type="checkbox" class="toggle-col" data-col="12" checked>Certificado</label>
+                <label><input type="checkbox" class="toggle-col" data-col="13" checked>Prox. Fecha Calibración/Caducidad</label> <!--10 -->
+                <label><input type="checkbox" class="toggle-col" data-col="14" checked>Días Restantes Cal</label>
+                <label><input type="checkbox" class="toggle-col" data-col="15" checked>Mantenimiento Preventivo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="16" checked>Intervalo de Tiempo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="17" checked>Numero de Reporte</label>
+                <label><input type="checkbox" class="toggle-col" data-col="18" checked>Fecha Mantenimiento</label>
+                <label><input type="checkbox" class="toggle-col" data-col="19" checked>Prox. Fecha Mantenimiento</label>
+                <label><input type="checkbox" class="toggle-col" data-col="20" checked>Días Restantes Man</label>
+                <label><input type="checkbox" class="toggle-col" data-col="21" checked>Presentación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="22" checked>Editar</label>
+                <label><input type="checkbox" class="toggle-col" data-col="23" checked>Baja</label>
                 <br>
                 <label><input type="checkbox" id="checkEquipos"> Equipos</label>
                 <label style="margin-left:20px;"><input type="checkbox" id="checkBlock"> Block</label>
@@ -142,6 +145,9 @@
                         <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Ubicación</th>
+                        <th>Factura</th>
+                        <th>No.Certificado</th>
+                        <th>Certificado</th>
                         <th>Prox.Fecha Calibración/Caducidad</th>
                         <th>Días Restantes Cal</th>
                         <th>Mantenimiento Preventivo</th>
@@ -194,6 +200,15 @@
                                 @endif
                                 <!-- Ubicación --> 
                                 <td>{{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}</td>
+                                <!-- Factura --> 
+                                <td scope="row"> 
+                                    @if ($general_eyc->Factura != 'ESPERA DE DATO')
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Factura) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                        @elseif($general_eyc->Factura == 'ESPERA DE DATO')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @endif
+                                </td>
                                 <!-- Fecha Calibración/Caducidad -->  
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                             @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
@@ -383,7 +398,7 @@ $('#tablaJs').on('draw.dt', function() {
 let table = new DataTable('#tablaJs', {
         columnDefs: [
         {
-            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20], // columnas que quieres ocultar por default
+            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 23], // columnas que quieres ocultar por default
             visible: false
         }
     ],
@@ -517,46 +532,13 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 
     if (!pasaCategoria) return false;
 
-    // FILTRO POR MES ACTUAL
-    /*if (filtrarMes) {
-        let hoy = new Date();
-        //console.log(hoy);
-        let mesActual = hoy.getMonth() + 1; // 1-12
-        console.log(mesActual);
-        let anioActual = hoy.getFullYear();
-
-        let fechas = [];
-        let visibleCols = [10, 15, 16].filter(idx => table.column(idx).visible());
-
-        let nodo = table.row(dataIndex, {order:'applied', search:'applied'}).node();
-        if (nodo) {
-            $(nodo).find('td').each(function(i) {
-                if (visibleCols.includes(i)) {
-                    let fechaStr = $(this).data('fecha');
-                    if (fechaStr && /^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
-                        // Parsear manualmente para evitar problemas de zona horaria
-                        let partes = fechaStr.split('-');
-                        let anio = parseInt(partes[0], 10);
-                        let mes = parseInt(partes[1], 10);
-                        if (anio === anioActual && mes === mesActual) {
-                            fechas.push(true);
-                        }
-                    }
-                }
-            });
-        }
-
-        // Si no hay fechas → mostrar (opcional)
-        if (fechas.length === 0) return true;
-
-        return fechas.some(Boolean);
-    }*/
     if (filtrarMes) {
 
         let hoy = new Date();
 
         // Columnas de fechas
-        let columnasFecha = [10, 15, 16];
+        //let columnasFecha = [10, 15, 16];
+        let columnasFecha = [13, 18, 19];
 
         // Filtrar solo las que estén visibles (opcional pero recomendado)
         columnasFecha = columnasFecha.filter(idx => table.column(idx).visible());
@@ -583,9 +565,12 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 });
 
 function validarCheckMes() {
-    let colCalibracion = table.column(10).visible();
+    /*let colCalibracion = table.column(10).visible();
     let colFechaMant = table.column(15).visible();
-    let colProxMant = table.column(16).visible();
+    let colProxMant = table.column(16).visible();*/
+    let colCalibracion = table.column(13).visible();
+    let colFechaMant = table.column(18).visible();
+    let colProxMant = table.column(19).visible();
 
     let habilitar = colCalibracion || colFechaMant || colProxMant;
 
