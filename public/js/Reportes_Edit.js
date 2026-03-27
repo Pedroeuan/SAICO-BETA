@@ -386,7 +386,12 @@
         var titulos = [];
         $('.titulo-row').each(function() {
             const id = $(this).data('titulo');
-            const text = $(this).find('input[name="titulos[]"]').first().val() || '';
+            const $row = $(this);
+            const text =
+                $row.find('.titulo-text').first().val() ||
+                $row.find('input[name="titulos[]"]').first().val() ||
+                $row.find('input[name^="titulos_text["]').first().val() ||
+                '';
             titulos.push({ id: id, text: text });
         });
         $('#titulos_hidden').val(JSON.stringify(titulos));
@@ -399,7 +404,9 @@
             
             // Eliminar la fila del título
             tituloRow.remove();
-            verificarYAgregarLongitud();
+            if (typeof verificarYAgregarLongitud === 'function') {
+                verificarYAgregarLongitud();
+            }
             // Eliminar todas las filas que tengan el mismo data-titulo
             $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
@@ -425,7 +432,9 @@
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
-            verificarYAgregarLongitud();
+            if (typeof verificarYAgregarLongitud === 'function') {
+                verificarYAgregarLongitud();
+            }
             updateRowNumbers();
         });
 

@@ -518,7 +518,7 @@
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                     <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
                                                     <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
-                                                        <td colspan="21">
+                                                        <td colspan="18">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                 <td>
@@ -556,6 +556,27 @@
                                                     </tr>
                                                     @php $contador++; @endphp
                                                 @endforeach
+
+                                                {{-- LONGITUD INSPECCIONADA --}}
+                                                @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
+                                                    @foreach ($grupo['Long_Inspecc'] as $long)
+                                                        <tr class="long-row" data-titulo="{{ $tituloKey }}">
+                                                            <td colspan="17">Longitud Inspeccionada</td>
+                                                            <td>
+                                                                <input type="text"
+                                                                    class="form-control long-text"
+                                                                    name="Long_Inspecc[{{ $tituloKey }}][]"
+                                                                    value="{{ $long }}"
+                                                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-danger btnEliminar">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -577,6 +598,8 @@
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
@@ -967,10 +990,36 @@
         updateTitulos(); // Actualizar lista de títulos
         });
 
+        $('#addLongBtn').click(function () {
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            const newLong = `
+                <tr class="long-row" data-titulo="${lastTitle}">
+                    <td colspan="17">Longitud Inspeccionada</td>
+                    <td>
+                        <input type="text"
+                            class="form-control long-text"
+                            name="Long_Inspecc[${lastTitle}][]"
+                            placeholder="Ingrese Longitud Inspeccionada...">
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+            $('#dynamicTable tbody').append(newLong);
+            if (typeof updateTitulos === 'function') updateTitulos();
+        });
+
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {

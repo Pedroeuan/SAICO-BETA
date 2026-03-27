@@ -1071,11 +1071,12 @@ class FOR_01_PRO_INS_03Controller extends Controller
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
 
- // Normalizar estructura para asegurar compatibilidad con la vista PDF
+        // Normalizar estructura para asegurar compatibilidad con la vista PDF
         $normalizedGrupos = [];
         foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
             $titulo = 'SIN TITULO';
             $resultados = [];
+            $longInspecc = null;
 
             // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
             if (is_array($grupo)) {
@@ -1111,11 +1112,23 @@ class FOR_01_PRO_INS_03Controller extends Controller
                 if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
                     $resultados = $grupo['resultados'];
                 }
+
+                if (array_key_exists('Long_Inspecc', $grupo)) {
+                    $longInspecc = $grupo['Long_Inspecc'];
+                }
+            }
+
+            // Normalizar Long_Inspecc a array para compatibilidad con la vista PDF
+            if ($longInspecc === null) {
+                $longInspecc = [];
+            } elseif (!is_array($longInspecc)) {
+                $longInspecc = [$longInspecc];
             }
 
             $normalizedGrupos[] = [
                 'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'resultados' => $resultados,
+                'Long_Inspecc' => $longInspecc,
             ];
         }
 

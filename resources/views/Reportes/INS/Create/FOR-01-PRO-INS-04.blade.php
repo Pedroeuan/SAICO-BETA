@@ -572,6 +572,8 @@
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
+                                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
 
@@ -957,7 +959,7 @@
             //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="11">
+                <td colspan="18">
                 <div class="d-flex justify-content-between align-items-center">
                     <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
@@ -1012,14 +1014,14 @@
             //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
             const newLong = `
                 <tr class="long-row" data-titulo="${titleId}">
-                    <td colspan="10">Longitud total inspeccionada:</td>
+                    <td colspan="17">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
                                 class="form-control w-90 long-text"
                                 name="Long_Inspecc[${titleId}][]"
                                 value="${value}"
-                                placeholder="Ingrese Longitud total inspeccionada:...">
+                                placeholder="Ingrese Longitud Inspeccionada...">
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminar">
                                     <i class="fa fa-times"></i>
@@ -1104,7 +1106,7 @@
             
             let newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="11">
+                <td colspan="18">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
@@ -1121,10 +1123,38 @@
         saveData();
         });
 
+        $('#addLongBtn').click(function () {
+            // Recontar filas existentes que NO son tÃ­tulos
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            const newLong = `
+                <tr class="long-row" data-titulo="${lastTitle}">
+                    <td colspan="17">Longitud Inspeccionada</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text"
+                                class="form-control w-90 long-text"
+                                name="Long_Inspecc[${lastTitle}][]"
+                                placeholder="Ingrese Longitud Inspeccionada...">
+                            <td><button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button></td>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            $('#dynamicTable tbody').append(newLong);
+            if (typeof updateTitulos === 'function') updateTitulos();
+            saveData($(this).closest('form').attr('id'));
+        });
+
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1198,7 +1228,7 @@
 
             const newLong = `
                 <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td colspan="17">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
