@@ -572,6 +572,8 @@
                                             </select>
                                         </div>
 
+                                        <input type="hidden" name="titulos_data" id="titulos_hidden">
+
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
@@ -832,8 +834,17 @@
                                                                 <!-- Campo para seleccionar una nueva imagen -->
                                                                 <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
+                                                                <div class="form-check mt-2">
+                                                                    <input type="checkbox" class="form-check-input imagen-hoja-checkbox" data-index="{{ $index }}" id="imagenHoja{{ $index }}" {{ old("imagen_hoja.$index", $foto['una_hoja'] ?? 0) == 1 ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="imagenHoja{{ $index }}">
+                                                                        Imagen en una hoja
+                                                                    </label>
+                                                                </div>
+
+                                                                <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ old("imagen_hoja.$index", $foto['una_hoja'] ?? 0) == 1 ? 1 : 0 }}">
+
                                                                 <!-- Campo para el comentario -->
-                                                                <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
+                                                                <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ old("comments.$index", $foto['comentario']) }}</textarea>
 
                                                                 <!-- Campo oculto para la imagen en base64 -->
                                                                 <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
@@ -853,6 +864,8 @@
                                             @else
                                                 <p>No hay imágenes disponibles.</p>
                                             @endif
+
+                                            <div id="imageFieldsContainer" class="row mt-2"></div>
                                         </div>
 
                                         <!-- Modal para recortar la imagen -->
