@@ -49,27 +49,27 @@
                 <div class="card-header p-2">
                     <ul class="nav nav-pills justify-content-center">
                         @if($rol == 'Laboratorio')
-                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
                         @elseif($rol == 'Tics')
-                        <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">TIC´S</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">TIC´S</a></li>
                         @elseif($rol == 'Equipos')
-                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Accesorios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Block Y Probeta</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Herramientas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_7" data-toggle="tab">Kits</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_8" data-toggle="tab">Importar</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Accesorios</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Block Y Probeta</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Herramientas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_7" data-toggle="tab">Kits</a></li>
+                            <!--<li class="nav-item"><a class="nav-link" href="#tab_8" data-toggle="tab">Importar</a></li>-->
                         @else
-                        <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">TIC´S</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Accesorios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Block Y Probeta</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Herramientas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_7" data-toggle="tab">Kits</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_8" data-toggle="tab">Importar</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">TIC´S</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Equipos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Consumibles</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Accesorios</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Block Y Probeta</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_6" data-toggle="tab">Herramientas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_7" data-toggle="tab">Kits</a></li>
+                            <!--<li class="nav-item"><a class="nav-link" href="#tab_8" data-toggle="tab">Importar</a></li>-->
                         @endif
                         <!-- Agrega más tabs según sea necesario -->
                     </ul>

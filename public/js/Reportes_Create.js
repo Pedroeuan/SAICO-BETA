@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }).get();
 
-    // Dedupe by id+text para evitar entradas repetidas en sessionStorage
+
     function dedupe(arr){
         const seen = new Set();
         return arr.filter(item => {

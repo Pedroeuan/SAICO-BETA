@@ -73,10 +73,20 @@
                         <div class="card-body w-100">
                             <form id="FOR-01-PRO-INS-08" action="{{route('Reportes_FOR_01_PRO_INS_08.update',['id' => $id])}}" method="post" enctype="multipart/form-data">
                                 @csrf
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <strong>No se pudo guardar la actualización.</strong>
+                                        <ul class="mb-0 mt-2">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
+                                <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -87,6 +97,22 @@
                                             @enderror
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">No. de Reporte</label>
+                                            <input type="text"
+                                                class="form-control inputForm @error('Detalles_Generales.No_Reporte') is-invalid @enderror"
+                                                name="Detalles_Generales[No_Reporte]"
+                                                placeholder="Ejemplo: 077-8DUCTOS-24"
+                                                value="{{ old('Detalles_Generales.No_Reporte', $Detalles_Generales['No_Reporte'] ?? '') }}"
+                                                readonly>
+                                            @error('Detalles_Generales.No_Reporte')
+                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -101,16 +127,11 @@
 
                                    <div class="col-sm-4">
                                         <div class="form-group">
-                                             <label class="col-form-label"> ¿Contrato existente? <span class="ml-3">
-                                                    <label class="mr-2"><input type="radio" name="TieneContrato" value="si" checked>Sí</label>
-                                                    <label>
-                                                        <input type="radio" name="TieneContrato" value="no"> No
-                                                    </label>
-                                                </span>
-                                            </label>
-
-                                            <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841" value="{{ old('Detalles_Generales.Contrato') }}" required>
+                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
+                                            @error('Contrato')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
 

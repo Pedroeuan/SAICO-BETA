@@ -21,6 +21,10 @@
         <td>{{ ucfirst(str_replace('_', ' ', $condicion->anticongelante ?? 'N/A')) }}</td>
     </tr>
     <tr>
+        <th>Liquido de frenos</th>
+        <td>{{ ucfirst(str_replace('_', ' ', $condicion->liquido_frenos ?? 'N/A')) }}</td>
+    </tr>
+    <tr>
         <th>Estado general llantas</th>
         <td>{{ ucfirst(str_replace('_', ' ', $condicion->estado_llantas ?? 'N/A')) }}</td>
     </tr>

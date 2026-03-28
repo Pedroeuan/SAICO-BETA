@@ -23,23 +23,16 @@ class SalidaVehiculoController extends Controller
         // Admin y super administrador pueden ver todas las salidas.
         if ($this->puedeVerTodasLasSalidas()) {
             $salidas = SalidaVehiculo::query()
-                ->select(['id', 'vehiculo_id', 'chofer_id', 'solicitado_por', 'fecha_salida', 'estatus'])
-                ->with(['vehiculo:id,placa,marca,modelo,anio', 'chofer:id,name'])
+                ->select(['id', 'vehiculo_id', 'chofer_id', 'fecha_salida', 'estatus'])
+                ->with(['vehiculo:id,placa', 'chofer:id,name'])
                 ->latest('fecha_salida')
                 ->get();
         } else {
-            $salidas = SalidaVehiculo::where(function ($query) {
-            $query->where('chofer_id', auth()->id())
-                ->orWhere('solicitado_por', auth()->id());
-        })
-        ->select(['id','vehiculo_id','chofer_id','solicitado_por','fecha_salida','estatus'])
-        ->with([
-            'vehiculo:id,placa,marca,modelo,anio',
-            'chofer:id,name',
-            'solicitante:id,name'
-        ])
-        ->latest('fecha_salida')
-        ->get();
+            $salidas = SalidaVehiculo::where('chofer_id', auth()->id())
+                ->select(['id', 'vehiculo_id', 'chofer_id', 'fecha_salida', 'estatus'])
+                ->with(['vehiculo:id,placa', 'chofer:id,name'])
+                ->latest('fecha_salida')
+                ->get();
         }
         $metricas = $this->metricas();
         $this->crearNotificacionesLicencias();

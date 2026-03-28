@@ -251,7 +251,6 @@ class DevolucionController extends Controller
                 // Obtener el campo 'Destino' para asignarlo a 'Tierra_Costafuera'
                 //$tierraCostafuera = $manifiesto->Destino;
                 $tierraCostafuera = 'FATIMA';
-
                 // Crear un registro en la tabla Historial_Almacen
                 $historialAlmacen = new Historial_Almacen;
                 $historialAlmacen->idAlmacen = $almacen->idAlmacen;

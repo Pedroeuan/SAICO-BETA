@@ -551,7 +551,7 @@
                                                     <input type="text" class="form-control inputForm" name="Num_Reporte" placeholder="Ejemplo: 042-2025" value="{{ optional($generalConEquipos)->Num_Reporte }}"> <!--Laravel ignora el null automáticamente -->
                                                 </div>
                                             </div>
-                                        @endif--}}
+                                        @endif --}}
 
                                         <div class="col-sm-4">
                                             <div class="form-group">

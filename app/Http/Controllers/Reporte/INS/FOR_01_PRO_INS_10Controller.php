@@ -447,7 +447,7 @@ class FOR_01_PRO_INS_10Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 13;
+        $maxFilasPorBloque = 10;
 
         if (!empty($filasSinTitulo)) {
 
@@ -829,7 +829,7 @@ class FOR_01_PRO_INS_10Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 13;
+        $maxFilasPorBloque = 10;
 
         if (!empty($filasSinTitulo)) {
 

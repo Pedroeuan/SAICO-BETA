@@ -100,20 +100,67 @@
                                         </div>
                                     </div>
 
+                                   <!-- check btton -->
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
-                                            @error('Cliente')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
+                                      <div class="form-group">
+                                        <label class="col-form-label">¿Cliente existente?
+                                            <span class="ml-3">
+                                                <label class="mr-2">
+                                                    <input type="radio" name="TieneCliente" value="si" checked> Sí</label>
+                                                    <label> <input type="radio" name="TieneCliente" value="no"> No </label>
+                                                 </span>
+                                                </label>
+                                                <!-- SELECT cuando es SI -->
+                                                 <select id="campoClienteSelect" class="form-select" name="ClienteSelect"> <option value="" selected disabled>Seleccione un Cliente</option>
+                                                 @foreach($Clientes as $Cliente)
+                                                 <option value="{{ $Cliente->Cliente }}"> {{ $Cliente->Cliente }}</option>
+                                                 @endforeach
+                                                </select>
+                                                <!-- INPUT cuando es NO -->
+                                                 <input type="text" id="campoClienteInput" class="form-control inputForm mt-2" name="ClienteInput" placeholder="Ingrese nombre del cliente" style="display:none;">
                                         </div>
                                     </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">
+                                ¿Cliente existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneCliente" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
+
+                            <!-- SELECT cuando es SI -->
+                            <select id="campoClienteSelect"
+                                    class="form-select"
+                                    name="ClienteSelect">
+                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                @foreach($Clientes as $Cliente)
+                                    <option value="{{ $Cliente->Cliente }}">
+                                        {{ $Cliente->Cliente }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- INPUT cuando es NO -->
+                            <input type="text"
+                                id="campoClienteInput"
+                                class="form-control inputForm mt-2"
+                                name="ClienteInput"
+                                placeholder="Ingrese nombre del cliente"
+                                style="display:none;">
+                        </div>
+                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
-                                                Contrato
-
+                                                ¿Contrato existente?
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -123,17 +170,14 @@
                                                     </label>
                                                 </span>
                                             </label>
-
                                             <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
-
-                                            <!-- Input oculto donde guardaremos el contrato interno -->
-                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
-
-                                            <!-- Texto para mostrar contrato interno -->
-                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
-                                                Contrato interno asignado: <b id="numeroInterno"></b>
-                                            </small>
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Detalles_Generales[Contrato]"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
 
@@ -540,17 +584,17 @@
                                             </tr>
                                         </thead>
 
-                                            <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
-                                            </tbody>
+                                <tbody>
+                                <!-- Filas dinámicas aparecerán aquí -->
+                                <!-- Aquí se almacenarán los datos en un campo oculto antes de enviar el formulario -->
+                                
+                                </tbody>
                                     </table>
-                                    </div>
-
-                                    <p>
-
-                                        <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                                        <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                                            <div>
+                                </div>
+                                <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
+                                <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                                <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                    <div>
                                                 <label for="numRows">Número de Filas:</label>
                                                 <select id="numRows" class="form-select">
                                                     @for ($i = 1; $i <= 500; $i++)
@@ -562,6 +606,8 @@
                                             <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
                                             <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                                            <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                         </div>
@@ -793,7 +839,7 @@
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
-                                            <select class="form-select form-control" id="imageCount" name="imageCount" autocomplete="off">
+                                            <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
                                                     <option value="{{ $i }}">{{ $i }} Imagen{{ $i > 1 ? 'es' : '' }}</option>
@@ -801,21 +847,10 @@
                                             </select>
                                         </div>
 
-                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                            <p>
-                                                Las imágenes se han eliminado de la caché por motivos de <strong>privacidad</strong> 
-                                                y <strong>seguridad</strong>. Por favor, vuelve a cargarlas o adjúntalas de nuevo.
-                                            </p>
+                                        <div id="imageFieldsContainer" class="row">
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
-                                        
-                                        <div class="w-100">
-                                            <div id="imageFieldsContainer" class="row">
-                                                <!-- Aquí se agregarán dinámicamente los campos -->
-                                            </div>
-                                        </div>
-                                        
+
                                         <!-- Modal para recortar la imagen -->
                                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
@@ -890,20 +925,20 @@
 
 <script>
     /*Juntas-Resultados */
-    $(document).ready(function() {
-        let tituloCount = 0;
-        let rowCount = 0;
-        let rowCountGlobal = 0;
-
-        function restoreData() {
-            const savedData = JSON.parse(sessionStorage.getItem('dynamicTableData_' + document.querySelectorAll("form")[1].id));
-            if (savedData) {
+$(document).ready(function() {
+    let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+    let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
+    let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
+    
+    function restoreData() {//-----------------------------------------------------------Reemplazar todo el resotedara
+        const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
+        if (!data) return;
                 //const tableData = JSON.parse(savedData);
                 // Restaurar contadores
-                tituloCount = savedData.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = savedData.filter(item => item.type === 'fila').length;
+                tituloCount = data.filter(item => item.type === 'titulo').length;
+                rowCountGlobal = data.filter(item => item.type === 'fila').length;
                 
-                savedData.forEach((item) => {
+                data.forEach((item) => {
                     if (item.type === 'titulo') {
                         let newTitle = `
                         <tr class="titulo-row" data-titulo="${item.id}">
@@ -920,34 +955,34 @@
                     } else if (item.type === 'fila') {
                         let newRow =
                         `<tr data-titulo="${item.titulo}">
-                            <td>${item.rowNumber} <input type="hidden" value="${item.rowNumber}"></td>
-                            <td><input type="text" class="form-control" name="ID[${item.titulo}"][]" value="${item.inputs[1]}" placeholder="ID"></td>
-                            <td><input type="text" class="form-control" name="elemento[${item.titulo}"][]" value="${item.inputs[2]}" placeholder="Descripción del Elemento"></td>
-                            <td><input type="text" class="form-control" name="0nom[${item.titulo}"][]" value="${item.inputs[3]}" placeholder="Ønom"></td>
-                            <td><input type="text" class="form-control" name="0ext[${item.titulo}"][]" value="${item.inputs[4]}" placeholder="Øext"></td>
-                            <td><input type="text" class="form-control" name="nivel[${item.titulo}"][]" value="${item.inputs[5]}" placeholder="Nivel"></td>
-                            <td><input type="text" class="form-control" name="12_00[${item.titulo}"][]" value="${item.inputs[6]}" placeholder="12:00"></td>
-                            <td><input type="text" class="form-control" name="01_00[${item.titulo}"][]" value="${item.inputs[7]}" placeholder="01:00"></td>
-                            <td><input type="text" class="form-control" name="01_30[${item.titulo}"][]" value="${item.inputs[8]}" placeholder="01:30"></td>
-                            <td><input type="text" class="form-control" name="02_00[${item.titulo}"][]" value="${item.inputs[9]}" placeholder="02:00"></td>
-                            <td><input type="text" class="form-control" name="03_00[${item.titulo}"][]" value="${item.inputs[10]}" placeholder="03:00"></td>
-                            <td><input type="text" class="form-control" name="04_00[${item.titulo}"][]" value="${item.inputs[11]}" placeholder="04:00"></td>
-                            <td><input type="text" class="form-control" name="04_30[${item.titulo}"][]" value="${item.inputs[12]}" placeholder="04:30"></td>
-                            <td><input type="text" class="form-control" name="05_00[${item.titulo}"][]" value="${item.inputs[13]}" placeholder="05:00"></td>
-                            <td><input type="text" class="form-control" name="06_00[${item.titulo}"][]" value="${item.inputs[14]}" placeholder="06:00"></td>
-                            <td><input type="text" class="form-control" name="07_00[${item.titulo}"][]" value="${item.inputs[15]}" placeholder="07:00"></td>
-                            <td><input type="text" class="form-control" name="07_30[${item.titulo}"][]" value="${item.inputs[16]}" placeholder="07:30"></td>
-                            <td><input type="text" class="form-control" name="08_00[${item.titulo}"][]" value="${item.inputs[17]}" placeholder="08:00"></td>
-                            <td><input type="text" class="form-control" name="09_00[${item.titulo}"][]" value="${item.inputs[18]}" placeholder="09:00"></td>
-                            <td><input type="text" class="form-control" name="10_00[${item.titulo}"][]" value="${item.inputs[19]}" placeholder="10:00"></td>
-                            <td><input type="text" class="form-control" name="10_30[${item.titulo}"][]" value="${item.inputs[20]}" placeholder="10:30"></td>
-                            <td><input type="text" class="form-control" name="11_00[${item.titulo}"][]" value="${item.inputs[21]}" placeholder="11:00"></td>
-                            <td><input type="text" class="form-control" name="tmin[${item.titulo}"][]" value="${item.inputs[22]}" placeholder="Tmin"></td>
-                            <td><input type="text" class="form-control" name="tmax[${item.titulo}"][]" value="${item.inputs[23]}" placeholder="Tmax"></td>
-                            <td><input type="text" class="form-control" name="tprom[${item.titulo}"][]" value="${item.inputs[24]}" placeholder="Tprom"></td>
-                            <td><input type="text" class="form-control" name="observaciones[${item.titulo}"][]" value="${item.inputs[25]}" placeholder="Observaciones"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                        </tr>`;
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
+                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
+                    <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Descripción del Elemento"></td>
+                    <td><input type="text" class="form-control" name="0nom[${lastTitle}][]" placeholder="Ønom"></td>
+                    <td><input type="text" class="form-control" name="0ext[${lastTitle}][]" placeholder="Øext"></td>
+                    <td><input type="text" class="form-control" name="nivel[${lastTitle}][]" placeholder="Nivel"></td>
+                    <td><input type="text" class="form-control" name="12_00[${lastTitle}][]" placeholder="12:00"></td>
+                    <td><input type="text" class="form-control" name="01_00[${lastTitle}][]" placeholder="01:00"></td>
+                    <td><input type="text" class="form-control" name="01_30[${lastTitle}][]" placeholder="01:30"></td>
+                    <td><input type="text" class="form-control" name="02_00[${lastTitle}][]" placeholder="02:00"></td>
+                    <td><input type="text" class="form-control" name="03_00[${lastTitle}][]" placeholder="SA"></td>
+                    <td><input type="text" class="form-control" name="04_00[${lastTitle}][]" placeholder="Tmin"></td>
+                    <td><input type="text" class="form-control" name="04_30[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)"></td>
+                    <td><input type="text" class="form-control" name="05_00[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="06_00[${lastTitle}][]" placeholder="Fotos"></td>
+                    <td><input type="text" class="form-control" name="07_00[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><input type="text" class="form-control" name="07_30[${lastTitle}][]" placeholder="Recomendaciones"></td>
+                    <td><input type="text" class="form-control" name="08_00[${lastTitle}][]" placeholder="Responsable de la Acción"></td>
+                    <td><input type="text" class="form-control" name="09_00[${lastTitle}][]" placeholder="Fecha de Cumplimiento"></td>
+                    <td><input type="text" class="form-control" name="10_00[${lastTitle}][]" placeholder="Estatus"></td>
+                    <td><input type="text" class="form-control" name="10_30[${lastTitle}][]" placeholder="Comentarios Adicionales"></td>
+                    <td><input type="text" class="form-control" name="11_00[${lastTitle}][]" placeholder="Seguimiento"></td>
+                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="Tmin"></td>
+                    <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="Tmax"></td>
+                    <td><input type="text" class="form-control" name="tprom[${lastTitle}][]" placeholder="Tprom"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                    </tr>`;
 
 
                         $('#dynamicTable tbody').append(newRow);
@@ -956,34 +991,117 @@
                 updateRowNumbers();
                 updateTitulos();
             }
+
+        });
+
+        // Reindexar numeración visible y actualizar contadores
+        function reindexRows(){
+            let idx = 0;
+            $('#dynamicTable tbody tr').not('.titulo-row, .long-row').each(function(){
+                idx++;
+
+                const td = $(this).find('td').eq(0);
+                const textNode = td.contents().filter(function(){ 
+                    return this.nodeType === 3; 
+                }).first();
+
+                if (textNode.length) {
+                    textNode[0].nodeValue = idx + ' ';
+                } else {
+                    const hidden = td.find('input[type="hidden"]').prop('outerHTML');
+                    td.html(idx + ' ' + hidden);
+                }
+
+                td.find('input[type="hidden"]').val(idx);
+            });
+
+            rowCountGlobal = idx;
+
+            const lastTitleId = $('.titulo-row').last().data('titulo');
+
+            rowCount = lastTitleId 
+                ? $('#dynamicTable tbody tr')
+                    .not('.titulo-row, .long-row')
+                    .filter(function(){
+                        return $(this).data('titulo') === lastTitleId;
+                    }).length 
+                : 0;
+        }
+        reindexRows();
+
+        // Actualizaciones finales y guardado
+        if (typeof updateTitulos === 'function') updateTitulos();
+        // Guardar con el form más cercano a la tabla (compatibilidad con tu saveData existente)
+        const formId = $('#dynamicTable').closest('form').attr('id') || (document.querySelectorAll('form')[1] && document.querySelectorAll('form')[1].id);
+        //if (formId && typeof saveData === 'function') saveData(formId);
         }
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
+            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
+            
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="26">
+            <tr class="titulo-row" data-titulo="${titleId}">
+                <td colspan="14">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
             </tr>
-            `;
+        `;
 
-            $('#dynamicTable tbody').append(newTitle);
-            updateTitulos(); // Actualizar lista de títulos
-            saveData(document.querySelectorAll("form")[1].id);
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        //saveData(document.querySelectorAll("form")[1].id);
+        // Guardar de forma robusta: usar el form relativo o id explícito
+        saveData($(this).closest('form').attr('id'));
+        });
+
+        $('#addLongBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
+                <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="14"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]" placeholder="Ingrese Longitud Inspeccionada...">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+ 
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        //saveData(document.querySelectorAll("form")[1].id);
+        // Guardar de forma robusta: usar el form relativo o id explícito
+        saveData($(this).closest('form').attr('id'));
         });
 
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1020,122 +1138,124 @@
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 
-                $('#dynamicTable tbody').append(newRow);
+                            $('#dynamicTable tbody').append(newRow);
             }
-            saveData(document.querySelectorAll("form")[1].id);
-        }
-    );
-
-        $('form').submit(function(e) {
-            // Validar que la tabla no esté vacía
-            if ($('#dynamicTable tbody tr').length === 0) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-                });
-                return;
-            }
-
-            // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
-            // Deshabilitar el botón de submit y cambiar el texto (opcional)
-            let submitButton = $(this).find('button[type="submit"]');
-            submitButton.prop('disabled', true).text('Guardando...');
-            // Opcional: Agregar un indicador de carga
-            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
+            verificarYAgregarLongitud();
+            saveData($(this).closest('form').attr('id'));
         });
 
-            // Restaurar datos al cargar la página
+        // Restaurar datos al cargar la página
         restoreData();
     });
 
+    function verificarYAgregarLongitud() {
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
 
-    /*Selects */
+        let contadorBloque = 0;
+        let $ultimoElementoBloque = null;
+
+        $rows.each(function () {
+            const $row = $(this);
+
+            // Ignorar longitudes existentes
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+                return;
+            }
+
+            // Contar título o fila normal
+            contadorBloque++;
+            $ultimoElementoBloque = $row;
+
+            // Cuando llegue a 11, insertar longitud
+            if (contadorBloque === 11) {
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="26">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text"
+                                    class="form-control w-90 long-text"
+                                    name="Long_Inspecc[${lastTitle}][]"
+                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                <button type="button" class="btn btn-danger btnEliminar">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                // Evitar duplicados
+                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                    $ultimoElementoBloque.after(newLong);
+                }
+
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+            }
+        });
+    }
+
+    /* Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
+            const selectedOption = $('#equiposSelect').find('option:selected');
+            $('#marcaInputE').val(selectedOption.data('marca') || '');
+            $('#modeloInputE').val(selectedOption.data('modelo') || '');
+            $('#nsInputE').val(selectedOption.data('ns') || '');
         }
 
-        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
-        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
-
-        // Evento cuando se cambia la selección en el select
-        $('#equiposSelect').on('change', function() {
+        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id + '_equipos');
+        if (selectedOptionLocalE != null) {
+            $('#equiposSelect').val(selectedOptionLocalE);
             actualizarInputsE();
-        });
+        }
+        $('#equiposSelect').on('change', actualizarInputsE);
 
         function actualizarInputsA() {
-            var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputA').val(marca);
-            $('#modeloInputA').val(modelo);
-            $('#nsInputA').val(ns);
+            const selectedOption = $('#accesoriosSelect').find('option:selected');
+            $('#marcaInputA').val(selectedOption.data('marca') || '');
+            $('#modeloInputA').val(selectedOption.data('modelo') || '');
+            $('#nsInputA').val(selectedOption.data('ns') || '');
         }
 
-        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
-        selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
-
-        // Evento cuando se cambia la selección en el select
-        $('#accesoriosSelect').on('change', function() {
+        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id + '_accesorios');
+        if (selectedOptionLocalA != null) {
+            $('#accesoriosSelect').val(selectedOptionLocalA);
             actualizarInputsA();
-        });
-            
+        }
+        $('#accesoriosSelect').on('change', actualizarInputsA);
+
         function actualizarInputsbyp() {
-            var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputbyp').val(marca);
-            $('#modeloInputbyp').val(modelo);
-            $('#nsInputbyp').val(ns);
+            const selectedOption = $('#blockyprobetaSelect').find('option:selected');
+            $('#nombreInputbyp').val(selectedOption.data('nombre') || '');
+            $('#nsInputbyp').val(selectedOption.data('ns') || '');
         }
 
-        const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
-        selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
-
-        // Evento cuando se cambia la selección en el select
-        $('#blockyprobetaSelect').on('change', function() {
+        const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id + '_ByP');
+        if (selectedOptionLocalbyp != null) {
+            $('#blockyprobetaSelect').val(selectedOptionLocalbyp);
             actualizarInputsbyp();
-        });
+        }
+        $('#blockyprobetaSelect').on('change', actualizarInputsbyp);
     });
 
-        /*FOR-01-PRO-INS-06*/
+    /* FOR-01-PRO-INS-06 */
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-06');
         if (!form) return;
 
-        // Guardar en localStorage al escribir
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
-                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                if (el.closest('#dynamicTable')) return;
                 localStorage.setItem('FOR-01-PRO-INS-06_' + el.name, el.value);
             });
         });
 
-        // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
                 const value = localStorage.getItem('FOR-01-PRO-INS-06_' + el.name);
@@ -1143,15 +1263,11 @@
             }
         });
 
-        // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
                 localStorage.removeItem('FOR-01-PRO-INS-06_' + el.name);
-                
             });
-            localStorage.clear();
         });
     });
-
 </script>
 @endsection

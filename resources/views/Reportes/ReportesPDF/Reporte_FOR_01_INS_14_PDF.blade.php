@@ -370,7 +370,7 @@
                     </table>
             </footer>
 
-            @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+        @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
             <div class="content">
                 
                 <div style="margin-bottom: 0px;"></div>
