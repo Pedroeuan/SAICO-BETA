@@ -5,6 +5,7 @@ namespace App\Models\Solicitudes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Manifiesto\manifiesto;
+use App\Models\EquiposyConsumibles\general_eyc;
 
 class detalles_solicitud extends Model
 {
@@ -12,7 +13,7 @@ class detalles_solicitud extends Model
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idDetalles_Solicitud',
         'idSolicitud',
-        'idGeneral',
+        'idGeneral_EyC',
         'Cantidad',
         'Unidad',
     ];
@@ -32,5 +33,9 @@ class detalles_solicitud extends Model
         return $this->hasMany(manifiesto::class, 'idManifiestos');
     }
 
+    public function generalEyc()
+    {
+        return $this->belongsTo(general_eyc::class, 'idGeneral_EyC', 'idGeneral_EyC');
+    }
     use HasFactory;
 }

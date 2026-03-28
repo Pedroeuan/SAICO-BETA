@@ -71,10 +71,10 @@ class PDFController extends Controller
         $user = Auth::user();
         $nombre = $user->name;
         $Solicitud = Solicitudes::findOrFail($id);
-        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        //$DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
+        $DetallesSolicitud = detalles_solicitud::with('generalEyc')->where('idSolicitud', $id)->get();
         $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
         $Devolucion = devolucion::where('idSolicitud', $id)->first();
-        $generalEyC = general_eyc::all();
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
@@ -83,7 +83,6 @@ class PDFController extends Controller
             'Manifiesto' => $Manifiesto,
             'DetallesSolicitud' => $DetallesSolicitud,
             'Solicitud' => $Solicitud,
-            'generalEyC' => $generalEyC,
             'nombre' => $nombre,
             'Logo' => $Logo,
             'Devolucion' => $Devolucion,
