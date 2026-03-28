@@ -166,7 +166,7 @@ class UsuariosController extends Controller
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
                 'required',
-                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio,Tics',
+                'in:Super Administrador,Administrador,Cliente,Ventas,Técnicos,Planeación,Equipos,Laboratorio,Tics,SGI',
             ],
             'Estatus' => 'required|string|max:255',
         ]);
