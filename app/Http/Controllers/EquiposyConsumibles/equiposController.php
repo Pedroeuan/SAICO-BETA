@@ -471,13 +471,15 @@ class equiposController extends Controller
         $No_EF = $request->input('No_economico');
         $SerF = $request->input('Serie');
 
-        //if (strcasecmp(trim($No_EF), trim($No_EBD)) == 0 && strcasecmp(trim($SerF), trim($SerBD)) == 0)
+        //Si el número económico O la serie son diferentes entre el formulario y la base de datos
+        //Si el número económico cambió o la serie cambió, entonces entra al if
         if(strcasecmp(trim($No_EF), trim($No_EBD)) != 0 || strcasecmp(trim($SerF), trim($SerBD)) != 0)
         {
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
-            
+            Log::info('noEconomico: ', ['noEconomico' => $noEconomico]);
+            Log::info('serie: ', ['serie' => $serie]);
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
             $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
             $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
@@ -488,11 +490,13 @@ class equiposController extends Controller
             ->where('idGeneral_EyC', '!=', $id)
             ->where('No_economico', '!=', $noEconomicoLimpio)  // ← EXCLUYE SU PROPIO REGISTRO
             ->exists();
+            Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
 
             // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
             $existsSerie = false;
             if ($serie !== '---') {
                 $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
+                Log::info('existsSerie1: ', ['existsSerie' => $existsSerie]);
             }
 
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
@@ -511,6 +515,7 @@ class equiposController extends Controller
             }
             elseif ($existsSerie && $existsNo_Economico == true)
             {
+                Log::info('existsSerie2: ', ['existsSerie' => $existsSerie]);
                 return redirect()->back()->withErrors([
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
