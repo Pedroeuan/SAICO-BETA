@@ -252,19 +252,23 @@ class FOR_01_PRO_INS_07Controller extends Controller
             'Datos_Equipo.MODELO_SONDA1' => 'nullable|string',
             'Datos_Equipo.N_S_SONDA1' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA1' => 'nullable|string',
+            'Datos_Equipo.ACCESORIO_SONDA1' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA2' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA2' => 'nullable|string',
             'Datos_Equipo.N_S_SONDA2' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA2' => 'nullable|string',
+            'Datos_Equipo.ACCESORIO_SONDA2' => 'nullable|string',
 
             'Datos_Equipo.MARCA_BLOCK_SEN' => 'nullable|string',
             'Datos_Equipo.MODELO_BLOCK_SEN' => 'nullable|string',
             'Datos_Equipo.N_S_BLOCK_SEN' => 'nullable|string',
+            'Datos_Equipo.BLOCK_SENSIBILIDAD' => 'nullable|string',
 
             'Datos_Equipo.MARCA_BLOCK_DIS' => 'nullable|string',
             'Datos_Equipo.MODELO_BLOCK_DIS' => 'nullable|string',
             'Datos_Equipo.N_S_BLOCK_DIS' => 'nullable|string',
+            'Datos_Equipo.BLOCK_DISTANCIA' => 'nullable|string',
 
             'Datos_Equipo.GANANCIA' => 'nullable|string',
             'Datos_Equipo.TIPO_JUNTA' => 'nullable|string',
@@ -670,19 +674,23 @@ class FOR_01_PRO_INS_07Controller extends Controller
             'Datos_Equipo.MODELO_SONDA1' => 'nullable|string',
             'Datos_Equipo.N_S_SONDA1' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA1' => 'nullable|string',
+            'Datos_Equipo.ACCESORIO_SONDA1' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA2' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA2' => 'nullable|string',
             'Datos_Equipo.N_S_SONDA2' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA2' => 'nullable|string',
+            'Datos_Equipo.ACCESORIO_SONDA2' => 'nullable|string',
 
             'Datos_Equipo.MARCA_BLOCK_SEN' => 'nullable|string',
             'Datos_Equipo.MODELO_BLOCK_SEN' => 'nullable|string',
             'Datos_Equipo.N_S_BLOCK_SEN' => 'nullable|string',
+            'Datos_Equipo.BLOCK_SENSIBILIDAD' => 'nullable|string',
 
             'Datos_Equipo.MARCA_BLOCK_DIS' => 'nullable|string',
             'Datos_Equipo.MODELO_BLOCK_DIS' => 'nullable|string',
             'Datos_Equipo.N_S_BLOCK_DIS' => 'nullable|string',
+            'Datos_Equipo.BLOCK_DISTANCIA' => 'nullable|string',
 
             'Datos_Equipo.GANANCIA' => 'nullable|string',
             'Datos_Equipo.TIPO_JUNTA' => 'nullable|string',
