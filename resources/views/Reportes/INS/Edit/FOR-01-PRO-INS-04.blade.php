@@ -518,7 +518,7 @@
                                                 @if ($grupo['titulos_juntas'] != 'SIN TITULO')
                                                     <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
                                                     <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
-                                                        <td colspan="21">
+                                                        <td colspan="18">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
                                                                 <td>
@@ -556,6 +556,27 @@
                                                     </tr>
                                                     @php $contador++; @endphp
                                                 @endforeach
+
+                                                {{-- LONGITUD INSPECCIONADA --}}
+                                                @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
+                                                    @foreach ($grupo['Long_Inspecc'] as $long)
+                                                        <tr class="long-row" data-titulo="{{ $tituloKey }}">
+                                                            <td colspan="17">Longitud Inspeccionada</td>
+                                                            <td>
+                                                                <input type="text"
+                                                                    class="form-control long-text"
+                                                                    name="Long_Inspecc[{{ $tituloKey }}][]"
+                                                                    value="{{ $long }}"
+                                                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-danger btnEliminar">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -572,9 +593,13 @@
                                             </select>
                                         </div>
 
+                                        <input type="hidden" name="titulos_data" id="titulos_hidden">
+
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
@@ -832,8 +857,17 @@
                                                                 <!-- Campo para seleccionar una nueva imagen -->
                                                                 <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
+                                                                <div class="form-check mt-2">
+                                                                    <input type="checkbox" class="form-check-input imagen-hoja-checkbox" data-index="{{ $index }}" id="imagenHoja{{ $index }}" {{ old("imagen_hoja.$index", $foto['una_hoja'] ?? 0) == 1 ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="imagenHoja{{ $index }}">
+                                                                        Imagen en una hoja
+                                                                    </label>
+                                                                </div>
+
+                                                                <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ old("imagen_hoja.$index", $foto['una_hoja'] ?? 0) == 1 ? 1 : 0 }}">
+
                                                                 <!-- Campo para el comentario -->
-                                                                <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
+                                                                <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ old("comments.$index", $foto['comentario']) }}</textarea>
 
                                                                 <!-- Campo oculto para la imagen en base64 -->
                                                                 <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
@@ -853,6 +887,8 @@
                                             @else
                                                 <p>No hay imágenes disponibles.</p>
                                             @endif
+
+                                            <div id="imageFieldsContainer" class="row mt-2"></div>
                                         </div>
 
                                         <!-- Modal para recortar la imagen -->
@@ -954,10 +990,36 @@
         updateTitulos(); // Actualizar lista de títulos
         });
 
+        $('#addLongBtn').click(function () {
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            const newLong = `
+                <tr class="long-row" data-titulo="${lastTitle}">
+                    <td colspan="17">Longitud Inspeccionada</td>
+                    <td>
+                        <input type="text"
+                            class="form-control long-text"
+                            name="Long_Inspecc[${lastTitle}][]"
+                            placeholder="Ingrese Longitud Inspeccionada...">
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+            $('#dynamicTable tbody').append(newLong);
+            if (typeof updateTitulos === 'function') updateTitulos();
+        });
+
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
