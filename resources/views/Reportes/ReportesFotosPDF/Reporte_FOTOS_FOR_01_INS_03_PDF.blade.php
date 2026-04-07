@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-01-INS-03</title>
+            <title>FORMATO FOR-INS-03/01</title>
             <style>
                 @page {
                     margin: 
@@ -171,7 +171,7 @@
             top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
             left: -21px; /* Ajusta para alinear la línea */
             width: 152.5%; /* Aumenta el ancho de la línea */
-            height: 10
+            height: 100%;
             border-top: 2px solid black;
             transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
         }
@@ -217,7 +217,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS </th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES </th>
                             <th>Versión</th>
                             <th>3</th>
                         </tr>

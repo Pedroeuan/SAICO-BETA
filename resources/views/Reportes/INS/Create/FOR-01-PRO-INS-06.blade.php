@@ -121,41 +121,7 @@
                                         </div>
                                     </div>
 
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">
-                                ¿Cliente existente?
-                                <span class="ml-3">
-                                    <label class="mr-2">
-                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="TieneCliente" value="no"> No
-                                    </label>
-                                </span>
-                            </label>
-
-                            <!-- SELECT cuando es SI -->
-                            <select id="campoClienteSelect"
-                                    class="form-select"
-                                    name="ClienteSelect">
-                                <option value="" selected disabled>Seleccione un Cliente</option>
-                                @foreach($Clientes as $Cliente)
-                                    <option value="{{ $Cliente->Cliente }}">
-                                        {{ $Cliente->Cliente }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            <!-- INPUT cuando es NO -->
-                            <input type="text"
-                                id="campoClienteInput"
-                                class="form-control inputForm mt-2"
-                                name="ClienteInput"
-                                placeholder="Ingrese nombre del cliente"
-                                style="display:none;">
-                        </div>
-                    </div>
+                    
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -171,13 +137,7 @@
                                                 </span>
                                             </label>
                                             <!-- Input visible solo si es "SI" -->
-                                            <input type="text"
-                                                id="campoContrato"
-                                                class="form-control inputForm"
-                                                name="Detalles_Generales[Contrato]"
-                                                placeholder="Ejemplo: 640853841"
-                                                value="{{ old('Detalles_Generales.Contrato') }}"
-                                                required>
+                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841" value="{{ old('Detalles_Generales.Contrato') }}" required>
                                         </div>
                                     </div>
 
@@ -933,63 +893,165 @@ $(document).ready(function() {
     function restoreData() {//-----------------------------------------------------------Reemplazar todo el resotedara
         const data = JSON.parse(sessionStorage.getItem('dynamicTableData') || 'null');
         if (!data) return;
-                //const tableData = JSON.parse(savedData);
-                // Restaurar contadores
-                tituloCount = data.filter(item => item.type === 'titulo').length;
-                rowCountGlobal = data.filter(item => item.type === 'fila').length;
-                
-                data.forEach((item) => {
-                    if (item.type === 'titulo') {
-                        let newTitle = `
-                        <tr class="titulo-row" data-titulo="${item.id}">
-                            <td colspan="26">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input type="text" class="form-control w-90" name="titulos[]" value="${item.text}" placeholder="Ingrese título">
-                                    <td><button type="button" class="btn btn-danger btnEliminarTitulo ">
-                                        <i class="fa fa-times"  aria-hidden="true"></i>
-                                    </button></td>
-                                </div>
+
+        // Helpers y configuración-CONFIGURAR CAMPOS DE ACUERDO A LOS NAMES DE CADA INPUT
+        const fieldNames = [
+        'ID',
+        'elemento',
+        'Ønom',
+        'Øext',
+        'nivel',
+        '12_00',
+        '01_00',
+        '01_30',
+        '02_00',
+        '03_00',
+        '04_00',
+        '04_30',
+        '05_00',
+        '06_00',
+        '07_00',
+        '07_30',
+        '08_00',
+        '09_00',
+        '10_00',
+        '10_30',
+        '11_00',
+        'tmin',
+        'tmax',
+        'tprom',
+        'observaciones'];
+        const placeholders = { //CONFIGURAR CAMPOS DE ACUERDO A LOS PLACEHOLDERS DE CADA INPUT
+        ID:'ID',
+        elemento:'elemento',
+        'Ønom': 'Ønom',
+        'Øext': 'Øext',
+        nivel: 'nivel',
+        '12_00':'12:00',
+        '01_00':'01:00',
+        '01_30':'01:30',
+        '02_00':'02:00',
+        '03_00':'03:00',
+        '04_00':'04:00',
+        '04_30':'04:30',
+        '05_00':'05:00',
+        '06_00':'06:00',
+        '07_00':'07:00',
+        '07_30':'07:30',
+        '08_00':'08:00',
+        '09_00':'09:00',
+        '10_00':'10:00',
+        '10_30':'10:30',
+        '11_00':'11:00',
+        tmin:'tmin',
+        tmax:'tmax',
+        tprom:'tprom',
+        observaciones:'observaciones'
+        };
+        function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
+
+        // Limpiar tabla y contadores
+        $('#dynamicTable tbody').empty();
+        tituloCount = 0;
+        rowCount = 0;
+        rowCountGlobal = 0;
+
+        // Recrear títulos (manteniendo el id único guardado)
+        (data.titles || []).forEach(function(t){
+            tituloCount++;
+            const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
+            const titleText = esc(t.text || '');
+
+            //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
+            const newTitle = `
+            <tr class="titulo-row" data-titulo="${titleId}">
+                <td colspan="26">
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                    <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
+                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    </button></td>
+                </div>
+                </td>
+            </tr>
+            `;
+            $('#dynamicTable tbody').append(newTitle);
+        });
+
+        // Recrear filas (inserción debajo del título correspondiente)
+        (data.rows || []).forEach(function(r){
+            const titleId = r.titleId || 'sin_titulo';
+            const vals = r.values || r.fields || []; // acepta array u objeto
+
+            const inputsHtml = fieldNames.map(function(fn, idx){
+                const value = Array.isArray(vals) ? (vals[idx] || '') : (vals[fn] || '');
+                return `<td><input type="text" class="form-control" name="${fn}[${titleId}][]" value="${esc(value)}" placeholder="${esc(placeholders[fn] || '')}"></td>`;
+            }).join('');
+
+            const $newRow = $(`<tr data-titulo="${titleId}">
+                <td class="row-number">0 <input type="hidden" value="0"></td>
+                ${inputsHtml}
+                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+            </tr>`);
+
+            const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
+
+            if ($titleRow.length) {
+                // Si ya hay filas para ese título, insertar después de la última de ellas
+                const $lastRowSameTitle = $titleRow.nextAll(`tr[data-titulo="${titleId}"]:not(.titulo-row)`).last();
+                if ($lastRowSameTitle.length) {
+                    $lastRowSameTitle.after($newRow);
+                } else {
+                    $titleRow.after($newRow);
+                }
+            } else {
+                // Título no existe (sin_titulo u otro caso) -> agregar al final
+                $('#dynamicTable tbody').append($newRow);
+            }
+        });
+
+        // Recrear Longitudes guardadas (data.longs)
+        (data.longs || []).forEach(function(l){
+
+            const titleId = l.titleId || 'sin_titulo';
+            const value   = esc(l.text || '');
+
+            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
+            const newLong = `
+                <tr class="long-row" data-titulo="${titleId}">
+                    <td colspan="25">Longitud Inspeccionada</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text"
+                                class="form-control w-90 long-text"
+                                name="Long_Inspecc[${titleId}][]"
+                                value="${value}"
+                                placeholder="Ingrese Longitud Inspeccionada...">
+                            <td>
+                                <button type="button" class="btn btn-danger btnEliminar">
+                                    <i class="fa fa-times"></i>
+                                </button>
                             </td>
-                        </tr>`;
-                        $('#dynamicTable tbody').append(newTitle);
-                    } else if (item.type === 'fila') {
-                        let newRow =
-                        `<tr data-titulo="${item.titulo}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
-                    <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Descripción del Elemento"></td>
-                    <td><input type="text" class="form-control" name="0nom[${lastTitle}][]" placeholder="Ønom"></td>
-                    <td><input type="text" class="form-control" name="0ext[${lastTitle}][]" placeholder="Øext"></td>
-                    <td><input type="text" class="form-control" name="nivel[${lastTitle}][]" placeholder="Nivel"></td>
-                    <td><input type="text" class="form-control" name="12_00[${lastTitle}][]" placeholder="12:00"></td>
-                    <td><input type="text" class="form-control" name="01_00[${lastTitle}][]" placeholder="01:00"></td>
-                    <td><input type="text" class="form-control" name="01_30[${lastTitle}][]" placeholder="01:30"></td>
-                    <td><input type="text" class="form-control" name="02_00[${lastTitle}][]" placeholder="02:00"></td>
-                    <td><input type="text" class="form-control" name="03_00[${lastTitle}][]" placeholder="SA"></td>
-                    <td><input type="text" class="form-control" name="04_00[${lastTitle}][]" placeholder="Tmin"></td>
-                    <td><input type="text" class="form-control" name="04_30[${lastTitle}][]" placeholder="Datos del Archivo (Escaneo)"></td>
-                    <td><input type="text" class="form-control" name="05_00[${lastTitle}][]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="06_00[${lastTitle}][]" placeholder="Fotos"></td>
-                    <td><input type="text" class="form-control" name="07_00[${lastTitle}][]" placeholder="Observaciones"></td>
-                    <td><input type="text" class="form-control" name="07_30[${lastTitle}][]" placeholder="Recomendaciones"></td>
-                    <td><input type="text" class="form-control" name="08_00[${lastTitle}][]" placeholder="Responsable de la Acción"></td>
-                    <td><input type="text" class="form-control" name="09_00[${lastTitle}][]" placeholder="Fecha de Cumplimiento"></td>
-                    <td><input type="text" class="form-control" name="10_00[${lastTitle}][]" placeholder="Estatus"></td>
-                    <td><input type="text" class="form-control" name="10_30[${lastTitle}][]" placeholder="Comentarios Adicionales"></td>
-                    <td><input type="text" class="form-control" name="11_00[${lastTitle}][]" placeholder="Seguimiento"></td>
-                    <td><input type="text" class="form-control" name="tmin[${lastTitle}][]" placeholder="Tmin"></td>
-                    <td><input type="text" class="form-control" name="tmax[${lastTitle}][]" placeholder="Tmax"></td>
-                    <td><input type="text" class="form-control" name="tprom[${lastTitle}][]" placeholder="Tprom"></td>
-                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                    </tr>`;
+                            `;
+            //-----------------------------------------Hacer ajuste de las filas a poner contando titulos y longitudes
+            //  Buscar filas reales del bloque
+            const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
+            const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
+            if ($rowsBlock.length >= 10) { 
+                const $nfila = $rowsBlock
+                    .not('.long-row')
+                    .eq(9);
 
-                        $('#dynamicTable tbody').append(newRow);
-                    }
-                });
-                updateRowNumbers();
-                updateTitulos();
+                if ($nfila.length) { 
+                    $nfila.after(newLong);
+                } else {
+                    $rowsBlock.last().after(newLong);
+                }
+            } else {
+                // fallback: al final del bloque
+                $rowsBlock.last().after(newLong);
             }
 
         });
@@ -1046,7 +1108,7 @@ $(document).ready(function() {
             
             let newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="14">
+                <td colspan="26">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
@@ -1076,7 +1138,7 @@ $(document).ready(function() {
             let newTitle = `
             <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
                 <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="14"> Longitud Inspeccionada</td>
+                <td colspan="25"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]" placeholder="Ingrese Longitud Inspeccionada...">
@@ -1166,16 +1228,19 @@ $(document).ready(function() {
             }
 
             // Contar título o fila normal
-            contadorBloque++;
-            $ultimoElementoBloque = $row;
+            if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
+                contadorBloque++;
+                $ultimoElementoBloque = $row;
+            }
+            //-----------------------------------------Hacer ajuste de "N" filas por bloque
+            // Cuando llegue a 11 → insertar longitud
+            if (contadorBloque === 10) {
 
-            // Cuando llegue a 11, insertar longitud
-            if (contadorBloque === 11) {
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 
                 const newLong = `
                     <tr class="long-row" data-titulo="${lastTitle}">
-                        <td colspan="26">Longitud Inspeccionada</td>
+                        <td colspan="25">Longitud Inspeccionada</td>
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 <input type="text"
@@ -1203,47 +1268,268 @@ $(document).ready(function() {
     /* Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
-            const selectedOption = $('#equiposSelect').find('option:selected');
-            $('#marcaInputE').val(selectedOption.data('marca') || '');
-            $('#modeloInputE').val(selectedOption.data('modelo') || '');
-            $('#nsInputE').val(selectedOption.data('ns') || '');
-        }
+            var selectedOption = $('#equiposSelect').find('option:selected');
 
-        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id + '_equipos');
-        if (selectedOptionLocalE != null) {
-            $('#equiposSelect').val(selectedOptionLocalE);
-            actualizarInputsE();
-        }
-        $('#equiposSelect').on('change', actualizarInputsE);
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
 
-        function actualizarInputsA() {
-            const selectedOption = $('#accesoriosSelect').find('option:selected');
-            $('#marcaInputA').val(selectedOption.data('marca') || '');
-            $('#modeloInputA').val(selectedOption.data('modelo') || '');
-            $('#nsInputA').val(selectedOption.data('ns') || '');
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE').val(marca);
+            $('#modeloInputE').val(modelo);
+            $('#nsInputE').val(ns);
         }
+        
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
-        const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id + '_accesorios');
-        if (selectedOptionLocalA != null) {
-            $('#accesoriosSelect').val(selectedOptionLocalA);
-            actualizarInputsA();
-        }
-        $('#accesoriosSelect').on('change', actualizarInputsA);
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarInputsE();
+            });
 
-        function actualizarInputsbyp() {
-            const selectedOption = $('#blockyprobetaSelect').find('option:selected');
-            $('#nombreInputbyp').val(selectedOption.data('nombre') || '');
-            $('#nsInputbyp').val(selectedOption.data('ns') || '');
-        }
+            function actualizarInputsbyp() {
+                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
-        const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id + '_ByP');
-        if (selectedOptionLocalbyp != null) {
-            $('#blockyprobetaSelect').val(selectedOptionLocalbyp);
-            actualizarInputsbyp();
+                // Extraer los datos de los atributos "data-"
+                var nombre = selectedOption.data('nombre') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#nombreInputbyp').val(nombre);
+                $('#nsInputbyp').val(ns);
+            }
+
+            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
+            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#blockyprobetaSelect').on('change', function() {
+                actualizarInputsbyp();
+            });
+
+            function actualizarInputsA1() {
+                var selectedOption = $('#accesoriosSelect1').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA1').val(marca);
+                $('#modeloInputA1').val(modelo);
+                $('#nsInputA1').val(ns);
+            }
+
+            const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios1');
+            selectedOptionLocalA1 != null ?  ($('#accesoriosSelect1').val(selectedOptionLocalA1),actualizarInputsA1()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect1').on('change', function() {
+                    actualizarInputsA1();
+                });
+
+            function actualizarInputsA2() {
+                var selectedOption = $('#accesoriosSelect2').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA2').val(marca);
+                $('#modeloInputA2').val(modelo);
+                $('#nsInputA2').val(ns);
+            }
+
+            const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
+            selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect2').on('change', function() {
+                    actualizarInputsA2();
+                });
+
+            function actualizarInputsA3() {
+                var selectedOption = $('#accesoriosSelect3').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA3').val(marca);
+                $('#modeloInputA3').val(modelo);
+                $('#nsInputA3').val(ns);
+            }
+
+            const selectedOptionLocalA3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios3');
+            selectedOptionLocalA3 != null ?  ($('#accesoriosSelect3').val(selectedOptionLocalA3),actualizarInputsA3()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect3').on('change', function() {
+                    actualizarInputsA3();
+                });
+
+            function actualizarInputsA4() {
+                var selectedOption = $('#accesoriosSelect4').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA4').val(marca);
+                $('#modeloInputA4').val(modelo);
+                $('#nsInputA4').val(ns);
+            }
+
+            const selectedOptionLocalA4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios4');
+            selectedOptionLocalA4 != null ?  ($('#accesoriosSelect4').val(selectedOptionLocalA4),actualizarInputsA4()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect4').on('change', function() {
+                    actualizarInputsA4();
+                });
+
+            function actualizarInputsA5() {
+                var selectedOption = $('#accesoriosSelect5').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA5').val(marca);
+                $('#modeloInputA5').val(modelo);
+                $('#nsInputA5').val(ns);
+            }
+
+            const selectedOptionLocalA5 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios5');
+            selectedOptionLocalA5 != null ?  ($('#accesoriosSelect5').val(selectedOptionLocalA5),actualizarInputsA5()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect5').on('change', function() {
+                    actualizarInputsA5();
+                });
+
+            function actualizarInputsA6() {
+                var selectedOption = $('#accesoriosSelect6').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA6').val(marca);
+                $('#modeloInputA6').val(modelo);
+                $('#nsInputA6').val(ns);
+            }
+
+            const selectedOptionLocalA6 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios6');
+            selectedOptionLocalA6 != null ?  ($('#accesoriosSelect6').val(selectedOptionLocalA6),actualizarInputsA6()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect6').on('change', function() {
+                    actualizarInputsA6();
+                });
+
+            function actualizarInputsA7() {
+                var selectedOption = $('#accesoriosSelect7').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA7').val(marca);
+                $('#modeloInputA7').val(modelo);
+                $('#nsInputA7').val(ns);
+            }
+
+            const selectedOptionLocalA7 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios7');
+            selectedOptionLocalA7 != null ?  ($('#accesoriosSelect7').val(selectedOptionLocalA7),actualizarInputsA7()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect7').on('change', function() {
+                    actualizarInputsA7();
+                });
+
+            function actualizarInputsA8() {
+                var selectedOption = $('#accesoriosSelect8').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA8').val(marca);
+                $('#modeloInputA8').val(modelo);
+                $('#nsInputA8').val(ns);
+            }
+
+            const selectedOptionLocalA8 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios8');
+            selectedOptionLocalA8 != null ?  ($('#accesoriosSelect8').val(selectedOptionLocalA8),actualizarInputsA8()):"";
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect8').on('change', function() {
+                    actualizarInputsA8();
+                });
+
+        function actualizarInputsE2() {
+            var selectedOption = $('#equiposSelect2').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE2').val(marca);
+            $('#modeloInputE2').val(modelo);
+            $('#nsInputE2').val(ns);
         }
-        $('#blockyprobetaSelect').on('change', actualizarInputsbyp);
+        
+            const selectedOptionLocalE2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos2');
+            selectedOptionLocalE2 != null ?  ($('#equiposSelect2').val(selectedOptionLocalE2),actualizarInputsE2()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect2').on('change', function() {
+                actualizarInputsE2();
+            });
+
+            function actualizarInputsE3() {
+            var selectedOption = $('#equiposSelect3').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE3').val(marca);
+            $('#modeloInputE3').val(modelo);
+            $('#nsInputE3').val(ns);
+        }
+        
+            const selectedOptionLocalE3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos3');
+            selectedOptionLocalE3 != null ?  ($('#equiposSelect3').val(selectedOptionLocalE3),actualizarInputsE3()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect3').on('change', function() {
+                actualizarInputsE3();
+            });
     });
-
+    
     /* FOR-01-PRO-INS-06 */
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-01-PRO-INS-06');

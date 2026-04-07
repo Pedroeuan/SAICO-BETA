@@ -4,47 +4,53 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-03/01</title>
             <style>
-                @page {
-                    margin: 
-                    /*3.0cm /* superior */
-                    /*2.1cm /* derecho */
-                    /*2.1cm /* inferior */
-                    /*2.4cm; /* izquierdo */
-                    3.0cm /* superior */
-                    1.2cm /* derecho */
-                    2.1cm /* inferior */
-                    2.2cm; /* izquierdo */
+              @page {
+                    margin: 3.0cm 1.2cm 2.1cm 2.2cm;
                 }
 
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -42px; /* Sube el encabezado para que no se monte con "DATOS GENERALES" */
                     left: 0;
                     right: 0;
-                    height: auto; /* Permite que el header crezca dinámicamente */
+                    height: auto;
                     text-align: center;
-                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
                 }
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: -30px;
                     left: 0;
                     right: 0;
                     height: auto;
                     text-align: center;
-                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
                 }
 
                 body {
-                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
-                    /*margin: 0;*/
-                    padding-top: 0px; /* Altura del header */
-                    padding-bottom: 0px; /* Altura del footer */
+                    /* Deja espacio exacto debajo del encabezado fijo */
+                    margin-top: 25px;
+                    margin-right: 0;
+                    margin-bottom: 0;
+                    margin-left: 0;
+                    padding-top: 0;
+                    padding-bottom: 0;
                     font-family: 'arial', sans-serif;
-                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                }
+                  .content {
+                    margin-top: 0;
+                }
+
+                .content-separador {
+                    height: 6px;
+                }
+
+                .tablaheader th {
+                    border: 1px solid black;
+                    padding: 4px 6px;
+                    vertical-align: middle;
+                    line-height: 1.15;
                 }
                 
                 .datosgenerales{
@@ -186,7 +192,7 @@
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 4px;"></div>
+                <div style="margin-bottom: 0px;"></div>
             </header>
 
             <footer>
@@ -398,13 +404,14 @@
 
         @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
             <div class="content">
+                <div class="content-separador"></div>
                 <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>   
 
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+                   
 
                     <tbody>
                         <tr>
@@ -558,7 +565,7 @@
                                 {{-- 🔹 TÍTULO --}}
                                 @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
                                     <tr class="titulo-row">
-                                        <td colspan="14" style="border:.5px solid black;">
+                                        <td colspan="10" style="border:.5px solid black;">
                                             {{ $grupo['titulos_juntas'] }}
                                         </td>
                                     </tr>
@@ -590,7 +597,7 @@
 
                                 {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
                                 <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="14"></td>
+                                    <td colspan="10"></td>
                                 </tr>--}}
                             </tbody>
                     </table>
