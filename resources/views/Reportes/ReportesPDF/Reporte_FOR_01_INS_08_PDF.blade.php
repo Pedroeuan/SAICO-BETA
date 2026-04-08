@@ -537,40 +537,46 @@
 
                 <table class="encabezadoAzul">
                     <tr>
-                        <th colspan="9">AJUSTE DEL EQUIPO</th>
+                        <th colspan="9">DATOS DE LA INSPECCIÓN</th>
                     </tr>
                 </table>
 
-                <table class="datosinspeccionsinborde">
-                    <tbody>
-                    @php
-                        $ganancia  = $Datos_Equipo['GANANCIA'] ?? '';
-                        $tipoJunta = $Datos_Equipo['TIPO_JUNTA'] ?? ($Datos_Equipo['TIP_JUNTA'] ?? '');
-                        $rechazo   = $Datos_Equipo['RECHAZO'] ?? ($Datos_Equipo['RANGO'] ?? '');
-                        $diametro  = $Datos_Equipo['DIAMETRO'] ?? '';
-                        $retardo   = $Datos_Equipo['RETARDO'] ?? '';
-                        $espesor   = $Datos_Equipo['ESPESOR'] ?? '';
-                    @endphp
-                    <tr>
-                        <th style="width: 100px;">GANANCIA:</th>
-                        <td class="lineaInferior">{{ $ganancia }}</td><td style="text-align: left; width: 2%;"> dB </td>
-                        <th style="width: 100px;">TIPO DE JUNTA:</th>
-                        <td class="lineaInferior">{{ $tipoJunta }}</td>
-                    </tr>
-                    <tr>
-                        <th>RECHAZO:</th>
-                        <td class="lineaInferior">{{ $rechazo }}</td><td></td>
-                        <th>DIAMETRO:</th>
-                        <td class="lineaInferior">{{ $diametro }}</td>
-                    </tr>
-                    <tr>
-                        <th>RETARDO:</th>
-                        <td class="lineaInferior">{{ $retardo }}</td><td></td>
-                        <th>ESPESOR:</th>
-                        <td class="lineaInferior">{{ $espesor }}</td>
-                    </tr>
-                </tbody>
+                @php
+                    $ganancia = $Datos_Equipo['GANANCIA'] ?? '---';
+                    $rango = $Datos_Equipo['RANGO'] ?? '---';
+                    $rechazo = $Datos_Equipo['RECHAZO'] ?? '---';
+                    $presionOperacion = $Datos_Equipo['PRESION_OPERACION'] ?? '---';
+                    $presionMaxOperacion = $Datos_Equipo['PRES_MAX_OPE'] ?? '---';
+                    $tempMaxOperacion = $Datos_Equipo['TEMP_MAX_OP'] ?? '---';
+                    $condicionSuperficial = $Datos_Equipo['CONDICION_SUPERFICIAL'] ?? '---';
+                    $estadoPintura = $Datos_Equipo['ESTADO_PINTURA'] ?? '---';
+                @endphp
 
+                <table class="datosgenerales">
+                    <tbody>
+                        <tr>
+                            <th style="width: 11%; text-align:left;">GANANCIA:</th>
+                            <td class="lineaInferior" style="width: 22%;">{{ $ganancia }}</td>
+                            <th style="width: 8%; text-align:left;">RANGO:</th>
+                            <td class="lineaInferior" style="width: 23%;">{{ $rango }}</td>
+                            <th style="width: 9%; text-align:left;">RECHAZO:</th>
+                            <td class="lineaInferior" style="width: 27%;">{{ $rechazo }}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align:left;">PRESIÓN DE OPERACIÓN:</th>
+                            <td class="lineaInferior">{{ $presionOperacion }}</td>
+                            <th style="text-align:left;">PRESIÓN MÁXIMA DE OPERACIÓN:</th>
+                            <td class="lineaInferior">{{ $presionMaxOperacion }}</td>
+                            <th style="text-align:left;">TEMPERATURA MAX. DE OPERACIÓN:</th>
+                            <td class="lineaInferior">{{ $tempMaxOperacion }}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align:left;">CONDICIÓN SUPERFICIAL:</th>
+                            <td class="lineaInferior">{{ $condicionSuperficial }}</td>
+                            <th style="text-align:left;">ESTADO DE PINTURA:</th>
+                            <td class="lineaInferior" colspan="3">{{ $estadoPintura }}</td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <div style="margin-bottom: 5px;"></div>
@@ -665,6 +671,92 @@
                                                 <td colspan="22"></td>
                                         </tr>--}}
                                     </tbody>
+                        </table>
+
+                        <div style="margin-bottom: 8px;"></div>
+
+                        <table class="datosgenerales" style="width:100%;">
+                            <tr>
+                                <td style="width: 43%; vertical-align: top;">
+                                    <table class="simbologia" style="font-size:7px;">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="4" class="celdaAmarillo" style="font-size:8px;">INDICACIONES Y HALLAZGOS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align:left;"><strong>NPIR:</strong></td>
+                                                <td style="text-align:left;">NO PRESENTA INDICACIONES RELEVANTES</td>
+                                                <td style="text-align:left;"><strong>FP:</strong></td>
+                                                <td style="text-align:left;">FALTA DE PENETRACIÓN</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left;"><strong>FF:</strong></td>
+                                                <td style="text-align:left;">FALTA DE FUSIÓN</td>
+                                                <td style="text-align:left;"><strong>G:</strong></td>
+                                                <td style="text-align:left;">GRIETAS</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left;"><strong>IE:</strong></td>
+                                                <td style="text-align:left;">INCLUSIÓN DE ESCORIA</td>
+                                                <td style="text-align:left;"><strong>IVL:</strong></td>
+                                                <td style="text-align:left;">INDICACIÓN VOLUMÉTRICA</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left;"><strong>IL:</strong></td>
+                                                <td style="text-align:left;">INDICACIÓN LINEAL</td>
+                                                <td style="text-align:left;"><strong>IT:</strong></td>
+                                                <td style="text-align:left;">INDICACIÓN TRANSVERSAL</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="width: 4%; border:0 !important;"></td>
+                                <td style="width: 53%; vertical-align: top;">
+                                    <table class="simbologia" style="font-size:7px;">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="6" class="celdaAmarillo" style="font-size:8px;">SIMBOLOGÍA DEL REPORTE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align:left;"><strong>A:</strong></td>
+                                                <td style="text-align:left;">ÁNGULO (°)</td>
+                                                <td style="text-align:left;"><strong>NI:</strong></td>
+                                                <td style="text-align:left;">NIVEL DE INDICACIÓN (%)</td>
+                                                <td style="text-align:left;"><strong>d</strong></td>
+                                                <td style="text-align:left;">PROFUNDIDAD (PULG)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left;"><strong>G:</strong></td>
+                                                <td style="text-align:left;">GANANCIA (dB)</td>
+                                                <td style="text-align:left;"><strong>L:</strong></td>
+                                                <td style="text-align:left;">LONGITUD DE LA INDICACIÓN (PULG)</td>
+                                                <td style="border:0 !important;"></td>
+                                                <td style="border:0 !important;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left;"><strong>NR:</strong></td>
+                                                <td style="text-align:left;">NIVEL DE REFERENCIA (%)</td>
+                                                <td style="text-align:left;"><strong>DSR:</strong></td>
+                                                <td style="text-align:left;">DISTANCIA DE LA INDICACIÓN</td>
+                                                <td style="border:0 !important;"></td>
+                                                <td style="border:0 !important;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left;"><strong>S:</strong></td>
+                                                <td style="text-align:left;">DISTANCIA ANGULAR (Pulg)</td>
+                                                <td style="text-align:left;"><strong>Tmin:</strong></td>
+                                                <td style="text-align:left;">ESPESOR MÍNIMO REGISTRADO (PULG)</td>
+                                                <td style="border:0 !important;"></td>
+                                                <td style="border:0 !important;"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                     @if (!$loop->last)

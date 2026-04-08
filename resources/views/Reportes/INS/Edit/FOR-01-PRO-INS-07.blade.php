@@ -316,6 +316,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA1]" id="accesorioNombreSonda1" value="{{ old('Datos_Equipo.ACCESORIO_SONDA1', $Datos_Equipo['ACCESORIO_SONDA1'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -364,6 +365,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA2]" id="accesorioNombreSonda2" value="{{ old('Datos_Equipo.ACCESORIO_SONDA2', $Datos_Equipo['ACCESORIO_SONDA2'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -412,6 +414,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[BLOCK_SENSIBILIDAD]" id="blockSensibilidadNombre" value="{{ old('Datos_Equipo.BLOCK_SENSIBILIDAD', $Datos_Equipo['BLOCK_SENSIBILIDAD'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -453,6 +456,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA', $Datos_Equipo['BLOCK_DISTANCIA'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -681,6 +685,15 @@
                                              <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
+                                        </div>
+
+                                        <div class="alert alert alert-info alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <h5><i class="icon fas fa-info"></i> Información</h5>
+                                            <p><b>NPIR</b>= No Presenta Indicaciones Relevantes, <b>SC</b>= Soldadura Circunferencial,
+                                                <b>SA</b>= Distancia Angular, <b>HT</b>= Horario técnico, <b>SL</b>= Soldadura Longitudinal,
+                                                <b>LA</b>= Largo Axial, <b>LC</b>= Largo Circunferencial, <b>DA</b>= Profundidad
+                                            </p>
                                         </div>
 
                                         <div class="col-sm-12">
@@ -1225,80 +1238,42 @@
                 actualizarInputsE();
             });
         
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect1').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA1').val(marca);
-                $('#modeloInputA1').val(modelo);
-                $('#nsInputA1').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect1').on('change', function() {
-                    actualizarInputsA();
-                });
-                
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect2').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA2').val(marca);
-                $('#modeloInputA2').val(modelo);
-                $('#nsInputA2').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect2').on('change', function() {
-                    actualizarInputsA();
-                });
-                
-
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect1').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp1').val(marca);
-                $('#modeloInputbyp1').val(modelo);
-                $('#nsInputbyp1').val(ns);
+            function actualizarInputsA1() {
+                const selectedOption = $('#accesoriosSelect1').find('option:selected');
+                $('#marcaInputA1').val(selectedOption.data('marca') || '');
+                $('#modeloInputA1').val(selectedOption.data('modelo') || '');
+                $('#nsInputA1').val(selectedOption.data('ns') || '');
+                $('#accesorioNombreSonda1').val(selectedOption.text().trim() || '');
             }
 
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect1').on('change', function() {
-                actualizarInputsbyp();
-            });
-
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect2').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp2').val(marca);
-                $('#modeloInputbyp2').val(modelo);
-                $('#nsInputbyp2').val(ns);
+            function actualizarInputsA2() {
+                const selectedOption = $('#accesoriosSelect2').find('option:selected');
+                $('#marcaInputA2').val(selectedOption.data('marca') || '');
+                $('#modeloInputA2').val(selectedOption.data('modelo') || '');
+                $('#nsInputA2').val(selectedOption.data('ns') || '');
+                $('#accesorioNombreSonda2').val(selectedOption.text().trim() || '');
             }
 
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect2').on('change', function() {
-                actualizarInputsbyp();
-            });
+            function actualizarInputsbyp1() {
+                const selectedOption = $('#blockyprobetaSelect1').find('option:selected');
+                $('#marcaInputbyp1').val(selectedOption.data('marca') || '');
+                $('#modeloInputbyp1').val(selectedOption.data('modelo') || '');
+                $('#nsInputbyp1').val(selectedOption.data('ns') || '');
+                $('#blockSensibilidadNombre').val(selectedOption.text().trim() || '');
+            }
+
+            function actualizarInputsbyp2() {
+                const selectedOption = $('#blockyprobetaSelect2').find('option:selected');
+                $('#marcaInputbyp2').val(selectedOption.data('marca') || '');
+                $('#modeloInputbyp2').val(selectedOption.data('modelo') || '');
+                $('#nsInputbyp2').val(selectedOption.data('ns') || '');
+                $('#blockDistanciaNombre').val(selectedOption.text().trim() || '');
+            }
+
+            $('#accesoriosSelect1').on('change', actualizarInputsA1);
+            $('#accesoriosSelect2').on('change', actualizarInputsA2);
+            $('#blockyprobetaSelect1').on('change', actualizarInputsbyp1);
+            $('#blockyprobetaSelect2').on('change', actualizarInputsbyp2);
         });
 </script>
 @endsection

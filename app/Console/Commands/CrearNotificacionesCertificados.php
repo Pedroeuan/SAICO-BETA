@@ -55,7 +55,8 @@ class CrearNotificacionesCertificados extends Command
             $No_economico = $generalEyc->No_economico;
             $Nombre_C = $generalEyc->Nombre_E_P_BP;
             $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
-
+            // Obtener el ISO relacionado
+            $iso = $generalEyc->ISO ? $generalEyc->ISO->NombreISO : null;
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
                 $tipo = $generalEyc->Tipo;

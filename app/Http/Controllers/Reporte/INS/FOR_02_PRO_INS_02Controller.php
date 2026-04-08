@@ -70,7 +70,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -340,11 +340,9 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
 
-            /*Titulos Juntas */
-            //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string',  // Cada título debe ser un string válido
-    
             /* Resultados Juntas */
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'componente' => 'nullable|array',
             'no_ind' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
@@ -354,7 +352,11 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'ht' => 'nullable|array',
             'evaluacion' => 'nullable|array',
             'longitud_inspeccionada' => 'nullable|array',
-    
+
+            'Long_Inspecc' => 'nullable|array',
+            'Long_Inspecc.*' => 'nullable|array',
+            'Long_Inspecc.*.*' => 'nullable|string|max:255',
+
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -752,7 +754,11 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'ht' => 'nullable|array',
             'evaluacion' => 'nullable|array',
             'longitud_inspeccionada' => 'nullable|array',
-    
+            
+            /* Longitudes inspeccionadas */
+            'Long_Inspecc' => 'nullable|array',
+            'Long_Inspecc.*' => 'nullable|array',
+            'Long_Inspecc.*.*' => 'nullable|string|max:255',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 

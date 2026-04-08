@@ -1527,10 +1527,10 @@ $(document).ready(function() {
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 13) { // si hay al menos 13 filas en el bloque
+            if ($rowsBlock.length >= 10) { 
                 const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(12); // fila índice 12 = fila 13 (0-based)
+                    .eq(9);
 
                 if ($nfila.length) { 
                     $nfila.after(newLong);
@@ -1650,7 +1650,6 @@ $(document).ready(function() {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
 
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
@@ -1686,30 +1685,6 @@ $(document).ready(function() {
             saveData($(this).closest('form').attr('id'));
         }
     );
-
-        /*$('form').submit(function(e) {
-            // Validar que la tabla no esté vacía
-            if ($('#dynamicTable tbody tr').length === 0) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-                });
-                return;
-            }
-            // Actualizar el campo oculto con [{id,text},...]
-            updateTitulos();
-            // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
-            // Deshabilitar el botón de submit y cambiar el texto (opcional)
-            let submitButton = $(this).find('button[type="submit"]');
-            submitButton.prop('disabled', true).text('Guardando...');
-            // Opcional: Agregar un indicador de carga
-            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-        });*/
-
             // Restaurar datos al cargar la página
             restoreData();
 });
@@ -1734,13 +1709,14 @@ function verificarYAgregarLongitud() {
         }
 
         // ✅ Contar título o fila normal
-        if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+        //if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {//MODIFICAR
+        if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
             contadorBloque++;
             $ultimoElementoBloque = $row;
         }
         //-----------------------------------------Hacer ajuste de "N" filas por bloque
         // 🎯 Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 11) {
+        if (contadorBloque === 10) {
 
             const lastTitle = $row.data('titulo') || 'sin_titulo';
 
@@ -1774,59 +1750,6 @@ function verificarYAgregarLongitud() {
     });
 }
 
-/*
-function verificarYAgregarLongitud() {
-
-    const $tbody = $('#dynamicTable tbody');
-
-    // 👉 Obtener solo filas reales (no títulos, no longitudes)
-    const $rowsReales = $tbody.children('tr')
-        .not('.titulo-row, .long-row');
-
-    // 👉 Buscar última longitud
-    const $ultimaLong = $tbody.children('tr.long-row').last();
-
-    let $bloque;
-
-    if ($ultimaLong.length) {
-        // Filas reales después de la última longitud
-        $bloque = $ultimaLong.nextAll('tr')
-            .not('.titulo-row, .long-row');
-    } else {
-        // Todas las filas reales
-        $bloque = $rowsReales;
-    }
-
-    // ✅ Solo cuando hay exactamente 11 filas reales
-    if ($bloque.length === 11) {
-
-        let lastTitle = $('.titulo-row').last().data('titulo') || 'sin_titulo';
-
-        const $Numfila = $bloque.eq(10); // índice 10 = fila 11 real
-        let newLong = `
-            <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="14">Longitud Inspeccionada</td>
-                <td>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text"
-                            class="form-control w-90 long-text"
-                            name="Long_Inspecc[${lastTitle}][]"
-                            placeholder="Ingrese Longitud Inspeccionada...">
-
-                        <td>
-                            <button type="button" class="btn btn-danger btnEliminar">
-                                <i class="fa fa-times"></i>
-                            </button>
-                        </td>
-                    </div>
-                </td>
-            </tr>`;
-
-        // 👉 Insertar justo después de la fila 11 real
-        $Numfila.after(newLong);
-    }
-}
-*/
 
     $(document).ready(function() {
         function actualizarInputsE() {

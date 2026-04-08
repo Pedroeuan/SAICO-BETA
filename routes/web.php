@@ -431,6 +431,10 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     /*GENERAL EYC*/
     /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
     Route::get('/inventario', [general_eycController::class, 'index'])->name('inventario');
+    /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
+    //Route::get('/Calibraciones', [general_eycController::class, 'index'])->name('Calibraciones');
+    /*Rutas de Vistas Equipos y Consumibles-Tabla General*/
+    //Route::get('/Mantenimientos', [general_eycController::class, 'index'])->name('Mantenimientos');
     /*Rutas de Vistas Equipos y Consumibles-Registro*/
     Route::get('/registros/createEyC', [general_eycController::class, 'createEquipos'])->name('registros.createEyC');
     /*Rutas de Vistas Equipos y Consumibles-Edición*/

@@ -1280,47 +1280,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 /*PREVENIR Enters*/
-/*Prevenir el Enter Equipos*/
-document.getElementById('equiposForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
+function prevenirEnter(formId) {
+    document.getElementById(formId).addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
             event.preventDefault();
         }
     });
+}
+
+/*Prevenir el Enter Equipos*/
+prevenirEnter('equiposForm');
 
     /*Prevenir el Enter Consumibles*/
-document.getElementById('consumiblesForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
+prevenirEnter('consumiblesForm');
 
     /*Prevenir el Enter Accesorios*/
-document.getElementById('accesoriosForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
+prevenirEnter('accesoriosForm');
 
     /*Prevenir el Enter Blocks*/
-document.getElementById('blocksForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
+prevenirEnter('blocksForm');
 
     /*Prevenir el Enter Herramientas*/
-document.getElementById('herramientasForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
+prevenirEnter('herramientasForm');
 
     /*Prevenir el Enter Kits*/
-document.getElementById('kitForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    });
+prevenirEnter('kitForm');
 
 /*RESTAURAR DATOS AL RECARGAR*/
 /*TICS */

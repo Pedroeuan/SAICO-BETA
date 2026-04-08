@@ -114,7 +114,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://s-aico.com'),
+    'url' => env('APP_URL', 'https://www.s-aico.com'),
 
     /*
     |--------------------------------------------------------------------------

@@ -1105,10 +1105,10 @@ $(document).ready(function() {
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 11) { // si hay al menos 13 filas en el bloque
+            if ($rowsBlock.length >= 10) { // si hay al menos 13 filas en el bloque
                 const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(10); // fila índice 12 = fila 13 (0-based)
+                    .eq(9); // fila índice 12 = fila 13 (0-based)
 
                 if ($nfila.length) { 
                     $nfila.after(newLong);
@@ -1287,13 +1287,13 @@ function verificarYAgregarLongitud() {
         }
 
         // ✅ Contar título o fila normal
-        if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+        if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
             contadorBloque++;
             $ultimoElementoBloque = $row;
         }
         //-----------------------------------------Hacer ajuste de "N" filas por bloque
         // 🎯 Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 11) {
+        if (contadorBloque === 10) {
 
             const lastTitle = $row.data('titulo') || 'sin_titulo';
 

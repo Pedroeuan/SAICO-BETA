@@ -36,30 +36,26 @@ class HistorialAlmacenController extends Controller
     // Obtener el nombre del usuario
     $Nombre = $user->name;
     $rol = Auth::user()->rol;
-    // Obtener todos los registros de historial_almacen con sus relaciones
-    //$historiales = Historial_Almacen::with(['Almacen.General_EyC'])->get();
+
+    $query = Historial_Almacen::with(['Almacen.General_EyC.ISO']);
     // Filtrar según el rol
     if ($rol === 'Laboratorio') {
-        // Solo registros con ISO 17025
-        $historiales = Historial_Almacen::with(['Almacen.General_EyC.ISO'])
-            ->whereHas('Almacen.General_EyC.ISO', function ($query) {
-                $query->where('NombreISO', '17025');
-            })
-            ->get();
-    }elseif($rol === 'Tics') {
-        //Todos los registros
-        $historiales = Historial_Almacen::whereHas('Almacen.General_EyC', function ($query) {
-            $query->where('Tipo','TICS');
-        })->get();
+        $query->whereHas('Almacen.General_EyC.ISO', function ($q) {
+            $q->where('NombreISO', '17025');
+        });
+
+    } elseif ($rol === 'Tics') {
+        $query->whereHas('Almacen.General_EyC', function ($q) {
+            $q->where('Tipo', 'TICS');
+        });
+
+    } elseif ($rol === 'Equipos') {
+        $query->whereHas('Almacen.General_EyC.ISO', function ($q) {
+            $q->where('NombreISO', '9001');
+        });
     }
-    else {
-        // Solo registros con ISO 9001
-        $historiales = Historial_Almacen::with(['Almacen.General_EyC.ISO'])
-            ->whereHas('Almacen.General_EyC.ISO', function ($query) {
-                $query->where('NombreISO', '9001');
-            })
-            ->get();
-    }
+    
+    $historiales = $query->get();
 
     return view('Historial_Almacen.index', compact('historiales','rol'));
     }

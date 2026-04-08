@@ -459,12 +459,12 @@ class BlockYProbetaController extends Controller
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
             }
-            else if ($existsNo_Economico) {
+            else if ($existsNo_Economico && $existsSerie == true) {
                 return redirect()->back()->withErrors([
                     'No_economico' => 'El No economico ya existe en la base de datos.',
                 ])->withInput();
             }
-            else if ($existsSerie)
+            else if ($existsSerie && $existsNo_Economico == true)
             {
                 return redirect()->back()->withErrors([
                     'Serie' => 'La Serie ya existe en la base de datos.',

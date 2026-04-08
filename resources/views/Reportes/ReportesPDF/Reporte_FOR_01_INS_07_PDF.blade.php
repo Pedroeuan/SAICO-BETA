@@ -485,6 +485,24 @@
 
                 <div style="margin-bottom: 4px;"></div>
 
+                @php
+                    $accesorioSonda2 = $Datos_Equipo['ACCESORIO_SONDA2'] ?? '---';
+                    $marcaSonda2 = $Datos_Equipo['MARCA_SONDA2'] ?? '---';
+                    $modeloSonda2 = $Datos_Equipo['MODELO_SONDA2'] ?? '---';
+                    $serieSonda2 = $Datos_Equipo['N_S_SONDA2'] ?? '---';
+                    $frecSonda2 = $Datos_Equipo['FREC_SONDA2'] ?? '---';
+
+                    $blockSensibilidad = $Datos_Equipo['BLOCK_SENSIBILIDAD'] ?? '---';
+                    $marcaBlockSen = $Datos_Equipo['MARCA_BLOCK_SEN'] ?? '---';
+                    $modeloBlockSen = $Datos_Equipo['MODELO_BLOCK_SEN'] ?? '---';
+                    $serieBlockSen = $Datos_Equipo['N_S_BLOCK_SEN'] ?? '---';
+
+                    $blockDistancia = $Datos_Equipo['BLOCK_DISTANCIA'] ?? '---';
+                    $marcaBlockDis = $Datos_Equipo['MARCA_BLOCK_DIS'] ?? '---';
+                    $modeloBlockDis = $Datos_Equipo['MODELO_BLOCK_DIS'] ?? '---';
+                    $serieBlockDis = $Datos_Equipo['N_S_BLOCK_DIS'] ?? '---';
+                @endphp
+
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
                         <tr><th colspan="7">DATOS DEL EQUIPO</th></tr>
@@ -525,6 +543,54 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <div style="margin-bottom: 4px;"></div>
+
+                <table class="datosinspeccion">
+                    <tbody>
+                        <tr class="celdaGris">
+                            <th colspan="4">SONDA #2</th>
+                            <th colspan="4">BLOCK DE CALIBRACIÓN (SENSIBILIDAD)</th>
+                            <th colspan="4">BLOCK DE CALIBRACIÓN (DISTANCIA)</th>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris" style="width: 8%;">ACCESORIOS:</th>
+                            <td colspan="3">{{ $accesorioSonda2 }}</td>
+                            <th class="celdaGris" style="width: 8%;">BLOCK:</th>
+                            <td colspan="3">{{ $blockSensibilidad }}</td>
+                            <th class="celdaGris" style="width: 8%;">BLOCK:</th>
+                            <td colspan="3">{{ $blockDistancia }}</td>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris">MARCA:</th>
+                            <td colspan="3">{{ $marcaSonda2 }}</td>
+                            <th class="celdaGris">MARCA:</th>
+                            <td colspan="3">{{ $marcaBlockSen }}</td>
+                            <th class="celdaGris">MARCA:</th>
+                            <td colspan="3">{{ $marcaBlockDis }}</td>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>{{ $modeloSonda2 }}</td>
+                            <th class="celdaGris">N.S:</th>
+                            <td>{{ $serieSonda2 }}</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>{{ $modeloBlockSen }}</td>
+                            <th class="celdaGris">N.S:</th>
+                            <td>{{ $serieBlockSen }}</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>{{ $modeloBlockDis }}</td>
+                            <th class="celdaGris">N.S:</th>
+                            <td>{{ $serieBlockDis }}</td>
+                        </tr>
+                        <tr>
+                            <th class="celdaGris">FREC:</th>
+                            <td colspan="3">{{ $frecSonda2 }}</td>
+                            <td colspan="8"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 <div style="margin-bottom: 4px;"></div>
 
                 <table class="encabezadoAzul">
@@ -631,13 +697,17 @@
                                 {{-- 🔹 LONGITUD INSPECCIONADA --}}
                                {{-- DESPUÉS --}}
                                 <tr>
-                                    <td colspan="9" style="border:0 !important;"></td>
-                                    <td colspan="3" style="border:.6px solid black; font-weight:bold; text-align:center;">
+                                    <td colspan="9" style="border:.6px solid black; text-align:left; font-size:8px; padding:4px 6px;">
+                                        <b>NPIR</b>= No Presenta Indicaciones Relevantes, <b>SC</b>= Soldadura Circunferencial,
+                                        <b>SA</b>= Distancia Angular, <b>HT</b>= Horario técnico, <b>SL</b>= Soldadura Longitudinal,
+                                        <b>LA</b>= Largo Axial, <b>LC</b>= Largo Circunferencial, <b>DA</b>= Profundidad
+                                    </td>
+                                    <th colspan="3" style="border:.6px solid black; font-weight:bold; text-align:center;">
                                         Longitud inspeccionada:
-                                    </td>
-                                    <td colspan="1" style="border:.6px solid black; font-weight:bold; text-align:center;">
+                                    </th>
+                                    <th colspan="1" style="border:.6px solid black; font-weight:bold; text-align:center;">
                                         {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </td>
+                                    </th>
                                 </tr>
 
                                 {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 

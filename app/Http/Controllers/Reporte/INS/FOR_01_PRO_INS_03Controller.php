@@ -491,7 +491,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
             $tituloText = $tituloObj['text']; // texto real
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -595,7 +595,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
     }
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
-        log::info("Valor de Cliente: " . $Cliente); // Agrega este log para verificar el valor de Cliente
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
@@ -791,8 +790,9 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-         $titulos_json = $request->input('titulos_data', '[]');
+        $titulos_json = $request->input('titulos_data', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
+        
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
@@ -849,7 +849,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
             $tituloText = $tituloObj['text']; // texto real
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
@@ -922,7 +922,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/Fotos";
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -940,7 +940,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
                 // Eliminar del almacenamiento
                 if (Storage::exists($rutaImagen)) {
                     Storage::delete($rutaImagen);
-                    Log::info("Imagen eliminada: {$rutaImagen}");
+                    //Log::info("Imagen eliminada: {$rutaImagen}");
                 } else {
                     //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
                 }
@@ -1071,11 +1071,12 @@ class FOR_01_PRO_INS_03Controller extends Controller
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
 
- // Normalizar estructura para asegurar compatibilidad con la vista PDF
+        // Normalizar estructura para asegurar compatibilidad con la vista PDF
         $normalizedGrupos = [];
         foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
             $titulo = 'SIN TITULO';
             $resultados = [];
+            $longInspecc = null;
 
             // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
             if (is_array($grupo)) {
@@ -1111,11 +1112,23 @@ class FOR_01_PRO_INS_03Controller extends Controller
                 if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
                     $resultados = $grupo['resultados'];
                 }
+
+                if (array_key_exists('Long_Inspecc', $grupo)) {
+                    $longInspecc = $grupo['Long_Inspecc'];
+                }
+            }
+
+            // Normalizar Long_Inspecc a array para compatibilidad con la vista PDF
+            if ($longInspecc === null) {
+                $longInspecc = [];
+            } elseif (!is_array($longInspecc)) {
+                $longInspecc = [$longInspecc];
             }
 
             $normalizedGrupos[] = [
                 'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'resultados' => $resultados,
+                'Long_Inspecc' => $longInspecc,
             ];
         }
 
@@ -1206,7 +1219,8 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(126, -265.5);
+            // Posicionar el número de página dentro de la celda "Página" del encabezado
+            $combinedPdf->SetXY(127, -266);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1217,6 +1231,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
+            // Posicionar el número de página dentro de la celda "Página" del encabezado
             $combinedPdf->SetXY(138, -265.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');

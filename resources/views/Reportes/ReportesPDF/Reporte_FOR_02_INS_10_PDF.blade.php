@@ -669,7 +669,7 @@
                                 {{-- 🔹 TÍTULO --}}
                                 @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
                                     <tr class="titulo-row">
-                                        <td colspan="14" style="border:.5px solid black;">
+                                        <td colspan="20" style="border:.5px solid black;">
                                             {{ $grupo['titulos_juntas'] }}
                                         </td>
                                     </tr>
