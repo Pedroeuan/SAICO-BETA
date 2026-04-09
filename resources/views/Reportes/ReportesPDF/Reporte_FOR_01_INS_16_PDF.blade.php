@@ -192,7 +192,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">  Inspección con Termografía </th>
+                            <th rowspan="2" style="font-size: 9pt;">  INSPECCIÓN CON TERMOGRAFÍA </th>
                             <th>Versión</th>
                             <th>0</th>
                         </tr>

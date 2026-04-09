@@ -512,12 +512,6 @@ class FOR_01_PRO_INS_17Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_02_PRO_INS_16_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
 
     public function FOR_01_PRO_INS_17_update(Request $request, $id)
     {
@@ -689,7 +683,7 @@ class FOR_01_PRO_INS_17Controller extends Controller
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Fotos";
+        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_17/{$Contrato}/{$No_Reporte}/Fotos";
 
         if (!Storage::exists($rutaCarpeta)) {
             Storage::makeDirectory($rutaCarpeta);
@@ -796,24 +790,25 @@ class FOR_01_PRO_INS_17Controller extends Controller
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
         // Obtener las fotos con su comentario
-        $Fotos = [];
+        if ($Fotos_Reportes) {
+                $Fotos = [];
 
-        if ($Fotos_Reportes && $Fotos_Reportes->Fotos_Reportes) {
-            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?: [];
+                if ($Fotos_Reportes && $Fotos_Reportes->Fotos_Reportes) {
 
-            foreach ($fotos as $foto) {
-                if (!isset($foto['imagen'], $foto['ruta'])) {
-                    continue;
+                    $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
+
+                    foreach ($fotos as $foto) {
+
+                        $Fotos[$foto['imagen']] = storage_path(
+                            'app/public/' . str_replace('storage/', '', $foto['ruta'])
+                        );
+
+                    }
                 }
-
-                $Fotos[$foto['imagen']] = storage_path(
-                    'app/public/' . str_replace('storage/', '', $foto['ruta'])
-                );
-            }
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-17/01.PDF',
+            'title' => 'Reporte_FOR-INS-10/02.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
