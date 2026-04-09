@@ -611,7 +611,7 @@
                                             </tbody>
                                     </table>
                                     </div>
-                                    <input type="hidden" id="titulos_hidden" name="titulos_hidden">
+                                    <input type="hidden" id="titulos_hidden" name="titulos_data">
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>

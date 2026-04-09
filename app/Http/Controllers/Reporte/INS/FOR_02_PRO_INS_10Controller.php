@@ -1113,6 +1113,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
         foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
             $titulo = 'SIN TITULO';
             $resultados = [];
+            $longInspecc = null;
 
             // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
             if (is_array($grupo)) {
@@ -1148,11 +1149,23 @@ class FOR_02_PRO_INS_10Controller extends Controller
                 if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
                     $resultados = $grupo['resultados'];
                 }
+
+                if (array_key_exists('Long_Inspecc', $grupo)) {
+                    $longInspecc = $grupo['Long_Inspecc'];
+                }
+            }
+
+            // Normalizar Long_Inspecc a array para compatibilidad con la vista PDF
+            if ($longInspecc === null) {
+                $longInspecc = [];
+            } elseif (!is_array($longInspecc)) {
+                $longInspecc = [$longInspecc];
             }
 
             $normalizedGrupos[] = [
                 'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'resultados' => $resultados,
+                'Long_Inspecc' => $longInspecc,
             ];
         }
 

@@ -12,7 +12,6 @@
                     2.2cm; /* izquierdo */
                 }
 
-                @if ($totalFotos <=4)
                 header {
                     width: 100%;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -39,7 +38,6 @@
                     font-family: 'arial', sans-serif;
                     /*background-color: rgb(45, 78, 226);*/
                 }
-            @else
                 header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -70,7 +68,6 @@
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
-                @endif
 
                 .datosgenerales{
                     border: 0px !important;
@@ -207,6 +204,22 @@
 
         .cross-line::after {
             transform: rotate(-27deg);
+        }
+
+        .foto-full {
+            width: 100% !important;
+            height: 435px !important;
+        }
+
+        .foto-full img {
+            width: 100% !important;
+            height: 404px !important;
+            object-fit: contain;
+        }
+
+        .foto-full .comment {
+            margin-top: 0px;
+            font-size: 12px;
         }
             </style>
         </head>
@@ -460,33 +473,86 @@
                     <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
                         <tbody>
                         @php
-                            $chunks = array_chunk($Fotos, 4); // Divide las imágenes en grupos de 4
+                            $chunks = [];
+                            $grupoActual = [];
+
+                            foreach ($Fotos as $foto) {
+                                if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
+                                    if (!empty($grupoActual)) {
+                                        $chunks[] = $grupoActual;
+                                        $grupoActual = [];
+                                    }
+
+                                    $chunks[] = [$foto];
+                                    continue;
+                                }
+
+                                $grupoActual[] = $foto;
+
+                                if (count($grupoActual) == 4) {
+                                    $chunks[] = $grupoActual;
+                                    $grupoActual = [];
+                                }
+                            }
+
+                            if (!empty($grupoActual)) {
+                                $chunks[] = $grupoActual;
+                            }
                         @endphp
 
                         @foreach($chunks as $fotosGrupo)
+                            @php
+                                $esHojaCompleta = (count($fotosGrupo) == 1 && !empty($fotosGrupo[0]['una_hoja']) && $fotosGrupo[0]['una_hoja'] == 1);
+                            @endphp
                             <table class="imagenes-reporte">
                                 <tr>
-                                    @foreach($fotosGrupo as $index => $foto)
+                                    @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
                                         <td class="foto-container">
-                                            <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                            <p class="comment">{{ $foto['comment'] }}</p>
+                                            <img src="{{ $fotosGrupo[0]['path'] }}" alt="Foto 1">
+                                            <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
                                         </td>
-                                        
-                                        @if(($index + 1) % 2 == 0)
-                                            </tr><tr> <!-- Cierra la fila actual y abre una nueva cada 2 imágenes -->
-                                        @endif
-                                    @endforeach
+                                        <td class="foto-container">
+                                            <img src="{{ $fotosGrupo[1]['path'] }}" alt="Foto 2">
+                                            <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
+                                        </td>
+                                        </tr><tr>
+                                        <td class="foto-container" colspan="2">
+                                            <img src="{{ $fotosGrupo[2]['path'] }}" alt="Foto 3">
+                                            <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
+                                        </td>
+                                    @else
+                                        @foreach($fotosGrupo as $index => $foto)
+                                            @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
+                                                <td class="foto-container foto-full" colspan="2">
+                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                                    <p class="comment">{{ $foto['comment'] }}</p>
+                                                </td>
+                                            @else
+                                                <td class="foto-container">
+                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                                    <p class="comment">{{ $foto['comment'] }}</p>
+                                                </td>
+                                                @if(($index + 1) % 2 == 0)
+                                                    </tr><tr>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    @endif
 
-                                    {{-- Rellenar los cuadros restantes con espacios vacíos con líneas cruzadas y comentario --}}
-                                    @for($i = count($fotosGrupo); $i < 4; $i++)
-                                        <td class="foto-container empty-box">
-                                            <div class="cross-line"></div> <!-- Añadir el contenedor de líneas cruzadas -->
-                                            <p class="empty-comment">&nbsp;</p> <!-- Línea de comentario para los espacios vacíos -->
-                                        </td> <!-- Celda vacía con líneas cruzadas y comentario -->
-                                        @if(($i + 1) % 2 == 0)
-                                            </tr><tr> <!-- Mantiene la estructura -->
+                                    @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
+                                        @php $faltantes = 4 - count($fotosGrupo); @endphp
+                                        @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
+                                            @for($i = 0; $i < $faltantes; $i++)
+                                                <td class="foto-container empty-box">
+                                                    <div class="cross-line"></div>
+                                                    <p class="empty-comment">&nbsp;</p>
+                                                </td>
+                                                @if((count($fotosGrupo) + $i + 1) % 2 == 0)
+                                                    </tr><tr>
+                                                @endif
+                                            @endfor
                                         @endif
-                                    @endfor
+                                    @endif
                                 </tr>
                             </table>
 

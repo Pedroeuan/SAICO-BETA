@@ -40,7 +40,7 @@
                 }
 
                 body {
-                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin-top: 200px; /* Ajusta para que el contenido no se sobreponga al header */
                     /*margin: 0;*/
                     padding-top: 0px; /* Altura del header */
                     padding-bottom: 0px; /* Altura del footer */
@@ -177,6 +177,8 @@
         </head>
         <body>
 
+        <div class="page">
+            {{-- portada --}}
             <header>
                 <table class="tablaheader">
                     <thead>
@@ -190,7 +192,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">  Inspección con Termografía </th>
+                            <th rowspan="2" style="font-size: 9pt;">  INSPECCIÓN CON TERMOGRAFÍA </th>
                             <th>Versión</th>
                             <th>0</th>
                         </tr>
@@ -202,69 +204,12 @@
                 </table>
     
                 <div style="margin-bottom: 5px;"></div>
-        
-                <table class="datosgenerales">
 
-                    <thead class="encabezadoAzul">
-                        <tr><th colspan="4">DATOS GENERALES</th></tr>
-                    </thead>   
-
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
-
-                    <tbody>
-                        <tr>
-                            <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
-                            <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>CLIENTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
-                            <th>CONTRATO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Equipo:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Equipo'] }}</td>
-                        </tr>
-                        <tr>
-
-                        <tr>
-                            <th>LUGAR:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
-                            <th>Hora de Inspeccíon:</th>
-                            <td class="lineaInferior"></td>
-                        </tr>
-                        <tr>
-                            <th>Procedimiento:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
-
-                        <tr>
-                            <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
-                            <th style="width: 160px;">ESTÁNDAR DE REFERENCIA:</th>
-                            <td class="lineaInferior"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h1> REPORTE DE INSPECCIÓN TERMOGRÁFICA</h1>
+                
             </header>
 
-                <div style="margin-bottom: 4px;"></div>
-
-            <div class="content">
-                @if(isset($Fotos[5]))
-                <img src="{{ $Fotos[5] }}" style="width:400px;">
-                @endif
-            </div>
+            <div style="margin-bottom: 4px;"></div>
 
             <footer>
                     <br>
@@ -448,5 +393,30 @@
                     </table>
             </footer>
 
+            <div class="content" style="text-align: center;">
+                <div class="content">
+                    @if(isset($Fotos[5]))
+                    <img src="{{ $Fotos[5] }}" style="width:650px;">
+                    @endif
+                </div>
+                
+                <table class="datosgenerales">
+                    <tbody>
+                        <tr>
+                            <th style="width: 12%;">INSTALACIÓN/EMBARCACIÓN::</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
+                            <th style="width: 15%;">EQUIPO:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
+                            <th style="width: 15%;">FECHA:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
+                            <th style="width: 15%;">NO. DE REPORTE:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         </body>
-    </html>
+        </html>
+        
