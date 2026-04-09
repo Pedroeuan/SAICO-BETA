@@ -40,27 +40,27 @@
         <ul class="nav nav-tabs" id="panelTabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="resumen-tab" data-toggle="tab" href="#resumen" role="tab">
-                     Resumen
+                    Resumen
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="graficas-tab" data-toggle="tab" href="#graficas" role="tab">
-                     Gráficas
+                    Gráficas
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="ranking-tab" data-toggle="tab" href="#ranking" role="tab">
-                     Ranking
+                    Ranking
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="indicadores-tab" data-toggle="tab" href="#indicadores" role="tab" aria-controls="indicadores" aria-selected="false">
-                     Indicadores
+                    Indicadores
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="alertas-tab" data-toggle="tab" href="#alertas" role="tab" aria-controls="alertas" aria-selected="false">
-                     Alertas de Documentación
+                    Alertas de Documentación
                 </a>
             </li>
             <li class="nav-item">
@@ -189,12 +189,12 @@
 
             <!-- TAB 3 RANKING -->
             <div class="tab-pane fade" id="ranking" role="tabpanel">
-
                 @if($vehiculoMasUsado)
                     <h4>
                         Vehículo más usado:
-                        {{ $vehiculoMasUsado->vehiculo->placa }}
-                        ({{ $vehiculoMasUsado->total }} salidas)
+                        {{ $vehiculoMasUsado->vehiculo->marca }}
+                        ({{ $vehiculoMasUsado->total }} salidas),
+                        Placa: {{ $vehiculoMasUsado->vehiculo->placa }}
                     </h4>
                 @endif
 
@@ -203,12 +203,14 @@
                     <thead>
                         <tr>
                             <th>Vehículo</th>
+                            <th>Placa</th>
                             <th>Total Salidas</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($topVehiculos as $item)
                         <tr>
+                            <td>{{ $item->vehiculo->marca ?? 'N/A' }}</td>
                             <td>{{ $item->vehiculo->placa ?? 'N/A' }}</td>
                             <td>{{ $item->total }}</td>
                         </tr>
@@ -251,8 +253,8 @@
         <div class="col-md-3">
             <div class="card shadow-sm border-0 bg-danger text-white">
                 <div class="card-body text-center py-4">
-                    <h6>Vehiculo Mas Usado</h6>
-                    <h5 class="fw-bold">{{ $vehiculoMasUsado->vehiculo->placa ?? 'N/A' }}</h5>
+                    <h6>Vehiculo Mas Usado123</h6>
+                    <h5 class="fw-bold">{{ $vehiculoMasUsado->vehiculo->marca ?? 'N/A' }}</h5>
                 </div>
             </div>
         </div>

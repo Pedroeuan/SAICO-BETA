@@ -115,7 +115,8 @@ class PanelController extends Controller
         $topVehiculos = $topVehiculosGrafica->take(5);
 
         $labelsVehiculos = $topVehiculosGrafica->map(function ($item) {
-            return $item->vehiculo->placa ?? 'N/A';
+            //return $item->vehiculo->marca ?? 'N/A' && $item->vehiculo->placa ? "{$item->vehiculo->marca} ({$item->vehiculo->placa})" : ($item->vehiculo->marca ?? 'N/A');
+            return $item->vehiculo->marca ?? 'N/A';
         })->values();
         $dataVehiculos = $topVehiculosGrafica->pluck('total')->values();
 
@@ -196,10 +197,10 @@ class PanelController extends Controller
             ->leftJoin('checklist_condiciones as cc', 'cc.salida_checklist_id', '=', 'sc.id')
             ->select(
                 'sv.vehiculo_id',
-                'v.placa',
+                'v.marca',
                 DB::raw("COUNT(DISTINCT CASE WHEN cc.observaciones IS NOT NULL AND TRIM(cc.observaciones) <> '' THEN sv.id END) as incidencias")
             )
-            ->groupBy('sv.vehiculo_id', 'v.placa')
+            ->groupBy('sv.vehiculo_id', 'v.marca')
             ->orderByDesc('incidencias')
             ->take(10)
             ->get();
@@ -218,7 +219,7 @@ class PanelController extends Controller
             ->value('total') ?? 0;
 
         $labelsIncidencias = $incidenciasPorVehiculo->map(function ($item) {
-            return $item->placa ?? 'N/A';
+            return $item->marca ?? 'N/A';
         })->values();
         $dataIncidencias = $incidenciasPorVehiculo->pluck('incidencias')->map(function ($value) {
             return (int) $value;
