@@ -1206,6 +1206,10 @@ $reportesDetalles_Generales[] = [
         {
             return redirect()->route('Reporte_FOR_01_INS_16.PDF', ['id' => $id]);
         }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-17")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_17.PDF', ['id' => $id]);
+        }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
         {
             return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);

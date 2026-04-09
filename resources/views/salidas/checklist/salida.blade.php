@@ -33,7 +33,7 @@
 </div>
 @endif
 
-<form method="POST"
+<form id="SalidaChecklist" method="POST"
     action="{{ route('salidas.checklist.salida.store', $salida->id) }}"
     enctype="multipart/form-data">
 @csrf
@@ -384,4 +384,39 @@ function nextTab(tabNum) {
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 
+<script>
+const reglas = {
+    liquido_limpiaparabrisas: ['suficiente','escaso','no_hay'],
+    aceite: ['suficiente','escaso','no_hay'],
+    anticongelante: ['suficiente','escaso','no_hay'],
+    liquido_frenos: ['suficiente','escaso','no_hay'],
+    estado_llantas: ['buen_estado','regular','malo'],
+    llanta_delantera_izq_calibracion: ['baja','normal','alta'],
+    llanta_delantera_der_calibracion: ['baja','normal','alta'],
+    llanta_trasera_izq_calibracion: ['baja','normal','alta'],
+    llanta_trasera_der_calibracion: ['baja','normal','alta']
+};
+
+document.getElementById('miFormulario').addEventListener('submit', function (e) {
+
+    let valido = true;
+
+    Object.keys(reglas).forEach(function(name) {
+
+        let select = document.querySelector(`[name="${name}"]`);
+        let valoresPermitidos = reglas[name];
+
+        if (!select.value || !valoresPermitidos.includes(select.value)) {
+            select.classList.add('is-invalid');
+            valido = false;
+        } else {
+            select.classList.remove('is-invalid');
+        }
+    });
+
+    if (!valido) {
+        e.preventDefault();
+    }
+});
+</script>
 @endsection
