@@ -6,8 +6,15 @@
 @section('css')
 <style>
     #my-notification .dropdown-menu {
-    max-height: 200px; /* Ajusta la altura según sea necesario */
-    overflow-y: auto;
+        max-height: 320px;
+        width: 360px;
+        max-width: 90vw;
+        overflow-y: auto;
+    }
+
+    #my-notification .dropdown-item {
+        white-space: normal;
+        word-break: break-word;
     }
 </style>
 @endsection
@@ -26,7 +33,7 @@
             <div class="card-body row">
 
                     <div class="col-5 text-center d-flex align-items-center justify-content-center">
-                        <div class>
+                        <div>
                             <h2>Registrar un nuevo usuario</h2>
                             <br>
                             <img src="{{ asset('images/usuario.png') }}" alt="logo-aico" width="340" height="350">
@@ -162,6 +169,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+
 <script>
 /*Prevenir el Enter*/
 document.getElementById('UsuarioForm').addEventListener('keydown', function(event) {
