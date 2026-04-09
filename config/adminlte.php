@@ -579,23 +579,23 @@ return [
                     [
                         'text' => 'Crear Reportes',
                         'icon' => 'far fa-file',
-                        'url' => '/Page_In_Construction',
+                        'url' => '/Menu/Servicios',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
 
-                        'url' => '/Page_In_Construction',
+                        'url' => '/index/ContratoProyecto',
                     ],
                     [
                         'text' => 'Registro de Pruebas',
                         'icon' => 'fas fa-indent',
-                        'url' => '/Page_In_Construction',
+                        'url' => '/Pruebas/Create',
                     ],
                     [
                         'text' => 'Pruebas',
                         'icon' => 'fas fa-table',
-                        'url' => '/Page_In_Construction',
+                        'url' => '/index/Pruebas',
 
                     ],
                 ],
@@ -612,12 +612,12 @@ return [
                         [
                             'text' => 'Registro OC',
                             'icon' => 'fas fa-chart-line',
-                            'url' => '/Page_In_Construction',
+                            'url' => '/OC/createOC',
                         ],
                         [
                             'text' => 'Ordenes de Compras',
                             'icon' => 'fas fa-clipboard-list',
-                            'url' => '/Page_In_Construction',
+                            'url' => '/OC/indexOC',
                         ],
                         
                     ],
