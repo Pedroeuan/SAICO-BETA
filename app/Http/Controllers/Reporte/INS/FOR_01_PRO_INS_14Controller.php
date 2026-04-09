@@ -181,8 +181,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
-
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria AGREGAR "S" a clientes
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -273,7 +272,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
             // Obtén el ID del cliente "POR DEFINIR"
             $idClientes = $NewCliente->idClientes; 
             $Orden_Servicio->idClientes = $idClientes;
-            $Orden_Servicio->Fecha = '2001/01/01';
+            $Orden_Servicio->Fecha = '2001-01-01';
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
@@ -614,7 +613,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 13;
+        $maxFilasPorBloque = 10;
 
         if (!empty($filasSinTitulo)) {
 
@@ -1033,7 +1032,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 11;
+        $maxFilasPorBloque = 10;
 
         if (!empty($filasSinTitulo)) {
 
@@ -1313,6 +1312,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
             $titulo = 'SIN TITULO';
             $resultados = [];
+            $longInspecc = null;
 
             // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
             if (is_array($grupo)) {
@@ -1348,11 +1348,23 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
                     $resultados = $grupo['resultados'];
                 }
+
+                if (array_key_exists('Long_Inspecc', $grupo)) {
+                    $longInspecc = $grupo['Long_Inspecc'];
+                }
+            }
+
+            // Normalizar Long_Inspecc a array para compatibilidad con la vista PDF
+            if ($longInspecc === null) {
+                $longInspecc = [];
+            } elseif (!is_array($longInspecc)) {
+                $longInspecc = [$longInspecc];
             }
 
             $normalizedGrupos[] = [
                 'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'resultados' => $resultados,
+                'Long_Inspecc' => $longInspecc,
             ];
         }
 

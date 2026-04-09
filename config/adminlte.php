@@ -579,23 +579,23 @@ return [
                     [
                         'text' => 'Crear Reportes',
                         'icon' => 'far fa-file',
-                        'url' => '/Menu/Servicios',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
 
-                        'url' => '/index/ContratoProyecto',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Registro de Pruebas',
                         'icon' => 'fas fa-indent',
-                        'url' => '/Pruebas/Create',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Pruebas',
                         'icon' => 'fas fa-table',
-                        'url' => '/index/Pruebas',
+                        'url' => '/Page_In_Construction',
 
                     ],
                 ],
@@ -612,12 +612,12 @@ return [
                         [
                             'text' => 'Registro OC',
                             'icon' => 'fas fa-chart-line',
-                            'url' => '/OC/createOC',
+                            'url' => '/Page_In_Construction',
                         ],
                         [
                             'text' => 'Ordenes de Compras',
                             'icon' => 'fas fa-clipboard-list',
-                            'url' => '/OC/indexOC',
+                            'url' => '/Page_In_Construction',
                         ],
                         
                     ],
@@ -633,8 +633,27 @@ return [
                         [
                             'text' => 'Inventario',
                             'icon' => 'far fa-clipboard',
-                            'url' => 'inventario',
-                            'can' => 'equipos-lab-access',
+                            'submenu' => 
+                            [
+                                [
+                                    'text' => 'Completo',
+                                    'icon' => 'far fa-clipboard',
+                                    'url' => 'inventario?view=inventario',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                                [
+                                    'text' => 'Calibraciones',
+                                    'icon' => 'fas fa-tachometer-alt',
+                                    'url' => 'inventario?view=calibraciones',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                                [
+                                    'text' => 'Mantenimientos',
+                                    'icon' => 'fas fa-tools',
+                                    'url' => 'inventario?view=mantenimientos',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                            ],
                         ],
                         [
                             'text' => ' Certificados',

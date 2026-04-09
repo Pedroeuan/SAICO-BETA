@@ -43,13 +43,15 @@ class general_eycController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     /*GENERAL*/
-    public function index()
+    public function index(Request $request)
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
+        // 'inventario' es el valor por defecto
+        $tipoVista = $request->query('view', 'inventario'); 
         // Obtener todos los equipos con sus certificados y almacen
         $general = general_eyc::get();
          // Filtrar según el rol
@@ -76,7 +78,19 @@ class general_eycController extends Controller
             $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial'])->get();
         }
 
-        return view('Equipos.index', compact('general','generalConCertificadosConAlmacenConISOConClasificacion','rol'));
+        // Definimos la ruta base de las vistas
+            $vista = 'Equipos.index'; // Default
+
+        if ($tipoVista === 'calibraciones') 
+            {
+                $vista = 'Equipos.calibraciones'; 
+            } 
+        elseif ($tipoVista === 'mantenimientos') 
+            {
+                $vista = 'Equipos.mantenimientos';
+            }
+
+        return view($vista, compact('general','generalConCertificadosConAlmacenConISOConClasificacion','rol'));
                     /*vista*/    /*variable donde se guardan los datos*/
     }
 

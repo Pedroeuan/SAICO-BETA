@@ -931,7 +931,7 @@
 
                                         <p>
 
-                        <!--IMAGENES CON COMENTARIOS-->
+                                        <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
                                             <label for="imageCount">Número de imágenes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -1213,13 +1213,13 @@ $(document).ready(function() {
             }
 
             // ✅ Contar título o fila normal
-            if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+            if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
                 contadorBloque++;
                 $ultimoElementoBloque = $row;
             }
             //-----------------------------------------Hacer ajuste de "N" filas por bloque
             // 🎯 Cuando llegue a 11 → insertar longitud
-            if (contadorBloque === 11) {
+            if (contadorBloque === 10) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 

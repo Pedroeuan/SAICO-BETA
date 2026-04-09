@@ -15,6 +15,7 @@ class ChecklistCondicion extends Model
         'liquido_limpiaparabrisas',
         'aceite',
         'anticongelante',
+        'liquido_frenos',
         'estado_llantas',
         'llanta_delantera_izq_calibracion',
         'llanta_delantera_der_calibracion',

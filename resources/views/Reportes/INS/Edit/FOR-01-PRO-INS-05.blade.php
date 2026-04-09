@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <style>
-        table {
+         table {
             width: 100%; /* Opcional: Para que ocupe todo el ancho disponible */
             border-collapse: collapse; /* Elimina los espacios entre bordes */
         }
@@ -103,7 +103,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Cliente</label>
-                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}">
+                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}" readonly>
                             @error('Cliente')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -113,7 +113,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Contrato</label>
-                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}">
+                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
                             @error('Contrato')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -285,24 +285,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">TRANSDUCTORES</div>
-
-                    {{--<div class="col-sm-50 d-flex justify-content-center">
-                        <div class="form-group text-center">
-                            <label class="col-form-label" for="inputSuccess">Transductores:</label>
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                            <option value="" selected disabled>Seleccione un Transductor</option> <!-- Opción por defecto -->
-                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach 
-                            </select>
-                        </div>
-                    </div> --}}
+                    <div class="d-flex justify-content-center align-items-center p-3 mb-2 bg-secondary text-white rounded">TRANSDUCTORES</div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -413,7 +396,7 @@
                         </div>
                     </div>
 
-                                        <div class="col-sm-6">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
                             <input type="text" class="form-control  inputForm" name="Datos_Equipo[BLOQUES3_MARCA]" placeholder="" value="{{old('Datos_Equipo.BLOQUES3_MARCA', $Datos_Equipo['BLOQUES3_MARCA'] ?? '')}}">
@@ -486,110 +469,153 @@
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">RESULTADOS</div>
-                    
-                    <div style="margin-bottom: 2px;"></div>
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                                    
+                        <div style="margin-bottom: 5px;"></div>
 
-                    <div class="table-responsive">
-                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
-                        <div class="alert alert-warning alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <h5><i class="icon fas fa-info"></i> Importante</h5>
-                            <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
-                        </div>
-                        <thead>
-                            <tr>
-                                <th style="width:40px ">#</th>
-                                <th>No.</th>
-                                <th>Dibujo</th>
-                                <th>Soldadura</th>
-                                <th>Evaluación</th>
-                                <th>Forma</th>
-                                <th>Transfer</th>
-                                <th>Longitud</th>
-                                <th>Ancho</th>
-                                <th>Observaciones</th>
-                                <th>Eliminar</th>
-                            </tr>
-
-                            <tr id="inputRow">
-                                <th></th> <!-- Para ID vacío -->
-                                <th><input type="text" class="form-control default-input" data-column="1"></th>
-                                <th><input type="text" class="form-control default-input" data-column="2"></th>
-                                <th><input type="text" class="form-control default-input" data-column="3"></th>
-                                <th><input type="text" class="form-control default-input" data-column="4"></th>
-                                <th><input type="text" class="form-control default-input" data-column="5"></th>
-                                <th><input type="text" class="form-control default-input" data-column="6"></th>
-                                <th><input type="text" class="form-control default-input" data-column="7"></th>
-                                <th><input type="text" class="form-control default-input" data-column="8"></th>
-                                <th><input type="text" class="form-control default-input" data-column="9"></th>
-                                <th></th> <!-- Para botón de eliminar -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $contador = 1;
-                            @endphp
-                            @foreach ($Grupo_Juntas_Re as $grupo)
-                                                    @php
-                                                        $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                        $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                                    @endphp
-
-                                                    @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                        <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
-                                                        <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
-                                                            <td colspan="10">
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                                                
-                                                                                <i class="fa fa-times"  aria-hidden="true"></i>
-                                                                        </button>
-                                                                    </td>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                @endif
-
-                                @foreach ($grupo['resultados'] as $resultado)
-                                    <tr data-titulo="{{ $tituloKey }}">
-                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                        <td><input type="text" class="form-control" name='No[{{ $tituloKey }}][]' value="{{ $resultado['No'] }}"></td>
-                                        <td><input type="text" class="form-control" name='dibujo[{{ $tituloKey }}][]' value="{{ $resultado['dibujo'] }}"></td>
-                                        <td><input type="text" class="form-control" name='soldadura[{{ $tituloKey }}][]' value="{{ $resultado['soldadura'] }}"></td>
-                                        <td><input type="text" class="form-control" name='evaluacion[{{ $tituloKey }}][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                        <td><input type="text" class="form-control" name='forma[{{ $tituloKey }}][]' value="{{ $resultado['forma'] }}"></td>
-                                        <td><input type="text" class="form-control" name='transfer[{{ $tituloKey }}][]' value="{{ $resultado['transfer'] }}"></td>
-                                        <td><input type="text" class="form-control" name='longitud[{{ $tituloKey }}][]' value="{{ $resultado['longitud'] }}"></td>
-                                        <td><input type="text" class="form-control" name='ancho[{{ $tituloKey }}][]' value="{{ $resultado['ancho'] }}"></td>
-                                        <td><input type="text" class="form-control" name='observaciones[{{ $tituloKey }}][]' value="{{ $resultado['observaciones'] }}"></td>
-                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                                    </tr>
-                                    @php $contador++; @endphp
-                                @endforeach
-                            @endforeach
-                        </tbody>
-                    </table>
-                    </div>
-
-                    <p>
-
-                        <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
-                        <div class="d-flex justify-content-between align-items-center w-100 mb-3">
-                            <div>
-                                <label for="numRows">Número de Filas:</label>
-                                <select id="numRows" class="form-select">
-                                    @for ($i = 1; $i <= 500; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                        <div class="table-responsive">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
                             </div>
+                        <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>No.</th>
+                                    <th>Dibujo</th>
+                                    <th>Soldadura</th>
+                                    <th>Evaluación</th>
+                                    <th>Forma</th>
+                                    <th>Transfer</th>
+                                    <th>Longitud</th>
+                                    <th>Ancho</th>
+                                    <th>Observaciones</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                                
+                                <tr id="inputRow">
+                                    <th></th> <!-- Para ID vacío -->
+                                    <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                    <th></th> <!-- Para botón de eliminar -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @php $contador = 1; @endphp
+
+                            @foreach ($Grupo_Juntas_Re as $index => $grupo)
+
+                            @php
+                                $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
+
+                                /*$titleId = $esSinTitulo
+                                    ? 'sin_titulo_' . $index   // 👈 único por bloque
+                                    : 'titulo_' . $index;*/
+                                $titleId = $esSinTitulo
+                                    ? 'sin_titulo'
+                                    : 'titulo_' . $index;
+
+                            @endphp
+
+                            {{-- 🔹 TÍTULO --}}
+                            @if (!$esSinTitulo)
+                            <tr class="titulo-row" data-titulo="{{ $titleId }}">
+                                <td colspan="10">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <input type="text"
+                                            class="form-control w-90 titulo-text"
+                                            name="titulos_text[{{ $titleId }}]"
+                                            value="{{ $grupo['titulos_juntas'] }}"
+                                            placeholder="Ingrese título...">
+
+                                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
+
+                                        <td>
+                                            <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endif
+
+                            {{-- 🔹 FILAS --}}
+                            @foreach ($grupo['resultados'] as $resultado)
+                            <tr data-titulo="{{ $titleId }}">
+                                <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                <td><input type="text" class="form-control" name="No[{{ $titleId }}][]" value="{{ $resultado['No'] }}"></td>
+                                <td><input type="text" class="form-control" name="dibujo[{{ $titleId }}][]" value="{{ $resultado['dibujo'] }}"></td>
+                                <td><input type="text" class="form-control" name="soldadura[{{ $titleId }}][]" value="{{ $resultado['soldadura'] }}"></td>
+                                <td><input type="text" class="form-control" name="evaluacion[{{ $titleId }}][]" value="{{ $resultado['evaluacion'] }}"></td>
+                                <td><input type="text" class="form-control" name="forma[{{ $titleId }}][]" value="{{ $resultado['forma'] }}"></td>
+                                <td><input type="text" class="form-control" name="transfer[{{ $titleId }}][]" value="{{ $resultado['transfer'] }}"></td>
+                                <td><input type="text" class="form-control" name="longitud[{{ $titleId }}][]" value="{{ $resultado['longitud'] }}"></td>
+                                <td><input type="text" class="form-control" name="ancho[{{ $titleId }}][]" value="{{ $resultado['ancho'] }}"></td>
+                                <td><input type="text" class="form-control" name="observaciones[{{ $titleId }}][]" value="{{ $resultado['observaciones'] }}"></td>
+                                <td>    
+                                <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @php $contador++; @endphp
+                            @endforeach
+
+                            {{-- 🔹 LONGITUD INSPECCIONADA --}}
+                            @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
+                                @foreach ($grupo['Long_Inspecc'] as $long)
+                                    <tr class="long-row" data-titulo="{{ $titleId }}">
+                                        <td colspan="9">Longitud Inspeccionada</td>
+
+                                        <td>
+                                            <input type="text"
+                                                class="form-control long-text"
+                                                name="Long_Inspecc[{{ $titleId }}][]"
+                                                value="{{ $long }}"
+                                                placeholder="Ingrese Longitud Inspeccionada...">
+                                        </td>
+
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btnEliminar">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+
+                            @endforeach
+
+                        </tbody>
+                        </table>
+                    </div>
+                    <input type="hidden" id="titulos_hidden" name="titulos_hidden">
+                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                        <div>
+                            <label for="numRows">Número de Filas:</label>
+                            <select id="numRows" class="form-select">
+                                @for ($i = 1; $i <= 500; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
 
                             <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
                             <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                            <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                         </div>
@@ -842,6 +868,18 @@
                                                                 <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
                                                             </div>
 
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox"
+                                                                    class="form-check-input imagen-hoja-checkbox"
+                                                                    data-index="{{ $index }}"
+                                                                    id="imagenHoja{{ $index }}"
+                                                                    {{ !empty($foto['una_hoja']) && $foto['una_hoja'] == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="imagenHoja{{ $index }}">
+                                                                    Imagen en una hoja
+                                                                </label>
+                                                            </div>
+
+                                                             <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}">
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
@@ -944,20 +982,24 @@
 
 <script>
     /*Juntas-Resultados */
-    $(document).ready(function() {
-        let tituloCount = 0;
-        let rowCount = 0;
-        let rowCountGlobal = 0;
+$(document).ready(function() {
+    let tituloCount = $('.titulo-row').length;
+    //let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+    let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
+    let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+            <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="10">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
@@ -970,10 +1012,40 @@
         updateTitulos(); // Actualizar lista de títulos
         });
 
-        $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
+        $('#addLongBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
+                <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="9"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        });
+
+        $('#addBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            // Recontar filas existentes que NO son títulos
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -981,9 +1053,8 @@
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
             let newRow = 
-
             `<tr data-titulo="${lastTitle}">
-                <td class="text-center align-middle">${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
                 <td><input type="text" class="form-control" name="No[${lastTitle}][]" value="${rowCountGlobal}" placeholder="No"></td>
                 <td><input type="text" class="form-control" name="dibujo[${lastTitle}][]" placeholder="Dibujo"></td>
                 <td><input type="text" class="form-control" name="soldadura[${lastTitle}][]" placeholder="Soldadura"></td>
@@ -993,10 +1064,12 @@
                 <td><input type="text" class="form-control" name="longitud[${lastTitle}][]" placeholder="Longitud"></td>
                 <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
                 <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
             </tr>`;
                 $('#dynamicTable tbody').append(newRow);
+
             }
+            verificarYAgregarLongitud();
         }
     );
 
@@ -1011,10 +1084,11 @@
                 });
                 return;
             }
-
+            // Actualizar el campo oculto con [{id,text},...]
+            updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');
@@ -1022,9 +1096,68 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-            // Restaurar datos al cargar la página
-        //restoreData();
-    });
+});
+
+function verificarYAgregarLongitud() {
+
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+
+        let contadorBloque = 0;
+        let $ultimoElementoBloque = null;
+
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            //  Ignorar longitudes existentes (no cuentan)
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+                return;
+            }
+
+            // Contar título o fila normal
+            if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
+                contadorBloque++;
+                $ultimoElementoBloque = $row;
+            }
+            //-----------------------------------------Hacer ajuste de "N" filas por bloque
+            // Cuando llegue a 11 → insertar longitud
+            if (contadorBloque === 10) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="9">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text"
+                                    class="form-control w-90 long-text"
+                                    name="Long_Inspecc[${lastTitle}][]"
+                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                //  Evitar duplicados
+                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                    $ultimoElementoBloque.after(newLong);
+                }
+
+                //  Reiniciar contador para siguiente bloque
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+            }
+        });
+    }
+
 
     $(document).ready(function() {
         function actualizarInputsE() {
@@ -1046,7 +1179,211 @@
                 actualizarInputsE();
             });
 
-        });
+            function actualizarInputsbyp() {
+                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
+                // Extraer los datos de los atributos "data-"
+                var nombre = selectedOption.data('nombre') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#nombreInputbyp').val(nombre);
+                $('#nsInputbyp').val(ns);
+            }
+
+            // Evento cuando se cambia la selección en el select
+            $('#blockyprobetaSelect').on('change', function() {
+                actualizarInputsbyp();
+            });
+
+            function actualizarInputsA1() {
+                var selectedOption = $('#accesoriosSelect1').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA1').val(marca);
+                $('#modeloInputA1').val(modelo);
+                $('#nsInputA1').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect1').on('change', function() {
+                    actualizarInputsA1();
+                });
+
+            function actualizarInputsA2() {
+                var selectedOption = $('#accesoriosSelect2').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA2').val(marca);
+                $('#modeloInputA2').val(modelo);
+                $('#nsInputA2').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect2').on('change', function() {
+                    actualizarInputsA2();
+                });
+
+            function actualizarInputsA3() {
+                var selectedOption = $('#accesoriosSelect3').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA3').val(marca);
+                $('#modeloInputA3').val(modelo);
+                $('#nsInputA3').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect3').on('change', function() {
+                    actualizarInputsA3();
+                });
+
+            function actualizarInputsA4() {
+                var selectedOption = $('#accesoriosSelect4').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA4').val(marca);
+                $('#modeloInputA4').val(modelo);
+                $('#nsInputA4').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect4').on('change', function() {
+                    actualizarInputsA4();
+                });
+
+            function actualizarInputsA5() {
+                var selectedOption = $('#accesoriosSelect5').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA5').val(marca);
+                $('#modeloInputA5').val(modelo);
+                $('#nsInputA5').val(ns);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect5').on('change', function() {
+                    actualizarInputsA5();
+                });
+
+            function actualizarInputsA6() {
+                var selectedOption = $('#accesoriosSelect6').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA6').val(marca);
+                $('#modeloInputA6').val(modelo);
+                $('#nsInputA6').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect6').on('change', function() {
+                    actualizarInputsA6();
+                });
+
+            function actualizarInputsA7() {
+                var selectedOption = $('#accesoriosSelect7').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA7').val(marca);
+                $('#modeloInputA7').val(modelo);
+                $('#nsInputA7').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect7').on('change', function() {
+                    actualizarInputsA7();
+                });
+
+            function actualizarInputsA8() {
+                var selectedOption = $('#accesoriosSelect8').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA8').val(marca);
+                $('#modeloInputA8').val(modelo);
+                $('#nsInputA8').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect8').on('change', function() {
+                    actualizarInputsA8();
+                });
+
+        function actualizarInputsE2() {
+            var selectedOption = $('#equiposSelect2').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE2').val(marca);
+            $('#modeloInputE2').val(modelo);
+            $('#nsInputE2').val(ns);
+        }
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect2').on('change', function() {
+                actualizarInputsE2();
+            });
+
+            function actualizarInputsE3() {
+            var selectedOption = $('#equiposSelect3').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE3').val(marca);
+            $('#modeloInputE3').val(modelo);
+            $('#nsInputE3').val(ns);
+        }
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect3').on('change', function() {
+                actualizarInputsE3();
+            });
+    });
 </script>
 @endsection

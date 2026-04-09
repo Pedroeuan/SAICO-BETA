@@ -585,8 +585,13 @@ class VehiculoController extends Controller
      */
     public function destroy(string $id)
     {
-        Vehiculo::findOrFail($id)->delete();
+        Vehiculo::findOrFail($id)->first();
 
+        $vehiculo = Vehiculo::findOrFail($id);
+        $vehiculo->update([
+            'estatus' => 'baja',
+        ]);
+        
         return redirect()->route('vehiculos.index')->with('success', 'Vehiculo eliminado');
 
     }

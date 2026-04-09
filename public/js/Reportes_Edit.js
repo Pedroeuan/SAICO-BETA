@@ -97,8 +97,7 @@
                 // Actualizar el campo oculto con la imagen en base64
                 const base64Input = currentInput.closest('.form-group').querySelector('input[type="hidden"][name^="images_base64"]');
                 if (base64Input) {
-                    //base64Input.value = base64data;
-                    base64Input.value = "";
+                    base64Input.value = base64data;
                 }
             }
             $('#cropperModal').modal('hide');
@@ -168,16 +167,27 @@
     });
 
     function bindImagenHojaCheckboxes() {
-    document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
-        cb.addEventListener('change', function () {
-            const index = this.dataset.index;
+        document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
+            const index = cb.dataset.index;
             const hidden = document.getElementById(`imagenHojaValue${index}`);
+
             if (hidden) {
-                hidden.value = this.checked ? 1 : 0;
+                hidden.value = cb.checked ? 1 : 0;
             }
+
+            if (cb.dataset.imagenHojaBound === '1') {
+                return;
+            }
+
+            cb.dataset.imagenHojaBound = '1';
+            cb.addEventListener('change', function () {
+                const hiddenField = document.getElementById(`imagenHojaValue${index}`);
+                if (hiddenField) {
+                    hiddenField.value = this.checked ? 1 : 0;
+                }
+            });
         });
-    });
-}
+    }
 
 
     // Generar campos de imágenes
@@ -185,6 +195,12 @@
         const imageCountSelect = document.getElementById('imageCount');
         const container = document.getElementById('imageFieldsContainer');
         const cropperImage = document.getElementById('cropperImage');
+
+        bindImagenHojaCheckboxes();
+
+        if (!imageCountSelect || !container) {
+            return;
+        }
 
 
         imageCountSelect.addEventListener('change', function () {
@@ -198,16 +214,15 @@
 
             // Calcular desde qué índice empezar (considerando imágenes del servidor)
             const existingCount = document.querySelectorAll('[id^="image-container-"]').length;
-            let startIndex = existingCount; // Si tienes 3 imágenes cargadas, aquí vale 3
-
-            for (let i = 1; i <= count; i++) {
-                const index = startIndex + i; // Comenzamos desde el consecutivo real
+            for (let i = 0; i < count; i++) {
+                const index = existingCount + i;
+                const displayIndex = index + 1;
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
                 col.setAttribute('id', `image-container-${index}`);
                 col.innerHTML = `
                     <div class="form-group">
-                        <label for="image${index}">Imagen por Subir ${index}:</label>
+                        <label for="image${index}">Imagen por Subir ${displayIndex}:</label>
                         <input type="file" class="form-control image-input" id="image${index}" accept="image/*">
 
                         <div class="form-check mt-2">
@@ -218,8 +233,8 @@
                         </div>
                         <input type="hidden" name="imagen_hoja[${index}]" id="imagenHojaValue${index}" value="0">
                         <div class="image-preview mt-2" id="image${index}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
-                        <input type="hidden" name="images_base64[]" id="image${index}-base64">
+                        <textarea class="form-control mt-2" name="comments[${index}]" id="comment${index}" placeholder="Comentario"></textarea>
+                        <input type="hidden" name="images_base64[${index}]" id="image${index}-base64">
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${index}">Eliminar</button>
                     </div>
                 `;
@@ -312,8 +327,10 @@
                 }
                 // Si ninguno tiene valor, dejar como originalmente en blade
             });
+
+            bindImagenHojaCheckboxes();
         }
-        bindImagenHojaCheckboxes();
+
         // Limpiar localStorage al enviar el formulario
         document.querySelector("form").addEventListener("submit", function () {
             localStorage.removeItem('imageCount');
@@ -369,7 +386,12 @@
         var titulos = [];
         $('.titulo-row').each(function() {
             const id = $(this).data('titulo');
-            const text = $(this).find('.titulo-text').val() || '';
+            const $row = $(this);
+            const text =
+                $row.find('.titulo-text').first().val() ||
+                $row.find('input[name="titulos[]"]').first().val() ||
+                $row.find('input[name^="titulos_text["]').first().val() ||
+                '';
             titulos.push({ id: id, text: text });
         });
         $('#titulos_hidden').val(JSON.stringify(titulos));
@@ -382,7 +404,9 @@
             
             // Eliminar la fila del título
             tituloRow.remove();
-            verificarYAgregarLongitud();
+            if (typeof verificarYAgregarLongitud === 'function') {
+                verificarYAgregarLongitud();
+            }
             // Eliminar todas las filas que tengan el mismo data-titulo
             $(`#dynamicTable tbody tr[data-titulo="${tituloId}"]`).remove();
 
@@ -390,13 +414,27 @@
         });
 
         /*Cambia el data-titulo y guarda en sesionstorage */
-        $(document).on('input', '.titulo-row .titulo-text', function () {
+        $(document).on('input', '.titulo-row input[name="titulos[]"]', function () {
             updateTitulos();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (document.getElementById('titulos_hidden')) {
+                updateTitulos();
+            }
+        });
+
+        document.addEventListener('submit', function () {
+            if (document.getElementById('titulos_hidden')) {
+                updateTitulos();
+            }
         });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
-            verificarYAgregarLongitud();
+            if (typeof verificarYAgregarLongitud === 'function') {
+                verificarYAgregarLongitud();
+            }
             updateRowNumbers();
         });
 
@@ -454,8 +492,8 @@
 
 
         textareas.forEach(textarea => {
-            // Verificar si es textarea de comentarios (tiene name="comments[]" y id)
-            if (textarea.name === "comments[]" && textarea.id) {
+            // Verificar si es textarea de comentarios y usar id cuando exista
+            if ((textarea.name === "comments[]" || textarea.name.startsWith("comments[")) && textarea.id) {
                 // Guardar usando id como clave
                 const stored = localStorage.getItem(`${formId}_${textarea.id}`);
                 if (stored !== null) textarea.value = stored;
@@ -480,7 +518,12 @@
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
                     if (input.value.trim() === "") {
-                        input.value = "---";
+                        if (input.type === "date") {
+                            // poner fecha actual
+                            input.value = new Date().toISOString().split('T')[0];
+                        } else if (input.type !== "file") {
+                            input.value = "---";
+                        }
                         localStorage.setItem(`${formId}_${input.name}`, input.value);
                     }
                 });

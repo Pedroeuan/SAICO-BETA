@@ -50,7 +50,7 @@
                         <td>{{ $Usuario->name }}</td>
                         <td>{{ $Usuario->email}}</td>
                         <td>{{ $Usuario->rol }}</td>
-                        <td>{{ $Usuario->formatted_date }}</td>
+                        <td>{{ $Usuario->created_at}}</td>
                         <td>{{ $Usuario->Estatus }}</td>
                         @if($rol == 'Administrador' && $Usuario->rol == 'Super Administrador')
                             <td>

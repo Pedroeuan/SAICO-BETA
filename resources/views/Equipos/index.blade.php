@@ -5,9 +5,6 @@
 
 
 @section('css')
-<!--datatable -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
 
 <style>
     #tablaJs td {
@@ -54,6 +51,17 @@
     #tablaJs {
         width: auto !important;
     }
+    .toggle-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .toggle-container label {
+        font-size: 12px;
+        cursor: pointer;
+    }
 </style>
 @endsection
 
@@ -66,6 +74,7 @@
         <div class="box-body d-flex justify-content-center">
         <div style="display: inline-block;">
         <h3 align="center">Inventario</h3>
+        <h6 align="center">Filtro</h6>
         <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
                     <thead>
@@ -89,13 +98,46 @@
                         </tr>
                     </tbody>
                 </table> -->
+                <div class="mb-3 text-center toggle-container">
+                <label><input type="checkbox" class="toggle-col" data-col="0" checked>Categoria</label>
+                <label><input type="checkbox" class="toggle-col" data-col="1" checked>ID</label>
+                <label><input type="checkbox" class="toggle-col" data-col="2" checked>Nombre</label>
+                <label><input type="checkbox" class="toggle-col" data-col="3" checked>Marca</label>
+                <label><input type="checkbox" class="toggle-col" data-col="4" checked>Modelo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="5" checked>NS</label>
+                <label><input type="checkbox" class="toggle-col" data-col="6" checked>Lote</label>
+                <label><input type="checkbox" class="toggle-col" data-col="7" checked>Stock</label>
+                <label><input type="checkbox" class="toggle-col" data-col="8" checked>Disponibilidad</label>
+                <label><input type="checkbox" class="toggle-col" data-col="9" checked>Ubicación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="10" checked>Factura</label>
+                <label><input type="checkbox" class="toggle-col" data-col="11" checked>No.Certificado</label>
+                <label><input type="checkbox" class="toggle-col" data-col="12" checked>Certificado</label>
+                <label><input type="checkbox" class="toggle-col" data-col="13" checked>Prox. Fecha Calibración/Caducidad</label> <!--10 -->
+                <label><input type="checkbox" class="toggle-col" data-col="14" checked>Días Restantes Cal</label>
+                <label><input type="checkbox" class="toggle-col" data-col="15" checked>Mantenimiento Preventivo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="16" checked>Intervalo de Tiempo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="17" checked>Numero de Reporte</label>
+                <label><input type="checkbox" class="toggle-col" data-col="18" checked>Fecha Mantenimiento</label>
+                <label><input type="checkbox" class="toggle-col" data-col="19" checked>Prox. Fecha Mantenimiento</label>
+                <label><input type="checkbox" class="toggle-col" data-col="20" checked>Días Restantes Man</label>
+                <label><input type="checkbox" class="toggle-col" data-col="21" checked>Presentación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="22" checked>Editar</label>
+                <label><input type="checkbox" class="toggle-col" data-col="23" checked>Baja</label>
+                <br>
+                <label><input type="checkbox" id="checkEquipos"> Equipos</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkBlock"> Block</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkAccesorios"> Accesorios</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkHerramientas"> Herramientas</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkConsumibles"> Consumibles</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkMes"> Mes Actual</label>
 
+            </div>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Categoria</th>
-                        <th>Nombre</th>
                         <th>Numero/ID</th>
+                        <th>Nombre</th>
                         <th>Marca</th>
                         <th>Modelo</th>
                         <th>NS</th>
@@ -103,8 +145,17 @@
                         <th>Stock</th>
                         <th>Disponibilidad</th>
                         <th>Ubicación</th>
+                        <th>Factura</th>
+                        <th>No.Certificado</th>
+                        <th>Certificado</th>
                         <th>Prox.Fecha Calibración/Caducidad</th>
-                        <th>Días Restantes</th>
+                        <th>Días Restantes Cal</th>
+                        <th>Mantenimiento Preventivo</th>
+                        <th>Intervalo de Tiempo</th>
+                        <th>Numero de Reporte</th>
+                        <th>Fecha Mantenimiento</th>
+                        <th>Prox.Fecha Mantenimiento</th>
+                        <th>Días Restantes Man</th>
                         <th>Presentación</th>
                         <th>Editar</th>
                         <th>Baja</th>
@@ -113,15 +164,23 @@
                 <tbody>
                     @foreach ($generalConCertificadosConAlmacenConISOConClasificacion as $general_eyc)
                         <tr>
-                            @if($general_eyc)
+                                <!-- Categoria --> 
                                 <td scope="row">@if($general_eyc->Tipo === 'BLOCK Y PROBETA') BLOCK @else {{ $general_eyc->Tipo}} @endif</td>
-                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                                <!-- Numero/ID --> 
                                 <td scope="row">{{$general_eyc->No_economico}}</td>
+                                <!-- Nombre --> 
+                                <td scope="row">{{$general_eyc->Nombre_E_P_BP}}</td>
+                                <!-- Marca --> 
                                 <td scope="row">{{$general_eyc->Marca}}</td>
+                                <!-- Modelo --> 
                                 <td scope="row">{{$general_eyc->Modelo}}</td>
+                                <!-- Serie --> 
                                 <td scope="row">{{$general_eyc->Serie}}</td>
+                                <!-- Lote --> 
                                 <td scope="row">{{$general_eyc->almacen->Lote}}</td>
+                                <!-- Stock --> 
                                 <td scope="row">{{$general_eyc->almacen->Stock}}</td>
+                                <!-- Disponibilidad --> 
                                 @if($general_eyc->Disponibilidad_Estado=='DISPONIBLE')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-success">Disponible<i class="fa fa-check" aria-hidden="true"></i></td>
                                     @elseif($general_eyc->Disponibilidad_Estado=='Equipo Disponible')
@@ -139,59 +198,169 @@
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
                                 @endif
-                            @endif
-                            <td>
-                                {{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}
-                            </td> 
-                            @if($general_eyc->certificados)
+                                <!-- Ubicación --> 
+                                <td>{{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}</td>
+                                <!-- Factura --> 
+                                <td scope="row"> 
+                                    @if ($general_eyc->Factura != 'ESPERA DE DATO')
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Factura) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                        @elseif($general_eyc->Factura == 'ESPERA DE DATO')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @endif
+                                </td>
+                                <!-- No Certificado --> 
+                                <td scope="row">{{$general_eyc->certificados->No_certificado}}</td>
+                                <!-- Certificado Actual --> 
+                                <td scope="row"> 
+                                    @if ($general_eyc->certificados->Certificados_Actual != 'ESPERA DE DATO')
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->certificados->Certificados_Actual) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
+                                        @elseif($general_eyc->certificados->Certificados_Actual == 'ESPERA DE DATO')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @endif
+                                </td> 
+                                <!-- Fecha Calibración/Caducidad -->  
                                     @if($general_eyc->Tipo=='EQUIPOS' || $general_eyc->Tipo=='CONSUMIBLES' || $general_eyc->Tipo=='BLOCK Y PROBETA')
                                             @if($general_eyc->certificados->Fecha_calibracion == '2001-01-01')
-                                                    <td scope="row">SIN FECHA ASIGNADA</td>
+                                                    <td scope="row" data-fecha="">SIN FECHA ASIGNADA</td>
+                                                    <!-- Días Restantes -->  
                                                     <td scope="row">-</td>
                                                 @elseif($general_eyc->Tipo=='CONSUMIBLES')
-                                                    <td scope="row">{{$general_eyc->certificados->formatted_date}}</td>
+                                                    <!-- Caducidad -->
+                                                    <td scope="row" data-fecha="{{$general_eyc->certificados->Fecha_calibracion}}">
+                                                        {{$general_eyc->certificados->formatted_date}}
+                                                    </td>
+                                                    <!-- Días Restantes -->
                                                     <td scope="row">
-                                                        {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) ) 
+                                                        {{ 
+                                                        ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) ) 
                                                             <= 0 ? 'CADUCADO' : 
-                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) }}
+                                                        (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Fecha_calibracion), false) 
+                                                        }}
                                                     </td>
                                                 @else
+                                                    <!-- Prox.Fecha Calibración/Caducidad si no es Fecha_calibracion == '2001-01-01'-->
                                                     @if($general_eyc->certificados->Prox_fecha_calibracion == '2001-01-01')
-                                                    <td scope="row">SIN FECHA ASIGNADA</td>
-                                                    <td scope="row">-</td>
+                                                        <!-- Prox.Fecha Calibración/Caducidad -->
+                                                        <td scope="row" data-fecha="">SIN FECHA ASIGNADA</td>
+                                                        <!-- Días Restantes -->
+                                                        <td scope="row">-</td>
                                                     @else
-                                                        <td scope="row">{{$general_eyc->certificados->formatted_date2}}</td>
+                                                        <!-- Prox.Fecha Calibración/Caducidad -->
+                                                        <td scope="row" data-fecha="{{$general_eyc->certificados->Prox_fecha_calibracion}}">
+                                                            {{$general_eyc->certificados->formatted_date2}}
+                                                        </td>
+                                                        <!-- Días Restantes -->
                                                         <td scope="row">
-                                                            {{ ( (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) ) 
+                                                            {{ 
+                                                            ((int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false)) 
                                                                 <= 0 ? 'VENCIDO' : 
-                                                                (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) }}
+                                                            (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_calibracion), false) 
+                                                            }}
                                                         </td>
                                                     @endif
                                             @endif
                                         @else
-                                            <td scope="row">N/A</td>
+                                            <!-- Fecha Calibración/Caducidad --> 
+                                            <td scope="row" data-fecha="">N/A</td>
+                                            <!-- Días Restantes --> 
                                             <td scope="row">N/A</td>
                                     @endif
-                                            <td scope="row"> 
+
+                                    @if($general_eyc->iso->Frec_Cali_Mant_Prev == 'ESPERA DE DATO')
+                                        <!-- Mantenimiento Preventivo --> 
+                                        <td scope="row">NO ASIGNADO</td>
+                                    @elseif($general_eyc->iso->Frec_Cali_Mant_Prev == 'N/A')
+                                        <!-- Mantenimiento Preventivo --> 
+                                        <td scope="row">N/A</td>
+                                    @else
+                                        <!-- Mantenimiento Preventivo -->
+                                        <td scope="row">{{$general_eyc->iso->Frec_Cali_Mant_Prev}}</td>
+                                    @endif
+
+                                    @if($general_eyc->iso->Frec_Man_Inter_Time == 'N/A')
+                                        <!-- INTERVALO DE TIEMPO --> 
+                                        <td scope="row">N/A</td>
+                                    @elseif($general_eyc->iso->Frec_Man_Inter_Time ==  'ESPERA DE DATO')
+                                        <!-- INTERVALO DE TIEMPO --> 
+                                        <td scope="row">SIN INTERVALO ASIGNADO</td>
+                                    @else
+                                        <!-- INTERVALO DE TIEMPO -->
+                                        <td scope="row">{{$general_eyc->iso->Frec_Man_Inter_Time}}</td>
+                                    @endif
+
+                                    @if($general_eyc->equipos)
+                                        @if($general_eyc->equipos->Num_Reporte == 'ESPERA DE DATO')
+                                        <td scope="row">SIN REPORTE ASIGNADO</td>
+                                        @else
+                                            <!-- NUMERO DE REPORTE -->
+                                            <td scope="row">{{$general_eyc->equipos->Num_Reporte}}</td>
+                                        @endif
+                                    @else
+                                        <td scope="row">N/A</td>
+                                    @endif
+                                    @if($general_eyc->certificados->Fecha_mantenimiento == '2001-01-01')
+                                        <!-- fecha de mantenimiento --> 
+                                        <td scope="row" data-fecha="">SIN FECHA ASIGNADA / N/A</td>
+                                    @else
+                                        <!-- fecha de mantenimiento -->
+                                        <td scope="row" data-fecha="{{$general_eyc->certificados->Fecha_mantenimiento}}">
+                                            {{$general_eyc->certificados->formatted_date5}}
+                                        </td>
+                                    @endif
+
+                                        <!-- Prox Fecha de Mantenimiento -->
+                                    @if($general_eyc->certificados->Prox_fecha_mantenimiento == '2001-01-01')
+                                        <!-- Proxima fecha de mantenimiento --> 
+                                        <td scope="row" data-fecha="">SIN FECHA ASIGNADA / N/A</td>
+                                        <!-- Días Restantes --> 
+                                        <td scope="row">-</td>
+                                    @else
+                                        @if($general_eyc->certificados->Prox_fecha_mantenimiento == '2001-01-01')
+                                            <!-- Proxima fecha de mantenimiento -->
+                                            <td scope="row" data-fecha="">SIN FECHA ASIGNADA / N/A</td>
+                                            <!-- Días Restantes --> 
+                                            <td scope="row">-</td>
+                                        @else
+                                            <!-- Proxima fecha de mantenimiento -->
+                                            <td scope="row" data-fecha="{{$general_eyc->certificados->Prox_fecha_mantenimiento}}">
+                                                @php
+                                                //dd($general_eyc->certificados->Prox_fecha_mantenimiento); //FORMATO YYYY-MM-DD
+                                                //dd($general_eyc->certificados->formatted_date6); //FORMATO DD-MM-YYYY
+                                                @endphp
+                                                {{$general_eyc->certificados->formatted_date6}}
+                                            </td>
+                                            <!-- Días Restantes --> 
+                                            <td scope="row">
+                                                {{
+                                                    ((int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) ) <= 0 ? 'VENCIDO' : 
+                                                    (int) \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($general_eyc->certificados->Prox_fecha_mantenimiento), false) 
+                                                }}
+                                            </td>
+                                        @endif
+                                    @endif
+                                    <!-- Presentación --> 
+                                    <td scope="row"> 
                                     @if ($general_eyc->Foto != 'ESPERA DE DATO')
                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
                                             <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
                                         @elseif($general_eyc->Foto == 'ESPERA DE DATO')
                                             <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
                                     @endif
+                                    </td>
+                                    <!-- Editar --> 
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                    </div>
                                 </td>
-                            @endif
-                            <td>
+                                    <!-- Baja --> 
+                                <td>
                                 <div class="btn-group">
-                                    <a href="{{ route('edicion.editEyC', ['id' => $general_eyc->idGeneral_EyC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                </div>
-                            </td>
-                            
-                            <td>
-                            <div class="btn-group">
-                                    <button type="button" class="btn btn-info btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="far fa-thumbs-down" aria-hidden="true"></i></button>
-                                </div>
-                            </td>
+                                        <button type="button" class="btn btn-info btnEliminarEquipo" idGeneral_EyC="{{$general_eyc->idGeneral_EyC}}"><i class="far fa-thumbs-down" aria-hidden="true"></i></button>
+                                    </div>
+                                </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -208,11 +377,19 @@
 <!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.bootstrap5.min.js"></script>
+<!-- Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
+<!-- (Opcional PDF y Print) -->
+<script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js"></script>
 <!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -230,7 +407,50 @@ $('#tablaJs').on('draw.dt', function() {
 });
 
 let table = new DataTable('#tablaJs', {
-    // options
+        columnDefs: [
+        {
+            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23], // columnas que quieres ocultar por default
+            visible: false
+        }
+    ],
+    layout: {
+        topStart: {
+            pageLength: true,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Exportar a Excel',
+                    title: 'Inventario',
+                    exportOptions: {
+                        //columns: [0,1,2,3,4,5,6,7,8,9,10,11,12]
+                        //columns:':visible'
+                        columns: ':visible',
+                        modifier: {
+                            search: 'applied',
+                            order: 'applied'
+                        }
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: 'Imprimir',
+                    title: 'Inventario',
+                        exportOptions: {
+                        columns: ':visible'
+                    }
+                }
+            ]
+        },
+        topEnd: {
+            search: true
+        },
+        bottomStart: {
+            pageLength: true   // 👈 ESTE ES EL IMPORTANTE
+        },
+        bottomEnd: {
+            paging: true
+        }
+    },
     language: {
                     "decimal": "",
                     "emptyTable": "No hay datos disponibles en la tabla",
@@ -256,7 +476,129 @@ let table = new DataTable('#tablaJs', {
                     }
                 }
 });
+validarCheckMes();
+// Sincronizar estado inicial
+$('.toggle-col').each(function () {
 
+    let colIndex = $(this).data('col');
+    let isVisible = table.column(colIndex).visible();
+
+    $(this).prop('checked', isVisible);
+
+});
+
+$('#checkMes').on('change', function () {
+
+    let colCalibracion = table.column(13).visible();
+    let colFechaMant = table.column(18).visible();
+    let colProxMant = table.column(19).visible();
+
+    // Validar si al menos una está visible
+    if (!colCalibracion && !colFechaMant && !colProxMant) {
+
+        // Quitar el check automáticamente
+        $(this).prop('checked', false);
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Atención',
+            text: 'Debes seleccionar al menos una columna de fechas (Calibración o Mantenimiento) para usar el filtro de Mes Actual.'
+        });
+
+        return;
+    }
+
+    // Si pasa la validación, redibuja la tabla
+    table.draw();
+});
+//Detectar cambios en los checkboxes
+$('#checkEquipos, #checkBlock, #checkAccesorios , #checkHerramientas , #checkConsumibles').on('change', function () {
+    table.draw();
+});
+// Filtro personalizado
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+
+    let mostrarEquipos = $('#checkEquipos').is(':checked');
+    let mostrarBlock = $('#checkBlock').is(':checked');
+    let mostrarAccesorios = $('#checkAccesorios').is(':checked');
+    let mostrarHerramientas = $('#checkHerramientas').is(':checked');
+    let mostrarConsumibles = $('#checkConsumibles').is(':checked');
+    let filtrarMes = $('#checkMes').is(':checked');
+
+    let categoria = data[0];
+
+    // FILTRO POR CATEGORIA
+    let pasaCategoria = (
+        (mostrarEquipos && categoria.includes('EQUIPOS')) ||
+        (mostrarBlock && categoria.includes('BLOCK')) ||
+        (mostrarAccesorios && categoria.includes('ACCESORIOS')) ||
+        (mostrarHerramientas && categoria.includes('HERRAMIENTAS')) ||
+        (mostrarConsumibles && categoria.includes('CONSUMIBLES'))
+    );
+
+    // Si NO hay ningún checkbox seleccionado → mostrar todo
+    if (!mostrarEquipos && !mostrarBlock && !mostrarAccesorios && !mostrarHerramientas && !mostrarConsumibles) {
+        pasaCategoria = true;
+    }
+
+    if (!pasaCategoria) return false;
+
+    if (filtrarMes) {
+
+        let hoy = new Date();
+
+        // Columnas de fechas
+        //let columnasFecha = [10, 15, 16];
+        let columnasFecha = [13, 18, 19];
+
+        // Filtrar solo las que estén visibles (opcional pero recomendado)
+        columnasFecha = columnasFecha.filter(idx => table.column(idx).visible());
+
+        let coincide = columnasFecha.some(idx => {
+
+            let celda = table.cell(dataIndex, idx).node();
+            if (!celda) return false;
+
+            let fechaStr = celda.dataset.fecha;
+            if (!fechaStr) return false;
+
+            let fecha = new Date(fechaStr);
+
+            return (
+                fecha.getMonth() === hoy.getMonth() &&
+                fecha.getFullYear() === hoy.getFullYear()
+            );
+        });
+
+        return coincide;
+    }
+    return true;
+});
+
+function validarCheckMes() {
+    /*let colCalibracion = table.column(10).visible();
+    let colFechaMant = table.column(15).visible();
+    let colProxMant = table.column(16).visible();*/
+    let colCalibracion = table.column(13).visible();
+    let colFechaMant = table.column(18).visible();
+    let colProxMant = table.column(19).visible();
+
+    let habilitar = colCalibracion || colFechaMant || colProxMant;
+
+    $('#checkMes').prop('disabled', !habilitar);
+
+    if (!habilitar) {
+        $('#checkMes').prop('checked', false);
+    }
+}
+
+// Ejecutar cuando cambian columnas
+$(document).on('change', '.toggle-col', function () {
+    let column = table.column($(this).data('col'));
+    column.visible($(this).is(':checked'));
+
+    validarCheckMes();
+});
 //$(".btnEliminarEquipo").on("click", function(){
 $(document).on("click", ".btnEliminarEquipo", function() {
     //valor del id a eliminar

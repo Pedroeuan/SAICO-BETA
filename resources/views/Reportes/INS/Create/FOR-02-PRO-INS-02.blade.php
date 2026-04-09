@@ -590,6 +590,8 @@
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
+                                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
                                     
@@ -968,33 +970,25 @@
 
         // Helpers y configuración-CONFIGURAR CAMPOS DE ACUERDO A LOS NAMES DE CADA INPUT
         const fieldNames = [
-        'no_junta',
-        'Tip_Ind',
-        'L_PGL',
-        'A_PGL',
-        'AL_PGL'
-        ,'X','Y',
-        'DA_PROF',
-        'PA','SA',
-        'TMIN',
-        'SCAN',
-        'EVAL',
-        'FOTOS'];
+        'componente',
+        'no_ind',
+        'tipo_indicacion',
+        'largo',
+        'ancho',
+        'diametro',
+        'ht',
+        'evaluacion',
+        'longitud_inspeccionada'];
         const placeholders = { //CONFIGURAR CAMPOS DE ACUERDO A LOS PLACEHOLDERS DE CADA INPUT
-            no_junta: 'Junta / Elemento', 
-            Tip_Ind: 'Tipo de Indicación', 
-            L_PGL: 'L (PLG)',
-            A_PGL: 'A (PLG)', 
-            AL_PGL: 'ALTURA (PLG)', 
-            X: 'X', 
-            Y: 'Y', 
-            DA_PROF: 'DA (PROF)',
-            PA: 'PA', 
-            SA: 'SA', 
-            TMIN: 'Tmin', 
-            SCAN: 'Datos del Archivo (Escaneo)', 
-            EVAL: 'Evaluación', 
-            FOTOS: 'Fotos'
+            componente: 'No. Junta/Componente', 
+            no_ind: 'No.Ind.', 
+            tipo_indicacion: 'Tipo de Indicación',
+            largo: 'LARGO', 
+            ancho: 'ANCHO', 
+            diametro: 'Ø', 
+            ht: 'H.T.', 
+            evaluacion: 'Evaluación',
+            longitud_inspeccionada: 'L.I.',
         };
         function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
 
@@ -1013,7 +1007,7 @@
             //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="15">
+                <td colspan="10">
                 <div class="d-flex justify-content-between align-items-center">
                     <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
@@ -1068,7 +1062,7 @@
             //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
             const newLong = `
                 <tr class="long-row" data-titulo="${titleId}">
-                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td colspan="9">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
@@ -1090,10 +1084,10 @@
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 13) { // si hay al menos 13 filas en el bloque
+            if ($rowsBlock.length >= 11) { // si hay al menos 11 filas en el bloque
                 const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(12); // fila índice 12 = fila 13 (0-based)
+                    .eq(10); // fila índice 10 = fila 11 (0-based)
 
                 if ($nfila.length) { 
                     $nfila.after(newLong);
@@ -1149,9 +1143,6 @@
         //if (formId && typeof saveData === 'function') saveData(formId);
         }
 
-
-
-
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
@@ -1185,7 +1176,7 @@
             let newTitle = `
             <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
                 <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="14"> Longitud Inspeccionada</td>
+                <td colspan="9"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
@@ -1207,7 +1198,8 @@
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;//MODIFICAR
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length; //MODIFICAR
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1237,30 +1229,6 @@
             saveData($(this).closest('form').attr('id'));
         }
     );
-
-        /*$('form').submit(function(e) {
-            // Validar que la tabla no esté vacía
-            if ($('#dynamicTable tbody tr').length === 0) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Advertencia',
-                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
-                });
-                return;
-            }
-            // Actualizar el campo oculto con [{id,text},...]
-            updateTitulos();
-            // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
-            // Deshabilitar el botón de submit y cambiar el texto (opcional)
-            let submitButton = $(this).find('button[type="submit"]');
-            submitButton.prop('disabled', true).text('Guardando...');
-            // Opcional: Agregar un indicador de carga
-            submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
-        });*/
-
             // Restaurar datos al cargar la página
             restoreData();
 });
@@ -1284,7 +1252,8 @@ function verificarYAgregarLongitud() {
         }
 
         // ✅ Contar título o fila normal
-        if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
+        //if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {//MODIFICAR
+        if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { //MODIFICAR
             contadorBloque++;
             $ultimoElementoBloque = $row;
         }
@@ -1296,7 +1265,7 @@ function verificarYAgregarLongitud() {
 
             const newLong = `
                 <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td colspan="9">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"

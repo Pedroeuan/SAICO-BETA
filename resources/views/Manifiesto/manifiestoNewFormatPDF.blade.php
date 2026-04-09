@@ -9,30 +9,33 @@
                 }
                 header {
                     position: fixed;
-                    top: -80px; /* Ajustar para que quede dentro del margen superior */
+                    top: -50px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
-                    height: 100px;
+                    height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-bottom: 1px solid #ffffff;
-                }
-                footer {
-                    position: relative;
-                    bottom: 0px; /* Ajustar para que quede dentro del margen inferior */
-                    left: 0;
-                    right: 0;
-                    height: 0px;
-                    text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-top: 1px solid #ffffff;
-                }
-                    
-                body {
-                    margin-top: 70px; /* Ajusta según el tamaño de tu encabezado */
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
+                }
+
+                footer {
+                    position: fixed;
+                    bottom: -30px; /* Ajusta la posición */
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                body {
+                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin: 0;*/
+                    padding-top: 0px; /* Altura del header */
+                    padding-bottom: 0px; /* Altura del footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
                 .content {
                     /*margin-top: 300px; /* Evita superposición con el header */
@@ -255,138 +258,10 @@
                 </table>
 
                 <div style="margin-bottom: 10px;"></div>   
-                
-                <table class="datosgenerales">
-                    <tbody>
-                        <tr>
-                            <td style="width: 10%;">Cliente:</td>
-                            <td class="lineaInferior"><label>{{ $Manifiesto->Cliente }}</label></td>
-                            <td style="width: 20%;"></td>
-                            <td style="width: 10%;">Folio:</td>
-                            <td class="lineaInferior">{{ $Manifiesto->Folio }}</td>
-                        </tr>
-                        <tr>
-                            <td>Sitio de Trabajo:</td>
-                            <td class="lineaInferior">{{ $Manifiesto->Destino }}</td>
-                            <td style="width: 20%;"></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Servicio: </td>
-                            <td class="lineaInferior">{{ $Manifiesto->Trabajo }}</td>
-                            <td style="width: 20%;"></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+
             </header>
 
-            <div class="content">
-                <div style="margin-bottom: 0px;"></div>
-                <table class="datosresultados">
-                    <thead>
-                            @if($Manifiesto->SATBMPRO == 'SI')
-                                <tr class="celdaAzul">
-                                    <th class="" style="width: 4%;">No.</th>
-                                    <th class="" style="width: 4%;">Cantidad</th>
-                                    <th class="" style="width: 4%;">Unidad</th>
-                                    <th class="" style="width: 20%;">Descripción</th>
-                                    <th class="" style="width: 10%;">No / ID</th>
-                                    <th class="">No. De Serie</th>
-                                    <th class="">Marca</th>
-                                    <th class="">Modelo</th>
-                                    <th class="">SAT</th>
-                                    <th class="">BMPRO</th>
-                                    <th class="">NOTA</th>
-                                </tr>
-                            @else
-                                <tr class="celdaAzul">
-                                    <th class="" style="width: 4%;">No.</th>
-                                    <th class="" style="width: 4%;">Cantidad</th>
-                                    <th class="" style="width: 4%;">Unidad</th>
-                                    <th class="" style="width: 25%;">Descripción</th>
-                                    <th class="" style="width: 10%;">No. ECO</th>
-                                    <th class="">No. De Serie</th>
-                                    <th class="">Marca</th>
-                                    <th class="">Modelo</th>
-                                </tr>
-                        @endif         
-                    </thead>
-                <tbody>
-                    @php
-                        $contador = 1; // Inicializa el contador
-                        $minFilas = 8; // Define el número mínimo de filas
-                    @endphp
-                        @foreach ($DetallesSolicitud as $detalle)
-                                @php
-                                    $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
-                                @endphp
-                                            @if($Manifiesto->SATBMPRO == 'SI')
-                                                <tr>
-                                                    <td class="">{{ $contador }}</td>
-                                                    <td class="">{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->No_economico ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Serie ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Marca ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Modelo ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->SAT ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->BMPRO ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Comentario ?? 'N/A' }}</td>
-                                                </tr>
-                                            @else
-                                                <tr>
-                                                    <td class="">{{ $contador }}</td>
-                                                    <td class="">{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->No_economico ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Serie ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Marca ?? 'N/A' }}</td>
-                                                    <td class="">{{ $general->Modelo ?? 'N/A' }}</td>
-                                                </tr>
-                                @endif
-                                    @php
-                                        $contador++; // Incrementa el contador
-                                    @endphp
-                        @endforeach
-
-                        @for($i = $contador; $i <= $minFilas; $i++)
-                            <tr>
-                                @if($Manifiesto->SATBMPRO == 'SI')
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                @else
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                    <td class="">----</td>
-                                @endif
-                            </tr>
-                        @endfor
-                    </tbody>
-                </table>
-
-            </div>
-
             <footer>
-
                     <div style="margin-bottom: 5px;"></div>
                     <table class="Comentarios">
                         <tr>
@@ -636,6 +511,139 @@
 
             </footer>
 
+            @php
+                $porPagina = 20; // número de filas por página
+                $chunks = $DetallesSolicitud->chunk($porPagina);
+            @endphp
+            @foreach ($chunks as $pagina)
+            <div class="content">
+                <div style="margin-bottom: 0px;"></div>
+                
+                <table class="datosgenerales">
+                    <tbody>
+                        <tr>
+                            <td style="width: 10%;">Cliente:</td>
+                            <td class="lineaInferior"><label>{{ $Manifiesto->Cliente }}</label></td>
+                            <td style="width: 20%;"></td>
+                            <td style="width: 10%;">Folio:</td>
+                            <td class="lineaInferior">{{ $Manifiesto->Folio }}</td>
+                        </tr>
+                        <tr>
+                            <td>Sitio de Trabajo:</td>
+                            <td class="lineaInferior">{{ $Manifiesto->Destino }}</td>
+                            <td style="width: 20%;"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Servicio: </td>
+                            <td class="lineaInferior">{{ $Manifiesto->Trabajo }}</td>
+                            <td style="width: 20%;"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
 
+                <div style="margin-bottom: 5px;"></div>
+
+                <table class="datosresultados">
+                    <thead>
+                            @if($Manifiesto->SATBMPRO == 'SI')
+                                <tr class="celdaAzul">
+                                    <th class="" style="width: 4%;">No.</th>
+                                    <th class="" style="width: 4%;">Cantidad</th>
+                                    <th class="" style="width: 4%;">Unidad</th>
+                                    <th class="" style="width: 20%;">Descripción</th>
+                                    <th class="" style="width: 10%;">No / ID</th>
+                                    <th class="">No. De Serie</th>
+                                    <th class="">Marca</th>
+                                    <th class="">Modelo</th>
+                                    <th class="">SAT</th>
+                                    <th class="">BMPRO</th>
+                                    <th class="">NOTA</th>
+                                </tr>
+                            @else
+                                <tr class="celdaAzul">
+                                    <th class="" style="width: 4%;">No.</th>
+                                    <th class="" style="width: 4%;">Cantidad</th>
+                                    <th class="" style="width: 4%;">Unidad</th>
+                                    <th class="" style="width: 25%;">Descripción</th>
+                                    <th class="" style="width: 10%;">No. ECO</th>
+                                    <th class="">No. De Serie</th>
+                                    <th class="">Marca</th>
+                                    <th class="">Modelo</th>
+                                </tr>
+                        @endif         
+                    </thead>
+                <tbody>
+                        @foreach ($pagina as $detalle)
+                                            @if($Manifiesto->SATBMPRO == 'SI')
+                                                <tr>
+                                                    <td>{{ $loop->iteration + ($loop->parent->index * $porPagina) }}</td>
+                                                    <td class="">{{ $detalle->Cantidad ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->Unidad ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->No_economico ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Serie ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Marca ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Modelo ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->SAT ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->BMPRO ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Comentario ?? 'N/A' }}</td>
+                                                </tr>
+                                            @else
+                                                <tr>
+                                                    <td>{{ $loop->iteration + ($loop->parent->index * $porPagina) }}</td>
+                                                    <td class="">{{ $detalle->Cantidad ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->Unidad ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Nombre_E_P_BP ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->No_economico ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Serie ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Marca ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->generalEyc->Modelo ?? 'N/A' }}</td>
+                                                </tr>
+                                            @endif
+                                        {{ $loop->iteration + ($loop->parent->index * $porPagina) }}  
+                                        <!-- Número de fila global 
+                                            Cuenta correctamente, 
+                                            No necesitas variables extra
+                                            Funciona con páginas
+                                        -->
+                        @endforeach
+                        @for ($i = $pagina->count(); $i < $porPagina; $i++)
+                            <tr>
+                                @if($Manifiesto->SATBMPRO == 'SI')
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                @else
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                    <td>----</td>
+                                @endif
+                            </tr>
+                        @endfor
+                    </tbody>
+                </table>
+
+            </div>
+                @if (!$loop->last)
+                    <div style="page-break-after: always;"></div>
+                @endif
+            @endforeach
         </body>
     </html>

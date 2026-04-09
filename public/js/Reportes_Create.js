@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }).get();
 
-    // Dedupe by id+text para evitar entradas repetidas en sessionStorage
+
     function dedupe(arr){
         const seen = new Set();
         return arr.filter(item => {
@@ -506,7 +506,12 @@ document.addEventListener("DOMContentLoaded", function () {
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
                     if (input.value.trim() === "") {
-                        input.value = "---";
+                        if (input.type === "date") {
+                            // poner fecha actual
+                            input.value = new Date().toISOString().split('T')[0];
+                        } else if (input.type !== "file") {
+                            input.value = "---";
+                        }
                         localStorage.setItem(`${formId}_${input.name}`, input.value);
                     }
                 });

@@ -72,7 +72,7 @@
                             <th>Documentación</th>
                             <th style="width: 90px;">Editar</th>
                             <th style="width: 90px;">Salida</th>
-                            <th style="width: 90px;">Eliminar</th>
+                            <th style="width: 90px;">Baja</th>
                             <th style="width: 120px;">Mantenimientos</th>
                             <th style="width: 100px;">Pagos</th>
 
@@ -93,8 +93,10 @@
                                     <span class="badge bg-success">Disponible</span>
                                 @elseif($vehiculo->estatus === 'ocupado')
                                     <span class="badge bg-warning">Ocupado</span>
-                                @else
+                                @elseif($vehiculo->estatus === 'inactivo')
                                     <span class="badge bg-secondary">Inactivo</span>
+                                @elseif($vehiculo->estatus === 'baja')
+                                    <span class="badge bg-danger">Baja</span>
                                 @endif
                             </td>
                             <td>
@@ -129,11 +131,11 @@
                             <td class="text-center">
                                 <form action="{{ route('vehiculos.destroy', $vehiculo->id) }}"
                                     method="POST"
-                                    onsubmit="return confirm('¿Eliminar vehículo?')">
+                                    onsubmit="return confirm('¿Dar de baja el vehículo?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger"
-                                            title="Eliminar">
+                                            title="Dar de baja">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

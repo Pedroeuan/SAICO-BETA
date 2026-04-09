@@ -2,6 +2,19 @@
 
 @section('title', 'Vehiculos')
 
+@section('css')
+<style>
+    .checklist-fluid-row label {
+        min-height: 40px;
+        line-height: 1.15;
+    }
+    .checklist-fluid-row .label-shift {
+        position: relative;
+        top: 6px;
+    }
+</style>
+@endsection
+
 @section('content')
 
 <br><br><br>
@@ -109,8 +122,8 @@
         Captura de llantas por tanteo: registra si la calibracion se percibe <strong>Baja</strong>, <strong>Normal</strong> o <strong>Alta</strong> en cada llanta.
     </div>
 
-    <div class="row">
-        <div class="col-md-4 mb-3">
+    <div class="row checklist-fluid-row">
+        <div class="col-md-3 mb-3">
             <label>Liquido limpia parabrisas</label>
             <select name="liquido_limpiaparabrisas" class="form-control" required>
                 <option value="">Seleccione</option>
@@ -119,8 +132,8 @@
                 <option value="no_hay" {{ old('liquido_limpiaparabrisas', $defaultLiquidoLimpiaparabrisas ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
             </select>
         </div>
-        <div class="col-md-4 mb-3">
-            <label>Aceite</label>
+        <div class="col-md-3 mb-3">
+            <label class="label-shift">Aceite</label>
             <select name="aceite" class="form-control" required>
                 <option value="">Seleccione</option>
                 <option value="suficiente" {{ old('aceite', $defaultAceite ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
@@ -128,13 +141,22 @@
                 <option value="no_hay" {{ old('aceite', $defaultAceite ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
             </select>
         </div>
-        <div class="col-md-4 mb-3">
-            <label>Anticongelante</label>
+        <div class="col-md-3 mb-3">
+            <label class="label-shift">Anticongelante</label>
             <select name="anticongelante" class="form-control" required>
                 <option value="">Seleccione</option>
                 <option value="suficiente" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
                 <option value="escaso" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
                 <option value="no_hay" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
+            </select>
+        </div>
+        <div class="col-md-3 mb-3">
+            <label class="label-shift">Liquido de frenos</label>
+            <select name="liquido_frenos" class="form-control" required>
+                <option value="">Seleccione</option>
+                <option value="suficiente" {{ old('liquido_frenos', $defaultLiquidoFrenos ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
+                <option value="escaso" {{ old('liquido_frenos', $defaultLiquidoFrenos ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
+                <option value="no_hay" {{ old('liquido_frenos', $defaultLiquidoFrenos ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
             </select>
         </div>
     </div>

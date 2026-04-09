@@ -535,7 +535,12 @@ function bindDetallesJuntaCheckboxes() {
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
                     if (input.value.trim() === "") {
-                        input.value = "---";
+                        if (input.type === "date") {
+                            // poner fecha actual
+                            input.value = new Date().toISOString().split('T')[0];
+                        } else if (input.type !== "file") {
+                            input.value = "---";
+                        }
                         localStorage.setItem(`${formId}_${input.name}`, input.value);
                     }
                 });

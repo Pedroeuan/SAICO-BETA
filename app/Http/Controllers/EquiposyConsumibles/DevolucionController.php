@@ -185,7 +185,8 @@ class DevolucionController extends Controller
         $manifiesto = manifiesto::where('Folio', $folio)->first();
 
         // Obtener el campo 'Destino' para asignarlo a 'Tierra_Costafuera'
-        $tierraCostafuera = $manifiesto->Destino;
+        //$tierraCostafuera = $manifiesto->Destino;
+        $tierraCostafuera = 'FATIMA';
 
         // Crear un registro en la tabla Historial_Almacen
         $historialAlmacen = new Historial_Almacen;
@@ -248,8 +249,8 @@ class DevolucionController extends Controller
                 // Buscar el registro en Manifiesto para obtener el campo 'Destino'
                 $manifiesto = manifiesto::where('Folio', $folio)->first();
                 // Obtener el campo 'Destino' para asignarlo a 'Tierra_Costafuera'
-                $tierraCostafuera = $manifiesto->Destino;
-
+                //$tierraCostafuera = $manifiesto->Destino;
+                $tierraCostafuera = 'FATIMA';
                 // Crear un registro en la tabla Historial_Almacen
                 $historialAlmacen = new Historial_Almacen;
                 $historialAlmacen->idAlmacen = $almacen->idAlmacen;

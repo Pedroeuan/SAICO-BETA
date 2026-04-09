@@ -890,15 +890,12 @@ $reportesDetalles_Generales[] = [
         $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
         $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
-        //dd($Grupo_Juntas_Re);
-
-        //$titulos = array_column($Grupo_Juntas_Re['titulos_juntas'], 'titulo');
+        
         $imagenes = [];
         if ($Fotos_Reporte && $Fotos_Reporte->Fotos_Reportes) {
             $imagenes = json_decode($Fotos_Reporte->Fotos_Reportes, true);
         }
-        //$Juntas_resultados = $Grupo_Juntas_Re['resultados'];
-        //$Titulos_resultados = $Grupo_Juntas_Re['titulos'];
+
 
         // Obtener el numero de firmas
         $numFirmas = $Firmas ['numFirmas'];
@@ -1208,6 +1205,10 @@ $reportesDetalles_Generales[] = [
         elseif($Nombre_Formato == "FOR-01-PRO-INS-16")
         {
             return redirect()->route('Reporte_FOR_01_INS_16.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-01-PRO-INS-17")
+        {
+            return redirect()->route('Reporte_FOR_01_INS_17.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
         {
