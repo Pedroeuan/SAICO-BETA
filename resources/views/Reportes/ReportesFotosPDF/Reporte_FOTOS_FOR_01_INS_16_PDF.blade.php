@@ -82,6 +82,23 @@
                 outline: 1px double #000000; /* Contorno externo */
             }
 
+            .encabezadoAzul2{
+                text-align: center;
+                width: 100%;
+                font-size: 8px;
+                background-color: #215e99;
+                color: #ffffff;
+                outline: 1px double #000000; /* Contorno externo */
+            }
+            .encabezadoAzul3{
+                text-align: center;
+                width: 100%;
+                font-size: 8px;
+                background-color: #0070c0;
+                color: #ffffff;
+                outline: 1px double #000000; /* Contorno externo */
+            }
+            
             .border {
                 border: 1px solid black; 
             }
@@ -203,10 +220,10 @@
             .celdaGris{
                 background-color: #DBDBDB;
             }
-            .celdaGrisResultados{
-                background-color: #DBDBDB;
-                font-size: 9px;
-            }
+            .celdaGrisOscuro{
+            background-color: #bfbfbf;
+            /*font-size: 9px;*/
+        }
             .datosresultados{
                 border-collapse: separate;  /*separate; No colapsar bordes */ /*collapse; Fusiona los bordes de las celdas */
                 border-spacing: 0px;        /* Espacio entre celdas */
@@ -219,188 +236,6 @@
             .datosresultados td, .datosresultados th {
                 border: .1px solid black; /* Borde grueso de 2px */
             }
-            /* ===== UTILIDADES Y CLASES REUTILIZABLES ===== */
-            
-            /* Tabla de sección estándar */
-            .tabla-seccion {
-                width: 100%;
-                border-collapse: collapse;
-                border: 1px solid #333;
-                margin-bottom: 0;
-            }
-
-            .tabla-seccion thead {
-                background-color: #305496;
-                color: #ffffff;
-            }
-
-            .tabla-seccion th {
-                text-align: center;
-                padding: 8px;
-                font-weight: bold;
-                font-size: 8px;
-            }
-
-            .tabla-seccion td {
-                padding: 8px;
-                border: 1px solid #333;
-            }
-
-            /* Celda de etiqueta (header izquierdo) */
-            .celda-etiqueta {
-                width: 25%;
-                background-color: #DBDBDB;
-                font-weight: bold;
-                text-align: center;
-                border-right: 1px solid #333333;
-            }
-
-            /* Celda de datos */
-            .celda-dato {
-                width: 25%;
-                text-align: center;
-                border-right: 1px solid #333;
-            }
-
-            /* Última celda sin borde derecho */
-            .celda-dato-final {
-                width: 25%;
-                text-align: center;
-                border-right: 0;
-            }
-
-            /* Separador de contenido */
-            .espaciador {
-                margin-bottom: 12px;
-            }
-
-            .espaciador-pequeno {
-                margin-bottom: 6px;
-            }
-
-            /* Tabla de dos columnas (imágenes) */
-            .tabla-dos-columnas {
-                width: 100%;
-                border-collapse: collapse;
-                border: 1px solid #333;
-            }
-
-            .tabla-dos-columnas td {
-                width: 50%;
-                padding: 10px;
-                border: 1px solid #333;
-                text-align: center;
-            }
-
-            .tabla-dos-columnas .col-izq {
-                border-right: 1px solid #333;
-            }
-
-            /* Contenedor de imagen con fallback */
-            .imagen-container {
-                max-width: 100%;
-                max-height: 200px;
-                display: inline-block;
-            }
-
-            .imagen-placeholder {
-                width: 100%;
-                height: 200px;
-                background: #f0f0f0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 48px;
-                color: #ccc;
-            }
-
-            /* Tabla de etiquetas debajo de imágenes */
-            .tabla-etiquetas {
-                width: 100%;
-                border-collapse: collapse;
-                border: 1px solid #333;
-                border-top: none;
-                background-color: #f0f0f0;
-            }
-
-            .tabla-etiquetas td {
-                padding: 8px;
-                border: 1px solid #333;
-                text-align: center;
-                font-weight: bold;
-                font-size: 8px;
-            }
-
-            .tabla-etiquetas .col-izq {
-                border-right: 1px solid #333;
-            }
-
-            /* Tabla de datos operativos */
-            .tabla-operativo tr {
-                border-bottom: 1px solid #333;
-            }
-
-            .tabla-operativo .celda-etiqueta {
-                background-color: #DBDBDB;
-            }
-
-            .tabla-operativo .celda-dato {
-                text-align: center;
-            }
-
-            /* Tabla de contenido texto (Observaciones, Nota, Recomendaciones) */
-            .tabla-contenido-texto {
-                width: 100%;
-                border-collapse: collapse;
-                border: 1px solid #333;
-            }
-
-            .tabla-contenido-texto td {
-                text-align: justify;
-                padding: 12px;
-                font-size: 8px;
-                line-height: 1.5;
-                min-height: 80px;
-                border: 1px solid #333;
-                word-wrap: break-word;
-            }
-
-            /* Severidad - colores dinámicos */
-            .severidad-row {
-                border-bottom: 1px solid #333;
-            }
-
-            .severidad-indicador {
-                width: 4%;
-                min-width: 4%;
-                padding: 0;
-                border: 1px solid #333;
-                text-align: center;
-            }
-
-            .severidad-etiqueta {
-                padding: 10px;
-                text-align: center;
-                width: 14%;
-                font-weight: bold;
-                border: 1px solid #333;
-                border-right: 1px solid #333;
-                font-size: 8px;
-                color: #333333;
-                background-color: transparent;
-            }
-
-            .severidad-descripcion {
-                padding: 10px;
-                text-align: left;
-                width: 32%;
-                font-size: 8px;
-                line-height: 1.4;
-                border: 1px solid #333;
-                border-right: 1px solid #333;
-                color: #000000;
-                background-color: transparent;
-            }
 
             /* Page break utility */
             .page-break {
@@ -409,7 +244,8 @@
             </style>
         </head>
         <body>
-
+        {{-- Pagina 3 --}}
+        <div class="page">
             <header>
                 <table class="tablaheader">
                     <thead>
@@ -442,95 +278,159 @@
             </footer>
 
             <div class="content">
-
-            <table class="datosgenerales">
-
-                    <thead class="encabezadoAzul">
-                        <tr><th colspan="4">DATOS GENERALES</th></tr>
-                    </thead>  
-
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
-
-                    <tbody>
-                        <tr>
-                            <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
-                            <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>CLIENTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
-                            <th>CONTRATO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>EQUIPO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Equipo'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>PARTIDA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Partida'] }}</td>
-                            <th>UBICACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Ubicacion'] }}</td>
-                        </tr>
-                        <tr>
-                            <th>LUGAR:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
-                            <th>HORA DE INSPECCIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['H_Inspeccion'] }}</td>
-                        </tr>
-                        <tr>
-                            <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
-                            <th style="width: 160px;">ESTÁNDAR DE REFERENCIA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Stndr_refe'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div style="margin-bottom: 6px;"></div>
-
-                <!-- DATOS Y AJUSTES DEL EQUIPO -->
+                <br>
+                <br>
+                <br>
+                <!-- IMAGEN DE REFERENCIA -->
                 <table class="datosresultados">
 
-                        <thead class="encabezadoAzul">
-                            <tr><th colspan="4">DATOS Y AJUSTES DEL EQUIPO</th></tr>
+                        <thead class="encabezadoAzul2">
+                            <tr><th colspan="2">IMAGEN DE REFERENCIA</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="2"></th></tr></thead> <!-- Fila vacia -->
+
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+
+                                <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+
+                            </tr>
+                            <tr>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Termograma:</th>
+
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma1'] }}</th>
+
+                            </tr>
+                            <tr>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Emisividad:</th>
+
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma2'] }}</th>
+
+                            </tr>
+                        </thead>
+                </table>
+                <br>
+                <br>
+                <!-- DATOS DE OPERACIÓN -->
+                <table class="datosresultados">
+
+                        <thead class="encabezadoAzul3">
+                            <tr><th colspan="4">DATOS DE OPERACIÓN</th></tr>
                         </thead>
 
                         <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
-                            <tr class="celdaGrisResultados">
-                                <th colspan="4" style="border: 1px solid black; border-left: 2px solid black; border-top: 2px solid black;">EQUIPO</th>
-                            </tr>
                             <tr>
-                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
-                                <th style="border: 1px solid black;">1</th>
-                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
-                                <th style="border: 1px solid black;">2</th>
-                            </tr>
-                            <tr>
-                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
-                                <th style="border: 1px solid black;">1</th>
-                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
-                                <th style="border: 1px solid black;">2</th>
+                                <th class="" style="width: 25%;">VOLTAJE:</th>
+
+                                <th class="" style="width: 25%;">{{ $Datos_Equipo['voltaje'] }}</th>
+
+                                <th class="" style="width: 25%;">CARGA AMP:</th>
+
+                                <th class="" style="width: 25%;">{{ $Datos_Equipo['CARGA_AMP'] }}</th>
                             </tr>
                         </thead>
-                <table>
+                </table>
 
+
+                <br>
+                <br>
+                <!-- TABLA DE SEVERIDAD -->
+                <table class="datosresultados">
+
+                        <thead class="encabezadoAzul3">
+                            <tr><th colspan="6">TABLA DE SEVERIDAD</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="6"></th></tr></thead> <!-- Fila vacia -->
+
+                        <thead>
+                            <tr>
+                                <th class="" style="width: 20%;">BUENO:</th>
+
+                                <th class="" style="width: 15%;">severidad1</th>
+
+                                <th class="" style="width: 25%;">El equipo se encuentra en condiciones de operación optimas.</th>
+
+                                <th class="" style="width: 20%;">PREVENTIVO</th>
+
+                                <th class="" style="width: 15%;">severidad2</th>
+
+                                <th class="" style="width: 25%;">Media anomalía programar el paro del equipo para su reparación.</th>
+                            </tr>
+
+                            <tr>
+                                <th class="" style="width: 20%;">MODERADO:</th>
+
+                                <th class="" style="width: 15%;">severidad3</th>
+
+                                <th class="" style="width: 25%;">Ligera anomalía, mantener en observación y programar reparación.</th>
+
+                                <th class="" style="width: 20%;">NO ACEPTABLE:</th>
+
+                                <th class="" style="width: 15%;">severidad4</th>
+
+                                <th class="" style="width: 25%;">Anomalía severa, se recomienda parar el equipo para su intervención.</th>
+                            </tr>
+                        </thead>
+                </table>
             </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        {{-- Pagina 4 --}}
+        <div class="page">
+                <br>
+                <br>
+                <br>
+                <!-- OBSERVACIONES -->
+                <table class="datosresultados">
+
+                        <thead class="encabezadoAzul3">
+                            <tr><th >OBSERVACIONES</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+
+                        <thead>
+                            <tr>
+                                <th class="" style="">123123123</th>
+                            </tr>
+                        </thead>
+                </table>
+                <br>
+                <br>
+                <br>
+                <!-- NOTA -->
+                <table class="datosgenerales">
+                    <tbody>
+                        <tr>
+                            <th style="">NOTA:</th>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <br>
+                <br>
+                <!-- RECOMENDACIONES -->
+                <table class="datosresultados">
+
+                        <thead class="encabezadoAzul3">
+                            <tr><th >RECOMENDACIONES</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+
+                        <thead>
+                            <tr>
+                                <th class="" style="">123123123</th>
+                            </tr>
+                        </thead>
+                </table>
+        </div>
         </body>
     </html>

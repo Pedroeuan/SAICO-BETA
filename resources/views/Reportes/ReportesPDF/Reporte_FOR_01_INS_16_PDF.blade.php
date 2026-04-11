@@ -6,60 +6,60 @@
             <title>FORMATO FOR-INS-16/01</title>
             <style>
                 @page {
-                    margin: 
-                    /*3.0cm /* superior */
-                    /*2.1cm /* derecho */
-                    /*2.1cm /* inferior */
-                    /*2.4cm; /* izquierdo */
-                    3.0cm /* superior */
-                    1.2cm /* derecho */
-                    2.1cm /* inferior */
-                    2.2cm; /* izquierdo */
+                    margin: 3.0cm 1.2cm 2.1cm 2.2cm;
                 }
 
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -42px; /* Sube el encabezado para que no se monte con "DATOS GENERALES" */
                     left: 0;
                     right: 0;
-                    height: auto; /* Permite que el header crezca dinámicamente */
+                    height: auto;
                     text-align: center;
-                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
                 }
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: -30px;
                     left: 0;
                     right: 0;
                     height: auto;
                     text-align: center;
-                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
                 }
 
                 body {
-                    margin-top: 200px; /* Ajusta para que el contenido no se sobreponga al header */
-                    /*margin: 0;*/
-                    padding-top: 0px; /* Altura del header */
-                    padding-bottom: 0px; /* Altura del footer */
+                    /* Deja espacio exacto debajo del encabezado fijo */
+                    margin-top: 40px;
+                    margin-right: 0;
+                    margin-bottom: 0;
+                    margin-left: 0;
+                    padding-top: 0;
+                    padding-bottom: 0;
                     font-family: 'arial', sans-serif;
-                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
+                .content {
+                    margin-top: 0;
+                }
+
+                .content-separador {
+                    height: 6px;
+                }
+
+                .tablaheader th {
+                    border: 1px solid black;
+                    padding: 4px 6px;
+                    vertical-align: middle;
+                    line-height: 1.15;
+                }
+                
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
                     font-size: 8px !important;
-                } 
-                .portada{
-                    border: 0px !important;
-                    text-align: center;
-                    border-collapse: collapse;
-                    width: 100%;
-                    font-size: 18px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
@@ -101,11 +101,19 @@
             text-align: center;
             width: 100%;
             font-size: 8px;
-            background-color: #2F75B5;
+            background-color: #305496;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
-            
+        .encabezadoAzul2{
+            text-align: center;
+            width: 100%;
+            font-size: 8px;
+            background-color: #215e99;
+            color: #ffffff;
+            outline: 1px double #000000; /* Contorno externo */
+        }
+
         .datosinspeccion{
             border-collapse: separate;  /*separate No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
@@ -140,10 +148,11 @@
         .celdaGris{
             background-color: #DBDBDB;
         }
-        .celdaGrisResultados{
-            background-color: #DBDBDB;
-            font-size: 9px;
+        .celdaGrisOscuro{
+            background-color: #bfbfbf;
+            /*font-size: 9px;*/
         }
+        
         .sinBordetdth td, .sinBordetdth th {
             border: 0px !important;
             text-align: center;
@@ -216,6 +225,8 @@
 
             <div class="content" style="text-align: center;">
                 <div class="content">
+                    <br>
+                    <br>
                     @if(isset($Fotos[5]))
                     <img src="{{ $Fotos[5] }}" style="width:650px;">
                     @endif
@@ -243,14 +254,13 @@
 
         <div class="page-break"></div>
 
-
         {{-- Segunda Hoja --}}
         <div class="page">
                         <header>
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
+                            <th style="width: 400%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-16/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
@@ -276,7 +286,10 @@
             <footer>
                 <p style="text-align: left;">FOR-INS-17/01</p>
             </footer>
-        <table class="datosgenerales">
+
+            <div class="content">
+
+                <table class="datosgenerales">
                     <thead class="encabezadoAzul">
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>  
@@ -345,23 +358,63 @@
                         <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
-                            <tr class="celdaGrisResultados">
+                            <tr class="celdaGris">
                                 <th colspan="4" style="border: 1px solid black; border-left: 2px solid black; border-top: 2px solid black;">EQUIPO</th>
                             </tr>
                             <tr>
-                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
-                                <th style="border: 1px solid black;">1</th>
-                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
-                                <th style="border: 1px solid black;">2</th>
+                                <th class="celdaGris" style="width: 80px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</th>
+                                <th class="celdaGris" style="width: 80px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['FEC_CAL'] }}</th>
                             </tr>
                             <tr>
-                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
-                                <th style="border: 1px solid black;">1</th>
-                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
-                                <th style="border: 1px solid black;">2</th>
+                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MODELO:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['MODELO_EQUIPO'] }}</th>
+                                <th class="celdaGris" style="border: 1px solid black;">CERTIFICADO POR:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['CER_POR'] }}</th>
+                            </tr>
+                            <tr>
+                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">SERIE:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['NS_EQUIPO'] }}</th>
+                                <th class="celdaGris" style="border: 1px solid black;">RANGO DE MEDICIÓN:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['RAN_MED'] }}</th>
                             </tr>
                         </thead>
-                <table>
+                </table>
+                <br>
+                <br>
+                <br>
+                <br>
+                <!-- IMAGEN DE REFERENCIA -->
+                <table class="datosresultados">
+
+                        <thead class="encabezadoAzul2">
+                            <tr><th colspan="2">IMAGEN DE REFERENCIA</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="2"></th></tr></thead> <!-- Fila vacia -->
+
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+
+                                <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+
+                            </tr>
+                            <tr>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Termograma:</th>
+
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">1</th>
+
+                            </tr>
+                            <tr>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Emisividad:</th>
+
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">2</th>
+
+                            </tr>
+                        </thead>
+                </table>
         </div>
 
         </body>
