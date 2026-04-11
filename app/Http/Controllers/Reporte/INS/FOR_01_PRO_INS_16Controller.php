@@ -814,7 +814,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-10/02.PDF',
+            'title' => 'Reporte_FOR-INS-16/02.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -864,8 +864,8 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -266.5);
-            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            //$combinedPdf->SetXY(138, -266.5);
+            //$combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
         // Añadir páginas del segundo PDF

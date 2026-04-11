@@ -76,7 +76,7 @@
             .encabezadoAzul{
                 text-align: center;
                 width: 100%;
-                font-size: 8px;
+                font-size: 12px;
                 background-color: #305496;
                 color: #ffffff;
                 outline: 1px double #000000; /* Contorno externo */
@@ -200,7 +200,25 @@
                 margin-top: 0px;
                 font-size: 12px;
             }
+            .celdaGris{
+                background-color: #DBDBDB;
+            }
+            .celdaGrisResultados{
+                background-color: #DBDBDB;
+                font-size: 9px;
+            }
+            .datosresultados{
+                border-collapse: separate;  /*separate; No colapsar bordes */ /*collapse; Fusiona los bordes de las celdas */
+                border-spacing: 0px;        /* Espacio entre celdas */
+                width: 100%;
+                text-align: center;
+                font-size: 10px;
+                /*border : 1px solid black;*/
+            }
 
+            .datosresultados td, .datosresultados th {
+                border: .1px solid black; /* Borde grueso de 2px */
+            }
             /* ===== UTILIDADES Y CLASES REUTILIZABLES ===== */
             
             /* Tabla de sección estándar */
@@ -420,253 +438,10 @@
             </header>
             
             <footer>
-                    <table class="datosgenerales">
-                        <thead>
-                            @if( $numFirmas == 1)
-                            <!-- 1 Firmas -->
-                                <tr>
-                                    <td style="width: 30px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
-                                </tr>
-                                                                    
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                </tr>
-                            @elseif( $numFirmas == 2)
-                            <!-- 2 Firmas -->
-                                <tr>
-                                    <td style="width: 30px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 30px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 30px;"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
-                                </tr>
-                                                                    
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
-                                </tr>
-                            @elseif( $numFirmas == 3)
-                            <!-- 3 Firmas -->
-                                <tr>
-                                    <td style="width: 20px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 20px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 20px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 20px;"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
-                                </tr>
-                                                                    
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
-                                </tr>
-                            @elseif( $numFirmas == 4)
-                            <!-- 4 Firmas -->
-                                <tr>
-                                    <td style="width: 15px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                                    <td style="width: 15px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                                    <td style="width: 15px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                                    <td style="width: 15px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
-                                    <td style="width: 15px;"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <th></th>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</strong></td>
-                                    <th></th>
-                                </tr>
-                                                                    
-                                <tr>
-                                    <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['PUESTO_3RO_ENCARGADO'] }}</strong></td>
-                                    <th></th>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
-                                    <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] }}</strong></td>
-                                    <th></th>
-                                </tr>
-                            @endif
-                        </thead>                            
-                    </table>
+                <p style="text-align: left;">FOR-INS-17/01</p>
             </footer>
 
             <div class="content">
-
-            @php
-                /**
-                 * Configuración de severidad
-                 * Define los estilos y comportamientos para cada nivel de severidad
-                 */
-                $severidadConfig = [
-                    'BUENO' => [
-                        'bg' => '#90EE90',
-                        'color' => '#006400',
-                        'label_color' => '#28a745',
-                        'descripcion' => 'El equipo se encuentra en condiciones óptimas.'
-                    ],
-                    'MODERADO' => [
-                        'bg' => '#FFFF00',
-                        'color' => '#000000',
-                        'label_color' => '#d4b000',
-                        'descripcion' => 'Ligera anomalía, mantener en observación y programar reparación.'
-                    ],
-                    'PREVENTIVO' => [
-                        'bg' => '#FFA500',
-                        'color' => '#FFFFFF',
-                        'label_color' => '#ffc107',
-                        'descripcion' => 'Media anomalía programar el paro del equipo para su reparación.'
-                    ],
-                    'NO ACEPTABLE' => [
-                        'bg' => '#FF0000',
-                        'color' => '#FFFFFF',
-                        'label_color' => '#dc3545',
-                        'descripcion' => 'Anomalía severa, se recomienda parar el equipo para su intervención.'
-                    ]
-                ];
-
-                $severidadSeleccionada = strtoupper(str_replace('_', ' ', $Datos_Equipo['severidad'] ?? 'NONE'));
-                $valorPorDefecto = '---';
-                $datosGenerales = [
-                    ['label' => 'FECHA:', 'value' => $Detalles_Generales['Fecha'] ?? $valorPorDefecto, 'label2' => 'NO. REPORTE:', 'value2' => $Detalles_Generales['No_Reporte'] ?? $valorPorDefecto],
-                    ['label' => 'CLIENTE:', 'value' => $Detalles_Generales['Cliente'] ?? $valorPorDefecto, 'label2' => 'CONTRATO:', 'value2' => $Detalles_Generales['Contrato'] ?? $valorPorDefecto],
-                    ['label' => 'PROYECTO:', 'value' => $Detalles_Generales['Proyecto'] ?? $valorPorDefecto, 'colspan' => 3],
-                    ['label' => 'ORDEN DE TRABAJO:', 'value' => $Detalles_Generales['Orden_Trabajo'] ?? $valorPorDefecto, 'colspan' => 3],
-                    ['label' => 'FOLIO:', 'value' => $Detalles_Generales['Folio'] ?? $valorPorDefecto, 'colspan' => 3],
-                    ['label' => 'EQUIPO:', 'value' => $Detalles_Generales['Equipo'] ?? $valorPorDefecto, 'colspan' => 3],
-                    ['label' => 'PARTIDA:', 'value' => $Detalles_Generales['Partida'] ?? $valorPorDefecto, 'label2' => 'UBICACIÃ“N:', 'value2' => $Detalles_Generales['Ubicacion'] ?? $valorPorDefecto],
-                    ['label' => 'LUGAR:', 'value' => $Detalles_Generales['Lugar'] ?? $valorPorDefecto, 'label2' => 'HORA DE INSPECCIÃ“N:', 'value2' => $Detalles_Generales['H_Inspeccion'] ?? $valorPorDefecto],
-                    ['label' => 'PROCEDIMIENTO:', 'value' => $Detalles_Generales['Procedimiento'] ?? $valorPorDefecto, 'label2' => 'ESTÃNDAR DE REFERENCIA:', 'value2' => $Detalles_Generales['Stndr_refe'] ?? $valorPorDefecto, 'label2_width' => '160px'],
-                ];
-                $camposEquipo = [
-                    ['etiqueta' => 'MARCA:', 'valor' => $Datos_Equipo['MARCA_EQUIPO'] ?? $valorPorDefecto, 'etiqueta2' => 'FECHA DE CALIBRACIÃ“N:', 'valor2' => $Datos_Equipo['FEC_CAL'] ?? $valorPorDefecto],
-                    ['etiqueta' => 'MODELO:', 'valor' => $Datos_Equipo['MODELO_EQUIPO'] ?? $valorPorDefecto, 'etiqueta2' => 'CERTIFICADO POR:', 'valor2' => $Datos_Equipo['CER_POR'] ?? $valorPorDefecto],
-                    ['etiqueta' => 'N.S.:', 'valor' => $Datos_Equipo['NS_EQUIPO'] ?? $valorPorDefecto, 'etiqueta2' => 'RANGO DE MEDICIÃ“N:', 'valor2' => $Datos_Equipo['RAN_MED'] ?? $valorPorDefecto],
-                ];
-                $imagenesReferencia = [
-                    ['termograma_foto' => $Fotos[1] ?? null, 'termograma_alt' => 'Termograma 1', 'termograma_valor' => $Datos_Equipo['termograma1'] ?? $valorPorDefecto, 'visible_foto' => $Fotos[2] ?? null, 'visible_alt' => 'Imagen Visible 1', 'emisividad_valor' => $Datos_Equipo['emisividad1'] ?? $valorPorDefecto],
-                    ['termograma_foto' => $Fotos[3] ?? null, 'termograma_alt' => 'Termograma 2', 'termograma_valor' => $Datos_Equipo['termograma2'] ?? $valorPorDefecto, 'visible_foto' => $Fotos[4] ?? null, 'visible_alt' => 'Imagen Visible 2', 'emisividad_valor' => $Datos_Equipo['emisividad2'] ?? $valorPorDefecto],
-                ];
-                $severidadFilas = [
-                    ['BUENO', 'PREVENTIVO'],
-                    ['MODERADO', 'NO ACEPTABLE'],
-                ];
-                $seccionesTexto = [
-                    ['titulo' => 'OBSERVACIONES', 'campo' => 'Observaciones'],
-                    ['titulo' => 'NOTA', 'campo' => 'Nota'],
-                    ['titulo' => 'RECOMENDACIONES', 'campo' => 'Recomendaciones'],
-                ];
-            @endphp
-
-            <div style="margin-bottom: 0px;"></div>
 
             <table class="datosgenerales">
 
@@ -729,206 +504,33 @@
                 <div style="margin-bottom: 6px;"></div>
 
                 <!-- DATOS Y AJUSTES DEL EQUIPO -->
-                <table class="datosgenerales" style="width: 100%;">
-                    <thead class="encabezadoAzul">
-                        <tr style="padding: 8px; text-align: center; font-weight: bold;">
-                            <th style="text-align: center; padding: 8px;">DATOS Y AJUSTES DEL EQUIPO</th>
-                        </tr>
-                    </thead>
-                </table>
+                <table class="datosresultados">
 
-                <table class="tabla-seccion" style="margin-top: 0;">
-                    <tbody>
-                        <tr style="border-bottom: 1px solid #333;">
-                            <td colspan="4" style="padding: 8px; background-color: #DBDBDB; font-weight: bold; border: 1px solid #333; text-align: center;">EQUIPO</td>
-                        </tr>
-                        @php
-                            $camposEquipo = [
-                                ['etiqueta' => 'MARCA:', 'valor' => $Datos_Equipo['MARCA_EQUIPO'] ?? '---', 'etiqueta2' => 'FECHA DE CALIBRACIÓN:', 'valor2' => $Datos_Equipo['FEC_CAL'] ?? '---'],
-                                ['etiqueta' => 'MODELO:', 'valor' => $Datos_Equipo['MODELO_EQUIPO'] ?? '---', 'etiqueta2' => 'CERTIFICADO POR:', 'valor2' => $Datos_Equipo['CER_POR'] ?? '---'],
-                                ['etiqueta' => 'N.S.:', 'valor' => $Datos_Equipo['NS_EQUIPO'] ?? '---', 'etiqueta2' => 'RANGO DE MEDICIÓN:', 'valor2' => $Datos_Equipo['RAN_MED'] ?? '---'],
-                            ];
-                        @endphp
-                        @foreach($camposEquipo as $fila)
-                            <tr style="@if(!$loop->last)border-bottom: 1px solid #333;@endif">
-                                <td class="celda-etiqueta">{{ $fila['etiqueta'] }}</td>
-                                <td class="celda-dato">{{ $fila['valor'] }}</td>
-                                <td class="celda-etiqueta">{{ $fila['etiqueta2'] }}</td>
-                                <td class="celda-dato-final">{{ $fila['valor2'] }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-                <div style="margin-bottom: 6px;"></div>
-
-                <!-- IMÁGENES DE REFERENCIA - TODAS JUNTAS CON BORDES Y COLORES -->
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead class="encabezadoAzul">
-                        <tr><th style="text-align: center; padding: 10px; font-weight: bold; font-size: 9px;">IMÁGENES DE REFERENCIA</th></tr>
-                    </thead>  
-                </table>
-
-                <!-- TODAS LAS IMÁGENES EN UNA TABLA UNIFICADA -->
-                <table style="width: 100%; border-collapse: collapse; border: 2px solid #333; background-color: #ffffff;">
-                    <tbody>
-                        <!-- FILA 1: IMÁGENES 1-2 (Termograma 1 - Visible 1) -->
-                        <tr style="height: 280px;">
-                            <td style="width: 50%; border-right: 2px solid #333; border-bottom: 2px solid #333; padding: 8px; text-align: center; vertical-align: middle;">
-                                @if($Fotos[1] ?? null)
-                                    <img src="{{ $Fotos[1] }}" alt="Termograma 1" style="max-width: 100%; max-height: 260px; display: inline-block;">
-                                @else
-                                    <div style="width: 100%; height: 260px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 52px; color: #ccc;">✕</div>
-                                @endif
-                            </td>
-                            <td style="width: 50%; border-bottom: 2px solid #333; padding: 8px; text-align: center; vertical-align: middle;">
-                                @if($Fotos[2] ?? null)
-                                    <img src="{{ $Fotos[2] }}" alt="Imagen Visible 1" style="max-width: 100%; max-height: 260px; display: inline-block;">
-                                @else
-                                    <div style="width: 100%; height: 260px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 52px; color: #ccc;">✕</div>
-                                @endif
-                            </td>
-                        </tr>
-
-                        <!-- ETIQUETAS FILA 1 -->
-                        <tr style="background-color: #ffffff; border-bottom: 2px solid #333;">
-                            <td style="width: 50%; border-right: 2px solid #333; padding: 8px; text-align: center; font-weight: bold; font-size: 8px; background-color: #DBDBDB;">
-                                Termograma
-                            </td>
-                            <td style="width: 50%; padding: 8px; text-align: center; font-size: 7px;">
-                                {{ $Datos_Equipo['termograma1'] ?? '---' }}
-                            </td>
-                        </tr>
-
-                        <!-- VALORES FILA 1 -->
-                        <tr style="background-color: #ffffff; border-bottom: 2px solid #333;">
-                            <td style="width: 50%; border-right: 2px solid #333; padding: 8px; text-align: center; font-weight: bold; font-size: 8px; background-color: #DBDBDB;">
-                                Emisividad
-                            </td>
-                            <td style="width: 50%; padding: 8px; text-align: center; font-size: 7px;">
-                                {{ $Datos_Equipo['emisividad1'] ?? '---' }}
-                            </td>
-                        </tr>
-
-                        <!-- FILA 2: IMÁGENES 3-4 (Termograma 2 - Visible 2/Emisividad) -->
-                        <tr style="height: 280px;">
-                            <td style="width: 50%; border-right: 2px solid #333; border-bottom: 2px solid #333; padding: 8px; text-align: center; vertical-align: middle;">
-                                @if($Fotos[3] ?? null)
-                                    <img src="{{ $Fotos[3] }}" alt="Termograma 2" style="max-width: 100%; max-height: 260px; display: inline-block;">
-                                @else
-                                    <div style="width: 100%; height: 260px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 52px; color: #ccc;">✕</div>
-                                @endif
-                            </td>
-                            <td style="width: 50%; border-bottom: 2px solid #333; padding: 8px; text-align: center; vertical-align: middle;">
-                                @if($Fotos[4] ?? null)
-                                    <img src="{{ $Fotos[4] }}" alt="Imagen Visible 2" style="max-width: 100%; max-height: 260px; display: inline-block;">
-                                @else
-                                    <div style="width: 100%; height: 260px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 52px; color: #ccc;">✕</div>
-                                @endif
-                            </td>
-                        </tr>
-
-                        <!-- ETIQUETAS FILA 2 -->
-                        <tr style="background-color: #ffffff; border-bottom: 2px solid #333;">
-                            <td style="width: 50%; border-right: 2px solid #333; padding: 8px; text-align: center; font-weight: bold; font-size: 8px; background-color: #DBDBDB;">
-                                Termograma
-                            </td>
-                            <td style="width: 50%; padding: 8px; text-align: center; font-size: 7px;">
-                                {{ $Datos_Equipo['termograma2'] ?? '---' }}
-                            </td>
-                        </tr>
-
-                        <!-- VALORES FILA 1 -->
-                        <tr style="background-color: #ffffff; border-bottom: 2px solid #333;">
-                            <td style="width: 50%; border-right: 2px solid #333; padding: 8px; text-align: center; font-weight: bold; font-size: 8px; background-color: #DBDBDB;">
-                                Emisividad
-                            </td>
-                            <td style="width: 50%; padding: 8px; text-align: center; font-size: 7px;">
-                                {{ $Datos_Equipo['emisividad2'] ?? '---' }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="espaciador-pequeno"></div>
-
-                <!-- DATOS DE OPERACIÓN -->
-                <table class="datosgenerales" style="width: 100%;">
-                    <thead class="encabezadoAzul">
-                        <tr><th style="text-align: center;">DATOS DE OPERACIÓN</th></tr>
-                    </thead>  
-                </table>
-
-                <table class="tabla-seccion tabla-operativo">
-                    <tr>
-                        <td class="celda-etiqueta">VOLTAJE:</td>
-                        <td class="celda-dato">{{ $Datos_Equipo['voltaje'] ?? '---' }}</td>
-                        <td class="celda-etiqueta">CARGA AMP:</td>
-                        <td class="celda-dato-final">{{ $Datos_Equipo['CARGA_AMP'] ?? '---' }}</td>
-                    </tr>
-                </table>
-
-                <div class="espaciador"></div>
-
-                <!-- TABLA DE SEVERIDAD -->
-                <table class="datosgenerales" style="width: 100%;">
-                    <thead class="encabezadoAzul">
-                        <tr><th style="text-align: center;">TABLA DE SEVERIDAD</th></tr>
-                    </thead>  
-                </table>
-
-                <table class="tabla-seccion">
-                    <tbody>
-                        @foreach($severidadFilas as $filaSeveridad)
-                            <tr @class(['severidad-row' => !$loop->last])>
-                                @foreach($filaSeveridad as $severidad)
-                                    @php
-                                        $config = $severidadConfig[$severidad];
-                                        $esSeleccionada = $severidadSeleccionada === $severidad;
-                                        $labelColor = $config['label_color'] ?? '#333333';
-                                        $bg = $esSeleccionada ? $labelColor : 'transparent';
-                                    @endphp
-                                    <td class="severidad-etiqueta" style="color: {{ $labelColor }};">
-                                        {{ $severidad }}
-                                    </td>
-                                    <td class="severidad-indicador" style="background-color: {{ $bg }};"></td>
-                                    <td class="severidad-descripcion">
-                                        {{ $config['descripcion'] }}
-                                    </td>
-                                @endforeach
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-                <div class="espaciador"></div>
-
-                <div class="page-break"></div>
-
-                <!-- SECCIONES DE CONTENIDO: OBSERVACIONES, NOTA, RECOMENDACIONES -->
-                <div class="espaciador"></div>
-
-                @foreach($seccionesTexto as $seccion)
-                    <table class="datosgenerales" style="width: 100%;">
                         <thead class="encabezadoAzul">
-                            <tr><th style="text-align: center;">{{ $seccion['titulo'] }}</th></tr>
-                        </thead>  
-                    </table>
+                            <tr><th colspan="4">DATOS Y AJUSTES DEL EQUIPO</th></tr>
+                        </thead>
 
-                    <table class="tabla-contenido-texto">
-                        <tr>
-                            <td>
-                                {{ $Datos_Equipo[$seccion['campo']] ?? $valorPorDefecto }}
-                            </td>
-                        </tr>
-                    </table>
+                        <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
-                    @if(!$loop->last)
-                        <div class="espaciador"></div>
-                    @endif
-                @endforeach
+                        <thead>
+                            <tr class="celdaGrisResultados">
+                                <th colspan="4" style="border: 1px solid black; border-left: 2px solid black; border-top: 2px solid black;">EQUIPO</th>
+                            </tr>
+                            <tr>
+                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
+                                <th style="border: 1px solid black;">1</th>
+                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
+                                <th style="border: 1px solid black;">2</th>
+                            </tr>
+                            <tr>
+                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
+                                <th style="border: 1px solid black;">1</th>
+                                <th class="celdaGrisResultados" style="width: 50px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
+                                <th style="border: 1px solid black;">2</th>
+                            </tr>
+                        </thead>
+                <table>
 
             </div>
-
         </body>
     </html>
