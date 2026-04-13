@@ -76,7 +76,7 @@
             .encabezadoAzul{
                 text-align: center;
                 width: 100%;
-                font-size: 12px;
+                font-size: 14px;
                 background-color: #305496;
                 color: #ffffff;
                 outline: 1px double #000000; /* Contorno externo */
@@ -85,7 +85,7 @@
             .encabezadoAzul2{
                 text-align: center;
                 width: 100%;
-                font-size: 8px;
+                font-size: 14px;
                 background-color: #215e99;
                 color: #ffffff;
                 outline: 1px double #000000; /* Contorno externo */
@@ -93,7 +93,7 @@
             .encabezadoAzul3{
                 text-align: center;
                 width: 100%;
-                font-size: 8px;
+                font-size: 14px;
                 background-color: #0070c0;
                 color: #ffffff;
                 outline: 1px double #000000; /* Contorno externo */
@@ -274,39 +274,47 @@
             </header>
             
             <footer>
-                <p style="text-align: left;">FOR-INS-17/01</p>
+                <p style="text-align: left;">FOR-INS-16/01</p>
             </footer>
 
             <div class="content">
                 <br>
                 <br>
                 <br>
-                <!-- IMAGEN DE REFERENCIA -->
+                <!-- IMAGEN DE REFERENCIA 2-->
                 <table class="datosresultados">
 
                         <thead class="encabezadoAzul2">
-                            <tr><th colspan="2">IMAGEN DE REFERENCIA</th></tr>
+                            <tr><th colspan="2">{{ $Datos_Equipo['Stndr_refe2'] }}</th></tr>
                         </thead>
 
                         <thead><tr class="sinBordeth"><th colspan="2"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
                             <tr>
-                                <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                                <th style="width: 10%;">        
+                                    @if(isset($Fotos[3]))
+                                        <img src="{{ $Fotos[3] }}" style="width:100%; height:auto;">
+                                    @endif
+                                </th>
 
-                                <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                                <th style="width: 10%;">        
+                                    @if(isset($Fotos[4]))
+                                        <img src="{{ $Fotos[4] }}" style="width:100%; height:auto;">
+                                    @endif
+                                </th>
 
                             </tr>
                             <tr>
                                 <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Termograma:</th>
 
-                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma1'] }}</th>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma2'] }}</th>
 
                             </tr>
                             <tr>
                                 <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Emisividad:</th>
 
-                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma2'] }}</th>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['emisividad2'] }}</th>
 
                             </tr>
                         </thead>
@@ -349,29 +357,29 @@
 
                         <thead>
                             <tr>
-                                <th class="" style="width: 20%;">BUENO:</th>
+                                <th class="" style="width: 20%; color: #00b050;">BUENO:</th>
 
-                                <th class="" style="width: 15%;">severidad1</th>
+                                <th class="" style="width: 15%; @if($Datos_Equipo['severidad'] == 'bueno') background-color: #00b050; @endif"></th>
 
                                 <th class="" style="width: 25%;">El equipo se encuentra en condiciones de operación optimas.</th>
 
-                                <th class="" style="width: 20%;">PREVENTIVO</th>
+                                <th class="" style="width: 20%; color: #ff6600;">PREVENTIVO</th>
 
-                                <th class="" style="width: 15%;">severidad2</th>
+                                <th class="" style="width: 15%; @if($Datos_Equipo['severidad'] == 'preventivo') background-color: #ff6600; @endif"></th>
 
                                 <th class="" style="width: 25%;">Media anomalía programar el paro del equipo para su reparación.</th>
                             </tr>
 
                             <tr>
-                                <th class="" style="width: 20%;">MODERADO:</th>
+                                <th class="" style="width: 20%; color: #ffcc00;">MODERADO:</th>
 
-                                <th class="" style="width: 15%;">severidad3</th>
+                                <th class="" style="width: 15%; @if($Datos_Equipo['severidad'] == 'moderado') background-color: #ffcc00; @endif"></th>
 
                                 <th class="" style="width: 25%;">Ligera anomalía, mantener en observación y programar reparación.</th>
 
-                                <th class="" style="width: 20%;">NO ACEPTABLE:</th>
+                                <th class="" style="width: 20%; color: #ff0000;">NO ACEPTABLE:</th>
 
-                                <th class="" style="width: 15%;">severidad4</th>
+                                <th class="" style="width: 15%; @if($Datos_Equipo['severidad'] == 'no_aceptable') background-color: #ff0000; @endif"></th>
 
                                 <th class="" style="width: 25%;">Anomalía severa, se recomienda parar el equipo para su intervención.</th>
                             </tr>
@@ -398,7 +406,7 @@
 
                         <thead>
                             <tr>
-                                <th class="" style="">123123123</th>
+                                <th class="" style="">{{ $Datos_Equipo['Observaciones'] }}</th>
                             </tr>
                         </thead>
                 </table>
@@ -409,7 +417,7 @@
                 <table class="datosgenerales">
                     <tbody>
                         <tr>
-                            <th style="">NOTA:</th>
+                            <th style="">NOTA: {{ $Datos_Equipo['Nota'] }}</th>
                         </tr>
                     </tbody>
                 </table>
@@ -427,7 +435,7 @@
 
                         <thead>
                             <tr>
-                                <th class="" style="">123123123</th>
+                                <th class="" style="">{{ $Datos_Equipo['Recomendaciones'] }}</th>
                             </tr>
                         </thead>
                 </table>

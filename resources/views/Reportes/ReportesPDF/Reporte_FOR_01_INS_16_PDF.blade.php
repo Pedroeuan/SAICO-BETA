@@ -100,7 +100,7 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 8px;
+            font-size: 14px;
             background-color: #305496;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
@@ -108,7 +108,7 @@
         .encabezadoAzul2{
             text-align: center;
             width: 100%;
-            font-size: 8px;
+            font-size: 14px;
             background-color: #215e99;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
@@ -220,7 +220,7 @@
             <div style="margin-bottom: 4px;"></div>
             
             <footer>
-                <p style="text-align: left;">FOR-INS-17/01</p>
+                <p style="text-align: left;">FOR-INS-16/01</p>
             </footer>
 
             <div class="content" style="text-align: center;">
@@ -284,7 +284,7 @@
             </header>
             
             <footer>
-                <p style="text-align: left;">FOR-INS-17/01</p>
+                <p style="text-align: left;">FOR-INS-16/01</p>
             </footer>
 
             <div class="content">
@@ -385,32 +385,40 @@
                 <br>
                 <br>
                 <br>
-                <!-- IMAGEN DE REFERENCIA -->
+                <!-- IMAGEN DE REFERENCIA 1-->
                 <table class="datosresultados">
 
                         <thead class="encabezadoAzul2">
-                            <tr><th colspan="2">IMAGEN DE REFERENCIA</th></tr>
+                            <tr><th colspan="2">{{ $Datos_Equipo['Stndr_refe1'] }}</th></tr>
                         </thead>
 
                         <thead><tr class="sinBordeth"><th colspan="2"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
                             <tr>
-                                <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                                <th style="width: 10%;">        
+                                    @if(isset($Fotos[1]))
+                                        <img src="{{ $Fotos[1] }}" style="width:100%; height:auto;">
+                                    @endif
+                                </th>
 
-                                <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                                <th style="width: 10%;">        
+                                    @if(isset($Fotos[2]))
+                                        <img src="{{ $Fotos[2] }}" style="width:100%; height:auto;">
+                                    @endif
+                                </th>
 
                             </tr>
                             <tr>
                                 <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Termograma:</th>
 
-                                <th class="celdaGrisOscuro" style="border: 1px solid black;">1</th>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma1'] }}</th>
 
                             </tr>
                             <tr>
                                 <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Emisividad:</th>
 
-                                <th class="celdaGrisOscuro" style="border: 1px solid black;">2</th>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['emisividad1'] }}</th>
 
                             </tr>
                         </thead>
