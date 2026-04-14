@@ -73,26 +73,6 @@
                     background-color: #FFF2CC;
                 }
 
-        .foto-container {
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
-            width: 312px;  /* Fija el ancho de la celda */
-            height: 170px; /* Fija la altura de la celda */
-            border: 1px solid black; 
-            vertical-align: middle;
-        }
-
-        .foto-container img {
-            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
-            object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 332.5px;  /* Ajusta el ancho de la celda */
-            height: 170px; /* Ajusta la altura de la celda */
-            vertical-align: middle;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
                 .tablaheader {
                     border-collapse: collapse; 
                     border-spacing: 0px;        /* Espacio entre celdas */
@@ -250,7 +230,7 @@
         }
         .foto-container[colspan="2"] img {
             width: 100%;
-            height: 23%;
+            height:27%;
         }
 
         /* ===== Imagen que ocupa una hoja completa ===== */
@@ -269,6 +249,33 @@
             margin-top: 0px;
             font-size: 12px;
         }
+        /* ===== Layout horizontal imagen + comentario ===== */
+
+        .foto-container-horizontal {
+            width: 70%;
+            height: 435px;
+            border: 1px solid black;
+            vertical-align: top;
+        }
+
+        .foto-container-horizontal img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Comentario lado derecho */
+        .comentario-horizontal {
+            width: 30%;
+            border: 1px solid black;
+            vertical-align: top;
+            padding: 10px;
+            font-size: 12px;
+            text-align: left;
+            /* 🔥 CLAVE */
+            border-top: none;
+        }
+
             </style>
         </head>
         <body>
@@ -551,6 +558,7 @@
                     </thead>  
 
                     <thead><tr class="sinBordeth"><th colspan="6"></th></tr></thead> <!-- Fila vacia -->
+                
                     <tbody>
                         <tr>
                             <th class="celdaGris" style="width: 60px;">MARCA:</th>
