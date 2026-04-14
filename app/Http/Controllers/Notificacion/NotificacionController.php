@@ -74,7 +74,9 @@ class NotificacionController extends Controller
         $certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
             ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->whereDate('Prox_fecha_calibracion', '>=', now())
             ->get();
+            //->get();
 
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
