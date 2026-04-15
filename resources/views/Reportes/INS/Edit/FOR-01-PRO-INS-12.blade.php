@@ -72,7 +72,7 @@
     <section class="content w-100">
         <div class="card w-100 p-3">
             <div class="card-body w-100">
-                <form id="FOR-01-PRO-INS-12" action="{{route('Reportes_FOR_01_PRO_INS_12.store')}}" method="post" enctype="multipart/form-data">
+                <form id="FOR-01-PRO-INS-12" action="{{ route('Reportes_FOR_01_PRO_INS_12.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                     <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -102,7 +102,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}">
+                                <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}" readonly>
                                 @error('Cliente')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror
@@ -112,7 +112,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}">
+                                <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
                                 @error('Contrato')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                 @enderror
@@ -560,59 +560,102 @@
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
+                            <tbody>
+                            @php $contador = 1; @endphp
 
-                                        <tbody>
-                                            @php
-                                                $contador = 1;
-                                            @endphp
+                            @foreach ($Grupo_Juntas_Re as $index => $grupo)
 
-                                            @foreach ($Grupo_Juntas_Re as $grupo)
-                                            @php
-                                                $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                            @endphp
-                                                @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                    <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
-                                                    <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
-                                                        <td colspan="13">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                <td>
-                                                                    <button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endif
+                            @php
+                                $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
 
-                                                @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr data-titulo="{{ $tituloKey }}">
-                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_junta[{{ $tituloKey }}][]' value="{{ $resultado['no_junta'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ZBarrido[{{ $tituloKey }}][]' value="{{ $resultado['ZBarrido'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_ind[{{ $tituloKey }}][]' value="{{ $resultado['no_ind'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='Tip_ind[{{ $tituloKey }}][]' value="{{ $resultado['Tip_ind'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='la[{{ $tituloKey }}][]' value="{{ $resultado['la'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='lc[{{ $tituloKey }}][]' value="{{ $resultado['lc'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ht[{{ $tituloKey }}][]' value="{{ $resultado['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='largo[{{ $tituloKey }}][]' value="{{ $resultado['largo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ancho[{{ $tituloKey }}][]' value="{{ $resultado['ancho'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='Eval[{{ $tituloKey }}][]' value="{{ $resultado['Eval'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='fotos[{{ $tituloKey }}][]' value="{{ $resultado['fotos'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='Observaciones[{{ $tituloKey }}][]' value="{{ $resultado['Observaciones'] }}"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                                                    </tr>
-                                                    @php $contador++; @endphp
-                                                @endforeach
-                                            @endforeach
-                                        </tbody>
+                                /*$titleId = $esSinTitulo
+                                    ? 'sin_titulo_' . $index   // 👈 único por bloque
+                                    : 'titulo_' . $index;*/
+                                $titleId = $esSinTitulo
+                                    ? 'sin_titulo'
+                                    : 'titulo_' . $index;
+
+                            @endphp
+
+                            {{-- 🔹 TÍTULO --}}
+                            @if (!$esSinTitulo)
+                            <tr class="titulo-row" data-titulo="{{ $titleId }}">
+                                <td colspan="13">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <input type="text"
+                                            class="form-control w-90 titulo-text"
+                                            name="titulos_text[{{ $titleId }}]"
+                                            value="{{ $grupo['titulos_juntas'] }}"
+                                            placeholder="Ingrese título...">
+
+                                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
+
+                                        <td>
+                                            <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endif
+
+                            {{-- 🔹 FILAS --}}
+                            @foreach ($grupo['resultados'] as $resultado)
+                            <tr data-titulo="{{ $titleId }}">
+                                <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                <td><input type="text" class="form-control" name='no_junta[{{ $titleId }}][]' value="{{ $resultado['no_junta'] }}"></td>
+                                <td><input type="text" class="form-control" name='ZBarrido[{{ $titleId }}][]' value="{{ $resultado['ZBarrido'] }}"></td>
+                                <td><input type="text" class="form-control" name='no_ind[{{ $titleId }}][]' value="{{ $resultado['no_ind'] }}"></td>
+                                <td><input type="text" class="form-control" name='Tip_ind[{{ $titleId }}][]' value="{{ $resultado['Tip_ind'] }}"></td>
+                                <td><input type="text" class="form-control" name='la[{{ $titleId }}][]' value="{{ $resultado['la'] }}"></td>
+                                <td><input type="text" class="form-control" name='lc[{{ $titleId }}][]' value="{{ $resultado['lc'] }}"></td>
+                                <td><input type="text" class="form-control" name='ht[{{ $titleId }}][]' value="{{ $resultado['ht'] }}"></td>
+                                <td><input type="text" class="form-control" name='largo[{{ $titleId }}][]' value="{{ $resultado['largo'] }}"></td>
+                                <td><input type="text" class="form-control" name='ancho[{{ $titleId }}][]' value="{{ $resultado['ancho'] }}"></td>
+                                <td><input type="text" class="form-control" name='Eval[{{ $titleId }}][]' value="{{ $resultado['Eval'] }}"></td>
+                                <td><input type="text" class="form-control" name='fotos[{{ $titleId }}][]' value="{{ $resultado['fotos'] }}"></td>
+                                <td><input type="text" class="form-control" name='Observaciones[{{ $titleId }}][]' value="{{ $resultado['Observaciones'] }}"></td>
+                                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @php $contador++; @endphp
+                            @endforeach
+
+                            {{-- 🔹 LONGITUD INSPECCIONADA --}}
+                            @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
+                                @foreach ($grupo['Long_Inspecc'] as $long)
+                                    <tr class="long-row" data-titulo="{{ $titleId }}">
+                                        <td colspan="12">Longitud Inspeccionada</td>
+
+                                        <td>
+                                            <input type="text"
+                                                class="form-control long-text"
+                                                name="Long_Inspecc[{{ $titleId }}][]"
+                                                value="{{ $long }}"
+                                                placeholder="Ingrese Longitud Inspeccionada...">
+                                        </td>
+
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btnEliminar">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+
+                            @endforeach
+
+                        </tbody>
                         </table>
-                        </div>
-
-                        <p>
-
+                    </div>
+                        <input type="hidden" id="titulos_hidden" name="titulos_hidden">
                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                         <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                             <div>
@@ -627,6 +670,8 @@
                             <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
                             <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                            <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                         </div>
@@ -922,7 +967,15 @@
                                                             <div class="image-preview mt-2">
                                                                 <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
                                                             </div>
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox" class="form-check-input imagen-hoja-checkbox" data-index="{{ $index }}" id="imagenHoja{{ $index }}"
+                                                                    {{ !empty($foto['una_hoja']) && $foto['una_hoja'] == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="imagenHoja{{ $index }}">
+                                                                    Imagen en una hoja
+                                                                </label>
+                                                            </div>
 
+                                                            <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}"> 
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
@@ -1026,19 +1079,23 @@
 <script>
     /*Juntas-Resultados */
     $(document).ready(function() {
-        let tituloCount = 0;
-        let rowCount = 0;
-        let rowCountGlobal = 0;
+    let tituloCount = $('.titulo-row').length;
+    //let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+    let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
+    let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
+            <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="13">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
@@ -1051,34 +1108,66 @@
         updateTitulos(); // Actualizar lista de títulos
         });
 
-        $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
+        $('#addLongBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
+                <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="12"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        });
+
+        $('#addBtn').click(function () {
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            // Recontar filas existentes que NO son títulos
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-            let newRow = `<tr data-titulo="${lastTitle}">
-                            <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
-                            <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento" value="${rowCountGlobal}"></td>
-                            <td><input type="text" class="form-control" name="ZBarrido[${lastTitle}][]" placeholder="Zona de Barrido"></td>
-                            <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
-                            <td><input type="text" class="form-control" name="Tip_ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-                            <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
-                            <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
-                            <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
-                            <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="Largo"></td>
-                            <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
-                            <td><input type="text" class="form-control" name="Eval[${lastTitle}][]" placeholder="Evaluación"></td>
-                            <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos"></td>
-                            <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones Técnico"></td>
-                            <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                        </tr>`;
+            let newRow = 
+                    `<tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"> 
+                    <td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento" value="${rowCountGlobal}"></td>
+                    <td><input type="text" class="form-control" name="ZBarrido[${lastTitle}][]" placeholder="Zona de Barrido"></td>
+                    <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
+                    <td><input type="text" class="form-control" name="Tip_ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="la[${lastTitle}][]" placeholder="LA"></td>
+                    <td><input type="text" class="form-control" name="lc[${lastTitle}][]" placeholder="LC"></td>
+                    <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
+                    <td><input type="text" class="form-control" name="largo[${lastTitle}][]" placeholder="Largo"></td>
+                    <td><input type="text" class="form-control" name="ancho[${lastTitle}][]" placeholder="Ancho"></td>
+                    <td><input type="text" class="form-control" name="Eval[${lastTitle}][]" placeholder="Evaluación"></td>
+                    <td><input type="text" class="form-control" name="fotos[${lastTitle}][]" placeholder="Fotos"></td>
+                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones Técnico"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                    </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
         }
     );
 
@@ -1093,17 +1182,79 @@
                 });
                 return;
             }
-
+            // Actualizar el campo oculto con [{id,text},...]
+            updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');
             // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
-    });
+
+});
+    
+        function verificarYAgregarLongitud() {
+
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+
+        let contadorBloque = 0;
+        let $ultimoElementoBloque = null;
+
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            //  Ignorar longitudes existentes (no cuentan)
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+                return;
+            }
+
+            // Contar título o fila normal
+            if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
+                contadorBloque++;
+                $ultimoElementoBloque = $row;
+            }
+            //-----------------------------------------Hacer ajuste de "N" filas por bloque
+            //  Cuando llegue a 11 → insertar longitud
+            if (contadorBloque === 10) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="12">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text"
+                                    class="form-control w-90 long-text"
+                                    name="Long_Inspecc[${lastTitle}][]"
+                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                //  Evitar duplicados
+                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                    $ultimoElementoBloque.after(newLong);
+                }
+
+                // Reiniciar contador para siguiente bloque
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+            }
+        });
+    }
 
         /*Selects */
     $(document).ready(function() {
@@ -1120,58 +1271,47 @@
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
         }
-        
-            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
-            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
 
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
-            }
-
-            const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios1');
-            selectedOptionLocalA1 != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA1),actualizarInputsA()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
-                });
-
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
+                var nombre = selectedOption.data('nombre') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
+                $('#nombreInputbyp').val(nombre);
                 $('#nsInputbyp').val(ns);
             }
-
-            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
-            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
 
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
+
+            function actualizarInputsA1() {
+                var selectedOption = $('#accesoriosSelect1').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA1').val(marca);
+                $('#modeloInputA1').val(modelo);
+                $('#nsInputA1').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect1').on('change', function() {
+                    actualizarInputsA1();
+                });
 
             function actualizarInputsA2() {
                 var selectedOption = $('#accesoriosSelect2').find('option:selected');
@@ -1186,15 +1326,11 @@
                 $('#modeloInputA2').val(modelo);
                 $('#nsInputA2').val(ns);
             }
-
-            const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
-            selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
-
+            
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect2').on('change', function() {
                     actualizarInputsA2();
                 });
-                
 
             function actualizarInputsA3() {
                 var selectedOption = $('#accesoriosSelect3').find('option:selected');
@@ -1209,14 +1345,143 @@
                 $('#modeloInputA3').val(modelo);
                 $('#nsInputA3').val(ns);
             }
-            const selectedOptionLocalA3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios3');
-            selectedOptionLocalA3 != null ?  ($('#accesoriosSelect3').val(selectedOptionLocalA3),actualizarInputsA3()):"";
-
+            
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect3').on('change', function() {
                     actualizarInputsA3();
                 });
-                
+
+            function actualizarInputsA4() {
+                var selectedOption = $('#accesoriosSelect4').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA4').val(marca);
+                $('#modeloInputA4').val(modelo);
+                $('#nsInputA4').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect4').on('change', function() {
+                    actualizarInputsA4();
+                });
+
+            function actualizarInputsA5() {
+                var selectedOption = $('#accesoriosSelect5').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA5').val(marca);
+                $('#modeloInputA5').val(modelo);
+                $('#nsInputA5').val(ns);
+            }
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect5').on('change', function() {
+                    actualizarInputsA5();
+                });
+
+            function actualizarInputsA6() {
+                var selectedOption = $('#accesoriosSelect6').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA6').val(marca);
+                $('#modeloInputA6').val(modelo);
+                $('#nsInputA6').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect6').on('change', function() {
+                    actualizarInputsA6();
+                });
+
+            function actualizarInputsA7() {
+                var selectedOption = $('#accesoriosSelect7').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA7').val(marca);
+                $('#modeloInputA7').val(modelo);
+                $('#nsInputA7').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect7').on('change', function() {
+                    actualizarInputsA7();
+                });
+
+            function actualizarInputsA8() {
+                var selectedOption = $('#accesoriosSelect8').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#marcaInputA8').val(marca);
+                $('#modeloInputA8').val(modelo);
+                $('#nsInputA8').val(ns);
+            }
+            
+                // Evento cuando se cambia la selección en el select
+                $('#accesoriosSelect8').on('change', function() {
+                    actualizarInputsA8();
+                });
+
+        function actualizarInputsE2() {
+            var selectedOption = $('#equiposSelect2').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE2').val(marca);
+            $('#modeloInputE2').val(modelo);
+            $('#nsInputE2').val(ns);
+        }
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect2').on('change', function() {
+                actualizarInputsE2();
             });
+
+            function actualizarInputsE3() {
+            var selectedOption = $('#equiposSelect3').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var marca = selectedOption.data('marca') || '';
+            var modelo = selectedOption.data('modelo') || '';
+            var ns = selectedOption.data('ns') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#marcaInputE3').val(marca);
+            $('#modeloInputE3').val(modelo);
+            $('#nsInputE3').val(ns);
+        }
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect3').on('change', function() {
+                actualizarInputsE3();
+            });
+    });
 </script>
 @endsection
