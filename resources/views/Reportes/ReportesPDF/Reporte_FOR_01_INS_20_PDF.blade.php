@@ -168,8 +168,8 @@
 
         .foto-container {
             padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
-            width: 270px;  /* Fija el ancho de la celda */
-            height: 270px; /* Fija la altura de la celda */
+            width: 220px;  /* Fija el ancho de la celda */
+            height: 200px; /* Fija la altura de la celda */
             border: 1px solid black; 
             vertical-align: middle;
         }
@@ -178,7 +178,7 @@
             /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
             object-fit: cover; /* Llenar el espacio sin distorsionar */
             width: 443px;  /* Ajusta el ancho de la celda */
-            height: 272px; /* Ajusta la altura de la celda */
+            height: 230px; /* Ajusta la altura de la celda */
             vertical-align: middle;
             display: flex;
             flex-direction: column;
@@ -191,7 +191,7 @@
             border-top: 1px solid black; /* Borde superior de 2px en color negro */
             padding-top: 1px; /* Espaciado entre el borde y el texto */
             margin-top: 0px; /* Espacio entre la imagen y el comentario */
-            height: 5px;
+            height: 30px;
             text-align: center; /* Centrar el texto */
             font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
             max-width: 100%; /* Para que el texto no desborde */
@@ -583,7 +583,7 @@
 
                                             {{-- Comentario derecha --}}
                                             <td class="foto-container">
-                                                <div class="">
+                                                <div class="" style="font-size: 10px; text-align: justify;">
                                                     {{ $foto['comment'] }}
                                                 </div>
                                             </td>
