@@ -193,7 +193,7 @@
             margin-top: 0px; /* Espacio entre la imagen y el comentario */
             height: 5px;
             text-align: center; /* Centrar el texto */
-            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
+            font-size: 10px; /* Ajusta el tamaño de la fuente si es necesario */
             max-width: 100%; /* Para que el texto no desborde */
             word-wrap: break-word; /* Permite que el texto se ajuste */
         }
