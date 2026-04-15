@@ -119,7 +119,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Contrato</label>
-                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}">
+                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
                             @error('Contrato')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -227,7 +227,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
                             <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
@@ -237,7 +237,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Criterio de Evaluación</label>
                             <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion', $Detalles_Generales['Criterio_Evaluacion'] ?? '')}}">
@@ -247,7 +247,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Accesorio</label>
                             <input type="text" class="form-control  inputForm @error('Accesorio') is-invalid @enderror" name="Detalles_Generales[Accesorio]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Accesorio', $Detalles_Generales['Accesorio'] ?? '')}}">
@@ -257,7 +257,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Tuberia</label>
                             <input type="text" class="form-control  inputForm @error('Tuberia') is-invalid @enderror" name="Detalles_Generales[Tuberia]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Tuberia', $Detalles_Generales['Tuberia'] ?? '')}}">
@@ -267,7 +267,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Estructural</label>
                             <input type="text" class="form-control  inputForm @error('Estructural') is-invalid @enderror" name="Detalles_Generales[Estructural]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Estructural', $Detalles_Generales['Estructural'] ?? '')}}">
@@ -341,7 +341,18 @@
                                                             <div class="image-preview mt-2">
                                                                 <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
                                                             </div>
-
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox"
+                                                                    class="form-check-input imagen-hoja-checkbox"
+                                                                    data-index="{{ $index }}"
+                                                                    id="imagenHoja{{ $index }}"
+                                                                    {{ !empty($foto['una_hoja']) && $foto['una_hoja'] == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="imagenHoja{{ $index }}">
+                                                                    Imagen en una hoja
+                                                                </label>
+                                                            </div>
+                                                            
+                                                            <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}">
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 
@@ -396,6 +407,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
 
                                 <!-- Select para elegir el número de firmas -->
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -594,12 +606,6 @@
                                 </thead>                            
                             </table>
                         </div>
-
-                        <p>
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                        
-                        <p>
 
                                         <div class="container">
                                             <div class="float-right">
