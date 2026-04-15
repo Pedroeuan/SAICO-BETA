@@ -158,10 +158,10 @@
         /* ************** */
         .imagenes-reporte {
             margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
-            width: 106%;
+            width: 104%;
             border-collapse: separate;
             /*border-spacing: 20px; /* Espacio entre celdas */
-            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
+            border-spacing: 25px 25px; /* 20px entre columnas, 0px entre filas */
             margin-bottom: 0;
             table-layout: fixed; /* Fija el ancho de las celdas */
         }
@@ -177,8 +177,8 @@
         .foto-container img {
             /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
             object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 310px;  /* Ajusta el ancho de la celda */
-            height: 271.5px; /* Ajusta la altura de la celda */
+            width: 443px;  /* Ajusta el ancho de la celda */
+            height: 272px; /* Ajusta la altura de la celda */
             vertical-align: middle;
             display: flex;
             flex-direction: column;
@@ -189,8 +189,9 @@
         /* Estilo para los comentarios */
         .comment { 
             border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 7px; /* Espaciado entre el borde y el texto */
+            padding-top: 1px; /* Espaciado entre el borde y el texto */
             margin-top: 0px; /* Espacio entre la imagen y el comentario */
+            height: 5px;
             text-align: center; /* Centrar el texto */
             /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
             max-width: 100%; /* Para que el texto no desborde */
@@ -231,49 +232,6 @@
         .foto-container[colspan="2"] img {
             width: 100%;
             height:27%;
-        }
-
-        /* ===== Imagen que ocupa una hoja completa ===== */
-        .foto-full {
-            width: 100% !important;
-            height: 435px !important;
-        }
-
-        .foto-full img {
-            width: 100% !important;
-            height: 404px !important;
-            object-fit: contain; /* no recorta */
-        }
-
-        .foto-full .comment {
-            margin-top: 0px;
-            font-size: 12px;
-        }
-        /* ===== Layout horizontal imagen + comentario ===== */
-
-        .foto-container-horizontal {
-            width: 70%;
-            height: 435px;
-            border: 1px solid black;
-            vertical-align: top;
-        }
-
-        .foto-container-horizontal img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        /* Comentario lado derecho */
-        .comentario-horizontal {
-            width: 30%;
-            border: 1px solid black;
-            vertical-align: top;
-            padding: 10px;
-            font-size: 12px;
-            text-align: left;
-            /* 🔥 CLAVE */
-            border-top: none;
         }
 
             </style>
@@ -480,7 +438,7 @@
                         }
                         // Imagen normal
                         $grupoActual[] = $foto;
-                        if (count($grupoActual) == 4) {
+                        if (count($grupoActual) == 2) {
                             $chunks[] = $grupoActual;
                             $grupoActual = [];
                         }
@@ -491,60 +449,74 @@
             @endphp
         @foreach($chunks as $fotosGrupo)
             <div class="content">
-                <table class="datosgenerales">
+                <table class="datosgenerales" border="0">
 
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                        <tr><th colspan="6">DATOS GENERALES</th></tr>
                     </thead>  
 
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+                    <thead><tr class="sinBordeth"><th colspan="6"></th></tr></thead> <!-- Fila vacia -->
 
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
+                            <th style=""></th>
+                            <td style=""></td>
                             <th style="width: 15%;">NO. REPORTE:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
+                            <td class="lineaInferior" colspan="5">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
+                            <td class="lineaInferior" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
+                            <td class="lineaInferior" colspan="2">{{ $Detalles_Generales['Folio'] }}</td>
+                            <th style="width: 200px;">TIPO DE RECUBRIMIENTO O AISLAMIENTO:</th>
+                            <td class="lineaInferior" colspan="2">{{ $Detalles_Generales['tip_ais'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
+                            <td class="lineaInferior" colspan="5">{{ $Detalles_Generales['Partida'] }}</td>
                         </tr>
                         <tr>
-                            <th>Instalación:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['ins'] }}</td>
-                            <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
+                            <th>INSTALACIÓN:</th>
+                            <td class="lineaInferior" colspan="2">{{ $Detalles_Generales['ins'] }}</td>
+                            <th>No. ISOMETRICO:</th>
+                            <td class="lineaInferior" colspan="2">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
                         </tr>
                         <tr>
-                            <th>Nombre de la Pieza:</th>
+                            <th>NOMBRE DE LA PIEZA:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Nom_pz'] }}</td>
                             <th>MATERIAL:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
+                            <th>TRAZABILIDAD:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Trazabilidad'] }}</td>
                         </tr>
                         <tr>
                             <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
-                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
+                            <td class="lineaInferior" colspan="2">{{ $Detalles_Generales['Procedimiento'] }}</td>
+                            <th>CRITERIO DE EVALUACIÓN:</th>
+                            <td class="lineaInferior" colspan="2">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>ACCESORIO:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Accesorio'] }}</td>
+                            <th>TUBERIA:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Tuberia'] }}</td>
+                            <th>ESTRUCTURAL:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Estructural'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -572,12 +544,6 @@
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
-
-                <table class="datosgenerales">
-                    <thead class="encabezadoAzul">
-                        <tr><th>MATRIZ DE DATOS OBTENIDA DE LA PIEZA</th></tr>
-                    </thead>  
-                </table>
                     @php
                         $esHojaCompleta = (
                             count($fotosGrupo) == 1 &&
@@ -586,31 +552,43 @@
                         );
                     @endphp
 
+                    <table class="datosgenerales">
+                        <thead class="encabezadoAzul">
+                            <tr>            
+                                <th>
+                                    {{ $esHojaCompleta 
+                                        ? 'SEÑAL DE REFERENCIA' 
+                                        : 'MATRIZ DE DATOS OBTENIDA DE LA PIEZA' 
+                                    }}
+                                </th>
+                            </tr>
+                        </thead>  
+                    </table>
                             <table class="imagenes-reporte">
                                 <tr>
-                                @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
-                                    {{-- 3 imágenes: 2 arriba, 1 abajo --}}
-                                    <td class="foto-container">
-                                        <img src="{{ $fotosGrupo[0]['path'] }}">
-                                        <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
-                                    </td>
-                                    <td class="foto-container">
-                                        <img src="{{ $fotosGrupo[1]['path'] }}">
-                                        <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
-                                    </td>
-                                    </tr><tr>
-                                    <td class="foto-container" colspan="2">
-                                        <img src="{{ $fotosGrupo[2]['path'] }}">
-                                        <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
-                                    </td>
-                                @else
                                     @foreach($fotosGrupo as $index => $foto)
-                                        {{-- Caso 1 imagen: ocupa toda la hoja --}}
+                                        {{-- Caso 1 imagen: ocupa toda la hoja 
                                         @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
                                             <td class="foto-container foto-full" colspan="2">
                                                 <img src="{{ $foto['path'] }}">
                                                 <p class="comment">{{ $foto['comment'] }}</p>
+                                            </td>--}}
+                                        @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
+                                            </tr><tr>
+                                            
+                                            {{-- Imagen izquierda --}}
+                                            <td class="foto-container">
+                                                <img src="{{ $foto['path'] }}">
                                             </td>
+
+                                            {{-- Comentario derecha --}}
+                                            <td class="foto-container">
+                                                <div class="">
+                                                    {{ $foto['comment'] }}
+                                                </div>
+                                            </td>
+
+                                            </tr><tr>
                                         @else
                                             <td class="foto-container">
                                                 <img src="{{ $foto['path'] }}">
@@ -621,29 +599,6 @@
                                             @endif
                                         @endif
                                     @endforeach
-                                @endif
-
-                                {{-- Relleno cuando NO es hoja completa y faltan imágenes --}}
-                                @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
-                                    @php $faltantes = 4 - count($fotosGrupo); @endphp
-                                    @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
-                                        @for($i = 0; $i < $faltantes; $i++)
-                                            <td class="foto-container empty-box">
-                                                <div class="cross-line"></div>
-                                                <div class="empty-comment"></div>
-                                            </td>
-                                            @if((count($fotosGrupo) + $i + 1) % 2 == 0)
-                                                </tr><tr>
-                                            @endif
-                                        @endfor
-                                    @elseif(count($fotosGrupo) == 3)
-                                        </tr><tr>
-                                        <td class="foto-container" colspan="2">
-                                            <img src="{{ $fotosGrupo[2]['path'] }}">
-                                            <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
-                                        </td>
-                                    @endif
-                                @endif
 
                                 </tr>
                             </table>

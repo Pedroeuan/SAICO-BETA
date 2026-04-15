@@ -124,7 +124,6 @@
                                         <div class="form-group">
                                             <label class="col-form-label">
                                                 Contrato
-
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
