@@ -1642,7 +1642,6 @@ $(document).ready(function() {
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
                     </td><td><input type="text" class="form-control" name="no_junta[${lastTitle}][]" placeholder="Junta / Elemento"></td>
                     <td><input type="text" class="form-control" name="Tip_Ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
                     <td><input type="text" class="form-control" name="L_PGL[${lastTitle}][]" placeholder="L (PLG)"></td>
