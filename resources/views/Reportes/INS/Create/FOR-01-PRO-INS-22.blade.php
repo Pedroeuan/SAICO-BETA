@@ -236,7 +236,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Material</label>
                             <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material')}}">
@@ -246,7 +246,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
                             <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
@@ -256,7 +256,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Diametro Nominal NPS</label>
                             <input type="text" class="form-control  inputForm @error('Dia_NPS') is-invalid @enderror" name="Detalles_Generales[Dia_NPS]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Dia_NPS')}}">
@@ -968,7 +968,7 @@
                         <p>
 
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                        
+
                         <p>
 
                         <!--IMAGENES CON COMENTARIOS-->
@@ -1050,7 +1050,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create-For-01-22.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -1334,7 +1334,8 @@ $(document).ready(function() {
 
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
+                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento"></td>
                     <td><input type="text" class="form-control" name="nom_pulg[${lastTitle}][]" placeholder="Ønom (pulg)"></td>
                     <td><input type="text" class="form-control" name="ext_pulg[${lastTitle}][]" placeholder="Øext (pulg)"></td>
@@ -1342,7 +1343,7 @@ $(document).ready(function() {
                     <td><input type="text" class="form-control" name="Ele_iden[${lastTitle}][]" placeholder="Elementos idendificados"></td>
                     <td><input type="text" class="form-control" name="-X[${lastTitle}][]" placeholder="(-X)"></td>
                     <td><input type="text" class="form-control" name="+X[${lastTitle}][]" placeholder="(+X)"></td>
-                    <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No_Ind"></td>
+                    <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No_Ind" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="Dis_rela[${lastTitle}][]" placeholder="Distancia relativa al dato (m)"></td>
                     <td><input type="text" class="form-control" name="HT1[${lastTitle}][]" placeholder="Horario Tecnico"></td>
                     <td><input type="text" class="form-control" name="HT2[${lastTitle}][]" placeholder="Horario Tecnico"></td>

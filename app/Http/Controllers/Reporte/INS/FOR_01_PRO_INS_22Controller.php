@@ -220,6 +220,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
 
     public function FOR_01_PRO_INS_22_store(Request $request)
     {
+        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -593,6 +594,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
                 'ruta' => "storage/Reportes/FOR_01_PRO_INS_22/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
                 'una_hoja' => $request->imagen_hoja[$index] ?? 0, 
+                'Paleta_Col' => $request->Paleta_Col[$index] ?? 0, 
+                'Escala_Loga' => $request->Escala_Loga[$index] ?? 0, 
             ];
         }
 
