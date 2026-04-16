@@ -220,6 +220,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
 
     public function FOR_01_PRO_INS_22_store(Request $request)
     {
+        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -593,6 +594,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
                 'ruta' => "storage/Reportes/FOR_01_PRO_INS_22/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
                 'una_hoja' => $request->imagen_hoja[$index] ?? 0, 
+                'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
+                'RG_Secundario' => $request->RG_Secundario[$index] ?? 0, 
             ];
         }
 
@@ -1023,6 +1026,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
+                        'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
+                        'RG_Secundario' => $request->RG_Secundario[$index] ?? 0, 
                     ];
                     $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
                 }
@@ -1042,6 +1047,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
+                        'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
+                        'RG_Secundario' => $request->RG_Secundario[$index] ?? 0, 
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
@@ -1052,6 +1059,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
                         'ruta' => $ruta,
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
+                        'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
+                        'RG_Secundario' => $request->RG_Secundario[$index] ?? 0, 
                     ];
                     $rutasGuardadas[] = $ruta;
                 }
