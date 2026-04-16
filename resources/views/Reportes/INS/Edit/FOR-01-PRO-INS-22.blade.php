@@ -1072,9 +1072,9 @@
                                                                 <input type="checkbox"
                                                                     class="form-check-input RG-Secundario-checkbox"
                                                                     data-index="{{ $index }}"
-                                                                    id="RG-Secundario{{ $index }}"
+                                                                    id="RG_Secundario{{ $index }}"
                                                                     {{ !empty($foto['RG_Secundario']) && $foto['RG_Secundario'] == 1 ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="RG-Secundario{{ $index }}">
+                                                                <label class="form-check-label" for="RG_Secundario{{ $index }}">
                                                                     Resultado y Graficas Sonyks Secundario
                                                                 </label>
                                                             </div>
@@ -1090,8 +1090,11 @@
                                                                 </label>
                                                             </div>
 
+                                                            <input type="hidden" name="RG_Principal[{{ $index }}]" id="RGPrincipalValue{{ $index }}" value="{{ $foto['RG_Principal'] ?? 0 }}">    
 
-                                                            <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}">                                                        
+                                                            <input type="hidden" name="RG_Secundario[{{ $index }}]" id="RGSecundarioValue{{ $index }}" value="{{ $foto['RG_Secundario'] ?? 0 }}"> 
+
+                                                            <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}"> 
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
 

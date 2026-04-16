@@ -1026,6 +1026,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
+                        'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
+                        'RG_Secundario' => $request->RG_Secundario[$index] ?? 0, 
                     ];
                     $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
                 }
@@ -1045,6 +1047,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
+                        'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
+                        'RG_Secundario' => $request->RG_Secundario[$index] ?? 0, 
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
@@ -1055,6 +1059,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
                         'ruta' => $ruta,
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
+                        'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
+                        'RG_Secundario' => $request->RG_Secundario[$index] ?? 0, 
                     ];
                     $rutasGuardadas[] = $ruta;
                 }

@@ -189,6 +189,64 @@
         });
     }
 
+function bindRGCheckboxes() {
+    document.querySelectorAll('.RG-Principal-checkbox').forEach(cb => {
+        const index = cb.dataset.index;
+        const hidden = document.getElementById(`RGPrincipalValue${index}`);
+
+        if (hidden) {
+            hidden.value = cb.checked ? 1 : 0;
+        }
+
+        if (cb.dataset.bound === '1') return;
+        cb.dataset.bound = '1';
+
+        cb.addEventListener('change', function () {
+            if (hidden) {
+                hidden.value = this.checked ? 1 : 0;
+            }
+
+            if (this.checked) {
+                const secundario = document.querySelector(`#RG_Secundario${index}`);
+                if (secundario) {
+                    secundario.checked = false;
+
+                    // actualizar su hidden también
+                    const hiddenSec = document.getElementById(`RGSecundarioValue${index}`);
+                    if (hiddenSec) hiddenSec.value = 0;
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.RG-Secundario-checkbox').forEach(cb => {
+        const index = cb.dataset.index;
+        const hidden = document.getElementById(`RGSecundarioValue${index}`);
+
+        if (hidden) {
+            hidden.value = cb.checked ? 1 : 0;
+        }
+
+        if (cb.dataset.bound === '1') return;
+        cb.dataset.bound = '1';
+
+        cb.addEventListener('change', function () {
+            if (hidden) {
+                hidden.value = this.checked ? 1 : 0;
+            }
+
+            if (this.checked) {
+                const principal = document.querySelector(`#RG_Principal${index}`);
+                if (principal) {
+                    principal.checked = false;
+
+                    const hiddenPri = document.getElementById(`RGPrincipalValue${index}`);
+                    if (hiddenPri) hiddenPri.value = 0;
+                }
+            }
+        });
+    });
+}
 
     // Generar campos de imágenes
     document.addEventListener("DOMContentLoaded", function () {
@@ -197,6 +255,7 @@
         const cropperImage = document.getElementById('cropperImage');
 
         bindImagenHojaCheckboxes();
+        bindRGCheckboxes();
 
         if (!imageCountSelect || !container) {
             return;
@@ -254,20 +313,6 @@
                 `;
                 container.appendChild(col);
 
-                // Si index es par, agregar un textarea para el par de imágenes
-                /*if (index % 2 === 0) {
-                    const pairIndex = Math.ceil(index / 2);
-                    const textareaCol = document.createElement('div');
-                    textareaCol.classList.add('col-12', 'mb-3');
-                    textareaCol.setAttribute('id', `images-comments-pair-${pairIndex}`);
-                    textareaCol.innerHTML = `
-                        <div class="form-group">
-                            <label for="images-comments-${pairIndex}">Comentarios para imágenes ${index - 1} y ${index}:</label>
-                            <textarea class="form-control images-comments" id="images-comments-${pairIndex}" data-pair-index="${pairIndex}" rows="3" placeholder="Comentarios sobre estas dos imágenes..."></textarea>
-                        </div>
-                    `;
-                    container.appendChild(textareaCol);
-                }*/
             }
 
             // Eventos de eliminación
@@ -343,6 +388,7 @@
             });
 
             bindImagenHojaCheckboxes();
+            bindRGCheckboxes();
         }
 
         // Limpiar localStorage al enviar el formulario
