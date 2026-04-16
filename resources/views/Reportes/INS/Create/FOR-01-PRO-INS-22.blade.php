@@ -1094,7 +1094,7 @@ $(document).ready(function() {
             ext_pulg: 'Øext (pulg)', 
             Long_m: 'Long. (m)', 
             Ele_iden: 'Elementos idendificados', 
-            '-X': '(-X)', 
+            '-X':'(-X)', 
             '+X': '(+X)',
             No_Ind: 'No. Ind.', 
             Dis_rela: 'Distancia relativa al dato (m)', 

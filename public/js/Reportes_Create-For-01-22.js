@@ -226,23 +226,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="form-group">
                         <label for="image${i}">Imagen por Subir ${i}:</label>
                         <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+
                         <div class="form-check mt-2">
                             <input type="checkbox"
-                                class="form-check-input Escala-Loga-checkbox"
+                                class="form-check-input RG-Principal-checkbox"
                                 data-index="${i}"
-                                id="Escala-Log${i}">
-                            <label class="form-check-label" for="Escala-Log${i}">
-                                Escala Logaritmica
+                                id="RG-Principal${i}">
+                            <label class="form-check-label" for="RG-Principal${i}">
+                                Resultado y Graficas Sonyks Principal
                             </label>
                         </div>
 
                         <div class="form-check mt-2">
                             <input type="checkbox"
-                                class="form-check-input Paleta-Col-checkbox"
+                                class="form-check-input RG-Secundario-checkbox"
                                 data-index="${i}"
-                                id="Paleta-Col${i}">
-                            <label class="form-check-label" for="Paleta-Col${i}">
-                                Paleta de Colores
+                                id="RG-Secundario${i}">
+                            <label class="form-check-label" for="RG-Secundario${i}">
+                                Resultado y Graficas Sonyks Secundario
                             </label>
                         </div>
 
@@ -256,9 +257,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             </label>
                         </div>
 
-                        <input type="hidden" name="Escala_Loga[]" id="EscalaLogaValue${i}" value="0">
+                        <input type="hidden" name="RG_Principal[]" id="RGPrincipalValue${i}" value="0">
 
-                        <input type="hidden" name="Paleta_Col[]" id="PaletaColValue${i}" value="0">
+                        <input type="hidden" name="RG_Secundario[]" id="RGSecundarioValue${i}" value="0">
                         
                         <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">
 
@@ -271,17 +272,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 container.appendChild(col);
             }
 
-            document.querySelectorAll('.Escala-Loga-checkbox').forEach(cb => {
+            document.querySelectorAll('.RG-Principal-checkbox').forEach(cb => {
                 cb.addEventListener('change', function () {
                     const index = this.dataset.index;
-                    document.getElementById(`EscalaLogaValue${index}`).value = this.checked ? 1 : 0;
+                    document.getElementById(`RGPrincipalValue${index}`).value = this.checked ? 1 : 0;
                 });
             });
 
-            document.querySelectorAll('.Paleta-Col-checkbox').forEach(cb => {
+            document.querySelectorAll('.RG-Secundario-checkbox').forEach(cb => {
                 cb.addEventListener('change', function () {
                     const index = this.dataset.index;
-                    document.getElementById(`PaletaColValue${index}`).value = this.checked ? 1 : 0;
+                    document.getElementById(`RGSecundarioValue${index}`).value = this.checked ? 1 : 0;
                 });
             });
 

@@ -1056,6 +1056,29 @@
                                                             <div class="image-preview mt-2">
                                                                 <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
                                                             </div>
+
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox"
+                                                                    class="form-check-input RG-Principal-checkbox"
+                                                                    data-index="{{ $index }}"
+                                                                    id="RG-Principal{{ $index }}"
+                                                                    {{ !empty($foto['RG_Principal']) && $foto['RG_Principal'] == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="RG-Principal{{ $index }}">
+                                                                    Resultado y Graficas Sonyks Principal
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox"
+                                                                    class="form-check-input RG-Secundario-checkbox"
+                                                                    data-index="{{ $index }}"
+                                                                    id="RG-Secundario{{ $index }}"
+                                                                    {{ !empty($foto['RG_Secundario']) && $foto['RG_Secundario'] == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="RG-Secundario{{ $index }}">
+                                                                    Resultado y Graficas Sonyks Secundario
+                                                                </label>
+                                                            </div>
+
                                                             <div class="form-check mt-2">
                                                                 <input type="checkbox"
                                                                     class="form-check-input imagen-hoja-checkbox"
@@ -1066,6 +1089,8 @@
                                                                     Imagen en una hoja
                                                                 </label>
                                                             </div>
+
+
                                                             <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}">                                                        
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
@@ -1160,7 +1185,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit-For-01-22.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
