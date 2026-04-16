@@ -976,8 +976,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
         $imagenHoja = $request->input('imagen_hoja', []);
-
-        //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
+        $RG_Principal = $request->input('RG_Principal', []);
+        $RG_Secundario = $request->input('RG_Secundario', []);
 
         // **1️⃣ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
