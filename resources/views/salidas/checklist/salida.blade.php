@@ -73,22 +73,22 @@
         <div class="card-header p-2">
             <ul class="nav nav-pills">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#tab1" data-toggle="tab">
+                    <a class="nav-link active" href="#tab1" data-bs-toggle="tab">
                         Datos Generales
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab2" data-toggle="tab">
+                    <a class="nav-link" href="#tab2" data-bs-toggle="tab">
                         Herramientas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab3" data-toggle="tab">
+                    <a class="nav-link" href="#tab3" data-bs-toggle="tab">
                         Documentos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#tab4" data-toggle="tab">
+                    <a class="nav-link" href="#tab4" data-bs-toggle="tab">
                         Evidencias
                     </a>
                 </li>
@@ -103,7 +103,7 @@
 
     <div class="mb-3">
         <label>Nivel de gasolina</label>
-        <select name="nivel_gasolina" class="form-control" required>
+        <select name="nivel_gasolina" class="form-control @error('nivel_gasolina') is-invalid @enderror" required>
             <option value="">Seleccione</option>
             <option value="Lleno" {{ old('nivel_gasolina', $defaultNivel ?? '') == 'Lleno' ? 'selected' : '' }}>Lleno</option>
             <option value="3/4" {{ old('nivel_gasolina', $defaultNivel ?? '') == '3/4' ? 'selected' : '' }}>3/4</option>
@@ -115,7 +115,10 @@
 
     <div class="mb-3">
         <label>Kilometraje</label>
-        <input type="number" name="kilometraje" class="form-control" required value="{{ old('kilometraje', $defaultKilometraje ?? '') }}">
+        <input type="number" name="kilometraje" class="form-control @error('kilometraje') is-invalid @enderror" required value="{{ old('kilometraje', $defaultKilometraje ?? '') }}">
+        @error('kilometraje')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
     </div>
 
     <div class="alert alert-info py-2">
@@ -125,88 +128,115 @@
     <div class="row checklist-fluid-row">
         <div class="col-md-3 mb-3">
             <label>Liquido limpia parabrisas</label>
-            <select name="liquido_limpiaparabrisas" class="form-control" required>
+            <select name="liquido_limpiaparabrisas" class="form-control @error('liquido_limpiaparabrisas') is-invalid @enderror" required>
                 <option value="">Seleccione</option>
                 <option value="suficiente" {{ old('liquido_limpiaparabrisas', $defaultLiquidoLimpiaparabrisas ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
                 <option value="escaso" {{ old('liquido_limpiaparabrisas', $defaultLiquidoLimpiaparabrisas ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
                 <option value="no_hay" {{ old('liquido_limpiaparabrisas', $defaultLiquidoLimpiaparabrisas ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
             </select>
+            @error('liquido_limpiaparabrisas')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="col-md-3 mb-3">
             <label class="label-shift">Aceite</label>
-            <select name="aceite" class="form-control" required>
+            <select name="aceite" class="form-control @error('aceite') is-invalid @enderror">
                 <option value="">Seleccione</option>
                 <option value="suficiente" {{ old('aceite', $defaultAceite ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
                 <option value="escaso" {{ old('aceite', $defaultAceite ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
                 <option value="no_hay" {{ old('aceite', $defaultAceite ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
             </select>
+            @error('aceite')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="col-md-3 mb-3">
             <label class="label-shift">Anticongelante</label>
-            <select name="anticongelante" class="form-control" required>
+            <select name="anticongelante" class="form-control @error('anticongelante') is-invalid @enderror" required>
                 <option value="">Seleccione</option>
                 <option value="suficiente" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
                 <option value="escaso" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
                 <option value="no_hay" {{ old('anticongelante', $defaultAnticongelante ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
             </select>
+            @error('anticongelante')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="col-md-3 mb-3">
             <label class="label-shift">Liquido de frenos</label>
-            <select name="liquido_frenos" class="form-control" required>
+            <select name="liquido_frenos" class="form-control @error('liquido_frenos') is-invalid @enderror" required>
                 <option value="">Seleccione</option>
                 <option value="suficiente" {{ old('liquido_frenos', $defaultLiquidoFrenos ?? '') === 'suficiente' ? 'selected' : '' }}>Suficiente</option>
                 <option value="escaso" {{ old('liquido_frenos', $defaultLiquidoFrenos ?? '') === 'escaso' ? 'selected' : '' }}>Escaso</option>
                 <option value="no_hay" {{ old('liquido_frenos', $defaultLiquidoFrenos ?? '') === 'no_hay' ? 'selected' : '' }}>No hay</option>
             </select>
+            @error('liquido_frenos')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
     </div>
 
     <div class="mb-3">
         <label>Estado general de llantas</label>
-        <select name="estado_llantas" class="form-control" required>
+        <select name="estado_llantas" class="form-control @error('estado_llantas') is-invalid @enderror" required>
             <option value="">Seleccione</option>
             <option value="buen_estado" {{ old('estado_llantas', $defaultEstadoLlantas ?? '') === 'buen_estado' ? 'selected' : '' }}>Buen estado</option>
             <option value="regular" {{ old('estado_llantas', $defaultEstadoLlantas ?? '') === 'regular' ? 'selected' : '' }}>Regular</option>
             <option value="malo" {{ old('estado_llantas', $defaultEstadoLlantas ?? '') === 'malo' ? 'selected' : '' }}>Malo</option>
         </select>
+            @error('estado_llantas')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
     </div>
 
     <div class="row">
         <div class="col-md-6 mb-3">
             <label>Delantera izquierda (calibracion)</label>
-            <select name="llanta_delantera_izq_calibracion" class="form-control" required>
+            <select name="llanta_delantera_izq_calibracion" class="form-control @error('llanta_delantera_izq_calibracion') is-invalid @enderror" required>
                 <option value="">Seleccione</option>
                 <option value="baja" {{ old('llanta_delantera_izq_calibracion', $defaultLlantaDelanteraIzq ?? '') === 'baja' ? 'selected' : '' }}>Baja</option>
                 <option value="normal" {{ old('llanta_delantera_izq_calibracion', $defaultLlantaDelanteraIzq ?? '') === 'normal' ? 'selected' : '' }}>Normal</option>
                 <option value="alta" {{ old('llanta_delantera_izq_calibracion', $defaultLlantaDelanteraIzq ?? '') === 'alta' ? 'selected' : '' }}>Alta</option>
             </select>
+            @error('llanta_delantera_izq_calibracion')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="col-md-6 mb-3">
             <label>Delantera derecha (calibracion)</label>
-            <select name="llanta_delantera_der_calibracion" class="form-control" required>
+            <select name="llanta_delantera_der_calibracion" class="form-control @error('llanta_delantera_der_calibracion') is-invalid @enderror" required>
                 <option value="">Seleccione</option>
                 <option value="baja" {{ old('llanta_delantera_der_calibracion', $defaultLlantaDelanteraDer ?? '') === 'baja' ? 'selected' : '' }}>Baja</option>
                 <option value="normal" {{ old('llanta_delantera_der_calibracion', $defaultLlantaDelanteraDer ?? '') === 'normal' ? 'selected' : '' }}>Normal</option>
                 <option value="alta" {{ old('llanta_delantera_der_calibracion', $defaultLlantaDelanteraDer ?? '') === 'alta' ? 'selected' : '' }}>Alta</option>
             </select>
+            @error('llanta_delantera_der_calibracion')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="col-md-6 mb-3">
             <label>Trasera izquierda (calibracion)</label>
-            <select name="llanta_trasera_izq_calibracion" class="form-control" required>
+            <select name="llanta_trasera_izq_calibracion" class="form-control @error('llanta_trasera_izq_calibracion') is-invalid @enderror" required>
                 <option value="">Seleccione</option>
                 <option value="baja" {{ old('llanta_trasera_izq_calibracion', $defaultLlantaTraseraIzq ?? '') === 'baja' ? 'selected' : '' }}>Baja</option>
                 <option value="normal" {{ old('llanta_trasera_izq_calibracion', $defaultLlantaTraseraIzq ?? '') === 'normal' ? 'selected' : '' }}>Normal</option>
                 <option value="alta" {{ old('llanta_trasera_izq_calibracion', $defaultLlantaTraseraIzq ?? '') === 'alta' ? 'selected' : '' }}>Alta</option>
             </select>
+            @error('llanta_trasera_izq_calibracion')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="col-md-6 mb-3">
             <label>Trasera derecha (calibracion)</label>
-            <select name="llanta_trasera_der_calibracion" class="form-control" required>
+            <select name="llanta_trasera_der_calibracion" class="form-control @error('llanta_trasera_der_calibracion') is-invalid @enderror" required>
                 <option value="">Seleccione</option>
                 <option value="baja" {{ old('llanta_trasera_der_calibracion', $defaultLlantaTraseraDer ?? '') === 'baja' ? 'selected' : '' }}>Baja</option>
                 <option value="normal" {{ old('llanta_trasera_der_calibracion', $defaultLlantaTraseraDer ?? '') === 'normal' ? 'selected' : '' }}>Normal</option>
                 <option value="alta" {{ old('llanta_trasera_der_calibracion', $defaultLlantaTraseraDer ?? '') === 'alta' ? 'selected' : '' }}>Alta</option>
             </select>
+            @error('llanta_trasera_der_calibracion')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
     </div>
 
@@ -353,15 +383,6 @@ $herramientas = [
 @stop
 
 @section('js')
-<script>
-function nextTab(tabNum) {
-    // Compatible con Bootstrap 4/5
-    document.querySelectorAll('.nav-pills .nav-link').forEach(function(el){el.classList.remove('active');});
-    document.querySelectorAll('.tab-pane').forEach(function(el){el.classList.remove('show','active');});
-    document.querySelector('.nav-pills .nav-link[href="#tab'+tabNum+'"]').classList.add('active');
-    document.getElementById('tab'+tabNum).classList.add('show','active');
-}
-</script>
 <!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
@@ -385,37 +406,100 @@ function nextTab(tabNum) {
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 
 <script>
-const reglas = {
-    liquido_limpiaparabrisas: ['suficiente','escaso','no_hay'],
-    aceite: ['suficiente','escaso','no_hay'],
-    anticongelante: ['suficiente','escaso','no_hay'],
-    liquido_frenos: ['suficiente','escaso','no_hay'],
-    estado_llantas: ['buen_estado','regular','malo'],
-    llanta_delantera_izq_calibracion: ['baja','normal','alta'],
-    llanta_delantera_der_calibracion: ['baja','normal','alta'],
-    llanta_trasera_izq_calibracion: ['baja','normal','alta'],
-    llanta_trasera_der_calibracion: ['baja','normal','alta']
-};
+    function validarTab1() {
 
-document.getElementById('miFormulario').addEventListener('submit', function (e) {
+        let nivel = document.querySelector('[name="nivel_gasolina"]').value;
+        let km = document.querySelector('[name="kilometraje"]').value;
+        let liquido = document.querySelector('[name="liquido_limpiaparabrisas"]').value;
+        let aceite = document.querySelector('[name="aceite"]').value;
+        let anticongelante = document.querySelector('[name="anticongelante"]').value;
+        let liquido_frenos = document.querySelector('[name="liquido_frenos"]').value;
+        let estado_llantas = document.querySelector('[name="estado_llantas"]').value;
+        let d_cal_izq= document.querySelector('[name="llanta_delantera_izq_calibracion"]').value;
+        let d_cali_der = document.querySelector('[name="llanta_delantera_der_calibracion"]').value;
+        let t_cali_izq = document.querySelector('[name="llanta_trasera_izq_calibracion"]').value;
+        let t_cali_der = document.querySelector('[name="llanta_trasera_der_calibracion"]').value;
 
-    let valido = true;
+        let faltantes = [];
 
-    Object.keys(reglas).forEach(function(name) {
+        if (!nivel) faltantes.push('Nivel de gasolina');
+        if (!km) faltantes.push('Kilometraje');
+        if (!liquido) faltantes.push('Líquido limpiaparabrisas');
+        if (!aceite) faltantes.push('Aceite');
+        if (!anticongelante) faltantes.push('Anticongelante');
+        if (!liquido_frenos) faltantes.push('Líquido de frenos');
+        if (!estado_llantas) faltantes.push('Estado de llantas');
+        if (!d_cal_izq) faltantes.push('Llanta delantera izquierda');
+        if (!d_cali_der) faltantes.push('Llanta delantera derecha');
+        if (!t_cali_izq) faltantes.push('Llanta trasera izquierda');
+        if (!t_cali_der) faltantes.push('Llanta trasera derecha');
 
-        let select = document.querySelector(`[name="${name}"]`);
-        let valoresPermitidos = reglas[name];
-
-        if (!select.value || !valoresPermitidos.includes(select.value)) {
-            select.classList.add('is-invalid');
-            valido = false;
-        } else {
-            select.classList.remove('is-invalid');
+        if (faltantes.length > 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Faltan datos',
+                html: `
+                    <b>Completa los siguientes campos:</b>
+                    <ul style="text-align:left;">
+                        ${faltantes.map(campo => `<li>${campo}</li>`).join('')}
+                    </ul>
+                `
+            });
+            return false;
         }
-    });
 
-    if (!valido) {
+        return true;
+    }
+    function nextTab(tabNum) {
+    // Validación para pasar de TAB 1 → TAB 2
+    if (tabNum === 2) {
+        if (!validarTab1()) return;
+    }
+        
+        // cambiar tab
+        document.querySelectorAll('.nav-pills .nav-link').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('show','active'));
+
+        document.querySelector('.nav-pills .nav-link[href="#tab'+tabNum+'"]').classList.add('active');
+        document.getElementById('tab'+tabNum).classList.add('show','active');
+    }
+    document.querySelectorAll('.nav-pills .nav-link').forEach(tab => {
+
+        tab.addEventListener('show.bs.tab', function (e) {
+
+            let target = e.target.getAttribute('href');
+
+            if (target === '#tab2') {
+                if (!validarTab1()) {
+                    e.preventDefault();
+                }
+            }
+
+            if (target === '#tab3') {
+                if (!validarTab1()) {
+                    e.preventDefault();
+                }
+            }
+
+            if (target === '#tab4') {
+                if (!validarTab1()) {
+                    e.preventDefault();
+                }
+            }
+
+        });
+
+    });
+document.getElementById('SalidaChecklist').addEventListener('submit', function(e) {
+    let evidencias = document.querySelector('[name="evidencias[]"]').files.length;
+
+    if (evidencias === 0) {
         e.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Evidencia requerida',
+            text: 'Debes subir al menos una evidencia'
+        });
     }
 });
 </script>
