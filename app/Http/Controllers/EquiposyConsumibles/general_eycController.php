@@ -57,14 +57,14 @@ class general_eycController extends Controller
          // Filtrar según el rol
         if ($rol === 'Laboratorio') {
             // Solo registros con ISO 17025
-            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial'])
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial','blocks'])
                 ->whereHas('ISO', function ($query) {
                     $query->where('NombreISO', '17025');
                 })
                 ->get();
         } elseif($rol === 'Equipos') {
         // Solo registros con ISO 9001
-        $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial'])
+        $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial','blocks'])
             ->whereHas('ISO', function ($query) {
                 $query->where('NombreISO', '9001')->where('Tipo', '!=', 'TICS');
             })
@@ -75,7 +75,7 @@ class general_eycController extends Controller
                 ->get();
             }else{
              //Todos los registros
-            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial'])->get();
+            $generalConCertificadosConAlmacenConISOConClasificacion = general_eyc::with(['certificados', 'almacen', 'ISO', 'clasificacion','lastHistorial','blocks'])->get();
         }
 
         // Definimos la ruta base de las vistas

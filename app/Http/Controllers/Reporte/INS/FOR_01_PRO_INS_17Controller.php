@@ -808,7 +808,7 @@ class FOR_01_PRO_INS_17Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-INS-10/02.PDF',
+            'title' => 'Reporte_FOR-INS-17/01.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -857,9 +857,9 @@ class FOR_01_PRO_INS_17Controller extends Controller
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -266.5);
-            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            $combinedPdf->SetFont('Arial', 'B', 12);
+            //$combinedPdf->SetXY(138, -266.5);
+            //$combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -868,7 +868,7 @@ class FOR_01_PRO_INS_17Controller extends Controller
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetFont('Arial', 'B', 12);
             $combinedPdf->SetXY(138, -265.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
