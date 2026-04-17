@@ -1216,7 +1216,9 @@ class FOR_01_PRO_INS_22Controller extends Controller
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
                     'comment' => $foto['comentario'] ?? '',
-                    'una_hoja'  => $foto['una_hoja'] ?? 0, 
+                    'una_hoja'  => $foto['una_hoja'] ?? 0,
+                    'RG_Principal' => $foto['RG_Principal'] ?? 0,
+                    'RG_Secundario' => $foto['RG_Secundario'] ?? 0, 
                 ];
             }
         }
