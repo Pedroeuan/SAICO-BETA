@@ -4,7 +4,7 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-05/01</title>
             <style>
-                 @page {
+                @page {
                     margin: 
                     /*3.0cm /* superior */
                     /*2.1cm /* derecho */
@@ -563,14 +563,14 @@
                                             </tr>
                                             @endforeach
 
-                                           {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                         <tr class="sinBordetd">
-    <td colspan="6"></td>
-    <th colspan="2">Longitud inspeccionada:</th>
-    <th colspan="1">
-        {{ array_sum($grupo['Long_Inspecc'] ?? []) }} m
-    </th>
-</tr>
+                                        {{-- 🔹 LONGITUD INSPECCIONADA --}}
+                                        <tr class="sinBordetd">
+                                        <td colspan="6"></td>
+                                        <th colspan="2">Longitud inspeccionada:</th>
+                                        <th colspan="1">
+                                            {{ array_sum($grupo['Long_Inspecc'] ?? []) }} m
+                                        </th>
+                                    </tr>
 
                                         {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
                                         <tr style="page-break-after: always;" class="sinBordetd">
