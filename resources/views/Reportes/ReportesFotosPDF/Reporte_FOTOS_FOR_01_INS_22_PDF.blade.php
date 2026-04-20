@@ -399,6 +399,18 @@
                             $chunks[] = [$foto];
                             continue;
                         }
+                        // Si las imagene tienen RG_Principal y RG_Secundaria, se consideran de hoja completa 
+                        if (!empty($foto['RG_Principal']) && !empty($foto['RG_Secundario'])) 
+                        { 
+                        // Guardar grupo previo (si existe) 
+                            if (!empty($grupoActual)) 
+                            { 
+                                $chunks[] = $grupoActual; $grupoActual = []; 
+                            } 
+                            // La imagen va SOLA 
+                            $chunks[] = [$foto]; 
+                            continue; 
+                        }
                         // Imagen normal
                         $grupoActual[] = $foto;
                         if (count($grupoActual) == 4) {
