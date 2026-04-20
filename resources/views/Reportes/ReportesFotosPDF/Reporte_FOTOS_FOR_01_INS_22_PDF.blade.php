@@ -115,6 +115,7 @@
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
+
         .foto-container2 {
             /*padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
             width: 680px;  /* Fija el ancho de la celda */
@@ -124,10 +125,11 @@
             text-align: center;
             vertical-align: middle;
         }
+
         .foto-container2 img {
             /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
             object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 650px;  /* Ajusta el ancho de la celda */
+            width: 680px;  /* Ajusta el ancho de la celda */
             height: 400px; /* Ajusta la altura de la celda */
             vertical-align: middle;
             display: flex;
@@ -135,6 +137,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .foto-container3 {
             /*padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
             width: 680px;  /* Fija el ancho de la celda */
@@ -144,9 +147,17 @@
             text-align: center;
             vertical-align: middle;
         }
+        
         .foto-container3 img {
-            width: 200px;
-            height: 10px;
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 680px;  /* Ajusta el ancho de la celda */
+            height: 50px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* ===== Imagen que ocupa una hoja completa ===== */
