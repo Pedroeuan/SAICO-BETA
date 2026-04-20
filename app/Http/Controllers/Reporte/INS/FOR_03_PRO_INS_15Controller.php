@@ -1099,7 +1099,6 @@ class FOR_03_PRO_INS_15Controller extends Controller
         //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_03_INS_15_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
-  
 
         $pdf1Content = $pdf1->output();
         //$pdf2Content = $pdf2->output();

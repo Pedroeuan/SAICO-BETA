@@ -840,7 +840,7 @@
 
             $('#addLongBtn').click(function () {
                 //let numFilas = parseInt($('#numRows').val());
-                let numFilas = parseInt($('#numRows').val(), 20) || 0;
+                let numFilas = parseInt($('#numRows').val(), 10) || 1;
                 // Recontar filas existentes que NO son títulos
                 rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
 
@@ -867,7 +867,7 @@
 
             $('#addBtn').click(function () {
                 //let numFilas = parseInt($('#numRows').val());
-                let numFilas = parseInt($('#numRows').val(), 20) || 0;
+                let numFilas = parseInt($('#numRows').val(), 10) || 1;
                 // Recontar filas existentes que NO son títulos
                 //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
                 rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
