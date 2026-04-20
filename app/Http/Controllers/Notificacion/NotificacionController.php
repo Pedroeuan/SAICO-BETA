@@ -135,6 +135,10 @@ class NotificacionController extends Controller
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;
                     }
+                }else
+                {
+                    // Si el rol no es ni Equipos ni Laboratorio, continuar con el siguiente
+                    continue;
                 }
 
                 // Convertir la fecha al formato DD-MM-YYYY
