@@ -106,6 +106,50 @@
             border-collapse: collapse;
             width: 100%;
         }
+
+        .encabezadoAzul{
+            text-align: center;
+            width: 100%;
+            font-size: 8px;
+            background-color: #305496;
+            color: #ffffff;
+            outline: 1px double #000000; /* Contorno externo */
+        }
+        .foto-container2 {
+            /*padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
+            width: 680px;  /* Fija el ancho de la celda */
+            /*height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            height: 400px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .foto-container2 img {
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 650px;  /* Ajusta el ancho de la celda */
+            height: 400px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .foto-container3 {
+            /*padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
+            width: 680px;  /* Fija el ancho de la celda */
+            /*height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .foto-container3 img {
+            width: 200px;
+            height: 10px;
+        }
+
+        /* ===== Imagen que ocupa una hoja completa ===== */
         /* ************** */
         .imagenes-reporte {
             margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
@@ -387,37 +431,65 @@
                 @php
                     $chunks = [];
                     $grupoActual = [];
+                    $rgTemp = null;
+
                     foreach ($Fotos as $foto) {
-                        // Si la imagen es de hoja completa
+
+                        // 🟥 Caso hoja completa
                         if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
-                            // Guardar grupo previo (si existe)
                             if (!empty($grupoActual)) {
                                 $chunks[] = $grupoActual;
                                 $grupoActual = [];
                             }
-                            // La imagen va SOLA
+
                             $chunks[] = [$foto];
                             continue;
                         }
-                        // Si las imagene tienen RG_Principal y RG_Secundaria, se consideran de hoja completa 
-                        if (!empty($foto['RG_Principal']) && !empty($foto['RG_Secundario'])) 
-                        { 
-                        // Guardar grupo previo (si existe) 
-                            if (!empty($grupoActual)) { 
-                                $chunks[] = $grupoActual; 
-                                $grupoActual = []; 
-                            } 
-                            // La imagen va SOLA 
-                            $chunks[] = [$foto]; 
-                            continue; 
+
+                        // 🟦 Si es principal → guardar temporal
+                        if (!empty($foto['RG_Principal']) && $foto['RG_Principal'] == "1") {
+                            $rgTemp = $foto;
+                            continue;
                         }
-                        // Imagen normal
+
+                        // 🟩 Si es secundario y hay principal → crear pareja
+                        if (!empty($foto['RG_Secundario']) && $foto['RG_Secundario'] == "1" && $rgTemp) {
+
+                            if (!empty($grupoActual)) {
+                                $chunks[] = $grupoActual;
+                                $grupoActual = [];
+                            }
+
+                            $chunks[] = [
+                                'tipo' => 'rg_doble',
+                                'principal' => $rgTemp['path'],
+                                'secundario' => $foto['path'],
+                            ];
+
+                            $rgTemp = null;
+                            continue;
+                        }
+
+                        // 🟨 Si quedó un principal sin pareja
+                        if ($rgTemp) {
+                            $grupoActual[] = $rgTemp;
+                            $rgTemp = null;
+                        }
+
+                        // 🟨 Imagen normal
                         $grupoActual[] = $foto;
+
                         if (count($grupoActual) == 4) {
                             $chunks[] = $grupoActual;
                             $grupoActual = [];
                         }
                     }
+
+                    // 🟨 Si quedó algo pendiente
+                    if ($rgTemp) {
+                        $grupoActual[] = $rgTemp;
+                    }
+
                     if (!empty($grupoActual)) {
                         $chunks[] = $grupoActual;
                     }
@@ -490,20 +562,51 @@
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
-
-                <table class="datosgenerales">
-                    <thead class="encabezadoAzul">
-                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
-                    </thead>  
-                </table>
                     @php
+                        $esRGDoble = isset($fotosGrupo['tipo']) && $fotosGrupo['tipo'] === 'rg_doble';
                         $esHojaCompleta = (
                             count($fotosGrupo) == 1 &&
                             !empty($fotosGrupo[0]['una_hoja']) &&
                             $fotosGrupo[0]['una_hoja'] == 1
                         );
                     @endphp
+                <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th>
+                            @if($esRGDoble && $fotosGrupo['principal'] )
+                            RESULTADO Y GRAFICAS SONYKS
+                            @else
+                            REGISTRO FOTOGRÁFICO
+                            @endif
+                        </th></tr>
+                    </thead>  
+                </table>
 
+                        @if($esRGDoble)
+                            <table class="">
+                                <tr>
+                                    <td class="foto-container2">
+                                        <img src="{{ $fotosGrupo['principal'] }}">
+                                    </td>
+                                </tr>
+                                </table>
+                                <table class="datosgenerales" >
+                                    <thead class="encabezadoAzul" >
+                                        <tr><th >
+                                            @if($esRGDoble && $fotosGrupo['secundario'])
+                                            DIAGRAMA DE TUBERÍA SONYKS
+                                            @endif
+                                        </th></tr>
+                                    </thead>
+                                </table>
+                                <table class="">
+                                <tr>
+                                    <td class="foto-container3">
+                                        <img src="{{ $fotosGrupo['secundario'] }}">
+                                    </td>
+                                </tr>
+                            </table>
+                        @else
                             <table class="imagenes-reporte">
                                 <tr>
                                 @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
@@ -565,6 +668,7 @@
 
                                 </tr>
                             </table>
+                        @endif
             </div>
             @if(!$loop->last)
                 <div style="page-break-after: always;"></div>
