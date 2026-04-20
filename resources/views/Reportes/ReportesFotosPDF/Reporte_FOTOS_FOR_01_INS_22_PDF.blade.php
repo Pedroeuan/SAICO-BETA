@@ -403,9 +403,9 @@
                         if (!empty($foto['RG_Principal']) && !empty($foto['RG_Secundario'])) 
                         { 
                         // Guardar grupo previo (si existe) 
-                            if (!empty($grupoActual)) 
-                            { 
-                                $chunks[] = $grupoActual; $grupoActual = []; 
+                            if (!empty($grupoActual)) { 
+                                $chunks[] = $grupoActual; 
+                                $grupoActual = []; 
                             } 
                             // La imagen va SOLA 
                             $chunks[] = [$foto]; 
