@@ -48,7 +48,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
         $Cliente = $datosParaCrearOS_OC['Cliente'];
         $Lugar = $datosParaCrearOS_OC['Lugar'];
         $Contrato= $datosParaCrearOS_OC['Contrato'];
-        $Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
+        //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
         $Proyecto = $datosParaCrearOS_OC['Proyecto'];
         //$Material = $datosParaCrearOS_OC['Material'];
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
@@ -58,6 +58,8 @@ class FOR_03_PRO_INS_15Controller extends Controller
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
         $idReportes = $datosParaCrearOS_OC['idReportes'];
 
+        $EsperaDato = "ESPERA DE DATOS";
+        /*Instancias */
         $Orden_Servicio = new Orden_Servicio;
         $Orden_Servicio_Prueba = new Orden_Servicio_Prueba;
         $Firmantes_OS = new Firmantes_OS;
@@ -69,7 +71,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -78,7 +80,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             $Orden_Servicio->idClientes = $idCliente;
-            $Orden_Servicio->Fecha = '2001/01/01';
+            $Orden_Servicio->Fecha = '2001-01-01';
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
@@ -109,13 +111,12 @@ class FOR_03_PRO_INS_15Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-            $EsperaDato = "ESPERA DE DATOS";
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
             $OC->Lugar_trabajo = $EsperaDato;
-            $OC->Fecha_Solicitud = '2001/01/01';
+            $OC->Fecha_Solicitud = '2001-01-01';
             $OC->Tipo_Servicio = $EsperaDato;
             $OC->Estatus = 'OC';
             $OC->OC_archivo = $EsperaDato;
@@ -136,17 +137,13 @@ class FOR_03_PRO_INS_15Controller extends Controller
 
         } else {
             // Cliente no encontrado
-            $Cliente = "POR DEFINIR";
-            $Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
-            // Si no existe, crea el cliente "POR DEFINIR"
-            if (!$Busqueda2Cliente) {
-                $Busqueda2Cliente = new clientes();
-                $Busqueda2Cliente->Cliente = $Cliente;
-                $Busqueda2Cliente->RFC = 'N/A';
-                $Busqueda2Cliente->Telefono = 'N/A';
-                $Busqueda2Cliente->Correo = 'N/A';
-                $Busqueda2Cliente->save();
-            }
+                $NewCliente = new clientes();
+                $NewCliente->Cliente = $Cliente;
+                $NewCliente->RFC = $EsperaDato;
+                $NewCliente->Telefono = $EsperaDato;
+                $NewCliente->Correo = $EsperaDato;
+                $NewCliente->save();
+           // }
 
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -155,9 +152,9 @@ class FOR_03_PRO_INS_15Controller extends Controller
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             // Obtén el ID del cliente "POR DEFINIR"
-            $idClientes = $Busqueda2Cliente->idClientes;
+            $idClientes = $NewCliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
-            $Orden_Servicio->Fecha = '2001/01/01';
+            $Orden_Servicio->Fecha = '2001-01-01';
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
@@ -188,13 +185,12 @@ class FOR_03_PRO_INS_15Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-            $EsperaDato = "ESPERA DE DATOS";
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
             $OC->Lugar_trabajo = $EsperaDato;
-            $OC->Fecha_Solicitud = '2001/01/01';
+            $OC->Fecha_Solicitud = '2001-01-01';
             $OC->Tipo_Servicio = $EsperaDato;
             $OC->Estatus = 'OC';
             $OC->OC_archivo = $EsperaDato;
@@ -216,11 +212,11 @@ class FOR_03_PRO_INS_15Controller extends Controller
 
     }
 
-    public function FOR_03_PRO_INS_15_store1(Request $request)
+    /*public function FOR_03_PRO_INS_15_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
+    }*/
 
     public function FOR_03_PRO_INS_15_store(Request $request)
     {
@@ -240,14 +236,14 @@ class FOR_03_PRO_INS_15Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo' => 'nullable|array',  // Asegura que es un array
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'ID' => 'nullable|array',
             'Descripcion_del_Elemento' => 'nullable|array',
             'Nivel' => 'nullable|array',
@@ -336,6 +332,13 @@ class FOR_03_PRO_INS_15Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
+
+        // Lógica para manejar Cliente
+        if ($request->TieneCliente === 'si') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+        } else {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+        }
         // Lógica para manejar el campo Contrato
         if ($request->TieneContrato === "no") {
 
@@ -372,7 +375,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
-        $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
+        $Reportes->Datos_Equipo = json_encode([]);
 
         $Reportes->Estatus = $Estatus; // Asignar el estatus
 
@@ -383,19 +386,32 @@ class FOR_03_PRO_INS_15Controller extends Controller
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
-        $titulos = $request->input('titulos', []);
+        // Recuperar 'titulos_data' (JSON con [{id,text},...])
+        $titulos_json = $request->input('titulos_data', '[]');
+        $titulos = json_decode($titulos_json, true); // array asociativo
+
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
+        $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+
+        //  cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 20; // Puedes ajustar este número según tus necesidades
+
+        if (!empty($filasSinTitulo)) {
+
+            $totalFilas = count($filasSinTitulo);
+            $contadorBloque = 1;
+
+            for ($offset = 0; $offset < $totalFilas; $offset += $maxFilasPorBloque) {
+
+                $resultados = [];
+
+                for ($i = $offset; $i < min($offset + $maxFilasPorBloque, $totalFilas); $i++) {
+
+                    $resultados[] = [
                     'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$sinTituloKey.$i"),
                     'Nivel' => $request->input("Nivel.$sinTituloKey.$i"),
@@ -407,23 +423,34 @@ class FOR_03_PRO_INS_15Controller extends Controller
                 ];
             }
         
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
+            // tomar la longitud correspondiente al bloque
+                //$longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
+                $indexLong = floor($offset / $maxFilasPorBloque);
+
+                $longBloque = $longitudesSin[$indexLong] ?? null;
+
+                $datosAgrupados[] = [
+                    'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
+                    'resultados'     => $resultados,
+                    //'Long_Inspecc'   => [$longBloque],
+                ];
+
+                $contadorBloque++;
+            }
         }
         
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
-            $filas = $request->input("ID.$tituloKey", []);
-            $numFilas = count($filas);
-        
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
+            // 2. Procesar los títulos existentes
+            foreach ($titulos as $tituloObj) {
+                $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
+                $tituloText = $tituloObj['text']; // texto real
+
+                $filas = $request->input("ID.$tituloKey", []);
+                $numFilas = count($filas);
+            
+                $resultados = [];
+            
+                for ($i = 0; $i < $numFilas; $i++) {
+                    $resultados[] = [
                     'ID' => $request->input("ID.$tituloKey.$i"),
                     'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$tituloKey.$i"),
                     'Nivel' => $request->input("Nivel.$tituloKey.$i"),
@@ -435,9 +462,12 @@ class FOR_03_PRO_INS_15Controller extends Controller
                 ];
             }
         
+            // Obtener longitud inspeccionada asociada a este título (si existe)
+            $long = $request->input("Long_Inspecc.$tituloKey", null);
             $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
+                'resultados' => $resultados,
+                //'Long_Inspecc' => $long,
             ];
         }
         
@@ -495,6 +525,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_03_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+                'una_hoja' => $request->imagen_hoja[$index] ?? 0,
             ];
         }
 
@@ -549,11 +580,11 @@ class FOR_03_PRO_INS_15Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_03_PRO_INS_15_update1(Request $request) 
+    /*public function FOR_03_PRO_INS_15_update1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
+    }*/
 
     public function FOR_03_PRO_INS_15_update(Request $request, $id)
     {
@@ -573,13 +604,12 @@ class FOR_03_PRO_INS_15Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
-            'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo' => 'nullable|array',  // Asegura que es un array
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
-
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'ID' => 'nullable|array',
             'Descripcion_del_Elemento' => 'nullable|array',
             'Nivel' => 'nullable|array',
@@ -665,63 +695,88 @@ class FOR_03_PRO_INS_15Controller extends Controller
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
-            'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
-            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
-        ]);
+        'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
+        'Datos_Equipo' => json_encode([])
+    ]);
 
-        $titulos = $request->input('titulos', []);
+        $titulos_json = $request->input('titulos_hidden', '[]');
+        $titulos = json_decode($titulos_json, true); // array asociativo
+
         $datosAgrupados = [];
         
-        // 1. Procesar filas SIN título (si existen)
+       // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
+        $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+
+        // cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 20;
+
+        if (!empty($filasSinTitulo)) {
+
+            $totalFilas = count($filasSinTitulo);
+            $contadorBloque = 1;
+
+            for ($offset = 0; $offset < $totalFilas; $offset += $maxFilasPorBloque) {
+
+                $resultados = [];
+
+                for ($i = $offset; $i < min($offset + $maxFilasPorBloque, $totalFilas); $i++) {
+
+                    $resultados[] = [
                     'ID' => $request->input("ID.$sinTituloKey.$i"),
                     'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$sinTituloKey.$i"),
-                    'NIVEL' => $request->input("NIVEL.$sinTituloKey.$i"),
-                    'Ø' => $request->input("Ø.$sinTituloKey.$i"),
-                    'LONGITUD_(m)' => $request->input("Referencia.$sinTituloKey.$i"),
-                    'CLASE' => $request->input("DNR.$sinTituloKey.$i"),
-                    'ESPECIFICACIÓN' => $request->input("HT.$sinTituloKey.$i"),
-                    'OBSERVACIONES' => $request->input("OBSERVACIONES.$sinTituloKey.$i"),
+                    'Nivel' => $request->input("Nivel.$sinTituloKey.$i"),
+                    '0' => $request->input("0.$sinTituloKey.$i"),
+                    'Longitud_(m)' => $request->input("Longitud_(m).$sinTituloKey.$i"),
+                    'Clase' => $request->input("Clase.$sinTituloKey.$i"),
+                    'Especificación' => $request->input("Especificación.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                 ];
             }
         
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
+                // tomar la longitud correspondiente al bloque
+                $longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
+
+                $datosAgrupados[] = [
+                    'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
+                    'resultados'     => $resultados,
+                    //'Long_Inspecc'   => [$longBloque],
+                ];
+
+                $contadorBloque++;
+            }
         }
         
         // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+        foreach ($titulos as $tituloObj) {
+            $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
+            $tituloText = $tituloObj['text']; // texto real
+
             $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             $resultados = [];
+        
             for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
+                    $resultados[] = [
                     'ID' => $request->input("ID.$tituloKey.$i"),
                     'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$tituloKey.$i"),
-                    'NIVEL' => $request->input("NIVEL.$tituloKey.$i"),
-                    'Ø' => $request->input("Ø.$tituloKey.$i"),
-                    'LONGITUD_(m)' => $request->input("Referencia.$tituloKey.$i"),
-                    'CLASE' => $request->input("DNR.$tituloKey.$i"),
-                    'ESPECIFICACIÓN' => $request->input("HT.$tituloKey.$i"),
+                    'Nivel' => $request->input("Nivel.$tituloKey.$i"),
+                    '0' => $request->input("0.$tituloKey.$i"),
+                    'Longitud_(m)' => $request->input("Longitud_(m).$tituloKey.$i"),
+                    'Clase' => $request->input("Clase.$tituloKey.$i"),
+                    'Especificación' => $request->input("Especificación.$tituloKey.$i"),
                     'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
                 ];
             }
         
+            // Obtener longitud inspeccionada asociada a este título (si existe)
+            $long = $request->input("Long_Inspecc.$tituloKey", null);
             $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
+                'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
+                'resultados' => $resultados,
+                //'Long_Inspecc' => $long,
             ];
         }
         
@@ -776,6 +831,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
+        $imagenHoja = $request->input('imagen_hoja', []);
 
         //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
 
@@ -787,7 +843,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
                 // Eliminar del almacenamiento
                 if (Storage::exists($rutaImagen)) {
                     Storage::delete($rutaImagen);
-                    Log::info("Imagen eliminada: {$rutaImagen}");
+                    //Log::info("Imagen eliminada: {$rutaImagen}");
                 } else {
                     //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
                 }
@@ -825,6 +881,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
                 }
@@ -843,6 +900,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
@@ -852,6 +910,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $ruta,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $ruta;
                 }
@@ -860,6 +919,9 @@ class FOR_03_PRO_INS_15Controller extends Controller
 
         // **3️⃣ Procesar nuevas imágenes Base64**
         foreach ($imagesBase64 as $index => $base64Image) {
+            if (isset($existingImages[$index])) {
+                continue; // ya fue procesada arriba
+            }
             if (!empty($base64Image)) {
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';
@@ -874,6 +936,7 @@ class FOR_03_PRO_INS_15Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
@@ -910,6 +973,68 @@ class FOR_03_PRO_INS_15Controller extends Controller
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
 
+        $normalizedGrupos = [];
+        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
+            $titulo = 'SIN TITULO';
+            $resultados = [];
+            $longInspecc = null;
+
+            // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
+            if (is_array($grupo)) {
+                if (isset($grupo['titulos_juntas'])) {
+                    if (is_array($grupo['titulos_juntas'])) {
+                        // Si por alguna razon se guardó como objeto, intentar extraer 'text' o 'titulo'
+                        if (isset($grupo['titulos_juntas']['text'])) {
+                            $titulo = $grupo['titulos_juntas']['text'];
+                        } elseif (isset($grupo['titulos_juntas']['titulo'])) {
+                            $titulo = $grupo['titulos_juntas']['titulo'];
+                        } else {
+                            $titulo = json_encode($grupo['titulos_juntas']);
+                        }
+                    } else {
+                        $titulo = $grupo['titulos_juntas'];
+                        if (trim($titulo) === '') {
+                            $titulo = 'SIN TITULO';
+                        }
+                    }
+                } elseif (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
+                    // No hay título explícito, se toma SIN TITULO
+                    $titulo = 'SIN TITULO';
+                } else {
+                    // Manejar estructura en la que la clave del grupo es el título y su valor es el array de resultados
+                    $firstKey = null;
+                    foreach ($grupo as $k => $v) { $firstKey = $k; break; }
+                    if ($firstKey !== null && is_array($grupo[$firstKey])) {
+                        $titulo = $firstKey;
+                        $resultados = $grupo[$firstKey];
+                    }
+                }
+
+                if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
+                    $resultados = $grupo['resultados'];
+                }
+
+                if (array_key_exists('Long_Inspecc', $grupo)) {
+                    $longInspecc = $grupo['Long_Inspecc'];
+                }
+            }
+
+            // Normalizar Long_Inspecc a array para compatibilidad con la vista PDF
+            if ($longInspecc === null) {
+                $longInspecc = [];
+            } elseif (!is_array($longInspecc)) {
+                $longInspecc = [$longInspecc];
+            }
+
+            $normalizedGrupos[] = [
+                'titulos_juntas' => $titulo,
+                'resultados' => $resultados,
+                'Long_Inspecc' => $longInspecc,
+            ];
+        }
+
+        $Grupo_Juntas_Detalles_Re = $normalizedGrupos;
+
         $totalTitulos = 0;
         $totalFilas = 0;
 
@@ -932,15 +1057,16 @@ class FOR_03_PRO_INS_15Controller extends Controller
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
-            $totalFotos = count($fotos); // Contar el total de imágenes
+           /* $totalFotos = count($fotos); // Contar el total de imágenes
             $Fotos = [];
         
             foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
-                    'comment' => $foto['comentario'] ?? ''
+                    'comment' => $foto['comentario'] ?? '',
+                    'una_hoja'  => $foto['una_hoja'] ?? 0,
                 ];
-            }
+            }*/
         }
 
         $data = [
@@ -955,11 +1081,11 @@ class FOR_03_PRO_INS_15Controller extends Controller
             //Total de Juntas
             /*'totalTitulos' => $totalTitulos,
             'totalFilas' => $totalFilas,*/
-            'totalTitulosYFilas' => $totalTitulosYFilas,
+            //'totalTitulosYFilas' => $totalTitulosYFilas,
             //Fotos_Reportes
-            'Fotos' => $Fotos,
+            //'Fotos' => $Fotos,
             //Total de Fotos
-            'totalFotos' => $totalFotos,
+            //'totalFotos' => $totalFotos,
             //Numero de Firmas
             'numFirmas' => $numFirmas,
             //Firmas
@@ -970,22 +1096,24 @@ class FOR_03_PRO_INS_15Controller extends Controller
         $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_03_INS_15_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_03_INS_15_PDF', $data)->setPaper('letter', 'portrait');
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_03_INS_15_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
+  
+
         $pdf1Content = $pdf1->output();
-        $pdf2Content = $pdf2->output();
+        //$pdf2Content = $pdf2->output();
 
        // Crear objetos FPDI independientes para contar páginas
         $tempPdf1 = new Fpdi();
         $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
 
-        $tempPdf2 = new Fpdi();
-        $pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+        /*$tempPdf2 = new Fpdi();
+        $pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));*/
 
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
-        $totalPageCount = $pageCount1 + $pageCount2;
+        $totalPageCount = $pageCount1; //+ $pageCount2;
 
         // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
@@ -994,12 +1122,12 @@ class FOR_03_PRO_INS_15Controller extends Controller
             $combinedPdf->AddPage('p');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(179, -179.5);
+            $combinedPdf->SetXY(124, -266.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
-        $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
         for ($i = 1; $i <= $pageCount2; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('p');
@@ -1008,10 +1136,13 @@ class FOR_03_PRO_INS_15Controller extends Controller
             $combinedPdf->SetXY(138, -265.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
-        }
+        }*/
 
-        return response($combinedPdf->Output('Reporte_FOR_03-INS_15.PDF', 'I'), 200)
-            ->header('Content-Type', 'application/pdf');
+        $pdfString = $combinedPdf->Output('Reporte_FOR_03-INS_15.PDF', 'S');
+
+return response($pdfString, 200)
+    ->header('Content-Type', 'application/pdf')
+    ->header('Content-Disposition', 'inline; filename="Reporte_FOR_03-INS_15.PDF"');
     }
 
     /**
