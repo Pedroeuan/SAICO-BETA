@@ -39,7 +39,7 @@
                 }
 
                 body {
-                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin-top: 30px; /* Ajusta para que el contenido no se sobreponga al header */
                     /*margin: 0;*/
                     padding-top: 0px; /* Altura del header */
                     padding-bottom: 0px; /* Altura del footer */
@@ -548,12 +548,15 @@
                 </table>
                 <div style="margin-bottom: 5px;"></div>
 
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">RESULTADOS</th>
-                        </tr>
-                </table>
                     <table class="datosresultados">
+
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="20">RESULTADOS</th></tr>
+                        </thead>
+
+                            <thead><tr class="sinBordeth"><th colspan="20"></th></tr></thead> <!-- Fila vacia -->
+
+                                <thead>
                             <thead>
                                 <tr class="celdaGris">
                                     <th rowspan= "2" style="width: 20%;">No.</th>
