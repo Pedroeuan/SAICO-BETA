@@ -121,8 +121,9 @@
                 <label><input type="checkbox" class="toggle-col" data-col="19" checked>Prox. Fecha Mantenimiento</label>
                 <label><input type="checkbox" class="toggle-col" data-col="20" checked>Días Restantes Man</label>
                 <label><input type="checkbox" class="toggle-col" data-col="21" checked>Presentación</label>
-                <label><input type="checkbox" class="toggle-col" data-col="22" checked>Editar</label>
-                <label><input type="checkbox" class="toggle-col" data-col="23" checked>Baja</label>
+                <label><input type="checkbox" class="toggle-col" data-col="22" checked>Planos</label>
+                <label><input type="checkbox" class="toggle-col" data-col="23" checked>Editar</label>
+                <label><input type="checkbox" class="toggle-col" data-col="24" checked>Baja</label>
                 <br>
                 <label><input type="checkbox" id="checkEquipos"> Equipos</label>
                 <label style="margin-left:20px;"><input type="checkbox" id="checkBlock"> Block</label>
@@ -157,6 +158,7 @@
                         <th>Prox.Fecha Mantenimiento</th>
                         <th>Días Restantes Man</th>
                         <th>Presentación</th>
+                        <th>Planos</th>
                         <th>Editar</th>
                         <th>Baja</th>
                     </tr>
@@ -325,10 +327,6 @@
                                         @else
                                             <!-- Proxima fecha de mantenimiento -->
                                             <td scope="row" data-fecha="{{$general_eyc->certificados->Prox_fecha_mantenimiento}}">
-                                                @php
-                                                //dd($general_eyc->certificados->Prox_fecha_mantenimiento); //FORMATO YYYY-MM-DD
-                                                //dd($general_eyc->certificados->formatted_date6); //FORMATO DD-MM-YYYY
-                                                @endphp
                                                 {{$general_eyc->certificados->formatted_date6}}
                                             </td>
                                             <!-- Días Restantes --> 
@@ -347,6 +345,22 @@
                                             <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Foto) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
                                         @elseif($general_eyc->Foto == 'ESPERA DE DATO')
                                             <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @endif
+                                    </td>
+                                    <!-- Planos --> 
+                                    <td scope="row">
+                                    @if($general_eyc->Tipo == 'BLOCK Y PROBETA') 
+                                        @if ($general_eyc->blocks?->Plano && $general_eyc->blocks?->Plano != 'ESPERA DE DATO')
+                                            <a class="btn btn-primary"
+                                            href="{{ asset('storage/' . $general_eyc->blocks->Plano) }}"
+                                            target="_blank">
+                                                <i class="far fa-file-pdf"></i>
+                                            </a>
+                                        @else
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                        @endif
+                                    @else
+                                        N/A
                                     @endif
                                     </td>
                                     <!-- Editar --> 
@@ -409,7 +423,7 @@ $('#tablaJs').on('draw.dt', function() {
 let table = new DataTable('#tablaJs', {
         columnDefs: [
         {
-            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23], // columnas que quieres ocultar por default
+            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24], // columnas que quieres ocultar por default
             visible: false
         }
     ],

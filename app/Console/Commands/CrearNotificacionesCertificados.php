@@ -27,7 +27,7 @@ class CrearNotificacionesCertificados extends Command
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
-
+        $rol = $user->rol;          
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
         $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
@@ -43,11 +43,35 @@ class CrearNotificacionesCertificados extends Command
         $fecha0DiasAntes = $fechaActual->copy()->addDays(0)->toDateString();
 
         // Obtener todos los certificados que están relacionados con la tabla general_eyc
-        $certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
-            ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
-            ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
-            ->get();
-
+        //$certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
+            //->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            //->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            //->get();
+            $certificados = Certificados::with('generaleyc.ISO')
+                ->where(function ($query) use (
+                    $fecha45DiasAntes, $fecha40DiasAntes, $fecha35DiasAntes,
+                    $fecha30DiasAntes, $fecha25DiasAntes, $fecha20DiasAntes,
+                    $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes,
+                    $fecha5DiasAntes, $fecha0DiasAntes
+                ) {
+                    $query->whereIn('Prox_fecha_calibracion', [
+                        $fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes,
+                        $fecha30DiasAntes,$fecha25DiasAntes,$fecha20DiasAntes,
+                        $fecha15DiasAntes,$fecha10DiasAntes,$fecha7DiasAntes,
+                        $fecha5DiasAntes,$fecha0DiasAntes
+                    ])
+                    ->orWhereIn('Fecha_calibracion', [
+                        $fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes,
+                        $fecha30DiasAntes,$fecha25DiasAntes,$fecha20DiasAntes,
+                        $fecha15DiasAntes,$fecha10DiasAntes,$fecha7DiasAntes,
+                        $fecha5DiasAntes,$fecha0DiasAntes
+                    ]);
+                })
+                ->where(function ($query) {
+                    $query->whereDate('Prox_fecha_calibracion', '>=', now())
+                        ->orWhereDate('Fecha_calibracion', '>=', now());
+                })
+                ->get();
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
             // Obtener el registro de general_eyc relacionado con el certificado
@@ -62,12 +86,30 @@ class CrearNotificacionesCertificados extends Command
                 $tipo = $generalEyc->Tipo;
 
                 // Según el tipo, definir qué fecha usar
-                if ($tipo === 'EQUIPOS') {
-                    $fechaCalibracion = $certificado->Prox_fecha_calibracion;
-                } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
-                    $fechaCalibracion = $certificado->Fecha_calibracion;
-                } else {
-                    // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                if ($rol == 'Equipos')
+                {
+                    if ($tipo === 'EQUIPOS') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                    } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
+                }
+                elseif($rol == 'Laboratorio')
+                {
+                    if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                    } elseif ($tipo === 'CONSUMIBLES') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
+                }else
+                {
+                    // Si el rol no es ni Equipos ni Laboratorio, continuar con el siguiente
                     continue;
                 }
 

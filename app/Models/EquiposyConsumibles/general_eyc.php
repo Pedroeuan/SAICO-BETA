@@ -97,12 +97,18 @@ class general_eyc extends Model
         return $this->hasManyThrough(Historial_Almacen::class, Almacen::class, 'idGeneral_EyC', 'idAlmacen');
     }
 
-    public function lastHistorial()
+    /*public function lastHistorial()
     {
         return $this->hasOne(Historial_Almacen::class, 'idGeneral_EyC')
         ->whereIn('Tipo', ['SALIDA', 'EN RENTA', 'DEVOLUCIÓN'])
         ->latest('Fecha');
-    }
+    }*/
+        public function lastHistorial()
+        {
+            return $this->hasOne(Historial_Almacen::class, 'idGeneral_EyC')
+                ->whereIn('Tipo', ['SALIDA', 'EN RENTA', 'DEVOLUCIÓN'])
+                ->latestOfMany('Fecha');
+        }
 
     use HasFactory;
 }
