@@ -11,7 +11,8 @@
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
-            header {
+
+                header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
@@ -65,7 +66,7 @@
                     text-align: center;
                     font-size: 9px;
                 }
-                    
+                
                 /* Aplica el borde a las celdas de la tabla */
                 .tablaheader th {
                     /*width: 70%;*/

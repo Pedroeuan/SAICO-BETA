@@ -201,7 +201,7 @@
                         </tr>
                     </tbody>
                 </table>
-    
+
                 <div style="margin-bottom: 4px;"></div>
 
             </header>
@@ -369,6 +369,7 @@
                     </table>
             </footer>
         @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+        <div class="content">
             <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">

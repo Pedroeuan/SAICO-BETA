@@ -11,7 +11,7 @@
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
-                
+                    
             header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
