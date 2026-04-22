@@ -521,6 +521,7 @@
                                                     <th><input type="text" class="form-control default-input" data-column="7" style="width: 120px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="8"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="9"></th>
+                                                    <th><input type="text" class="form-control default-input" data-column="10"></th>
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                             </thead>
@@ -1046,31 +1047,32 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-    /*Juntas-Resultados */
-    $(document).ready(function() {
+
+$(document).ready(function() {
     let tituloCount = $('.titulo-row').length;
-        //let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
-        let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
-        let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
+    //let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+    let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
+    let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
-            $('#addTituloBtn').click(function () {
-                tituloCount++;
-                rowCount = 0; // Reiniciar el contador de filas para este título
-                // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
-                const titleId = `titulo_${tituloCount}_${Date.now()}`;
+        $('#addTituloBtn').click(function () {
+            tituloCount++;
+            rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
-                let newTitle = `
-                <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                    <td colspan="10">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                            <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </button></td>
-                        </div>
-                    </td>
-                </tr>
-            `;
+            let newTitle = `
+            <tr class="titulo-row" data-titulo="${titleId}">
+                <td colspan="11">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
@@ -1087,7 +1089,7 @@
             let newTitle = `
             <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
                 <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="20"> Longitud Inspeccionada</td>
+                <td colspan="10"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
@@ -1104,18 +1106,22 @@
         });
 
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-            let newRow = `
-                <tr data-titulo="${lastTitle}">
+            let newRow = 
+                    `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td><input type="text" class="form-control" name="nno[${lastTitle}][]" placeholder="No."></td>
                     <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. Junta/Componente"></td>
                     <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
                     <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
@@ -1126,12 +1132,11 @@
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
                     <td><input type="text" class="form-control" name="longitud_inspeccionada[${lastTitle}][]" placeholder="L.I."></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr>
-            `;
+                    </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //updateRowNumbers();
+            verificarYAgregarLongitud();
         }
     );
 
@@ -1158,7 +1163,67 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-    });
+});
+
+    function verificarYAgregarLongitud() {
+
+        const $tbody = $('#dynamicTable tbody');
+        const $rows = $tbody.children('tr');
+
+        let contadorBloque = 0;
+        let $ultimoElementoBloque = null;
+
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            // ❌ Ignorar longitudes existentes (no cuentan)
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+                return;
+            }
+
+            // ✅ Contar título o fila normal
+            if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
+                contadorBloque++;
+                $ultimoElementoBloque = $row;
+            }
+            //-----------------------------------------Hacer ajuste de "N" filas por bloque
+            // 🎯 Cuando llegue a 11 → insertar longitud
+            if (contadorBloque === 10) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="10">Longitud Inspeccionada</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="text"
+                                    class="form-control w-90 long-text"
+                                    name="Long_Inspecc[${lastTitle}][]"
+                                    placeholder="Ingrese Longitud Inspeccionada...">
+                                <td>
+                                    <button type="button" class="btn btn-danger btnEliminar">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                // 👉 Evitar duplicados
+                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
+                    $ultimoElementoBloque.after(newLong);
+                }
+
+                // 🔄 Reiniciar contador para siguiente bloque
+                contadorBloque = 0;
+                $ultimoElementoBloque = null;
+            }
+        });
+    }
 
     /*Selects */
     $(document).ready(function() {
