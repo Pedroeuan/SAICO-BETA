@@ -619,9 +619,8 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
     public function FOR_02_PRO_INS_02_update(Request $request, $id)
     {
-
+        //dd($request->all());
         $Estatus = "ACTUALIZADO";
-
         // Validar los datos del formulario
         $validatedData = $request->validate([
             /* Detalles Generales */
@@ -770,12 +769,11 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-
         $titulos_json = $request->input('titulos_hidden', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
 
         $datosAgrupados = [];
-        
+
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("no.$sinTituloKey", []);

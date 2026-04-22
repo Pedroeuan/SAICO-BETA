@@ -533,14 +533,13 @@
 
                                                 @php
                                                     $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
-
                                                     /*$titleId = $esSinTitulo
                                                         ? 'sin_titulo_' . $index   // 👈 único por bloque
                                                         : 'titulo_' . $index;*/
                                                     $titleId = $esSinTitulo
+
                                                         ? 'sin_titulo'
                                                         : 'titulo_' . $index;
-
                                                 @endphp
 
                                                 {{-- 🔹 TÍTULO --}}
@@ -1092,7 +1091,8 @@ $(document).ready(function() {
                 <td colspan="10"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]" 
+                        placeholder="Ingrese Longitud Inspeccionada...">
                         <td><button type="button" class="btn btn-danger btnEliminar">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
@@ -1121,7 +1121,7 @@ $(document).ready(function() {
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="nno[${lastTitle}][]" placeholder="No."></td>
+                    <td><input type="text" class="form-control" name="no[${lastTitle}][]" placeholder="No." value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. Junta/Componente"></td>
                     <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
                     <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
@@ -1130,7 +1130,7 @@ $(document).ready(function() {
                     <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
                     <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="longitud_inspeccionada[${lastTitle}][]" placeholder="L.I."></td>
+                    <td><input type="text" class="form-control" name="long_insp[${lastTitle}][]" placeholder="L.I."></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                     </tr>`;
 
