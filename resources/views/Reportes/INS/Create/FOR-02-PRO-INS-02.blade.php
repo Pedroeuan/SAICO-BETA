@@ -111,6 +111,7 @@
                                         </div>
                                     </div>
 
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label">
@@ -128,7 +129,7 @@
                             <!-- SELECT cuando es SI -->
                             <select id="campoClienteSelect"
                                     class="form-select"
-                                    name="ClientesSelect">
+                                    name="ClienteSelect">
                                 <option value="" selected disabled>Seleccione un Cliente</option>
                                 @foreach($Clientes as $Cliente)
                                     <option value="{{ $Cliente->Cliente }}">
@@ -141,19 +142,16 @@
                             <input type="text"
                                 id="campoClienteInput"
                                 class="form-control inputForm mt-2"
-                                name="clienteInput"
+                                name="ClienteInput"
                                 placeholder="Ingrese nombre del cliente"
                                 style="display:none;">
                         </div>
                     </div>
 
-
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
-                                                Contrato
-
+                                                ¿Contrato existente?
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí

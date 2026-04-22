@@ -219,6 +219,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
     public function FOR_02_PRO_INS_02_store(Request $request)
     {
+        
         $Estatus = "CREADO";
         // Validar los datos del formulario
         $validatedData = $request->validate([
@@ -278,7 +279,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'diametro' => 'nullable|array',
             'ht' => 'nullable|array',
             'evaluacion' => 'nullable|array',
-            'longitud_inspeccionada' => 'nullable|array',
+            'long_insp' => 'nullable|array',
 
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
@@ -359,16 +360,17 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
-
         // ==========================
         // Lógica para manejar Cliente
         // ==========================
-                if ($request->TieneCliente === 'si') {
-                        $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
-                } else {
-                        $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
-                }
-        
+        if ($request->TieneCliente === 'si') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+        } else {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+        }
+        // ==========================
+        // Lógica para manejar Contrato
+        // ==========================
         // Lógica para manejar el campo Contrato
         if ($request->TieneContrato === "no") {
 
@@ -680,7 +682,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             'diametro' => 'nullable|array',
             'ht' => 'nullable|array',
             'evaluacion' => 'nullable|array',
-            'longitud_inspeccionada' => 'nullable|array',
+            'long_insp' => 'nullable|array',
             
             /* Longitudes inspeccionadas */
             'Long_Inspecc' => 'nullable|array',

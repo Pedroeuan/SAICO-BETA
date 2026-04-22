@@ -491,6 +491,7 @@
                                         </div>
                                         <thead>
                                                 <tr>
+                                                    <th rowspan="2">#</th>
                                                     <th rowspan="2">NO.</th>
                                                     <th rowspan="2">No. de Junta / Componente</th>
                                                     <th rowspan="2">No. Indicación</th>
@@ -544,7 +545,7 @@
                                                 {{-- 🔹 TÍTULO --}}
                                                 @if (!$esSinTitulo)
                                                 <tr class="titulo-row" data-titulo="{{ $titleId }}">
-                                                    <td colspan="21">
+                                                    <td colspan="11">
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <input type="text"
                                                                 class="form-control w-90 titulo-text"
@@ -584,15 +585,15 @@
                                                 @endforeach
 
                                                 {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                                @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
-                                                    @foreach ($grupo['Long_Inspecc'] as $long)
+                                                @if (!empty($grupo['long_insp']) && is_array($grupo['long_insp']))
+                                                    @foreach ($grupo['long_insp'] as $long)
                                                         <tr class="long-row" data-titulo="{{ $titleId }}">
-                                                            <td colspan="20">Longitud Inspeccionada</td>
+                                                            <td colspan="10">Longitud Inspeccionada</td>
 
                                                             <td>
                                                                 <input type="text"
                                                                     class="form-control long-text"
-                                                                    name="Long_Inspecc[{{ $titleId }}][]"
+                                                                    name="long_insp[{{ $titleId }}][]"
                                                                     value="{{ $long }}"
                                                                     placeholder="Ingrese Longitud Inspeccionada...">
                                                             </td>
