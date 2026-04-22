@@ -585,15 +585,15 @@
                                                 @endforeach
 
                                                 {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                                @if (!empty($grupo['long_insp']) && is_array($grupo['long_insp']))
-                                                    @foreach ($grupo['long_insp'] as $long)
+                                                @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
+                                                    @foreach ($grupo['Long_Inspecc'] as $long)
                                                         <tr class="long-row" data-titulo="{{ $titleId }}">
                                                             <td colspan="10">Longitud Inspeccionada</td>
 
                                                             <td>
                                                                 <input type="text"
                                                                     class="form-control long-text"
-                                                                    name="long_insp[{{ $titleId }}][]"
+                                                                    name="Long_Inspecc[{{ $titleId }}][]"
                                                                     value="{{ $long }}"
                                                                     placeholder="Ingrese Longitud Inspeccionada...">
                                                             </td>
@@ -608,8 +608,12 @@
                                                 @endif
 
                                                 @endforeach
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                        <input type="hidden" id="titulos_hidden" name="titulos_hidden">
+                                        <p>
+
 
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">

@@ -219,7 +219,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
     public function FOR_02_PRO_INS_02_store(Request $request)
     {
-        
+        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los datos del formulario
         $validatedData = $request->validate([
@@ -561,6 +561,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+                'una_hoja' => $request->imagen_hoja[$index] ?? 0, //
             ];
         }
 
