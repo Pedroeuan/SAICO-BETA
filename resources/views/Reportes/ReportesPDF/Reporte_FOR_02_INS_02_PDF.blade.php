@@ -603,7 +603,7 @@
 
                                         {{-- 🔹 LONGITUD INSPECCIONADA --}}
                                         <tr class="sinBordetd">
-                                        <td colspan="6"></td>
+                                        <td colspan="7"></td>
                                         <th colspan="2">Longitud inspeccionada:</th>
                                         <th colspan="1">
                                             {{ array_sum($grupo['Long_Inspecc'] ?? []) }} m
