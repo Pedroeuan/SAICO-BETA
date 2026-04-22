@@ -27,7 +27,7 @@ class CrearNotificacionesCertificados extends Command
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
-
+        $rol = $user->rol;          
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
         $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
@@ -86,12 +86,30 @@ class CrearNotificacionesCertificados extends Command
                 $tipo = $generalEyc->Tipo;
 
                 // Según el tipo, definir qué fecha usar
-                if ($tipo === 'EQUIPOS') {
-                    $fechaCalibracion = $certificado->Prox_fecha_calibracion;
-                } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
-                    $fechaCalibracion = $certificado->Fecha_calibracion;
-                } else {
-                    // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                if ($rol == 'Equipos')
+                {
+                    if ($tipo === 'EQUIPOS') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                    } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
+                }
+                elseif($rol == 'Laboratorio')
+                {
+                    if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                    } elseif ($tipo === 'CONSUMIBLES') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
+                }else
+                {
+                    // Si el rol no es ni Equipos ni Laboratorio, continuar con el siguiente
                     continue;
                 }
 

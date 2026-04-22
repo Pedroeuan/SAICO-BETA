@@ -423,7 +423,7 @@ $('#tablaJs').on('draw.dt', function() {
 let table = new DataTable('#tablaJs', {
         columnDefs: [
         {
-            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], // columnas que quieres ocultar por default
+            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24], // columnas que quieres ocultar por default
             visible: false
         }
     ],
