@@ -580,7 +580,7 @@
                                     {{-- 🔹 TÍTULO --}}
                                 @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
                                     <tr class="titulo-row">
-                                        <td colspan="9" style="border:.5px solid black;">
+                                        <td colspan="10" style="border:.5px solid black;">
                                             {{ $grupo['titulos_juntas'] }}
                                         </td>
                                     </tr>
@@ -597,7 +597,7 @@
                                                 <td>{{ $junta['diametro'] }}</td>
                                                 <td>{{ $junta['ht'] }}</td>
                                                 <td>{{ $junta['evaluacion'] }}</td>
-                                                <td>{{ $junta['longitud_inspeccionada'] }}</td>
+                                                <td>{{ $junta['long_insp'] }}</td>
                                             </tr>
                                             @endforeach
 
