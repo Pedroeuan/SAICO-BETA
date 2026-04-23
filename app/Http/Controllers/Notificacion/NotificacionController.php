@@ -99,7 +99,7 @@ class NotificacionController extends Controller
                     $query->whereDate('Prox_fecha_calibracion', '>=', now())
                         ->orWhereDate('Fecha_calibracion', '>=', now());
                 })
-                ->get();        
+                ->get();
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
             // Obtener el registro de general_eyc relacionado con el certificado
@@ -114,7 +114,7 @@ class NotificacionController extends Controller
                 $tipo = $generalEyc->Tipo;
 
                 // Según el tipo, definir qué fecha usar
-                if ($rol == 'Equipos')
+                if ($iso == '9001')
                 {
                     if ($tipo === 'EQUIPOS') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
@@ -125,7 +125,7 @@ class NotificacionController extends Controller
                         continue;
                     }
                 }
-                elseif($rol == 'Laboratorio')
+                elseif($iso == '17025')
                 {
                     if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
@@ -135,10 +135,6 @@ class NotificacionController extends Controller
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;
                     }
-                }else
-                {
-                    // Si el rol no es ni Equipos ni Laboratorio, continuar con el siguiente
-                    continue;
                 }
 
                 // Convertir la fecha al formato DD-MM-YYYY

@@ -4,13 +4,14 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-01-INS-05</title>
             <style>
-               @page {
+                @page {
                     margin: 
                     3.0cm /* superior */
                     1.2cm /* derecho */
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
+                    
             header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
