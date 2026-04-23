@@ -114,13 +114,27 @@ class NotificacionController extends Controller
                 $tipo = $generalEyc->Tipo;
 
                 // Según el tipo, definir qué fecha usar
-                if ($tipo === 'EQUIPOS') {
-                    $fechaCalibracion = $certificado->Prox_fecha_calibracion;
-                } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
-                    $fechaCalibracion = $certificado->Fecha_calibracion;
-                } else {
-                    // Si no corresponde a ninguno de los tipos, continuar con el siguiente
-                    continue;
+                if ($iso == '9001')
+                {
+                    if ($tipo === 'EQUIPOS') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                    } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
+                }
+                elseif($iso == '17025')
+                {
+                    if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                    } elseif ($tipo === 'CONSUMIBLES') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
                 }
 
                 // Convertir la fecha al formato DD-MM-YYYY

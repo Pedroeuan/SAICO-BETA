@@ -111,6 +111,7 @@
                                         </div>
                                     </div>
 
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label">
@@ -128,7 +129,7 @@
                             <!-- SELECT cuando es SI -->
                             <select id="campoClienteSelect"
                                     class="form-select"
-                                    name="ClientesSelect">
+                                    name="ClienteSelect">
                                 <option value="" selected disabled>Seleccione un Cliente</option>
                                 @foreach($Clientes as $Cliente)
                                     <option value="{{ $Cliente->Cliente }}">
@@ -141,19 +142,16 @@
                             <input type="text"
                                 id="campoClienteInput"
                                 class="form-control inputForm mt-2"
-                                name="clienteInput"
+                                name="ClienteInput"
                                 placeholder="Ingrese nombre del cliente"
                                 style="display:none;">
                         </div>
                     </div>
 
-
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
-                                                Contrato
-
+                                                ¿Contrato existente?
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -536,6 +534,7 @@
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
                                                 <tr>
+                                                    <th rowspan="2">#</th>
                                                     <th rowspan="2">NO.</th>
                                                     <th rowspan="2">No. de Junta / Componente</th>
                                                     <th rowspan="2">No. Indicación</th>
@@ -970,6 +969,7 @@
 
         // Helpers y configuración-CONFIGURAR CAMPOS DE ACUERDO A LOS NAMES DE CADA INPUT
         const fieldNames = [
+        'no',
         'componente',
         'no_ind',
         'tipo_indicacion',
@@ -978,8 +978,9 @@
         'diametro',
         'ht',
         'evaluacion',
-        'longitud_inspeccionada'];
+        'long_insp'];
         const placeholders = { //CONFIGURAR CAMPOS DE ACUERDO A LOS PLACEHOLDERS DE CADA INPUT
+            no: 'No.',
             componente: 'No. Junta/Componente', 
             no_ind: 'No.Ind.', 
             tipo_indicacion: 'Tipo de Indicación',
@@ -988,7 +989,7 @@
             diametro: 'Ø', 
             ht: 'H.T.', 
             evaluacion: 'Evaluación',
-            longitud_inspeccionada: 'L.I.',
+            long_insp: 'L.I.',
         };
         function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
 
@@ -1007,7 +1008,7 @@
             //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="10">
+                <td colspan="11">
                 <div class="d-flex justify-content-between align-items-center">
                     <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
@@ -1058,11 +1059,10 @@
 
             const titleId = l.titleId || 'sin_titulo';
             const value   = esc(l.text || '');
-
             //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
             const newLong = `
                 <tr class="long-row" data-titulo="${titleId}">
-                    <td colspan="9">Longitud Inspeccionada</td>
+                    <td colspan="10">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
@@ -1084,10 +1084,10 @@
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 11) { // si hay al menos 11 filas en el bloque
+            if ($rowsBlock.length >= 10) { // si hay al menos 11 filas en el bloque
                 const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(10); // fila índice 10 = fila 11 (0-based)
+                    .eq(9); // fila índice 9 = fila 10 (0-based)
 
                 if ($nfila.length) { 
                     $nfila.after(newLong);
@@ -1146,14 +1146,17 @@
         $('#addTituloBtn').click(function () {
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
+            // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+            const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="10">
+            <tr class="titulo-row" data-titulo="${titleId}">
+                <td colspan="11">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="fa fa-times" aria-hidden="true"></i>
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
+                        <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
                     </div>
                 </td>
@@ -1162,7 +1165,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData(document.querySelectorAll("form")[1].id);
+        saveData($(this).closest('form').attr('id'));
         });
         
         $('#addLongBtn').click(function () {
@@ -1174,12 +1177,12 @@
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             let newTitle = `
-            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
                 <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="9"> Longitud Inspeccionada</td>
+                <td colspan="10"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]"
+                        placeholder="Ingrese Longitud Inspeccionada...">
                         <td><button type="button" class="btn btn-danger btnEliminar">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
@@ -1198,8 +1201,7 @@
         $('#addBtn').click(function () {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
-            //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;//MODIFICAR
-            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length; //MODIFICAR
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1208,7 +1210,8 @@
 
             let newRow = `
                 <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
+                    <td><input type="text" class="form-control" name="no[${lastTitle}][]" placeholder="NO" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="componente[${lastTitle}][]" placeholder="No. Junta/Componente"></td>
                     <td><input type="text" class="form-control" name="no_ind[${lastTitle}][]" placeholder="No.Ind."></td>
                     <td><input type="text" class="form-control" name="tipo_indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
@@ -1217,7 +1220,7 @@
                     <td><input type="text" class="form-control" name="diametro[${lastTitle}][]" placeholder="Ø"></td>
                     <td><input type="text" class="form-control" name="ht[${lastTitle}][]" placeholder="H.T."></td>
                     <td><input type="text" class="form-control" name="evaluacion[${lastTitle}][]" placeholder="Evaluación"></td>
-                    <td><input type="text" class="form-control" name="longitud_inspeccionada[${lastTitle}][]" placeholder="L.I."></td>
+                    <td><input type="text" class="form-control" name="long_insp[${lastTitle}][]" placeholder="L.I."></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>
             `;
@@ -1258,14 +1261,15 @@ function verificarYAgregarLongitud() {
             $ultimoElementoBloque = $row;
         }
         //-----------------------------------------Hacer ajuste de "N" filas por bloque
-        // 🎯 Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 11) {
+        // 🎯 Cuando llegue a 10
+        //  → insertar longitud
+        if (contadorBloque === 10) {
 
             const lastTitle = $row.data('titulo') || 'sin_titulo';
 
             const newLong = `
                 <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="9">Longitud Inspeccionada</td>
+                    <td colspan="10">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
