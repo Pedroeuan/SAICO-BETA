@@ -976,8 +976,8 @@ class FOR_01_PRO_INS_22Controller extends Controller
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
         $imagenHoja = $request->input('imagen_hoja', []);
-
-        //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
+        $RG_Principal = $request->input('RG_Principal', []);
+        $RG_Secundario = $request->input('RG_Secundario', []);
 
         // **1️⃣ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
@@ -1216,7 +1216,9 @@ class FOR_01_PRO_INS_22Controller extends Controller
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
                     'comment' => $foto['comentario'] ?? '',
-                    'una_hoja'  => $foto['una_hoja'] ?? 0, 
+                    'una_hoja'  => $foto['una_hoja'] ?? 0,
+                    'RG_Principal' => $foto['RG_Principal'] ?? 0,
+                    'RG_Secundario' => $foto['RG_Secundario'] ?? 0, 
                 ];
             }
         }
@@ -1272,7 +1274,7 @@ class FOR_01_PRO_INS_22Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(179, -181);
+            $combinedPdf->SetXY(179, -180);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 

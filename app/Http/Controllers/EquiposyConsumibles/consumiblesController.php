@@ -379,7 +379,7 @@ class consumiblesController extends Controller
         $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
         $historialAlmacen->Tipo = $Tipo;
         $historialAlmacen->Cantidad = $request->input('Stock');
-        if($rol == 'Laboratotio')
+        if($rol == 'Laboratorio')
         {
             $historialAlmacen->Fecha = $request->input('Fecha_Alta');
         }

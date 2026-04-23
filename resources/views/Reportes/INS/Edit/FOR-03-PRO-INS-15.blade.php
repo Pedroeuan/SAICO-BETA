@@ -103,7 +103,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}" readonly>
                                             @error('Cliente')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -113,7 +113,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
                                             @error('Contrato')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -192,7 +192,7 @@
                                                 <th class="align-middle">ID</th>
                                                 <th class="align-middle">Descripción del Elemento</th>
                                                 <th class="align-middle">Nivel</th>
-                                                <th class="align-middle">0</th>
+                                                <th class="align-middle">Ø</th>
                                                 <th class="align-middle">Longitud (m)</th>
                                                 <th class="align-middle">Clase</th>
                                                 <th class="align-middle">Especificación</th>
@@ -209,47 +209,59 @@
                                                     <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
                                                     <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>
-                                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 100px;"></th>
+                                                    <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                             </thead>
+                                            @php $contador = 1; @endphp
+                                                @foreach ($Grupo_Juntas_Re as $index => $grupo)
 
-                                            @php
-                                                $contador = 1;
-                                            @endphp
-                                            <tbody>
-                                                @foreach ($Grupo_Juntas_Re as $grupo)
-                                                    @php
-                                                        $tituloKey1 = $grupo['titulos_juntas'] != 'SIN TITULO' ? $grupo['titulos_juntas'] : 'sin_titulo';
-                                                        $tituloKey = (preg_replace('/\s+/', '_', $tituloKey1));
-                                                    @endphp
+                                                @php
+                                                    $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
 
-                                                    @if ($grupo['titulos_juntas'] != 'SIN TITULO')
-                                                        <!--<tr class="titulo-row" data-titulo="titulo_{{ $tituloKey }}">-->
-                                                        <tr class="titulo-row" data-titulo="{{ $tituloKey }}">
-                                                            <td colspan="15">
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título..." value="{{ $grupo['titulos_juntas'] }}">
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                                            <i class="fa fa-times"  aria-hidden="true"></i>
-                                                                        </button>
-                                                                    </td>
-                                                                </div>
+                                                    /*$titleId = $esSinTitulo
+                                                        ? 'sin_titulo_' . $index   // único por bloque
+                                                        : 'titulo_' . $index;*/
+                                                    $titleId = $esSinTitulo
+                                                        ? 'sin_titulo'
+                                                        : 'titulo_' . $index;
+
+                                                @endphp
+
+                                                {{--  TÍTULO --}}
+                                                @if (!$esSinTitulo)
+                                                <tr class="titulo-row" data-titulo="{{ $titleId }}">
+                                                    <td colspan="9">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <input type="text"
+                                                                class="form-control w-90 titulo-text"
+                                                                name="titulos_text[{{ $titleId }}]"
+                                                                value="{{ $grupo['titulos_juntas'] }}"
+                                                                placeholder="Ingrese título...">
+
+                                                            <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
+
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
                                                             </td>
-                                                        </tr>
-                                                    @endif
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @endif
 
-                                                    @foreach ($grupo['resultados'] as $resultado)
-                                                        <tr data-titulo="{{ $tituloKey }}">
-                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                            <td><input type="text" class="form-control" name='ID[{{ $tituloKey }}][]' value="{{ $resultado['ID'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Descripcion_del_Elemento[{{ $tituloKey }}][]' value="{{ $resultado['Descripcion_del_Elemento'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Nivel[{{ $tituloKey }}][]' value="{{ $resultado['NIVEL'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='0[{{ $tituloKey }}][]' value="{{ $resultado['Ø'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Longitud_(m)[{{ $tituloKey }}][]' value="{{ $resultado['LONGITUD_(m)'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Clase[{{ $tituloKey }}][]' value="{{ $resultado['CLASE'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Especificación[{{ $tituloKey }}][]' value="{{ $resultado['ESPECIFICACIÓN'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Observaciones[{{ $tituloKey }}][]' value="{{ $resultado['Observaciones'] }}"></td>
+                                                {{-- FILAS --}}
+                                                @foreach ($grupo['resultados'] as $resultado)
+                                                <tr data-titulo="{{ $titleId }}">
+                                                    <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                            <td><input type="text" class="form-control" name="ID[{{ $titleId }}][]" value="{{ $resultado['ID'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="Descripcion_del_Elemento[{{ $titleId }}][]" value="{{ $resultado['Descripcion_del_Elemento'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="Nivel[{{ $titleId }}][]" value="{{ $resultado['Nivel'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="0[{{ $titleId }}][]" value="{{ $resultado['0'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="Longitud_(m)[{{ $titleId }}][]" value="{{ $resultado['Longitud_(m)'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="Clase[{{ $titleId }}][]" value="{{ $resultado['Clase'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="Especificación[{{ $titleId }}][]" value="{{ $resultado['Especificación'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="Observaciones[{{ $titleId }}][]" value="{{ $resultado['Observaciones'] }}"></td>
                                                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                                         </tr>
                                                         @php $contador++; @endphp
@@ -258,7 +270,7 @@
                                             </tbody>
                                     </table>
                                     </div>
-
+                                    <input type="hidden" id="titulos_hidden" name="titulos_hidden">
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
@@ -277,13 +289,6 @@
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
                                     <p>
-
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones', $Datos_Equipo['Observaciones'] ?? '')}}</textarea>
-                                            </div>
-                                        </div>
 
                                     <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -527,7 +532,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit-For-03-15.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -536,61 +541,91 @@
 <script>
 /*Juntas-Resultados */
     $(document).ready(function() {
-        let tituloCount = 0;
-        let rowCount = 0;
-        let rowCountGlobal = 0;
+        let tituloCount = $('.titulo-row').length;
+        //let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
+        let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
+        let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
+            $('#addTituloBtn').click(function () {
+                tituloCount++;
+                rowCount = 0; // Reiniciar el contador de filas para este título
+                // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
+                const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
-        $('#addTituloBtn').click(function () {
-            tituloCount++;
-            rowCount = 0; // Reiniciar el contador de filas para este título
+                let newTitle = `
+                <tr class="titulo-row" data-titulo="${titleId}">
+                    <td colspan="9">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                            <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
+                            <td><button type="button" class="btn btn-danger btnEliminarTitulo">
+                                <i class="fa fa-times"  aria-hidden="true"></i>
+                            </button></td>
+                        </div>
+                    </td>
+                </tr>
+            `;
 
-            let newTitle = `
-            <tr class="titulo-row" data-titulo="titulo_${tituloCount}">
-                <td colspan="15">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <td><button type="button" class="btn btn-danger btnEliminarTitulo ml-2">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </button></td>
-                    </div>
-                </td>
-            </tr>
-        `;
+            $('#dynamicTable tbody').append(newTitle);
+            updateTitulos(); // Actualizar lista de títulos
+            });
 
-        $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de títulos
-        });
+            $('#addLongBtn').click(function () {
+                //let numFilas = parseInt($('#numRows').val());
+                let numFilas = parseInt($('#numRows').val(), 10) || 1;
+                // Recontar filas existentes que NO son títulos
+                rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
 
-        $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
-            // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+                let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
-            for (let i = 0; i < numFilas; i++) {
-            rowCount++; // Incrementar el contador general de filas
-            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+                let newTitle = `
+                <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                    <td colspan="8"> Longitud Inspeccionada</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                            <td><button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"  aria-hidden="true"></i>
+                            </button></td>
+                        </div>
+                    </td>
+                </tr>
+            `;
 
-            let newRow = `
-                <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
-                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
-                    <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Descripcion_del_Elemento"></td>
-                    <td><input type="text" class="form-control" name="No_Indicacion[${lastTitle}][]" placeholder="Nivel"></td>
-                    <td><input type="text" class="form-control" name="Tipo_Indicacion[${lastTitle}][]" placeholder="0"></td>
-                    <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="Longitud_(m)"></td>
-                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="Clase"></td>
-                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="Especificación"></td>
-                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                </tr>`;
+            $('#dynamicTable tbody').append(newTitle);
+            updateTitulos(); // Actualizar lista de títulos
+            });
 
+            $('#addBtn').click(function () {
+                //let numFilas = parseInt($('#numRows').val());
+                let numFilas = parseInt($('#numRows').val(), 10) || 1;
+                // Recontar filas existentes que NO son títulos
+                //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+                rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+                let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+                for (let i = 0; i < numFilas; i++) {
+                rowCount++; // Incrementar el contador general de filas
+                rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+
+                let newRow = 
+                    `<tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"> 
+                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
+                    <td><input type="text" class="form-control" name="Descripcion_del_Elemento[${lastTitle}][]" placeholder="Descripcion_del_Elemento"></td>
+                    <td><input type="text" class="form-control" name="Nivel[${lastTitle}][]" placeholder="NIVEL"></td>
+                    <td><input type="text" class="form-control" name="0[${lastTitle}][]" placeholder="Ø"></td>
+                    <td><input type="text" class="form-control" name="Longitud_(m)[${lastTitle}][]" placeholder="Longitud_(m)"></td>
+                    <td><input type="text" class="form-control" name="Clase[${lastTitle}][]" placeholder="Clase"></td>
+                    <td><input type="text" class="form-control" name="Especificación[${lastTitle}][]" placeholder="Especificación"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                    </tr>`;
                 $('#dynamicTable tbody').append(newRow);
-            }
-
         }
-    );
+});
         
         $('form').submit(function(e) {
             // Validar que la tabla no esté vacía
@@ -604,9 +639,22 @@
                 return;
             }
 
+            $('form').submit(function(e) {
+            // Validar que la tabla no esté vacía
+            if ($('#dynamicTable tbody tr').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Advertencia',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
+                });
+                return;
+            }
+            // Actualizar el campo oculto con [{id,text},...]
+            updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');
@@ -614,9 +662,6 @@
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
     });
-
-
-    </script>
+});
+</script>
 @endsection
-
-

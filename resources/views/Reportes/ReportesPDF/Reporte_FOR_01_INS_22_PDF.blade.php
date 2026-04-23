@@ -3,14 +3,6 @@
         <head>
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-22/01</title>
-            @php
-                $dg = $Detalles_Generales ?? [];
-                $de = $Datos_Equipo ?? [];
-                $grupos = $Grupo_Juntas_Detalles_Re ?? [];
-                $tipoFluido = $dg['Tipo_Flu'] ?? $dg['Tip_Flu'] ?? '';
-                $procedimientoGeneral = $dg['Procedimiento'] ?? '';
-                $observacionesEquipo = $de['Observaciones'] ?? '';
-            @endphp
             <style>
                 @page {
                     margin:
@@ -52,7 +44,7 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 6px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
@@ -93,7 +85,7 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 7cap;
+            font-size: 7px;
             background-color: #2F75B5;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
@@ -104,11 +96,12 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 6px !important;
         }
 
         .datosinspeccion td, .datosinspeccion th {
             border: .6px solid black; 
+            font-size: 6px !important;
         }
 
         .datosinspeccionsinborde{
@@ -116,7 +109,6 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            font-size: 8px;
         }
 
         .datosresultados{
@@ -124,14 +116,16 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            
         }
 
         .datosresultados td, .datosresultados th {
             border: .6px solid black; 
+            font-size: 8px !important;
         }
         .celdaGris{
             background-color: #DBDBDB;
+            font-size: 8px;
         }
         
         .sinBordetdth td, .sinBordetdth th {
@@ -211,7 +205,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 814px;">{{ $observacionesEquipo }}</td>                            
+                            <td class="lineaInferior" style="width: 814px;">{{ $Datos_Equipo['Observaciones'] ?? '' }}</td>                            
                         </tr>  
                     </table>
 
@@ -368,63 +362,64 @@
 
         @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
             <div class="content">
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior">{{ $dg['Fecha'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior">{{ $dg['No_Reporte'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior">{{ $dg['Cliente'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior">{{ $dg['Contrato'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $dg['Proyecto'] ?? '' }}</td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $dg['Orden_Trabajo'] ?? '' }}</td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior">{{ $dg['Folio'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
                             <th>TIPO DE FLUIDO:</th>
-                            <td class="lineaInferior">{{ $tipoFluido }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_Flu'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior">{{ $dg['Partida'] ?? '' }}</td>
-                            <th>TEMPERATURA DE OPERACI&Oacute;N:</th>
-                            <td class="lineaInferior">{{ $dg['Temp_Op'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
+                            <th>TEMPERATURA DE OPERACIÓN:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Temp_Op'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior">{{ $dg['Lugar'] ?? '' }}</td>
-                            <th>ESPESOR NOMINAL / C&Eacute;DULA:</th>
-                            <td class="lineaInferior">{{ $dg['Esp_Ced'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] ?? '' }}</td>
+                            <th>ESPESOR NOMINAL / CÉDULA:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Esp_Ced'] ?? '' }}</td>
                         </tr>
                         <tr>
-                            <th>TUBER&Iacute;A / UDC / ISOM&Eacute;TRICO / PLANO:</th>
-                            <td class="lineaInferior">{{ $dg['Isometrico_Plano'] ?? '' }}</td>
+                            <th>TUBERÍA / UDC / ISOMÉRICO / PLANO:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] ?? '' }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior">{{ $dg['Material'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>PROCEDIMIENTO:</th>
-                            <td class="lineaInferior">{{ $procedimientoGeneral }}</td>
-                            <th>ESPESOR DI&Aacute;METRO NOMINAL NPS:</th>
-                            <td class="lineaInferior">{{ $dg['Dia_NPS'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
+                            <th>ESPESOR DIÁMETRO NOMINAL NPS:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Dia_NPS'] ?? '' }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -443,34 +438,34 @@
                             <th colspan="2">EQUIPO DE ONDAS GUIADAS</th>
                             <th colspan="2">ANILLO TRANSDUCTOR 1</th>
                             <th colspan="2">ANILLO TRANSDUCTOR 2</th>
-                            <th>N&Uacute;MERO DE M&Oacute;DULOS:</th>
+                            <th>NÚMERO DE MÓDULOS:</th>
                         </tr>
                         <tr>
                             <th class="celdaGris" style="width: 60px;">MARCA:</th>
-                            <td style="width: 80px;">{{ $de['MARCA_EQUIPO'] ?? '' }}</td>
-                            <th class="celdaGris" style="width: 10px;">DI&Aacute;METRO PULG:</th>
-                            <td style="width: 80px;">{{ $de['DIAMETRO_PULG'] ?? '' }}</td>
-                            <th class="celdaGris" style="width: 60px;">DI&Aacute;METRO PULG:</th>
-                            <td style="width: 100px;">{{ $de['DIAMETRO_AN2'] ?? '' }}</td>
-                            <td style="width: 100px;">{{ $de['Num_Mode'] ?? '' }}</td>
+                            <td style="width: 80px;">{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td>
+                            <th class="celdaGris" style="width: 10px;">DIÁMETRO PULG:</th>
+                            <td style="width: 80px;">{{ $Datos_Equipo['DIAMETRO_PULG'] ?? '' }}</td>
+                            <th class="celdaGris" style="width: 60px;">DIÁMETRO PULG:</th>
+                            <td style="width: 100px;">{{ $Datos_Equipo['DIAMETRO_AN2'] ?? '' }}</td>
+                            <td style="width: 100px;">{{ $Datos_Equipo['Num_Mode'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>{{ $de['MODELO_EQUIPO'] ?? '' }}</td>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td>
                             <th class="celdaGris">MARCA:</th>
-                            <td>{{ $de['MARCA_AN1'] ?? '' }}</td>
+                            <td>{{ $Datos_Equipo['MARCA_AN1'] ?? '' }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td>{{ $de['MODELO_AN2'] ?? '' }}</td>
-                            <th class="celdaGris" style="width: 100px;">N&Uacute;MERO DE TRANSDUCTORES</th>
+                            <td>{{ $Datos_Equipo['MODELO_AN2'] ?? '' }}</td>
+                            <th class="celdaGris" style="width: 100px;">NÚMERO DE TRANSDUCTORES</th>
                         </tr>
                         <tr>
                             <th class="celdaGris">N.S:</th>
-                            <td>{{ $de['NS_EQUIPO'] ?? '' }}</td>
+                            <td>{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td>
                             <th class="celdaGris">N.S:</th>
-                            <td style="width: 60px;">{{ $de['NS_AN1'] ?? '' }}</td>
+                            <td style="width: 60px;">{{ $Datos_Equipo['NS_AN1'] ?? '' }}</td>
                             <th class="celdaGris">N.S:</th>
-                            <td style="width: 60px;">{{ $de['NS_AN2'] ?? '' }}</td>
-                            <td>{{ $de['NUM_TRANS'] ?? '' }}</td>
+                            <td style="width: 60px;">{{ $Datos_Equipo['NS_AN2'] ?? '' }}</td>
+                            <td>{{ $Datos_Equipo['NUM_TRANS'] ?? '' }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -479,7 +474,7 @@
 
                 <table class="datosgenerales">
                     <thead class="encabezadoAzul">
-                        <tr><th colspan="8">DATOS DE LA INSPECCI&Oacute;N</th></tr>
+                        <tr><th colspan="8">DATOS DE LA INSPECCIÓN</th></tr>
                     </thead>
 
                     <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead>
@@ -487,29 +482,29 @@
                     <tbody>
                         <tr>
                             <th style="width: 15%;">FRECUENCIA:</th>
-                            <td class="lineaInferior">{{ $de['Frecuencia'] ?? '' }}</td>
-                            <th style="width: 15%;">ORIENTACI&Oacute;N DE LA TUBER&Iacute;A:</th>
-                            <td class="lineaInferior">{{ $de['Ori_Tube'] ?? '' }}</td>
-                            <th style="width: 15%;" colspan="2">REFERENCIA DE LA POSICI&Oacute;N DEL ANILLO:</th>
-                            <td class="lineaInferior" colspan="2">{{ $de['Ref_An'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Frecuencia'] ?? '' }}</td>
+                            <th style="width: 15%;">ORIENTACIÓN DE LA TUBERÍA:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Ori_Tube'] ?? '' }}</td>
+                            <th style="width: 15%;" colspan="2">REFERENCIA DE LA POSICIÓN DEL ANILLO:</th>
+                            <td class="lineaInferior" colspan="2">{{ $Datos_Equipo['Ref_An'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th style="width: 15%;">MODO DE ONDA:</th>
-                            <td class="lineaInferior">{{ $de['Mod_Onda'] ?? '' }}</td>
-                            <th style="width: 15%;">DIRECCI&Oacute;N DEL DISPARO:</th>
-                            <td class="lineaInferior">{{ $de['Dir_Dis'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Mod_Onda'] ?? '' }}</td>
+                            <th style="width: 15%;">DIRECCIÓN DEL DISPARO:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Dir_Dis'] ?? '' }}</td>
                             <th style="width: 15%;" colspan="2">DISTANCIA DE POSICI&Oacute;N DEL ANILLO:</th>
-                            <td class="lineaInferior" colspan="2">{{ $de['Dm_An'] ?? '' }}</td>
+                            <td class="lineaInferior" colspan="2">{{ $Datos_Equipo['Dm_An'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th style="width: 15%;">PRESI&Oacute;N DE OPERACI&Oacute;N DEL ANILLO:</th>
-                            <td class="lineaInferior">{{ $de['Psi_an'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Psi_an'] ?? '' }}</td>
                             <th style="width: 15%;">TIPO DE RECUBRIMIENTO:</th>
-                            <td class="lineaInferior">{{ $de['Tip_Rec'] ?? '' }}</td>
-                            <th style="width: 15%;">&Aacute;NGULO DE ORIENTACI&Oacute;N DEL ANILLO:</th>
-                            <td class="lineaInferior">{{ $de['Ang_An'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Tip_Rec'] ?? '' }}</td>
+                            <th style="width: 15%;">ÁNGULO DE ORIENTACIÓN DEL ANILLO:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Ang_An'] ?? '' }}</td>
                             <th style="width: 15%;">COORDENADAS GPS:</th>
-                            <td class="lineaInferior">{{ $de['Coor_GPS'] ?? '' }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['Coor_GPS'] ?? '' }}</td>
                         </tr>
                     </tbody>
                 </table>

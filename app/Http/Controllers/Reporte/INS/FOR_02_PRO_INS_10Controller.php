@@ -593,7 +593,7 @@ class FOR_02_PRO_INS_10Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_02_PRO_INS_10/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
-                'una_hoja' => $request->imagen_hoja[$index] ?? 0, // 👈 AQUÍ
+                'una_hoja' => $request->imagen_hoja[$index] ?? 0, //
             ];
         }
 
