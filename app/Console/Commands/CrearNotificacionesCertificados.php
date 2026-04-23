@@ -27,7 +27,7 @@ class CrearNotificacionesCertificados extends Command
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
-        $rol = $user->rol;          
+
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
         $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
@@ -86,7 +86,7 @@ class CrearNotificacionesCertificados extends Command
                 $tipo = $generalEyc->Tipo;
 
                 // Según el tipo, definir qué fecha usar
-                if ($rol == 'Equipos')
+                if ($iso == '9001')
                 {
                     if ($tipo === 'EQUIPOS') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
@@ -97,7 +97,7 @@ class CrearNotificacionesCertificados extends Command
                         continue;
                     }
                 }
-                elseif($rol == 'Laboratorio')
+                elseif($iso == '17025')
                 {
                     if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
@@ -107,10 +107,6 @@ class CrearNotificacionesCertificados extends Command
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;
                     }
-                }else
-                {
-                    // Si el rol no es ni Equipos ni Laboratorio, continuar con el siguiente
-                    continue;
                 }
 
                 // Convertir la fecha al formato DD-MM-YYYY
