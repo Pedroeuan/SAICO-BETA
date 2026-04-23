@@ -55,7 +55,7 @@ class NotificacionController extends Controller
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
-
+        $rol = $user->rol;
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
         $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
