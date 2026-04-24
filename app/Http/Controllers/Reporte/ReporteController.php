@@ -799,14 +799,14 @@ class ReporteController extends Controller
         $reportesDetalles_Generales = [];
         foreach ($Reportes as $reporte) {
             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
-$reportesDetalles_Generales[] = [
-    'Contrato' => $detalles['Contrato'] ?? '',
-    'Proyecto' => $detalles['Proyecto'] ?? '',
-    'Cliente' => $detalles['Cliente'] ?? '',
-    'Fecha' => $detalles['Fecha'] ?? '',
-    'No_Reporte' => $detalles['No_Reporte'] ?? '',
-    'idReportes' => $reporte->idReportes
-];
+            $reportesDetalles_Generales[] = [
+                'Contrato' => $detalles['Contrato'] ?? '',
+                'Proyecto' => $detalles['Proyecto'] ?? '',
+                'Cliente' => $detalles['Cliente'] ?? '',
+                'Fecha' => $detalles['Fecha'] ?? '',
+                'No_Reporte' => $detalles['No_Reporte'] ?? '',
+                'idReportes' => $reporte->idReportes
+            ];
         }
         // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
         $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
