@@ -602,7 +602,7 @@
                                             </tbody>
                                         </table>
                                         </div>
-                                        <input type="hidden" id="titulos_hidden" name="titulos_hidden">
+                                        <input type="hidden" id="titulos_hidden" name="titulos_data">
                                         <p>
 
 
