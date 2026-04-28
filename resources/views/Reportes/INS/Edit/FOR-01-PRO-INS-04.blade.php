@@ -518,7 +518,7 @@
                                                     <!-- TITULOS -->
                                                     @if ($item['tipo'] == 'titulo')
                                                         <tr class="titulo-row" data-titulo="{{ $titleId }}">
-                                                            <td colspan="11">
+                                                            <td colspan="18">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <input type="text"
                                                                         class="form-control w-90 titulo-text"
@@ -568,7 +568,7 @@
                                                     <!-- LONGITUD (CIERRA BLOQUE) -->
                                                     @if ($item['tipo'] == 'longitud')
                                                         <tr class="long-row" data-titulo="{{ $titleId }}">
-                                                            <td colspan="10">Longitud Inspeccionada</td>
+                                                            <td colspan="17">Longitud Inspeccionada</td>
 
                                                             <td>
                                                                 <input type="text"

@@ -523,7 +523,7 @@ class FOR_01_PRO_INS_04Controller extends Controller
                 'texto' => $tituloText
             ]);
 
-            $filas = $request->input("No.$tituloKey", []);
+            $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
             //$resultados = [];
