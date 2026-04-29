@@ -472,9 +472,7 @@
                     <thead class="encabezadoAzul">
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
-
-                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
-                        <tbody>
+                </table>
 
                             @php
                                 $esHojaCompleta = (count($fotosGrupo) == 1 && !empty($fotosGrupo[0]['una_hoja']) && $fotosGrupo[0]['una_hoja'] == 1);

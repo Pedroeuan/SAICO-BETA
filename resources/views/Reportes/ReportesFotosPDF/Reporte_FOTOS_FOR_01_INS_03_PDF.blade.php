@@ -476,9 +476,7 @@
                     <thead class="encabezadoAzul">
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
-
-                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
-                        <tbody>
+                </table>
                         @php
                             $esHojaCompleta = (
                                 count($fotosGrupo) == 1 &&
@@ -547,7 +545,7 @@
                                     @endif
                                     </tr>
                                 </table>
-                                
+
                                 @if(!$loop->last)
                                     <div style="page-break-after: always;"></div>
                                 @endif
