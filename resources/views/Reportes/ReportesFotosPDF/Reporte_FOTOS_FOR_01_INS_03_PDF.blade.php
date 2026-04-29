@@ -469,13 +469,16 @@
                         </tr>
                     </tbody>
                 </table>
+
                 <div style="margin-bottom: 6px;"></div>
 
-                    <table class="datosgenerales">
-                        <thead class="encabezadoAzul">
-                            <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
-                        </thead>  
-                    </table>
+                <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
+                        <tbody>
                         @php
                             $esHojaCompleta = (
                                 count($fotosGrupo) == 1 &&
@@ -542,14 +545,13 @@
                                             </td>
                                         @endif
                                     @endif
-
                                     </tr>
                                 </table>
-                </div>
-                @if(!$loop->last)
-                    <div style="page-break-after: always;"></div>
-                @endif
-            @endforeach
+                                
+                                @if(!$loop->last)
+                                    <div style="page-break-after: always;"></div>
+                                @endif
+                            @endforeach
                     </tbody>
                 </table>
             </div>
