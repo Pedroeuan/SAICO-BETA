@@ -559,6 +559,7 @@
                         <thead class="encabezadoAzul">
                             <tr><th colspan="17">RESULTADOS</th></tr>
                         </thead>
+                        
                         <thead><tr class="sinBordeth"><th colspan="17"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
@@ -606,9 +607,6 @@
                         </thead>
                             <tbody>
                                 @foreach ($bloque as $item)
-                                            @php
-                                                //dd($bloque);
-                                            @endphp
                                             @if (!is_array($item))
                                                 @continue
                                             @endif
@@ -635,7 +633,6 @@
                                                     <td>{{ $item['data']['decibel_c'] ?? '' }}</td>
                                                     <td>{{ $item['data']['decibel_d'] ?? '' }}</td>
                                                     <td>{{ $item['data']['longitud'] ?? '' }}</td>
-
                                                     <td>{{ $item['data']['dis_angular'] ?? '' }}</td>
                                                     <td>{{ $item['data']['profundidad_a'] ?? '' }}</td>
                                                     <td>{{ $item['data']['pos_x'] ?? '' }}</td>

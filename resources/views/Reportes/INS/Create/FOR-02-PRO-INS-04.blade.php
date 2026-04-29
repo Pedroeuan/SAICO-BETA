@@ -1057,7 +1057,7 @@
                 saveData(formId);
             }
         });
-         $('#addLongBtn').click(function () {
+        $('#addLongBtn').click(function () {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos

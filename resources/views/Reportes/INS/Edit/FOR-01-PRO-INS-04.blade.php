@@ -590,6 +590,7 @@
                                     </table>
                                     </div>
 
+                                    <input type="hidden" id="titulos_hidden" name="titulos_data">
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 m-3">
                                         <div>
@@ -600,8 +601,6 @@
                                                 @endfor
                                             </select>
                                         </div>
-
-                                        <input type="hidden" id="titulos_hidden" name="titulos_data">
 
                                         <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
