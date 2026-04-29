@@ -59,7 +59,24 @@
                     border-bottom: 1px solid black;
                     text-align: center;
                 }
-                    
+
+                .lineaSuperior{
+                    border-top: 2px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+
+                .lineaIzquierda{
+                    border-left: 1px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+                .lineaDerecha{
+                    border-right: 1px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+
                 .simbologia {
                     border-collapse: collapse;  /*separate No colapsar bordes */
                     border-spacing: 0px;        /* Espacio entre celdas */
@@ -125,7 +142,7 @@
             text-align: center;
             font-size: 8px;
             table-layout: fixed;
-            border: 1px solid black;
+            /*border: 1px solid black;*/
         }
 
         .datosresultados td, .datosresultados th {
@@ -546,45 +563,45 @@
 
                         <thead>
                             <tr class="celdaGris">
-                                <th rowspan= "3"><span class="rotar-texto-sin-dividir">Número de junta</span></th>
-                                <th rowspan= "3"><span class="rotar-texto-sin-dividir">No. Indicación</span></th>
-                                <th rowspan= "3"><span class="rotar-texto-dividido">Ángulo de inspección</span></th>
-                                <th rowspan= "3"><span class="rotar-texto-sin-dividir">Desde la cara</span></th>
-                                <th rowspan= "3"><span class="rotar-texto-dividido">Pierna</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-sin-dividir">Número de junta</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-sin-dividir">No. Indicación</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-dividido">Ángulo de inspección</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-sin-dividir">Desde la cara</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-dividido">Pierna</span></th>
 
                                 <th colspan= "4">Decibeles</th>
 
                                 <th colspan= "5">Discontinuidad</th>
 
-                                <th rowspan="3"><span class="rotar-texto-dividido">Clase de la discontinuidad</span></th>
-                                <th rowspan="3"><span class="rotar-texto-sin-dividir">Evaluación</span></th>
+                                <th rowspan="3" style="width: 6%;"><span class="rotar-texto-dividido">Clase de la discontinuidad</span></th>
+                                <th rowspan="3" style="width: 6%;"><span class="rotar-texto-sin-dividir">Evaluación</span></th>
 
-                                <th rowspan= "3" style="width: 82px; vertical-align: middle; padding: 3px 2px;">
-                                    <span class="observaciones-header">Observa<br>ciones</span>
+                                <th rowspan= "3">
+                                    <span>Observaciones</span>
                                 </th>
                             </tr>
 
                             <tr class="celdaGris">
-                                <th style="height: 60px;"><span class="rotar-texto-dividido">Nivel de indicación</span></th>
+                                <th style="height: 50px;"><span class="rotar-texto-dividido">Nivel de indicación</span></th>
                                 <th><span class="rotar-texto-dividido">Nivel de referencia</span></th>
                                 <th><span class="rotar-texto-dividido">Factor de atenuación</span></th>
-                                <th><span class="rotar-texto-dividido">Relación de indicación</span></th>
+                                <th><span class="rotar-texto-sin-dividir">Relación de<br>indicación</span></th>
 
-                                <th rowspan= "2"><span class="rotar-texto-dividido">Longitud</span></th>
-                                <th rowspan= "2"><span class="rotar-texto-dividido">Distancia angular</span></th>
-                                <th rowspan= "2"><span class="rotar-texto-dividido">Profundidad desde A</span></th>
+                                <th rowspan= "2" style="width: 6%;"><span class="rotar-texto-dividido">Longitud</span></th>
+                                <th rowspan= "2" style="width: 6%;"><span class="rotar-texto-dividido">Distancia angular</span></th>
+                                <th rowspan= "2" style="width: 6%;"><span class="rotar-texto-dividido">Profundidad desde A</span></th>
 
                                 <th colspan= "2">Posición</th>
                             </tr>
 
                             <tr class="celdaGris">
-                                <th>a</th>
-                                <th>b</th>
-                                <th>c</th>
-                                <th>d</th>
+                                <th style="width: 5%;">a</th>
+                                <th style="width: 5%;">b</th>
+                                <th style="width: 5%;">c</th>
+                                <th style="width: 5%;">d</th>
 
-                                <th style="width: 20px;">X</th>
-                                <th style="width: 20px;">Y</th>
+                                <th style="width: 4%;">X</th>
+                                <th style="width: 4%;">Y</th>
                             </tr>
                         </thead>
                             <tbody>
@@ -599,7 +616,7 @@
                                             {{-- TITULO --}}
                                             @if (($item['tipo'] ?? null) == 'titulo')
                                                 <tr class="titulo-row">
-                                                    <td colspan="18" style="border:.5px solid black;">
+                                                    <td colspan="17" style="border:.5px solid black;">
                                                         {{ $item['texto'] }}
                                                     </td>
                                                 </tr>
