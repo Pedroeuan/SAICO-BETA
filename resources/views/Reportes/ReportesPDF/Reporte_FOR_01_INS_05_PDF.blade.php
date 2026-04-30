@@ -540,12 +540,14 @@
                 </table>
                 <div style="margin-bottom: 5px;"></div>
 
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">RESULTADOS</th>
-                        </tr>
-                </table>
                     <table class="datosresultados">
+                    
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="17">RESULTADOS</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="17"></th></tr></thead> <!-- Fila vacia -->
+
                         <thead>
                             <tr class="celdaGris">
                                     <th style="width: 5%;">No.</th>
