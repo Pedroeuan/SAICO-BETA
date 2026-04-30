@@ -191,30 +191,6 @@
             white-space: nowrap; /* Evita que el texto se divida en varias líneas */
             max-width: 20px; /* Ajusta al ancho máximo deseado */
         }
-
-        .observaciones-header {
-            display: inline-block;
-            text-align: center;
-            line-height: 1.1;
-            font-size: 7px;
-        }
-
-        .longitud-label {
-            border: .6px solid black !important;
-            font-weight: bold;
-            text-align: center;
-            font-size: 7px;
-            line-height: 1.1;
-            padding: 2px;
-        }
-
-        .longitud-value {
-            border: .6px solid black !important;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-            padding: 2px;
-        }
             </style>
         </head>
         <body>
@@ -412,10 +388,10 @@
             
             @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
-            <div style="margin-bottom: 4px;"></div>
-        
                 <table class="datosgenerales">
+
                     <thead class="encabezadoAzul">
+
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>  
 
@@ -559,7 +535,7 @@
                         <thead class="encabezadoAzul">
                             <tr><th colspan="17">RESULTADOS</th></tr>
                         </thead>
-                        
+
                         <thead><tr class="sinBordeth"><th colspan="17"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
