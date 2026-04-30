@@ -1195,7 +1195,6 @@ class FOR_01_PRO_INS_04Controller extends Controller
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
 
-
         $totalTitulos = 0;
         $totalFilas = 0;
 

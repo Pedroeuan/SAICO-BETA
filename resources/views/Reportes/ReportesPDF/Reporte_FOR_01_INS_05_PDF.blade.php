@@ -260,7 +260,7 @@
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
                                 </tr>
-                                                                    
+
                                 <tr>
                                     <th></th>
                                     <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
@@ -592,7 +592,7 @@
                                             @if (($item['tipo'] ?? null) == 'longitud')
                                                 <tr class="sinBordetd">
                                                     <td colspan="6"></td>
-                                                    <th colspan="4">Longitud inspeccionada:</th>
+                                                    <th colspan="2">Longitud inspeccionada:</th>
                                                     <th>{{ $item['valor'] ?? '' }} m</th>
                                                 </tr>
                                             @endif
