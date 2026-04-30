@@ -598,6 +598,11 @@ return [
                         'url' => '/index/Pruebas',
 
                     ],
+                    [
+                        'text' => 'Publicaciones',
+                        'icon' => 'fas fa-bullhorn',
+                        'url' => '/publicaciones',
+                    ],
                 ],
             ],
 

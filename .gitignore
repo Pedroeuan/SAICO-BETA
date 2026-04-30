@@ -20,3 +20,5 @@ yarn-error.log
 /.idea
 /.vscode
 .env copy.example
+# Variables sensibles del orquestador Python de publicaciones
+/scripts-python/.env

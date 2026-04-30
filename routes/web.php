@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Publicaciones\PublicacionController;
 
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\DashboardController;
@@ -115,6 +116,17 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+
+    Route::middleware('auth')->prefix('publicaciones')->name('publicaciones.')->group(function () {
+        Route::post('/{id}/restaurar', [PublicacionController::class, 'restaurar'])->name('restaurar');
+        Route::get('/', [PublicacionController::class, 'index'])->name('index');
+        Route::get('/create', [PublicacionController::class, 'create'])->name('create');
+        Route::post('/', [PublicacionController::class, 'store'])->name('store');
+        Route::get('/{publicacion}', [PublicacionController::class, 'show'])->name('show');
+        Route::get('/{publicacion}/edit', [PublicacionController::class, 'edit'])->name('edit');
+        Route::match(['put', 'patch'], '/{publicacion}', [PublicacionController::class, 'update'])->name('update');
+        Route::delete('/{publicacion}', [PublicacionController::class, 'destroy'])->name('destroy');
     });
 
     Route::middleware('auth')->group(function () {
@@ -733,4 +745,3 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
 
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
-
