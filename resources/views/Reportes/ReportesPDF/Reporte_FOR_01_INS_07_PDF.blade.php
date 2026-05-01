@@ -6,16 +6,18 @@
             <style>
                 @page {
                     margin: 
+                    /*3.0cm /* superior */
+                    /*2.1cm /* derecho */
+                    /*2.1cm /* inferior */
+                    /*2.4cm; /* izquierdo */
                     3.0cm /* superior */
-                    2.1cm /* derecho */
+                    1.2cm /* derecho */
                     2.1cm /* inferior */
-                    2.4cm; /* izquierdo */
+                    2.2cm; /* izquierdo */
                 }
-                .content { margin-top: 6px; }
-
                 header {
                     position: fixed;
-                    top: -40px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -36,33 +38,51 @@
                 }
 
                 body {
-                    margin-top: 2.5px;
-                    padding-top: 0;
-                    padding-bottom: 0;
-                    font-family: 'arial', sans-serif;;
+                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin: 0;*/
+                    padding-top: 0px; /* Altura del header */
+                    padding-bottom: 0px; /* Altura del footer */
+                    font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
+
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 6px !important;
+                    font-size: 8px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
+                }
+
+                .lineaSuperior{
+                    border-top: 2px solid black;
+                    text-align: center;
                     font-size: 6px;
                 }
-                    
+
+                .lineaIzquierda{
+                    border-left: 1px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+                .lineaDerecha{
+                    border-right: 1px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+
                 .simbologia {
                     border-collapse: collapse;  /*separate No colapsar bordes */
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 5px;
+                    font-size: 8px;
                 }
 
                 .simbologia td, .simbologia th {
@@ -89,14 +109,10 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 7px;
-            background-color: #2F75B5;
+            font-size: 8px;
+            background-color: #305496;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
-        }
-
-        .border {
-            border: 1px solid black; 
         }
             
         .datosinspeccion{
@@ -104,70 +120,36 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 6px;
+            font-size: 8px;
         }
 
         .datosinspeccion td, .datosinspeccion th {
             border: .6px solid black; 
         }
-        
 
         .datosinspeccionsinborde{
             border: 0px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
-            font-size: 6px;
+            font-size: 8px;
         }
 
         .datosresultados{
-            border-collapse: collapse;
+            border-collapse: separate;  /*separate No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 10px;
-            }
-        .datosresultados td, .datosresultados th {
-            border: .6px solid black;
-        }
-        .datosresultados .sinBordeth th{
-            border: 0 !important;
-        }
-        .datosresultados td.long-wrap{
-            border: 0 !important;
-            padding: 0 !important;
-        }
-
-        .long-wrap{
-            border: none !important;
-            padding: 0 !important;
-        }
-
-        .long-box{
-            width: 36%;
-            margin-left: auto;
-            border-collapse: collapse;
+            font-size: 8px;
             table-layout: fixed;
+            /*border: 1px solid black;*/
         }
 
-        .long-box td{
-            border: .6px solid black !important;
-            font-weight: bold;
-            text-align: center;
+        .datosresultados td, .datosresultados th {
+            border: .6px solid black; 
         }
-
-
         .celdaGris{
             background-color: #DBDBDB;
-            font-size: 6px;
-        }
-
-        .celdaGrisResultados{
-            background-color: #DBDBDB;
-            font-size: 9px;
-        }
-
-        .juntas{
-            font-size: 9px;
         }
         
         .sinBordetdth td, .sinBordetdth th {
@@ -175,6 +157,7 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
+            /*font-size: 100px;*/
         }
         
         .sinBordetd td {
@@ -182,6 +165,7 @@
             text-align: center;
             border-collapse: collapse;
             width: 100%;
+            /*font-size: 100px;*/
         }
 
         .sinBordeth th {
@@ -189,6 +173,7 @@
             text-align: left;
             border-collapse: collapse;
             width: 100%;
+            /*font-size: 10px;*/
         }
         .rotar-texto-dividido {
             text-align: center; /* Centra el texto horizontalmente */
@@ -205,27 +190,6 @@
             transform: rotate(270deg); /* Rota solo el texto */
             white-space: nowrap; /* Evita que el texto se divida en varias líneas */
             max-width: 20px; /* Ajusta al ancho máximo deseado */
-        }
-        /* agrega/ajusta en tu <style> */
-        .tablaheader th{
-            border: 1px solid black;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .pagina-cell{
-            text-align: center !important;
-            vertical-align: middle !important;
-            white-space: nowrap;
-            padding: 0;
-        }
-        .logo-cell{
-            padding: 0;
-        }
-        .logo-cell img{
-            display: block;
-            margin: 0 auto;
-            width: 80px;
-            height: auto;
         }
 
             </style>
@@ -259,7 +223,7 @@
     
                 <div style="margin-bottom: 0px;"></div>
             </header>
-                          
+
             <footer>
                     <br>
 
@@ -424,7 +388,7 @@
                     </table>
             </footer>
 
-            @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 <table class="encabezadoAzul">
                     <tr>
@@ -485,24 +449,6 @@
 
                 <div style="margin-bottom: 4px;"></div>
 
-                @php
-                    $accesorioSonda2 = $Datos_Equipo['ACCESORIO_SONDA2'] ?? '---';
-                    $marcaSonda2 = $Datos_Equipo['MARCA_SONDA2'] ?? '---';
-                    $modeloSonda2 = $Datos_Equipo['MODELO_SONDA2'] ?? '---';
-                    $serieSonda2 = $Datos_Equipo['N_S_SONDA2'] ?? '---';
-                    $frecSonda2 = $Datos_Equipo['FREC_SONDA2'] ?? '---';
-
-                    $blockSensibilidad = $Datos_Equipo['BLOCK_SENSIBILIDAD'] ?? '---';
-                    $marcaBlockSen = $Datos_Equipo['MARCA_BLOCK_SEN'] ?? '---';
-                    $modeloBlockSen = $Datos_Equipo['MODELO_BLOCK_SEN'] ?? '---';
-                    $serieBlockSen = $Datos_Equipo['N_S_BLOCK_SEN'] ?? '---';
-
-                    $blockDistancia = $Datos_Equipo['BLOCK_DISTANCIA'] ?? '---';
-                    $marcaBlockDis = $Datos_Equipo['MARCA_BLOCK_DIS'] ?? '---';
-                    $modeloBlockDis = $Datos_Equipo['MODELO_BLOCK_DIS'] ?? '---';
-                    $serieBlockDis = $Datos_Equipo['N_S_BLOCK_DIS'] ?? '---';
-                @endphp
-
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
                         <tr><th colspan="7">DATOS DEL EQUIPO</th></tr>
@@ -549,44 +495,35 @@
                 <table class="datosinspeccion">
                     <tbody>
                         <tr class="celdaGris">
+                            <th colspan="2">BLOCK DE CALIBRACIÓN (SENSIBILIDAD)</th>
+                            <th colspan="2">BLOCK DE CALIBRACIÓN (DISTANCIA)</th>
                             <th colspan="4">SONDA #2</th>
-                            <th colspan="4">BLOCK DE CALIBRACIÓN (SENSIBILIDAD)</th>
-                            <th colspan="4">BLOCK DE CALIBRACIÓN (DISTANCIA)</th>
                         </tr>
                         <tr>
-                            <th class="celdaGris" style="width: 8%;">ACCESORIOS:</th>
-                            <td colspan="3">{{ $accesorioSonda2 }}</td>
-                            <th class="celdaGris" style="width: 8%;">BLOCK:</th>
-                            <td colspan="3">{{ $blockSensibilidad }}</td>
-                            <th class="celdaGris" style="width: 8%;">BLOCK:</th>
-                            <td colspan="3">{{ $blockDistancia }}</td>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">MARCA:</th>
-                            <td colspan="3">{{ $marcaSonda2 }}</td>
-                            <th class="celdaGris">MARCA:</th>
-                            <td colspan="3">{{ $marcaBlockSen }}</td>
-                            <th class="celdaGris">MARCA:</th>
-                            <td colspan="3">{{ $marcaBlockDis }}</td>
+                            <th style="width: 15%;" class="celdaGris">MARCA:</th>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_BLOCK_SEN'] ?? '---' }}</td>
+                            <th style="width: 15%;" class="celdaGris">MARCA:</th>
+                            <td style="width: 15%;">{{ $Datos_Equipo['MARCA_BLOCK_DIS'] ?? '---' }}</td>
+                            <th style="width: 15%;" class="celdaGris">MARCA:</th>
+                            <td colspan="3">{{ $Datos_Equipo['MARCA_SONDA2'] ?? '---' }}</td>
                         </tr>
                         <tr>
                             <th class="celdaGris">MODELO:</th>
-                            <td>{{ $modeloSonda2 }}</td>
-                            <th class="celdaGris">N.S:</th>
-                            <td>{{ $serieSonda2 }}</td>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK_SEN'] ?? '---' }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td>{{ $modeloBlockSen }}</td>
-                            <th class="celdaGris">N.S:</th>
-                            <td>{{ $serieBlockSen }}</td>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK_DIS'] ?? '---' }}</td>
                             <th class="celdaGris">MODELO:</th>
-                            <td>{{ $modeloBlockDis }}</td>
-                            <th class="celdaGris">N.S:</th>
-                            <td>{{ $serieBlockDis }}</td>
+                            <td colspan="3">{{ $Datos_Equipo['MODELO_SONDA2'] ?? '---' }}</td>
                         </tr>
                         <tr>
+                            <th class="celdaGris">N.S:</th>
+                            <td>{{ $Datos_Equipo['N_S_BLOCK_SEN'] ?? '---' }}</td>
+                            <th class="celdaGris">N.S:</th>
+                            <td>{{ $Datos_Equipo['N_S_BLOCK_DIS'] ?? '---' }}</td>
+                            <th class="celdaGris">N.S:</th>
+                            <td>{{ $Datos_Equipo['N_S_SONDA2'] ?? '---' }}</td>
                             <th class="celdaGris">FREC:</th>
-                            <td colspan="3">{{ $frecSonda2 }}</td>
-                            <td colspan="8"></td>
+                            <td >{{ $Datos_Equipo['FREC_SONDA2'] ?? '---' }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -599,41 +536,25 @@
                     </tr>
                 </table>
 
-               {{-- FOR-01-INS-07 | AJUSTE DEL EQUIPO (versión robusta como en 08) --}}
-                @php
-                    $ganancia  = $Datos_Equipo['GANANCIA'] ?? '---';
-                    $tipoJunta = $Datos_Equipo['TIPO_JUNTA'] ?? ($Datos_Equipo['TIP_JUNTA'] ?? '---');
-                    $rechazo   = $Datos_Equipo['RECHAZO'] ?? ($Datos_Equipo['RANGO'] ?? '---');
-                    $diametro  = $Datos_Equipo['DIAMETRO'] ?? '---';
-                    $retardo   = $Datos_Equipo['RETARDO'] ?? '---';
-                    $espesor   = $Datos_Equipo['ESPESOR'] ?? '---';
-                @endphp
-
                 <table class="datosinspeccionsinborde">
                     <tbody>
                         <tr class="">
-                            <th style="width: 100px;">GANANCIA:</th>
-                            <td class="lineaInferior">{{ $ganancia }}</td><td style="text-align: left; width: 2%;"> dB </td>
-                            <th style="width: 100px;">TIPO DE JUNTA:</th>
-                            <td class="lineaInferior">{{ $tipoJunta }}</td>
-                            <th rowspan="3" style="width: 100px;">
-                                <img class=""
-                                    src="{{ $FOR_01_INS_07 ?? public_path('images/FOR-01-INS-07.png') }}"
-                                    alt="FOR_01_INS_07"
-                                    style="width: 80px; height: auto;">
-                            </th>
+                            <th style="width: 15%;">GANANCIA:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['GANANCIA'] ?? '---' }}</td>
+                            <th style="width: 15%;">TIPO DE JUNTA:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TIPO_JUNTA'] ?? '---' }}</td>
                         </tr>
                         <tr class="">
                             <th>RECHAZO:</th>
-                            <td class="lineaInferior">{{ $rechazo }}</td><td></td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['RECHAZO'] ?? '---' }}</td>
                             <th>DIAMETRO:</th>
-                            <td class="lineaInferior">{{ $diametro }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['DIAMETRO'] ?? '---' }}</td>
                         </tr>
                         <tr class="">
-                            <th>RETARDO:</th>
-                            <td class="lineaInferior">{{ $retardo }}</td><td></td>
+                            <th>TEMPERATURA:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TEMPERATURA'] ?? '---' }}</td>
                             <th>ESPESOR:</th>
-                            <td class="lineaInferior">{{ $espesor }}</td>
+                            <td class="lineaInferior">{{ $Datos_Equipo['ESPESOR'] ?? '---' }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -664,57 +585,56 @@
                             </tr>
                         
                         </thead>
+                            <tbody>
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-                                <tbody>
-                                    {{-- 🔹 TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="13" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
-                                        </td>
-                                    </tr>
-                                @endif
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="13" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
 
-                                {{-- 🔹 FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                    <tr class="juntas">
-                                        <td>{{ $junta['junta_ele'] }}</td>
-                                        <td>{{ $junta['no_indicacion'] }}</td>
-                                        <td>{{ $junta['angulo'] }}</td>
-                                        <td>{{ $junta['nr'] }}</td>
-                                        <td>{{ $junta['ni'] }}</td>
-                                        <td>{{ $junta['la'] }}</td>
-                                        <td>{{ $junta['lc'] }}</td>
-                                        <td>{{ $junta['dist_zapata'] }}</td>
-                                        <td>{{ $junta['sa'] }}</td>
-                                        <td>{{ $junta['da'] }}</td>
-                                        <td>{{ $junta['ht'] }}</td>
-                                        <td>{{ $junta['evaluacion'] }}</td>
-                                        <td>{{ $junta['fotos'] }}</td>
-                                    </tr>
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                <td>{{ $item['data']['junta_ele'] }}</td>
+                                                <td>{{ $item['data']['no_indicacion'] }}</td>
+                                                <td>{{ $item['data']['angulo'] }}</td>
+                                                <td>{{ $item['data']['nr'] }}</td>
+                                                <td>{{ $item['data']['ni'] }}</td>
+                                                <td>{{ $item['data']['la'] }}</td>
+                                                <td>{{ $item['data']['lc'] }}</td>
+                                                <td>{{ $item['data']['dist_zapata'] }}</td>
+                                                <td>{{ $item['data']['sa'] }}</td>
+                                                <td>{{ $item['data']['da'] }}</td>
+                                                <td>{{ $item['data']['ht'] }}</td>
+                                                <td>{{ $item['data']['evaluacion'] }}</td>
+                                                <td>{{ $item['data']['fotos'] }}</td>
+                                                </tr>
+                                            @endif
+
+                                            {{-- LONGITUD --}}
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="">
+                                                    <td colspan="9" rowspan="2" style="border:.6px solid black; text-align:left; font-size:8px; padding:4px 6px;">
+                                                        <b>NPIR</b>= No Presenta Indicaciones Relevantes, <b>SC</b>= Soldadura Circunferencial,
+                                                        <b>SA</b>= Distancia Angular, <b>HT</b>= Horario técnico, <b>SL</b>= Soldadura Longitudinal,
+                                                        <b>LA</b>= Largo Axial, <b>LC</b>= Largo Circunferencial, <b>DA</b>= Profundidad
+                                                    </td>
+                                                    <th colspan="2">Longitud inspeccionada:</th>
+                                                    <th colspan="2">{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
+
                                 @endforeach
-
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                               {{-- DESPUÉS --}}
-                                <tr>
-                                    <td colspan="9" style="border:.6px solid black; text-align:left; font-size:8px; padding:4px 6px;">
-                                        <b>NPIR</b>= No Presenta Indicaciones Relevantes, <b>SC</b>= Soldadura Circunferencial,
-                                        <b>SA</b>= Distancia Angular, <b>HT</b>= Horario técnico, <b>SL</b>= Soldadura Longitudinal,
-                                        <b>LA</b>= Largo Axial, <b>LC</b>= Largo Circunferencial, <b>DA</b>= Profundidad
-                                    </td>
-                                    <th colspan="3" style="border:.6px solid black; font-weight:bold; text-align:center;">
-                                        Longitud inspeccionada:
-                                    </th>
-                                    <th colspan="1" style="border:.6px solid black; font-weight:bold; text-align:center;">
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </th>
-                                </tr>
-
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="13"></td>
-                                </tr>--}}
                             </tbody>
+
                     </table>
             </div>
             @if (!$loop->last)
