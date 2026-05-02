@@ -1036,10 +1036,10 @@
             const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
             const $rowsBlock = $titleRow.nextUntil('.titulo-row');
 
-            if ($rowsBlock.length >= 15) { // si hay al menos 13 filas en el bloque
+            if ($rowsBlock.length >= 11) { // si hay al menos 11 filas en el bloque
                 const $nfila = $rowsBlock
                     .not('.long-row')
-                    .eq(14); // fila índice 12 = fila 13 (0-based)
+                    .eq(10); // fila índice 10 = fila 11 (0-based)
 
                 if ($nfila.length) { 
                     $nfila.after(newLong);
@@ -1120,7 +1120,7 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-        saveData();
+        saveData($(this).closest('form').attr('id'));
         });
 
         $('#addLongBtn').click(function () {
@@ -1185,18 +1185,16 @@
                         </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
-           }
-            //saveData(document.querySelectorAll("form")[1].id);
+            }
             verificarYAgregarLongitud();
             saveData($(this).closest('form').attr('id'));
         }
     );
-
             // Restaurar datos al cargar la página
             restoreData();
 });
 
-     function verificarYAgregarLongitud() {
+    function verificarYAgregarLongitud() {
 
     const $tbody = $('#dynamicTable tbody');
     const $rows = $tbody.children('tr');
@@ -1256,7 +1254,7 @@
     });
 }
     /*Selects */
-   $(document).ready(function() {
+    $(document).ready(function() {
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
 

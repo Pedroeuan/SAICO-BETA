@@ -633,11 +633,11 @@
                                                 @endif
 
                                                 @endforeach
-           
+
                                         </tbody>
                                     </table>
                                     </div>
-                                    <input type="hidden" id="titulos_hidden" name="titulos_hidden">
+                                    <input type="hidden" id="titulos_hidden" name="titulos_data">
                                     <p>
 
                                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
