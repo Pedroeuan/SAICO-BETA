@@ -1009,7 +1009,7 @@ $(document).ready(function() {
             const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
-           <tr class="titulo-row" data-titulo="${titleId}">
+            <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="26">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90" name="titulos[]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
@@ -1114,7 +1114,7 @@ $(document).ready(function() {
             updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');
@@ -1122,7 +1122,8 @@ $(document).ready(function() {
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-});
+    });
+
     function verificarYAgregarLongitud() {
 
         const $tbody = $('#dynamicTable tbody');
@@ -1181,7 +1182,7 @@ $(document).ready(function() {
                 $ultimoElementoBloque = null;
             }
 
-         });
+        });
     }
 
     /*Selects */

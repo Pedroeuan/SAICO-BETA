@@ -550,7 +550,7 @@
                                                     <!-- TITULOS -->
                                                     @if ($item['tipo'] == 'titulo')
                                                         <tr class="titulo-row" data-titulo="{{ $titleId }}">
-                                                            <td colspan="18">
+                                                            <td colspan="23">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <input type="text"
                                                                         class="form-control w-90 titulo-text"
@@ -573,49 +573,29 @@
                                                     @if ($item['tipo'] == 'fila')
                                                         <tr data-titulo="{{ $titleId }}">
                                                             <td>{{ $contador }}</td>
-
-                                                        <td><input type="text" class="form-control" name='no_junta[{{ $titleId }}][]' value="{{ $item['data']['no_junta'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_indicacion[{{ $titleId }}][]' value="{{ $item['data']['no_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ang_inspeccion[{{ $titleId }}][]' value="{{ $item['data']['ang_inspeccion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='dsd_cara[{{ $titleId }}][]' value="{{ $item['data']['dsd_cara'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='pierna[{{ $titleId }}][]' value="{{ $item['data']['pierna'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='decibel_a[{{ $titleId }}][]' value="{{ $item['data']['decibel_a'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='decibel_b[{{ $titleId }}][]' value="{{ $item['data']['decibel_b'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='decibel_c[{{ $titleId }}][]' value="{{ $item['data']['decibel_c'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='decibel_d[{{ $titleId }}][]' value="{{ $item['data']['decibel_d'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='longitud[{{ $titleId }}][]' value="{{ $item['data']['longitud'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='dis_angular[{{ $titleId }}][]' value="{{ $item['data']['dis_angular'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='profundidad_a[{{ $titleId }}][]' value="{{ $item['data']['profundidad_a'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='pos_x[{{ $titleId }}][]' value="{{ $item['data']['pos_x'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='pos_y[{{ $titleId }}][]' value="{{ $item['data']['pos_y'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='discontinuidad[{{ $titleId }}][]' value="{{ $item['data']['discontinuidad'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='evaluacion[{{ $titleId }}][]' value="{{ $item['data']['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='observaciones[{{ $titleId }}][]' value="{{ $item['data']['observaciones'] }}"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-
-                                                    <td><input type="text" class="form-control" name="ID[{{ $titleId }}][]" value="{{ $resultado['ID'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="no_junta[{{ $titleId }}][]" value="{{ $resultado['no_junta'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="lado_a[{{ $titleId }}][]" value="{{ $resultado['lado_a'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="lado_b[{{ $titleId }}][]" value="{{ $resultado['lado_b'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="diametro[{{ $titleId }}][]" value="{{ $resultado['diametro'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="no_indicacion[{{ $titleId }}][]" value="{{ $resultado['no_indicacion'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="tipo_indicacion[{{ $titleId }}][]" value="{{ $resultado['tipo_indicacion'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="Ang[{{ $titleId }}][]" value="{{ $resultado['Ang'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="Gdb[{{ $titleId }}][]" value="{{ $resultado['Gdb'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="nr[{{ $titleId }}][]" value="{{ $resultado['nr'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="ni[{{ $titleId }}][]" value="{{ $resultado['ni'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="x[{{ $titleId }}][]" value="{{ $resultado['x'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="y[{{ $titleId }}][]" value="{{ $resultado['y'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="horario_tecnico[{{ $titleId }}][]" value="{{ $resultado['horario_tecnico'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="no_pierna[{{ $titleId }}][]" value="{{ $resultado['no_pierna'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="s[{{ $titleId }}][]" value="{{ $resultado['s'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="l[{{ $titleId }}][]" value="{{ $resultado['l'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="d[{{ $titleId }}][]" value="{{ $resultado['d'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="tmin[{{ $titleId }}][]" value="{{ $resultado['tmin'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="evaluacion[{{ $titleId }}][]" value="{{ $resultado['evaluacion'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="fotos[{{ $titleId }}][]" value="{{ $resultado['fotos'] }}"></td>
-                                                    <td><input type="text" class="form-control" name="observaciones[{{ $titleId }}][]" value="{{ $resultado['observaciones'] }}"></td>
-                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                            <td><input type="text" class="form-control" name="ID[{{ $titleId }}][]" value="{{ $item['data']['ID'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="no_junta[{{ $titleId }}][]" value="{{ $item['data']['no_junta'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="lado_a[{{ $titleId }}][]" value="{{ $item['data']['lado_a'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="lado_b[{{ $titleId }}][]" value="{{ $item['data']['lado_b'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="diametro[{{ $titleId }}][]" value="{{ $item['data']['diametro'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="no_indicacion[{{ $titleId }}][]" value="{{ $item['data']['no_indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="tipo_indicacion[{{ $titleId }}][]" value="{{ $item['data']['tipo_indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="Ang[{{ $titleId }}][]" value="{{ $item['data']['Ang'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="Gdb[{{ $titleId }}][]" value="{{ $item['data']['Gdb'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="nr[{{ $titleId }}][]" value="{{ $item['data']['nr'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="ni[{{ $titleId }}][]" value="{{ $item['data']['ni'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="x[{{ $titleId }}][]" value="{{ $item['data']['x'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="y[{{ $titleId }}][]" value="{{ $item['data']['y'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="horario_tecnico[{{ $titleId }}][]" value="{{ $item['data']['horario_tecnico'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="no_pierna[{{ $titleId }}][]" value="{{ $item['data']['no_pierna'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="s[{{ $titleId }}][]" value="{{ $item['data']['s'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="l[{{ $titleId }}][]" value="{{ $item['data']['l'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="d[{{ $titleId }}][]" value="{{ $item['data']['d'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="tmin[{{ $titleId }}][]" value="{{ $item['data']['tmin'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="evaluacion[{{ $titleId }}][]" value="{{ $item['data']['evaluacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="fotos[{{ $titleId }}][]" value="{{ $item['data']['fotos'] }}"></td>
+                                                            <td><input type="text" class="form-control" name="observaciones[{{ $titleId }}][]" value="{{ $item['data']['observaciones'] }}"></td>
+                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                         </tr>
 
                                                         @php $contador++; @endphp
@@ -623,7 +603,7 @@
                                                     <!-- LONGITUD (CIERRA BLOQUE) -->
                                                     @if ($item['tipo'] == 'longitud')
                                                         <tr class="long-row" data-titulo="{{ $titleId }}">
-                                                            <td colspan="17">Longitud Inspeccionada</td>
+                                                            <td colspan="22">Longitud Inspeccionada</td>
 
                                                             <td>
                                                                 <input type="text"
@@ -1117,10 +1097,10 @@
 
             let newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="14">
+                <td colspan="23">
                     <div class="d-flex justify-content-between align-items-center">
-                         <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                         <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
@@ -1132,10 +1112,35 @@
             $('#dynamicTable tbody').append(newTitle);
         });
 
+        $('#addLongBtn').click(function () {
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+
+                <tr class="long-row" data-titulo="${lastTitle}">
+                <td colspan="22"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        });
+
         $('#addBtn').click(function () {
-            let numFilas = parseInt($('#numRows').val());
+            //let numFilas = parseInt($('#numRows').val());
+            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
-            rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
@@ -1193,7 +1198,7 @@
 
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');
@@ -1229,13 +1234,13 @@
             }
             //-----------------------------------------Hacer ajuste de "N" filas por bloque
             // 🎯 Cuando llegue a 11 → insertar longitud
-            if (contadorBloque === 15) {
+            if (contadorBloque === 10) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 
                 const newLong = `
                     <tr class="long-row" data-titulo="${lastTitle}">
-                        <td colspan="13">Longitud Inspeccionada</td>
+                        <td colspan="22">Longitud Inspeccionada</td>
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 <input type="text"
@@ -1261,7 +1266,7 @@
                 $ultimoElementoBloque = null;
             }
 
-         });
+        });
     }
         
     /*Selects */

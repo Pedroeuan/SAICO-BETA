@@ -432,7 +432,7 @@ class FOR_01_PRO_INS_04Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 16; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = 12; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -854,7 +854,7 @@ class FOR_01_PRO_INS_04Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 16; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = 12; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar

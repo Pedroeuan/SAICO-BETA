@@ -846,7 +846,7 @@
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
 
                                                     </tr>
-                                                                                        
+
                                                     <tr>
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
@@ -892,7 +892,7 @@
                                             </select>
                                         </div>
 
-                                         <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
+                                        <div id="msgImgNoSave"  class="alert alert-info alert-dismissible d-none">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <h5><i class="icon fas fa-info"></i> Importante</h5>
                                             <p>
@@ -1053,7 +1053,7 @@
             //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="15">
+                <td colspan="23">
                 <div class="d-flex justify-content-between align-items-center">
                     <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
@@ -1108,7 +1108,7 @@
             //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
             const newLong = `
                 <tr class="long-row" data-titulo="${titleId}">
-                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td colspan="22">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
@@ -1199,7 +1199,7 @@
             
             let newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="14">
+                <td colspan="23">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
@@ -1229,7 +1229,7 @@
             let newTitle = `
             <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
                 <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="14"> Longitud Inspeccionada</td>
+                <td colspan="22"> Longitud Inspeccionada</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]" placeholder="Ingrese Longitud Inspeccionada...">
@@ -1328,13 +1328,13 @@
         }
         //-----------------------------------------Hacer ajuste de "N" filas por bloque
         // 🎯 Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 15) {
+        if (contadorBloque === 10) {
 
             const lastTitle = $row.data('titulo') || 'sin_titulo';
 
             const newLong = `
                 <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="14">Longitud Inspeccionada</td>
+                    <td colspan="23">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"

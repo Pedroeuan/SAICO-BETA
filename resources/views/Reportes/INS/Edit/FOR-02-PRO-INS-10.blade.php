@@ -1098,7 +1098,6 @@ $(document).ready(function() {
 
         $('#addLongBtn').click(function () {
             //let numFilas = parseInt($('#numRows').val());
-            let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
 
@@ -1183,7 +1182,7 @@ $(document).ready(function() {
             updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');

@@ -442,7 +442,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 16; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = 11; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -553,7 +553,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
                     'lado_a' => $request->input("lado_a.$tituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$tituloKey.$i"),
                     'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'diametro' => $request->input("no_indicacion.$tituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
                     'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
                     'Ang' => $request->input("Ang.$tituloKey.$i"),
                     'Gdb' => $request->input("Gdb.$tituloKey.$i"),
@@ -883,7 +883,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 16; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = 11; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -994,7 +994,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
                     'lado_a' => $request->input("lado_a.$tituloKey.$i"),
                     'lado_b' => $request->input("lado_b.$tituloKey.$i"),
                     'diametro' => $request->input("diametro.$tituloKey.$i"),
-                    'diametro' => $request->input("no_indicacion.$tituloKey.$i"),
+                    'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
                     'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
                     'Ang' => $request->input("Ang.$tituloKey.$i"),
                     'Gdb' => $request->input("Gdb.$tituloKey.$i"),
@@ -1115,7 +1115,6 @@ class FOR_01_PRO_INS_08Controller extends Controller
         // **Reiniciar el array antes de procesar imágenes**
         $imagenesGuardadas = [];
 
-
         // **Evitar duplicados en las rutas ya guardadas**
         $rutasGuardadas = [];
 
@@ -1233,79 +1232,18 @@ class FOR_01_PRO_INS_08Controller extends Controller
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
 
-        // Normalizar estructura para asegurar compatibilidad con la vista PDF
-        $normalizedGrupos = [];
-        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
-            $titulo = 'SIN TITULO';
-            $resultados = [];
-            $longInspecc = null;
-
-            // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
-            if (is_array($grupo)) {
-                if (isset($grupo['titulos_juntas'])) {
-                    if (is_array($grupo['titulos_juntas'])) {
-                        // Si por alguna razon se guardó como objeto, intentar extraer 'text' o 'titulo'
-                        if (isset($grupo['titulos_juntas']['text'])) {
-                            $titulo = $grupo['titulos_juntas']['text'];
-                        } elseif (isset($grupo['titulos_juntas']['titulo'])) {
-                            $titulo = $grupo['titulos_juntas']['titulo'];
-                        } else {
-                            $titulo = json_encode($grupo['titulos_juntas']);
-                        }
-                    } else {
-                        $titulo = $grupo['titulos_juntas'];
-                        if (trim($titulo) === '') {
-                            $titulo = 'SIN TITULO';
-                        }
-                    }
-                } elseif (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
-                    // No hay título explícito, se toma SIN TITULO
-                    $titulo = 'SIN TITULO';
-                } else {
-                    // Manejar estructura en la que la clave del grupo es el título y su valor es el array de resultados
-                    $firstKey = null;
-                    foreach ($grupo as $k => $v) { $firstKey = $k; break; }
-                    if ($firstKey !== null && is_array($grupo[$firstKey])) {
-                        $titulo = $firstKey;
-                        $resultados = $grupo[$firstKey];
-                    }
-                }
-
-                if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
-                    $resultados = $grupo['resultados'];
-                }
-
-                if (array_key_exists('Long_Inspecc', $grupo)) {
-                    $longInspecc = $grupo['Long_Inspecc'];
-                }
-            }
-
-            // Normalizar Long_Inspecc a array para compatibilidad con la vista PDF
-            if ($longInspecc === null) {
-                $longInspecc = [];
-            } elseif (!is_array($longInspecc)) {
-                $longInspecc = [$longInspecc];
-            }
-
-            $normalizedGrupos[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados,
-                'Long_Inspecc' => $longInspecc,
-            ];
-        }
-
-        $Grupo_Juntas_Detalles_Re = $normalizedGrupos;
-
         $totalTitulos = 0;
         $totalFilas = 0;
 
-        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
-            if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
-                $totalFilas += count($grupo['resultados']);
-            }
+        foreach ($Grupo_Juntas_Detalles_Re as $bloque) {
+            foreach ($bloque as $item) {
+                if (($item['tipo'] ?? '') === 'titulo') {
+                    $totalTitulos++;
+                }
 
-            if (isset($grupo['titulos_juntas']) && strtoupper(trim($grupo['titulos_juntas'])) !== 'SIN TITULO') {
-                $totalTitulos++;
+                if (($item['tipo'] ?? '') === 'fila') {
+                    $totalFilas++;
+                }
             }
         }
 
@@ -1325,7 +1263,7 @@ class FOR_01_PRO_INS_08Controller extends Controller
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
                     'comment' => $foto['comentario'] ?? '',
-                    'una_hoja'  => $foto['una_hoja'] ?? 0, // 👈 CLAVE
+                    'una_hoja'  => $foto['una_hoja'] ?? 0, 
                 ];
             }
         }
@@ -1396,7 +1334,6 @@ class FOR_01_PRO_INS_08Controller extends Controller
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
-
         return response($combinedPdf->Output('Reporte_FOR_INS_01_08.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }

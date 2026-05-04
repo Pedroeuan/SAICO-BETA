@@ -1274,8 +1274,30 @@ class ReporteController extends Controller
         }
 
         //Tercero Eliminar el registro de la tabla 'Fotos_Reporte'
-        $Fotos_Reporte  = Fotos_Reporte::where('idReportes', $id)->first();
+        $Fotos_Reporte = Fotos_Reporte::where('idReportes', $id)->first();
+
         if ($Fotos_Reporte) {
+
+            // Convertir JSON a array
+            $fotos = json_decode($Fotos_Reporte->Fotos_Reportes, true);
+
+            if (is_array($fotos)) {
+
+                foreach ($fotos as $foto) {
+
+                    if (!empty($foto['ruta'])) {
+
+                        // Quitar "storage/" porque Storage trabaja desde "public"
+                        $ruta = str_replace('storage/', '', $foto['ruta']);
+
+                        if (Storage::disk('public')->exists($ruta)) {
+                            Storage::disk('public')->delete($ruta);
+                        }
+                    }
+                }
+            }
+
+            // Eliminar registro de la BD
             $Fotos_Reporte->delete();
         }
 
