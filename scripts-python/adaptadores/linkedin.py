@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 from typing import Any, Optional
 
 import requests
+from dotenv import load_dotenv
 
 from .base import RedSocialBase
 
@@ -15,12 +17,13 @@ class LinkedInAdapter(RedSocialBase):
     API_BASE = "https://api.linkedin.com/v2"
     TIMEOUT = 15
 
-    def __init__(self, config: dict[str, Any], publicacion: dict[str, Any]) -> None:
-        super().__init__(config, publicacion)
+    def __init__(self) -> None:
+        """Carga las credenciales de LinkedIn desde el .env del script."""
+        load_dotenv(Path(__file__).resolve().parents[1] / ".env")
         self.logger = logging.getLogger("publicaciones.linkedin")
-        self.access_token = str(config.get("LINKEDIN_ACCESS_TOKEN", "")).strip()
-        self.person_urn = str(config.get("LINKEDIN_PERSON_URN", "")).strip()
-        self.org_id = str(config.get("LINKEDIN_ORG_ID", "")).strip()
+        self.access_token = str(os.getenv("LINKEDIN_ACCESS_TOKEN", "")).strip()
+        self.person_urn = str(os.getenv("LINKEDIN_PERSON_URN", "")).strip()
+        self.org_id = str(os.getenv("LINKEDIN_ORG_ID", "")).strip()
         self.author_urn = f"urn:li:organization:{self.org_id}" if self.org_id else self.person_urn
         self.session = requests.Session()
         self.session.headers.update(
@@ -32,19 +35,17 @@ class LinkedInAdapter(RedSocialBase):
 
     @property
     def nombre_red(self) -> str:
+        """Retorna el identificador interno de la red social."""
         return "linkedin"
 
     def conectar(self) -> bool:
-        """Verifica credenciales mínimas y disponibilidad del perfil u organización."""
+        """Verifica credenciales minimas y disponibilidad del perfil u organizacion."""
         if not self.access_token or not self.author_urn:
             self.logger.error("Faltan credenciales de LinkedIn.")
             return False
 
         try:
-            response = self.session.get(
-                f"{self.API_BASE}/me",
-                timeout=self.TIMEOUT,
-            )
+            response = self.session.get(f"{self.API_BASE}/me", timeout=self.TIMEOUT)
             if response.ok:
                 return True
 
@@ -61,10 +62,10 @@ class LinkedInAdapter(RedSocialBase):
             self.logger.exception("No fue posible conectar con LinkedIn: %s", exc)
             return False
 
-    def publicar_texto(self) -> dict[str, Optional[str] | bool]:
-        """Publica texto plano usando UGC Posts API."""
+    def publicar_texto(self, titulo: str, contenido: str, url: Optional[str] = None) -> dict[str, Optional[str] | bool]:
+        """Publica texto plano usando la API de UGC Posts."""
         try:
-            payload = self._build_ugc_payload()
+            payload = self._build_ugc_payload(titulo, contenido, url)
             response = self.session.post(
                 f"{self.API_BASE}/ugcPosts",
                 json=payload,
@@ -88,11 +89,17 @@ class LinkedInAdapter(RedSocialBase):
                 "error": str(exc),
             }
 
-    def publicar_con_imagen(self) -> dict[str, Optional[str] | bool]:
+    def publicar_con_imagen(
+        self,
+        titulo: str,
+        contenido: str,
+        ruta_imagen: str,
+        url: Optional[str] = None,
+    ) -> dict[str, Optional[str] | bool]:
         """Publica contenido con imagen en LinkedIn."""
         try:
-            asset = self._subir_imagen()
-            payload = self._build_ugc_payload(asset)
+            asset = self._subir_imagen(ruta_imagen)
+            payload = self._build_ugc_payload(titulo, contenido, url, asset)
             response = self.session.post(
                 f"{self.API_BASE}/ugcPosts",
                 json=payload,
@@ -116,9 +123,9 @@ class LinkedInAdapter(RedSocialBase):
                 "error": str(exc),
             }
 
-    def _subir_imagen(self) -> str:
+    def _subir_imagen(self, ruta_imagen: str) -> str:
         """Registra el asset en LinkedIn y sube el binario de la imagen."""
-        imagen_path = Path(str(self.publicacion.get("imagen", "")))
+        imagen_path = Path(ruta_imagen)
         registro_payload = {
             "registerUploadRequest": {
                 "recipes": ["urn:li:digitalmediaRecipe:feedshare-image"],
@@ -152,9 +159,15 @@ class LinkedInAdapter(RedSocialBase):
 
         return asset
 
-    def _build_ugc_payload(self, asset: Optional[str] = None) -> dict[str, Any]:
-        """Construye el payload de publicación UGC."""
-        comentario = self._build_texto()
+    def _build_ugc_payload(
+        self,
+        titulo: str,
+        contenido: str,
+        url: Optional[str] = None,
+        asset: Optional[str] = None,
+    ) -> dict[str, Any]:
+        """Construye el payload de publicacion UGC."""
+        comentario = self._build_texto(titulo, contenido, url)
         payload: dict[str, Any] = {
             "author": self.author_urn,
             "lifecycleState": "PUBLISHED",
@@ -177,25 +190,22 @@ class LinkedInAdapter(RedSocialBase):
                 {
                     "status": "READY",
                     "description": {
-                        "text": str(self.publicacion.get("imagen_alt") or self.publicacion.get("titulo") or ""),
+                        "text": titulo[:200],
                     },
                     "media": asset,
                     "title": {
-                        "text": str(self.publicacion.get("titulo", ""))[:200],
+                        "text": titulo[:200],
                     },
                 }
             ]
 
         return payload
 
-    def _build_texto(self) -> str:
-        """Arma el texto final con título, contenido y URL opcional."""
-        titulo = str(self.publicacion.get("titulo", "")).strip()
-        contenido = str(self.publicacion.get("contenido", "")).strip()
-        url = str(self.publicacion.get("url_destino") or "").strip()
-        texto = f"{titulo}\n\n{contenido}"
-        if url:
-            texto = f"{texto}\n\n{url}"
+    def _build_texto(self, titulo: str, contenido: str, url: Optional[str] = None) -> str:
+        """Arma el texto final con titulo, contenido y URL opcional."""
+        texto = f"{titulo.strip()}\n\n{contenido.strip()}"
+        if url and url.strip():
+            texto = f"{texto}\n\n{url.strip()}"
 
         if len(texto) > 3000:
             self.logger.warning("Texto de LinkedIn excedia 3000 caracteres. Se recorto antes de publicar.")

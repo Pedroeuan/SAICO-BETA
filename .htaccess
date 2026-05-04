@@ -1,0 +1,17 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquea archivos ocultos y secretos del proyecto.
+    RewriteRule (^|/)\. - [F,L]
+
+    # Bloquea acceso web a carpetas internas que no deben exponerse.
+    RewriteRule ^(app|bootstrap|config|database|docs|lang|resources|routes|scripts-python|storage|tests|vendor)/ - [F,L,NC]
+
+    # Bloquea archivos sensibles del proyecto y utilidades de diagnostico.
+    RewriteRule ^(artisan|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|phpinfo\.php|postcss\.config\.js|tailwind\.config\.js|vite\.config\.js)$ - [F,L,NC]
+
+    # Bloquea variantes comunes de archivos de entorno y respaldos.
+    RewriteRule ^\.env([.-].*)?$ - [F,L,NC]
+</IfModule>

@@ -2,6 +2,76 @@
 
 @section('title', 'Nueva Publicacion')
 
+@section('css')
+<style>
+    .publicacion-form-card,
+    .publicacion-side-card {
+        box-shadow: none;
+    }
+
+    .publicacion-block {
+        border: 1px solid #dee2e6;
+        border-radius: .5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: #fff;
+    }
+
+    .publicacion-block__title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: .35rem;
+        color: #343a40;
+    }
+
+    .publicacion-block__hint {
+        font-size: .85rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+
+    .publicacion-red-card {
+        border: 1px solid #dee2e6;
+        border-radius: .5rem;
+        padding: .85rem 1rem;
+        background: #fff;
+        height: 100%;
+        cursor: pointer;
+        transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    .publicacion-red-card:hover {
+        border-color: #adb5bd;
+    }
+
+    .publicacion-preview {
+        min-height: 230px;
+        border: 1px solid #dee2e6;
+        border-radius: .5rem;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .publicacion-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .publicacion-counter {
+        font-size: .8rem;
+        color: #6c757d;
+    }
+
+    .publicacion-form-footer .btn {
+        min-width: 150px;
+    }
+</style>
+@endsection
+
 @section('content_header')
 <br>
 <br>
@@ -9,7 +79,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <div>
             <h1 class="mb-1">Nueva publicacion</h1>
-            <small class="text-muted">Crea contenido listo para LinkedIn, Facebook y X.</small>
+            <small class="text-muted">Captura contenido corporativo listo para difundirse desde SAICO.</small>
         </div>
         <a href="{{ route('publicaciones.index') }}" class="btn btn-default">
             <i class="fas fa-arrow-left mr-1"></i>Volver
@@ -19,47 +89,47 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-12 col-xl-10">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <div>
-                    <h1 class="h3 mb-1">Nueva publicacion</h1>
-                    <p class="text-muted mb-0">Crea contenido listo para publicarse en LinkedIn, Facebook y X.</p>
+    <form method="POST" action="{{ route('publicaciones.store') }}" enctype="multipart/form-data" class="row" id="publicacion-form">
+        @csrf
+
+        <div class="col-lg-8">
+            <div class="card card-primary card-outline publicacion-form-card">
+                <div class="card-header">
+                    <h3 class="card-title">Datos principales de la publicación</h3>
                 </div>
-            </div>
+                <div class="card-body">
+                    <div class="publicacion-block">
+                        <div class="publicacion-block__title">Contenido editorial</div>
+                        <div class="publicacion-block__hint">Define el mensaje principal, el tipo de publicación y el contenido que se enviará al sitio y a redes.</div>
 
-            <form method="POST" action="{{ route('publicaciones.store') }}" enctype="multipart/form-data" class="card shadow-sm border-0" id="publicacion-form">
-                @csrf
-                <div class="card-body p-4">
-                    <div class="row g-4">
-                        <div class="col-lg-8">
-                            <div class="mb-3">
-                                <label for="titulo" class="form-label">Titulo</label>
-                                <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" maxlength="150" minlength="5" required value="{{ old('titulo') }}">
-                                <div class="d-flex justify-content-between mt-1">
-                                    <small class="text-muted">Describe el servicio o mensaje principal.</small>
-                                    <small class="text-muted"><span data-counter-for="titulo">0</span>/150</small>
-                                </div>
-                                @error('titulo') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-group">
+                            <label for="titulo">Titulo</label>
+                            <input type="text" class="form-control @error('titulo') is-invalid @enderror" id="titulo" name="titulo" maxlength="150" minlength="5" required value="{{ old('titulo') }}">
+                            <div class="d-flex justify-content-between mt-1">
+                                <small class="text-muted">Describe el mensaje principal de la publicación.</small>
+                                <span class="publicacion-counter"><span data-counter-for="titulo">0</span>/150</span>
                             </div>
+                            @error('titulo') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
 
-                            <div class="mb-3">
-                                <label for="contenido" class="form-label">Contenido</label>
-                                <textarea class="form-control @error('contenido') is-invalid @enderror" id="contenido" name="contenido" rows="9" maxlength="3000" minlength="20" required>{{ old('contenido') }}</textarea>
-                                <div class="d-flex justify-content-between mt-1">
-                                    <small class="text-muted">Cuenta qué ofrece la empresa, beneficios y llamado a la acción.</small>
-                                    <small class="text-muted"><span data-counter-for="contenido">0</span>/3000</small>
-                                </div>
-                                <div id="twitter-warning" class="alert alert-warning py-2 px-3 mt-2 d-none mb-0">
-                                    El texto supera 280 caracteres. X lo truncará automáticamente.
-                                </div>
-                                @error('contenido') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-group">
+                            <label for="contenido">Contenido</label>
+                            <textarea class="form-control @error('contenido') is-invalid @enderror" id="contenido" name="contenido" rows="9" maxlength="3000" minlength="20" required>{{ old('contenido') }}</textarea>
+                            <div class="d-flex justify-content-between mt-1">
+                                <small class="text-muted">Incluye contexto, beneficios o llamada a la acción.</small>
+                                <span class="publicacion-counter"><span data-counter-for="contenido">0</span>/3000</span>
                             </div>
+                            <div id="twitter-warning" class="alert alert-warning py-2 px-3 mt-2 d-none mb-0">
+                                El texto supera 280 caracteres. X lo truncará automáticamente.
+                            </div>
+                            @error('contenido') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="tipo" class="form-label">Tipo de publicacion</label>
-                                    <select class="form-select @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tipo">Tipo de publicacion</label>
+                                    <select class="form-control @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
                                         <option value="">Selecciona...</option>
                                         @foreach ($tipos as $tipo)
                                             <option value="{{ $tipo->value }}" @selected(old('tipo') === $tipo->value)>{{ $tipo->label() }}</option>
@@ -67,98 +137,108 @@
                                     </select>
                                     @error('tipo') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="imagen" class="form-label">Imagen principal</label>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="imagen">Imagen principal</label>
                                     <input class="form-control @error('imagen') is-invalid @enderror" type="file" id="imagen" name="imagen" accept=".jpg,.jpeg,.png,.webp" required>
-                                    <small class="text-muted d-block mt-1">JPG, PNG o WEBP. Maximo 5 MB.</small>
+                                    <small class="text-muted d-block mt-1">JPG, PNG o WEBP. Máximo 5 MB.</small>
                                     @error('imagen') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                </div>
-                            </div>
-
-                            <div class="mt-4">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <label class="form-label mb-0">Redes sociales objetivo</label>
-                                    <small class="text-muted">Selecciona al menos una</small>
-                                </div>
-                                <div class="row g-3">
-                                    @foreach ($redes as $red)
-                                        <div class="col-md-4">
-                                            <label class="border rounded-3 p-3 w-100 h-100">
-                                                <div class="form-check mb-0">
-                                                    <input class="form-check-input @error('redes') is-invalid @enderror" type="checkbox" name="redes[]" value="{{ $red->value }}" id="red-{{ $red->value }}" @checked(in_array($red->value, old('redes', ['linkedin']), true))>
-                                                    <span class="form-check-label ms-1 fw-semibold">
-                                                        <i class="{{ $red->icono() }} me-2"></i>{{ $red->label() }}
-                                                    </span>
-                                                </div>
-                                                <small class="text-muted d-block mt-2">
-                                                    @if ($red->value === 'linkedin')
-                                                        Ideal para servicios, reputación y posicionamiento B2B.
-                                                    @elseif ($red->value === 'facebook')
-                                                        Útil para alcance visual y comunidad de clientes.
-                                                    @else
-                                                        Conveniente para mensajes breves, novedades y difusión rápida.
-                                                    @endif
-                                                </small>
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                @error('redes') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
-                                @error('redes.*') <div class="text-danger small mt-2">{{ $message }}</div> @enderror
-                            </div>
-
-                            <div class="accordion mt-4" id="accordionAvanzado">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#config-avanzada" aria-expanded="false" aria-controls="config-avanzada">
-                                            Configuracion avanzada
-                                        </button>
-                                    </h2>
-                                    <div id="config-avanzada" class="accordion-collapse collapse" data-bs-parent="#accordionAvanzado">
-                                        <div class="accordion-body">
-                                            <div class="mb-3">
-                                                <label for="url_destino" class="form-label">URL de destino</label>
-                                                <input type="url" class="form-control @error('url_destino') is-invalid @enderror" id="url_destino" name="url_destino" maxlength="500" value="{{ old('url_destino') }}" placeholder="https://tu-dominio.com/servicio">
-                                                @error('url_destino') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                            </div>
-                                            <div>
-                                                <label for="imagen_alt" class="form-label">Texto alternativo de la imagen</label>
-                                                <input type="text" class="form-control @error('imagen_alt') is-invalid @enderror" id="imagen_alt" name="imagen_alt" maxlength="200" value="{{ old('imagen_alt') }}" placeholder="Describe la escena de la imagen">
-                                                @error('imagen_alt') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <div class="border rounded-3 p-3 bg-light">
-                                <h2 class="h6 mb-3">Vista previa</h2>
-                                <div class="ratio ratio-4x3 rounded overflow-hidden border bg-white mb-3">
-                                    <img id="imagen-preview" src="https://placehold.co/1200x900?text=Vista+previa" alt="Vista previa de la imagen" class="w-100 h-100 object-fit-cover">
-                                </div>
-                                <div class="small text-muted">
-                                    La imagen es obligatoria y se optimizará automáticamente antes de enviarse a redes.
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="publicacion-block">
+                        <div class="publicacion-block__title">Redes sociales objetivo</div>
+                        <div class="publicacion-block__hint">Selecciona en qué redes debe intentarse la autopublicación.</div>
+
+                        <div class="row">
+                            @foreach ($redes as $red)
+                                <div class="col-md-4 mb-3">
+                                    <label class="publicacion-red-card mb-0 w-100">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input @error('redes') is-invalid @enderror" type="checkbox" name="redes[]" value="{{ $red->value }}" id="red-{{ $red->value }}" @checked(in_array($red->value, old('redes', ['linkedin']), true))>
+                                            <span class="form-check-label font-weight-bold">
+                                                <i class="{{ $red->icono() }} mr-2"></i>{{ $red->label() }}
+                                            </span>
+                                        </div>
+                                        <small class="text-muted d-block">
+                                            @if ($red->value === 'linkedin')
+                                                Ideal para servicios, reputación y posicionamiento B2B.
+                                            @elseif ($red->value === 'facebook')
+                                                Útil para alcance visual y comunidad de clientes.
+                                            @else
+                                                Conveniente para avisos breves y difusión rápida.
+                                            @endif
+                                        </small>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                        @error('redes') <div class="text-danger small">{{ $message }}</div> @enderror
+                        @error('redes.*') <div class="text-danger small">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="publicacion-block mb-0">
+                        <div class="publicacion-block__title">Configuracion avanzada</div>
+                        <div class="publicacion-block__hint">Campos opcionales para enriquecer la publicación y su presentación en redes.</div>
+
+                        <div class="form-group">
+                            <label for="url_destino">URL de destino</label>
+                            <input type="url" class="form-control @error('url_destino') is-invalid @enderror" id="url_destino" name="url_destino" maxlength="500" value="{{ old('url_destino') }}" placeholder="https://tu-dominio.com/servicio">
+                            @error('url_destino') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label for="imagen_alt">Texto alternativo de la imagen</label>
+                            <input type="text" class="form-control @error('imagen_alt') is-invalid @enderror" id="imagen_alt" name="imagen_alt" maxlength="200" value="{{ old('imagen_alt') }}" placeholder="Describe la escena de la imagen">
+                            @error('imagen_alt') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
                 </div>
-                <div class="card-footer bg-white d-flex justify-content-end gap-2">
-                    <a href="{{ route('publicaciones.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                <div class="card-footer bg-white text-right publicacion-form-footer">
+                    <a href="{{ route('publicaciones.index') }}" class="btn btn-default mr-2">Cancelar</a>
                     <button type="submit" class="btn btn-primary" id="submit-button">
-                        <span class="spinner-border spinner-border-sm me-2 d-none" id="submit-spinner" role="status" aria-hidden="true"></span>
+                        <span class="spinner-border spinner-border-sm mr-2 d-none" id="submit-spinner" role="status" aria-hidden="true"></span>
                         Guardar y publicar
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+
+        <div class="col-lg-4">
+            <div class="card publicacion-side-card">
+                <div class="card-header">
+                    <h3 class="card-title">Vista previa</h3>
+                </div>
+                <div class="card-body">
+                    <div class="publicacion-preview mb-3">
+                        <img id="imagen-preview" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 900'><rect width='1200' height='900' fill='%23f8f9fa'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-family='Arial, sans-serif' font-size='48'>Vista previa</text></svg>" alt="Vista previa de la imagen">
+                    </div>
+                    <p class="text-muted small mb-0">La imagen es obligatoria y se optimizará automáticamente antes de enviarse a redes sociales.</p>
+                </div>
+            </div>
+
+            <div class="card publicacion-side-card">
+                <div class="card-header">
+                    <h3 class="card-title">Recomendaciones</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0 pl-3 text-muted">
+                        <li>Usa un título claro y directo.</li>
+                        <li>Mantén el contenido enfocado al objetivo del mensaje.</li>
+                        <li>Agrega URL solo cuando dirija a un recurso útil.</li>
+                        <li>Selecciona únicamente las redes necesarias.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 @stop
 
-@push('scripts')
+@section('js')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const titulo = document.getElementById('titulo');
@@ -192,16 +272,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     imagen.addEventListener('change', function (event) {
-        const file = event.target.files[0];
+        const file = event.target.files && event.target.files[0];
         if (!file) {
             return;
         }
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+        if (!file.type.startsWith('image/')) {
+            return;
+        }
+
+        preview.src = URL.createObjectURL(file);
     });
 
     form.addEventListener('submit', function () {
@@ -214,4 +294,4 @@ document.addEventListener('DOMContentLoaded', function () {
     updateTwitterWarning();
 });
 </script>
-@endpush
+@endsection

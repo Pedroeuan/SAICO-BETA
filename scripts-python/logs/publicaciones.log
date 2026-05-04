@@ -1,0 +1,118 @@
+2026-05-04 14:45:01,348 ERROR publicaciones No fue posible cargar el adaptador de facebook: No module named 'imghdr'
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\publicar_redes.py", line 122, in obtener_adaptador_cls
+    modulo = importlib.import_module(modulo_nombre)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\__init__.py", line 4, in <module>
+    from .twitter import TwitterAdapter
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\twitter.py", line 8, in <module>
+    import tweepy
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\tweepy\__init__.py", line 12, in <module>
+    from tweepy.api import API
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\tweepy\api.py", line 7, in <module>
+    import imghdr
+ModuleNotFoundError: No module named 'imghdr'
+2026-05-04 14:45:01,374 WARNING publicaciones No existe adaptador configurado para la red facebook.
+2026-05-04 14:45:17,609 ERROR publicaciones.facebook Error al conectar con Facebook: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRRLwplGc15IZAMpt4Vwe4ZC85GzKLDL2qQwVhkg4p4dLAZCpUullUe3fMKftFlotdMvhPY2AC2F2LBlaJe6ZC0Er0zsMydnymocFkdRMXRbAs28WoYQ4ZAWeNVmSvTaRJzkngWWrjOHZBMChrLHsauEzDWZBe9fH7zejr6fmThuVtyP9krX7W5M8aTzZAkD6NGRKsVycrJdW9R3hiIhdioTn4WBII3MZD (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRRLwplGc15IZAMpt4Vwe4ZC85GzKLDL2qQwVhkg4p4dLAZCpUullUe3fMKftFlotdMvhPY2AC2F2LBlaJe6ZC0Er0zsMydnymocFkdRMXRbAs28WoYQ4ZAWeNVmSvTaRJzkngWWrjOHZBMChrLHsauEzDWZBe9fH7zejr6fmThuVtyP9krX7W5M8aTzZAkD6NGRKsVycrJdW9R3hiIhdioTn4WBII3MZD (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 40, in conectar
+    response = requests.get(
+        f"{self.BASE_URL}/{self.page_id}",
+        params={"access_token": self.page_token},
+        timeout=self.TIMEOUT,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRRLwplGc15IZAMpt4Vwe4ZC85GzKLDL2qQwVhkg4p4dLAZCpUullUe3fMKftFlotdMvhPY2AC2F2LBlaJe6ZC0Er0zsMydnymocFkdRMXRbAs28WoYQ4ZAWeNVmSvTaRJzkngWWrjOHZBMChrLHsauEzDWZBe9fH7zejr6fmThuVtyP9krX7W5M8aTzZAkD6NGRKsVycrJdW9R3hiIhdioTn4WBII3MZD (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+2026-05-04 14:45:17,621 WARNING publicaciones No fue posible conectar con la API de facebook.
+2026-05-04 14:45:30,918 ERROR publicaciones.facebook No fue posible validar la pagina de Facebook: {"error":{"message":"Error validating access token: Session has expired on Monday, 04-May-26 13:00:00 PDT. The current time is Monday, 04-May-26 13:45:30 PDT.","type":"OAuthException","code":190,"error_subcode":463,"fbtrace_id":"AEss5YSgDb0_py6xqSBQnSM"}}
+2026-05-04 14:45:30,921 WARNING publicaciones No fue posible conectar con la API de facebook.
+2026-05-04 14:48:28,221 ERROR publicaciones.facebook No fue posible validar la pagina de Facebook: {"error":{"message":"(#100) Object does not exist, cannot be loaded due to missing permission or reviewable feature, or does not support this operation. This endpoint requires the 'pages_read_engagement' permission or the 'Page Public Content Access' feature or the 'Page Public Metadata Access' feature. Refer to https:\/\/developers.facebook.com\/docs\/apps\/review\/login-permissions#manage-pages, https:\/\/developers.facebook.com\/docs\/apps\/review\/feature#reference-PAGES_ACCESS and https:\/\/developers.facebook.com\/docs\/apps\/review\/feature#page-public-metadata-access for details.","type":"OAuthException","code":100,"fbtrace_id":"AwNW2Eo87jx9ZVIZTovfccn"}}
+2026-05-04 14:48:28,225 WARNING publicaciones No fue posible conectar con la API de facebook.
+2026-05-04 14:49:59,889 ERROR publicaciones.facebook No fue posible validar la pagina de Facebook: {"error":{"message":"(#100) Object does not exist, cannot be loaded due to missing permission or reviewable feature, or does not support this operation. This endpoint requires the 'pages_read_engagement' permission or the 'Page Public Content Access' feature or the 'Page Public Metadata Access' feature. Refer to https:\/\/developers.facebook.com\/docs\/apps\/review\/login-permissions#manage-pages, https:\/\/developers.facebook.com\/docs\/apps\/review\/feature#reference-PAGES_ACCESS and https:\/\/developers.facebook.com\/docs\/apps\/review\/feature#page-public-metadata-access for details.","type":"OAuthException","code":100,"fbtrace_id":"AHiI3rp1L0kZhqxwR8wVoGz"}}
+2026-05-04 14:49:59,893 WARNING publicaciones No fue posible conectar con la API de facebook.
+2026-05-04 15:18:57,986 ERROR publicaciones.facebook No fue posible validar la pagina de Facebook: {"error":{"message":"(#100) Object does not exist, cannot be loaded due to missing permission or reviewable feature, or does not support this operation. This endpoint requires the 'pages_read_engagement' permission or the 'Page Public Content Access' feature or the 'Page Public Metadata Access' feature. Refer to https:\/\/developers.facebook.com\/docs\/apps\/review\/login-permissions#manage-pages, https:\/\/developers.facebook.com\/docs\/apps\/review\/feature#reference-PAGES_ACCESS and https:\/\/developers.facebook.com\/docs\/apps\/review\/feature#page-public-metadata-access for details.","type":"OAuthException","code":100,"fbtrace_id":"AmgWySk2udFYb6cbkvz1aXw"}}
+2026-05-04 15:18:57,988 WARNING publicaciones No fue posible conectar con la API de facebook.
+2026-05-04 15:26:20,701 INFO publicaciones Resultado de publicacion en facebook: {"exito": true, "post_id": "935218113016940_122118669975237901", "red": "facebook", "error": null}
+2026-05-04 15:34:38,998 INFO publicaciones Resultado de publicacion en facebook: {"exito": true, "post_id": "935218113016940_122118670899237901", "red": "facebook", "error": null}
