@@ -1083,7 +1083,7 @@
 
 <script>
     /*Juntas-Resultados */
-        $(document).ready(function() {
+$(document).ready(function() {
     let tituloCount = $('.titulo-row').length;
     //let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
     let rowCount = 0; //contador de filas por título (se reinicia a 0 cuando se crea un nuevo título).
