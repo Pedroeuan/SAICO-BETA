@@ -449,7 +449,7 @@
                             <div class="alert alert-warning alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                <p>La primera fila "---" es para el llenado automatico de cada una de las columnas "|" del formato.</p>
+                                <p>La primera fila "---" es para el llenado automatico de cada una de las columnas "" del formato.</p>
                             </div>
                             <thead>
                                 <tr>
@@ -476,7 +476,6 @@
 
                                 <tr id="inputRow">
                                     <th></th> <!-- Para ID vacío -->
-                                    <th><input type="text" class="form-control default-input" data-column="0" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
@@ -489,6 +488,7 @@
                                     <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
