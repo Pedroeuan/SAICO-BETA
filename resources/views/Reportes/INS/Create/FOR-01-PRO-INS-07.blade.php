@@ -327,7 +327,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ACOPLANTE:</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ACOPLANTE (MARCA Y TIPO):</div>
                                     <div>
                                         <div class="form-group">
                                             <input type="text" class="form-control  inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE')}}">
@@ -390,55 +390,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">SONDA #2</div>
-
-                                    <!-- Select para Accesorios -->
-                                    <div class="col-sm-50 d-flex justify-content-center">
-                                        <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Accesorios:</label>
-                                            <select class="form-select inputForm" name="accesorios2" id="accesoriosSelect2">
-                                            <option value="" selected disabled>Seleccione un Accesorio</option>
-                                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
-                                                    <option value="{{ $accesorios->idGeneral_EyC }}"
-                                                            data-marca="{{ $accesorios->Marca }}"
-                                                            data-modelo="{{ $accesorios->Modelo }}"
-                                                            data-ns="{{ $accesorios->Serie }}">
-                                                        {{ $accesorios->Nombre_E_P_BP }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA2]" id="accesorioNombreSonda2" value="{{ old('Datos_Equipo.ACCESORIO_SONDA2') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputA2" name="Datos_Equipo[MARCA_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA2')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA2')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[N_S_SONDA2]" placeholder="" value="{{old('Datos_Equipo.N_S_SONDA2')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">FREC:</label>
-                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA2]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA2')}}">
-                                        </div>
-                                    </div>
-
                                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">BLOCK DE CALIBRACIÓN (SENSIBILIDAD)</div>
 
                                     <!-- Select para Block y Probeta -->
@@ -498,7 +449,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA') }}">
+                                            {{-- <input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA') }}"> --}}
                                         </div>
                                     </div>
 
@@ -520,6 +471,55 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
                                             <input type="text" class="form-control  inputForm" id="nsInputbyp2" name="Datos_Equipo[N_S_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK_DIS')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">SONDA #2</div>
+
+                                    <!-- Select para Accesorios -->
+                                    <div class="col-sm-50 d-flex justify-content-center">
+                                        <div class="form-group text-center">
+                                            <label class="col-form-label" for="inputSuccess">Accesorios:</label>
+                                            <select class="form-select inputForm" name="accesorios2" id="accesoriosSelect2">
+                                            <option value="" selected disabled>Seleccione un Accesorio</option>
+                                                @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
+                                                    <option value="{{ $accesorios->idGeneral_EyC }}"
+                                                            data-marca="{{ $accesorios->Marca }}"
+                                                            data-modelo="{{ $accesorios->Modelo }}"
+                                                            data-ns="{{ $accesorios->Serie }}">
+                                                        {{ $accesorios->Nombre_E_P_BP }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            {{--<input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA2]" id="accesorioNombreSonda2" value="{{ old('Datos_Equipo.ACCESORIO_SONDA2') }}">--}}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA2" name="Datos_Equipo[MARCA_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA2')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
+                                            <input type="text" class="form-control  inputForm" id="modeloInputA2" name="Datos_Equipo[MODELO_SONDA2]" placeholder="" value="{{old('Datos_Equipo.MODELO_SONDA2')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">N.S:</label>
+                                            <input type="text" class="form-control  inputForm" id="nsInputA2" name="Datos_Equipo[N_S_SONDA2]" placeholder="" value="{{old('Datos_Equipo.N_S_SONDA2')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">FREC:</label>
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA2]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA2')}}">
                                         </div>
                                     </div>
 
@@ -1035,8 +1035,6 @@ $(document).ready(function() {
             const titleText = esc(t.text || '');
 
             //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
-           
-            //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="14">
@@ -1391,29 +1389,22 @@ function verificarYAgregarLongitud() {
         $('#blockyprobetaSelect2').on('change', actualizarInputsbyp2);
         });
 
-    /*FOR-01-PRO-INS-09*/
+    /*FOR-01-PRO-INS-07*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-01-PRO-INS-09');
+        const form = document.getElementById('FOR-01-PRO-INS-07');
         if (!form) return;
-
-        // Guardar en localStorage al escribir
-        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-          //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-01-PRO-INS-09_' + el.name, el.value);
-            //});
-        //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-01-PRO-INS-09_' + el.name, el.value);
+                localStorage.setItem('FOR-01-PRO-INS-07_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
-                const value = localStorage.getItem('FOR-01-PRO-INS-09_' + el.name);
+                const value = localStorage.getItem('FOR-01-PRO-INS-07_' + el.name);
                 if (value !== null) el.value = value;
             }
         });
@@ -1421,7 +1412,7 @@ function verificarYAgregarLongitud() {
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-01-PRO-INS-09_' + el.name);
+                localStorage.removeItem('FOR-01-PRO-INS-07_' + el.name);
                 //localStorage.clear();
             });
         });

@@ -345,7 +345,6 @@
                         </tr>                      
                     </table>
 
-                                                
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)

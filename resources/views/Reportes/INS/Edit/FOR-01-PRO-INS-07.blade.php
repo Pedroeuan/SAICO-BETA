@@ -103,7 +103,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                             <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}" readonly>
+                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '')}}" readonly>
                                             @error('Cliente')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -285,7 +285,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ACOPLANTE:</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ACOPLANTE (MARCA Y TIPO):</div>
                                     <div>
                                         <div class="form-group">
                                             <input type="text" class="form-control  inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE', $Datos_Equipo['ACOPLANTE'] ?? '')}}">
@@ -316,14 +316,14 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA1]" id="accesorioNombreSonda1" value="{{ old('Datos_Equipo.ACCESORIO_SONDA1', $Datos_Equipo['ACCESORIO_SONDA1'] ?? '') }}">
+                                            {{--<input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA1]" id="accesorioNombreSonda1" value="{{ old('Datos_Equipo.ACCESORIO_SONDA1', $Datos_Equipo['ACCESORIO_SONDA1'] ?? '') }}">--}}
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputA1" name="Datos_Equipo[MARCA_SONDA1]" placeholder="" value="{{old('Datos_Equipo.LONGITUD_CABLE', $Datos_Equipo['LONGITUD_CABLE'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA1" name="Datos_Equipo[MARCA_SONDA1]" placeholder="" value="{{old('Datos_Equipo.MARCA_SONDA1', $Datos_Equipo['MARCA_SONDA1'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -345,6 +345,90 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">FREC:</label>
                                             <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_SONDA1]" placeholder="" value="{{old('Datos_Equipo.FREC_SONDA1', $Datos_Equipo['FREC_SONDA1'] ?? '')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">BLOCK DE CALIBRACIÓN (SENSIBILIDAD)</div>
+
+                                    <!-- Select para Block y Probeta -->
+                                    <div class="col-sm-50 d-flex justify-content-center">
+                                        <div class="form-group text-center">
+                                            <label class="col-form-label" for="inputSuccess">Block de Sensibilidad:</label>
+                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect1">
+                                            <option value="" selected disabled>Seleccione un Block de Sensibilidad</option>
+                                                @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
+                                                    <option value="{{ $blockyprobeta->idGeneral_EyC }}"
+                                                            data-marca="{{ $blockyprobeta->Marca }}"
+                                                            data-modelo="{{ $blockyprobeta->Modelo }}"
+                                                            data-ns="{{ $blockyprobeta->Serie }}">
+                                                        {{ $blockyprobeta->Nombre_E_P_BP }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            {{--<input type="hidden" name="Datos_Equipo[BLOCK_SENSIBILIDAD]" id="blockSensibilidadNombre" value="{{ old('Datos_Equipo.BLOCK_SENSIBILIDAD', $Datos_Equipo['BLOCK_SENSIBILIDAD'] ?? '') }}">--}}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
+                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp1" name="Datos_Equipo[MARCA_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK_SEN', $Datos_Equipo['MARCA_BLOCK_SEN'] ?? '')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
+                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp1" name="Datos_Equipo[MODELO_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK_SEN', $Datos_Equipo['MODELO_BLOCK_SEN'] ?? '')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">N.S:</label>
+                                            <input type="text" class="form-control  inputForm" id="nsInputbyp1" name="Datos_Equipo[N_S_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK_SEN', $Datos_Equipo['N_S_BLOCK_SEN'] ?? '')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">BLOCK DE CALIBRACIÓN (DISTANCIA)</div>
+
+                                    <!-- Select para Block y Probeta -->
+                                    <div class="col-sm-50 d-flex justify-content-center">
+                                        <div class="form-group text-center">
+                                            <label class="col-form-label" for="inputSuccess">Block de Distancia:</label>
+                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect2">
+                                            <option value="" selected disabled>Seleccione un Block de Distancia</option>
+                                                @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
+                                                    <option value="{{ $blockyprobeta->idGeneral_EyC }}"
+                                                            data-marca="{{ $blockyprobeta->Marca }}"
+                                                            data-modelo="{{ $blockyprobeta->Modelo }}"
+                                                            data-ns="{{ $blockyprobeta->Serie }}">
+                                                        {{ $blockyprobeta->Nombre_E_P_BP }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            {{--<input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA', $Datos_Equipo['BLOCK_DISTANCIA'] ?? '') }}"> --}}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
+                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp2" name="Datos_Equipo[MARCA_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK_DIS', $Datos_Equipo['MARCA_BLOCK_DIS'] ?? '')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
+                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp2" name="Datos_Equipo[MODELO_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK_DIS', $Datos_Equipo['MODELO_BLOCK_DIS'] ?? '')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">N.S:</label>
+                                            <input type="text" class="form-control  inputForm" id="nsInputbyp2" name="Datos_Equipo[N_S_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK_DIS', $Datos_Equipo['N_S_BLOCK_DIS'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -397,91 +481,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">BLOCK DE CALIBRACIÓN (SENSIBILIDAD)</div>
-
-                                    <!-- Select para Block y Probeta -->
-                                    <div class="col-sm-50 d-flex justify-content-center">
-                                        <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Block de Sensibilidad:</label>
-                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect1">
-                                            <option value="" selected disabled>Seleccione un Block de Sensibilidad</option>
-                                                @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
-                                                    <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                                            data-marca="{{ $blockyprobeta->Marca }}"
-                                                            data-modelo="{{ $blockyprobeta->Modelo }}"
-                                                            data-ns="{{ $blockyprobeta->Serie }}">
-                                                        {{ $blockyprobeta->Nombre_E_P_BP }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <input type="hidden" name="Datos_Equipo[BLOCK_SENSIBILIDAD]" id="blockSensibilidadNombre" value="{{ old('Datos_Equipo.BLOCK_SENSIBILIDAD', $Datos_Equipo['BLOCK_SENSIBILIDAD'] ?? '') }}">
-                                        </div>
+                                    <div class="col-sm-12">
+                                        <hr style="border: none; height: 3px; background-color: black;">
                                     </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp1" name="Datos_Equipo[MARCA_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK_SEN', $Datos_Equipo['MARCA_BLOCK_SEN'] ?? '')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp1" name="Datos_Equipo[MODELO_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK_SEN', $Datos_Equipo['MODELO_BLOCK_SEN'] ?? '')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputbyp1" name="Datos_Equipo[N_S_BLOCK_SEN]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK_SEN', $Datos_Equipo['N_S_BLOCK_SEN'] ?? '')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">BLOCK DE CALIBRACIÓN (DISTANCIA)</div>
-
-                                    <!-- Select para Block y Probeta -->
-                                    <div class="col-sm-50 d-flex justify-content-center">
-                                        <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Block de Distancia:</label>
-                                            <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect2">
-                                            <option value="" selected disabled>Seleccione un Block de Distancia</option>
-                                                @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
-                                                    <option value="{{ $blockyprobeta->idGeneral_EyC }}"
-                                                            data-marca="{{ $blockyprobeta->Marca }}"
-                                                            data-modelo="{{ $blockyprobeta->Modelo }}"
-                                                            data-ns="{{ $blockyprobeta->Serie }}">
-                                                        {{ $blockyprobeta->Nombre_E_P_BP }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA', $Datos_Equipo['BLOCK_DISTANCIA'] ?? '') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp2" name="Datos_Equipo[MARCA_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK_DIS', $Datos_Equipo['MARCA_BLOCK_DIS'] ?? '')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control  inputForm" id="modeloInputbyp2" name="Datos_Equipo[MODELO_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.MODELO_BLOCK_DIS', $Datos_Equipo['MODELO_BLOCK_DIS'] ?? '')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control  inputForm" id="nsInputbyp2" name="Datos_Equipo[N_S_BLOCK_DIS]" placeholder="" value="{{old('Datos_Equipo.N_S_BLOCK_DIS', $Datos_Equipo['N_S_BLOCK_DIS'] ?? '')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="alert alert-secondary" role="alert"></div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -578,94 +580,88 @@
                                         </thead>
 
                                         <tbody>
-                                            @php $contador = 1; @endphp
+                                            @php 
+                                                $contador = 1; 
+                                            @endphp
 
-                                        @foreach ($Grupo_Juntas_Re as $index => $grupo)
+                                            @foreach ($Grupo_Juntas_Re as $bloque)
+                                                @foreach ($bloque as $item)
 
-                                        @php
-                                            $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
-
-                                            /*$titleId = $esSinTitulo
-                                                ? 'sin_titulo_' . $index   // 👈 único por bloque
-                                                : 'titulo_' . $index;*/
-                                            $titleId = $esSinTitulo
-                                                ? 'sin_titulo'
-                                                : 'titulo_' . $index;
-
-                                        @endphp
-
-                                        {{-- 🔹 TÍTULO --}}
-                                        @if (!$esSinTitulo)
-                                        <tr class="titulo-row" data-titulo="{{ $titleId }}">
-                                            <td colspan="14">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <input type="text"
-                                                        class="form-control w-90 titulo-text"
-                                                        name="titulos_text[{{ $titleId }}]"
-                                                        value="{{ $grupo['titulos_juntas'] }}"
-                                                        placeholder="Ingrese título...">
-
-                                                    <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
-
-                                                    <td>
-                                                        <button type="button" class="btn btn-danger btnEliminarTitulo">
-                                                            <i class="fa fa-times"></i>
-                                                        </button>
-                                                    </td>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @endif
-
-                                                  {{-- 🔹 FILAS --}}
-                                                @foreach ($grupo['resultados'] as $resultado)
-                                                    <tr data-titulo="{{ $titleId }}">
-                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                        <td><input type="text" class="form-control" name='junta_ele[{{ $titleId }}][]' value="{{ $resultado['junta_ele'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_indicacion[{{ $titleId }}][]' value="{{ $resultado['no_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='angulo[{{ $titleId }}][]' value="{{ $resultado['angulo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='nr[{{ $titleId }}][]' value="{{ $resultado['nr'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ni[{{ $titleId }}][]' value="{{ $resultado['ni'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='la[{{ $titleId }}][]' value="{{ $resultado['la'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='lc[{{ $titleId }}][]' value="{{ $resultado['lc'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='dist_zapata[{{ $titleId }}][]' value="{{ $resultado['dist_zapata'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='sa[{{ $titleId }}][]' value="{{ $resultado['sa'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='da[{{ $titleId }}][]' value="{{ $resultado['da'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ht[{{ $titleId }}][]' value="{{ $resultado['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='evaluacion[{{ $titleId }}][]' value="{{ $resultado['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='fotos[{{ $titleId }}][]' value="{{ $resultado['fotos'] }}"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-                                                    </tr>
-                                                    @php $contador++; @endphp
-                                                    @endforeach
-
-                                                    {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                                    @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
-                                                        @foreach ($grupo['Long_Inspecc'] as $long)
-                                                            <tr class="long-row" data-titulo="{{ $titleId }}">
-                                                                <td colspan="13">Longitud Inspeccionada</td>
-
-                                                                <td>
+                                                    @php
+                                                        $titleId = $item['grupo'] ?? 'sin_titulo';
+                                                    @endphp
+                                                    <!-- TITULOS -->
+                                                    @if ($item['tipo'] == 'titulo')
+                                                        <tr class="titulo-row" data-titulo="{{ $titleId }}">
+                                                            <td colspan="14">
+                                                                <div class="d-flex justify-content-between align-items-center">
                                                                     <input type="text"
-                                                                        class="form-control long-text"
-                                                                        name="Long_Inspecc[{{ $titleId }}][]"
-                                                                        value="{{ $long }}"
-                                                                        placeholder="Ingrese Longitud Inspeccionada...">
-                                                                </td>
+                                                                        class="form-control w-90 titulo-text"
+                                                                        name="titulos_text[{{ $titleId }}]"
+                                                                        value="{{ $item['texto'] }}"
+                                                                        placeholder="Ingrese título...">
 
-                                                                <td class="text-center">
-                                                                    <button type="button" class="btn btn-danger btnEliminar">
-                                                                        <i class="fa fa-times"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
+                                                                    <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
+
+                                                                    <td>
+                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                            <i class="fa fa-times"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
                                                     @endif
-                                                 @endforeach
+                                                    <!-- FILAS -->
+                                                    @if ($item['tipo'] == 'fila')
+                                                        <tr data-titulo="{{ $titleId }}">
+                                                        <td>{{ $contador }}</td>
+
+                                                        <td><input type="text" class="form-control" name='junta_ele[{{ $titleId }}][]' value="{{ $item['data']['junta_ele'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='no_indicacion[{{ $titleId }}][]' value="{{ $item['data']['no_indicacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='angulo[{{ $titleId }}][]' value="{{ $item['data']['angulo'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='nr[{{ $titleId }}][]' value="{{ $item['data']['nr'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ni[{{ $titleId }}][]' value="{{ $item['data']['ni'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='la[{{ $titleId }}][]' value="{{ $item['data']['la'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='lc[{{ $titleId }}][]' value="{{ $item['data']['lc'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='dist_zapata[{{ $titleId }}][]' value="{{ $item['data']['dist_zapata'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='sa[{{ $titleId }}][]' value="{{ $item['data']['sa'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='da[{{ $titleId }}][]' value="{{ $item['data']['da'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='ht[{{ $titleId }}][]' value="{{ $item['data']['ht'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='evaluacion[{{ $titleId }}][]' value="{{ $item['data']['evaluacion'] }}"></td>
+                                                        <td><input type="text" class="form-control" name='fotos[{{ $titleId }}][]' value="{{ $item['data']['fotos'] }}"></td>
+
+                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+
+                                                        </tr>
+
+                                                        @php $contador++; @endphp
+                                                    @endif
+                                                    <!-- LONGITUD (CIERRA BLOQUE) -->
+                                                    @if ($item['tipo'] == 'longitud')
+                                                        <tr class="long-row" data-titulo="{{ $titleId }}">
+                                                            <td colspan="13">Longitud Inspeccionada</td>
+
+                                                            <td>
+                                                                <input type="text"
+                                                                    class="form-control long-text"
+                                                                    name="Long_Inspecc[{{ $titleId }}][]"
+                                                                    value="{{ $item['valor'] }}">
+                                                            </td>
+
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-danger btnEliminar">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                            @endforeach
                                         </tbody>
                                     </table>
                                     </div>
-                                    <input type="hidden" id="titulos_hidden" name="titulos_hidden">
+                                    <input type="hidden" id="titulos_hidden" name="titulos_data">
                                     <p>
                                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                         <div class="d-flex justify-content-between align-items-center w-100 mb-3">
@@ -682,7 +678,7 @@
 
                                             <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
-                                             <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+                                            <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                         </div>
@@ -1062,7 +1058,7 @@
             </tr>
         `;
 
-       $('#dynamicTable tbody').append(newTitle);
+        $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
         });
 
@@ -1147,7 +1143,7 @@
             updateTitulos();
             // Eliminar los datos de sessionStorage
             //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
+            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
             // Deshabilitar el botón de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');

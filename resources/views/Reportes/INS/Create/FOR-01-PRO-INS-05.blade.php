@@ -1102,7 +1102,7 @@
         saveData($(this).closest('form').attr('id'));
         });
 
-         $('#addLongBtn').click(function () {
+        $('#addLongBtn').click(function () {
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1170,6 +1170,7 @@
             // Restaurar datos al cargar la página
         restoreData();
     });
+
 function verificarYAgregarLongitud() {
 
     const $tbody = $('#dynamicTable tbody');
