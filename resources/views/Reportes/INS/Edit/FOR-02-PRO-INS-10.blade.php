@@ -547,8 +547,8 @@
                                                 {{-- 🔹 FILAS --}}
                                                 @foreach ($grupo['resultados'] as $resultado)
                                                 <tr data-titulo="{{ $titleId }}">
-                                                    <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                    <td><input type="text" class="form-control" name='ID[{{ $titleId }}][]' value="{{ $resultado['ID'] }}"></td>
+                                                        <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                        <td><input type="text" class="form-control" name='ID[{{ $titleId }}][]' value="{{ $resultado['ID'] }}"></td>
                                                         <td><input type="text" class="form-control" name='elemento_tubo[{{ $titleId }}][]' value="{{ $resultado['elemento_tubo'] }}"></td>
                                                         <td><input type="text" class="form-control" name='no_aceptacion[{{ $titleId }}][]' value="{{ $resultado['no_aceptacion'] }}"></td>
                                                         <td><input type="text" class="form-control" name='no_serie[{{ $titleId }}][]' value="{{ $resultado['no_serie'] }}"></td>

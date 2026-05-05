@@ -368,7 +368,7 @@
                     </table>
             </footer>
 
-        @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+        @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                                 <table class="encabezadoAzul">
                     <tr>
@@ -538,56 +538,56 @@
                         </thead>
 
                             <tbody>
-                              
-                                {{-- 🔹 TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="13" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
-                                        </td>
-                                    </tr>
-                                @endif
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-                                {{-- 🔹 FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                    <tr class="juntas">
-                                        <td>{{ $junta['no_junta'] }}</td>
-                                        <td>{{ $junta['no_indicacion'] }}</td>
-                                        <td>{{ $junta['angulo_inspeccion'] }}</td>
-                                        <td>{{ $junta['pierna'] }}</td>
-                                        <td>{{ $junta['nivel_referencia'] }}</td>
-                                        <td>{{ $junta['nivel_indicacion'] }}</td>
-                                        <td>{{ $junta['distancia_angular'] }}</td>
-                                        <td>{{ $junta['profundidad'] }}</td>
-                                        <td>{{ $junta['longitud'] }}</td>
-                                        <td>{{ $junta['evaluacion'] }}</td>
-                                        <td>{{ $junta['x'] }}</td>
-                                        <td>{{ $junta['y'] }}</td>
-                                        <td>{{ $junta['observaciones'] }}</td>
-                                    </tr>
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="13" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
+
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+
+                                                    <td>{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['no_indicacion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['angulo_inspeccion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['pierna'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['nivel_referencia'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['nivel_indicacion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['distancia_angular'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['profundidad'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['longitud'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['evaluacion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['x'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['y'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['observaciones'] ?? '' }}</td>
+                                                </tr>
+                                            @endif
+
+                                            {{-- LONGITUD --}}
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="8"></td>
+                                                    <th colspan="3">Longitud inspeccionada:</th>
+                                                    <th colspan="2">{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
+
                                 @endforeach
-
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="sinBordetd">
-                                    <td colspan="8">
-                                    <th colspan="3">Longitud inspeccionada:</th>
-                                    <th colspan="2">
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </th>
-                                </tr>
-
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="13"></td>
-                                </tr>--}}
                             </tbody>
-                    </table>
-
-                <table>
-            </div>
-                @if (!$loop->last)
-                    <div style="page-break-after: always;"></div>
-                @endif
+                        </table>
+                    </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
             @endforeach
         </body>
     </html>

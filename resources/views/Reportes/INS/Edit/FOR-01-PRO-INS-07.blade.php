@@ -615,23 +615,21 @@
                                                     <!-- FILAS -->
                                                     @if ($item['tipo'] == 'fila')
                                                         <tr data-titulo="{{ $titleId }}">
-                                                        <td>{{ $contador }}</td>
-
-                                                        <td><input type="text" class="form-control" name='junta_ele[{{ $titleId }}][]' value="{{ $item['data']['junta_ele'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='no_indicacion[{{ $titleId }}][]' value="{{ $item['data']['no_indicacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='angulo[{{ $titleId }}][]' value="{{ $item['data']['angulo'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='nr[{{ $titleId }}][]' value="{{ $item['data']['nr'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ni[{{ $titleId }}][]' value="{{ $item['data']['ni'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='la[{{ $titleId }}][]' value="{{ $item['data']['la'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='lc[{{ $titleId }}][]' value="{{ $item['data']['lc'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='dist_zapata[{{ $titleId }}][]' value="{{ $item['data']['dist_zapata'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='sa[{{ $titleId }}][]' value="{{ $item['data']['sa'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='da[{{ $titleId }}][]' value="{{ $item['data']['da'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='ht[{{ $titleId }}][]' value="{{ $item['data']['ht'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='evaluacion[{{ $titleId }}][]' value="{{ $item['data']['evaluacion'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='fotos[{{ $titleId }}][]' value="{{ $item['data']['fotos'] }}"></td>
-
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                            <td><input type="text" class="form-control" name='junta_ele[{{ $titleId }}][]' value="{{ $item['data']['junta_ele'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='no_indicacion[{{ $titleId }}][]' value="{{ $item['data']['no_indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='angulo[{{ $titleId }}][]' value="{{ $item['data']['angulo'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='nr[{{ $titleId }}][]' value="{{ $item['data']['nr'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ni[{{ $titleId }}][]' value="{{ $item['data']['ni'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='la[{{ $titleId }}][]' value="{{ $item['data']['la'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='lc[{{ $titleId }}][]' value="{{ $item['data']['lc'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='dist_zapata[{{ $titleId }}][]' value="{{ $item['data']['dist_zapata'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='sa[{{ $titleId }}][]' value="{{ $item['data']['sa'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='da[{{ $titleId }}][]' value="{{ $item['data']['da'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ht[{{ $titleId }}][]' value="{{ $item['data']['ht'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='evaluacion[{{ $titleId }}][]' value="{{ $item['data']['evaluacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='fotos[{{ $titleId }}][]' value="{{ $item['data']['fotos'] }}"></td>
+                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
 
                                                         </tr>
 

@@ -556,7 +556,7 @@
                                                     <!-- FILAS -->
                                                     @if ($item['tipo'] == 'fila')
                                                         <tr data-titulo="{{ $titleId }}">
-                                                            <td>{{ $contador }}</td>
+                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
                                                             <td><input type="text" class="form-control" name='No[{{ $titleId }}][]' value="{{ $item['data']['No'] }}"></td>
                                                             <td><input type="text" class="form-control" name='componente[{{ $titleId }}][]' value="{{ $item['data']['componente'] }}"></td>
                                                             <td><input type="text" class="form-control" name='no_indicacion[{{ $titleId }}][]' value="{{ $item['data']['no_indicacion'] }}"></td>
