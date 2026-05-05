@@ -53,7 +53,7 @@ class NotificacionController extends Controller
 
     public function crearNotificacionesCertificados()
     {
-        // Obtener el usuario autenticado
+         // Obtener el usuario autenticado
         $user = Auth::user();
         $rol = $user->rol;
         // Obtener fechas límite para las consultas
@@ -109,6 +109,8 @@ class NotificacionController extends Controller
             $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
             // Obtener el ISO relacionado
             $iso = $generalEyc->ISO ? $generalEyc->ISO->NombreISO : null;
+            Log::info('***********************');
+            Log::info('iso: ', ['iso' => $iso]);
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
                 $tipo = $generalEyc->Tipo;
@@ -118,14 +120,18 @@ class NotificacionController extends Controller
                 {
                     if ($tipo === 'EQUIPOS') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);
                     } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);
                     } else {
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;
                     }
                 }
-                elseif($iso == '17025')
+                else //if($iso == '17025')
                 {
                     if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
@@ -225,7 +231,7 @@ class NotificacionController extends Controller
                         $notificacion->leida = false;
                         $notificacion->save();
 
-                        // 📧 Enviar correo
+                    // 📧 Enviar correo
                     //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                     }
 

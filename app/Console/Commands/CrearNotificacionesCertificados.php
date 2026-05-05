@@ -81,6 +81,8 @@ class CrearNotificacionesCertificados extends Command
             $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
             // Obtener el ISO relacionado
             $iso = $generalEyc->ISO ? $generalEyc->ISO->NombreISO : null;
+            Log::info('***********************');
+            Log::info('iso: ', ['iso' => $iso]);
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
                 $tipo = $generalEyc->Tipo;
@@ -90,14 +92,18 @@ class CrearNotificacionesCertificados extends Command
                 {
                     if ($tipo === 'EQUIPOS') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);
                     } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);
                     } else {
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;
                     }
                 }
-                elseif($iso == '17025')
+                else //if($iso == '17025')
                 {
                     if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
