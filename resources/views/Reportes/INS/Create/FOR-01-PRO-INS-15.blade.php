@@ -888,6 +888,7 @@
         //TERMINA  restoreData()
         
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -917,6 +918,7 @@
         });
 
         $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 1;
             // Recontar filas existentes que NO son títulos
@@ -947,6 +949,7 @@
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 1;
             // Recontar filas existentes que NO son títulos
@@ -960,94 +963,82 @@
 
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"> 
-                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
-                    <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
-                    <td><input type="text" class="form-control" name="No_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="Tipo_Ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-                    <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="Referencia"></td>
-                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="DNR (in)"></td>
-                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="H.T."></td>
-                    <td><input type="text" class="form-control" name="LAxial[${lastTitle}][]" placeholder="Long. Axial (in)"></td>
-                    <td><input type="text" class="form-control" name="LCirc[${lastTitle}][]" placeholder="Long. Circ. (in)"></td>
-                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="d (in)"></td>
-                    <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="ta (in)"></td>
-                    <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="%Perdida"></td>
-                    <td><input type="text" class="form-control" name="Espe[${lastTitle}][]" placeholder="Espesor Remanente (in)f"></td>
-                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                        <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"> 
+                        <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
+                        <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
+                        <td><input type="text" class="form-control" name="No_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
+                        <td><input type="text" class="form-control" name="Tipo_Ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                        <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="Referencia"></td>
+                        <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="DNR (in)"></td>
+                        <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="H.T."></td>
+                        <td><input type="text" class="form-control" name="LAxial[${lastTitle}][]" placeholder="Long. Axial (in)"></td>
+                        <td><input type="text" class="form-control" name="LCirc[${lastTitle}][]" placeholder="Long. Circ. (in)"></td>
+                        <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="d (in)"></td>
+                        <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="ta (in)"></td>
+                        <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="%Perdida"></td>
+                        <td><input type="text" class="form-control" name="Espe[${lastTitle}][]" placeholder="Espesor Remanente (in)f"></td>
+                        <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 
             $('#dynamicTable tbody').append(newRow);
             }
             //saveData(document.querySelectorAll("form")[1].id);
-            verificarYAgregarLongitud();
             saveData($(this).closest('form').attr('id'));
         }
     );
             // Restaurar datos al cargar la página
             restoreData();
 });
-function verificarYAgregarLongitud() {
+    function verificarYAgregarLongitud() {
 
-    const $tbody = $('#dynamicTable tbody');
-    const $rows = $tbody.children('tr');
+        const $rows = $('#dynamicTable tbody tr');
 
-    let contadorBloque = 0;
-    let $ultimoElementoBloque = null;
+        let contadorBloque = 0;
 
-    $rows.each(function () {
+        $rows.each(function () {
 
-        const $row = $(this);
+            const $row = $(this);
 
-        //  Ignorar longitudes existentes (no cuentan)
-        if ($row.hasClass('long-row')) {
-            contadorBloque = 0;
-            $ultimoElementoBloque = null;
-            return;
-        }
-
-        //  Contar título o fila normal
-        //if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {//MODIFICAR
-        if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
-            contadorBloque++;
-            $ultimoElementoBloque = $row;
-        }
-        //-----------------------------------------Hacer ajuste de "N" filas por bloque
-        //  Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 20) {
-
-            const lastTitle = $row.data('titulo') || 'sin_titulo';
-
-            const newLong = `
-                <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="14">Longitud Inspeccionada</td>
-                    <td>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <input type="text"
-                                class="form-control w-90 long-text"
-                                name="Long_Inspecc[${lastTitle}][]"
-                                placeholder="Ingrese Longitud Inspeccionada...">
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminar">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </div>
-                    </td>
-                </tr>`;
-
-            // Evitar duplicados
-            if (!$ultimoElementoBloque.next().hasClass('long-row')) {
-                $ultimoElementoBloque.after(newLong);
+            // ✅ Si ya hay longitud → cerrar bloque
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
             }
 
-            // Reiniciar contador para siguiente bloque
-            contadorBloque = 0;
-            $ultimoElementoBloque = null;
-        }
-    });
-}
+            contadorBloque++;
+
+            // 🎯 Cuando llega a 10 → insertar longitud
+            if (contadorBloque === 10) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="14">Longitud Inspeccionada</td>
+                        <td>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
+                }
+
+                // 🔄 cerrar bloque
+                contadorBloque = 0;
+            }
+        });
+    }
+
 
         $(document).ready(function() {
         function actualizarInputsE() {

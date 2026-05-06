@@ -1068,6 +1068,7 @@ $(document).ready(function() {
 
         /*Recuperación información fin */
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -1096,6 +1097,7 @@ $(document).ready(function() {
         });
 
         $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1125,6 +1127,7 @@ $(document).ready(function() {
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1159,7 +1162,7 @@ $(document).ready(function() {
                 $('#dynamicTable tbody').append(newRow);
             }
             //saveData(document.querySelectorAll("form")[1].id);
-            verificarYAgregarLongitud();
+            
             saveData($(this).closest('form').attr('id'));
         }
     );
@@ -1170,22 +1173,23 @@ $(document).ready(function() {
 
     function verificarYAgregarLongitud() {
 
-        const $tbody = $('#dynamicTable tbody');
-        const $rows = $tbody.children('tr');
+        const $rows = $('#dynamicTable tbody tr');
 
         let contadorBloque = 0;
-        let $ultimoElementoBloque = null;
 
         $rows.each(function () {
 
             const $row = $(this);
 
-            // ✅ Contar TODO (títulos, filas y longitudes)
-            contadorBloque++;
-            $ultimoElementoBloque = $row;
+            // ✅ Si ya hay longitud → cerrar bloque
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
+            }
 
-            //-----------------------------------------
-            // 🎯 Cuando llegue a 10 → insertar longitud
+            contadorBloque++;
+
+            // 🎯 Cuando llega a 10 → insertar longitud
             if (contadorBloque === 10) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
@@ -1194,12 +1198,9 @@ $(document).ready(function() {
                     <tr class="long-row" data-titulo="${lastTitle}">
                         <td colspan="13">Longitud Inspeccionada</td>
                         <td>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <input type="text"
-                                    class="form-control w-90 long-text"
-                                    name="Long_Inspecc[${lastTitle}][]"
-                                    placeholder="Ingrese Longitud Inspeccionada...">
-                            </div>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
                         </td>
                         <td>
                             <button type="button" class="btn btn-danger btnEliminar">
@@ -1208,18 +1209,16 @@ $(document).ready(function() {
                         </td>
                     </tr>`;
 
-                // 👉 Evitar duplicados
-                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
-                    $ultimoElementoBloque.after(newLong);
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
                 }
 
-                // 🔄 Reiniciar contador
+                // 🔄 cerrar bloque
                 contadorBloque = 0;
-                $ultimoElementoBloque = null;
             }
         });
     }
-
 /*function verificarYAgregarLongitud() {
 
     const $tbody = $('#dynamicTable tbody');

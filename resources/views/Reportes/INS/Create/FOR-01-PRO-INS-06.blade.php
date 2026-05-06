@@ -1099,6 +1099,7 @@ $(document).ready(function() {
         }
 
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -1128,6 +1129,7 @@ $(document).ready(function() {
         });
 
         $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1149,7 +1151,7 @@ $(document).ready(function() {
                 </td>
             </tr>
         `;
- 
+
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
         //saveData(document.querySelectorAll("form")[1].id);
@@ -1158,6 +1160,7 @@ $(document).ready(function() {
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1200,9 +1203,8 @@ $(document).ready(function() {
                     <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 
-                            $('#dynamicTable tbody').append(newRow);
+                $('#dynamicTable tbody').append(newRow);
             }
-            verificarYAgregarLongitud();
             saveData($(this).closest('form').attr('id'));
         });
 
@@ -1211,30 +1213,25 @@ $(document).ready(function() {
     });
 
     function verificarYAgregarLongitud() {
-        const $tbody = $('#dynamicTable tbody');
-        const $rows = $tbody.children('tr');
+
+        const $rows = $('#dynamicTable tbody tr');
 
         let contadorBloque = 0;
-        let $ultimoElementoBloque = null;
 
         $rows.each(function () {
+
             const $row = $(this);
 
-            // Ignorar longitudes existentes
+            // ✅ Si ya hay longitud → cerrar bloque
             if ($row.hasClass('long-row')) {
                 contadorBloque = 0;
-                $ultimoElementoBloque = null;
                 return;
             }
 
-            // Contar título o fila normal
-            if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
-                contadorBloque++;
-                $ultimoElementoBloque = $row;
-            }
-            //-----------------------------------------Hacer ajuste de "N" filas por bloque
-            // Cuando llegue a 11 → insertar longitud
-            if (contadorBloque === 10) {
+            contadorBloque++;
+
+            // 🎯 Cuando llega a 10 → insertar longitud
+            if (contadorBloque === 15) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 
@@ -1242,25 +1239,24 @@ $(document).ready(function() {
                     <tr class="long-row" data-titulo="${lastTitle}">
                         <td colspan="25">Longitud Inspeccionada</td>
                         <td>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <input type="text"
-                                    class="form-control w-90 long-text"
-                                    name="Long_Inspecc[${lastTitle}][]"
-                                    placeholder="Ingrese Longitud Inspeccionada...">
-                                <button type="button" class="btn btn-danger btnEliminar">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </div>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
                         </td>
                     </tr>`;
 
-                // Evitar duplicados
-                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
-                    $ultimoElementoBloque.after(newLong);
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
                 }
 
+                // 🔄 cerrar bloque
                 contadorBloque = 0;
-                $ultimoElementoBloque = null;
             }
         });
     }
