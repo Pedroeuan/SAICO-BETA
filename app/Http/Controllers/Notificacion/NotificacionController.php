@@ -55,7 +55,7 @@ class NotificacionController extends Controller
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
-        $rol = $user->rol;
+
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
         $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
@@ -71,35 +71,11 @@ class NotificacionController extends Controller
         $fecha0DiasAntes = $fechaActual->copy()->addDays(0)->toDateString();
 
         // Obtener todos los certificados que están relacionados con la tabla general_eyc
-        //$certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
-            //->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
-            //->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
-            //->get();
-            $certificados = Certificados::with('generaleyc.ISO')
-                ->where(function ($query) use (
-                    $fecha45DiasAntes, $fecha40DiasAntes, $fecha35DiasAntes,
-                    $fecha30DiasAntes, $fecha25DiasAntes, $fecha20DiasAntes,
-                    $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes,
-                    $fecha5DiasAntes, $fecha0DiasAntes
-                ) {
-                    $query->whereIn('Prox_fecha_calibracion', [
-                        $fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes,
-                        $fecha30DiasAntes,$fecha25DiasAntes,$fecha20DiasAntes,
-                        $fecha15DiasAntes,$fecha10DiasAntes,$fecha7DiasAntes,
-                        $fecha5DiasAntes,$fecha0DiasAntes
-                    ])
-                    ->orWhereIn('Fecha_calibracion', [
-                        $fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes,
-                        $fecha30DiasAntes,$fecha25DiasAntes,$fecha20DiasAntes,
-                        $fecha15DiasAntes,$fecha10DiasAntes,$fecha7DiasAntes,
-                        $fecha5DiasAntes,$fecha0DiasAntes
-                    ]);
-                })
-                ->where(function ($query) {
-                    $query->whereDate('Prox_fecha_calibracion', '>=', now())
-                        ->orWhereDate('Fecha_calibracion', '>=', now());
-                })
-                ->get();
+        $certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
+            ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->get();
+
         // Recorrer cada certificado
         foreach ($certificados as $certificado) {
             // Obtener el registro de general_eyc relacionado con el certificado
@@ -118,14 +94,18 @@ class NotificacionController extends Controller
                 {
                     if ($tipo === 'EQUIPOS') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);
                     } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);
                     } else {
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;
                     }
                 }
-                elseif($iso == '17025')
+                else //if($iso == '17025')
                 {
                     if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;

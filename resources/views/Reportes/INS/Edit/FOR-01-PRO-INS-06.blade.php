@@ -573,33 +573,33 @@
                                                     <!-- FILAS -->
                                                     @if ($item['tipo'] == 'fila')
                                                         <tr data-titulo="{{ $titleId }}">
-                                                            <td>{{ $contador }}</td>
-                                                        <td><input type="text" class="form-control" name='ID[{{ $titleId}}][]' value="{{ $item['data']['ID'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='elemento[{{ $titleId }}][]' value="{{ $item['data']['elemento'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='Ønom[{{ $titleId }}][]' value="{{ $item['data']['Ønom'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='Øext[{{ $titleId }}][]' value="{{ $item['data']['Øext'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='nivel[{{ $titleId }}][]' value="{{ $item['data']['nivel'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='12_00[{{ $titleId }}][]' value="{{ $item['data']['12_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='01_00[{{ $titleId }}][]' value="{{ $item['data']['01_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='01_30[{{ $titleId }}][]' value="{{ $item['data']['01_30'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='02_00[{{ $titleId }}][]' value="{{ $item['data']['02_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='03_00[{{ $titleId }}][]' value="{{ $item['data']['03_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='04_00[{{ $titleId }}][]' value="{{ $item['data']['04_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='04_30[{{ $titleId }}][]' value="{{ $item['data']['04_30'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='05_00[{{ $titleId }}][]' value="{{ $item['data']['05_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='06_00[{{ $titleId }}][]' value="{{ $item['data']['06_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='07_00[{{ $titleId }}][]' value="{{ $item['data']['07_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='07_30[{{ $titleId }}][]' value="{{ $item['data']['07_30'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='08_00[{{ $titleId }}][]' value="{{ $item['data']['08_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='09_00[{{ $titleId }}][]' value="{{ $item['data']['09_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='10_00[{{ $titleId }}][]' value="{{ $item['data']['10_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='10_30[{{ $titleId }}][]' value="{{ $item['data']['10_30'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='11_00[{{ $titleId }}][]' value="{{ $item['data']['11_00'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tmin[{{ $titleId }}][]' value="{{ $item['data']['tmin'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tmax[{{ $titleId }}][]' value="{{ $item['data']['tmax'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='tprom[{{ $titleId }}][]' value="{{ $item['data']['tprom'] }}"></td>
-                                                        <td><input type="text" class="form-control" name='observaciones[{{ $titleId }}][]' value="{{ $item['data']['observaciones'] }}"></td>
-                                                        <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                            <td><input type="text" class="form-control" name='ID[{{ $titleId}}][]' value="{{ $item['data']['ID'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='elemento[{{ $titleId }}][]' value="{{ $item['data']['elemento'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Ønom[{{ $titleId }}][]' value="{{ $item['data']['Ønom'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Øext[{{ $titleId }}][]' value="{{ $item['data']['Øext'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='nivel[{{ $titleId }}][]' value="{{ $item['data']['nivel'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='12_00[{{ $titleId }}][]' value="{{ $item['data']['12_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='01_00[{{ $titleId }}][]' value="{{ $item['data']['01_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='01_30[{{ $titleId }}][]' value="{{ $item['data']['01_30'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='02_00[{{ $titleId }}][]' value="{{ $item['data']['02_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='03_00[{{ $titleId }}][]' value="{{ $item['data']['03_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='04_00[{{ $titleId }}][]' value="{{ $item['data']['04_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='04_30[{{ $titleId }}][]' value="{{ $item['data']['04_30'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='05_00[{{ $titleId }}][]' value="{{ $item['data']['05_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='06_00[{{ $titleId }}][]' value="{{ $item['data']['06_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='07_00[{{ $titleId }}][]' value="{{ $item['data']['07_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='07_30[{{ $titleId }}][]' value="{{ $item['data']['07_30'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='08_00[{{ $titleId }}][]' value="{{ $item['data']['08_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='09_00[{{ $titleId }}][]' value="{{ $item['data']['09_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='10_00[{{ $titleId }}][]' value="{{ $item['data']['10_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='10_30[{{ $titleId }}][]' value="{{ $item['data']['10_30'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='11_00[{{ $titleId }}][]' value="{{ $item['data']['11_00'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='tmin[{{ $titleId }}][]' value="{{ $item['data']['tmin'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='tmax[{{ $titleId }}][]' value="{{ $item['data']['tmax'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='tprom[{{ $titleId }}][]' value="{{ $item['data']['tprom'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='observaciones[{{ $titleId }}][]' value="{{ $item['data']['observaciones'] }}"></td>
+                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                         </tr>
                                                         @php $contador++; @endphp
                                                     @endif
@@ -1003,6 +1003,7 @@ $(document).ready(function() {
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -1026,6 +1027,7 @@ $(document).ready(function() {
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
@@ -1072,30 +1074,32 @@ $(document).ready(function() {
         }
     );
 
-    $('#addLongBtn').click(function () {
-    const lastTitle = $('.titulo-row').length > 0
-        ? $('.titulo-row').last().data('titulo')
-        : 'sin_titulo';
+        $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
+            //let numFilas = parseInt($('#numRows').val());
+            // Recontar filas existentes que NO son títulos
+            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
 
-    const newLong = `
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+            <!--<tr class="titulo-row long-row" data-titulo="${lastTitle}">-->
                 <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="25">Longitud Inspeccionada</td>
-                    <td>
-                        <input type="text"
-                            class="form-control long-text"
-                            name="Long_Inspecc[${lastTitle}][]"
-                            placeholder="Ingrese Longitud Inspeccionada...">
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-danger btnEliminar">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-    `;
+                <td colspan="25"> Longitud Inspeccionada</td>
+                <td>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                        <td><button type="button" class="btn btn-danger btnEliminar">
+                            <i class="fa fa-times"  aria-hidden="true"></i>
+                        </button></td>
+                    </div>
+                </td>
+            </tr>
+        `;
 
-    $('#dynamicTable tbody').append(newLong);
-});
+        $('#dynamicTable tbody').append(newTitle);
+        updateTitulos(); // Actualizar lista de títulos
+        });
 
     
         $('form').submit(function(e) {
@@ -1126,30 +1130,23 @@ $(document).ready(function() {
 
     function verificarYAgregarLongitud() {
 
-        const $tbody = $('#dynamicTable tbody');
-        const $rows = $tbody.children('tr');
+        const $rows = $('#dynamicTable tbody tr');
 
         let contadorBloque = 0;
-        let $ultimoElementoBloque = null;
 
         $rows.each(function () {
 
             const $row = $(this);
 
-            //  Ignorar longitudes existentes (no cuentan)
+            // ✅ Si ya hay longitud → cerrar bloque
             if ($row.hasClass('long-row')) {
                 contadorBloque = 0;
-                $ultimoElementoBloque = null;
                 return;
             }
 
-            //  Contar título o fila normal
-            if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
-                contadorBloque++;
-                $ultimoElementoBloque = $row;
-            }
-            //-----------------------------------------Hacer ajuste de "N" filas por bloque
-            //  Cuando llegue a 11 → insertar longitud
+            contadorBloque++;
+
+            // 🎯 Cuando llega a 10 → insertar longitud
             if (contadorBloque === 15) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
@@ -1158,30 +1155,25 @@ $(document).ready(function() {
                     <tr class="long-row" data-titulo="${lastTitle}">
                         <td colspan="25">Longitud Inspeccionada</td>
                         <td>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <input type="text"
-                                    class="form-control w-90 long-text"
-                                    name="Long_Inspecc[${lastTitle}][]"
-                                    placeholder="Ingrese Longitud Inspeccionada...">
-                                <td>
-                                    <button type="button" class="btn btn-danger btnEliminar">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </div>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
                         </td>
                     </tr>`;
 
-                //  Evitar duplicados
-                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
-                    $ultimoElementoBloque.after(newLong);
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
                 }
 
-                //  Reiniciar contador para siguiente bloque
+                // 🔄 cerrar bloque
                 contadorBloque = 0;
-                $ultimoElementoBloque = null;
             }
-
         });
     }
 

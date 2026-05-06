@@ -572,7 +572,7 @@
                                                     <!-- FILAS -->
                                                     @if ($item['tipo'] == 'fila')
                                                         <tr data-titulo="{{ $titleId }}">
-                                                            <td>{{ $contador }}</td>
+                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
                                                             <td><input type="text" class="form-control" name="ID[{{ $titleId }}][]" value="{{ $item['data']['ID'] }}"></td>
                                                             <td><input type="text" class="form-control" name="no_junta[{{ $titleId }}][]" value="{{ $item['data']['no_junta'] }}"></td>
                                                             <td><input type="text" class="form-control" name="lado_a[{{ $titleId }}][]" value="{{ $item['data']['lado_a'] }}"></td>
@@ -1090,6 +1090,7 @@ $(document).ready(function() {
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0;
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -1113,6 +1114,7 @@ $(document).ready(function() {
         });
 
         $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
 
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
@@ -1137,6 +1139,7 @@ $(document).ready(function() {
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1208,67 +1211,54 @@ $(document).ready(function() {
 
 });
 
-        function verificarYAgregarLongitud() {
+function verificarYAgregarLongitud() {
 
-        const $tbody = $('#dynamicTable tbody');
-        const $rows = $tbody.children('tr');
+        const $rows = $('#dynamicTable tbody tr');
 
         let contadorBloque = 0;
-        let $ultimoElementoBloque = null;
 
         $rows.each(function () {
 
             const $row = $(this);
 
-            // ❌ Ignorar longitudes existentes (no cuentan)
+            // ✅ Si ya hay longitud → cerrar bloque
             if ($row.hasClass('long-row')) {
                 contadorBloque = 0;
-                $ultimoElementoBloque = null;
                 return;
             }
 
-            // ✅ Contar título o fila normal
-            if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
-                contadorBloque++;
-                $ultimoElementoBloque = $row;
-            }
-            //-----------------------------------------Hacer ajuste de "N" filas por bloque
-            // 🎯 Cuando llegue a 11 → insertar longitud
+            contadorBloque++;
+
+            // 🎯 Cuando llega a 10 → insertar longitud
             if (contadorBloque === 10) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 
                 const newLong = `
                     <tr class="long-row" data-titulo="${lastTitle}">
-                        <td colspan="22">Longitud Inspeccionada</td>
+                        <td colspan="23">Longitud Inspeccionada</td>
                         <td>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <input type="text"
-                                    class="form-control w-90 long-text"
-                                    name="Long_Inspecc[${lastTitle}][]"
-                                    placeholder="Ingrese Longitud Inspeccionada...">
-                                <td>
-                                    <button type="button" class="btn btn-danger btnEliminar">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </div>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
                         </td>
                     </tr>`;
 
-                // 👉 Evitar duplicados
-                if (!$ultimoElementoBloque.next().hasClass('long-row')) {
-                    $ultimoElementoBloque.after(newLong);
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
                 }
 
-                // 🔄 Reiniciar contador para siguiente bloque
+                // 🔄 cerrar bloque
                 contadorBloque = 0;
-                $ultimoElementoBloque = null;
             }
-
         });
     }
-        
     /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
