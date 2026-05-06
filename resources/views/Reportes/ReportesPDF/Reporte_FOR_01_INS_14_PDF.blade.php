@@ -125,7 +125,7 @@
             width: 100%;
             text-align: center;
             font-size: 8px;
-            border: 1px solid black; 
+            /*border: 1px solid black; */ 
         }
 
         .datosresultados td, .datosresultados th {
@@ -370,7 +370,7 @@
                     </table>
             </footer>
 
-        @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+        @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 
                 <div style="margin-bottom: 0px;"></div>
@@ -705,60 +705,59 @@
                             </tr>                               
                         </thead>
                             <tbody>
-                                
-                                {{-- 🔹 TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="14" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
+
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="14" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
+
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                    <td>{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Tip_Ind'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['L_PGL'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['A_PGL'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['AL_PGL'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['X'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Y'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['DA_PROF'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['PA'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['SA'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['TMIN'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['SCAN'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['EVAL'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['FOTOS'] ?? '' }}</td>
+                                                </tr>
+                                            @endif
+
+                                    {{-- 🔹 LONGITUD INSPECCIONADA --}}
+                                    @if (($item['tipo'] ?? null) == 'longitud')
+                                    <tr class="">
+                                        <td colspan="9" rowspan="2"><b>SIR</b>= Sin indicaciones Relevantes <b>L</b>= Indicacion Lineal <b>R</b>= Indicacion Redondeada <b>A</b>= Aceptado 
+                                        <b>R</b>= Rechazado <br> <b>FP</b>= Falta de Penetracion <b>FF</b>= Falta de Fusion <b>P</b>= Poros <b>PA</b>= Poros Agrupados
+                                        <b>LA</b>= Linea de Escoria (<b>DA</b>=Profundidad / <b>PA</b>=Distancia superficial / <b>SA</b>= Distancia angular)
                                         </td>
+                                        <th colspan="3">Longitud inspeccionada:</th>
+                                        <th colspan="2">{{ $item['valor'] ?? '' }} m</th>
                                     </tr>
-                                @endif
+                                    @endif
 
-                                {{-- 🔹 FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                    <tr class="juntas">
-                                        <td>{{ $junta['no_junta'] }}</td>
-                                        <td>{{ $junta['Tip_Ind'] }}</td>
-                                        <td>{{ $junta['L_PGL'] }}</td>
-                                        <td>{{ $junta['A_PGL'] }}</td>
-                                        <td>{{ $junta['AL_PGL'] }}</td>
-                                        <td>{{ $junta['X'] }}</td>
-                                        <td>{{ $junta['Y'] }}</td>
-                                        <td>{{ $junta['DA_PROF'] }}</td>
-                                        <td>{{ $junta['PA'] }}</td>
-                                        <td>{{ $junta['SA'] }}</td>
-                                        <td>{{ $junta['TMIN'] }}</td>
-                                        <td>{{ $junta['SCAN'] }}</td>
-                                        <td>{{ $junta['EVAL'] }}</td>
-                                        <td>{{ $junta['FOTOS'] }}</td>
-                                    </tr>
                                 @endforeach
-
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="">
-                                    <td colspan="9"><b>SIR</b>= Sin indicaciones Relevantes <b>L</b>= Indicacion Lineal <b>R</b>= Indicacion Redondeada <b>A</b>= Aceptado 
-                                    <b>R</b>= Rechazado <br> <b>FP</b>= Falta de Penetracion <b>FF</b>= Falta de Fusion <b>P</b>= Poros <b>PA</b>= Poros Agrupados
-                                    <b>LA</b>= Linea de Escoria (<b>DA</b>=Profundidad / <b>PA</b>=Distancia superficial / <b>SA</b>= Distancia angular)
-                                    </td>
-                                    <th colspan="3">Longitud inspeccionada:</th>
-                                    <th colspan="2">
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </th>
-                                </tr>
-
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="14"></td>
-                                </tr>--}}
                             </tbody>
-                    </table>
-
-                <table>
-            </div>
-                @if (!$loop->last)
-                    <div style="page-break-after: always;"></div>
-                @endif
+                        </table>
+                    </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
             @endforeach
         </body>
     </html>
