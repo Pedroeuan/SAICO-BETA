@@ -1129,7 +1129,6 @@
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
-
         // Guardar de forma robusta: usar el form relativo o id explícito
         saveData($(this).closest('form').attr('id'));
         });
@@ -1164,6 +1163,7 @@
             </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
             //saveData(document.querySelectorAll("form")[1].id);
             saveData($(this).closest('form').attr('id'));
         }

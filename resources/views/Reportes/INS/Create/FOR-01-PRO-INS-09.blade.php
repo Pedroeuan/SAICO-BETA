@@ -1161,8 +1161,7 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //saveData(document.querySelectorAll("form")[1].id);
-            
+            verificarYAgregarLongitud();
             saveData($(this).closest('form').attr('id'));
         }
     );

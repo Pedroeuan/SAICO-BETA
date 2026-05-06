@@ -1084,6 +1084,7 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
         }
     );
 

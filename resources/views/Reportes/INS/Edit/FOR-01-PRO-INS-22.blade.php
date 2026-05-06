@@ -1293,6 +1293,7 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
         }
     );
             $('form').submit(function(e) {

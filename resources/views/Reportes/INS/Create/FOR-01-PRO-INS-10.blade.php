@@ -1231,6 +1231,7 @@ $(document).ready(function() {
         `;
 
         $('#dynamicTable tbody').append(newTitle);
+        verificarYAgregarLongitud();
         updateTitulos(); // Actualizar lista de títulos
         //saveData(document.querySelectorAll("form")[1].id);
         // Guardar de forma robusta: usar el form relativo o id explícito

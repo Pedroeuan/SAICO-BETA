@@ -983,6 +983,7 @@
 
             $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
             //saveData(document.querySelectorAll("form")[1].id);
             saveData($(this).closest('form').attr('id'));
         }

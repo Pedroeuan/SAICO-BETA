@@ -1170,6 +1170,7 @@
                     </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
         }
     );
 

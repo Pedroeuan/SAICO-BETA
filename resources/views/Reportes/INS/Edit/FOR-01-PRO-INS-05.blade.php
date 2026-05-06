@@ -1054,8 +1054,8 @@ $(document).ready(function() {
                 <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
             </tr>`;
                 $('#dynamicTable tbody').append(newRow);
-
             }
+            verificarYAgregarLongitud();
         }
     );
 

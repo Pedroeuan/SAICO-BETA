@@ -1207,7 +1207,7 @@ $(document).ready(function() {
             }
             saveData($(this).closest('form').attr('id'));
         });
-
+        verificarYAgregarLongitud();
         // Restaurar datos al cargar la página
         restoreData();
     });

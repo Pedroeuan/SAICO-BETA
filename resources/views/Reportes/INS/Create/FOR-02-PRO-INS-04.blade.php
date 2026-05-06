@@ -1118,6 +1118,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
             saveData($(this).closest('form').attr('id'));
         }
     );
