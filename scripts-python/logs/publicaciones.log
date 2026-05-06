@@ -116,3 +116,604 @@ requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.co
 2026-05-04 15:18:57,988 WARNING publicaciones No fue posible conectar con la API de facebook.
 2026-05-04 15:26:20,701 INFO publicaciones Resultado de publicacion en facebook: {"exito": true, "post_id": "935218113016940_122118669975237901", "red": "facebook", "error": null}
 2026-05-04 15:34:38,998 INFO publicaciones Resultado de publicacion en facebook: {"exito": true, "post_id": "935218113016940_122118670899237901", "red": "facebook", "error": null}
+2026-05-06 12:53:34,690 WARNING publicaciones Se omite la red linkedin porque no tiene credenciales configuradas.
+2026-05-06 12:54:01,549 ERROR publicaciones.facebook Error al conectar con Facebook: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRfHZC3n5DlOrwX9HKNfeMlVa0ASYEhtkBXRDOzasae5jQtCFZBfTu7OHzOovnN6Vew7UN7RTimEZB54L7MWFnTZAQBJL9LAIjkvFZCosL0ZCBFEHXj9YLHoONoP5uraAdG7aX3iNGq10ZAwiDTaSkLSfNZBF6hHgONq2vOcgBgbbgJHU2aBp7hZAfzAgytz8kxg55E4XqfmlZBwOW1a2t6OzItUSoOI1Yi (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRfHZC3n5DlOrwX9HKNfeMlVa0ASYEhtkBXRDOzasae5jQtCFZBfTu7OHzOovnN6Vew7UN7RTimEZB54L7MWFnTZAQBJL9LAIjkvFZCosL0ZCBFEHXj9YLHoONoP5uraAdG7aX3iNGq10ZAwiDTaSkLSfNZBF6hHgONq2vOcgBgbbgJHU2aBp7hZAfzAgytz8kxg55E4XqfmlZBwOW1a2t6OzItUSoOI1Yi (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 40, in conectar
+    response = requests.get(
+        f"{self.BASE_URL}/{self.page_id}",
+        params={"access_token": self.page_token},
+        timeout=self.TIMEOUT,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRfHZC3n5DlOrwX9HKNfeMlVa0ASYEhtkBXRDOzasae5jQtCFZBfTu7OHzOovnN6Vew7UN7RTimEZB54L7MWFnTZAQBJL9LAIjkvFZCosL0ZCBFEHXj9YLHoONoP5uraAdG7aX3iNGq10ZAwiDTaSkLSfNZBF6hHgONq2vOcgBgbbgJHU2aBp7hZAfzAgytz8kxg55E4XqfmlZBwOW1a2t6OzItUSoOI1Yi (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+2026-05-06 12:54:02,055 WARNING publicaciones No fue posible conectar con la API de facebook.
+2026-05-06 15:22:08,991 ERROR publicaciones.facebook Error al conectar con Facebook: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 38, in conectar
+    response = requests.get(
+        f"{self.BASE_URL}/{self.page_id}",
+        params={"access_token": self.page_token},
+        timeout=self.TIMEOUT,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+2026-05-06 15:26:12,949 ERROR publicaciones.facebook Error al conectar con Facebook: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 38, in conectar
+    response = requests.get(
+        f"{self.BASE_URL}/{self.page_id}",
+        params={"access_token": self.page_token},
+        timeout=self.TIMEOUT,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+2026-05-06 15:28:48,802 ERROR publicaciones.facebook Error al conectar con Facebook: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 38, in conectar
+    response = requests.get(
+        f"{self.BASE_URL}/{self.page_id}",
+        params={"access_token": self.page_token},
+        timeout=self.TIMEOUT,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+2026-05-06 16:02:17,656 ERROR publicaciones.facebook Error al publicar imagen en Facebook: name 'Path' is not defined
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 94, in publicar_con_imagen
+    imagen_path = Path(ruta_imagen)
+                  ^^^^
+NameError: name 'Path' is not defined
+2026-05-06 16:02:17,660 INFO publicaciones Resultado de publicacion en facebook: {"exito": false, "post_id": null, "red": "facebook", "error": "name 'Path' is not defined"}
+2026-05-06 16:02:19,283 ERROR publicaciones.instagram Error al publicar imagen en Instagram: 400 Client Error: Bad Request for url: https://graph.facebook.com/v19.0/17841461015825471/media
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\instagram.py", line 86, in publicar_con_imagen
+    contenedor_id = self._crear_contenedor(image_url, caption)
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\instagram.py", line 114, in _crear_contenedor
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://graph.facebook.com/v19.0/17841461015825471/media
+2026-05-06 16:02:19,379 INFO publicaciones Resultado de publicacion en instagram: {"exito": false, "post_id": null, "red": "instagram", "error": "400 Client Error: Bad Request for url: https://graph.facebook.com/v19.0/17841461015825471/media"}
+2026-05-06 16:07:15,993 WARNING publicaciones.facebook No fue posible abrir la imagen C:\xampp\htdocs\SAICO-BETA\storage\app\public\publicaciones\2026\05\925d5bf5-cc91-453c-93c2-8386cbb3b980-1778105233.jpg. Se usara publicacion de texto. Error: 403 Client Error: Forbidden for url: https://graph.facebook.com/v19.0/935218113016940/photos
+2026-05-06 16:07:16,309 ERROR publicaciones.facebook Error al publicar texto en Facebook: 403 Client Error: Forbidden for url: https://graph.facebook.com/v19.0/935218113016940/feed
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 110, in publicar_con_imagen
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://graph.facebook.com/v19.0/935218113016940/photos
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 68, in publicar_texto
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 403 Client Error: Forbidden for url: https://graph.facebook.com/v19.0/935218113016940/feed
+2026-05-06 16:07:16,333 INFO publicaciones Resultado de publicacion en facebook: {"exito": false, "post_id": null, "red": "facebook", "error": "403 Client Error: Forbidden for url: https://graph.facebook.com/v19.0/935218113016940/feed"}
+2026-05-06 16:09:00,059 ERROR publicaciones.facebook Error al conectar con Facebook: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 39, in conectar
+    response = requests.get(
+        f"{self.BASE_URL}/{self.page_id}",
+        params={"access_token": self.page_token},
+        timeout=self.TIMEOUT,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRR86ZCZAAZCY8XtRuWgsnnjqgVG39cgEE7T2SFgSKLNNrmdctAkxZCCwx8Rg6I3kbfEKEBKn9r3UfwNepNxY9cPoIkiRorjX6lhhI0U7ZAWKmMMP9ZBznqkGtyqnUZCusVwhNfwMmbKqgqEvBgJS35bRFGWjzmmBWsTqqflosxnIurR6b8h (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+2026-05-06 16:19:30,736 ERROR publicaciones.facebook Error al conectar con Facebook: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRc3RGJijEcDEXi3ZCrrdSWJZBxT0rOoC48FuOrG0gsQsBVCnZAEY0H0OsasBZA0FHvrfvB89455kiZB9M6iJ2Cv9VgPnKxYd7xkj3FoNOZAxKZBfHZCFSk9ZCwCNJ7RutZAu1R5KNE44aQocCca1iCZCOVZAdaEFPvogTrJSZCyYXZA0sZAuFz2xDqZC (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRc3RGJijEcDEXi3ZCrrdSWJZBxT0rOoC48FuOrG0gsQsBVCnZAEY0H0OsasBZA0FHvrfvB89455kiZB9M6iJ2Cv9VgPnKxYd7xkj3FoNOZAxKZBfHZCFSk9ZCwCNJ7RutZAu1R5KNE44aQocCca1iCZCOVZAdaEFPvogTrJSZCyYXZA0sZAuFz2xDqZC (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 39, in conectar
+    response = requests.get(
+        f"{self.BASE_URL}/{self.page_id}",
+        params={"access_token": self.page_token},
+        timeout=self.TIMEOUT,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRc3RGJijEcDEXi3ZCrrdSWJZBxT0rOoC48FuOrG0gsQsBVCnZAEY0H0OsasBZA0FHvrfvB89455kiZB9M6iJ2Cv9VgPnKxYd7xkj3FoNOZAxKZBfHZCFSk9ZCwCNJ7RutZAu1R5KNE44aQocCca1iCZCOVZAdaEFPvogTrJSZCyYXZA0sZAuFz2xDqZC (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+2026-05-06 16:38:07,390 ERROR publicaciones.facebook Error al conectar con Facebook: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRU7KgdJK3QxzS7bKRryqAX381odvZBoReXtM4eNIZBcFHkoUqLMl9DilXEbk4ggrf2Ahy7wqZB2u3ZCnC88vtkVq13IC1ZC2KRgxOF0tUDM3M3eayrpXX9xgV0CbIh2rbspZBamOKG9319tDvdU46jmAmF2HgwO0KnQndZAjzZC9oZAK3qJJWcF6DW2vzwVcVkNEDZAaOlvXFg4OSEWQhVjGPnq3e8PsMZD (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 204, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 759, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 219, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 535, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRU7KgdJK3QxzS7bKRryqAX381odvZBoReXtM4eNIZBcFHkoUqLMl9DilXEbk4ggrf2Ahy7wqZB2u3ZCnC88vtkVq13IC1ZC2KRgxOF0tUDM3M3eayrpXX9xgV0CbIh2rbspZBamOKG9319tDvdU46jmAmF2HgwO0KnQndZAjzZC9oZAK3qJJWcF6DW2vzwVcVkNEDZAaOlvXFg4OSEWQhVjGPnq3e8PsMZD (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\SAICO-BETA\scripts-python\adaptadores\facebook.py", line 39, in conectar
+    response = requests.get(
+        f"{self.BASE_URL}/{self.page_id}",
+        params={"access_token": self.page_token},
+        timeout=self.TIMEOUT,
+    )
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\MATEO\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='graph.facebook.com', port=443): Max retries exceeded with url: /v19.0/935218113016940?access_token=EAAMVaJpZCySUBRU7KgdJK3QxzS7bKRryqAX381odvZBoReXtM4eNIZBcFHkoUqLMl9DilXEbk4ggrf2Ahy7wqZB2u3ZCnC88vtkVq13IC1ZC2KRgxOF0tUDM3M3eayrpXX9xgV0CbIh2rbspZBamOKG9319tDvdU46jmAmF2HgwO0KnQndZAjzZC9oZAK3qJJWcF6DW2vzwVcVkNEDZAaOlvXFg4OSEWQhVjGPnq3e8PsMZD (Caused by NewConnectionError("HTTPSConnection(host='graph.facebook.com', port=443): Failed to establish a new connection: [WinError 10013] Intento de acceso a un socket no permitido por sus permisos de acceso"))
+2026-05-06 16:43:07,830 INFO publicaciones Resultado de publicacion en facebook: {"exito": true, "post_id": "935218113016940_122118919383237901", "red": "facebook", "error": null}

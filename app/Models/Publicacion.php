@@ -39,6 +39,7 @@ class Publicacion extends Model
         'resultado_publicacion',
         'publicado_en_redes',
         'publicado_at',
+        'programado_at',
         'activo',
     ];
 
@@ -53,6 +54,7 @@ class Publicacion extends Model
             'publicado_en_redes' => 'boolean',
             'activo' => 'boolean',
             'publicado_at' => 'datetime',
+            'programado_at' => 'datetime',
         ];
     }
 
@@ -104,6 +106,15 @@ class Publicacion extends Model
         return $query->where('publicado_en_redes', true);
     }
 
+    public function scopePendientesProgramadas(Builder $query): Builder
+    {
+        return $query
+            ->where('activo', true)
+            ->where('publicado_en_redes', false)
+            ->whereNotNull('programado_at')
+            ->where('programado_at', '<=', now());
+    }
+
     public function scopePorTipo(Builder $query, TipoPublicacion|string $tipo): Builder
     {
         $valor = $tipo instanceof TipoPublicacion ? $tipo->value : $tipo;
@@ -151,6 +162,11 @@ class Publicacion extends Model
         }
 
         return 'exito';
+    }
+
+    public function estaProgramada(): bool
+    {
+        return $this->programado_at !== null && !$this->publicado_en_redes;
     }
 
     protected static function generarSlugUnico(string $titulo, ?int $ignorarId = null): string

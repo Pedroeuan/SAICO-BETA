@@ -9,45 +9,35 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     /**
-     * Los comandos Artisan proporcionados por la aplicación.
+     * Los comandos Artisan proporcionados por la aplicacion.
      *
      * @var array
      */
     protected $commands = [
-        // Registra aquí los comandos personalizados
-        Commands\CrearNotificacionesCertificados::class, // Añade tu comando aquí
+        Commands\CrearNotificacionesCertificados::class,
+        Commands\PublicarPublicacionesProgramadas::class,
     ];
 
     /**
-     * Definir el programador de comandos de la aplicación.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
+     * Definir el programador de comandos de la aplicacion.
      */
     protected function schedule(Schedule $schedule)
     {
-        // Programar el comando para que se ejecute diariamente
-        $schedule->command('notificaciones:crear-certificados')->daily(); //cada dia
-        //$schedule->command('notificaciones:crear-certificados')->everyMinute(); //cada minuto
-        //$schedule->command('notificaciones:crear-certificados')->dailyAt('02:00'); //ejecutar en un horario específico (por ejemplo, a las 2 am
-
-        // vehiculos 
+        $schedule->command('notificaciones:crear-certificados')->daily();
         $schedule->job(new RevisarVencimientosVehiculosJob)->daily();
+        $schedule->command('publicaciones:procesar-programadas')->everyMinute()->withoutOverlapping();
     }
 
     protected $routeMiddleware = [
         // Otros middlewares...
     ];
 
-    
     /**
-     * Registrar los comandos de consola de la aplicación.
-     *
-     * @return void
+     * Registrar los comandos de consola de la aplicacion.
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

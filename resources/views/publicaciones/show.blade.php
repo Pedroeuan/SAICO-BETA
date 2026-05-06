@@ -84,6 +84,10 @@
                             <div class="fw-semibold">Publicacion en redes</div>
                             <div class="text-muted small">{{ optional($publicacion->publicado_at)->format('d/m/Y H:i') ?: 'Pendiente' }}</div>
                         </div>
+                        <div class="mb-4">
+                            <div class="fw-semibold">Programada para</div>
+                            <div class="text-muted small">{{ optional($publicacion->programado_at)->format('d/m/Y H:i') ?: 'Sin programacion' }}</div>
+                        </div>
                         @if ($publicacion->trashed())
                             <div>
                                 <div class="fw-semibold text-danger">Eliminada logicamente</div>
@@ -117,12 +121,18 @@
 
                         <dt class="col-sm-5">Alt imagen</dt>
                         <dd class="col-sm-7">{{ $publicacion->imagen_alt ?: 'Sin texto alternativo' }}</dd>
+
+                        <dt class="col-sm-5">Modo</dt>
+                        <dd class="col-sm-7">{{ $publicacion->estaProgramada() ? 'Programada' : 'Publicacion inmediata' }}</dd>
                     </dl>
                 </div>
             </div>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
+                    <div class="alert alert-info">
+                        La operacion productiva actual del modulo esta habilitada solo para Facebook. Instagram y LinkedIn permanecen deshabilitados por configuracion.
+                    </div>
                     <h2 class="h5 mb-3">Estado por red social</h2>
                     <div class="list-group list-group-flush">
                         @foreach ($redes as $red)

@@ -7,6 +7,6 @@ que una dependencia rota en una red afecte a las demas.
 __all__ = [
     "RedSocialBase",
     "FacebookAdapter",
+    "InstagramAdapter",
     "LinkedInAdapter",
-    "TwitterAdapter",
 ]

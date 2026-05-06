@@ -5,6 +5,7 @@ import importlib
 import logging
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -30,14 +31,15 @@ logger = logging.getLogger("publicaciones")
 
 ADAPTADORES = {
     "facebook": ("adaptadores.facebook", "FacebookAdapter"),
+    "instagram": ("adaptadores.instagram", "InstagramAdapter"),
     "linkedin": ("adaptadores.linkedin", "LinkedInAdapter"),
-    "twitter": ("adaptadores.twitter", "TwitterAdapter"),
 }
 
 
 def cargar_env() -> dict[str, str]:
-    """Carga variables desde el archivo .env del directorio scripts-python."""
-    load_dotenv(BASE_DIR / ".env")
+    """Carga variables primero desde el .env raiz y luego desde scripts-python/.env."""
+    load_dotenv(BASE_DIR.parent / ".env")
+    load_dotenv(BASE_DIR / ".env", override=True)
     return dict(os.environ)
 
 
@@ -58,9 +60,9 @@ def obtener_conexion(config: dict[str, str]) -> mysql.connector.MySQLConnection:
     """Abre una conexion a MySQL usando las variables del .env del script."""
     return mysql.connector.connect(
         host=config.get("DB_HOST", "127.0.0.1"),
-        user=config.get("DB_USER", ""),
-        password=config.get("DB_PASS", ""),
-        database=config.get("DB_NAME", ""),
+        user=config.get("DB_USER", config.get("DB_USERNAME", "")),
+        password=config.get("DB_PASS", config.get("DB_PASSWORD", "")),
+        database=config.get("DB_NAME", config.get("DB_DATABASE", "")),
         connection_timeout=15,
     )
 
@@ -102,12 +104,19 @@ def obtener_publicacion(conexion: mysql.connector.MySQLConnection, publicacion_i
 
 def credenciales_configuradas(red: str) -> bool:
     """Verifica si la red social tiene todas las credenciales requeridas."""
-    variables = {
-        "facebook": ["FACEBOOK_PAGE_TOKEN", "FACEBOOK_PAGE_ID"],
-        "linkedin": ["LINKEDIN_ACCESS_TOKEN", "LINKEDIN_ORG_ID"],
-        "twitter": ["TWITTER_API_KEY", "TWITTER_API_SECRET", "TWITTER_ACCESS_TOKEN", "TWITTER_ACCESS_SECRET"],
-    }
-    return all(os.getenv(variable) for variable in variables.get(red, []))
+    if red == "facebook":
+        return bool(os.getenv("FACEBOOK_PAGE_TOKEN")) and bool(os.getenv("FACEBOOK_PAGE_ID"))
+
+    if red == "instagram":
+        token = os.getenv("INSTAGRAM_ACCESS_TOKEN") or os.getenv("FACEBOOK_PAGE_TOKEN")
+        return bool(token) and bool(os.getenv("INSTAGRAM_IG_USER_ID"))
+
+    if red == "linkedin":
+        return bool(os.getenv("LINKEDIN_ACCESS_TOKEN")) and bool(
+            os.getenv("LINKEDIN_ORG_ID") or os.getenv("LINKEDIN_PERSON_URN")
+        )
+
+    return False
 
 
 def obtener_adaptador_cls(red: str) -> type[Any] | None:
@@ -132,16 +141,25 @@ def guardar_resultados(
     resultados: dict[str, Any],
 ) -> None:
     """Actualiza la publicacion con el detalle final del intento de autopublicacion."""
+    exito_en_alguna = any(
+        isinstance(resultado, dict) and bool(resultado.get("exito"))
+        for resultado in resultados.values()
+    )
     cursor = conexion.cursor()
     cursor.execute(
         """
         UPDATE publicaciones
-        SET publicado_en_redes = 1,
-            publicado_at = NOW(),
+        SET publicado_en_redes = %s,
+            publicado_at = %s,
             resultado_publicacion = %s
         WHERE id = %s
         """,
-        (json.dumps(resultados, ensure_ascii=False), publicacion_id),
+        (
+            1 if exito_en_alguna else 0,
+            time.strftime("%Y-%m-%d %H:%M:%S") if exito_en_alguna else None,
+            json.dumps(resultados, ensure_ascii=False),
+            publicacion_id,
+        ),
     )
     conexion.commit()
     cursor.close()

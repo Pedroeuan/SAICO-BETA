@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any, Optional
 
 import requests
-from dotenv import load_dotenv
 
 from .base import RedSocialBase
 
@@ -19,7 +18,7 @@ class LinkedInAdapter(RedSocialBase):
 
     def __init__(self) -> None:
         """Carga las credenciales de LinkedIn desde el .env del script."""
-        load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+        self.cargar_entorno()
         self.logger = logging.getLogger("publicaciones.linkedin")
         self.access_token = str(os.getenv("LINKEDIN_ACCESS_TOKEN", "")).strip()
         self.person_urn = str(os.getenv("LINKEDIN_PERSON_URN", "")).strip()

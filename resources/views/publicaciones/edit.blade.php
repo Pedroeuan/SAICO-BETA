@@ -89,6 +89,23 @@
 
 @section('content')
 <div class="container-fluid">
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <div class="font-weight-bold mb-1">No fue posible guardar la publicacion.</div>
+            <ul class="mb-0 pl-3">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('publicaciones.update', $publicacion) }}" enctype="multipart/form-data" class="row" id="publicacion-form">
         @csrf
         @method('PUT')
@@ -96,12 +113,12 @@
         <div class="col-lg-8">
             <div class="card card-warning card-outline publicacion-form-card">
                 <div class="card-header">
-                    <h3 class="card-title">Edición de la publicación</h3>
+                    <h3 class="card-title">Edicion de la publicacion</h3>
                 </div>
                 <div class="card-body">
                     <div class="publicacion-block">
                         <div class="publicacion-block__title">Contenido editorial</div>
-                        <div class="publicacion-block__hint">Actualiza la información principal sin salir del flujo operativo del módulo.</div>
+                        <div class="publicacion-block__hint">Actualiza la informacion principal sin salir del flujo operativo del modulo.</div>
 
                         <div class="form-group">
                             <label for="titulo">Titulo</label>
@@ -117,11 +134,8 @@
                             <label for="contenido">Contenido</label>
                             <textarea class="form-control @error('contenido') is-invalid @enderror" id="contenido" name="contenido" rows="9" maxlength="3000" minlength="20" required>{{ old('contenido', $publicacion->contenido) }}</textarea>
                             <div class="d-flex justify-content-between mt-1">
-                                <small class="text-muted">Mantén claro el beneficio, contexto o llamada a la acción.</small>
+                                <small class="text-muted">Manten claro el beneficio, contexto o llamada a la accion.</small>
                                 <span class="publicacion-counter"><span data-counter-for="contenido">0</span>/3000</span>
-                            </div>
-                            <div id="twitter-warning" class="alert alert-warning py-2 px-3 mt-2 d-none mb-0">
-                                El texto supera 280 caracteres. X lo truncará automáticamente.
                             </div>
                             @error('contenido') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
@@ -152,7 +166,7 @@
 
                     <div class="publicacion-block">
                         <div class="publicacion-block__title">Redes sociales objetivo</div>
-                        <div class="publicacion-block__hint">Conserva o ajusta las redes definidas para la publicación.</div>
+                        <div class="publicacion-block__hint">Por ahora el modulo opera solo con Facebook en produccion. Instagram y LinkedIn quedan fuera hasta nueva habilitacion.</div>
 
                         <div class="row">
                             @php($redesSeleccionadas = old('redes', $publicacion->redes_objetivo ?? []))
@@ -165,15 +179,7 @@
                                                 <i class="{{ $red->icono() }} mr-2"></i>{{ $red->label() }}
                                             </span>
                                         </div>
-                                        <small class="text-muted d-block">
-                                            @if ($red->value === 'linkedin')
-                                                Principal para visibilidad corporativa y servicios.
-                                            @elseif ($red->value === 'facebook')
-                                                Conveniente para alcance visual y comunidad.
-                                            @else
-                                                Recomendado para avisos breves y difusión veloz.
-                                            @endif
-                                        </small>
+                                        <small class="text-muted d-block">{{ $red->descripcion() }}</small>
                                     </label>
                                 </div>
                             @endforeach
@@ -184,7 +190,7 @@
 
                     <div class="publicacion-block mb-0">
                         <div class="publicacion-block__title">Configuracion avanzada</div>
-                        <div class="publicacion-block__hint">Controla enlaces, accesibilidad de imagen y, si lo deseas, una republicación manual.</div>
+                        <div class="publicacion-block__hint">Controla enlaces, accesibilidad de imagen y decide si deseas publicar ahora o dejar la salida programada en Facebook.</div>
 
                         <div class="form-group">
                             <label for="url_destino">URL de destino</label>
@@ -198,20 +204,38 @@
                             @error('imagen_alt') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
+                        @php($programadaAnterior = optional($publicacion->programado_at)->format('Y-m-d\TH:i'))
+                        @php($programadaActiva = old('programar_publicacion', $publicacion->estaProgramada() ? '1' : null))
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="programar_publicacion" name="programar_publicacion" @checked((bool) $programadaActiva)>
+                            <label class="form-check-label" for="programar_publicacion">
+                                Programar publicacion automatica
+                            </label>
+                        </div>
+                        <small class="text-muted d-block mt-1">Si la activas, la publicacion quedara pendiente hasta la fecha configurada.</small>
+
+                        <div class="form-group mt-3" id="programado-wrapper">
+                            <label for="programado_at">Fecha y hora programada</label>
+                            <input type="datetime-local" class="form-control @error('programado_at') is-invalid @enderror" id="programado_at" name="programado_at" value="{{ old('programado_at', $programadaAnterior) }}">
+                            <small class="text-muted d-block mt-1">Ejemplo: programa hoy para que se publique automaticamente el domingo.</small>
+                            @error('programado_at') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                        </div>
+
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="1" id="republicar_redes" name="republicar_redes" @checked(old('republicar_redes'))>
                             <label class="form-check-label" for="republicar_redes">
-                                Republicar en redes sociales
+                                Publicar ahora en redes sociales
                             </label>
                         </div>
-                        <small class="text-muted d-block mt-1">Déjalo desmarcado si solo quieres actualizar el contenido en el sistema.</small>
+                        <small class="text-muted d-block mt-1">Si programas la publicacion, esta opcion se desactiva para evitar conflicto.</small>
                     </div>
                 </div>
                 <div class="card-footer bg-white text-right publicacion-form-footer">
                     <a href="{{ route('publicaciones.show', $publicacion) }}" class="btn btn-default mr-2">Cancelar</a>
                     <button type="submit" class="btn btn-warning" id="submit-button">
                         <span class="spinner-border spinner-border-sm mr-2 d-none" id="submit-spinner" role="status" aria-hidden="true"></span>
-                        Guardar cambios
+                        <span id="submit-label">Guardar cambios</span>
                     </button>
                 </div>
             </div>
@@ -226,7 +250,7 @@
                     <div class="publicacion-preview mb-3">
                         <img id="imagen-preview" src="{{ $publicacion->imagen_url ?: 'https://placehold.co/1200x900?text=Sin+imagen' }}" alt="{{ $publicacion->imagen_alt ?: $publicacion->titulo }}">
                     </div>
-                    <p class="text-muted small mb-0">Si cargas una nueva imagen, reemplazará la actual en el sistema.</p>
+                    <p class="text-muted small mb-0">Si cargas una nueva imagen, reemplazara la actual en el sistema y sera la base para Instagram.</p>
                 </div>
             </div>
 
@@ -250,10 +274,10 @@
                             @endforeach
                         </ul>
                         <div class="small text-muted mt-3">
-                            Último intento: {{ optional($publicacion->publicado_at)->format('d/m/Y H:i') ?: 'Sin fecha registrada' }}
+                            Ultimo intento: {{ optional($publicacion->publicado_at)->format('d/m/Y H:i') ?: 'Sin fecha registrada' }}
                         </div>
                     @else
-                        <div class="alert alert-secondary mb-0">La publicación aún no se ha enviado a redes sociales.</div>
+                        <div class="alert alert-secondary mb-0">La publicacion aun no se ha enviado a redes sociales.</div>
                     @endif
                 </div>
             </div>
@@ -269,10 +293,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const contenido = document.getElementById('contenido');
     const imagen = document.getElementById('imagen');
     const preview = document.getElementById('imagen-preview');
-    const twitterWarning = document.getElementById('twitter-warning');
     const form = document.getElementById('publicacion-form');
     const submitButton = document.getElementById('submit-button');
+    const submitLabel = document.getElementById('submit-label');
     const submitSpinner = document.getElementById('submit-spinner');
+    const programarPublicacion = document.getElementById('programar_publicacion');
+    const programadoWrapper = document.getElementById('programado-wrapper');
+    const programadoAt = document.getElementById('programado_at');
+    const republicarRedes = document.getElementById('republicar_redes');
 
     function updateCounter(fieldId) {
         const field = document.getElementById(fieldId);
@@ -282,8 +310,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function updateTwitterWarning() {
-        twitterWarning.classList.toggle('d-none', contenido.value.length <= 280);
+    function updateProgramacion() {
+        const programada = programarPublicacion.checked;
+        programadoWrapper.classList.toggle('d-none', !programada);
+        programadoAt.required = programada;
+
+        if (programada) {
+            republicarRedes.checked = false;
+            republicarRedes.setAttribute('disabled', 'disabled');
+            submitLabel.textContent = 'Guardar y programar';
+        } else {
+            republicarRedes.removeAttribute('disabled');
+            submitLabel.textContent = republicarRedes.checked ? 'Guardar y publicar ahora' : 'Guardar cambios';
+        }
+    }
+
+    function updateAccionEdicion() {
+        if (!programarPublicacion.checked) {
+            submitLabel.textContent = republicarRedes.checked ? 'Guardar y publicar ahora' : 'Guardar cambios';
+        }
     }
 
     titulo.addEventListener('input', function () {
@@ -292,7 +337,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     contenido.addEventListener('input', function () {
         updateCounter('contenido');
-        updateTwitterWarning();
     });
 
     imagen.addEventListener('change', function (event) {
@@ -308,6 +352,9 @@ document.addEventListener('DOMContentLoaded', function () {
         preview.src = URL.createObjectURL(file);
     });
 
+    programarPublicacion.addEventListener('change', updateProgramacion);
+    republicarRedes.addEventListener('change', updateAccionEdicion);
+
     form.addEventListener('submit', function () {
         submitButton.setAttribute('disabled', 'disabled');
         submitSpinner.classList.remove('d-none');
@@ -315,7 +362,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateCounter('titulo');
     updateCounter('contenido');
-    updateTwitterWarning();
+    updateProgramacion();
+    updateAccionEdicion();
 });
 </script>
 @endsection

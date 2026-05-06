@@ -42,6 +42,7 @@ class PublicacionController extends Controller
             'tipos' => TipoPublicacion::cases(),
             'tipoSeleccionado' => $tipo,
             'estadoSeleccionado' => $estado,
+            'redesCatalogo' => $this->redesDisponibles(),
         ]);
     }
 
@@ -52,7 +53,7 @@ class PublicacionController extends Controller
     {
         return view('publicaciones.create', [
             'tipos' => TipoPublicacion::cases(),
-            'redes' => RedSocial::cases(),
+            'redes' => $this->redesDisponibles(),
         ]);
     }
 
@@ -82,7 +83,7 @@ class PublicacionController extends Controller
     {
         return view('publicaciones.show', [
             'publicacion' => $publicacion,
-            'redes' => RedSocial::cases(),
+            'redes' => $this->redesDisponibles(),
         ]);
     }
 
@@ -94,7 +95,7 @@ class PublicacionController extends Controller
         return view('publicaciones.edit', [
             'publicacion' => $publicacion,
             'tipos' => TipoPublicacion::cases(),
-            'redes' => RedSocial::cases(),
+            'redes' => $this->redesDisponibles(),
         ]);
     }
 
@@ -108,6 +109,14 @@ class PublicacionController extends Controller
             $republicada = (bool) $request->boolean('republicar_redes');
 
             if (!$republicada) {
+                if ($publicacion->estaProgramada()) {
+                    $fecha = optional($publicacion->programado_at)->format('d/m/Y H:i');
+
+                    return redirect()
+                        ->route('publicaciones.show', $publicacion)
+                        ->with('success', "La publicacion se actualizo correctamente y quedo programada para el {$fecha}.");
+                }
+
                 return redirect()
                     ->route('publicaciones.show', $publicacion)
                     ->with('success', 'La publicacion se actualizo correctamente.');
@@ -155,6 +164,13 @@ class PublicacionController extends Controller
      */
     protected function resolverMensajeResultado(Publicacion $publicacion, bool $republicada = false): array
     {
+        if ($publicacion->estaProgramada()) {
+            $accion = $republicada ? 'actualizo' : 'guardo';
+            $fecha = optional($publicacion->programado_at)->format('d/m/Y H:i');
+
+            return ['success', "La publicacion se {$accion} correctamente y quedo programada para el {$fecha}."];
+        }
+
         $resultadoGeneral = $publicacion->resultado_publicacion['_general']['error'] ?? null;
 
         if ($resultadoGeneral === 'Publicacion automatica deshabilitada hasta configurar credenciales y entorno Python.') {
@@ -170,5 +186,18 @@ class PublicacionController extends Controller
             'error' => ['warning', "La publicacion se {$accion}, pero fallo la publicacion en redes sociales."],
             default => ['success', "La publicacion se {$accion} correctamente."],
         };
+    }
+
+    /**
+     * @return array<int, RedSocial>
+     */
+    protected function redesDisponibles(): array
+    {
+        $habilitadas = config('publicaciones.redes_habilitadas', ['facebook']);
+
+        return array_values(array_filter(
+            RedSocial::cases(),
+            fn (RedSocial $red): bool => in_array($red->value, $habilitadas, true)
+        ));
     }
 }

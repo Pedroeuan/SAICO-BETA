@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Optional
 
 import requests
-from dotenv import load_dotenv
 
 from .base import RedSocialBase
 
@@ -20,7 +19,7 @@ class FacebookAdapter(RedSocialBase):
 
     def __init__(self) -> None:
         """Carga las credenciales de Facebook desde el archivo .env del script."""
-        load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+        self.cargar_entorno()
         self.logger = logging.getLogger("publicaciones.facebook")
         self.page_token = str(os.getenv("FACEBOOK_PAGE_TOKEN", "")).strip()
         self.page_id = str(os.getenv("FACEBOOK_PAGE_ID", "")).strip()
@@ -75,6 +74,15 @@ class FacebookAdapter(RedSocialBase):
                 "red": self.nombre_red,
                 "error": None,
             }
+        except requests.RequestException as exc:
+            detalle = self._extraer_error_api(exc.response)
+            self.logger.exception("Error al publicar texto en Facebook: %s", detalle)
+            return {
+                "exito": False,
+                "post_id": None,
+                "red": self.nombre_red,
+                "error": detalle,
+            }
         except Exception as exc:
             self.logger.exception("Error al publicar texto en Facebook: %s", exc)
             return {
@@ -120,6 +128,15 @@ class FacebookAdapter(RedSocialBase):
         except OSError as exc:
             self.logger.warning("No fue posible abrir la imagen %s. Se usara publicacion de texto. Error: %s", ruta_imagen, exc)
             return self.publicar_texto(titulo, contenido, url)
+        except requests.RequestException as exc:
+            detalle = self._extraer_error_api(exc.response)
+            self.logger.exception("Error al publicar imagen en Facebook: %s", detalle)
+            return {
+                "exito": False,
+                "post_id": None,
+                "red": self.nombre_red,
+                "error": detalle,
+            }
         except Exception as exc:
             self.logger.exception("Error al publicar imagen en Facebook: %s", exc)
             return {
@@ -128,3 +145,30 @@ class FacebookAdapter(RedSocialBase):
                 "red": self.nombre_red,
                 "error": str(exc),
             }
+
+    def _extraer_error_api(self, response: Optional[requests.Response]) -> str:
+        if response is None:
+            return "Facebook no devolvio respuesta HTTP."
+
+        try:
+            data = response.json()
+        except ValueError:
+            return f"HTTP {response.status_code}: {response.text.strip()}"
+
+        error = data.get("error") if isinstance(data, dict) else None
+        if isinstance(error, dict):
+            mensaje = str(error.get("message") or f"HTTP {response.status_code}").strip()
+            tipo = str(error.get("type") or "").strip()
+            codigo = str(error.get("code") or "").strip()
+            subcodigo = str(error.get("error_subcode") or "").strip()
+            partes = [
+                parte for parte in [
+                    mensaje,
+                    f"type={tipo}" if tipo else "",
+                    f"code={codigo}" if codigo else "",
+                    f"subcode={subcodigo}" if subcodigo else "",
+                ] if parte
+            ]
+            return " | ".join(partes)
+
+        return f"HTTP {response.status_code}: {response.text.strip()}"

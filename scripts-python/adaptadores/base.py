@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Optional
+
+from dotenv import load_dotenv
 
 
 class RedSocialBase(ABC):
@@ -39,3 +42,9 @@ class RedSocialBase(ABC):
         """Nombre logico de la red basado en la clase."""
         nombre = self.__class__.__name__.replace("Adapter", "")
         return nombre.lower()
+
+    def cargar_entorno(self) -> None:
+        """Carga primero el .env raiz y luego el .env especifico del orquestador."""
+        ruta_adaptador = Path(__file__).resolve()
+        load_dotenv(ruta_adaptador.parents[2] / ".env")
+        load_dotenv(ruta_adaptador.parents[1] / ".env", override=True)

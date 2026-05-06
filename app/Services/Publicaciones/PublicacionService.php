@@ -3,6 +3,7 @@
 namespace App\Services\Publicaciones;
 
 use App\Models\Publicacion;
+use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +30,10 @@ class PublicacionService
 
             return Publicacion::create($payload);
         });
+
+        if ($publicacion->programado_at !== null) {
+            return $publicacion->fresh();
+        }
 
         if (!$this->autopublicacionHabilitada()) {
             $publicacion->forceFill([
@@ -96,10 +101,16 @@ class PublicacionService
                 }
             }
 
+            if ($payload['programado_at'] !== null) {
+                $payload['publicado_en_redes'] = false;
+                $payload['publicado_at'] = null;
+                $payload['resultado_publicacion'] = null;
+            }
+
             $pub->fill($payload);
             $pub->save();
 
-            $pub->setAttribute('debe_republicar', $republicar);
+            $pub->setAttribute('debe_republicar', $republicar && $pub->programado_at === null);
 
             return $pub;
         });
@@ -137,6 +148,52 @@ class PublicacionService
         $pub->delete();
     }
 
+    public function publicarPendientesProgramadas(): int
+    {
+        if (!$this->autopublicacionHabilitada()) {
+            Log::channel('publicaciones')->info('Se omite la publicacion programada porque la autopublicacion esta deshabilitada.');
+
+            return 0;
+        }
+
+        $publicaciones = Publicacion::query()
+            ->pendientesProgramadas()
+            ->orderBy('programado_at')
+            ->get();
+
+        $procesadas = 0;
+
+        foreach ($publicaciones as $publicacion) {
+            try {
+                $resultado = $this->ejecutarScriptPython($publicacion->id);
+                $publicacion->forceFill([
+                    'resultado_publicacion' => $resultado,
+                ])->save();
+                $procesadas++;
+            } catch (Throwable $exception) {
+                Log::channel('publicaciones')->warning('La publicacion programada fallo al enviarse.', [
+                    'publicacion_id' => $publicacion->id,
+                    'error' => $exception->getMessage(),
+                ]);
+
+                $publicacion->forceFill([
+                    'resultado_publicacion' => [
+                        '_general' => [
+                            'exito' => false,
+                            'post_id' => null,
+                            'red' => 'general',
+                            'error' => $exception->getMessage(),
+                        ],
+                    ],
+                    'publicado_en_redes' => false,
+                    'publicado_at' => null,
+                ])->save();
+            }
+        }
+
+        return $procesadas;
+    }
+
     /**
      * Ejecuta el script Python orquestador y persiste el resultado.
      *
@@ -146,6 +203,7 @@ class PublicacionService
     {
         $script = (string) config('publicaciones.python_script');
         $python = (string) config('publicaciones.python_bin', 'python');
+        $timeout = max((int) config('publicaciones.python_timeout', 90), 10);
 
         if ($script === '' || !is_file($script)) {
             throw new RuntimeException('No se encontro el script Python configurado para publicaciones.');
@@ -175,7 +233,6 @@ class PublicacionService
         $salida = '';
         $errores = '';
         $inicio = microtime(true);
-        $timeout = 30;
 
         do {
             $salida .= stream_get_contents($pipes[1]);
@@ -188,7 +245,7 @@ class PublicacionService
 
             if ((microtime(true) - $inicio) >= $timeout) {
                 proc_terminate($process);
-                throw new RuntimeException('El script de publicaciones supero el tiempo limite de 30 segundos.');
+                throw new RuntimeException(sprintf('El script de publicaciones supero el tiempo limite de %d segundos.', $timeout));
             }
 
             usleep(100000);
@@ -209,11 +266,16 @@ class PublicacionService
             throw new RuntimeException('El script Python no devolvio un JSON valido. STDERR: ' . trim($errores));
         }
 
+        $exitoEnAlguna = collect($resultado)->contains(
+            fn (mixed $item): bool => is_array($item) && (bool) ($item['exito'] ?? false)
+        );
+
         $publicacion = Publicacion::query()->findOrFail($id);
         $publicacion->forceFill([
             'resultado_publicacion' => $resultado,
-            'publicado_en_redes' => collect($resultado)->contains(fn (mixed $item): bool => is_array($item) && (bool) ($item['exito'] ?? false)),
-            'publicado_at' => now(),
+            'publicado_en_redes' => $exitoEnAlguna,
+            'publicado_at' => $exitoEnAlguna ? now() : null,
+            'programado_at' => null,
         ])->save();
 
         Log::channel('publicaciones')->info('Resultado de publicacion en redes.', [
@@ -254,17 +316,20 @@ class PublicacionService
      */
     protected function normalizarDatos(array $datos, bool $esNuevo = false): array
     {
+        $redesHabilitadas = config('publicaciones.redes_habilitadas', ['facebook']);
         $redes = array_values(array_unique(array_map('strval', $datos['redes'] ?? $datos['redes_objetivo'] ?? [])));
+        $redes = array_values(array_filter($redes, fn (string $red): bool => in_array($red, $redesHabilitadas, true)));
 
         $payload = [
             'titulo' => (string) $datos['titulo'],
             'contenido' => (string) $datos['contenido'],
             'tipo' => (string) $datos['tipo'],
-            'imagen_alt' => $datos['imagen_alt'] ?: null,
+            'imagen_alt' => ($datos['imagen_alt'] ?? null) ?: null,
             'video' => $datos['video'] ?? null,
-            'url_destino' => $datos['url_destino'] ?: null,
+            'url_destino' => ($datos['url_destino'] ?? null) ?: null,
             'redes_objetivo' => $redes,
             'activo' => (bool) ($datos['activo'] ?? true),
+            'programado_at' => $this->resolverFechaProgramada($datos),
         ];
 
         if ($esNuevo) {
@@ -349,5 +414,17 @@ class PublicacionService
     protected function autopublicacionHabilitada(): bool
     {
         return (bool) config('publicaciones.autopublicar', false);
+    }
+
+    protected function resolverFechaProgramada(array $datos): ?Carbon
+    {
+        $programar = filter_var($datos['programar_publicacion'] ?? false, FILTER_VALIDATE_BOOL);
+        $valor = $datos['programado_at'] ?? null;
+
+        if (!$programar || blank($valor)) {
+            return null;
+        }
+
+        return Carbon::parse((string) $valor);
     }
 }

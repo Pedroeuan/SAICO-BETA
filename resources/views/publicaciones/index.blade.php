@@ -314,12 +314,12 @@
                                         </td>
                                         <td>
                                             <div class="publicaciones-redes">
-                                                @foreach (\App\Enums\RedSocial::cases() as $red)
+                                                @foreach ($redesCatalogo as $red)
                                                     @php($item = $resultado->get($red->value))
                                                     @php($esObjetivo = in_array($red->value, $publicacion->redes_objetivo ?? [], true))
                                                     <span class="publicaciones-red {{ ($item['exito'] ?? false) ? 'is-ok' : ($esObjetivo ? '' : 'is-idle') }}">
                                                         <i class="{{ $red->icono() }}"></i>
-                                                        <span>{{ ucfirst($red->value) }}</span>
+                                                        <span>{{ $red->label() }}</span>
                                                         @if ($esObjetivo)
                                                             <i class="fas {{ ($item['exito'] ?? false) ? 'fa-check-circle' : 'fa-minus-circle' }}"></i>
                                                         @else

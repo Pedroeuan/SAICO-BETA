@@ -9,6 +9,13 @@ use Illuminate\Validation\Rule;
 
 class StorePublicacionRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'programar_publicacion' => $this->boolean('programar_publicacion'),
+        ]);
+    }
+
     public function authorize(): bool
     {
         return true;
@@ -19,6 +26,8 @@ class StorePublicacionRequest extends FormRequest
      */
     public function rules(): array
     {
+        $redesHabilitadas = config('publicaciones.redes_habilitadas', ['facebook']);
+
         return [
             'titulo' => ['required', 'string', 'min:5', 'max:150'],
             'contenido' => ['required', 'string', 'min:20', 'max:3000'],
@@ -27,7 +36,9 @@ class StorePublicacionRequest extends FormRequest
             'imagen_alt' => ['nullable', 'string', 'max:200'],
             'url_destino' => ['nullable', 'url', 'max:500'],
             'redes' => ['required', 'array', 'min:1'],
-            'redes.*' => [Rule::in(array_column(RedSocial::cases(), 'value'))],
+            'redes.*' => [Rule::in(array_values(array_intersect(array_column(RedSocial::cases(), 'value'), $redesHabilitadas)))],
+            'programar_publicacion' => ['nullable', 'boolean'],
+            'programado_at' => ['nullable', Rule::requiredIf(fn (): bool => $this->boolean('programar_publicacion')), 'date', 'after:now'],
         ];
     }
 
@@ -55,7 +66,10 @@ class StorePublicacionRequest extends FormRequest
             'redes.required' => 'Selecciona al menos una red social.',
             'redes.array' => 'Las redes sociales deben enviarse como una lista valida.',
             'redes.min' => 'Selecciona al menos una red social objetivo.',
-            'redes.*.in' => 'Una de las redes sociales seleccionadas no es valida.',
+            'redes.*.in' => 'La red social seleccionada no esta habilitada en este momento.',
+            'programado_at.required_if' => 'Debes indicar la fecha y hora cuando activas la programacion.',
+            'programado_at.date' => 'La fecha programada no tiene un formato valido.',
+            'programado_at.after' => 'La fecha programada debe ser posterior a la fecha y hora actual.',
         ];
     }
 }
