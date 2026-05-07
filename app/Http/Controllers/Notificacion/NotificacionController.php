@@ -54,7 +54,7 @@ class NotificacionController extends Controller
     public function crearNotificacionesCertificados()
     {
         // Obtener el usuario autenticado
-        $user = Auth::user();
+        //$user = Auth::user();
 
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();

@@ -353,7 +353,7 @@
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
-                                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+                                        <!--button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button> --->
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
@@ -1010,11 +1010,11 @@
             contadorBloque++;
 
             // 🎯 Cuando llega a 10 → insertar longitud
-            if (contadorBloque === 10) {
+            if (contadorBloque === 20) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 
-                const newLong = `
+                /*const newLong = `
                     <tr class="long-row" data-titulo="${lastTitle}">
                         <td colspan="14">Longitud Inspeccionada</td>
                         <td>
@@ -1032,14 +1032,13 @@
                 // 👉 evitar duplicado
                 if (!$row.next().hasClass('long-row')) {
                     $row.after(newLong);
-                }
+                }*/
 
                 // 🔄 cerrar bloque
                 contadorBloque = 0;
             }
         });
     }
-
 
         $(document).ready(function() {
         function actualizarInputsE() {
