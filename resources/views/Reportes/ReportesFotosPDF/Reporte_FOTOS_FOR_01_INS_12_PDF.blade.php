@@ -473,7 +473,7 @@
                 <div style="margin-bottom: 6px;"></div>
             </header>
             
-               <table class="datosgenerales">
+                <table class="datosgenerales">
                     <thead class="encabezadoAzul">
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  

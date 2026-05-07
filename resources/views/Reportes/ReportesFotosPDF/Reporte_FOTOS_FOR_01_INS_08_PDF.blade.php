@@ -474,11 +474,9 @@
                     <thead class="encabezadoAzul">
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
-
-                    <thead><tr class="sinBordeth"><th></th></tr></thead> <!-- Fila vacia -->
-                        <tbody>
+                </table>
                         @php
-                              $esHojaCompleta = (count($fotosGrupo) == 1 && !empty($fotosGrupo[0]['una_hoja']) && $fotosGrupo[0]['una_hoja'] == 1);
+                            $esHojaCompleta = (count($fotosGrupo) == 1 && !empty($fotosGrupo[0]['una_hoja']) && $fotosGrupo[0]['una_hoja'] == 1);
                         @endphp
 
                         <table class="imagenes-reporte">
@@ -486,10 +484,10 @@
                                     @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
                                         {{-- 3 imágenes: 2 arriba, 1 abajo --}}
                                         <td class="foto-container">
-                                             <img src="{{ $fotosGrupo[0]['path'] }}">
-                                             <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
+                                            <img src="{{ $fotosGrupo[0]['path'] }}">
+                                            <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
                                         </td>
-                                          <td class="foto-container">
+                                        <td class="foto-container">
                                             <img src="{{ $fotosGrupo[1]['path'] }}">
                                             <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
                                         </td>
@@ -519,7 +517,7 @@
                                     @endif
 
                                     {{-- Relleno cuando NO es hoja completa y faltan imágenes --}}
-                                                                        @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
+                                    @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
                                         @php $faltantes = 4 - count($fotosGrupo); @endphp
                                         @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
                                             @for($i = 0; $i < $faltantes; $i++)

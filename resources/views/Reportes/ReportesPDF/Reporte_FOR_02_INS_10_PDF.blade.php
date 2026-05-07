@@ -345,7 +345,8 @@
                         </tr>                      
                     </table>
 
-                                                
+                    <div style="margin-bottom: 5px;"></div>
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -498,7 +499,7 @@
                     </table>
             </footer>
 
-            @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 <table class="datosgenerales">
 
@@ -665,64 +666,63 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-                                {{-- 🔹 TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="20" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
-                                        </td>
-                                    </tr>
-                                @endif
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="20" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
 
-                                {{-- 🔹 FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                    <tr class="juntas">
-                                        <td>{{ $junta['ID'] }}</td>
-                                        <td>{{ $junta['elemento_tubo'] }}</td>
-                                        <td>{{ $junta['no_aceptacion'] }}</td>
-                                        <td>{{ $junta['no_serie'] }}</td>
-                                        <td>{{ $junta['no_colada'] }}</td>
-                                        <td>{{ $junta['tnominal'] }}</td>
-                                        <td>{{ $junta['diametro'] }}</td>
-                                        <td>{{ $junta['no_ind'] }}</td>
-                                        <td>{{ $junta['tipo_indicacion'] }}</td>
-                                        <td>{{ $junta['nr'] }}</td>
-                                        <td>{{ $junta['ni'] }}</td>
-                                        <td>{{ $junta['ht'] }}</td>
-                                        <td>{{ $junta['prof'] }}</td>
-                                        <td>{{ $junta['la'] }}</td>
-                                        <td>{{ $junta['lc'] }}</td>
-                                        <td>{{ $junta['tmax'] }}</td>
-                                        <td>{{ $junta['tmin'] }}</td>
-                                        <td>{{ $junta['metros_lineales'] }}</td>
-                                        <td>{{ $junta['evaluacion'] }}</td>
-                                        <td>{{ $junta['observaciones'] }}</td>
-                                    </tr>
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+
+                                                    <td>{{ $item['data']['ID'] }}</td>
+                                                    <td>{{ $item['data']['elemento_tubo'] }}</td>
+                                                    <td>{{ $item['data']['no_aceptacion'] }}</td>
+                                                    <td>{{ $item['data']['no_serie'] }}</td>
+                                                    <td>{{ $item['data']['no_colada'] }}</td>
+                                                    <td>{{ $item['data']['tnominal'] }}</td>
+                                                    <td>{{ $item['data']['diametro'] }}</td>
+                                                    <td>{{ $item['data']['no_ind'] }}</td>
+                                                    <td>{{ $item['data']['tipo_indicacion'] }}</td>
+                                                    <td>{{ $item['data']['nr'] }}</td>
+                                                    <td>{{ $item['data']['ni'] }}</td>
+                                                    <td>{{ $item['data']['ht'] }}</td>
+                                                    <td>{{ $item['data']['prof'] }}</td>
+                                                    <td>{{ $item['data']['la'] }}</td>
+                                                    <td>{{ $item['data']['lc'] }}</td>
+                                                    <td>{{ $item['data']['tmax'] }}</td>
+                                                    <td>{{ $item['data']['tmin'] }}</td>
+                                                    <td>{{ $item['data']['metros_lineales'] }}</td>
+                                                    <td>{{ $item['data']['evaluacion'] }}</td>
+                                                    <td>{{ $item['data']['observaciones'] }}</td>
+                                                </tr>
+                                            @endif
+
+                                            {{-- LONGITUD --}}
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="13"></td>
+                                                    <th colspan="5">Longitud inspeccionada:</th>
+                                                    <th colspan="2">{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
+
                                 @endforeach
-
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="sinBordetd">
-                                    <td colspan="12">
-                                    </td>
-                                    <th colspan="5">Longitud inspeccionada:</th>
-                                    <th colspan="2">
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </th>
-                                </tr>
-
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="14"></td>
-                                </tr>--}}
                             </tbody>
-                    </table>
-
-                <table>
-            </div>
-                @if (!$loop->last)
-                    <div style="page-break-after: always;"></div>
-                @endif
+                        </table>
+                    </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
             @endforeach
         </body>
     </html>
