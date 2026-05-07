@@ -238,6 +238,27 @@
 
             <footer>
 
+                    {{--SIMBOLOGÍA al final de cada tabla de grupo --}}
+                            <table class="simbologia">
+                                <thead>
+                                    <tr>
+                                        <th colspan="10" class="celdaAmarillo">SIMBOLOGÍA</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 20px;"><strong>DNR:</strong></td>
+                                        <td style="width: 100px;">DISTANCIA DE NIVEL DE REFERENCIA</td>
+                                        <td style="width: 20px;"><strong>d:</strong></td>
+                                        <td style="width: 150px;">PROFUNDIDAD DE LA INDICACION</td>
+                                        <td style="width: 30px;"><strong><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</strong></td>
+                                        <td style="width: 100px;">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
+                                        <td style="width: 40px;"><strong>C.E. GEN.:</strong></td>
+                                        <td style="width: 100px;">CORROSIÓN EXTERNA GENERALIZADA</td>
+                                        <td style="width: 20px;"><strong>SIR:</strong></td>
+                                        <td style="width: 100px;">SIN INDICACIONES RELEVANTES</td>
+                                    </tr>
+                                </thead>
+                            </table>
+
                     <table class="datosgenerales">                               
                         <tr>                                     
                             <th>OBSERVACIONES:</th>                                         
@@ -424,7 +445,7 @@
                         </thead>                            
                     </table>
             </footer>
-            @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 <div class="content">
                 
@@ -516,69 +537,47 @@
                             <th style="width: 60px;">Observaciones</th>
                         </tr>
                     </thead>
+                        <tbody>
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-                    <tbody>
-                        {{-- TÍTULO del grupo --}}
-                        @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                            <tr class="titulo-row">
-                                <td colspan="12" style="border:.5px solid black;">
-                                    {{ $grupo['titulos_juntas'] }}
-                                </td>
-                            </tr>
-                        @endif
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="17" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
 
-                        {{--FILAS de resultados --}}
-                        @foreach ($grupo['resultados'] as $junta)
-                            <tr class="juntas">
-                                <td>{{ $junta['ID'] }}</td>
-                                <td>{{ $junta['Elemento'] }}</td>
-                                <td>{{ $junta['No_ind'] }}</td>
-                                <td>{{ $junta['Tipo_Ind'] }}</td>
-                                <td>{{ $junta['Referencia'] }}</td>
-                                <td>{{ $junta['DNR'] }}</td>
-                                <td>{{ $junta['HT'] }}</td>
-                                <td>{{ $junta['d'] }}</td>
-                                <td>{{ $junta['ta'] }}</td>
-                                <td>{{ $junta['Perdida'] }}</td>
-                                <td>{{ $junta['Espe'] }}</td>
-                                <td>{{ $junta['Observaciones'] }}</td>
-                            </tr>
-                        @endforeach {{--Cierra $junta --}}
-                    </tbody>
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                    <td>{{ $item['data']['ID'] }}</td>
+                                                    <td>{{ $item['data']['Elemento'] }}</td>
+                                                    <td>{{ $item['data']['No_ind'] }}</td>
+                                                    <td>{{ $item['data']['Tipo_Ind'] }}</td>
+                                                    <td>{{ $item['data']['Referencia'] }}</td>
+                                                    <td>{{ $item['data']['DNR'] }}</td>
+                                                    <td>{{ $item['data']['HT'] }}</td>
+                                                    <td>{{ $item['data']['d'] }}</td>
+                                                    <td>{{ $item['data']['ta'] }}</td>
+                                                    <td>{{ $item['data']['Perdida'] }}</td>
+                                                    <td>{{ $item['data']['Espe'] }}</td>
+                                                    <td>{{ $item['data']['Observaciones'] }}</td>
+                                                </tr>
+                                            @endif
 
-                    {{--SIMBOLOGÍA al final de cada tabla de grupo --}}
-                    <tr>
-                        <td colspan="12" class="long-wrap">
-                            <table class="simbologia">
-                                <thead>
-                                    <tr>
-                                        <th colspan="10" class="celdaAmarillo">SIMBOLOGÍA</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 20px;"><strong>DNR:</strong></td>
-                                        <td style="width: 100px;">DISTANCIA DE NIVEL DE REFERENCIA</td>
-                                        <td style="width: 20px;"><strong>d:</strong></td>
-                                        <td style="width: 150px;">PROFUNDIDAD DE LA INDICACION</td>
-                                        <td style="width: 30px;"><strong><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</strong></td>
-                                        <td style="width: 100px;">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
-                                        <td style="width: 40px;"><strong>C.E. GEN.:</strong></td>
-                                        <td style="width: 100px;">CORROSIÓN EXTERNA GENERALIZADA</td>
-                                        <td style="width: 20px;"><strong>SIR:</strong></td>
-                                        <td style="width: 100px;">SIN INDICACIONES RELEVANTES</td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </td>
-                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
+            @endforeach
+        </body>
+    </html>
 
-                </table>
-
-            </div>{{--Cierra .content del grupo --}}
-
-            {{-- Salto de página entre grupos (igual que FOR-INS-08) --}}
-            @if (!$loop->last)
-            <div style="page-break-after: always;"></div>
-            @endif
-            @endforeach {{--Cierra $grupo --}}
-    </body>
-</html>

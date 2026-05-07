@@ -304,94 +304,87 @@
                                                     <th></th> <!-- Para botón de eliminar -->
                                                 </tr>
                                         </thead>
-                                            @php $contador = 1; @endphp
+                                        <tbody>
+                                            @php 
+                                                $contador = 1; 
+                                            @endphp
 
-                                                @foreach ($Grupo_Juntas_Re as $index => $grupo)
+                                            @foreach ($Grupo_Juntas_Re as $bloque)
+                                                @foreach ($bloque as $item)
 
-                                                @php
-                                                    $esSinTitulo = str_starts_with($grupo['titulos_juntas'], 'SIN TITULO');
+                                                    @php
+                                                        $titleId = $item['grupo'] ?? 'sin_titulo';
+                                                    @endphp
+                                                    <!-- TITULOS -->
+                                                    @if ($item['tipo'] == 'titulo')
+                                                        <tr class="titulo-row" data-titulo="{{ $titleId }}">
+                                                            <td colspan="15">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <input type="text"
+                                                                        class="form-control w-90 titulo-text"
+                                                                        name="titulos_text[{{ $titleId }}]"
+                                                                        value="{{ $item['texto'] }}"
+                                                                        placeholder="Ingrese título...">
 
-                                                    /*$titleId = $esSinTitulo
-                                                        ? 'sin_titulo_' . $index   // único por bloque
-                                                        : 'titulo_' . $index;*/
-                                                    $titleId = $esSinTitulo
-                                                        ? 'sin_titulo'
-                                                        : 'titulo_' . $index;
+                                                                    <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
 
-                                                @endphp
+                                                                    <td>
+                                                                        <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                            <i class="fa fa-times"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    <!-- FILAS -->
+                                                    @if ($item['tipo'] == 'fila')
+                                                        <tr data-titulo="{{ $titleId }}">
+                                                            <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
+                                                            <td><input type="text" class="form-control" name='ID[{{ $titleId }}][]' value="{{ $item['data']['ID'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Elemento[{{ $titleId }}][]' value="{{ $item['data']['Elemento'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='No_ind[{{ $titleId }}][]' value="{{ $item['data']['No_ind'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Tipo_Ind[{{ $titleId }}][]' value="{{ $item['data']['Tipo_Ind'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Referencia[{{ $titleId }}][]' value="{{ $item['data']['Referencia'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='DNR[{{ $titleId }}][]' value="{{ $item['data']['DNR'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='HT[{{ $titleId }}][]' value="{{ $item['data']['HT'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='LAxial[{{ $titleId }}][]' value="{{ $item['data']['LAxial'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='LCirc[{{ $titleId }}][]' value="{{ $item['data']['LCirc'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='d[{{ $titleId }}][]' value="{{ $item['data']['d'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ta[{{ $titleId }}][]' value="{{ $item['data']['ta'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Perdida[{{ $titleId }}][]' value="{{ $item['data']['Perdida'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Espe[{{ $titleId }}][]' value="{{ $item['data']['Espe'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Observaciones[{{ $titleId }}][]' value="{{ $item['data']['Observaciones'] }}"></td>
+                                                            <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                        </tr>
 
-                                                {{--  TÍTULO --}}
-                                                @if (!$esSinTitulo)
-                                                <tr class="titulo-row" data-titulo="{{ $titleId }}">
-                                                    <td colspan="15">
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <input type="text"
-                                                                class="form-control w-90 titulo-text"
-                                                                name="titulos_text[{{ $titleId }}]"
-                                                                value="{{ $grupo['titulos_juntas'] }}"
-                                                                placeholder="Ingrese título...">
-
-                                                            <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
+                                                        @php $contador++; @endphp
+                                                    @endif
+                                                    <!-- LONGITUD (CIERRA BLOQUE) -->
+                                                    @if ($item['tipo'] == 'longitud')
+                                                        <tr class="long-row" data-titulo="{{ $titleId }}">
+                                                            <td colspan="14">Longitud Inspeccionada</td>
 
                                                             <td>
-                                                                <button type="button" class="btn btn-danger btnEliminarTitulo">
+                                                                <input type="text"
+                                                                    class="form-control long-text"
+                                                                    name="Long_Inspecc[{{ $titleId }}][]"
+                                                                    value="{{ $item['valor'] }}">
+                                                            </td>
+
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-danger btnEliminar">
                                                                     <i class="fa fa-times"></i>
                                                                 </button>
                                                             </td>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                @endif
-
-                                                {{-- 🔹 FILAS --}}
-                                                @foreach ($grupo['resultados'] as $resultado)
-                                                <tr data-titulo="{{ $titleId }}">
-                                                    <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                    <td><input type="text" class="form-control" name='ID[{{ $titleId }}][]' value="{{ $resultado['ID'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='Elemento[{{ $titleId }}][]' value="{{ $resultado['Elemento'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='No_ind[{{ $titleId }}][]' value="{{ $resultado['No_ind'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='Tipo_Ind[{{ $titleId }}][]' value="{{ $resultado['Tipo_Ind'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='Referencia[{{ $titleId }}][]' value="{{ $resultado['Referencia'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='DNR[{{ $titleId }}][]' value="{{ $resultado['DNR'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='HT[{{ $titleId }}][]' value="{{ $resultado['HT'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='LAxial[{{ $titleId }}][]' value="{{ $resultado['LAxial'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='LCirc[{{ $titleId }}][]' value="{{ $resultado['LCirc'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='d[{{ $titleId }}][]' value="{{ $resultado['d'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='ta[{{ $titleId }}][]' value="{{ $resultado['ta'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='Perdida[{{ $titleId }}][]' value="{{ $resultado['Perdida'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='Espe[{{ $titleId }}][]' value="{{ $resultado['Espe'] }}"></td>
-                                                    <td><input type="text" class="form-control" name='Observaciones[{{ $titleId }}][]' value="{{ $resultado['Observaciones'] }}"></td>
-                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"  aria-hidden="true"></i></button></td>
                                                         </tr>
-                                                @php $contador++; @endphp
-                                                    @endforeach
-                                                    {{--  LONGITUD INSPECCIONADA --}}
-                                                    @if (!empty($grupo['Long_Inspecc']) && is_array($grupo['Long_Inspecc']))
-                                                        @foreach ($grupo['Long_Inspecc'] as $long)
-                                                            <tr class="long-row" data-titulo="{{ $titleId }}">
-                                                                <td colspan="14">Longitud Inspeccionada</td>
-
-                                                                <td>
-                                                                    <input type="text"
-                                                                        class="form-control long-text"
-                                                                        name="Long_Inspecc[{{ $titleId }}][]"
-                                                                        value="{{ $long }}"
-                                                                        placeholder="Ingrese Longitud Inspeccionada...">
-                                                                </td>
-
-                                                                <td class="text-center">
-                                                                    <button type="button" class="btn btn-danger btnEliminar">
-                                                                        <i class="fa fa-times"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
                                                     @endif
                                                 @endforeach
+                                            @endforeach
                                             </tbody>
                                     </table>
                                     </div>
-                                    <input type="hidden" id="titulos_hidden" name="titulos_hidden">
+                                    <input type="hidden" id="titulos_hidden" name="titulos_data">
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
@@ -407,7 +400,7 @@
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
-                                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+                                        <!--button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>--->
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
@@ -950,11 +943,11 @@
             contadorBloque++;
 
             // 🎯 Cuando llega a 10 → insertar longitud
-            if (contadorBloque === 10) {
+            if (contadorBloque === 20) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 
-                const newLong = `
+                /*const newLong = `
                     <tr class="long-row" data-titulo="${lastTitle}">
                         <td colspan="14">Longitud Inspeccionada</td>
                         <td>
@@ -972,7 +965,7 @@
                 // 👉 evitar duplicado
                 if (!$row.next().hasClass('long-row')) {
                     $row.after(newLong);
-                }
+                }*/
 
                 // 🔄 cerrar bloque
                 contadorBloque = 0;
