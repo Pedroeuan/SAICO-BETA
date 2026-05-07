@@ -1330,7 +1330,7 @@ function verificarYAgregarLongitud() {
 
                 const newLong = `
                     <tr class="long-row" data-titulo="${lastTitle}">
-                        <td colspan="23">Longitud Inspeccionada</td>
+                        <td colspan="22">Longitud Inspeccionada</td>
                         <td>
                             <input type="text"
                                 class="form-control long-text"

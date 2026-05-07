@@ -216,6 +216,93 @@
 
             <footer> 
 
+                    <div style="margin-bottom: 8px;"></div>
+
+                        <table class="datosgenerales" style="width:100%;">
+                            <tr>
+                                <td style="width: 43%; vertical-align: top;">
+                                    <table class="simbologia">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="4" class="celdaAmarillo" style="font-size:8px;">INDICACIONES Y HALLAZGOS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>NPIR:</strong></td>
+                                                <td style="text-align:left;">NO PRESENTA INDICACIONES RELEVANTES</td>
+                                                <td><strong>FP:</strong></td>
+                                                <td style="text-align:left;">FALTA DE PENETRACIÓN</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>FF:</strong></td>
+                                                <td style="text-align:left;">FALTA DE FUSIÓN</td>
+                                                <td><strong>G:</strong></td>
+                                                <td style="text-align:left;">GRIETAS</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>IE:</strong></td>
+                                                <td style="text-align:left;">INCLUSIÓN DE ESCORIA</td>
+                                                <td><strong>IVL:</strong></td>
+                                                <td style="text-align:left;">INDICACIÓN VOLUMÉTRICA</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>IL:</strong></td>
+                                                <td style="text-align:left;">INDICACIÓN LINEAL</td>
+                                                <td><strong>IT:</strong></td>
+                                                <td style="text-align:left;">INDICACIÓN TRANSVERSAL</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="width: 4%; border:0 !important;"></td>
+                                <td style="width: 53%; vertical-align: top;">
+                                    <table class="simbologia">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="6" class="celdaAmarillo" style="font-size:8px;">SIMBOLOGÍA DEL REPORTE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>A:</strong></td>
+                                                <td style="text-align:left;">ÁNGULO (°)</td>
+                                                <td><strong>NI:</strong></td>
+                                                <td style="text-align:left;">NIVEL DE INDICACIÓN (%)</td>
+                                                <td><strong>d</strong></td>
+                                                <td style="text-align:left;">PROFUNDIDAD (PULG)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>G:</strong></td>
+                                                <td style="text-align:left;">GANANCIA (dB)</td>
+                                                <td><strong>L:</strong></td>
+                                                <td style="text-align:left;">LONGITUD DE LA INDICACIÓN (PULG)</td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>NR:</strong></td>
+                                                <td style="text-align:left;">NIVEL DE REFERENCIA (%)</td>
+                                                <td><strong>DSR:</strong></td>
+                                                <td style="text-align:left;">DISTANCIA DE LA INDICACIÓN</td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>S:</strong></td>
+                                                <td style="text-align:left;">DISTANCIA ANGULAR (Pulg)</td>
+                                                <td><strong>Tmin:</strong></td>
+                                                <td style="text-align:left;">ESPESOR MÍNIMO REGISTRADO (PULG)</td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
@@ -619,92 +706,6 @@
                             </tbody>
                         </table>
 
-                        <div style="margin-bottom: 8px;"></div>
-
-                        <table class="datosgenerales" style="width:100%;">
-                            <tr>
-                                <td style="width: 43%; vertical-align: top;">
-                                    <table class="simbologia">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="4" class="celdaAmarillo" style="font-size:8px;">INDICACIONES Y HALLAZGOS</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><strong>NPIR:</strong></td>
-                                                <td style="text-align:left;">NO PRESENTA INDICACIONES RELEVANTES</td>
-                                                <td><strong>FP:</strong></td>
-                                                <td style="text-align:left;">FALTA DE PENETRACIÓN</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>FF:</strong></td>
-                                                <td style="text-align:left;">FALTA DE FUSIÓN</td>
-                                                <td><strong>G:</strong></td>
-                                                <td style="text-align:left;">GRIETAS</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>IE:</strong></td>
-                                                <td style="text-align:left;">INCLUSIÓN DE ESCORIA</td>
-                                                <td><strong>IVL:</strong></td>
-                                                <td style="text-align:left;">INDICACIÓN VOLUMÉTRICA</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>IL:</strong></td>
-                                                <td style="text-align:left;">INDICACIÓN LINEAL</td>
-                                                <td><strong>IT:</strong></td>
-                                                <td style="text-align:left;">INDICACIÓN TRANSVERSAL</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                                <td style="width: 4%; border:0 !important;"></td>
-                                <td style="width: 53%; vertical-align: top;">
-                                    <table class="simbologia">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="6" class="celdaAmarillo" style="font-size:8px;">SIMBOLOGÍA DEL REPORTE</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><strong>A:</strong></td>
-                                                <td style="text-align:left;">ÁNGULO (°)</td>
-                                                <td><strong>NI:</strong></td>
-                                                <td style="text-align:left;">NIVEL DE INDICACIÓN (%)</td>
-                                                <td><strong>d</strong></td>
-                                                <td style="text-align:left;">PROFUNDIDAD (PULG)</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>G:</strong></td>
-                                                <td style="text-align:left;">GANANCIA (dB)</td>
-                                                <td><strong>L:</strong></td>
-                                                <td style="text-align:left;">LONGITUD DE LA INDICACIÓN (PULG)</td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>NR:</strong></td>
-                                                <td style="text-align:left;">NIVEL DE REFERENCIA (%)</td>
-                                                <td><strong>DSR:</strong></td>
-                                                <td style="text-align:left;">DISTANCIA DE LA INDICACIÓN</td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>S:</strong></td>
-                                                <td style="text-align:left;">DISTANCIA ANGULAR (Pulg)</td>
-                                                <td><strong>Tmin:</strong></td>
-                                                <td style="text-align:left;">ESPESOR MÍNIMO REGISTRADO (PULG)</td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
                     @if (!$loop->last)
                         <div style="page-break-after: always;"></div>
                     @endif

@@ -1065,7 +1065,7 @@
             //-----------------------------------------Hacer ajuste del colspan="12" de acuerdo a la tabla
             const newLong = `
                 <tr class="long-row" data-titulo="${titleId}">
-                    <td colspan="12">Longitud Inspeccionada</td>
+                    <td colspan="13">Longitud Inspeccionada</td>
                     <td>
                         <div class="d-flex justify-content-between align-items-center">
                             <input type="text"
@@ -1158,7 +1158,7 @@
             
             let newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="12">
+                <td colspan="13">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del título -->
