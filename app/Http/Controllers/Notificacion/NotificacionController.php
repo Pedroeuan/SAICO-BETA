@@ -90,13 +90,31 @@ class NotificacionController extends Controller
                 $tipo = $generalEyc->Tipo;
 
                 // Según el tipo, definir qué fecha usar
-                if ($tipo === 'EQUIPOS') {
-                    $fechaCalibracion = $certificado->Prox_fecha_calibracion;
-                } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
-                    $fechaCalibracion = $certificado->Fecha_calibracion;
-                } else {
-                    // Si no corresponde a ninguno de los tipos, continuar con el siguiente
-                    continue;
+                if ($iso == '9001')
+                {
+                    if ($tipo === 'EQUIPOS') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);
+                    } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
+                }
+                else //if($iso == '17025')
+                {
+                    if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                    } elseif ($tipo === 'CONSUMIBLES') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
                 }
 
                 // Convertir la fecha al formato DD-MM-YYYY
@@ -186,10 +204,11 @@ class NotificacionController extends Controller
                         $notificacion->url = $url;
                         $notificacion->leida = false;
                         $notificacion->save();
+
+                        // 📧 Enviar correo
+                    //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                     }
 
-                    // 📧 Enviar correo
-                    //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                 }
             }
         }

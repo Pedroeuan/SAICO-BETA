@@ -454,58 +454,58 @@ return [
                 //'topnav' => true,
                 'submenu' => [
                         [
-                            'text' => 'FOR-02-PRO-INS-02',
+                            'text' => 'FOR-PIMP-02_B/03',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_02_PRO_INS_02',
-                            'can' => 'equipos-access',
+                            'url' => '/Reporte/FOR_PIMP_02_B/03',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-03',
+                            'text' => 'FOR-PIMP-02_B/04',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_03',
-                            'can' => 'equipos-access',
+                            'url' => '/Reporte/FOR_PIMP_02_B/04',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-04',
+                            'text' => 'FOR-PIMP-03/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_04',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_03/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-02-PRO-INS-04',
+                            'text' => 'FOR-PIMP-07_B/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_02_PRO_INS_04',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_07_B/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-05',
+                            'text' => 'FOR-PIMP-05_B/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_05',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_05_B/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-06',
+                            'text' => 'FOR-PIMP-06_B/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_06',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_06_B/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-07',
+                            'text' => 'FOR-PIMP-04/02',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_07',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_04/02',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-08',
+                            'text' => 'FOR-PIMP-03/01',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_08',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_03/01',
+                            'can' => '',
                         ],
                         [
-                            'text' => 'FOR-01-PRO-INS-09',
+                            'text' => 'FOR-PIMP-04/03',
                             'icon' => 'fa fa-file',
-                            'url' => 'Reporte/FOR_01_PRO_INS_09',
-                            'can' => 'equipos-access',
+                            'url' => 'Reporte/FOR_PIMP_04/03',
+                            'can' => '',
                         ],
                         [
                             'text' => 'FOR-01-PRO-INS-10',
@@ -633,8 +633,27 @@ return [
                         [
                             'text' => 'Inventario',
                             'icon' => 'far fa-clipboard',
-                            'url' => 'inventario',
-                            'can' => 'equipos-lab-access',
+                            'submenu' => 
+                            [
+                                [
+                                    'text' => 'Completo',
+                                    'icon' => 'far fa-clipboard',
+                                    'url' => 'inventario?view=inventario',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                                [
+                                    'text' => 'Calibraciones',
+                                    'icon' => 'fas fa-tachometer-alt',
+                                    'url' => 'inventario?view=calibraciones',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                                [
+                                    'text' => 'Mantenimientos',
+                                    'icon' => 'fas fa-tools',
+                                    'url' => 'inventario?view=mantenimientos',
+                                    'can' => 'equipos-lab-access',
+                                ],
+                            ],
                         ],
                         [
                             'text' => ' Certificados',
@@ -698,7 +717,7 @@ return [
                         [
                             'text' => 'Ver usuarios',
                             'icon' => 'fas fa-users',
-                            'url' => 'Adminindex',
+                            'url' => 'Admin/index',
                         ],
                         [
                             'text' => 'Registro de usuarios',
@@ -711,7 +730,7 @@ return [
                 [
                     'text' => 'Solicitudes AD',
                     'icon' => 'fas fa-file-alt',
-                    'can' => 'tecnicos-equipos-access',  // Define una política en Laravel para controlar el acceso
+                    'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
                     //'topnav' => true,
                     'submenu' => [
                         [
@@ -726,7 +745,30 @@ return [
                         ],
                     ],
                 ],
-
+                // Sidebar Vehiculo
+                [
+                    'text' => 'Gestión de Vehículos',
+                    'icon' => 'fas fa-car',
+                    'submenu'=> [
+                        [
+                            'text' => 'Vehículos',
+                            'icon' => 'fas fa-truck',
+                            'url' => '/vehiculos',
+                            'can' => 'vehiculos-admin-access'
+                        ],
+                        [
+                            'text' => 'Salidas de Vehículos',
+                            'icon' => 'fas fa-sign-out-alt',
+                            'url' => '/salidas-vehiculos',
+                        ],
+                        [
+                            'text' => 'Panel Vehícular',
+                            'url' => 'salidas-vehiculos/panel',
+                            'icon' => 'fas fa-chart-bar',
+                            'can' => 'vehiculos-admin-access'
+                        ],
+                    ],
+                ],
     ],//Final Menu
 
     /*

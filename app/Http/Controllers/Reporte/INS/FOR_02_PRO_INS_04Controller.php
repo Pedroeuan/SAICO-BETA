@@ -58,6 +58,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
         $idReportes = $datosParaCrearOS_OC['idReportes'];
 
+        $EsperaDato = "ESPERA DE DATOS";
         $Orden_Servicio = new Orden_Servicio;
         $Orden_Servicio_Prueba = new Orden_Servicio_Prueba;
         $Firmantes_OS = new Firmantes_OS;
@@ -69,7 +70,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idCliente; // O el campo que sea clave primaria
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -86,7 +87,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
-            // Obtén el ID del registro recién creado
+            // ObtÃ©n el ID del registro reciÃ©n creado
             $idOrdenServicio = $Orden_Servicio->idOrden_Servicio;
 
             $Orden_Servicio_Prueba->idOrden_Servicio = $idOrdenServicio;
@@ -136,17 +137,17 @@ class FOR_02_PRO_INS_04Controller extends Controller
 
         } else {
             // Cliente no encontrado
-            $Cliente = "POR DEFINIR";
-            $Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
+            //$Cliente = "POR DEFINIR";
+            //$Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
             // Si no existe, crea el cliente "POR DEFINIR"
-            if (!$Busqueda2Cliente) {
-                $Busqueda2Cliente = new clientes();
-                $Busqueda2Cliente->Cliente = $Cliente;
-                $Busqueda2Cliente->RFC = 'N/A';
-                $Busqueda2Cliente->Telefono = 'N/A';
-                $Busqueda2Cliente->Correo = 'N/A';
-                $Busqueda2Cliente->save();
-            }
+            //if (!$Busqueda2Cliente) {
+                $NewCliente = new clientes();
+                $NewCliente->Cliente = $Cliente;
+                $NewCliente->RFC = 'N/A';
+                $NewCliente->Telefono = 'N/A';
+                $NewCliente->Correo = 'N/A';
+                $NewCliente->save();
+            //}
 
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -155,9 +156,9 @@ class FOR_02_PRO_INS_04Controller extends Controller
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             // Obtén el ID del cliente "POR DEFINIR"
-            $idClientes = $Busqueda2Cliente->idClientes;
+            $idClientes = $NewCliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
-            $Orden_Servicio->Fecha = '2001/01/01';
+            $Orden_Servicio->Fecha = '2001-01-01';
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
@@ -165,7 +166,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
             $Orden_Servicio->Plano_isometrico = $Isometrico_Plano;
             $Orden_Servicio->save();
 
-            // Obtén el ID del registro recién creado
+            // ObtÃ©n el ID del registro reciÃ©n creado
             $idOrdenServicio = $Orden_Servicio->idOrden_Servicio;
 
             $Orden_Servicio_Prueba->idOrden_Servicio = $idOrdenServicio;
@@ -188,7 +189,6 @@ class FOR_02_PRO_INS_04Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-            $EsperaDato = "ESPERA DE DATOS";
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
@@ -261,10 +261,11 @@ class FOR_02_PRO_INS_04Controller extends Controller
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string',  // Cada título debe ser un string válido
+            //'titulos.*' => 'string',  // Cada tÃ­tulo debe ser un string vÃ¡lido
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
+            /* FILAS DINÃMICAS */
+            'titulos_data' => 'nullable|string',
             'no_junta' => 'nullable|array',
             'no_indicacion' => 'nullable|array',
             'clasificacion' => 'nullable|array',
@@ -276,6 +277,10 @@ class FOR_02_PRO_INS_04Controller extends Controller
             'amplitud' => 'nullable|array',
             'evaluacion' => 'nullable|array',
             'comentarios' => 'nullable|array',
+
+            'Long_Inspecc' => 'nullable|array',
+            'Long_Inspecc.*' => 'nullable|array',
+            'Long_Inspecc.*.*' => 'nullable|string|max:255',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -344,7 +349,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
         ]);
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
-        // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
+        // y no se aplicarÃ¡n las demÃ¡s reglas de validaciÃ³n si el campo estÃ¡ vacÃ­o. Esto es Ãºtil 
         // cuando tienes campos opcionales en tu formulario.
 
         /*Detalles Generales y Datos del Equipo */
@@ -355,10 +360,17 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
+
+         // Lógica para manejar Cliente
+        if ($request->TieneCliente === 'si') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+        } else {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+        }
         // Lógica para manejar el campo Contrato
         if ($request->TieneContrato === "no") {
 
-            // Si el usuario alteró el valor o no llegó, se recalcula en backend
+            // Si el usuario alterÃ³ el valor o no llegÃ³, se recalcula en backend
             $actual = $request->Detalles_Generales['Contrato'] ?? null;
 
             // Verificar que realmente tenga el formato correcto
@@ -383,7 +395,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $nuevo;
 
             } else {
-                // Si el frontend envió un contrato válido, se utiliza ese
+                // Si el frontend enviÃ³ un contrato vÃ¡lido, se utiliza ese
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
@@ -398,23 +410,60 @@ class FOR_02_PRO_INS_04Controller extends Controller
         // Guardar el registro en la base de datos   
         $Reportes->save();
 
-        // Obtener el idReportes del registro recién creado
+        // Obtener el idReportes del registro reciÃ©n creado
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
-        $titulos = $request->input('titulos', []);
+        $titulos_json = $request->input('titulos_data', '[]');
+        $titulos = json_decode($titulos_json, true); // array asociativo
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
+        //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+        $numFilasSin = count($filasSinTitulo);//agregar
+
+        // 🔹 cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 11; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+
+        $bloques = []; //agregar
+        $bloqueActual = [];//agregar
+        $contador = 0;//agregar
+        /*//agregar
+        |--------------------------------------------------------------------------
+        | FUNCIONES AUXILIARES
+        |--------------------------------------------------------------------------
+        */
+        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
+            if (!empty($bloqueActual)) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+        };
+
+        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
+            if ($contador >= $maxFilasPorBloque) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+
+            $bloqueActual[] = $elemento;
+            $contador++;
+        };
+
+        /*
+        |--------------------------------------------------------------------------
+        | 1. BLOQUE SIN TITULO
+        |--------------------------------------------------------------------------
+        */
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $sinTituloKey,
+                    'data' => [
                     'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
                     'clasificacion' => $request->input("clasificacion.$sinTituloKey.$i"),
@@ -426,26 +475,51 @@ class FOR_02_PRO_INS_04Controller extends Controller
                     'amplitud' => $request->input("amplitud.$sinTituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
                     'comentarios' => $request->input("comentarios.$sinTituloKey.$i"),
-                ];
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
-        }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+                    ]
+                    ]);
+                }
+                
+                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // tomar la longitud correspondiente al bloque
+
+                foreach ($longitudesSin as $long) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $sinTituloKey,
+                        'valor' => $long
+                    ]);
+
+                    // cerrar bloque al encontrar longitud
+                    $cerrarBloque();
+                }
+
+        /*
+        |--------------------------------------------------------------------------
+        | 2. TITULOS + FILAS + LONGITUDES
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($titulos as $tituloObj) {
+            $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
+            $tituloText = $tituloObj['text']; // texto real
+
+            // agregar título
+            $agregarElemento([
+                'tipo' => 'titulo',
+                'grupo' => $tituloKey,
+                'texto' => $tituloText
+            ]);
+
             $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
-            $resultados = [];
+            //$resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $tituloKey,
+                    'data' => [
                     'no_junta' => $request->input("no_junta.$tituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
                     'clasificacion' => $request->input("clasificacion.$tituloKey.$i"),
@@ -457,22 +531,42 @@ class FOR_02_PRO_INS_04Controller extends Controller
                     'amplitud' => $request->input("amplitud.$tituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
                     'comentarios' => $request->input("comentarios.$tituloKey.$i"),
-                ];
+                    ]
+                ]);
             }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
-            ];
+
+            // Obtener longitud inspeccionada asociada a este título (si existe)
+            $longitudes = $request->input("Long_Inspecc.$tituloKey", []); //Agregar
+
+                foreach ($longitudes as $long) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $tituloKey,
+                        'valor' => $long
+                    ]);
+
+                    // cerrar bloque al encontrar longitud
+                    $cerrarBloque();
+                }
         }
-        
+        /*
+        |--------------------------------------------------------------------------
+        | 3. CERRAR SI QUEDAN ELEMENTOS
+        |--------------------------------------------------------------------------
+        */
+        $cerrarBloque();
+        /*
+        |--------------------------------------------------------------------------
+        | 4. GUARDAR
+        |--------------------------------------------------------------------------
+        */
         // Guardar en el modelo
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
         $Grupo_Juntas_Detalles_Re->save();
         
         /*Firmas */
         // Guardar las firmas
-        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
+        $numFirmas = $request->input('numFirmas'); // Obtener el nÃºmero de firmas seleccionadas
         
         if ($numFirmas == 1) {
             $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
@@ -495,10 +589,10 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $Firmas_Reportes->save();
 
         /* Fotos y Comentarios */
-        $imageCount = $request->input('imageCount'); // Número de imágenes
+        $imageCount = $request->input('imageCount'); // NÃºmero de imÃ¡genes
         if($imageCount>=1)
         {
-        $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
+        $imagenesGuardadas = []; // Para almacenar rutas de imÃ¡genes guardadas
 
         foreach ($request->images_base64 as $index => $base64Image) {
             $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
@@ -507,7 +601,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
             // Decodificar Base64
             $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
             
-            // Crear un nombre único para la imagen
+            // Crear un nombre Ãºnico para la imagen
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
@@ -520,6 +614,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_02_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
+                'una_hoja' => $request->imagen_hoja[$index] ?? 0, // ðŸ‘ˆ AQUÃ
             ];
         }
 
@@ -620,10 +715,13 @@ class FOR_02_PRO_INS_04Controller extends Controller
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
-            //'titulos.*' => 'string',  // Cada título debe ser un string válido
+            //'titulos.*' => 'string',  // Cada tÃ­tulo debe ser un string vÃ¡lido
+            //'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
+            //'titulos_hidden' => 'nullable|string', // JSON con [{id,text},...]
 
             /*Resultados_Juntas*/
-            /* FILAS DINÁMICAS */
+            /* FILAS DINÃMICAS */
+            'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'no_junta' => 'nullable|array',
             'no_indicacion' => 'nullable|array',
             'clasificacion' => 'nullable|array',
@@ -635,6 +733,11 @@ class FOR_02_PRO_INS_04Controller extends Controller
             'amplitud' => 'nullable|array',
             'evaluacion' => 'nullable|array',
             'comentarios' => 'nullable|array',
+
+            /* Longitudes inspeccionadas */
+            'Long_Inspecc' => 'nullable|array',
+            'Long_Inspecc.*' => 'nullable|array',
+            'Long_Inspecc.*.*' => 'nullable|string|max:255',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -717,19 +820,56 @@ class FOR_02_PRO_INS_04Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        $titulos = $request->input('titulos', []);
-        $datosAgrupados = [];
-        
+        $titulos_json = $request->input('titulos_data', '[]');
+        $titulos = json_decode($titulos_json, true); // array asociativo
+        $datosAgrupados = []; 
+
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
-        $numFilasSinTitulo = count($filasSinTitulo);
-        
-        if ($numFilasSinTitulo > 0) {
-            $resultados = [];
-        
-            for ($i = 0; $i < $numFilasSinTitulo; $i++) {
-                $resultados[] = [
+        //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+        $numFilasSin = count($filasSinTitulo);//agregar
+
+        // 🔹 cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 11; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+
+        $bloques = []; //agregar
+        $bloqueActual = [];//agregar
+        $contador = 0;//agregar
+        /*//agregar
+        |--------------------------------------------------------------------------
+        | FUNCIONES AUXILIARES
+        |--------------------------------------------------------------------------
+        */
+        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
+            if (!empty($bloqueActual)) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+        };
+
+        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
+            if ($contador >= $maxFilasPorBloque) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+
+            $bloqueActual[] = $elemento;
+            $contador++;
+        };
+
+        /*
+        |--------------------------------------------------------------------------
+        | 1. BLOQUE SIN TITULO
+        |--------------------------------------------------------------------------
+        */
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $sinTituloKey,
+                    'data' => [
                     'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
                     'clasificacion' => $request->input("clasificacion.$sinTituloKey.$i"),
@@ -741,26 +881,51 @@ class FOR_02_PRO_INS_04Controller extends Controller
                     'amplitud' => $request->input("amplitud.$sinTituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
                     'comentarios' => $request->input("comentarios.$sinTituloKey.$i"),
-                ];
-            }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => 'SIN TITULO', // o puedes usar "Sin título"
-                'resultados' => $resultados
-            ];
-        }
-        
-        // 2. Procesar los títulos existentes
-        foreach ($titulos as $titulo) {
-            //$tituloKey = "titulo_" . $titulo;
-            $tituloKey = strtolower(preg_replace('/\s+/', '_', $titulo));
+                    ]
+                    ]);
+                }
+                
+                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // tomar la longitud correspondiente al bloque
+
+                foreach ($longitudesSin as $long) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $sinTituloKey,
+                        'valor' => $long
+                    ]);
+
+                    // cerrar bloque al encontrar longitud
+                    $cerrarBloque();
+                }
+
+        /*
+        |--------------------------------------------------------------------------
+        | 2. TITULOS + FILAS + LONGITUDES
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($titulos as $tituloObj) {
+            $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
+            $tituloText = $tituloObj['text']; // texto real
+
+            // agregar título
+            $agregarElemento([
+                'tipo' => 'titulo',
+                'grupo' => $tituloKey,
+                'texto' => $tituloText
+            ]);
+
             $filas = $request->input("no_junta.$tituloKey", []);
             $numFilas = count($filas);
         
-            $resultados = [];
+            //$resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $tituloKey,
+                    'data' => [
                     'no_junta' => $request->input("no_junta.$tituloKey.$i"),
                     'no_indicacion' => $request->input("no_indicacion.$tituloKey.$i"),
                     'clasificacion' => $request->input("clasificacion.$tituloKey.$i"),
@@ -772,24 +937,42 @@ class FOR_02_PRO_INS_04Controller extends Controller
                     'amplitud' => $request->input("amplitud.$tituloKey.$i"),
                     'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
                     'comentarios' => $request->input("comentarios.$tituloKey.$i"),
-                ];
+                    ]
+                ]);
             }
-        
-            $datosAgrupados[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados
-            ];
+
+            // Obtener longitud inspeccionada asociada a este título (si existe)
+            $longitudes = $request->input("Long_Inspecc.$tituloKey", []); //Agregar
+
+                foreach ($longitudes as $long) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $tituloKey,
+                        'valor' => $long
+                    ]);
+
+                    // cerrar bloque al encontrar longitud
+                    $cerrarBloque();
+                }
         }
-        
+        /*
+        |--------------------------------------------------------------------------
+        | 3. CERRAR SI QUEDAN ELEMENTOS
+        |--------------------------------------------------------------------------
+        */
+        $cerrarBloque();
+        /*
+        |--------------------------------------------------------------------------
+        | 4. GUARDAR
+        |--------------------------------------------------------------------------
+        */
         // Actualizar el campo en la base de datos
         $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
+            'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
         ]);
-
-
         /*Firmas */
         // Guardar las firmas
-        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
+        $numFirmas = $request->input('numFirmas'); // Obtener el nÃºmero de firmas seleccionadas
         
         if ($numFirmas == 1) {
             $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
@@ -823,20 +1006,21 @@ class FOR_02_PRO_INS_04Controller extends Controller
         /* Fotos y Comentarios */
         // Obtener los valores necesarios para la ruta personalizada
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-        $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato estÃ¡ definido
 
-        // Ruta base para guardar las imágenes
+        // Ruta base para guardar las imÃ¡genes
         $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
-        // Obtener las imágenes existentes
+        // Obtener las imÃ¡genes existentes
         $existingImages = $request->input('existing_images', []);
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
+        $imagenHoja = $request->input('imagen_hoja', []);
 
-        //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
+        //Log::info('ImÃ¡genes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
 
-        // **1️⃣ Eliminar imágenes marcadas para borrar**
+        // **1ï¸âƒ£ Eliminar imÃ¡genes marcadas para borrar**
         foreach ($deletedImages as $index) {
             if (isset($existingImages[$index])) {
                 $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
@@ -844,9 +1028,9 @@ class FOR_02_PRO_INS_04Controller extends Controller
                 // Eliminar del almacenamiento
                 if (Storage::exists($rutaImagen)) {
                     Storage::delete($rutaImagen);
-                    Log::info("Imagen eliminada: {$rutaImagen}");
+                    //Log::info("Imagen eliminada: {$rutaImagen}");
                 } else {
-                    //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
+                    //Log::warning("No se encontrÃ³ la imagen para eliminar: {$rutaImagen}");
                 }
 
                 // Eliminar de `existingImages` para que no se guarde en la BD
@@ -854,13 +1038,13 @@ class FOR_02_PRO_INS_04Controller extends Controller
             }
         }
 
-        // **Reiniciar el array antes de procesar imágenes**
+        // **Reiniciar el array antes de procesar imÃ¡genes**
         $imagenesGuardadas = [];
 
         // **Evitar duplicados en las rutas ya guardadas**
         $rutasGuardadas = [];
 
-        // **2️⃣ Procesar imágenes existentes**
+        // **2ï¸âƒ£ Procesar imÃ¡genes existentes**
         foreach ($existingImages as $index => $ruta) {
             if ($request->hasFile("replace_images.$index")) {
                 // **Reemplazo de imagen existente**
@@ -882,11 +1066,12 @@ class FOR_02_PRO_INS_04Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva; // Guardar ruta para evitar duplicados
                 }
             } elseif (!empty($imagesBase64[$index])) {
-                // **Procesar imágenes en Base64**
+                // **Procesar imÃ¡genes en Base64**
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $imagesBase64[$index]));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';
                 $path = "{$rutaCarpeta}/{$imageName}";
@@ -900,6 +1085,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
@@ -909,14 +1095,18 @@ class FOR_02_PRO_INS_04Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $ruta,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $ruta;
                 }
             }
         }
 
-        // **3️⃣ Procesar nuevas imágenes Base64**
+        // **3ï¸âƒ£ Procesar nuevas imÃ¡genes Base64**
         foreach ($imagesBase64 as $index => $base64Image) {
+            if (isset($existingImages[$index])) {
+                continue; // ya fue procesada arriba
+            }
             if (!empty($base64Image)) {
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';
@@ -931,18 +1121,18 @@ class FOR_02_PRO_INS_04Controller extends Controller
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
                         'comentario' => $comments[$index] ?? '',
+                        'una_hoja' => $imagenHoja[$index] ?? 0,
                     ];
                     $rutasGuardadas[] = $rutaNueva;
                 }
             }
         }
-
         // **4️⃣ Guardar las imágenes actualizadas en la BD**
         $Fotos_Reportes->update([
             'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)), // Se usa array reindexado
         ]);
 
-        //Log::info('Imágenes finales guardadas en BD:', ['imagenesGuardadas' => $imagenesGuardadas]);
+        //Log::info('ImÃ¡genes finales guardadas en BD:', ['imagenesGuardadas' => $imagenesGuardadas]);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
@@ -970,15 +1160,18 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $totalTitulos = 0;
         $totalFilas = 0;
 
-        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
-            if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
-                $totalFilas += count($grupo['resultados']);
-            }
+        foreach ($Grupo_Juntas_Detalles_Re as $bloque) {
+            foreach ($bloque as $item) {
+                if (($item['tipo'] ?? '') === 'titulo') {
+                    $totalTitulos++;
+                }
 
-            if (isset($grupo['titulos_juntas']) && strtoupper(trim($grupo['titulos_juntas'])) !== 'SIN TITULO') {
-                $totalTitulos++;
+                if (($item['tipo'] ?? '') === 'fila') {
+                    $totalFilas++;
+                }
             }
         }
+
 
         $totalTitulosYFilas = $totalTitulos + $totalFilas;
 
@@ -986,6 +1179,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
         $numFirmas = $Firmas_Reportes['numFirmas'];
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
+
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
@@ -995,11 +1189,11 @@ class FOR_02_PRO_INS_04Controller extends Controller
             foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
-                    'comment' => $foto['comentario'] ?? ''
+                    'comment' => $foto['comentario'] ?? '',
+                    'una_hoja'  => $foto['una_hoja'] ?? 0,
                 ];
             }
         }
-
         $data = [
             'title' => 'Reporte_FOR-01-INS-04.PDF',
             'Logo' => $Logo,
@@ -1103,3 +1297,7 @@ class FOR_02_PRO_INS_04Controller extends Controller
         //
     }
 }
+
+
+
+

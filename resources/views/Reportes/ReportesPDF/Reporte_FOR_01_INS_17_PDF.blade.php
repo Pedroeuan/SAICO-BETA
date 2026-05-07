@@ -1,48 +1,59 @@
-<!DOCTYPE html>
+
+    <!DOCTYPE html>
         <html lang="es">
         <head>
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-17/01</title>
             <style>
                 @page {
-                    margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
+                    margin: 3.0cm 1.2cm 2.1cm 2.2cm;
                 }
+
                 header {
                     position: fixed;
-                    top: -80px; /* Ajustar para que quede dentro del margen superior */
+                    top: -42px; /* Sube el encabezado para que no se monte con "DATOS GENERALES" */
                     left: 0;
                     right: 0;
-                    height: 100px;
+                    height: auto;
                     text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-bottom: 1px solid #ffffff;
+                    font-family: 'arial', sans-serif;
                 }
+
                 footer {
                     position: fixed;
-                    bottom: 0px; /* Ajustar para que quede dentro del margen inferior */
+                    bottom: -30px;
                     left: 0;
                     right: 0;
-                    height: 125px;
+                    height: auto;
                     text-align: center;
-                    line-height: normal;
-                    /*background-color: #f2f2f2;*/
-                    border-top: 1px solid #ffffff;
+                    font-family: 'arial', sans-serif;
                 }
-                    
+
                 body {
-                    margin-top: 280px; /* Ajusta según el tamaño de tu encabezado */
+                    /* Deja espacio exacto debajo del encabezado fijo */
+                    margin-top: 40px;
+                    margin-right: 0;
+                    margin-bottom: 0;
+                    margin-left: 0;
+                    padding-top: 0;
+                    padding-bottom: 0;
                     font-family: 'arial', sans-serif;
                 }
                 .content {
-                    /*margin-top: 300px; /* Evita superposición con el header */
-                    margin-bottom: 125px; /* Evita superposición con el footer */
+                    margin-top: 0;
                 }
 
-                .table-container {
-                    margin: 100px 0;
+                .content-separador {
+                    height: 6px;
                 }
 
+                .tablaheader th {
+                    border: 1px solid black;
+                    padding: 4px 6px;
+                    vertical-align: middle;
+                    line-height: 1.15;
+                }
+                
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
@@ -89,12 +100,20 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 8px;
-            background-color: #2F75B5;
+            font-size: 14px;
+            background-color: #305496;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
-            
+        .encabezadoAzul2{
+            text-align: center;
+            width: 100%;
+            font-size: 14px;
+            background-color: #215e99;
+            color: #ffffff;
+            outline: 1px double #000000; /* Contorno externo */
+        }
+
         .datosinspeccion{
             border-collapse: separate;  /*separate No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
@@ -128,6 +147,10 @@
         }
         .celdaGris{
             background-color: #DBDBDB;
+        }
+        .celdaGrisOscuro{
+            background-color: #bfbfbf;
+            /*font-size: 9px;*/
         }
         
         .sinBordetdth td, .sinBordetdth th {
@@ -169,26 +192,86 @@
             white-space: nowrap; /* Evita que el texto se divida en varias líneas */
             max-width: 20px; /* Ajusta al ancho máximo deseado */
         }
+        .page-break {
+            page-break-before: always;
+        }
             </style>
         </head>
         <body>
 
+        <div class="page">
+            {{-- Portada --}}
             <header>
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
+                            <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th style="font-size: 12pt;">  ASESORIA E INSPECCIÓN EN CONTRUCCIÓN COSTA FUERA S.C. </th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <div style="margin-bottom: 5px;"></div>
+
+                <h1> REPORTE DE INSPECCIÓN TERMOGRÁFICA</h1>
+                
+            </header>
+
+            <div style="margin-bottom: 4px;"></div>
+            
+            <footer>
+                <p style="text-align: left;">FOR-INS-17/01</p>
+            </footer>
+
+            <div class="content" style="text-align: center;">
+                <div class="content">
+                    <br>
+                    <br>
+                    @if(isset($Fotos[5]))
+                    <img src="{{ $Fotos[5] }}" style="width:650px;">
+                    @endif
+                </div>
+                <br>
+                <br>
+                <table class="portada" align="center">
+                    <tbody>
+                        <tr>
+                            <th >INSTALACIÓN/EMBARCACIÓN: {{ $Detalles_Generales['Lugar'] }}</th>
+                        </tr>
+                        <tr>
+                            <th>EQUIPO: {{ $Detalles_Generales['Equipo'] }}</th>
+                        </tr>
+                        <tr>
+                            <th>FECHA: {{ $Detalles_Generales['Fecha'] }}</th>
+                        </tr>
+                        <tr>
+                            <th>NO. DE REPORTE: {{ $Detalles_Generales['No_Reporte'] }}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        {{-- Segunda Hoja --}}
+        <div class="page">
+                        <header>
+                <table class="tablaheader">
+                    <thead>
+                        <tr>
+                            <th style="width: 400%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-17/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS</th>
+                            <th rowspan="2" style="font-size: 8pt;"> INSPECCIÓN CON TERMOGRAFÍA A TABLEROS</th>
                             <th>Versión</th>
-                            <th>1</th>
+                            <th>2</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -196,157 +279,152 @@
                         </tr>
                     </tbody>
                 </table>
-    
-                <div style="margin-bottom: 5px;"></div>
-        
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
 
-                <div style="margin-bottom: 5px;"></div>    
-                
+                <div style="margin-bottom: 6px;"></div>
+            </header>
+            
+            <footer>
+                <p style="text-align: left;">FOR-INS-17/01</p>
+            </footer>
+
+            <div class="content">
+
                 <table class="datosgenerales">
+                    <thead class="encabezadoAzul">
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>EQUIPO:</th>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Equipo'] }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Partida'] }}</td>
+                            <th>UBICACIÓN:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Ubicacion'] }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior"></td>
-                            <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
+                            <th>HORA DE INSPECCIÓN:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['H_Inspeccion'] }}</td>
                         </tr>
                         <tr>
-                            <th>PIEZA:</th>
-                            <td class="lineaInferior"></td>
-                            <th>MATERIAL:</th>
-                            <td class="lineaInferior"></td>
-                        </tr>
-                        <tr>
-                            <th>PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
-                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior"></td>
+                            <th >PROCEDIMIENTO:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
+                            <th style="width: 160px;">ESTÁNDAR DE REFERENCIA:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Stndr_refe'] }}</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 5px;"></div>
-        
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                
-                <div style="margin-bottom: 5px;"></div>  
+                <div style="margin-bottom: 6px;"></div>
 
-                <table class="datosinspeccion">
-                    <tbody>
-                        <tr class="celdaGris">
-                            <th colspan="2">EQUIPO</th>
-                            <th colspan="2">SOFTWARE</th>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris" style="width: 120px;">MARCA:</th>
-                            <td>1</td>
-                            <th class="celdaGris" style="width: 120px;">MARCA:</th>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>5</td>
-                            <th class="celdaGris">MODELO:</th>
-                            <td>6</td>
-                        </tr>
-                        <tr>
-                            <th class="celdaGris">N.S.:</th>
-                            <td>8</td>
-                            <th class="celdaGris">N.S.:</th>
-                            <td>9</td>
-                        </tr>
-                    </tbody>
+                <!-- DATOS Y AJUSTES DEL EQUIPO -->
+                <table class="datosresultados">
+
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="4">DATOS Y AJUSTES DEL EQUIPO</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
+                        <thead>
+                            <tr class="celdaGris">
+                                <th colspan="4" style="border: 1px solid black; border-left: 2px solid black; border-top: 2px solid black;">EQUIPO</th>
+                            </tr>
+                            <tr>
+                                <th class="celdaGris" style="width: 80px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</th>
+                                <th class="celdaGris" style="width: 80px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['FEC_CAL'] }}</th>
+                            </tr>
+                            <tr>
+                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MODELO:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['MODELO_EQUIPO'] }}</th>
+                                <th class="celdaGris" style="border: 1px solid black;">CERTIFICADO POR:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['CER_POR'] }}</th>
+                            </tr>
+                            <tr>
+                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">SERIE:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['NS_EQUIPO'] }}</th>
+                                <th class="celdaGris" style="border: 1px solid black;">RANGO DE MEDICIÓN:</th>
+                                <th style="border: 1px solid black;">{{ $Datos_Equipo['RAN_MED'] }}</th>
+                            </tr>
+                        </thead>
                 </table>
+                <br>
+                <br>
+                <br>
+                <br>
+                <!-- IMAGEN DE REFERENCIA 1-->
+                <table class="datosresultados">
 
-                <div style="margin-bottom: 5px;"></div>
+                        <thead class="encabezadoAzul2">
+                            <tr><th colspan="2">{{ $Datos_Equipo['Stndr_refe1'] }}</th></tr>
+                        </thead>
 
-                <table class="datosinspeccionsinborde">
-                    <tbody>
-                        <tr>
-                            <th style="width: 15%;">TEMP. AMBIENTAL:</th>
-                            <td class="lineaInferior">1</td>
-                            <th style="width: 15%;">HÚMEDAD RELATIVA:</th>
-                            <td class="lineaInferior">2</td>
-                        </tr>
+                        <thead><tr class="sinBordeth"><th colspan="2"></th></tr></thead> <!-- Fila vacia -->
 
-                        <tr>
-                            <th style="width: 15%;">TEMP. REFLEJADA:</th>
-                            <td class="lineaInferior">1</td>
-                            <th style="width: 15%;">VELOCIDAD DEL VIENTO:</th>
-                            <td class="lineaInferior">2</td>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">        
+                                    @if(isset($Fotos[1]))
+                                        <img src="{{ $Fotos[1] }}" style="width:100%; height:auto;">
+                                    @endif
+                                </th>
 
-                        <tr>
-                            <th style="width: 15%;">ÁNGULO DE CAPTURA:</th>
-                            <td class="lineaInferior">1</td>
-                            <th style="width: 15%;">DISTANCIA DE CAPTURA:</th>
-                            <td class="lineaInferior">2</td>
-                        </tr>
+                                <th style="width: 10%;">        
+                                    @if(isset($Fotos[2]))
+                                        <img src="{{ $Fotos[2] }}" style="width:100%; height:auto;">
+                                    @endif
+                                </th>
 
-                        <tr>
-                            <th style="width: 15%;">MATERIAL Y EMISIVIDAD:</th>
-                            <td colspan="3" class="lineaInferior">1</td>
-                        </tr>
+                            </tr>
+                            <tr>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Termograma:</th>
 
-                    </tbody>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma1'] }}</th>
+
+                            </tr>
+                            <tr>
+                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Emisividad:</th>
+
+                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['emisividad1'] }}</th>
+
+                            </tr>
+                        </thead>
                 </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="9">INTRODUCCIÓN</th>
-                        </tr>
-                </table>
-            </header>
-
-            <!--<footer>
-                <div style="margin-bottom: 5px;"></div>
-
-            </footer>-->
-            
-            <div class="content">
-                <div style="margin-bottom: 0px;"></div>
-
-                
-            </div>
+        </div>
 
         </body>
-    </html>
+        </html>
+        

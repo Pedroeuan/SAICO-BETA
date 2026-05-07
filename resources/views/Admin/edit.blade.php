@@ -82,6 +82,7 @@
                                 <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
                                 <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
                                 <option value="Tics" @if($Usuario->rol == 'Tics') selected="selected" @endif> Tics</option>
+                                <option value="SGI" @if($Usuario->rol == 'SGI') selected="selected" @endif> SGI</option>
                                 @else
                                 <option value="Super Administrador" @if($Usuario->rol == 'Super Administrador') selected="selected" @endif> Super Administrador</option>
                                 <option value="Administrador" @if($Usuario->rol == 'Administrador') selected="selected" @endif> Administrador</option>
@@ -92,6 +93,7 @@
                                 <option value="Equipos" @if($Usuario->rol == 'Equipos') selected="selected" @endif> Equipos</option>
                                 <option value="Laboratorio" @if($Usuario->rol == 'Laboratorio') selected="selected" @endif> Laboratorio</option>
                                 <option value="Tics" @if($Usuario->rol == 'Tics') selected="selected" @endif> Tics</option>
+                                <option value="SGI" @if($Usuario->rol == 'SGI') selected="selected" @endif> SGI</option>
                                 @endif
 
                             </select>
@@ -127,6 +129,45 @@
                             @error('Estatus')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        <hr>
+                        <h5>Documentación para Vehículos</h5>
+
+                        <div class="form-group">
+                            <label>Número de Licencia</label>
+                            <input type="text" name="licencia_numero" class="form-control" value="{{ $Usuario->licencia_numero }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha vencimiento licencia</label>
+                            @if($Usuario->licencia_vencimiento == '2001-01-01')
+                                <input type="date" class="form-control inputForm" name="licencia_vencimiento">
+                            @else
+                                <input type="date" class="form-control inputForm" value="{{ $Usuario->licencia_vencimiento }}" name="licencia_vencimiento">
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label>Licencia actual:</label>
+                            @if($Usuario->licencia_pdf && $Usuario->licencia_pdf != 'ESPERA DE DATO')
+                                <br>
+                                <a href="{{ asset('storage/'.$Usuario->licencia_pdf) }}" target="_blank">Ver Licencia Actual</a>
+                                @else
+                                <p>No se ha subido una licencia.</p>
+                            @endif
+                            <input type="file" name="licencia_pdf" class="form-control" accept="application/pdf">
+                        </div>
+
+                        <div class="form-group">
+                            <label>CV actual:</label>
+                            @if($Usuario->cv_pdf && $Usuario->cv_pdf != 'ESPERA DE DATO')
+                                <br>
+                                <a href="{{ asset('storage/'.$Usuario->cv_pdf) }}" target="_blank">Ver CV Actual </a>
+                            @else
+                                <p>No se ha subido un CV.</p>
+                            @endif
+                            <input type="file" name="cv_pdf" class="form-control" accept="application/pdf">
                         </div>
 
                         <div class="form-group">

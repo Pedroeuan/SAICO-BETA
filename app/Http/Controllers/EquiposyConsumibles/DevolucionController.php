@@ -70,14 +70,6 @@ class DevolucionController extends Controller
         $solicitud = Solicitudes::where('idSolicitud', $id)->first();
         $EstadoSolicitud = $solicitud->Estatus;
 
-        // Extraer el prefijo (4 letras), número y año del Folio base
-        //preg_match('/^([A-Z]{4}-\d+)/', $folioBase, $matches);
-        /*preg_match('/^([A-Z]+)-\d+\/(\d{2})$/', $folioBase, $matches);
-        if (count($matches) > 0) {
-            $folioPattern = $matches[1]; // Prefijo + número como "PROP-001"
-            //$anioPattern = substr($folioBase, -2); // Año como "24"
-            $anioPattern = $matches[2]; // Año como "24" */
-            // Extraer prefijo (1 o más letras antes del "-"), número y año del Folio base
             preg_match('/^([A-Z]+-\d+)/', $folioBase, $matches);
             if (count($matches) > 0) {
                 $folioPattern = $matches[1]; // Ej: "P-001", "AB-001", "PROP-001", etc.
@@ -87,6 +79,7 @@ class DevolucionController extends Controller
             $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
             // Obtener todos los idSolicitud de los folios similares
             $idsSolicitud = $foliosSimilares->pluck('idSolicitud')->toArray(); // Convertir a array
+            log::info('IDs de Solicitudes obtenidos para folios similares: ' . implode(', ', $idsSolicitud)); // Log para verificar los IDs obtenidos
             // Obtener los Folios asociados a cada idSolicitud desde la tabla manifiesto
             $foliosManifiestos = manifiesto::whereIn('idSolicitud', $idsSolicitud)
                 ->get(['idSolicitud', 'Folio'])
@@ -94,7 +87,7 @@ class DevolucionController extends Controller
 
             // Buscar esos idSolicitud en la tabla detalles_solicitud y contar idGeneral_EyC
             $detallesSolicitud = detalles_solicitud::whereIn('idSolicitud', $idsSolicitud)
-                ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(cantidad) as cantidad'))
+                ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(Cantidad) as cantidad'))
                 ->groupBy('idGeneral_EyC', 'idSolicitud')
                 ->get();
 
@@ -192,7 +185,8 @@ class DevolucionController extends Controller
         $manifiesto = manifiesto::where('Folio', $folio)->first();
 
         // Obtener el campo 'Destino' para asignarlo a 'Tierra_Costafuera'
-        $tierraCostafuera = $manifiesto->Destino;
+        //$tierraCostafuera = $manifiesto->Destino;
+        $tierraCostafuera = 'FATIMA';
 
         // Crear un registro en la tabla Historial_Almacen
         $historialAlmacen = new Historial_Almacen;
@@ -213,7 +207,8 @@ class DevolucionController extends Controller
 
     public function devolverTodo(Request $request)
     {
-        $idsSolicitud = $request->input('idSolicitudes');
+        //$idsSolicitud = $request->input('idSolicitudes');
+        $idsSolicitud = $request->json('idSolicitudes');
         foreach ($idsSolicitud as $idSolicitud) {
             $detalles = detalles_solicitud::where('idSolicitud', $idSolicitud)->get();
             foreach ($detalles as $detalle) {
@@ -254,8 +249,8 @@ class DevolucionController extends Controller
                 // Buscar el registro en Manifiesto para obtener el campo 'Destino'
                 $manifiesto = manifiesto::where('Folio', $folio)->first();
                 // Obtener el campo 'Destino' para asignarlo a 'Tierra_Costafuera'
-                $tierraCostafuera = $manifiesto->Destino;
-
+                //$tierraCostafuera = $manifiesto->Destino;
+                $tierraCostafuera = 'FATIMA';
                 // Crear un registro en la tabla Historial_Almacen
                 $historialAlmacen = new Historial_Almacen;
                 $historialAlmacen->idAlmacen = $almacen->idAlmacen;

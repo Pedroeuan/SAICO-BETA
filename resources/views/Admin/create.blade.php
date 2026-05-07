@@ -4,13 +4,17 @@
 @section('title', 'Usuario')
 
 @section('css')
-<!--datatable -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
 <style>
     #my-notification .dropdown-menu {
-    max-height: 200px; /* Ajusta la altura según sea necesario */
-    overflow-y: auto;
+        max-height: 320px;
+        width: 360px;
+        max-width: 90vw;
+        overflow-y: auto;
+    }
+
+    #my-notification .dropdown-item {
+        white-space: normal;
+        word-break: break-word;
     }
 </style>
 @endsection
@@ -29,7 +33,7 @@
             <div class="card-body row">
 
                     <div class="col-5 text-center d-flex align-items-center justify-content-center">
-                        <div class>
+                        <div>
                             <h2>Registrar un nuevo usuario</h2>
                             <br>
                             <img src="{{ asset('images/usuario.png') }}" alt="logo-aico" width="340" height="350">
@@ -83,6 +87,7 @@
                                     <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
                                     <option value="Laboratorio" {{ old('RolUsuario') == 'Laboratorio' ? 'selected' : '' }}>Laboratorio</option>
                                     <option value="Tics" {{ old('RolUsuario') == 'Tics' ? 'selected' : '' }}>Tics</option>
+                                    <option value="SGI" {{ old('RolUsuario') == 'SGI' ? 'selected' : '' }}>SGI</option>
                                 @else
                                     <option value="Super Administrador" {{ old('RolUsuario') == 'Super Administrador' ? 'selected' : '' }}>Super Administrador</option>
                                     <option value="Administrador" {{ old('RolUsuario') == 'Administrador' ? 'selected' : '' }}>Administrador</option>
@@ -93,6 +98,7 @@
                                     <option value="Equipos" {{ old('RolUsuario') == 'Equipos' ? 'selected' : '' }}>Equipos</option>
                                     <option value="Laboratorio" {{ old('RolUsuario') == 'Laboratorio' ? 'selected' : '' }}>Laboratorio</option>
                                     <option value="Tics" {{ old('RolUsuario') == 'Tics' ? 'selected' : '' }}>Tics</option>
+                                    <option value="SGI" {{ old('RolUsuario') == 'SGI' ? 'selected' : '' }}>SGI</option>
                                 @endif
                             </select>
                             @error('RolUsuario')
@@ -106,6 +112,28 @@
                             @error('Estatus')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+                        <hr>
+
+                        <h5>Documentación para Vehículos</h5>
+                        <div class="form-group">
+                            <label>Número de Licenica</label>
+                            <input type="text" name="licencia_numero" class="form-control" placeholder="Número de licencia">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha vencimeinto licencia</label>
+                            <input type="date" name="licencia_vencimeinto" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Subir PDF Licencia</label>
+                            <input type="file" name="licencia_pdf" class="form_control" accept="application/pdf">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subir CV (PDF)</label>
+                            <input type="file" name="cv_pdf" class="form-cotrol" accept="application/pdf">
                         </div>
 
                         <div class="form-group">
@@ -141,6 +169,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+
 <script>
 /*Prevenir el Enter*/
 document.getElementById('UsuarioForm').addEventListener('keydown', function(event) {

@@ -152,7 +152,7 @@
 
                         <td scope="row">
                             <div class="input-group">
-                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" @if($stockDisponible == 1)required @else required @endif>
+                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" @if($stockDisponible == 1) required @else required @endif>
                             </div>
                         </td>
                         <td scope="row">

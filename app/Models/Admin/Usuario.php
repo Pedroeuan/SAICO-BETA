@@ -18,6 +18,13 @@ class Usuario extends Model
         'password',
         'rol',
         'Estatus',
+        'licencia_numero',
+        'licencia_vencimiento',
+        'licencia_pdf',
+        'cv_pdf',
+        'licencia_estatus',
+        'created_at',
+        'updated_at'
     ];
     protected $table = 'users';
     protected $primaryKey = 'id';
@@ -25,8 +32,9 @@ class Usuario extends Model
 
     public function getFormattedDateAttribute()
     {
-        return \Carbon\Carbon::parse($this->attributes['created_at'])->format('d-m-Y');
+        return \Carbon\Carbon::parse($this->attributes['licencia_vencimiento'])->format('d-m-Y');
     }
+
     public function Solicitudes_AD()
     {
         return $this->belongsToMany(

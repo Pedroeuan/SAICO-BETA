@@ -61,7 +61,9 @@
                         <tr>
                             <td scope="row">{{$solicitud->tecnico}}</td>
                             <td scope="row">{{$solicitud->folio}}</td>
-                            <td scope="row">{{$solicitud->formatted_date}}</td>
+                            <td data-order="{{ $solicitud->fecha_servicio }}">
+                                {{ $solicitud->formatted_date }}
+                            </td>
                             <td scope="row">{{$solicitud->Estatus}}</td>
                             @if($rol == 'Equipos' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                 @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')

@@ -1,29 +1,57 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Http\Controllers\Notificacion;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Admin\Usuario;
-use Illuminate\Console\Command;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\NotificacionesEyC;
-use App\Models\Notificacion\Notificacion;
+use App\Http\Controllers\Controller;
+
+use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\equipos;
 use App\Models\EquiposyConsumibles\certificados;
-use App\Notifications\NotificacionCertificadoMailable;
+use App\Models\EquiposyConsumibles\consumibles;
+use App\Models\EquiposyConsumibles\almacen;
+use App\Models\EquiposyConsumibles\Historial_Almacen;
+use App\Models\EquiposyConsumibles\accesorios;
+use App\Models\EquiposyConsumibles\block_y_probeta;
+use App\Models\EquiposyConsumibles\herramientas;
+use App\Models\EquiposyConsumibles\historial_certificado;
+use App\Models\EquiposyConsumibles\detalles_kits;
+use App\Models\EquiposyConsumibles\kits;
+use App\Models\Notificacion\Notificacion;
+use App\Models\User;
 
-class CrearNotificacionesCertificados extends Command
+
+class NotificacionController extends Controller
 {
-    protected $signature = 'notificaciones:crear-certificados';
-    protected $description = 'Crear notificaciones para los certificados según sus fechas de calibración';
-
-    public function __construct()
+    public function index()
     {
-        parent::__construct();
+        $user = Auth::user();
+        $rol = $user->rol;
+
+        // Si es Admin o SuperAdmin → ver todas
+        if (in_array($rol, ['Administrador', 'SuperAdministrador'])) {
+            $notificaciones = Notificacion::with('users_id')
+                ->orderBy('created_at', 'desc')
+                ->distinct()  // evita duplicados
+                ->get();
+        } else {
+            // Si NO es Admin → solo sus notificaciones, no de todo su rol
+            $notificaciones = Notificacion::where('users_id', $user->id)
+                ->with('user')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        return view('notifications.index', compact('notificaciones'));
     }
 
-    public function handle()
+    public function crearNotificacionesCertificados()
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
@@ -44,8 +72,8 @@ class CrearNotificacionesCertificados extends Command
 
         // Obtener todos los certificados que están relacionados con la tabla general_eyc
         $certificados = Certificados::with('generaleyc.ISO') // Cargar la relación con general_eyc
-            ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
-            ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha25DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->whereIn('Prox_fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
+            ->orWhereIn('Fecha_calibracion', [$fecha45DiasAntes,$fecha40DiasAntes,$fecha35DiasAntes, $fecha30DiasAntes, $fecha25DiasAntes,$fecha20DiasAntes, $fecha15DiasAntes, $fecha10DiasAntes, $fecha7DiasAntes, $fecha5DiasAntes, $fecha0DiasAntes])
             ->get();
 
         // Recorrer cada certificado
@@ -55,19 +83,38 @@ class CrearNotificacionesCertificados extends Command
             $No_economico = $generalEyc->No_economico;
             $Nombre_C = $generalEyc->Nombre_E_P_BP;
             $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
-
+            // Obtener el ISO relacionado
+            $iso = $generalEyc->ISO ? $generalEyc->ISO->NombreISO : null;
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
                 $tipo = $generalEyc->Tipo;
 
                 // Según el tipo, definir qué fecha usar
-                if ($tipo === 'EQUIPOS') {
-                    $fechaCalibracion = $certificado->Prox_fecha_calibracion;
-                } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
-                    $fechaCalibracion = $certificado->Fecha_calibracion;
-                } else {
-                    // Si no corresponde a ninguno de los tipos, continuar con el siguiente
-                    continue;
+                if ($iso == '9001')
+                {
+                    if ($tipo === 'EQUIPOS') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);
+                    } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                            Log::info('***********************');
+                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
+                }
+                else //if($iso == '17025')
+                {
+                    if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
+                        $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                    } elseif ($tipo === 'CONSUMIBLES') {
+                        $fechaCalibracion = $certificado->Fecha_calibracion;
+                    } else {
+                        // Si no corresponde a ninguno de los tipos, continuar con el siguiente
+                        continue;
+                    }
                 }
 
                 // Convertir la fecha al formato DD-MM-YYYY
@@ -157,12 +204,51 @@ class CrearNotificacionesCertificados extends Command
                         $notificacion->url = $url;
                         $notificacion->leida = false;
                         $notificacion->save();
+
+                        // 📧 Enviar correo
+                        $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                     }
 
-                    // 📧 Enviar correo
-                    $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                 }
             }
         }
     }
+
+    public function getNotificaciones()
+    {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        
+        // Obtener notificaciones para el usuario
+        $notificaciones = Notificacion::where('users_id', $user->id)
+                                        ->where('leida', false) // Descomenta esto si necesitas filtrar solo no leídas
+                                        ->orderBy('created_at', 'desc')
+                                        ->get(['idNotificaciones', 'Mensaje_Corto', 'url']); // Asegúrate de tener el 'id' también
+    
+        // Formatear las notificaciones para AdminLTE
+        $formattedNotifications = $notificaciones->map(function ($notificacion) {
+            return [
+                'id' => $notificacion->idNotificaciones,
+                'message' => $notificacion->Mensaje_Corto,
+                'url' => $notificacion->url ?? '#', // usa la URL de la tabla, fallback si es null
+            ];
+        });
+    
+        // Retornar las notificaciones en formato JSON
+        return response()->json($formattedNotifications);
+    }
+    
+    public function marcarComoLeida($id)
+    {
+        $notificacion = Notificacion::find($id);
+
+        if ($notificacion) {
+            $notificacion->leida = true;
+            $notificacion->save();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 404);
+    }
+
 }

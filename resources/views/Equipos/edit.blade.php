@@ -544,14 +544,14 @@
                                             </div>
                                         </div>
 
-                                        @if($rol != 'Laboratorio' )
+                                        {{--@if($rol != 'Laboratorio' )
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label class="col-form-label" for="inputSuccess">Numero de Reporte</label>
-                                                    <input type="text" class="form-control inputForm" name="Num_Reporte" placeholder="Ejemplo: 042-2025" value="{{ $generalConEquipos->Num_Reporte }}">
+                                                    <input type="text" class="form-control inputForm" name="Num_Reporte" placeholder="Ejemplo: 042-2025" value="{{ optional($generalConEquipos)->Num_Reporte }}"> <!--Laravel ignora el null automáticamente -->
                                                 </div>
                                             </div>
-                                        @endif
+                                        @endif --}}
 
                                         <div class="col-sm-4">
                                             <div class="form-group">
@@ -1401,7 +1401,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="col-sm-4">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
                                             @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')

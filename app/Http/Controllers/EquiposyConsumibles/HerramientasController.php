@@ -56,7 +56,7 @@ class HerramientasController extends Controller
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
             'ISO' => 'required|in:9001,17025',
-            'Disponibilidad_Estado' => 'required|string|max:255',
+            'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
         ]);
         $NA='N/A';
         // Limpia y normaliza el número económico
@@ -432,7 +432,7 @@ class HerramientasController extends Controller
             'Modelo' => 'required|string|max:255',
             'Serie' => 'required|string|max:255',
             'ISO' => 'required|in:9001,17025',
-            'Disponibilidad_Estado' => 'required|string|max:255',
+            'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
         ]);
         // Obtener el equipo existente
         $generalEyC  = general_eyc::find($id);
@@ -476,12 +476,12 @@ class HerramientasController extends Controller
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
             }
-            else if ($existsNo_Economico) {
+            else if ($existsNo_Economico && $existsSerie == true) {
                 return redirect()->back()->withErrors([
                     'No_economico' => 'El No economico ya existe en la base de datos.',
                 ])->withInput();
             }
-            else if ($existsSerie)
+            else if ($existsSerie && $existsNo_Economico == true)
             {
                 return redirect()->back()->withErrors([
                     'Serie' => 'La Serie ya existe en la base de datos.',
@@ -493,6 +493,7 @@ class HerramientasController extends Controller
         if ($disponibilidadEstado == 'Elige un Tipo') {
             $disponibilidadEstado = $EsperaDato;
         }
+
         // Actualizar los datos del equipo
         $generalEyC ->update([
             'Nombre_E_P_BP' => $request->input('Nombre_E_P_BP'),
