@@ -341,20 +341,20 @@
                                                     @if ($item['tipo'] == 'fila')
                                                         <tr data-titulo="{{ $titleId }}">
                                                             <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                            <td><input type="text" class="form-control" name='ID[{{ $tituloKey }}][]' value="{{ $item['data']['ID'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Elemento[{{ $tituloKey }}][]' value="{{ $item['data']['Elemento'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='No_Indicacion[{{ $tituloKey }}][]' value="{{ $item['data']['No_Indicacion'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Tipo_Indicacion[{{ $tituloKey }}][]' value="{{ $item['data']['Tipo_Indicacion'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Referencia[{{ $tituloKey }}][]' value="{{ $item['data']['Referencia'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='DNR[{{ $tituloKey }}][]' value="{{ $item['data']['DNR'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='HT[{{ $tituloKey }}][]' value="{{ $item['data']['HT'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Long_Axial[{{ $tituloKey }}][]' value="{{ $item['data']['Long_Axial'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Long_Circ[{{ $tituloKey }}][]' value="{{ $item['data']['Long_Circ'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='d[{{ $tituloKey }}][]' value="{{ $item['data']['d'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='ta[{{ $tituloKey }}][]' value="{{ $item['data']['ta'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Perdida[{{ $tituloKey }}][]' value="{{ $item['data']['Perdida'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Espesor_remanente[{{ $tituloKey }}][]' value="{{ $item['data']['Espesor_remanente'] }}"></td>
-                                                            <td><input type="text" class="form-control" name='Observaciones[{{ $tituloKey }}][]' value="{{ $item['data']['Observaciones'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ID[{{ $titleId }}][]' value="{{ $item['data']['ID'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Elemento[{{ $titleId }}][]' value="{{ $item['data']['Elemento'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='No_Indicacion[{{ $titleId }}][]' value="{{ $item['data']['No_Indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Tipo_Indicacion[{{ $titleId }}][]' value="{{ $item['data']['Tipo_Indicacion'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Referencia[{{ $titleId }}][]' value="{{ $item['data']['Referencia'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='DNR[{{ $titleId }}][]' value="{{ $item['data']['DNR'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='HT[{{ $titleId }}][]' value="{{ $item['data']['HT'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Long_Axial[{{ $titleId }}][]' value="{{ $item['data']['Long_Axial'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Long_Circ[{{ $titleId }}][]' value="{{ $item['data']['Long_Circ'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='d[{{ $titleId }}][]' value="{{ $item['data']['d'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ta[{{ $titleId }}][]' value="{{ $item['data']['ta'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Perdida[{{ $titleId }}][]' value="{{ $item['data']['Perdida'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Espesor_remanente[{{ $titleId }}][]' value="{{ $item['data']['Espesor_remanente'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='Observaciones[{{ $titleId }}][]' value="{{ $item['data']['Observaciones'] }}"></td>
                                                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                         </tr>
 
@@ -365,6 +365,8 @@
                                             </tbody>
                                     </table>
                                     </div>
+
+                                    <input type="hidden" id="titulos_hidden" name="titulos_data">
 
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">

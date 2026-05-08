@@ -411,7 +411,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
         $numFilasSin = count($filasSinTitulo);//agregar
 
@@ -504,7 +504,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
                 'texto' => $tituloText
             ]);
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             //$resultados = [];
@@ -602,14 +602,14 @@ class FOR_02_PRO_INS_15Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos";  /* Ruta personalizada CAMBIAR */
+            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos";  /* Ruta personalizada CAMBIAR */
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
+                'ruta' => "storage/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
                 'una_hoja' => $request->imagen_hoja[$index] ?? 0, //
             ];
@@ -809,7 +809,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
         $numFilasSin = count($filasSinTitulo);//agregar
 
@@ -902,7 +902,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
                 'texto' => $tituloText
             ]);
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             //$resultados = [];
@@ -999,7 +999,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_04/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+        $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_15/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -1234,7 +1234,7 @@ class FOR_02_PRO_INS_15Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(179, -179.5);
+            $combinedPdf->SetXY(179, -182.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
