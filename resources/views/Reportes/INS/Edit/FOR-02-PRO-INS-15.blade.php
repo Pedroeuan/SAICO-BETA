@@ -318,7 +318,7 @@
                                                     <!-- TITULOS -->
                                                     @if ($item['tipo'] == 'titulo')
                                                         <tr class="titulo-row" data-titulo="{{ $titleId }}">
-                                                            <td colspan="18">
+                                                            <td colspan="15">
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <input type="text"
                                                                         class="form-control w-90 titulo-text"
@@ -789,9 +789,9 @@
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
-            let newRow = `
-                <tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal}<input type="hidden" value="${rowCount}"></td>
+            let newRow = 
+                    `<tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"> 
                     <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento"></td>
                     <td><input type="text" class="form-control" name="No_Indicacion[${lastTitle}][]" placeholder="No. de Indicacion"></td>
