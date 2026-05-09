@@ -178,7 +178,7 @@
         });
     });
 }
-function bindDetallesJuntaCheckboxes() {
+/*function bindDetallesJuntaCheckboxes() {
     document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
         cb.addEventListener('change', function () {
 
@@ -200,8 +200,58 @@ function bindDetallesJuntaCheckboxes() {
             }
         });
     });
-}
+}*/
+function bindDetallesJuntaCheckboxes() {
 
+    document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
+
+        cb.addEventListener('change', function () {
+
+            const index = this.dataset.index;
+
+            const container = document.getElementById(`detallesContainer${index}`);
+            const hidden = document.getElementById(`detallesJuntaValue${index}`);
+
+            // ✅ CHECKBOX IMAGEN EN HOJA
+            const imagenHojaCheckbox = document.getElementById(`imagenHoja${index}`);
+            const imagenHojaValue = document.getElementById(`imagenHojaValue${index}`);
+
+            if (this.checked) {
+
+                container.classList.remove('d-none');
+                hidden.value = 1;
+
+                // ✅ MARCAR AUTOMÁTICAMENTE
+                if (imagenHojaCheckbox) {
+                    imagenHojaCheckbox.checked = true;
+                }
+
+                if (imagenHojaValue) {
+                    imagenHojaValue.value = 1;
+                }
+
+            } else {
+
+                container.classList.add('d-none');
+                hidden.value = 0;
+
+                // ✅ DESMARCAR AUTOMÁTICAMENTE (OPCIONAL)
+                if (imagenHojaCheckbox) {
+                    imagenHojaCheckbox.checked = false;
+                }
+
+                if (imagenHojaValue) {
+                    imagenHojaValue.value = 0;
+                }
+
+                // 🔥 LIMPIAR CAMPOS CUANDO SE DESMARCA
+                container.querySelectorAll('input').forEach(input => {
+                    input.value = '';
+                });
+            }
+        });
+    });
+}
     // Generar campos de imágenes
     document.addEventListener("DOMContentLoaded", function () {
         const imageCountSelect = document.getElementById('imageCount');
