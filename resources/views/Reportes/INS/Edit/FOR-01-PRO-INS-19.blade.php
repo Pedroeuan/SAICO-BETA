@@ -1051,12 +1051,13 @@ $(document).ready(function() {
 
         $('#dynamicTable tbody').append(newTitle);
         updateTitulos(); // Actualizar lista de títulos
+        verificarYAgregarLongitud();
         });
 
         $('#addLongBtn').click(function () {
             verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
-            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            //let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
 
@@ -1068,7 +1069,7 @@ $(document).ready(function() {
                 <td colspan="12"> Total</td>
                 <td>
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]" placeholder="Total . . . ">
                         <td><button type="button" class="btn btn-danger btnEliminar">
                             <i class="fa fa-times"  aria-hidden="true"></i>
                         </button></td>
@@ -1083,8 +1084,8 @@ $(document).ready(function() {
 
         $('#addBtn').click(function () {
             verificarYAgregarLongitud();
-            //let numFilas = parseInt($('#numRows').val());
-            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            let numFilas = parseInt($('#numRows').val());
+            //let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
             //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;

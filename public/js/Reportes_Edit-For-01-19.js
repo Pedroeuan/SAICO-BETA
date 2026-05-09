@@ -474,7 +474,12 @@ function bindDetallesJuntaCheckboxes() {
         var titulos = [];
         $('.titulo-row').each(function() {
             const id = $(this).data('titulo');
-            const text = $(this).find('.titulo-text').val() || '';
+            const $row = $(this);
+            const text =
+                $row.find('.titulo-text').first().val() ||
+                $row.find('input[name="titulos[]"]').first().val() ||
+                $row.find('input[name^="titulos_text["]').first().val() ||
+                '';
             titulos.push({ id: id, text: text });
         });
         $('#titulos_hidden').val(JSON.stringify(titulos));
@@ -498,10 +503,23 @@ function bindDetallesJuntaCheckboxes() {
         $(document).on('input', '.titulo-row .titulo-text', function () {
             updateTitulos();
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            if (document.getElementById('titulos_hidden')) {
+                updateTitulos();
+            }
+        });
 
+        document.addEventListener('submit', function () {
+            if (document.getElementById('titulos_hidden')) {
+                updateTitulos();
+            }
+        });
+        
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
-            verificarYAgregarLongitud();
+            if (typeof verificarYAgregarLongitud === 'function') {
+                verificarYAgregarLongitud();
+            }
             updateRowNumbers();
         });
 

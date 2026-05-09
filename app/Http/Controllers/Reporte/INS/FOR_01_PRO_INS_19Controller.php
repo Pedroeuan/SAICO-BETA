@@ -862,6 +862,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
         ]);
 
         $titulos_json = $request->input('titulos_data', '[]');
+        //dd($titulos_json);
         $titulos = json_decode($titulos_json, true); // array asociativo
         $datosAgrupados = [];
         
@@ -1013,7 +1014,6 @@ class FOR_01_PRO_INS_19Controller extends Controller
         $Grupo_Juntas_Detalles_Re->update([
             'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
         ]);
-
 
         /*Firmas */
         // Guardar las firmas
