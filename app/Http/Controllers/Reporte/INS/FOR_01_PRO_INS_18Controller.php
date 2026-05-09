@@ -41,18 +41,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_01_PRO_INS_18Controller extends Controller
 {
-    private function firstFilledInput(Request $request, array $keys)
-    {
-        foreach ($keys as $key) {
-            $value = $request->input($key);
-            if ($value !== null) {
-                return $value;
-            }
-        }
-
-        return null;
-    }
-
     public function OS_OC($datosParaCrearOS_OC)
     {
         $idPrueba_Aplica = $datosParaCrearOS_OC['idPrueba_Aplica'];
@@ -223,11 +211,6 @@ class FOR_01_PRO_INS_18Controller extends Controller
 
     }
 
-    /*public function FOR_02_PRO_INS_10_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }*/
 
     public function FOR_01_PRO_INS_18_store(Request $request)
     {
@@ -433,102 +416,158 @@ class FOR_01_PRO_INS_18Controller extends Controller
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
-       // Recuperar 'titulos_data' (JSON con [{id,text},...])
-        $titulos_json = $request->input('titulos_hidden', $request->input('titulos_data', '[]'));
+        $titulos_json = $request->input('titulos_data', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
-
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("Junta.$sinTituloKey", []);
-        $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+        //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+        $numFilasSin = count($filasSinTitulo);//agregar
 
-        //  cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 10;
+        // 🔹 cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 13; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
-        if (!empty($filasSinTitulo)) {
+        $bloques = []; //agregar
+        $bloqueActual = [];//agregar
+        $contador = 0;//agregar
+        /*//agregar
+        |--------------------------------------------------------------------------
+        | FUNCIONES AUXILIARES
+        |--------------------------------------------------------------------------
+        */
+        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
+            if (!empty($bloqueActual)) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+        };
 
-            $totalFilas = count($filasSinTitulo);
-            $contadorBloque = 1;
+        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
+            if ($contador >= $maxFilasPorBloque) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
 
-            for ($offset = 0; $offset < $totalFilas; $offset += $maxFilasPorBloque) {
+            $bloqueActual[] = $elemento;
+            $contador++;
+        };
 
-                $resultados = [];
-
-                for ($i = $offset; $i < min($offset + $maxFilasPorBloque, $totalFilas); $i++) {
-
-                    $resultados[] = [
-                    'Junta' => $this->firstFilledInput($request, ["Junta.$sinTituloKey.$i", "junta.$sinTituloKey.$i"]),
-                    'Zona_barrido' => $this->firstFilledInput($request, ["Zona_barrido.$sinTituloKey.$i", "zona_barrido.$sinTituloKey.$i"]),
-                    'No_Ind' => $this->firstFilledInput($request, ["No_Ind.$sinTituloKey.$i", "no indicacion.$sinTituloKey.$i"]),
-                    'Tipo_Ind' => $this->firstFilledInput($request, ["Tipo_Ind.$sinTituloKey.$i", "tipo de indicacion.$sinTituloKey.$i"]),
-                    'LA' => $this->firstFilledInput($request, ["LA.$sinTituloKey.$i", "lA.$sinTituloKey.$i"]),
-                    'LC' => $this->firstFilledInput($request, ["LC.$sinTituloKey.$i", "lC.$sinTituloKey.$i"]),
+        /*
+        |--------------------------------------------------------------------------
+        | 1. BLOQUE SIN TITULO
+        |--------------------------------------------------------------------------
+        */
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $sinTituloKey,
+                    'data' => [
+                    'Junta' => $request->input("Junta.$sinTituloKey.$i"),
+                    'Zona_barrido' => $request->input("Zona_barrido.$sinTituloKey.$i"),
+                    'No_Ind' => $request->input("No_Ind.$sinTituloKey.$i"),
+                    'Tipo_Ind' => $request->input("Tipo_Ind.$sinTituloKey.$i"),
+                    'LA' => $request->input("LA.$sinTituloKey.$i"),
+                    'LC' => $request->input("LC.$sinTituloKey.$i"),
                     'HT' => $request->input("HT.$sinTituloKey.$i"),
-                    'AMP' => $this->firstFilledInput($request, ["AMP.$sinTituloKey.$i", "Amp.$sinTituloKey.$i"]),
-                    'Largo' => $this->firstFilledInput($request, ["Largo.$sinTituloKey.$i", "largo.$sinTituloKey.$i"]),
-                    'Ancho' => $this->firstFilledInput($request, ["Ancho.$sinTituloKey.$i", "ancho.$sinTituloKey.$i"]),
+                    'AMP' => $request->input("AMP.$sinTituloKey.$i"),
+                    'Largo' => $request->input("Largo.$sinTituloKey.$i"),
+                    'Ancho' => $request->input("Ancho.$sinTituloKey.$i"),
                     'Evaluacion' => $request->input("Evaluacion.$sinTituloKey.$i"),
-                    'Fotos' => $this->firstFilledInput($request, ["Fotos.$sinTituloKey.$i", "fotos.$sinTituloKey.$i"]),
-                    'Observaciones' => $this->firstFilledInput($request, ["Observaciones.$sinTituloKey.$i", "Observacion.$sinTituloKey.$i"]),
-                ];
-            }
-        
+                    'Fotos' => $request->input("Fotos.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
+                    ]
+                    ]);
+                }
+                
+                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
                 // tomar la longitud correspondiente al bloque
-                $indexLong = floor($offset / $maxFilasPorBloque);
 
-                $longBloque = $longitudesSin[$indexLong] ?? null;
+                foreach ($longitudesSin as $long) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $sinTituloKey,
+                        'valor' => $long
+                    ]);
 
-                $datosAgrupados[] = [
-                    'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
-                    'resultados'     => $resultados,
-                    'Long_Inspecc'   => [$longBloque],
-                ];
+                    // cerrar bloque al encontrar longitud
+                    $cerrarBloque();
+                }
 
-                $contadorBloque++;
-            }
-        }
-        
-       // 2. Procesar los títulos existentes
+        /*
+        |--------------------------------------------------------------------------
+        | 2. TITULOS + FILAS + LONGITUDES
+        |--------------------------------------------------------------------------
+        */
+
         foreach ($titulos as $tituloObj) {
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
             $tituloText = $tituloObj['text']; // texto real
 
+            // agregar título
+            $agregarElemento([
+                'tipo' => 'titulo',
+                'grupo' => $tituloKey,
+                'texto' => $tituloText
+            ]);
+
             $filas = $request->input("Junta.$tituloKey", []);
             $numFilas = count($filas);
         
-            $resultados = [];
+            //$resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
-                    'Junta' => $this->firstFilledInput($request, ["Junta.$tituloKey.$i", "junta.$tituloKey.$i"]),
-                    'Zona_barrido' => $this->firstFilledInput($request, ["Zona_barrido.$tituloKey.$i", "zona_barrido.$tituloKey.$i"]),
-                    'No_Ind' => $this->firstFilledInput($request, ["No_Ind.$tituloKey.$i", "no indicacion.$tituloKey.$i"]),
-                    'Tipo_Ind' => $this->firstFilledInput($request, ["Tipo_Ind.$tituloKey.$i", "tipo de indicacion.$tituloKey.$i"]),
-                    'LA' => $this->firstFilledInput($request, ["LA.$tituloKey.$i", "lA.$tituloKey.$i"]),
-                    'LC' => $this->firstFilledInput($request, ["LC.$tituloKey.$i", "lC.$tituloKey.$i"]),
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $tituloKey,
+                    'data' => [
+                    'Junta' => $request->input("Junta.$tituloKey.$i"),
+                    'Zona_barrido' => $request->input("Zona_barrido.$tituloKey.$i"),
+                    'No_Ind' => $request->input("No_Ind.$tituloKey.$i"),
+                    'Tipo_Ind' => $request->input("Tipo_Ind.$tituloKey.$i"),
+                    'LA' => $request->input("LA.$tituloKey.$i"),
+                    'LC' => $request->input("LC.$tituloKey.$i"),
                     'HT' => $request->input("HT.$tituloKey.$i"),
-                    'AMP' => $this->firstFilledInput($request, ["AMP.$tituloKey.$i", "Amp.$tituloKey.$i"]),
-                    'Largo' => $this->firstFilledInput($request, ["Largo.$tituloKey.$i", "largo.$tituloKey.$i"]),
-                    'Ancho' => $this->firstFilledInput($request, ["Ancho.$tituloKey.$i", "ancho.$tituloKey.$i"]),
+                    'AMP' => $request->input("AMP.$tituloKey.$i"),
+                    'Largo' => $request->input("Largo.$tituloKey.$i"),
+                    'Ancho' => $request->input("Ancho.$tituloKey.$i"),
                     'Evaluacion' => $request->input("Evaluacion.$tituloKey.$i"),
-                    'Fotos' => $this->firstFilledInput($request, ["Fotos.$tituloKey.$i", "fotos.$tituloKey.$i"]),
-                    'Observaciones' => $this->firstFilledInput($request, ["Observaciones.$tituloKey.$i", "Observacion.$tituloKey.$i"]),
-                ];
+                    'Fotos' => $request->input("Fotos.$tituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
+                    ]
+                ]);
             }
-        
+
             // Obtener longitud inspeccionada asociada a este título (si existe)
-            $long = $request->input("Long_Inspecc.$tituloKey", null);
-            $datosAgrupados[] = [
-                'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
-                'resultados' => $resultados,
-                'Long_Inspecc' => $long,
-            ];
+            $longitudes = $request->input("Long_Inspecc.$tituloKey", []); //Agregar
+
+                foreach ($longitudes as $long) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $tituloKey,
+                        'valor' => $long
+                    ]);
+
+                    // cerrar bloque al encontrar longitud
+                    $cerrarBloque();
+                }
         }
-        
+        /*
+        |--------------------------------------------------------------------------
+        | 3. CERRAR SI QUEDAN ELEMENTOS
+        |--------------------------------------------------------------------------
+        */
+        $cerrarBloque();
+        /*
+        |--------------------------------------------------------------------------
+        | 4. GUARDAR
+        |--------------------------------------------------------------------------
+        */
         // Guardar en el modelo
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE);
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
         $Grupo_Juntas_Detalles_Re->save();
         
         /*Firmas */
@@ -797,100 +836,159 @@ class FOR_01_PRO_INS_18Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        $titulos_json = $request->input('titulos_hidden', '[]');
+        $titulos_json = $request->input('titulos_data', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
-
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("Junta.$sinTituloKey", []);
-        $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+        //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+        $numFilasSin = count($filasSinTitulo);//agregar
 
-        // cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 10;
+        // 🔹 cuántas filas debe tener cada bloque
+        $maxFilasPorBloque = 13; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
-        if (!empty($filasSinTitulo)) {
+        $bloques = []; //agregar
+        $bloqueActual = [];//agregar
+        $contador = 0;//agregar
+        /*//agregar
+        |--------------------------------------------------------------------------
+        | FUNCIONES AUXILIARES
+        |--------------------------------------------------------------------------
+        */
+        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
+            if (!empty($bloqueActual)) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+        };
 
-            $totalFilas = count($filasSinTitulo);
-            $contadorBloque = 1;
+        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
+            if ($contador >= $maxFilasPorBloque) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
 
-            for ($offset = 0; $offset < $totalFilas; $offset += $maxFilasPorBloque) {
+            $bloqueActual[] = $elemento;
+            $contador++;
+        };
 
-                $resultados = [];
-
-                for ($i = $offset; $i < min($offset + $maxFilasPorBloque, $totalFilas); $i++) {
-
-                    $resultados[] = [
-                    'Junta' => $this->firstFilledInput($request, ["Junta.$sinTituloKey.$i", "junta.$sinTituloKey.$i"]),
-                    'Zona_barrido' => $this->firstFilledInput($request, ["Zona_barrido.$sinTituloKey.$i", "zona_barrido.$sinTituloKey.$i"]),
-                    'No_Ind' => $this->firstFilledInput($request, ["No_Ind.$sinTituloKey.$i", "no indicacion.$sinTituloKey.$i"]),
-                    'Tipo_Ind' => $this->firstFilledInput($request, ["Tipo_Ind.$sinTituloKey.$i", "tipo de indicacion.$sinTituloKey.$i"]),
-                    'LA' => $this->firstFilledInput($request, ["LA.$sinTituloKey.$i", "lA.$sinTituloKey.$i"]),
-                    'LC' => $this->firstFilledInput($request, ["LC.$sinTituloKey.$i", "lC.$sinTituloKey.$i"]),
+        /*
+        |--------------------------------------------------------------------------
+        | 1. BLOQUE SIN TITULO
+        |--------------------------------------------------------------------------
+        */
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $sinTituloKey,
+                    'data' => [
+                    'Junta' => $request->input("Junta.$sinTituloKey.$i"),
+                    'Zona_barrido' => $request->input("Zona_barrido.$sinTituloKey.$i"),
+                    'No_Ind' => $request->input("No_Ind.$sinTituloKey.$i"),
+                    'Tipo_Ind' => $request->input("Tipo_Ind.$sinTituloKey.$i"),
+                    'LA' => $request->input("LA.$sinTituloKey.$i"),
+                    'LC' => $request->input("LC.$sinTituloKey.$i"),
                     'HT' => $request->input("HT.$sinTituloKey.$i"),
-                    'AMP' => $this->firstFilledInput($request, ["AMP.$sinTituloKey.$i", "Amp.$sinTituloKey.$i"]),
-                    'Largo' => $this->firstFilledInput($request, ["Largo.$sinTituloKey.$i", "largo.$sinTituloKey.$i"]),
-                    'Ancho' => $this->firstFilledInput($request, ["Ancho.$sinTituloKey.$i", "ancho.$sinTituloKey.$i"]),
+                    'AMP' => $request->input("AMP.$sinTituloKey.$i"),
+                    'Largo' => $request->input("Largo.$sinTituloKey.$i"),
+                    'Ancho' => $request->input("Ancho.$sinTituloKey.$i"),
                     'Evaluacion' => $request->input("Evaluacion.$sinTituloKey.$i"),
-                    'Fotos' => $this->firstFilledInput($request, ["Fotos.$sinTituloKey.$i", "fotos.$sinTituloKey.$i"]),
-                    'Observaciones' => $this->firstFilledInput($request, ["Observaciones.$sinTituloKey.$i", "Observacion.$sinTituloKey.$i"]),
-                ];
-            }
-        
-            // tomar la longitud correspondiente al bloque
-                $longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
+                    'Fotos' => $request->input("Fotos.$sinTituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
+                    ]
+                    ]);
+                }
+                
+                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // tomar la longitud correspondiente al bloque
 
-                $datosAgrupados[] = [
-                    'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
-                    'resultados'     => $resultados,
-                    'Long_Inspecc'   => [$longBloque],
-                ];
+                foreach ($longitudesSin as $long) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $sinTituloKey,
+                        'valor' => $long
+                    ]);
 
-                $contadorBloque++;
-            }
-        }
-        
-       // 2. Procesar los títulos existentes
+                    // cerrar bloque al encontrar longitud
+                    $cerrarBloque();
+                }
+
+        /*
+        |--------------------------------------------------------------------------
+        | 2. TITULOS + FILAS + LONGITUDES
+        |--------------------------------------------------------------------------
+        */
+
         foreach ($titulos as $tituloObj) {
             $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
             $tituloText = $tituloObj['text']; // texto real
 
+            // agregar título
+            $agregarElemento([
+                'tipo' => 'titulo',
+                'grupo' => $tituloKey,
+                'texto' => $tituloText
+            ]);
+
             $filas = $request->input("Junta.$tituloKey", []);
             $numFilas = count($filas);
         
-            $resultados = [];
+            //$resultados = [];
         
             for ($i = 0; $i < $numFilas; $i++) {
-                $resultados[] = [
-                    'Junta' => $this->firstFilledInput($request, ["Junta.$tituloKey.$i", "junta.$tituloKey.$i"]),
-                    'Zona_barrido' => $this->firstFilledInput($request, ["Zona_barrido.$tituloKey.$i", "zona_barrido.$tituloKey.$i"]),
-                    'No_Ind' => $this->firstFilledInput($request, ["No_Ind.$tituloKey.$i", "no indicacion.$tituloKey.$i"]),
-                    'Tipo_Ind' => $this->firstFilledInput($request, ["Tipo_Ind.$tituloKey.$i", "tipo de indicacion.$tituloKey.$i"]),
-                    'LA' => $this->firstFilledInput($request, ["LA.$tituloKey.$i", "lA.$tituloKey.$i"]),
-                    'LC' => $this->firstFilledInput($request, ["LC.$tituloKey.$i", "lC.$tituloKey.$i"]),
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $tituloKey,
+                    'data' => [
+                    'Junta' => $request->input("Junta.$tituloKey.$i"),
+                    'Zona_barrido' => $request->input("Zona_barrido.$tituloKey.$i"),
+                    'No_Ind' => $request->input("No_Ind.$tituloKey.$i"),
+                    'Tipo_Ind' => $request->input("Tipo_Ind.$tituloKey.$i"),
+                    'LA' => $request->input("LA.$tituloKey.$i"),
+                    'LC' => $request->input("LC.$tituloKey.$i"),
                     'HT' => $request->input("HT.$tituloKey.$i"),
-                    'AMP' => $this->firstFilledInput($request, ["AMP.$tituloKey.$i", "Amp.$tituloKey.$i"]),
-                    'Largo' => $this->firstFilledInput($request, ["Largo.$tituloKey.$i", "largo.$tituloKey.$i"]),
-                    'Ancho' => $this->firstFilledInput($request, ["Ancho.$tituloKey.$i", "ancho.$tituloKey.$i"]),
+                    'AMP' => $request->input("AMP.$tituloKey.$i"),
+                    'Largo' => $request->input("Largo.$tituloKey.$i"),
+                    'Ancho' => $request->input("Ancho.$tituloKey.$i"),
                     'Evaluacion' => $request->input("Evaluacion.$tituloKey.$i"),
-                    'Fotos' => $this->firstFilledInput($request, ["Fotos.$tituloKey.$i", "fotos.$tituloKey.$i"]),
-                    'Observaciones' => $this->firstFilledInput($request, ["Observaciones.$tituloKey.$i", "Observacion.$tituloKey.$i"]),
-                ];
+                    'Fotos' => $request->input("Fotos.$tituloKey.$i"),
+                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
+                    ]
+                ]);
             }
-        
+
             // Obtener longitud inspeccionada asociada a este título (si existe)
-            $long = $request->input("Long_Inspecc.$tituloKey", null);
-            $datosAgrupados[] = [
-                'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
-                'resultados' => $resultados,
-                'Long_Inspecc' => $long,
-            ];
+            $longitudes = $request->input("Long_Inspecc.$tituloKey", []); //Agregar
+
+                foreach ($longitudes as $long) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $tituloKey,
+                        'valor' => $long
+                    ]);
+
+                    // cerrar bloque al encontrar longitud
+                    $cerrarBloque();
+                }
         }
-        
+        /*
+        |--------------------------------------------------------------------------
+        | 3. CERRAR SI QUEDAN ELEMENTOS
+        |--------------------------------------------------------------------------
+        */
+        $cerrarBloque();
+        /*
+        |--------------------------------------------------------------------------
+        | 4. GUARDAR
+        |--------------------------------------------------------------------------
+        */
         // Actualizar el campo en la base de datos
         $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => json_encode($datosAgrupados, JSON_UNESCAPED_UNICODE)
+            'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
         ]);
 
 
@@ -1081,80 +1179,18 @@ class FOR_01_PRO_INS_18Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
-
-        // Normalizar estructura para asegurar compatibilidad con la vista PDF
-        $normalizedGrupos = [];
-        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
-            $titulo = 'SIN TITULO';
-            $resultados = [];
-            $longInspecc = null;
-
-            // Caso esperado: ['titulos_juntas' => 'TEXTO', 'resultados' => [...]]
-            if (is_array($grupo)) {
-                if (isset($grupo['titulos_juntas'])) {
-                    if (is_array($grupo['titulos_juntas'])) {
-                        // Si por alguna razon se guardó como objeto, intentar extraer 'text' o 'titulo'
-                        if (isset($grupo['titulos_juntas']['text'])) {
-                            $titulo = $grupo['titulos_juntas']['text'];
-                        } elseif (isset($grupo['titulos_juntas']['titulo'])) {
-                            $titulo = $grupo['titulos_juntas']['titulo'];
-                        } else {
-                            $titulo = json_encode($grupo['titulos_juntas']);
-                        }
-                    } else {
-                        $titulo = $grupo['titulos_juntas'];
-                        if (trim($titulo) === '') {
-                            $titulo = 'SIN TITULO';
-                        }
-                    }
-                } elseif (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
-                    // No hay título explícito, se toma SIN TITULO
-                    $titulo = 'SIN TITULO';
-                } else {
-                    // Manejar estructura en la que la clave del grupo es el título y su valor es el array de resultados
-                    $firstKey = null;
-                    foreach ($grupo as $k => $v) { $firstKey = $k; break; }
-                    if ($firstKey !== null && is_array($grupo[$firstKey])) {
-                        $titulo = $firstKey;
-                        $resultados = $grupo[$firstKey];
-                    }
-                }
-
-                if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
-                    $resultados = $grupo['resultados'];
-                }
-
-                if (array_key_exists('Long_Inspecc', $grupo)) {
-                    $longInspecc = $grupo['Long_Inspecc'];
-                }
-            }
-
-            // Normalizar Long_Inspecc a array para compatibilidad con la vista PDF
-            if ($longInspecc === null) {
-                $longInspecc = [];
-            } elseif (!is_array($longInspecc)) {
-                $longInspecc = [$longInspecc];
-            }
-
-            $normalizedGrupos[] = [
-                'titulos_juntas' => $titulo,
-                'resultados' => $resultados,
-                'Long_Inspecc' => $longInspecc,
-            ];
-        }
-
-        $Grupo_Juntas_Detalles_Re = $normalizedGrupos;
-
         $totalTitulos = 0;
         $totalFilas = 0;
 
-        foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
-            if (isset($grupo['resultados']) && is_array($grupo['resultados'])) {
-                $totalFilas += count($grupo['resultados']);
-            }
+        foreach ($Grupo_Juntas_Detalles_Re as $bloque) {
+            foreach ($bloque as $item) {
+                if (($item['tipo'] ?? '') === 'titulo') {
+                    $totalTitulos++;
+                }
 
-            if (isset($grupo['titulos_juntas']) && strtoupper(trim($grupo['titulos_juntas'])) !== 'SIN TITULO') {
-                $totalTitulos++;
+                if (($item['tipo'] ?? '') === 'fila') {
+                    $totalFilas++;
+                }
             }
         }
 
