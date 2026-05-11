@@ -1316,8 +1316,6 @@ $(document).ready(function() {
         });
     }
     
-
-
     /*Selects */
         $(document).ready(function() {
             function actualizarInputsC1() {
