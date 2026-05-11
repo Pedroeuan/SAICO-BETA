@@ -888,7 +888,7 @@ class FOR_01_PRO_INS_07Controller extends Controller
         */
         $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
             if (!empty($bloqueActual)) {
-                $bloques[] = $bloqueActual;-
+                $bloques[] = $bloqueActual;
                 $bloqueActual = [];
                 $contador = 0;
             }

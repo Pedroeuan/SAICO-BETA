@@ -727,7 +727,7 @@
                     </table>
             </footer>
 
-            @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
                 <div class="content">
 
                 <div style="margin-bottom: 0px;"></div>
@@ -790,55 +790,56 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-                                {{-- 🔹 TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="12" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
-                                        </td>
-                                    </tr>
-                                @endif
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="12" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
 
-                                {{-- 🔹 FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                    <tr class="juntas">
-                                        <td>{{ $junta['no'] }}</td>
-                                        <td>{{ $junta['junta'] }}</td>
-                                        <td>{{ $junta['lado'] }}</td>
-                                        <td>{{ $junta['no_ind'] }}</td>
-                                        <td>{{ $junta['tipo_ind'] }}</td>
-                                        <td>{{ $junta['long'] }}</td>
-                                        <td>{{ $junta['prof'] }}</td>
-                                        <td>{{ $junta['NR'] }}</td>
-                                        <td>{{ $junta['dnr'] }}</td>
-                                        <td>{{ $junta['evaluacion'] }}</td>
-                                        <td>{{ $junta['archivo'] }}</td>
-                                        <td>{{ $junta['long_ins'] }}</td>
-                                    </tr>
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                    <td>{{ $item['data']['no'] }}</td>
+                                                    <td>{{ $item['data']['junta'] }}</td>
+                                                    <td>{{ $item['data']['lado'] }}</td>
+                                                    <td>{{ $item['data']['no_ind'] }}</td>
+                                                    <td>{{ $item['data']['tipo_ind'] }}</td>
+                                                    <td>{{ $item['data']['long'] }}</td>
+                                                    <td>{{ $item['data']['prof'] }}</td>
+                                                    <td>{{ $item['data']['NR'] }}</td>
+                                                    <td>{{ $item['data']['dnr'] }}</td>
+                                                    <td>{{ $item['data']['evaluacion'] }}</td>
+                                                    <td>{{ $item['data']['archivo'] }}</td>
+                                                    <td>{{ $item['data']['long_ins'] }}</td> 
+                                                </tr>
+                                            @endif
+
+                                            {{-- LONGITUD --}}
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="10"></td>
+                                                    <th colspan="1">Total:</th>
+                                                    <th colspan="1">
+                                                        {{ $item['valor'] ?? '' }} m
+                                                    </th>
+                                                </tr>
+                                            @endif
+
                                 @endforeach
-
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="sinBordetd">
-                                    <td colspan="10"></td>
-                                    <th colspan="1">Total:</th>
-                                    <th colspan="1">
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </th>
-                                </tr>
-
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="14"></td>
-                                </tr>--}}
                             </tbody>
-                    </table>
-
-                <table>
-            </div>
-                @if (!$loop->last)
-                    <div style="page-break-after: always;"></div>
-                @endif
+                        </table>
+                    </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
             @endforeach
         </body>
     </html>

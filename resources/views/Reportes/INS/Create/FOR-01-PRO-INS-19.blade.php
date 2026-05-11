@@ -550,7 +550,7 @@
                                 </tbody>
                         </table>
                         </div>
-                        <input type="hidden" name="titulos_data" id="titulos_hidden">
+                        <input type="text" name="titulos_data" id="titulos_hidden">
                         <p>
 
                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
@@ -1115,8 +1115,8 @@ $(document).ready(function() {
 
         $('#addBtn').click(function () {
             verificarYAgregarLongitud();
-            //let numFilas = parseInt($('#numRows').val());
-            let numFilas = parseInt($('#numRows').val(), 10) || 0;
+            let numFilas = parseInt($('#numRows').val());
+            //let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
             //rowCountGlobal = $('#dynamicTable tbody tr:not(.titulo-row)').length;
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
@@ -1175,7 +1175,7 @@ $(document).ready(function() {
             contadorBloque++;
 
             // 🎯 Cuando llega a 10 → insertar longitud
-            if (contadorBloque === 10) {
+            if (contadorBloque === 20) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 
