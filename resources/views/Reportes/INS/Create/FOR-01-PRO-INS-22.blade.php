@@ -1391,7 +1391,7 @@ $(document).ready(function() {
             contadorBloque++;
 
             // 🎯 Cuando llega a 10 → insertar longitud
-            if (contadorBloque === 10) {
+            if (contadorBloque === 11) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 

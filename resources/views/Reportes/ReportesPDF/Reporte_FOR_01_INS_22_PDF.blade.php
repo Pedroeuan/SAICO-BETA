@@ -201,7 +201,162 @@
                 <div style="margin-bottom: 4px;"></div>
             </header>
 
-            <footer>                    
+            <footer>
+
+                <table style="margin: auto; border: 0px solid black;">
+                    <tr>
+                        <td>
+                            <table class="simbologia" style="border: 1px solid black;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>PE</strong></td>
+                                        <td>FIN DE TUBERIA</td>
+                                        <td><strong>V</strong></td>
+                                        <td>SOLDADURA CIRCUNFERENCIAL</td>
+                                        <td><strong>BV</strong></td>
+                                        <td>SOLDADURA DE CODO</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>HC</strong></td>
+                                        <td>ABRAZADERA DE SUJECIÓN</td>
+                                        <td><strong>C1</strong></td>
+                                        <td>ANOMALÍA O IND. CATEGORIA 1</td>
+                                        <td><strong>H.T.</strong></td>
+                                        <td>HORARIO TÉCNICO</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>SB</strong></td>
+                                        <td>RAMAL</td>
+                                        <td><strong>C2</strong></td>
+                                        <td>ANOMALÍA O IND. CATEGORIA 2</td>
+                                        <td><strong>-X</strong></td>
+                                        <td>DISTANCIA NEGATIVA</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>IND</strong></td>
+                                        <td>INDICACIÓN</td>
+                                        <td><strong>C3</strong></td>
+                                        <td>ANOMALÍA O IND. CATEGORIA 3</td>
+                                        <td><strong>+X</strong></td>
+                                        <td>DISTANCIA POSITIVA</td>
+                                    </tr>
+
+                                </thead>
+
+                            </table>
+                        </td>
+                        
+                        <td>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class=""></th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                        <td><strong></strong></td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </td>
+
+                        <td>
+                        <table class="simbologia" style="border: 0px solid black;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="8" class="celdaAmarillo">RELACIÓN ENTRE ÁNGULOS DE LA DIRECCIONALIDAD Y HORARIOS TÉCNICOS</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>ÁNGULO</strong></td>
+                                        <td>H.T.</td>
+                                        <td><strong>ÁNGULO</strong></td>
+                                        <td>H.T.</td>
+                                        <td><strong>ÁNGULO</strong></td>
+                                        <td>H.T.</td>
+                                        <td><strong>ÁNGULO</strong></td>
+                                        <td>H.T.</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>0°</strong></td>
+                                        <td>12:00</td>
+                                        <td><strong>90°</strong></td>
+                                        <td>03:00</td>
+                                        <td><strong>180°</strong></td>
+                                        <td>06:00</td>
+                                        <td><strong>270°</strong></td>
+                                        <td>09:00</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>30°</strong></td>
+                                        <td>01:00</td>
+                                        <td><strong>120°</strong></td>
+                                        <td>04:00</td>
+                                        <td><strong>210°</strong></td>
+                                        <td>07:00</td>
+                                        <td><strong>300°</strong></td>
+                                        <td>10:00</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>45°</strong></td>
+                                        <td>01:30</td>
+                                        <td><strong>135°</strong></td>
+                                        <td>04:30</td>
+                                        <td><strong>225°</strong></td>
+                                        <td>07:30</td>
+                                        <td><strong>315°</strong></td>
+                                        <td>10:30</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>60°</strong></td>
+                                        <td>02:00</td>
+                                        <td><strong>150°</strong></td>
+                                        <td>05:00</td>
+                                        <td><strong>240°</strong></td>
+                                        <td>08:00</td>
+                                        <td><strong>330°</strong></td>
+                                        <td>11:00</td>
+                                    </tr>
+
+                                </thead>
+                            </table>
+                        </td>
+                    </tr>
+                </table>                    
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
@@ -360,7 +515,7 @@
                     </table>
             </footer>
 
-        @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+        @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 <table class="datosgenerales">
 
@@ -545,209 +700,58 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="14" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
-                                        </td>
-                                    </tr>
-                                @endif
+                                    @foreach ($bloque as $item)
+                                                @if (!is_array($item))
+                                                    @continue
+                                                @endif
 
-                                {{-- FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                            <tr class="juntas">
-                                                <td>{{ $junta['ID'] }}</td>
-                                                <td>{{ $junta['Elemento'] }}</td>
-                                                <td>{{ $junta['nom_pulg'] }}</td>
-                                                <td>{{ $junta['ext_pulg'] }}</td>
-                                                <td>{{ $junta['Long_m'] }}</td>
-                                                <td>{{ $junta['Ele_iden'] }}</td>
-                                                <td>{{ $junta['-X'] }}</td>
-                                                <td>{{ $junta['+X'] }}</td>
-                                                <td>{{ $junta['No_Ind'] }}</td>
-                                                <td>{{ $junta['Dis_rela'] }}</td>
-                                                <td>{{ $junta['HT1'] }}</td>
-                                                <td>{{ $junta['HT2'] }}</td>
-                                                <td>{{ $junta['Cate'] }}</td>
-                                                <td>{{ $junta['Direc'] }}</td>
-                                                <td>{{ $junta['Clas'] }}</td>
-                                                <td>{{ $junta['Porc_Refl'] }}</td>
-                                                <td>{{ $junta['Fotos'] }}</td>
-                                                <td>{{ $junta['Observaciones'] }}</td>
-                                            </tr>
+                                                {{-- TITULO --}}
+                                                @if (($item['tipo'] ?? null) == 'titulo')
+                                                    <tr class="titulo-row">
+                                                        <td colspan="18" style="border:.5px solid black;">
+                                                            {{ $item['texto'] }}
+                                                        </td>
+                                                    </tr>
+                                                @endif
+
+                                                {{-- FILA --}}
+                                                @if (($item['tipo'] ?? null) == 'fila')
+                                                    <tr class="juntas">
+                                                        <td>{{ $item['data']['ID'] }}</td>
+                                                        <td>{{ $item['data']['Elemento'] }}</td>
+                                                        <td>{{ $item['data']['nom_pulg'] }}</td>
+                                                        <td>{{ $item['data']['ext_pulg'] }}</td>
+                                                        <td>{{ $item['data']['Long_m'] }}</td>
+                                                        <td>{{ $item['data']['Ele_iden'] }}</td>
+                                                        <td>{{ $item['data']['-X'] }}</td>
+                                                        <td>{{ $item['data']['+X'] }}</td>
+                                                        <td>{{ $item['data']['No_Ind'] }}</td>
+                                                        <td>{{ $item['data']['Dis_rela'] }}</td>
+                                                        <td>{{ $item['data']['HT1'] }}</td>
+                                                        <td>{{ $item['data']['HT2'] }}</td>
+                                                        <td>{{ $item['data']['Cate'] }}</td>
+                                                        <td>{{ $item['data']['Direc'] }}</td>
+                                                        <td>{{ $item['data']['Clas'] }}</td>
+                                                        <td>{{ $item['data']['Porc_Refl'] }}</td>
+                                                        <td>{{ $item['data']['Fotos'] }}</td>
+                                                        <td>{{ $item['data']['Observaciones'] }}</td>
+                                                    </tr>
+                                                @endif
+
+                                        {{-- 🔹 LONGITUD INSPECCIONADA --}}
+                                        @if (($item['tipo'] ?? null) == 'longitud')
+                                        <tr class="sinBordetd">
+                                            <td colspan="14">
+                                            </td>
+                                            <th colspan="3">Longitud inspeccionada:</th>
+                                            <th>{{ $item['valor'] ?? '' }} m</th>
+                                        </tr>
+                                        @endif
+
                                     @endforeach
-
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="">
-                                    <th colspan="15">Longitud inspeccionada:</th>
-                                    <th colspan="3">
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </th>
-                                </tr>
-
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="18"></td>
-                                </tr>--}}
-                            </tbody>
+                                </tbody>
                     </table>
-
-                <table style="margin: auto; border: 0px solid black;">
-                    <tr>
-                        <td>
-                            <table class="simbologia" style="border: 1px solid black;">
-                                <thead>
-                                    <tr>
-                                        <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA DEL REPORTE</th>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>PE</strong></td>
-                                        <td>FIN DE TUBERIA</td>
-                                        <td><strong>V</strong></td>
-                                        <td>SOLDADURA CIRCUNFERENCIAL</td>
-                                        <td><strong>BV</strong></td>
-                                        <td>SOLDADURA DE CODO</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>HC</strong></td>
-                                        <td>ABRAZADERA DE SUJECIÓN</td>
-                                        <td><strong>C1</strong></td>
-                                        <td>ANOMALÍA O IND. CATEGORIA 1</td>
-                                        <td><strong>H.T.</strong></td>
-                                        <td>HORARIO TÉCNICO</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>SB</strong></td>
-                                        <td>RAMAL</td>
-                                        <td><strong>C2</strong></td>
-                                        <td>ANOMALÍA O IND. CATEGORIA 2</td>
-                                        <td><strong>-X</strong></td>
-                                        <td>DISTANCIA NEGATIVA</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>IND</strong></td>
-                                        <td>INDICACIÓN</td>
-                                        <td><strong>C3</strong></td>
-                                        <td>ANOMALÍA O IND. CATEGORIA 3</td>
-                                        <td><strong>+X</strong></td>
-                                        <td>DISTANCIA POSITIVA</td>
-                                    </tr>
-
-                                </thead>
-
-                            </table>
-                        </td>
-                        
-                        <td>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th colspan="6" class=""></th>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                        <td><strong></strong></td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </td>
-
-                        <td>
-                        <table class="simbologia" style="border: 0px solid black;">
-                                <thead>
-                                    <tr>
-                                        <th colspan="8" class="celdaAmarillo">RELACIÓN ENTRE ÁNGULOS DE LA DIRECCIONALIDAD Y HORARIOS TÉCNICOS</th>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>ÁNGULO</strong></td>
-                                        <td>H.T.</td>
-                                        <td><strong>ÁNGULO</strong></td>
-                                        <td>H.T.</td>
-                                        <td><strong>ÁNGULO</strong></td>
-                                        <td>H.T.</td>
-                                        <td><strong>ÁNGULO</strong></td>
-                                        <td>H.T.</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>0°</strong></td>
-                                        <td>12:00</td>
-                                        <td><strong>90°</strong></td>
-                                        <td>03:00</td>
-                                        <td><strong>180°</strong></td>
-                                        <td>06:00</td>
-                                        <td><strong>270°</strong></td>
-                                        <td>09:00</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>30°</strong></td>
-                                        <td>01:00</td>
-                                        <td><strong>120°</strong></td>
-                                        <td>04:00</td>
-                                        <td><strong>210°</strong></td>
-                                        <td>07:00</td>
-                                        <td><strong>300°</strong></td>
-                                        <td>10:00</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>45°</strong></td>
-                                        <td>01:30</td>
-                                        <td><strong>135°</strong></td>
-                                        <td>04:30</td>
-                                        <td><strong>225°</strong></td>
-                                        <td>07:30</td>
-                                        <td><strong>315°</strong></td>
-                                        <td>10:30</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><strong>60°</strong></td>
-                                        <td>02:00</td>
-                                        <td><strong>150°</strong></td>
-                                        <td>05:00</td>
-                                        <td><strong>240°</strong></td>
-                                        <td>08:00</td>
-                                        <td><strong>330°</strong></td>
-                                        <td>11:00</td>
-                                    </tr>
-
-                                </thead>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                </div>
             
             </div>
             @if (!$loop->last)
