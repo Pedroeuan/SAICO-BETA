@@ -1,0 +1,68 @@
+SAICO VEHICULOS MOBILE
+MANUAL RAPIDO PARA PRESENTACION
+
+1. PLAN A - WIFI
+1. Conecta la laptop y el celular a la misma red Wi-Fi.
+2. En la laptop ejecuta:
+   ipconfig
+3. Busca la Direccion IPv4.
+4. Abre estos archivos y cambia la IP:
+   - run_on_android_wifi.cmd
+   - build_wifi_apk.cmd
+5. Cambia esta linea:
+   set "API_HOST=192.168.1.242"
+   por la IP nueva, por ejemplo:
+   set "API_HOST=192.168.0.55"
+6. Ejecuta:
+   start_mobile_backend_wifi.cmd
+7. Luego ejecuta:
+   run_on_android_wifi.cmd
+
+2. PLAN B - CABLE USB
+1. Conecta el celular por cable.
+2. Activa Depuracion por USB.
+3. Acepta el permiso en el celular.
+4. Ejecuta:
+   run_on_android.cmd
+5. Este modo no necesita cambiar IP.
+6. Este modo usa:
+   http://127.0.0.1:8000/api/mobile/v1
+   mediante adb reverse.
+7. Si quieres forzar un celular especifico:
+   run_on_android.cmd ID_DEL_DISPOSITIVO
+
+3. SI CAMBIAS DE CELULAR
+1. Conecta el nuevo celular.
+2. Ejecuta:
+   adb devices
+3. Copia el ID del nuevo celular si quieres elegirlo manualmente.
+4. Puedes correr:
+   run_on_android.cmd NUEVO_DEVICE_ID
+   o
+   run_on_android_wifi.cmd NUEVO_DEVICE_ID
+5. Si no pasas ID, el script toma el primer Android detectado.
+
+4. SI QUIERES INSTALAR LA APK EN OTRO CELULAR
+1. Para Wi-Fi genera APK con:
+   build_wifi_apk.cmd
+2. La APK queda en:
+   build\app\outputs\flutter-apk\app-debug.apk
+3. Pasala al otro celular e instalala.
+4. Ese celular debe estar en la misma red que la laptop.
+5. Debes dejar corriendo:
+   start_mobile_backend_wifi.cmd
+
+5. ARCHIVOS IMPORTANTES
+- start_mobile_backend.cmd
+- start_mobile_backend_wifi.cmd
+- run_on_android.cmd
+- run_on_android_wifi.cmd
+- build_wifi_apk.cmd
+
+6. RECOMENDACION PARA MANANA
+1. Prueba primero por Wi-Fi.
+2. Lleva el cable listo.
+3. Si la red de la uni falla, usa run_on_android.cmd.
+4. Si cambias de Wi-Fi, cambia la IP solo en:
+   - run_on_android_wifi.cmd
+   - build_wifi_apk.cmd
