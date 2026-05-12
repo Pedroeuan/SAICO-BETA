@@ -1029,16 +1029,16 @@
                                     <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="3" style="width: 80px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="4" style="width: 80px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 60px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="5" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="6" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="7" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 80px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="9" style="width: 80px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="10" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 70px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 70px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="11" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="12" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="13" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="14" style="width: 100px;"></th>
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>

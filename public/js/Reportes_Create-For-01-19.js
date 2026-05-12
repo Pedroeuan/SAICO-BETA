@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-            document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
+            /*document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
                 const key = `${formId}_${cb.id}`;
                 const stored = localStorage.getItem(key);
 
@@ -317,8 +317,62 @@ document.addEventListener("DOMContentLoaded", function () {
                         hiddenInput.value = 0;
                     }
                 }
-            });
+            });*/
+            
+            document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
+                cb.addEventListener('change', function () {
 
+                    const index = this.dataset.index;
+
+                    const container = document.getElementById(`detallesContainer${index}`);
+                    const hiddenInput = document.getElementById(`detallesJuntaValue${index}`);
+
+                    // CHECKBOX IMAGEN EN HOJA
+                    const imagenHojaCheckbox = document.getElementById(`imagenHoja${index}`);
+                    const imagenHojaValue = document.getElementById(`imagenHojaValue${index}`);
+
+                    const form = document.querySelector("form");
+                    const formId = form.id;
+
+                    if (this.checked) {
+
+                        container.classList.remove('d-none');
+                        hiddenInput.value = 1;
+
+                        // ✅ MARCAR AUTOMÁTICAMENTE
+                        imagenHojaCheckbox.checked = true;
+                        imagenHojaValue.value = 1;
+
+                        // Guardar en localStorage
+                        localStorage.setItem(`${formId}_imagenHoja${index}`, true);
+
+                        // Restaurar valores guardados
+                        container.querySelectorAll('input[type="text"]').forEach(input => {
+                            const key = `${formId}_${input.name}_${container.id}`;
+                            const stored = localStorage.getItem(key);
+
+                            if (stored !== null) {
+                                input.value = stored;
+                            }
+                        });
+
+                    } else {
+
+                        container.classList.add('d-none');
+                        hiddenInput.value = 0;
+
+                        // OPCIONAL: desmarcar también
+                        imagenHojaCheckbox.checked = false;
+                        imagenHojaValue.value = 0;
+
+                        localStorage.setItem(`${formId}_imagenHoja${index}`, false);
+                    }
+
+                    // Guardar estado del checkbox
+                    localStorage.setItem(`${formId}_${this.id}`, this.checked);
+
+                });
+            });
             // 🔁 RESTAURAR INPUTS DE DETALLES JUNTA
             document.querySelectorAll('.detalles-junta-container input').forEach(input => {
                 const key = `${formId}_${input.name}_${input.closest('.detalles-junta-container').id}`;
