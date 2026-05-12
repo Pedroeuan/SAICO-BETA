@@ -218,12 +218,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
 
     }
 
-    public function FOR_01_PRO_INS_03_store1(Request $request)
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
     public function FOR_01_PRO_INS_03_store(Request $request)
     {
         $Estatus = "CREADO";
@@ -246,6 +240,8 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Codigo_Aplicable' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.Num_Soldador' => 'nullable|string',
+            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -709,12 +705,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_01_PRO_INS_03_update1(Request $request) 
-    {
-        // Verificar los datos recibidos antes de procesarlos
-        dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
-    }
-
     public function FOR_01_PRO_INS_03_update(Request $request, $id)
     {
         //dd($request->all());
@@ -738,6 +728,9 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Codigo_Aplicable' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.Num_Soldador' => 'nullable|string',
+            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.Reporte_Firmado' => 'required|mimes:pdf',
             
             /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -862,10 +855,29 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Firmas = Firma_Reporte::where('idReportes',$id)->first();
         $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
 
-        // Obtener el valor de 'Detalles_Generales.Contrato'
+        // 0. Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        // 1. Obtener los valores para la ruta
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
 
-        // Actualiza los detalles generales como JSON en la base de datos
+        // 2. Definir la ruta personalizada (quitamos "Fotos" al final si solo es para el PDF)
+        // Nota: storeAs ya sabe que debe buscar dentro de 'storage/app'
+        $rutaBase = "public/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
+
+        if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
+            
+            $file = $request->file('Detalles_Generales.Reporte_Firmado');
+
+            $nombreArchivo = 'Reporte_Firmado_' . $No_Reporte . '_' . time() . '.pdf';
+            $file->storeAs($rutaBase, $nombreArchivo);
+
+            // 3. Generar la ruta pública
+            $rutaPublica = str_replace('public/', 'storage/', $rutaBase) . '/' . $nombreArchivo;
+            
+            // 4. INSERTAR la ruta dentro del array Detalles_Generales
+            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $rutaPublica;
+
+        }
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 

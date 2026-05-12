@@ -995,6 +995,50 @@
                                             </div>
                                         </div>
 
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{ old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '') }}">
+                                                @error('Num_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
+                                                @error('Nombre_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>
+                                        
+                                        <p>
+
+                                        <div class="row justify-content-center">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputSuccess">SUBIR MANIFIESTO FIRMADO</label>
+                                                        <input type="file" class="form-control-file inputForm" name="Detalles_Generales[Reporte_Firmado]"></input>
+                                                            @if ($errors->any())
+                                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                            @endif
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
