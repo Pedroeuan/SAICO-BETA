@@ -730,7 +730,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
-            'Detalles_Generales.Reporte_Firmado' => 'required|mimes:pdf',
+            'Detalles_Generales.Reporte_Firmado' => 'nullable|mimes:pdf',
             
             /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -855,29 +855,39 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Firmas = Firma_Reporte::where('idReportes',$id)->first();
         $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
 
-        // 0. Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-        // 1. Obtener los valores para la ruta
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
 
-        // 2. Definir la ruta personalizada (quitamos "Fotos" al final si solo es para el PDF)
-        // Nota: storeAs ya sabe que debe buscar dentro de 'storage/app'
-        $rutaBase = "public/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
+        // 1. Obtener los detalles actuales que ya están en la base de datos
+        $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
-            $file = $request->file('Detalles_Generales.Reporte_Firmado');
+            // 1. ELIMINAR ARCHIVO ANTERIOR (si existe)
+            if (!empty($detallesActuales['Reporte_Firmado'])) {
+                // Convertimos la ruta de la base de datos (storage/...) de vuelta a la ruta del disco (public/...)
+                $archivoViejo = str_replace('storage/', 'public/', $detallesActuales['Reporte_Firmado']);
+                
+                if (Storage::exists($archivoViejo)) {
+                    Storage::delete($archivoViejo);
+                }
+            }
 
+            // 2. PROCESAR NUEVO ARCHIVO
+            $file = $request->file('Detalles_Generales.Reporte_Firmado');
+            $rutaBase = "public/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
             $nombreArchivo = 'Reporte_Firmado_' . $No_Reporte . '_' . time() . '.pdf';
+            
             $file->storeAs($rutaBase, $nombreArchivo);
 
-            // 3. Generar la ruta pública
             $rutaPublica = str_replace('public/', 'storage/', $rutaBase) . '/' . $nombreArchivo;
-            
-            // 4. INSERTAR la ruta dentro del array Detalles_Generales
             $validatedData['Detalles_Generales']['Reporte_Firmado'] = $rutaPublica;
 
+        } else {
+            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
         }
+
+        // Actualizar el reporte
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
