@@ -41,7 +41,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_01_PRO_INS_03Controller extends Controller
 {
+    public function Datos_QR($datosParaCrearQR)
+    {
 
+    }
+    
     public function OS_OC($datosParaCrearOS_OC)
     {
         $idPrueba_Aplica = $datosParaCrearOS_OC['idPrueba_Aplica'];
@@ -474,12 +478,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
-        /*if (!empty($filasSinTitulo)) {
-            /$totalFilas = count($filasSinTitulo);
-            $contadorBloque = 1;
-            for ($offset = 0; $offset < $totalFilas; $offset += $maxFilasPorBloque) {
-                $resultados = [];
-                for ($i = $offset; $i < min($offset + $maxFilasPorBloque, $totalFilas); $i++) {*/
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
                     'tipo' => 'fila',
@@ -500,19 +498,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
                 }
                 
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-                // tomar la longitud correspondiente al bloque
-                //$longBloque = $longitudesSin[$contadorBloque - 1] ?? null;
-                //$indexLong = floor($offset / $maxFilasPorBloque);
 
-                //$longBloque = $longitudesSin[$indexLong] ?? null;
-
-                /*$datosAgrupados[] = [
-                    'titulos_juntas' => 'SIN TITULO ' . $contadorBloque,
-                    'resultados'     => $resultados,
-                    'Long_Inspecc'   => [$longBloque],
-                ];
-
-                $contadorBloque++;*/
                 foreach ($longitudesSin as $long) {
                     $agregarElemento([
                         'tipo' => 'longitud',
@@ -544,8 +530,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $filas = $request->input("No.$tituloKey", []);
             $numFilas = count($filas);
         
-            //$resultados = [];
-        
             for ($i = 0; $i < $numFilas; $i++) {
                 $agregarElemento([
                     'tipo' => 'fila',
@@ -568,11 +552,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
             // Obtener longitud inspeccionada asociada a este título (si existe)
             //$long = $request->input("Long_Inspecc.$tituloKey", null);
             $longitudes = $request->input("Long_Inspecc.$tituloKey", []); //Agregar
-            /*$datosAgrupados[] = [
-                'titulos_juntas' => $tituloText, //<-- Usar el texto real del título
-                'resultados' => $resultados,
-                'Long_Inspecc' => $long,
-            ];*/
                 foreach ($longitudes as $long) {
                     $agregarElemento([
                         'tipo' => 'longitud',
@@ -696,8 +675,12 @@ class FOR_01_PRO_INS_03Controller extends Controller
             
         ];
 
-        $this->OS_OC($datosParaCrearOS_OC);
+        $Datos_QR = [
+            'idSolicitud' => $idSolicitud,
+        ];
 
+        $this->OS_OC($datosParaCrearOS_OC);
+        $this->OS_OC($datosParaCrearOS_OC);
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         

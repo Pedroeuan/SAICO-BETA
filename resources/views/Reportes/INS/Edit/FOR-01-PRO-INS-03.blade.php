@@ -263,6 +263,8 @@
                                         </div>
                                     </div>
 
+                                    <input type="text" class="form-control  inputForm" id="IDInputC1" name="Datos_Equipo[ID_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.ID_PENETRANTES', $Datos_Equipo['ID_PENETRANTES'] ?? '')}}">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -1279,11 +1281,13 @@ $(document).ready(function() {
                 var selectedOption = $('#consumiblesSelect1').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
+                var ID = selectedOption.data('ID') || '';
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC1').val(ID);
                 $('#marcaInputC1').val(marca);
                 $('#modeloInputC1').val(modelo);
                 $('#loteInputC1').val(lote);
