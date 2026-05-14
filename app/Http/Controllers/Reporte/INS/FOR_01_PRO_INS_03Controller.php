@@ -22,6 +22,7 @@ use App\Models\OrdenServicio\Orden_Servicio;
 use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
@@ -43,7 +44,78 @@ class FOR_01_PRO_INS_03Controller extends Controller
 {
     public function Datos_QR($datosParaCrearQR)
     {
+        // 1. CORRECCIÓN DE VARIABLES: Asegúrate de que estas variables vengan del array $datosParaCrearQR
+        // Si $datosParaCrearOS_OC no existe, el código fallará. He ajustado para que los tome de $datosParaCrearQR.
+        $Contrato   = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
+        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte'; 
+        
+        $idPenetrante = $datosParaCrearQR['idPenetrante'];
+        $idRemovedor  = $datosParaCrearQR['idRemovedor'];
+        $idRevelador  = $datosParaCrearQR['idRevelador'];
+        
+        $idsConsumibles = [$idPenetrante, $idRemovedor, $idRevelador];
 
+        // 2. OBTENCIÓN DE RUTAS
+        $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)
+                    ->whereNotNull('Factura')
+                    ->pluck('Factura')
+                    ->toArray();
+
+        $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)
+                    ->whereNotNull('Certificado_Actual')
+                    ->pluck('C')
+                    ->toArray();
+
+        $todasLasRutas = array_merge($facturas, $certificados);
+
+        // 3. INICIALIZAR FPDI
+        $pdf = new Fpdi();
+
+        foreach ($todasLasRutas as $ruta) {
+            Log::info('***********************');
+            Log::info('ruta: ', ['ruta' => $ruta]);
+            // 1. Definimos los textos que queremos ignorar
+            $textosA_Omitir = [
+                'EN ESPERA DE DATOS',
+                'ESPERA DE DATO',
+                'N/A',
+                '', 
+                null
+            ];
+            // 2. Si la ruta es uno de estos textos, saltamos a la siguiente iteración
+            if (in_array(trim($ruta), $textosA_Omitir)) {
+                continue;
+            }
+            // CORRECCIÓN DE RUTA: Verifica si $ruta ya trae la carpeta o solo el nombre del archivo.
+            $file = storage_path("app/public/Reportes/FOR_01_PRO_INS_04/{$Contrato}/{$No_Reporte}/" . $ruta);
+
+            if (file_exists($file)) {
+                try {
+                    $pageCount = $pdf->setSourceFile($file);
+
+                    for ($n = 1; $n <= $pageCount; $n++) {
+                        $tplIdx = $pdf->importPage($n);
+                        $specs = $pdf->getImportedPageSize($tplIdx);
+
+                        // Importante: Respetar orientación y tamaño de cada página original
+                        $pdf->AddPage($specs['orientation'], [$specs['width'], $specs['height']]);
+                        $pdf->useTemplate($tplIdx);
+                    }
+                } catch (\Exception $e) {
+                    // Si el PDF es versión > 1.4, FPDI gratuito fallará. 
+                    // Aquí podrías loguear el error: \Log::error("Error procesando PDF: " . $e->getMessage());
+                    continue; 
+                }
+            }
+        }
+
+        // 4. RETORNO DEL PDF COMBINADO
+        // Usamos 'S' para devolver el string y envolverlo en una respuesta de Laravel
+        $pdfOutput = $pdf->Output('S', 'Documentacion_Combinada.pdf');
+
+    return response($pdfOutput)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', "inline; filename=\"QR_FOR_01_PRO_INS_04_{$Contrato}_{$No_Reporte}.pdf\"");
     }
     
     public function OS_OC($datosParaCrearOS_OC)
@@ -52,7 +124,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Cliente = $datosParaCrearOS_OC['Cliente'];
         $Lugar = $datosParaCrearOS_OC['Lugar'];
         $Contrato= $datosParaCrearOS_OC['Contrato'];
-        //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
         $Proyecto = $datosParaCrearOS_OC['Proyecto'];
         $Material = $datosParaCrearOS_OC['Material'];
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
@@ -249,6 +320,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             
             /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            'Datos_Equipo.ID_PENETRANTES' => 'nullable|string',
             'Datos_Equipo.MARCA_PENETRANTES' => 'nullable|string',
             'Datos_Equipo.MODELO_PENETRANTES' => 'nullable|string',
             'Datos_Equipo.LOTE_PENETRANTES' => 'nullable|string',
@@ -256,6 +328,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Datos_Equipo.APLICACION_PENETRANTES' => 'nullable|string',
             'Datos_Equipo.TIPO_GRUPO_PENETRANTES' => 'nullable|string',
 
+            'Datos_Equipo.ID_REMOVEDOR' => 'nullable|string',
             'Datos_Equipo.MARCA_REMOVEDOR' => 'nullable|string',
             'Datos_Equipo.MODELO_REMOVEDOR' => 'nullable|string',
             'Datos_Equipo.LOTE_REMOVEDOR' => 'nullable|string',
@@ -263,6 +336,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Datos_Equipo.APLICACION_REMOVEDOR' => 'nullable|string',
             'Datos_Equipo.TIPO_GRUPO_REMOVEDOR' => 'nullable|string',
 
+            'Datos_Equipo.ID_REVELEADOR' => 'nullable|string',
             'Datos_Equipo.MARCA_REVELEADOR' => 'nullable|string',
             'Datos_Equipo.MODELO_REVELEADOR' => 'nullable|string',
             'Datos_Equipo.LOTE_REVELEADOR' => 'nullable|string',
@@ -659,6 +733,10 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Pieza = $validatedData['Detalles_Generales']['Pieza'];
         $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Codigo_Aplicable'];
 
+        $idPenetrante = $validatedData['Datos_Equipo']['ID_PENETRANTES'];
+        $idRemovedor = $validatedData['Datos_Equipo']['ID_REMOVEDOR'];
+        $idRevelador = $validatedData['Datos_Equipo']['ID_REVELEADOR'];
+
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
             'Cliente' => $Cliente,
@@ -675,12 +753,18 @@ class FOR_01_PRO_INS_03Controller extends Controller
             
         ];
 
-        $Datos_QR = [
+        $datosParaCrearQR = [
+            'Contrato' => $Contrato,
+            'Proyecto' => $Proyecto,
             'idSolicitud' => $idSolicitud,
+            'idPenetrante' => $idPenetrante,
+            'idRemovedor' => $idRemovedor,
+            'idRevelador' => $idRevelador,
         ];
 
         $this->OS_OC($datosParaCrearOS_OC);
-        $this->OS_OC($datosParaCrearOS_OC);
+        $this->Datos_QR($datosParaCrearQR);
+        $QR_PDF = $validatedData['Datos_Equipo']['QR_PDF'];
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
@@ -694,7 +778,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
-            /*DETALLES GENERALES */
+             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
             'Detalles_Generales.No_Reporte' => 'required|string',
@@ -713,10 +797,10 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
-            'Detalles_Generales.Reporte_Firmado' => 'nullable|mimes:pdf',
             
             /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
+            'Datos_Equipo.ID_PENETRANTES' => 'nullable|string',
             'Datos_Equipo.MARCA_PENETRANTES' => 'nullable|string',
             'Datos_Equipo.MODELO_PENETRANTES' => 'nullable|string',
             'Datos_Equipo.LOTE_PENETRANTES' => 'nullable|string',
@@ -724,6 +808,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Datos_Equipo.APLICACION_PENETRANTES' => 'nullable|string',
             'Datos_Equipo.TIPO_GRUPO_PENETRANTES' => 'nullable|string',
 
+            'Datos_Equipo.ID_REMOVEDOR' => 'nullable|string',
             'Datos_Equipo.MARCA_REMOVEDOR' => 'nullable|string',
             'Datos_Equipo.MODELO_REMOVEDOR' => 'nullable|string',
             'Datos_Equipo.LOTE_REMOVEDOR' => 'nullable|string',
@@ -731,6 +816,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'Datos_Equipo.APLICACION_REMOVEDOR' => 'nullable|string',
             'Datos_Equipo.TIPO_GRUPO_REMOVEDOR' => 'nullable|string',
 
+            'Datos_Equipo.ID_REVELEADOR' => 'nullable|string',
             'Datos_Equipo.MARCA_REVELEADOR' => 'nullable|string',
             'Datos_Equipo.MODELO_REVELEADOR' => 'nullable|string',
             'Datos_Equipo.LOTE_REVELEADOR' => 'nullable|string',
@@ -750,7 +836,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
 
             /*Resultados_Juntas*/
             'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
-            'No'=> 'nullable|array',
+            'No' => 'nullable|array',
             'componente' => 'nullable|array',
             'no_indicacion' => 'nullable|array',
             'tipo_indicacion' => 'nullable|array',
@@ -761,7 +847,6 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'evaluacion' => 'nullable|array',
             'long_inspeccionada' => 'nullable|array',
 
-            /* Longitudes inspeccionadas */
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',

@@ -1086,17 +1086,9 @@
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
-                                    @if ($generalEyC->Factura != 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
-                                            <label class="col-form-label" for="inputSuccess">Ver Factura</label> 
-                                            <div>
-                                                <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                               
-                                            </div>                                              
-                                        </div>
-                                    </div>
-                                    @elseif($generalEyC->Factura == 'ESPERA DE DATO')
+                                    @php //dd($generalEyC); 
+                                    @endphp
+                                    @if ($generalEyC->Factura == 'ESPERA DE DATO' || $generalEyC->Factura == 'EN ESPERA DE DATOS')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
@@ -1106,6 +1098,17 @@
                                             </div>                                                                                              
                                         </div>
                                     </div>
+                                    @else
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                            <label class="col-form-label" for="inputSuccess">Ver Factura</label> 
+                                            <div>
+                                                <a href="{{ asset('storage/' . $generalEyC->Factura) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                               
+                                            </div>                                              
+                                        </div>
+                                    </div>
+                                    
                                     @endif
 
                                 <div class="col-sm-4">
