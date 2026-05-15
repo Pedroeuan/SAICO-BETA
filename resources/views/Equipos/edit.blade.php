@@ -386,7 +386,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @elseif($rol != 'Equipos') Estatus @else Disponibilidad/Estatus @endif</label>
-                                                @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
+                                                @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' && $rol != 'Super Administrador' || $generalEyC->Disponibilidad_Estado == 'En Servicio' && $rol != 'Super Administrador')
                                                     <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
                                                 @else
                                                     <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
@@ -457,24 +457,26 @@
                                                 <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
                                             </div>
                                         </div>
-                                        @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
-                                                <label class="col-form-label" for="inputSuccess">Ver Certificado</label>  
-                                                <div>                                            
-                                                    <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                                                                     
-                                                </div> 
+                                        @if($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO' || $generalConCertificados->Certificado_Actual == 'N/A')
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                                    <label class="col-form-label" for="inputSuccess">No hay Certificado</label> 
+                                                    <div>
+                                                        <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                                    </div>                                              
+                                                </div>
                                             </div>
-                                        </div>
-                                        @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <!-- Agrega esto en tu archivo de vista Equipos.edit -->   
-                                                <label class="col-form-label" for="inputSuccess">No se encontraron Certificados</label>                                              
-                                                    <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                                 
+                                            @else
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                                    <label class="col-form-label" for="inputSuccess">Ver Certificado</label>     
+                                                    <div>                                          
+                                                        <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                            
+                                                    </div> 
+                                                </div>
                                             </div>
-                                        </div>
                                         @endif
                                         <div class="col-sm-4">
                                             <div class="form-group">
@@ -760,7 +762,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">@if($rol != 'Laboratorio')Disponibilidad @elseif($rol != 'Equipos') Estatus @else Disponibilidad/Estatus @endif</label>
-                                                @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
+                                                @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' && $rol != 'Super Administrador' || $generalEyC->Disponibilidad_Estado == 'En Servicio' && $rol != 'Super Administrador')
                                                     <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
                                                 @else
                                                     <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
@@ -832,24 +834,26 @@
                                                 <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
                                             </div>
                                         </div>
-                                        @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
-                                                <label class="col-form-label" for="inputSuccess">Ver Certificado</label>  
-                                                <div>                                            
-                                                    <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                                                                     
-                                                </div> 
+                                        @if($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO' || $generalConCertificados->Certificado_Actual == 'N/A')
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                                    <label class="col-form-label" for="inputSuccess">No hay Certificado</label> 
+                                                    <div>
+                                                        <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                                    </div>                                              
+                                                </div>
                                             </div>
-                                        </div>
-                                        @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <!-- Agrega esto en tu archivo de vista Equipos.edit -->   
-                                                <label class="col-form-label" for="inputSuccess">No se encontraron Certificados</label>                                              
-                                                    <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                                 
+                                            @else
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                                    <label class="col-form-label" for="inputSuccess">Ver Certificado</label>     
+                                                    <div>                                          
+                                                        <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                            
+                                                    </div> 
+                                                </div>
                                             </div>
-                                        </div>
                                         @endif
                                         <div class="col-sm-4">
                                             <div class="form-group">
@@ -1086,8 +1090,6 @@
                                             <input type="file" class="form-control inputForm" name="Factura" placeholder="Enter ..."></input>
                                         </div>
                                     </div>
-                                    @php //dd($generalEyC); 
-                                    @endphp
                                     @if ($generalEyC->Factura == 'ESPERA DE DATO' || $generalEyC->Factura == 'EN ESPERA DE DATOS')
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -1114,7 +1116,7 @@
                                 <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
+                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' && $rol != 'Super Administrador' || $generalEyC->Disponibilidad_Estado == 'En Servicio' && $rol != 'Super Administrador')
                                                     <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
                                                 @else
                                                 <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
@@ -1176,27 +1178,27 @@
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="">
                                         </div>
                                     </div>
-                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
-                                            <label class="col-form-label" for="inputSuccess">Ver Certificado</label>     
-                                            <div>                                          
-                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                            
-                                            </div> 
-                                        </div>
-                                    </div>
-                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                            <label class="col-form-label" for="inputSuccess">No hay Certificado</label> 
-                                            <div>
-                                                <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
-                                            </div>                                              
-                                        </div>
-                                    </div>
-                                    @endif
+                                        @if($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO' || $generalConCertificados->Certificado_Actual == 'N/A')
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                                    <label class="col-form-label" for="inputSuccess">No hay Certificado</label> 
+                                                    <div>
+                                                        <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                                    </div>                                              
+                                                </div>
+                                            </div>
+                                            @else
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                                    <label class="col-form-label" for="inputSuccess">Ver Certificado</label>     
+                                                    <div>                                          
+                                                        <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                            
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                        @endif
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha Caducidad</label>
@@ -1407,7 +1409,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
+                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' && $rol != 'Super Administrador' || $generalEyC->Disponibilidad_Estado == 'En Servicio' && $rol != 'Super Administrador')
                                                     <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
                                                 @else
                                                 <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
@@ -1426,7 +1428,7 @@
                                             <input type="file" class="form-control inputForm"  name="Certificado_Actual" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO' || $generalConCertificados->Certificado_Actual != 'N/A')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->     
@@ -1618,7 +1620,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
+                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' && $rol != 'Super Administrador' || $generalEyC->Disponibilidad_Estado == 'En Servicio' && $rol != 'Super Administrador')
                                                     <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
                                                 @else
                                                 <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
@@ -1669,7 +1671,7 @@
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ..." multiple>
                                         </div>
                                     </div>
-                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
+                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO' || $generalConCertificados->Certificado_Actual != 'N/A')
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
@@ -1882,7 +1884,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Disponibilidad</label>
-                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $generalEyC->Disponibilidad_Estado == 'En Servicio')
+                                            @if($generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' && $rol != 'Super Administrador' || $generalEyC->Disponibilidad_Estado == 'En Servicio' && $rol != 'Super Administrador')
                                                     <input type="text" class="form-control inputForm" name="Disponibilidad_Estado" value="{{ $generalEyC->Disponibilidad_Estado }}" readonly>
                                                 @else
                                                 <select class="form-control select2" style="width: 100%;" name="Disponibilidad_Estado">
@@ -1948,23 +1950,27 @@
                                             <input type="file" class="form-control inputForm" name="Certificado_Actual" placeholder="Enter ...">
                                         </div>
                                     </div>
-                                    @if ($generalConCertificados->Certificado_Actual != 'ESPERA DE DATO')
-                                    <div class="col-sm-6">
-                                        <div class="form-group">  
-                                            <label class="col-form-label" for="inputSuccess">Ver Certificado Actual</label>
-                                            <div>                                        
-                                                <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                               
-                                            </div>   
-                                        </div>
-                                    </div>
-                                    @elseif($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO')
-                                    <div class="col-sm-6">
-                                    <label class="col-form-label" for="inputSuccess">No hay Certificado</label>
-                                        <div class="form-group">                                            
-                                                <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                               
-                                        </div>
-                                    </div>
-                                    @endif
+                                        @if($generalConCertificados->Certificado_Actual == 'ESPERA DE DATO' || $generalConCertificados->Certificado_Actual == 'N/A')
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
+                                                    <label class="col-form-label" for="inputSuccess">No hay Certificado</label> 
+                                                    <div>
+                                                        <a target="_blank" class="btn btn-secondary long-button" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                                    </div>                                              
+                                                </div>
+                                            </div>
+                                            @else
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                                    <label class="col-form-label" for="inputSuccess">Ver Certificado</label>     
+                                                    <div>                                          
+                                                        <a href="{{ asset('storage/' . $generalConCertificados->Certificado_Actual) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                            
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                        @endif
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Plano</label>

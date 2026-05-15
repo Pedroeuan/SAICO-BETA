@@ -594,8 +594,8 @@
                                         {{-- LONGITUD --}}
                                         @if (($item['tipo'] ?? null) == 'longitud')
                                             <tr class="sinBordetd">
-                                                <td colspan="2"></td>
-                                                <th colspan="3">Longitud inspeccionada:</th>
+                                                <td colspan="7"></td>
+                                                <th colspan="2">Longitud inspeccionada:</th>
                                                 <th>{{ $item['valor'] ?? '' }} m</th>
                                             </tr>
                                         @endif

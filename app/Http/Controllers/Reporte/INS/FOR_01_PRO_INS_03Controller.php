@@ -44,80 +44,74 @@ class FOR_01_PRO_INS_03Controller extends Controller
 {
     public function Datos_QR($datosParaCrearQR)
     {
-        // 1. CORRECCIÓN DE VARIABLES: Asegúrate de que estas variables vengan del array $datosParaCrearQR
-        // Si $datosParaCrearOS_OC no existe, el código fallará. He ajustado para que los tome de $datosParaCrearQR.
         $Contrato   = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte'; 
-        
-        $idPenetrante = $datosParaCrearQR['idPenetrante'];
-        $idRemovedor  = $datosParaCrearQR['idRemovedor'];
-        $idRevelador  = $datosParaCrearQR['idRevelador'];
-        
-        $idsConsumibles = [$idPenetrante, $idRemovedor, $idRevelador];
+        $idsConsumibles = [$datosParaCrearQR['idPenetrante'], $datosParaCrearQR['idRemovedor'], $datosParaCrearQR['idRevelador']];
 
-        // 2. OBTENCIÓN DE RUTAS
+        // 1. Obtener las rutas de la base de datos
         $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)
-                    ->whereNotNull('Factura')
-                    ->pluck('Factura')
-                    ->toArray();
+                    ->whereNotNull('Factura')->pluck('Factura')->toArray();
 
         $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)
-                    ->whereNotNull('Certificado_Actual')
-                    ->pluck('C')
-                    ->toArray();
+                    ->whereNotNull('Certificado_Actual')->pluck('Certificado_Actual')->toArray();
 
         $todasLasRutas = array_merge($facturas, $certificados);
 
-        // 3. INICIALIZAR FPDI
+        // 2. Inicializar FPDI
         $pdf = new Fpdi();
+        $paginasAgregadas = 0;
 
+        // 3. Recolectar copias de los PDFs y unirlos
         foreach ($todasLasRutas as $ruta) {
-            Log::info('***********************');
-            Log::info('ruta: ', ['ruta' => $ruta]);
-            // 1. Definimos los textos que queremos ignorar
-            $textosA_Omitir = [
-                'EN ESPERA DE DATOS',
-                'ESPERA DE DATO',
-                'N/A',
-                '', 
-                null
-            ];
-            // 2. Si la ruta es uno de estos textos, saltamos a la siguiente iteración
-            if (in_array(trim($ruta), $textosA_Omitir)) {
-                continue;
-            }
-            // CORRECCIÓN DE RUTA: Verifica si $ruta ya trae la carpeta o solo el nombre del archivo.
-            $file = storage_path("app/public/Reportes/FOR_01_PRO_INS_04/{$Contrato}/{$No_Reporte}/" . $ruta);
+            // Omitir textos de espera
+            $textosA_Omitir = ['EN ESPERA DE DATOS', 'ESPERA DE DATO', 'ESPERA DE DATOS', 'N/A', '', null];
+            if (in_array(trim($ruta), $textosA_Omitir)) continue;
+
+            // Como confirmas que todo está en "Equipos y Consumibles", 
+            // la ruta de la BD ya es el camino relativo correcto desde 'public'
+            $file = storage_path("app/public/" . trim($ruta));
 
             if (file_exists($file)) {
                 try {
                     $pageCount = $pdf->setSourceFile($file);
-
                     for ($n = 1; $n <= $pageCount; $n++) {
                         $tplIdx = $pdf->importPage($n);
                         $specs = $pdf->getImportedPageSize($tplIdx);
-
-                        // Importante: Respetar orientación y tamaño de cada página original
+                        
                         $pdf->AddPage($specs['orientation'], [$specs['width'], $specs['height']]);
                         $pdf->useTemplate($tplIdx);
+                        $paginasAgregadas++;
                     }
+                    Log::info("Archivo combinado exitosamente: " . $ruta);
                 } catch (\Exception $e) {
-                    // Si el PDF es versión > 1.4, FPDI gratuito fallará. 
-                    // Aquí podrías loguear el error: \Log::error("Error procesando PDF: " . $e->getMessage());
-                    continue; 
+                    Log::error("Error al procesar el archivo {$ruta}: " . $e->getMessage());
+                    continue;
                 }
+            } else {
+                Log::warning("No se encontró el archivo físico en: " . $file);
             }
         }
 
-        // 4. RETORNO DEL PDF COMBINADO
-        // Usamos 'S' para devolver el string y envolverlo en una respuesta de Laravel
-        $pdfOutput = $pdf->Output('S', 'Documentacion_Combinada.pdf');
+        // 4. Definir destino del nuevo archivo (El PDF unido)
+        $nombreArchivo = "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
+        $directorioFinal = "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
+        $pathDestino = storage_path("app/public/" . $directorioFinal . $nombreArchivo);
 
-    return response($pdfOutput)
-        ->header('Content-Type', 'application/pdf')
-        ->header('Content-Disposition', "inline; filename=\"QR_FOR_01_PRO_INS_04_{$Contrato}_{$No_Reporte}.pdf\"");
+        // Crear la carpeta del reporte si no existe
+        if (!file_exists(storage_path("app/public/" . $directorioFinal))) {
+            mkdir(storage_path("app/public/" . $directorioFinal), 0755, true);
+        }
+
+        // Guardar el PDF final solo si tiene contenido
+        if ($paginasAgregadas > 0) {
+            $pdf->Output('F', $pathDestino);
+        } else {
+            Log::error("El PDF final no se generó porque no se encontraron archivos válidos.");
+        }
+
+        return $nombreArchivo;
     }
-    
+        
     public function OS_OC($datosParaCrearOS_OC)
     {
         $idPrueba_Aplica = $datosParaCrearOS_OC['idPrueba_Aplica'];
@@ -725,6 +719,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
         $Material = $validatedData['Detalles_Generales']['Material'];
@@ -755,7 +750,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
 
         $datosParaCrearQR = [
             'Contrato' => $Contrato,
-            'Proyecto' => $Proyecto,
+            'No_Reporte' => $No_Reporte,
             'idSolicitud' => $idSolicitud,
             'idPenetrante' => $idPenetrante,
             'idRemovedor' => $idRemovedor,
@@ -923,8 +918,12 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Firmas = Firma_Reporte::where('idReportes',$id)->first();
         $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
 
+        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $idPenetrante = $validatedData['Datos_Equipo']['ID_PENETRANTES'];
+        $idRemovedor = $validatedData['Datos_Equipo']['ID_REMOVEDOR'];
+        $idRevelador = $validatedData['Datos_Equipo']['ID_REVELEADOR'];
 
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
@@ -955,6 +954,24 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
         }
 
+        $datosParaCrearQR = [
+            'Contrato' => $Contrato,
+            'No_Reporte' => $No_Reporte,
+            'idSolicitud' => $idSolicitud,
+            'idPenetrante' => $idPenetrante,
+            'idRemovedor' => $idRemovedor,
+            'idRevelador' => $idRevelador,
+        ];
+
+        $this->Datos_QR($datosParaCrearQR);
+        // 1. Captura el nombre que devuelve la función
+        $nombreGenerado = $this->Datos_QR($datosParaCrearQR);
+
+        // 2. ASIGNA la llave al array para que deje de marcar error
+        $validatedData['Datos_Equipo']['QR_PDF'] = $nombreGenerado;
+
+        // 3. Ahora sí, ya existe la llave y puedes usarla
+        $QR_PDF = $validatedData['Datos_Equipo']['QR_PDF'];
         // Actualizar el reporte
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
