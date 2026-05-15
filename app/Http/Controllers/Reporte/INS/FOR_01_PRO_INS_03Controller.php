@@ -45,71 +45,123 @@ class FOR_01_PRO_INS_03Controller extends Controller
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato   = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
-        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte'; 
-        $idsConsumibles = [$datosParaCrearQR['idPenetrante'], $datosParaCrearQR['idRemovedor'], $datosParaCrearQR['idRevelador']];
+        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
 
-        // 1. Obtener las rutas de la base de datos
+        $idsConsumibles = [
+            $datosParaCrearQR['idPenetrante'],
+            $datosParaCrearQR['idRemovedor'],
+            $datosParaCrearQR['idRevelador']
+        ];
+
+        // Obtener rutas de facturas
         $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)
-                    ->whereNotNull('Factura')->pluck('Factura')->toArray();
+            ->whereNotNull('Factura')
+            ->pluck('Factura')
+            ->toArray();
 
+        // Obtener rutas de certificados
         $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)
-                    ->whereNotNull('Certificado_Actual')->pluck('Certificado_Actual')->toArray();
+            ->whereNotNull('Certificado_Actual')
+            ->pluck('Certificado_Actual')
+            ->toArray();
 
+        // Unificar rutas
         $todasLasRutas = array_merge($facturas, $certificados);
 
-        // 2. Inicializar FPDI
+        // Filtrar rutas inválidas
+        $todasLasRutas = array_filter($todasLasRutas, function ($ruta) {
+
+            if (empty($ruta)) {
+                return false;
+            }
+
+            $ruta = trim($ruta);
+
+            $valoresInvalidos = [
+                'EN ESPERA DE DATOS',
+                'ESPERA DE DATO',
+                'N/A',
+                '-'
+            ];
+
+            return !in_array(strtoupper($ruta), $valoresInvalidos);
+        });
+
+        // Reindexar array
+        $todasLasRutas = array_values($todasLasRutas);
+
+        Log::info('***********************');
+        Log::info('todasLasRutas: ', ['todasLasRutas' => $todasLasRutas]);
+
+        // Nombre del PDF final
+        $nombreArchivo = "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
+
+        $directorioFinal = "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
+
+        $rutaDirectorio = storage_path("app/public/" . $directorioFinal);
+
+        // Crear directorio si no existe
+        if (!file_exists($rutaDirectorio)) {
+            mkdir($rutaDirectorio, 0755, true);
+        }
+
+        // Ruta final del PDF unido
+        $pathDestino = $rutaDirectorio . $nombreArchivo;
+
+        // Crear instancia FPDI
         $pdf = new Fpdi();
-        $paginasAgregadas = 0;
 
-        // 3. Recolectar copias de los PDFs y unirlos
-        foreach ($todasLasRutas as $ruta) {
-            // Omitir textos de espera
-            $textosA_Omitir = ['EN ESPERA DE DATOS', 'ESPERA DE DATO', 'ESPERA DE DATOS', 'N/A', '', null];
-            if (in_array(trim($ruta), $textosA_Omitir)) continue;
+        foreach ($todasLasRutas as $rutaPDF)
+        {
+            try {
 
-            // Como confirmas que todo está en "Equipos y Consumibles", 
-            // la ruta de la BD ya es el camino relativo correcto desde 'public'
-            $file = storage_path("app/public/" . trim($ruta));
+                // Ruta completa física
+                $rutaCompleta = storage_path('app/public/' . $rutaPDF);
 
-            if (file_exists($file)) {
-                try {
-                    $pageCount = $pdf->setSourceFile($file);
-                    for ($n = 1; $n <= $pageCount; $n++) {
-                        $tplIdx = $pdf->importPage($n);
-                        $specs = $pdf->getImportedPageSize($tplIdx);
-                        
-                        $pdf->AddPage($specs['orientation'], [$specs['width'], $specs['height']]);
-                        $pdf->useTemplate($tplIdx);
-                        $paginasAgregadas++;
-                    }
-                    Log::info("Archivo combinado exitosamente: " . $ruta);
-                } catch (\Exception $e) {
-                    Log::error("Error al procesar el archivo {$ruta}: " . $e->getMessage());
+                // Verificar existencia
+                if (!file_exists($rutaCompleta)) {
+                    Log::warning("No existe el archivo: {$rutaCompleta}");
                     continue;
                 }
-            } else {
-                Log::warning("No se encontró el archivo físico en: " . $file);
+
+                // Contar páginas
+                $totalPaginas = $pdf->setSourceFile($rutaCompleta);
+
+                // Importar cada página
+                for ($pagina = 1; $pagina <= $totalPaginas; $pagina++)
+                {
+                    $template = $pdf->importPage($pagina);
+
+                    $size = $pdf->getTemplateSize($template);
+
+                    // Crear página con mismo tamaño/orientación
+                    $pdf->AddPage(
+                        $size['orientation'],
+                        [$size['width'], $size['height']]
+                    );
+
+                    // Dibujar página
+                    $pdf->useTemplate($template);
+                }
+
+            } catch (\Exception $e) {
+
+                Log::error("Error procesando PDF: {$rutaPDF}");
+                Log::error($e->getMessage());
             }
         }
 
-        // 4. Definir destino del nuevo archivo (El PDF unido)
-        $nombreArchivo = "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
-        $directorioFinal = "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
-        $pathDestino = storage_path("app/public/" . $directorioFinal . $nombreArchivo);
+        // Guardar PDF final
+        $pdf->Output($pathDestino, 'F');
 
-        // Crear la carpeta del reporte si no existe
-        if (!file_exists(storage_path("app/public/" . $directorioFinal))) {
-            mkdir(storage_path("app/public/" . $directorioFinal), 0755, true);
-        }
+        Log::info("PDF unido generado correctamente", [
+            'ruta' => $pathDestino
+        ]);
 
-        // Guardar el PDF final solo si tiene contenido
-        if ($paginasAgregadas > 0) {
-            $pdf->Output('F', $pathDestino);
-        } else {
-            Log::error("El PDF final no se generó porque no se encontraron archivos válidos.");
-        }
-
-        return $nombreArchivo;
+        return [
+            'nombreArchivo' => $nombreArchivo,
+            'ruta' => $pathDestino
+        ];
     }
         
     public function OS_OC($datosParaCrearOS_OC)
