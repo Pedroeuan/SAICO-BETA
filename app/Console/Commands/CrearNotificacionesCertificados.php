@@ -91,12 +91,12 @@ class NotificacionController extends Controller
                 {
                     if ($tipo === 'EQUIPOS') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
-                            Log::info('***********************');
-                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);
+                            /*Log::info('***********************');
+                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);*/
                     } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Fecha_calibracion;
-                            Log::info('***********************');
-                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);
+                            /*Log::info('***********************');
+                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);*/
                     } else {
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;

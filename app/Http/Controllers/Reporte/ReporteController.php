@@ -1135,6 +1135,11 @@ class ReporteController extends Controller
         $Proyecto = $request->input('Proyecto');
 
         $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $contratoSeleccionado)->get();
+    // Obtener solo las rutas de los archivos firmados
+        /*$Rerpote_Firmado = $reportesEncontrados->map(function ($reporte) {
+            $detalles = json_decode($reporte->Detalles_Generales, true);
+            return $detalles['Reporte_Firmado'] ?? null;
+        })->filter(); // filter() elimina los valores nulos*/
 
         if ($reportesEncontrados->isNotEmpty()) {
             return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados', 'contratoSeleccionado', 'Proyecto'));

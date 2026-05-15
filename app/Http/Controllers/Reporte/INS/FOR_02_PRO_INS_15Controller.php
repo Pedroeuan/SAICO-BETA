@@ -58,6 +58,8 @@ class FOR_02_PRO_INS_15Controller extends Controller
         $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
         $idReportes = $datosParaCrearOS_OC['idReportes'];
 
+        $EsperaDato = "ESPERA DE DATOS";
+
         $Orden_Servicio = new Orden_Servicio;
         $Orden_Servicio_Prueba = new Orden_Servicio_Prueba;
         $Firmantes_OS = new Firmantes_OS;
