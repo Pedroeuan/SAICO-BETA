@@ -85,7 +85,7 @@ class MobileSalidaController extends Controller
             'message' => 'Detalle de salida obtenido correctamente.',
             'data' => [
                 'salida' => new MobileSalidaResource($salida),
-                'defaults_ultima_entrada' => $this->vehiculoService->departureDefaults($salida),
+                'defaults_ultima_entrada' => (object) $this->vehiculoService->departureDefaults($salida),
             ],
         ]);
     }

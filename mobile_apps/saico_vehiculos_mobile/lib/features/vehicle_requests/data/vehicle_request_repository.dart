@@ -123,14 +123,21 @@ class VehicleRequestRepository {
 
     final response = await _dio.get<Map<String, dynamic>>(ApiEndpoints.exitDetail(exitId));
     final body = response.data ?? <String, dynamic>{};
-    final data = body['data'] as Map<String, dynamic>? ?? <String, dynamic>{};
-    final salida = data['salida'] as Map<String, dynamic>? ?? <String, dynamic>{};
-    final defaults =
-        data['defaults_ultima_entrada'] as Map<String, dynamic>? ?? <String, dynamic>{};
+    final data = _asJsonMap(body['data']);
+    final salida = _asJsonMap(data['salida']);
+    final defaults = _asJsonMap(data['defaults_ultima_entrada']);
 
     return VehicleExitDetail(
       exit: VehicleExitSummary.fromJson(salida),
       departureDefaults: defaults,
     );
   }
+}
+
+Map<String, dynamic> _asJsonMap(dynamic value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+
+  return <String, dynamic>{};
 }

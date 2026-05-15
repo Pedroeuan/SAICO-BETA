@@ -15,7 +15,6 @@ class FacebookAdapter(RedSocialBase):
 
     API_VERSION = "v19.0"
     BASE_URL = f"https://graph.facebook.com/{API_VERSION}"
-    TIMEOUT = 15
 
     def __init__(self) -> None:
         """Carga las credenciales de Facebook desde el archivo .env del script."""
@@ -23,6 +22,10 @@ class FacebookAdapter(RedSocialBase):
         self.logger = logging.getLogger("publicaciones.facebook")
         self.page_token = str(os.getenv("FACEBOOK_PAGE_TOKEN", "")).strip()
         self.page_id = str(os.getenv("FACEBOOK_PAGE_ID", "")).strip()
+        self.timeout = (
+            int(os.getenv("FACEBOOK_CONNECT_TIMEOUT", "15")),
+            int(os.getenv("FACEBOOK_READ_TIMEOUT", "45")),
+        )
 
     @property
     def nombre_red(self) -> str:
@@ -39,7 +42,7 @@ class FacebookAdapter(RedSocialBase):
             response = requests.get(
                 f"{self.BASE_URL}/{self.page_id}",
                 params={"access_token": self.page_token},
-                timeout=self.TIMEOUT,
+                timeout=self.timeout,
             )
             if response.status_code == 200:
                 return True
@@ -63,7 +66,7 @@ class FacebookAdapter(RedSocialBase):
             response = requests.post(
                 f"{self.BASE_URL}/{self.page_id}/feed",
                 data=payload,
-                timeout=self.TIMEOUT,
+                timeout=self.timeout,
             )
             response.raise_for_status()
             data = response.json()
@@ -114,7 +117,7 @@ class FacebookAdapter(RedSocialBase):
                         "access_token": self.page_token,
                     },
                     files={"source": archivo_imagen},
-                    timeout=self.TIMEOUT,
+                    timeout=self.timeout,
                 )
             response.raise_for_status()
             data = response.json()

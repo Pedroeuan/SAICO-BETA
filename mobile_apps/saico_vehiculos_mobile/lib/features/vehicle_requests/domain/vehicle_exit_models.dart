@@ -168,10 +168,9 @@ class VehicleExitSummary {
   final VehicleChecklistSnapshot? arrivalChecklist;
 
   factory VehicleExitSummary.fromJson(Map<String, dynamic> json) {
-    final vehicle = json['vehiculo'] as Map<String, dynamic>? ?? <String, dynamic>{};
-    final driver = json['chofer'] as Map<String, dynamic>? ?? <String, dynamic>{};
-    final requester =
-        json['solicitante'] as Map<String, dynamic>? ?? <String, dynamic>{};
+    final vehicle = _asJsonMap(json['vehiculo']);
+    final driver = _asJsonMap(json['chofer']);
+    final requester = _asJsonMap(json['solicitante']);
 
     return VehicleExitSummary(
       id: _asInt(json['id']) ?? 0,
@@ -372,16 +371,17 @@ bool _asBool(dynamic value) {
 }
 
 VehicleChecklistSnapshot? _parseChecklist(dynamic value) {
-  if (value is! Map<String, dynamic>) {
+  final checklist = _asJsonMap(value);
+  if (checklist.isEmpty) {
     return null;
   }
 
-  final condition = value['condicion'] as Map<String, dynamic>? ?? <String, dynamic>{};
+  final condition = _asJsonMap(checklist['condicion']);
   if (condition.isEmpty) {
     return null;
   }
 
-  final documents = (value['documentos'] as List<dynamic>? ?? <dynamic>[])
+  final documents = (checklist['documentos'] as List<dynamic>? ?? <dynamic>[])
       .whereType<Map<String, dynamic>>()
       .map(
         (item) => ChecklistDocumentSnapshot(
@@ -391,7 +391,7 @@ VehicleChecklistSnapshot? _parseChecklist(dynamic value) {
       )
       .toList(growable: false);
 
-  final tools = (value['herramientas'] as List<dynamic>? ?? <dynamic>[])
+  final tools = (checklist['herramientas'] as List<dynamic>? ?? <dynamic>[])
       .whereType<Map<String, dynamic>>()
       .map(
         (item) => ChecklistToolSnapshot(
@@ -401,15 +401,15 @@ VehicleChecklistSnapshot? _parseChecklist(dynamic value) {
       )
       .toList(growable: false);
 
-  final evidenceUrls = (value['evidencias'] as List<dynamic>? ?? <dynamic>[])
+  final evidenceUrls = (checklist['evidencias'] as List<dynamic>? ?? <dynamic>[])
       .whereType<Map<String, dynamic>>()
       .map((item) => item['foto_url'] as String? ?? '')
       .where((item) => item.trim().isNotEmpty)
       .toList(growable: false);
 
   return VehicleChecklistSnapshot(
-    id: _asInt(value['id']) ?? 0,
-    type: value['tipo'] as String? ?? '',
+    id: _asInt(checklist['id']) ?? 0,
+    type: checklist['tipo'] as String? ?? '',
     condition: ChecklistConditionSnapshot(
       fuelLevel: condition['nivel_gasolina'] as String? ?? '',
       mileage: _asInt(condition['kilometraje']) ?? 0,
@@ -434,4 +434,12 @@ VehicleChecklistSnapshot? _parseChecklist(dynamic value) {
     tools: tools,
     evidenceUrls: evidenceUrls,
   );
+}
+
+Map<String, dynamic> _asJsonMap(dynamic value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+
+  return <String, dynamic>{};
 }
