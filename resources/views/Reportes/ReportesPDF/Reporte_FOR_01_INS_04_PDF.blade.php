@@ -59,7 +59,24 @@
                     border-bottom: 1px solid black;
                     text-align: center;
                 }
-                    
+
+                .lineaSuperior{
+                    border-top: 2px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+
+                .lineaIzquierda{
+                    border-left: 1px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+                .lineaDerecha{
+                    border-right: 1px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+
                 .simbologia {
                     border-collapse: collapse;  /*separate No colapsar bordes */
                     border-spacing: 0px;        /* Espacio entre celdas */
@@ -125,7 +142,7 @@
             text-align: center;
             font-size: 8px;
             table-layout: fixed;
-            border: 1px solid black;
+            /*border: 1px solid black;*/
         }
 
         .datosresultados td, .datosresultados th {
@@ -173,30 +190,6 @@
             transform: rotate(270deg); /* Rota solo el texto */
             white-space: nowrap; /* Evita que el texto se divida en varias líneas */
             max-width: 20px; /* Ajusta al ancho máximo deseado */
-        }
-
-        .observaciones-header {
-            display: inline-block;
-            text-align: center;
-            line-height: 1.1;
-            font-size: 7px;
-        }
-
-        .longitud-label {
-            border: .6px solid black !important;
-            font-weight: bold;
-            text-align: center;
-            font-size: 7px;
-            line-height: 1.1;
-            padding: 2px;
-        }
-
-        .longitud-value {
-            border: .6px solid black !important;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-            padding: 2px;
         }
             </style>
         </head>
@@ -392,49 +385,13 @@
                         </thead>                            
                     </table>
             </footer>
-
-             @php
-                    $chunks = [];
-                    $grupoActual = [];
-                    foreach ($Fotos as $foto) {
-                        // Si la imagen es de hoja completa
-                        if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
-                            // Guardar grupo previo (si existe)
-                            if (!empty($grupoActual)) {
-                                $chunks[] = $grupoActual;
-                                $grupoActual = [];
-                            }
-                            // La imagen va SOLA
-                            $chunks[] = [$foto];
-                            continue;
-                        }
-                        // Imagen normal
-                        $grupoActual[] = $foto;
-                        if (count($grupoActual) == 4) {
-                            $chunks[] = $grupoActual;
-                            $grupoActual = [];
-                        }
-                    }
-                    if (!empty($grupoActual)) {
-                        $chunks[] = $grupoActual;
-                    }
-
-                    $gruposParaMostrar = !empty($Grupo_Juntas_Detalles_Re)
-                        ? $Grupo_Juntas_Detalles_Re
-                        : [[
-                            'titulos_juntas' => 'SIN TITULO',
-                            'resultados' => [],
-                            'Long_Inspecc' => ['---'],
-                        ]];
-                @endphp
-
             
-            @foreach ($gruposParaMostrar as $grupo)
+            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
-            <div style="margin-bottom: 4px;"></div>
-        
                 <table class="datosgenerales">
+
                     <thead class="encabezadoAzul">
+
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>  
 
@@ -578,102 +535,101 @@
                         <thead class="encabezadoAzul">
                             <tr><th colspan="17">RESULTADOS</th></tr>
                         </thead>
+
                         <thead><tr class="sinBordeth"><th colspan="17"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
                             <tr class="celdaGris">
-                                <th rowspan= "3"><span class="rotar-texto-sin-dividir">Número de junta</span></th>
-                                <th rowspan= "3"><span class="rotar-texto-sin-dividir">No. Indicación</span></th>
-                                <th rowspan= "3"><span class="rotar-texto-dividido">Ángulo de inspección</span></th>
-                                <th rowspan= "3"><span class="rotar-texto-sin-dividir">Desde la cara</span></th>
-                                <th rowspan= "3"><span class="rotar-texto-dividido">Pierna</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-sin-dividir">Número de junta</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-sin-dividir">No. Indicación</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-dividido">Ángulo de inspección</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-sin-dividir">Desde la cara</span></th>
+                                <th rowspan= "3" style="width: 6%;"><span class="rotar-texto-dividido">Pierna</span></th>
 
                                 <th colspan= "4">Decibeles</th>
 
                                 <th colspan= "5">Discontinuidad</th>
 
-                                <th rowspan="3"><span class="rotar-texto-dividido">Clase de la discontinuidad</span></th>
-                                <th rowspan="3"><span class="rotar-texto-sin-dividir">Evaluación</span></th>
+                                <th rowspan="3" style="width: 6%;"><span class="rotar-texto-dividido">Clase de la discontinuidad</span></th>
+                                <th rowspan="3" style="width: 6%;"><span class="rotar-texto-sin-dividir">Evaluación</span></th>
 
-                                <th rowspan= "3" style="width: 82px; vertical-align: middle; padding: 3px 2px;">
-                                    <span class="observaciones-header">Observa<br>ciones</span>
+                                <th rowspan= "3">
+                                    <span>Observaciones</span>
                                 </th>
                             </tr>
 
                             <tr class="celdaGris">
-                                <th style="height: 60px;"><span class="rotar-texto-dividido">Nivel de indicación</span></th>
+                                <th style="height: 50px;"><span class="rotar-texto-dividido">Nivel de indicación</span></th>
                                 <th><span class="rotar-texto-dividido">Nivel de referencia</span></th>
                                 <th><span class="rotar-texto-dividido">Factor de atenuación</span></th>
-                                <th><span class="rotar-texto-dividido">Relación de indicación</span></th>
+                                <th><span class="rotar-texto-sin-dividir">Relación de<br>indicación</span></th>
 
-                                <th rowspan= "2"><span class="rotar-texto-dividido">Longitud</span></th>
-                                <th rowspan= "2"><span class="rotar-texto-dividido">Distancia angular</span></th>
-                                <th rowspan= "2"><span class="rotar-texto-dividido">Profundidad desde A</span></th>
+                                <th rowspan= "2" style="width: 6%;"><span class="rotar-texto-dividido">Longitud</span></th>
+                                <th rowspan= "2" style="width: 6%;"><span class="rotar-texto-dividido">Distancia angular</span></th>
+                                <th rowspan= "2" style="width: 6%;"><span class="rotar-texto-dividido">Profundidad desde A</span></th>
 
                                 <th colspan= "2">Posición</th>
                             </tr>
 
                             <tr class="celdaGris">
-                                <th>a</th>
-                                <th>b</th>
-                                <th>c</th>
-                                <th>d</th>
+                                <th style="width: 5%;">a</th>
+                                <th style="width: 5%;">b</th>
+                                <th style="width: 5%;">c</th>
+                                <th style="width: 5%;">d</th>
 
-                                <th style="width: 20px;">X</th>
-                                <th style="width: 20px;">Y</th>
+                                <th style="width: 4%;">X</th>
+                                <th style="width: 4%;">Y</th>
                             </tr>
                         </thead>
-                        <tbody>
+                            <tbody>
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-                                {{-- 🔹 TÍTULO --}}
-                                         @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                            <tr class="titulo-row">
-                                                <td colspan="17" style="border:.5px solid black;">
-                                                    {{ $grupo['titulos_juntas'] }}
-                                                </td>
-                                            </tr>
-                                            @endif     
-
-                                            {{-- 🔹 FILAS DEL BLOQUE --}}
-                                            @foreach ($grupo['resultados'] as $junta)
-                                                <tr class="juntas">
-                                                    <td>{{ $junta['no_junta'] }}</td>
-                                                    <td>{{ $junta['no_indicacion'] }}</td>
-                                                    <td>{{ $junta['ang_inspeccion'] }}</td>
-                                                    <td>{{ $junta['dsd_cara'] }}</td>
-                                                    <td>{{ $junta['pierna'] }}</td>
-                                                    <td>{{ $junta['decibel_a'] }}</td>
-                                                    <td>{{ $junta['decibel_b'] ?? '' }}</td>
-                                                    <td>{{ $junta['decibel_c'] }}</td>
-                                                    <td>{{ $junta['decibel_d'] ?? '' }}</td>
-                                                    <td>{{ $junta['longitud'] }}</td>
-                                                    <td>{{ $junta['dis_angular'] }}</td>
-                                                    <td>{{ $junta['profundidad_a'] }}</td>
-                                                    <td>{{ $junta['pos_x'] }}</td>
-                                                    <td>{{ $junta['pos_y'] }}</td>
-                                                    <td>{{ $junta['discontinuidad'] }}</td>
-                                                    <td>{{ $junta['evaluacion'] }}</td>
-                                                    <td>{{ $junta['observaciones'] }}</td>
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="17" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
                                                 </tr>
+                                            @endif
 
-                                            @endforeach
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                    <td>{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['no_indicacion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['dsd_cara'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['pierna'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['decibel_a'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['decibel_b'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['decibel_c'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['decibel_d'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['longitud'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['dis_angular'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['profundidad_a'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['pos_x'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['pos_y'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['discontinuidad'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['evaluacion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['observaciones'] ?? '' }}</td>
+                                                </tr>
+                                            @endif
 
-                                            {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                            <tr>
-                                                <td colspan="13" style="border:0 !important;"></td>
-                                                <td colspan="2" class="longitud-label">
-                                                    Longitud inspeccionada:
-                                                </td>
-                                                <td colspan="2" class="longitud-value">
-                                                    {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                                </td>
-                                            </tr>
+                                            {{-- LONGITUD --}}
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="12"></td>
+                                                    <th colspan="4">Longitud inspeccionada:</th>
+                                                    <th>{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
 
-                                            {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                            <tr style="page-break-after: always;" class="sinBordetd">
-                                                <td colspan="22"></td>
-                                        </tr>--}}
-                                    </tbody>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                     @if (!$loop->last)

@@ -415,12 +415,12 @@ class consumiblesController extends Controller
     /* Update the specified resource in storage.
      */
         public function updateConsumibles(Request $request, $id)
-        { //dd($request->all());
+        { 
             $request->validate([
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'Marca' => 'required|string|max:255',
                 'Modelo' => 'required|string|max:255',
-                'Stock' => 'required|integer|min:1',
+                'Stock' => 'required|integer',
                 'ISO' => 'required|in:9001,17025',
                 'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
             ]);

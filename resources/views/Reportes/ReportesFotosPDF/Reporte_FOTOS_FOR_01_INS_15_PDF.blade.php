@@ -508,79 +508,70 @@
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
                     </thead>  
                 </table>
-                    @php
-                        $esHojaCompleta = (
-                            count($fotosGrupo) == 1 &&
-                            !empty($fotosGrupo[0]['una_hoja']) &&
-                            $fotosGrupo[0]['una_hoja'] == 1
-                        );
-                    @endphp
 
+                            @php
+                                $esHojaCompleta = (count($fotosGrupo) == 1 && !empty($fotosGrupo[0]['una_hoja']) && $fotosGrupo[0]['una_hoja'] == 1);
+                            @endphp
                             <table class="imagenes-reporte">
                                 <tr>
-                                @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
-                                    {{-- 3 imágenes: 2 arriba, 1 abajo --}}
-                                    <td class="foto-container">
-                                        <img src="{{ $fotosGrupo[0]['path'] }}">
-                                        <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
-                                    </td>
-                                    <td class="foto-container">
-                                        <img src="{{ $fotosGrupo[1]['path'] }}">
-                                        <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
-                                    </td>
-                                    </tr><tr>
-                                    <td class="foto-container" colspan="2">
-                                        <img src="{{ $fotosGrupo[2]['path'] }}">
-                                        <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
-                                    </td>
-                                @else
-                                    @foreach($fotosGrupo as $index => $foto)
-                                        {{-- Caso 1 imagen: ocupa toda la hoja --}}
-                                        @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
-                                            <td class="foto-container foto-full" colspan="2">
-                                                <img src="{{ $foto['path'] }}">
-                                                <p class="comment">{{ $foto['comment'] }}</p>
-                                            </td>
-                                        @else
-                                            <td class="foto-container">
-                                                <img src="{{ $foto['path'] }}">
-                                                <p class="comment">{{ $foto['comment'] }}</p>
-                                            </td>
-                                            @if(($index + 1) % 2 == 0)
-                                                </tr><tr>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @endif
-
-                                {{-- Relleno cuando NO es hoja completa y faltan imágenes --}}
-                                @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
-                                    @php $faltantes = 4 - count($fotosGrupo); @endphp
-                                    @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
-                                        @for($i = 0; $i < $faltantes; $i++)
-                                            <td class="foto-container empty-box">
-                                                <div class="cross-line"></div>
-                                                <div class="empty-comment"></div>
-                                            </td>
-                                            @if((count($fotosGrupo) + $i + 1) % 2 == 0)
-                                                </tr><tr>
-                                            @endif
-                                        @endfor
-                                    @elseif(count($fotosGrupo) == 3)
+                                    @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
+                                        <td class="foto-container">
+                                            <img src="{{ $fotosGrupo[0]['path'] }}" alt="Foto 1">
+                                            <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
+                                        </td>
+                                        <td class="foto-container">
+                                            <img src="{{ $fotosGrupo[1]['path'] }}" alt="Foto 2">
+                                            <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
+                                        </td>
                                         </tr><tr>
                                         <td class="foto-container" colspan="2">
-                                            <img src="{{ $fotosGrupo[2]['path'] }}">
+                                            <img src="{{ $fotosGrupo[2]['path'] }}" alt="Foto 3">
                                             <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
                                         </td>
+                                    @else
+                                        @foreach($fotosGrupo as $index => $foto)
+                                            @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
+                                                <td class="foto-container foto-full" colspan="2">
+                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                                    <p class="comment">{{ $foto['comment'] }}</p>
+                                                </td>
+                                            @else
+                                                <td class="foto-container">
+                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
+                                                    <p class="comment">{{ $foto['comment'] }}</p>
+                                                </td>
+                                                @if(($index + 1) % 2 == 0)
+                                                    </tr><tr>
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     @endif
-                                @endif
 
+                                    @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
+                                        @php $faltantes = 4 - count($fotosGrupo); @endphp
+                                        @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
+                                            @for($i = 0; $i < $faltantes; $i++)
+                                                <td class="foto-container empty-box">
+                                                    <div class="cross-line"></div>
+                                                    <p class="empty-comment">&nbsp;</p>
+                                                </td>
+                                                @if((count($fotosGrupo) + $i + 1) % 2 == 0)
+                                                    </tr><tr>
+                                                @endif
+                                            @endfor
+                                        @endif
+                                    @endif
                                 </tr>
                             </table>
+
+                            {{-- Salto de página cada 4 imágenes --}}
+                            @if (!$loop->last)
+                                <div style="page-break-after: always;"></div>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            @if(!$loop->last)
-                <div style="page-break-after: always;"></div>
-            @endif
-        @endforeach
+
         </body>
     </html>

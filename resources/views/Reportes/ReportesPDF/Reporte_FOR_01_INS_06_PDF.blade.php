@@ -112,7 +112,7 @@
         
 
         .datosinspeccionsinborde{
-            border: 0px !important;
+            border: 5px !important;
             text-align: center;
             border-collapse: collapse;
             width: 100%;
@@ -408,43 +408,18 @@
                         </thead>                            
                     </table>
             </footer>
-            @php
-                    $chunks = [];
-                    $grupoActual = [];
-                    foreach ($Fotos as $foto) {
-                        // Si la imagen es de hoja completa
-                        if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
-                            // Guardar grupo previo (si existe)
-                            if (!empty($grupoActual)) {
-                                $chunks[] = $grupoActual;
-                                $grupoActual = [];
-                            }
-                            // La imagen va SOLA
-                            $chunks[] = [$foto];
-                            continue;
-                        }
-                        // Imagen normal
-                        $grupoActual[] = $foto;
-                        if (count($grupoActual) == 4) {
-                            $chunks[] = $grupoActual;
-                            $grupoActual = [];
-                        }
-                    }
-                    if (!empty($grupoActual)) {
-                        $chunks[] = $grupoActual;
-                    }
-                @endphp
-
             
-            @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
-                  <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="4">DATOS GENERALES</th>
-                    </tr>
-                </table>   
-                <div style="margin-bottom: 5px;"></div>         
                 <table class="datosgenerales">
+
+                    <thead class="encabezadoAzul">
+
+                        <tr><th colspan="4">DATOS GENERALES</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
@@ -497,218 +472,201 @@
                 </table>
                 
                 <div style="margin-bottom: 4px;"></div>
-               @php
-                    $marcaEquipo = $Datos_Equipo['MARCA_EQUIPO'] ?? '---';
-                    $modeloEquipo = $Datos_Equipo['MODELO_EQUIPO'] ?? '---';
-                    $nsEquipo = $Datos_Equipo['NS_EQUIPO'] ?? ($Datos_Equipo['N_S_EQUIPO'] ?? '---');
-
-                    $marcaTr  = $Datos_Equipo['MARCA_TR'] ?? ($Datos_Equipo['MARCA_TRANSDUCTOR'] ?? '---');
-                    $modeloTr = $Datos_Equipo['MODELO_TR'] ?? ($Datos_Equipo['MODELO_TRANSDUCTOR'] ?? '---');
-                    $nsTr     = $Datos_Equipo['NS_TR'] ?? ($Datos_Equipo['N_S_TRANSDUCTOR'] ?? '---');
-                    $frecTr   = $Datos_Equipo['FREC_TR'] ?? ($Datos_Equipo['FREC_TRANSDUCTOR'] ?? '---');
-
-                    $marcaBlock  = $Datos_Equipo['MARCA_BLOCK'] ?? '---';
-                    $modeloBlock = $Datos_Equipo['MODELO_BLOCK'] ?? '---';
-                    $nsBlock     = $Datos_Equipo['NS_BLOCK'] ?? ($Datos_Equipo['N_S_BLOCK'] ?? '---');
-
-                    $acoplante = $Datos_Equipo['ACOPLANTE'] ?? '---';
-                @endphp
-
 
                 <table class="datosinspeccion">
                     <thead class="encabezadoAzul">
-                    <tr><th colspan="9">DATOS DEL EQUIPO</th></tr>
+                        <tr><th colspan="9">DATOS DEL EQUIPO</th></tr>
                     </thead>
 
-                    <thead>
-                    <tr class="sinBordeth"><th colspan="9"></th></tr>
-                    </thead>
+                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
                     <tbody>
 
-                    <tr class="celdaGris">
-                    <th colspan="2">EQUIPO</th>
-                    <th colspan="4">TRANSDUCTOR</th>
-                    <th colspan="2">BLOCK DE REFERENCIA</th>
-                    <th>ACOPLANTE:</th>
-                    </tr>
+                        <tr class="celdaGris">
+                            <th colspan="2">EQUIPO</th>
+                            <th colspan="4">TRANSDUCTOR</th>
+                            <th colspan="2">BLOCK DE REFERENCIA</th>
+                            <th>ACOPLANTE:</th>
+                        </tr>
 
-                    <tr>
-                    <th class="celdaGris">MARCA:</th>
-                    <td>{{ $marcaEquipo }}</td>
+                        <tr>
+                            <th class="celdaGris">MARCA:</th>
+                            <td>{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '---' }}</td>
 
-                    <th class="celdaGris">MARCA:</th>
-                    <td colspan="3">{{ $marcaTr }}</td>
+                            <th class="celdaGris">MARCA:</th>
+                            <td colspan="3">{{ $Datos_Equipo['MARCA_TRANSDUCTOR'] ?? '---' }}</td>
 
-                    <th class="celdaGris">MARCA:</th>
-                    <td>{{ $marcaBlock }}</td>
+                            <th class="celdaGris">MARCA:</th>
+                            <td>{{ $Datos_Equipo['MARCA_BLOCK'] ?? '---' }}</td>
 
-                    <td>{{ $acoplante ?? '---' }}</td>
-                    </tr>
+                            <td>{{ $Datos_Equipo['ACOPLANTE'] ?? '---' }}</td>
+                        </tr>
 
-                    <tr>
-                    <th class="celdaGris">MODELO:</th>
-                    <td>{{ $modeloEquipo }}</td>
+                        <tr>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '---' }}</td>
 
-                    <th class="celdaGris">MODELO:</th>
-                    <td colspan="3">{{ $modeloTr }}</td>
+                            <th class="celdaGris">MODELO:</th>
+                            <td colspan="3">{{$Datos_Equipo['MODELO_TRANSDUCTOR'] ?? '---' }}</td>
 
-                    <th class="celdaGris">MODELO:</th>
-                    <td>{{ $modeloBlock }}</td>
-                    <th class="celdaGris">LOGITUD DEL CABLE:</th>
-                    </tr>
+                            <th class="celdaGris">MODELO:</th>
+                            <td>{{ $Datos_Equipo['MODELO_BLOCK'] ?? '---' }}</td>
+                            <th class="celdaGris">LOGITUD DEL CABLE:</th>
+                        </tr>
 
-                    <tr>
-                    <th class="celdaGris">SERIE:</th>
-                    <td>{{ $nsEquipo }}</td>
+                        <tr>
+                            <th class="celdaGris">SERIE:</th>
+                            <td>{{ $Datos_Equipo['N_S_EQUIPO'] ?? '---' }}</td>
 
-                    <th class="celdaGris">SERIE:</th>
-                    <td>{{ $nsTr }}</td>
+                            <th class="celdaGris">SERIE:</th>
+                            <td>{{ $Datos_Equipo['N_S_TRANSDUCTOR'] ?? '---' }}</td>
 
-                    <th class="celdaGris">FRECC:</th>
-                    <td>{{ $frecTr }}</td>
+                            <th class="celdaGris">FRECC:</th>
+                            <td>{{ $Datos_Equipo['FREC_TRANSDUCTOR'] ?? '---' }}</td>
 
-                    <th class="celdaGris">SERIE:</th>
-                    <td>{{ $nsBlock }}</td>
+                            <th class="celdaGris">SERIE:</th>
+                            <td>{{ $Datos_Equipo['N_S_BLOCK'] ?? '---' }}</td>
 
-                    <td>{{ $Datos_Equipo['LONGITUD'] ?? ($Datos_Equipo['LONG_CABLE'] ?? '---') }}</td>
-                    
-                    </tr>                
+                            <td>{{ $Datos_Equipo['LONGITUD'] ?? ($Datos_Equipo['LONG_CABLE'] ?? '---') }}</td>
+
+                        </tr>                
                     </tbody>
-                    </table>
-                <div style="margin-bottom: 4px;"></div>
-
-                <table class="encabezadoAzul">
-                    <tr>
-                        <th colspan="9">AJUSTE DEL EQUIPO</th>
-                    </tr>
                 </table>
 
-                <table class="datosinspeccionsinborde">
-                    <tbody>
-                    @php
-                        $ganancia  = $Datos_Equipo['GANANCIA'] ?? '';
-                        $tipoJunta = $Datos_Equipo['TIPO_JUNTA'] ?? ($Datos_Equipo['TIP_JUNTA'] ?? '');
-                        $rechazo   = $Datos_Equipo['RECHAZO'] ?? ($Datos_Equipo['RANGO'] ?? '');
-                        $diametro  = $Datos_Equipo['DIAMETRO'] ?? '';
-                        $retardo   = $Datos_Equipo['RETARDO'] ?? '';
-                        $espesor   = $Datos_Equipo['ESPESOR'] ?? '';
-                    @endphp
-                    <tr>
-                        <th style="width: 100px;">GANANCIA:</th>
-                        <td class="lineaInferior">{{ $ganancia }}</td><td style="text-align: left; width: 2%;"> dB </td>
-                        <th style="width: 100px;">TIPO DE JUNTA:</th>
-                        <td class="lineaInferior">{{ $tipoJunta }}</td>
-                    </tr>
-                    <tr>
-                        <th>RECHAZO:</th>
-                        <td class="lineaInferior">{{ $rechazo }}</td><td></td>
-                        <th>DIAMETRO:</th>
-                        <td class="lineaInferior">{{ $diametro }}</td>
-                    </tr>
-                    <tr>
-                        <th>RETARDO:</th>
-                        <td class="lineaInferior">{{ $retardo }}</td><td></td>
-                        <th>ESPESOR:</th>
-                        <td class="lineaInferior">{{ $espesor }}</td>
-                    </tr>
-                </tbody>
+                <div style="margin-bottom: 4px;"></div>
 
+                <table class="datosinspeccionsinborde">
+
+                    <thead class="encabezadoAzul">
+
+                        <tr><th colspan="9">DATOS DE LA INSPECCIÓN</th></tr>
+                    </thead>  
+
+                    <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
+
+                    <tbody>
+                        <tr>
+                            <th style="width: 90px;">GANANCIA:</th>
+                            <td class="lineaInferior" style="width: 184px;">{{ $Datos_Equipo['GANANCIA'] }}</td>
+                            <th style="width: 110px;">RANGO:</th>
+                            <td class="lineaInferior" style="width: 184px;">{{ $Datos_Equipo['RANGO'] }}</td>
+                            <th style="width: 120px;">RECHAZO:</th>
+                            <td class="lineaInferior" style="width: 184px;">{{ $Datos_Equipo['RECHAZO'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>PRESION DE OPERACIÓN:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['PRES_OPE'] }}</td>
+                            <th>PRESION MAXIMA DE OPERACION:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['PRES_MX_OPE'] }}</td>
+                            <th>TEMPERATURA MAX. DE OPERACION:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['TEMP_MX_OPE'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>CONDICION SUPERFICIAL:</th>
+                            <td colspan="2" class="lineaInferior">{{ $Datos_Equipo['COND_SUPER'] }}</td>
+                            <th>ESTADO DE PINTURA:</th>
+                            <td colspan="2" class="lineaInferior">{{ $Datos_Equipo['PINTURA'] }}</td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <div style="margin-bottom: 5px;"></div>
 
                     <table class="datosresultados">
+                    
                         <thead class="encabezadoAzul">
                             <tr><th colspan="25">RESULTADOS</th></tr>
-                            <thead>
-                            <tr class="celdaGris">
-                                <th style="width: 20px;">ID</th>
-                                <th style="width: 50px;">Descripción del Elemento</th>
-                                <th style="width: 20px;">Ønom</th>
-                                <th style="width: 20px;">Øext.</th>
-                                <th style="width: 20px;">Nivel</th>
-                                <th style="width: 20px;">12:00</th>
-                                <th style="width: 20px;">01:00</th>
-                                <th style="width: 20px;">01:30</th>
-                                <th style="width: 20px;">02:00</th>
-                                <th style="width: 20px;">03:00</th>
-                                <th style="width: 20px;">04:00</th>
-                                <th style="width: 20px;">04:30</th>
-                                <th style="width: 20px;">05:00</th>
-                                <th style="width: 20px;">06:00</th>
-                                <th style="width: 20px;">07:00</th>
-                                <th style="width: 20px;">07:30</th>
-                                <th style="width: 20px;">08:00</th>
-                                <th style="width: 20px;">09:00</th>
-                                <th style="width: 20px;">10:00</th>
-                                <th style="width: 20px;">10:30</th>
-                                <th style="width: 20px;">11:00</th>
-                                <th style="width: 40px;">Tmin</th>
-                                <th style="width: 40px;">Tmax</th>
-                                <th style="width: 40px;">Tprom</th>
-                                <th style="width: 50px;">Observaciones</th>
-                            </tr>
-                          </thead>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="25"></th></tr></thead> <!-- Fila vacia -->
+
+                        <thead>
+                                <tr class="celdaGris">
+                                    <th style="width: 20px;">ID</th>
+                                    <th style="width: 50px;">Descripción del Elemento</th>
+                                    <th style="width: 20px;">Ønom</th>
+                                    <th style="width: 20px;">Øext.</th>
+                                    <th style="width: 20px;">Nivel</th>
+                                    <th style="width: 20px;">12:00</th>
+                                    <th style="width: 20px;">01:00</th>
+                                    <th style="width: 20px;">01:30</th>
+                                    <th style="width: 20px;">02:00</th>
+                                    <th style="width: 20px;">03:00</th>
+                                    <th style="width: 20px;">04:00</th>
+                                    <th style="width: 20px;">04:30</th>
+                                    <th style="width: 20px;">05:00</th>
+                                    <th style="width: 20px;">06:00</th>
+                                    <th style="width: 20px;">07:00</th>
+                                    <th style="width: 20px;">07:30</th>
+                                    <th style="width: 20px;">08:00</th>
+                                    <th style="width: 20px;">09:00</th>
+                                    <th style="width: 20px;">10:00</th>
+                                    <th style="width: 20px;">10:30</th>
+                                    <th style="width: 20px;">11:00</th>
+                                    <th style="width: 40px;">Tmin</th>
+                                    <th style="width: 40px;">Tmax</th>
+                                    <th style="width: 40px;">Tprom</th>
+                                    <th style="width: 50px;">Observaciones</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                        {{-- 🔹 TÍTULO --}}
-                                         @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                            <tr class="titulo-row">
-                                                <td colspan="25" style="border:.5px solid black;">
-                                                    {{ $grupo['titulos_juntas'] }}
-                                                </td>
-                                            </tr>
-                                            @endif     
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-                                            {{-- 🔹 FILAS DEL BLOQUE --}}
-                                            @foreach ($grupo['resultados'] as $junta)
-                                            <tr class="juntas">
-                                                <td> {{ $junta['ID'] }}</td>
-                                                <td> {{ $junta['elemento'] }}</td>
-                                                <td> {{ $junta['Ønom'] }}</td>
-                                                <td> {{ $junta['Øext'] }}</td>
-                                                <td> {{ $junta['nivel'] }}</td>
-                                                <td> {{ $junta['12_00'] }}</td>
-                                                <td> {{ $junta['01_00'] }}</td>
-                                                <td> {{ $junta['01_30'] }}</td>
-                                                <td> {{ $junta['02_00'] }}</td>
-                                                <td> {{ $junta['03_00'] }}</td>
-                                                <td> {{ $junta['04_00'] }}</td>
-                                                <td> {{ $junta['04_30'] }}</td>
-                                                <td> {{ $junta['05_00'] }}</td>
-                                                <td> {{ $junta['06_00'] }}</td>
-                                                <td> {{ $junta['07_00'] }}</td>
-                                                <td> {{ $junta['07_30'] }}</td>
-                                                <td> {{ $junta['08_00'] }}</td>
-                                                <td> {{ $junta['09_00'] }}</td>
-                                                <td> {{ $junta['10_00'] }}</td>
-                                                <td> {{ $junta['10_30'] }}</td>
-                                                <td> {{ $junta['11_00'] }}</td>
-                                                <td> {{ $junta['tmin'] }}</td>
-                                                <td> {{ $junta['tmax'] }}</td>
-                                                <td> {{ $junta['tprom'] }}</td>
-                                                <td> {{ $junta['observaciones'] }}</td>
-                                            </tr>
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="25" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
 
-                                                @endforeach
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                    <td>{{ $item['data']['ID'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['elemento'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Ønom'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Øext'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['nivel'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['12_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['01_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['01_30'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['02_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['03_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['04_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['04_30'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['05_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['06_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['07_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['07_30'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['08_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['09_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['10_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['10_30'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['11_00'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['tmin'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['tmax'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['tprom'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['observaciones'] ?? '' }}</td>
+                                                </tr>
+                                            @endif
 
-                                            {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                            <tr>
-                                                <td colspan="19" style="border:0 !important;"></td>
-                                                <td colspan="4" style="border:.6px solid black; font-weight:bold; text-align:center;">
-                                                    Longitud inspeccionada:
-                                                </td>
-                                                <td colspan="2" style="border:.6px solid black; font-weight:bold; text-align:center;">
-                                                    {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                                </td>
-                                            </tr>
+                                            {{-- LONGITUD --}}
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="20"></td>
+                                                    <th colspan="4">Longitud inspeccionada:</th>
+                                                    <th>{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
 
-                                            {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                            <tr style="page-break-after: always;" class="sinBordetd">
-                                                <td colspan="22"></td>
-                                        </tr>--}}
-                                    </tbody>
-                        </table>
+                                @endforeach
+                            </tbody>
+                        </table>    
                     </div>
                     @if (!$loop->last)
                         <div style="page-break-after: always;"></div>

@@ -224,7 +224,46 @@
 
                 </header>
 
-                <footer>   
+                <footer>
+                    <div style="margin-bottom: 5px;"></div>
+                        <table class="simbologia">
+                            <thead>
+                                <tr>
+                                    <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
+                                </tr>
+
+                                <tr>
+                                    <td style="width: 20px;"><strong>NPIR</strong></td>
+                                    <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
+                                    <td style="width: 20px;"><strong>IR</strong></td>
+                                    <td style="width: 150px;">INDICACIÓN REDONDEADA</td>
+                                    <td style="width: 20px;"><strong>LA</strong></td>
+                                    <td style="width: 180px;">LONGITUD AXIAL</td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>IL</strong></td>
+                                    <td>INDICACIÓN LINEAL</td>
+                                    <td><strong>G</strong></td>
+                                    <td>GRIETAS</td>
+                                    <td><strong>LC</strong></td>
+                                    <td>LONGITUD CIRCUNFERENCIAL</td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>CC</strong></td>
+                                    <td>CAMBIO DE CONDUCTIVIDAD</td>
+                                    <td><strong>ZG</strong></td>
+                                    <td>ZONA DE GRIETAS</td>
+                                    <td><strong>H.T.</strong></td>
+                                    <td>HORARIO TÉCNICO</td>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    <table>
+                </div>
+
                     <br>
                     <table class="datosgenerales observacionesFooter">                                
                         <tr>                                     
@@ -386,7 +425,7 @@
                     </table>
             </footer>
 
-        @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+        @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 
                 <div style="margin-bottom: 0px;"></div>    
@@ -586,87 +625,50 @@
                         </thead>
 
                                 <tbody>
-                                    {{-- 🔹 TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="12" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
-                                        </td>
-                                    </tr>
-                                @endif
+                                    @foreach ($bloque as $item)
+                                                @if (!is_array($item))
+                                                    @continue
+                                                @endif
 
-                                {{-- 🔹 FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                    <tr class="juntas">
-                                        <td>{{ $junta['no_junta'] }}</td>
-                                        <td>{{ $junta['ZBarrido'] }}</td>
-                                        <td>{{ $junta['no_ind'] }}</td>
-                                        <td>{{ $junta['Tip_ind'] }}</td>
-                                        <td>{{ $junta['la'] }}</td>
-                                        <td>{{ $junta['lc'] }}</td>
-                                        <td>{{ $junta['ht'] }}</td>
-                                        <td>{{ $junta['largo'] }}</td>
-                                        <td>{{ $junta['ancho'] }}</td>
-                                        <td>{{ $junta['Eval'] }}</td>
-                                        <td>{{ $junta['fotos'] }}</td>
-                                        <td>{{ $junta['Observaciones'] }}</td>
-                                    </tr>
-                                @endforeach
+                                                {{-- TITULO --}}
+                                                @if (($item['tipo'] ?? null) == 'titulo')
+                                                    <tr class="titulo-row">
+                                                        <td colspan="12" style="border:.5px solid black;">
+                                                            {{ $item['texto'] }}
+                                                        </td>
+                                                    </tr>
+                                                @endif
 
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="sinBordetd">
-                                    <td colspan="8">
-                                    <th colspan="2">Longitud inspeccionada:</th>
-                                    <th colspan="2">
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m²
-                                    </th>
-                                </tr>
+                                                {{-- FILA --}}
+                                                @if (($item['tipo'] ?? null) == 'fila')
+                                                    <tr class="juntas">
+                                                        <td>{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['ZBarrido'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['no_ind'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['Tip_ind'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['la'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['lc'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['ht'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['largo'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['ancho'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['Eval'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['fotos'] ?? '' }}</td>
+                                                        <td>{{ $item['data']['Observaciones'] ?? '' }}</td>
+                                                    </tr>
+                                                @endif
 
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="12"></td>
-                                </tr>--}}
-                            </tbody>
+                                                {{-- LONGITUD --}}
+                                                @if (($item['tipo'] ?? null) == 'longitud')
+                                                    <tr class="sinBordetd">
+                                                        <td colspan="8"></td>
+                                                        <th colspan="2">Longitud inspeccionada:</th>
+                                                        <th colspan="2">{{ $item['valor'] ?? '' }} m</th>
+                                                    </tr>
+                                                @endif
+
+                                    @endforeach
+                                </tbody>
                     </table>
-                    <div style="margin-bottom: 5px;"></div>
-                    <table class="simbologia">
-                        <thead>
-                            <tr>
-                                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
-                            </tr>
-
-                            <tr>
-                                <td style="width: 20px;"><strong>NPIR</strong></td>
-                                <td style="width: 110px;">NO PRESENTA INDICACIÓN RELEVANTE</td>
-                                <td style="width: 20px;"><strong>IR</strong></td>
-                                <td style="width: 150px;">INDICACIÓN REDONDEADA</td>
-                                <td style="width: 20px;"><strong>LA</strong></td>
-                                <td style="width: 180px;">LONGITUD AXIAL</td>
-                            </tr>
-
-                            <tr>
-                                <td><strong>IL</strong></td>
-                                <td>INDICACIÓN LINEAL</td>
-                                <td><strong>G</strong></td>
-                                <td>GRIETAS</td>
-                                <td><strong>LC</strong></td>
-                                <td>LONGITUD CIRCUNFERENCIAL</td>
-                            </tr>
-
-                            <tr>
-                                <td><strong>CC</strong></td>
-                                <td>CAMBIO DE CONDUCTIVIDAD</td>
-                                <td><strong>ZG</strong></td>
-                                <td>ZONA DE GRIETAS</td>
-                                <td><strong>H.T.</strong></td>
-                                <td>HORARIO TÉCNICO</td>
-                            </tr>
-                        </thead>
-                    </table>
-
-                <table>
-            </div>
-
         @if (!$loop->last)
             <div style="page-break-after: always;"></div>
         @endif

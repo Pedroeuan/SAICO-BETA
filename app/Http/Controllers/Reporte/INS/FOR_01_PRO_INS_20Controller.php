@@ -335,9 +335,20 @@ class FOR_01_PRO_INS_20Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
+
+        // ==========================
+        // Lógica para manejar Cliente
+        // ==========================
+        if ($request->TieneCliente === 'si') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+        } else {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+        }
+        // ==========================
+        // Lógica para manejar Contrato
+        // ==========================
         // Lógica para manejar el campo Contrato
         if ($request->TieneContrato === "no") {
-
             // Si el usuario alteró el valor o no llegó, se recalcula en backend
             $actual = $request->Detalles_Generales['Contrato'] ?? null;
 

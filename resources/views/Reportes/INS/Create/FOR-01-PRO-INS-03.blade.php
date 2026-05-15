@@ -306,6 +306,8 @@
                                         </div>
                                     </div>
 
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC1" name="Datos_Equipo[ID_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.ID_PENETRANTES')}}">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -366,6 +368,8 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC2" name="Datos_Equipo[ID_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.ID_REMOVEDOR')}}">
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -428,6 +432,8 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC3" name="Datos_Equipo[ID_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.ID_REMOVEDOR')}}">
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -930,6 +936,32 @@
                                             </div>
                                         </div>
 
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                                @error('Num_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                                @error('Nombre_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -1167,6 +1199,7 @@ $(document).ready(function() {
         //TERMINA  restoreData()
 
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -1196,6 +1229,7 @@ $(document).ready(function() {
         });
 
         $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1226,6 +1260,7 @@ $(document).ready(function() {
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1255,8 +1290,8 @@ $(document).ready(function() {
                     </tr>`;
                 $('#dynamicTable tbody').append(newRow);
             }
-            //saveData(document.querySelectorAll("form")[1].id);
             verificarYAgregarLongitud();
+            //saveData(document.querySelectorAll("form")[1].id);
             saveData($(this).closest('form').attr('id'));
         }
     );
@@ -1264,87 +1299,77 @@ $(document).ready(function() {
             restoreData();
 });
 
-function verificarYAgregarLongitud() {
+    function verificarYAgregarLongitud() {
 
-    const $tbody = $('#dynamicTable tbody');
-    const $rows = $tbody.children('tr');
+        const $rows = $('#dynamicTable tbody tr');
 
-    let contadorBloque = 0;
-    let $ultimoElementoBloque = null;
+        let contadorBloque = 0;
 
-    $rows.each(function () {
+        $rows.each(function () {
 
-        const $row = $(this);
+            const $row = $(this);
 
-        // ❌ Ignorar longitudes existentes (no cuentan)
-        if ($row.hasClass('long-row')) {
-            contadorBloque = 0;
-            $ultimoElementoBloque = null;
-            return;
-        }
-
-        // ✅ Contar título o fila normal
-        if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {
-            contadorBloque++;
-            $ultimoElementoBloque = $row;
-        }
-        //-----------------------------------------Hacer ajuste de "N" filas por bloque
-        // 🎯 Cuando llegue a 15 → insertar longitud
-        if (contadorBloque === 15) {
-
-            const lastTitle = $row.data('titulo') || 'sin_titulo';
-
-            const newLong = `
-                <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="10">Longitud total inspeccionada:</td>
-                    <td>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <input type="text"
-                                class="form-control w-90 long-text"
-                                name="Long_Inspecc[${lastTitle}][]"
-                                placeholder="Ingrese Longitud total inspeccionada...">
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminar">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </div>
-                    </td>
-                </tr>`;
-
-            // 👉 Evitar duplicados
-            if (!$ultimoElementoBloque.next().hasClass('long-row')) {
-                $ultimoElementoBloque.after(newLong);
+            // ✅ Si ya hay longitud → cerrar bloque
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
             }
 
-            // 🔄 Reiniciar contador para siguiente bloque
-            contadorBloque = 0;
-            $ultimoElementoBloque = null;
-        }
-    });
-}
+            contadorBloque++;
 
+            // 🎯 Cuando llega a 10 → insertar longitud
+            if (contadorBloque === 15) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="10">Longitud Inspeccionada</td>
+                        <td>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
+                }
+
+                // 🔄 cerrar bloque
+                contadorBloque = 0;
+            }
+        });
+    }
 
     /*Selects */
         $(document).ready(function() {
             function actualizarInputsC1() {
                 var selectedOption = $('#consumiblesSelect1').find('option:selected');
-
+                
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC1').val(ID);
                 $('#marcaInputC1').val(marca);
                 $('#modeloInputC1').val(modelo);
                 $('#loteInputC1').val(lote);
             }
-
-            // Evento cuando se cambia la selección en el select
-            $('#consumiblesSelect1').on('change', function() {
-                actualizarInputsC1();
-            });
+                // Evento cuando se cambia la selección en el select
+                $('#consumiblesSelect1').on('change', function() {
+                    actualizarInputsC1();
+                });
 
             const selectedOptionLocalCons1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
             selectedOptionLocalCons1 != null ?  ($('#consumiblesSelect1').val(selectedOptionLocalCons1),actualizarInputsC1()):"";
@@ -1357,12 +1382,15 @@ function verificarYAgregarLongitud() {
             function actualizarInputsC2() {
                 var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC2').val(ID);
                 $('#marcaInputC2').val(marca);
                 $('#modeloInputC2').val(modelo);
                 $('#loteInputC2').val(lote);
@@ -1379,12 +1407,15 @@ function verificarYAgregarLongitud() {
             function actualizarInputsC3() {
                 var selectedOption = $('#consumiblesSelect3').find('option:selected');
 
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC3').val(ID);
                 $('#marcaInputC3').val(marca);
                 $('#modeloInputC3').val(modelo);
                 $('#loteInputC3').val(lote);

@@ -185,13 +185,19 @@
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>
+                    <svg class="bd-placeholder-img card-img-top expansive-effect"
 
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="RADIOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                    <title>RADIOGRAFIA</title>
-                    <rect width="100%" height="100%" fill="#C04040"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/RADIOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RADIOGRAFIA</text>
-                </svg>
+                        width="100%" height="200" 
+                        role="img" aria-label="RELEVADO DE ESFUERZOS" 
+                        data-name="RELEVADO DE ESFUERZOS"
+                        onclick="redirectToView(this)"
+                        focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+                        <title>RELEVADO DE ESFUERZOS</title>
+                        <rect width="100%" height="100%" fill="#0070C0"></rect>
+                        <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                        <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
+                    </svg>
 
                 <div style="margin-bottom: 15px;"></div>
 
@@ -278,18 +284,27 @@
 
                 <div style="margin-bottom: 15px;"></div>
 
+                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="RADIOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                    <title>RADIOGRAFIA</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/RADIOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RADIOGRAFIA</text>
+                </svg>
+
+                <div style="margin-bottom: 15px;"></div>
+
                 <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
-                    role="img" aria-label="RELEVADO DE ESFUERZOS" 
-                    data-name="RELEVADO DE ESFUERZOS"
+                    role="img" aria-label="VISUAL" 
+                    data-name="VISUAL"
                     onclick="redirectToView(this)"
                     focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                    <title>RELEVADO DE ESFUERZOS</title>
-                    <rect width="100%" height="100%" fill="#0070C0"></rect>
-                    <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
+                    <title>VISUAL</title>
+                    <rect width="100%" height="100%" fill="#C04040"></rect>
+                    <image href="{{ asset('images/Menu Servicios SVG/Inspección_Visual.svg') }}" x="10%" y="10%" width="80%" height="70%" />
+                    <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">VISUAL</text>
                 </svg>
 
                 <div style="margin-bottom: 15px;"></div>

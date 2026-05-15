@@ -353,7 +353,7 @@
 
                                         <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
 
-                                        <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
+                                        <!--button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button> --->
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                     </div>
@@ -888,6 +888,7 @@
         //TERMINA  restoreData()
         
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -917,6 +918,7 @@
         });
 
         $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 1;
             // Recontar filas existentes que NO son títulos
@@ -947,6 +949,7 @@
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 1;
             // Recontar filas existentes que NO son títulos
@@ -960,358 +963,83 @@
 
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
-                    <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"> 
-                    <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
-                    <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
-                    <td><input type="text" class="form-control" name="No_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
-                    <td><input type="text" class="form-control" name="Tipo_Ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-                    <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="Referencia"></td>
-                    <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="DNR (in)"></td>
-                    <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="H.T."></td>
-                    <td><input type="text" class="form-control" name="LAxial[${lastTitle}][]" placeholder="Long. Axial (in)"></td>
-                    <td><input type="text" class="form-control" name="LCirc[${lastTitle}][]" placeholder="Long. Circ. (in)"></td>
-                    <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="d (in)"></td>
-                    <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="ta (in)"></td>
-                    <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="%Perdida"></td>
-                    <td><input type="text" class="form-control" name="Espe[${lastTitle}][]" placeholder="Espesor Remanente (in)f"></td>
-                    <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                    <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
+                        <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"> 
+                        <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
+                        <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
+                        <td><input type="text" class="form-control" name="No_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
+                        <td><input type="text" class="form-control" name="Tipo_Ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                        <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="Referencia"></td>
+                        <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="DNR (in)"></td>
+                        <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="H.T."></td>
+                        <td><input type="text" class="form-control" name="LAxial[${lastTitle}][]" placeholder="Long. Axial (in)"></td>
+                        <td><input type="text" class="form-control" name="LCirc[${lastTitle}][]" placeholder="Long. Circ. (in)"></td>
+                        <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="d (in)"></td>
+                        <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="ta (in)"></td>
+                        <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="%Perdida"></td>
+                        <td><input type="text" class="form-control" name="Espe[${lastTitle}][]" placeholder="Espesor Remanente (in)f"></td>
+                        <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 
             $('#dynamicTable tbody').append(newRow);
             }
-            //saveData(document.querySelectorAll("form")[1].id);
             verificarYAgregarLongitud();
+            //saveData(document.querySelectorAll("form")[1].id);
             saveData($(this).closest('form').attr('id'));
         }
     );
             // Restaurar datos al cargar la página
             restoreData();
 });
-function verificarYAgregarLongitud() {
+    function verificarYAgregarLongitud() {
 
-    const $tbody = $('#dynamicTable tbody');
-    const $rows = $tbody.children('tr');
+        const $rows = $('#dynamicTable tbody tr');
 
-    let contadorBloque = 0;
-    let $ultimoElementoBloque = null;
+        let contadorBloque = 0;
 
-    $rows.each(function () {
+        $rows.each(function () {
 
-        const $row = $(this);
+            const $row = $(this);
 
-        //  Ignorar longitudes existentes (no cuentan)
-        if ($row.hasClass('long-row')) {
-            contadorBloque = 0;
-            $ultimoElementoBloque = null;
-            return;
-        }
+            // ✅ Si ya hay longitud → cerrar bloque
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
+            }
 
-        //  Contar título o fila normal
-        //if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {//MODIFICAR
-        if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
             contadorBloque++;
-            $ultimoElementoBloque = $row;
-        }
-        //-----------------------------------------Hacer ajuste de "N" filas por bloque
-        //  Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 20) {
 
-            const lastTitle = $row.data('titulo') || 'sin_titulo';
+            // 🎯 Cuando llega a 10 → insertar longitud
+            if (contadorBloque === 22) {
 
-            const newLong = `
-                <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="14">Longitud Inspeccionada</td>
-                    <td>
-                        <div class="d-flex justify-content-between align-items-center">
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                /*const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="14">Longitud Inspeccionada</td>
+                        <td>
                             <input type="text"
-                                class="form-control w-90 long-text"
-                                name="Long_Inspecc[${lastTitle}][]"
-                                placeholder="Ingrese Longitud Inspeccionada...">
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminar">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </div>
-                    </td>
-                </tr>`;
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`;
 
-            // Evitar duplicados
-            if (!$ultimoElementoBloque.next().hasClass('long-row')) {
-                $ultimoElementoBloque.after(newLong);
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
+                }*/
+
+                // 🔄 cerrar bloque
+                contadorBloque = 0;
             }
+        });
+    }
 
-            // Reiniciar contador para siguiente bloque
-            contadorBloque = 0;
-            $ultimoElementoBloque = null;
-        }
-    });
-}
-
-        $(document).ready(function() {
-        function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
-        }
-        
-            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
-            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
-
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var nombre = selectedOption.data('nombre') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#nombreInputbyp').val(nombre);
-                $('#nsInputbyp').val(ns);
-            }
-
-            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
-            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
-
-            function actualizarInputsA1() {
-                var selectedOption = $('#accesoriosSelect1').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA1').val(marca);
-                $('#modeloInputA1').val(modelo);
-                $('#nsInputA1').val(ns);
-            }
-
-            const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios1');
-            selectedOptionLocalA1 != null ?  ($('#accesoriosSelect1').val(selectedOptionLocalA1),actualizarInputsA1()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect1').on('change', function() {
-                    actualizarInputsA1();
-                });
-
-            function actualizarInputsA2() {
-                var selectedOption = $('#accesoriosSelect2').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA2').val(marca);
-                $('#modeloInputA2').val(modelo);
-                $('#nsInputA2').val(ns);
-            }
-
-            const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
-            selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect2').on('change', function() {
-                    actualizarInputsA2();
-                });
-
-            function actualizarInputsA3() {
-                var selectedOption = $('#accesoriosSelect3').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA3').val(marca);
-                $('#modeloInputA3').val(modelo);
-                $('#nsInputA3').val(ns);
-            }
-
-            const selectedOptionLocalA3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios3');
-            selectedOptionLocalA3 != null ?  ($('#accesoriosSelect3').val(selectedOptionLocalA3),actualizarInputsA3()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect3').on('change', function() {
-                    actualizarInputsA3();
-                });
-
-            function actualizarInputsA4() {
-                var selectedOption = $('#accesoriosSelect4').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA4').val(marca);
-                $('#modeloInputA4').val(modelo);
-                $('#nsInputA4').val(ns);
-            }
-
-            const selectedOptionLocalA4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios4');
-            selectedOptionLocalA4 != null ?  ($('#accesoriosSelect4').val(selectedOptionLocalA4),actualizarInputsA4()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect4').on('change', function() {
-                    actualizarInputsA4();
-                });
-
-            function actualizarInputsA5() {
-                var selectedOption = $('#accesoriosSelect5').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA5').val(marca);
-                $('#modeloInputA5').val(modelo);
-                $('#nsInputA5').val(ns);
-            }
-
-            const selectedOptionLocalA5 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios5');
-            selectedOptionLocalA5 != null ?  ($('#accesoriosSelect5').val(selectedOptionLocalA5),actualizarInputsA5()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect5').on('change', function() {
-                    actualizarInputsA5();
-                });
-
-            function actualizarInputsA6() {
-                var selectedOption = $('#accesoriosSelect6').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA6').val(marca);
-                $('#modeloInputA6').val(modelo);
-                $('#nsInputA6').val(ns);
-            }
-
-            const selectedOptionLocalA6 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios6');
-            selectedOptionLocalA6 != null ?  ($('#accesoriosSelect6').val(selectedOptionLocalA6),actualizarInputsA6()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect6').on('change', function() {
-                    actualizarInputsA6();
-                });
-
-            function actualizarInputsA7() {
-                var selectedOption = $('#accesoriosSelect7').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA7').val(marca);
-                $('#modeloInputA7').val(modelo);
-                $('#nsInputA7').val(ns);
-            }
-
-            const selectedOptionLocalA7 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios7');
-            selectedOptionLocalA7 != null ?  ($('#accesoriosSelect7').val(selectedOptionLocalA7),actualizarInputsA7()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect7').on('change', function() {
-                    actualizarInputsA7();
-                });
-
-            function actualizarInputsA8() {
-                var selectedOption = $('#accesoriosSelect8').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA8').val(marca);
-                $('#modeloInputA8').val(modelo);
-                $('#nsInputA8').val(ns);
-            }
-
-            const selectedOptionLocalA8 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios8');
-            selectedOptionLocalA8 != null ?  ($('#accesoriosSelect8').val(selectedOptionLocalA8),actualizarInputsA8()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect8').on('change', function() {
-                    actualizarInputsA8();
-                });
-
-        function actualizarInputsE2() {
-            var selectedOption = $('#equiposSelect2').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE2').val(marca);
-            $('#modeloInputE2').val(modelo);
-            $('#nsInputE2').val(ns);
-        }
-        
-            const selectedOptionLocalE2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos2');
-            selectedOptionLocalE2 != null ?  ($('#equiposSelect2').val(selectedOptionLocalE2),actualizarInputsE2()):"";
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect2').on('change', function() {
-                actualizarInputsE2();
-            });
-
-            function actualizarInputsE3() {
-            var selectedOption = $('#equiposSelect3').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE3').val(marca);
-            $('#modeloInputE3').val(modelo);
-            $('#nsInputE3').val(ns);
-        }
-        
-            const selectedOptionLocalE3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos3');
-            selectedOptionLocalE3 != null ?  ($('#equiposSelect3').val(selectedOptionLocalE3),actualizarInputsE3()):"";
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect3').on('change', function() {
-                actualizarInputsE3();
-            });
-    });
 
     /*FOR-01-PRO-INS-15*/
     document.addEventListener('DOMContentLoaded', function () {

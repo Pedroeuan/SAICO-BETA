@@ -4,7 +4,7 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-03/01</title>
             <style>
-              @page {
+                @page {
                     margin: 3.0cm 1.2cm 2.1cm 2.2cm;
                 }
 
@@ -38,7 +38,7 @@
                     padding-bottom: 0;
                     font-family: 'arial', sans-serif;
                 }
-                  .content {
+                .content {
                     margin-top: 0;
                 }
 
@@ -174,7 +174,7 @@
                         <tr>
                             <th style="width: 400%;">FORMATO</th>
                             <th style="width: 70%;">Código:</th>
-                            <th style="width: 100%;">FOR-INS-03/01</th>
+                            <th style="width: 80%;">FOR-INS-03/01</th>
                             <th rowspan="3" style="width: 80%;"><img src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -402,7 +402,7 @@
                     </table>
             </footer>
 
-        @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+        @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 <div class="content-separador"></div>
                 <table class="datosgenerales">
@@ -410,9 +410,6 @@
                     <thead class="encabezadoAzul">
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>   
-
-                   
-
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
@@ -560,51 +557,56 @@
                                     <th>H.T.</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                
-                                {{-- 🔹 TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="10" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
-                                        </td>
-                                    </tr>
-                                @endif
+                                <tbody>
+                                    @foreach ($bloque as $item)
+                                        @php
+                                            //dd($bloque);
+                                        @endphp
+                                        @if (!is_array($item))
+                                            @continue
+                                        @endif
 
-                                {{-- 🔹 FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                    <tr class="juntas">
-                                        <td>{{ $junta['No'] }}</td>
-                                        <td>{{ $junta['componente'] }}</td>
-                                        <td>{{ $junta['no_indicacion'] }}</td>
-                                        <td>{{ $junta['tipo_indicacion'] }}</td>
-                                        <td>{{ $junta['largo'] }}</td>
-                                        <td>{{ $junta['ancho'] }}</td>
-                                        <td>{{ $junta['diametro'] }}</td>
-                                        <td>{{ $junta['ht'] }}</td>
-                                        <td>{{ $junta['evaluacion'] }}</td>
-                                        <td>{{ $junta['long_inspeccionada'] }}</td>
-                                    </tr>
-                                @endforeach
+                                        {{-- TITULO --}}
+                                        @if (($item['tipo'] ?? null) == 'titulo')
+                                            <tr class="titulo-row">
+                                                <td colspan="10" style="border:.5px solid black;">
+                                                    {{ $item['texto'] }}
+                                                </td>
+                                            </tr>
+                                        @endif
 
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr class="">
-                                    <th colspan="9">Longitud inspeccionada:</th>
-                                    <th>
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </th>
-                                </tr>
+                                        {{-- FILA --}}
+                                        @if (($item['tipo'] ?? null) == 'fila')
+                                            <tr class="juntas">
+                                                <td>{{ $item['data']['No'] ?? '' }}</td>
+                                                <td>{{ $item['data']['componente'] ?? '' }}</td>
+                                                <td>{{ $item['data']['no_indicacion'] ?? '' }}</td>
+                                                <td>{{ $item['data']['tipo_indicacion'] ?? '' }}</td>
+                                                <td>{{ $item['data']['largo'] ?? '' }}</td>
+                                                <td>{{ $item['data']['ancho'] ?? '' }}</td>
+                                                <td>{{ $item['data']['diametro'] ?? '' }}</td>
+                                                <td>{{ $item['data']['ht'] ?? '' }}</td>
+                                                <td>{{ $item['data']['evaluacion'] ?? '' }}</td>
+                                                <td>{{ $item['data']['long_inspeccionada'] ?? '' }}</td>
+                                            </tr>
+                                        @endif
 
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="10"></td>
-                                </tr>--}}
-                            </tbody>
+                                        {{-- LONGITUD --}}
+                                        @if (($item['tipo'] ?? null) == 'longitud')
+                                            <tr class="sinBordetd">
+                                                <td colspan="7"></td>
+                                                <th colspan="2">Longitud inspeccionada:</th>
+                                                <th>{{ $item['valor'] ?? '' }} m</th>
+                                            </tr>
+                                        @endif
+
+                                    @endforeach
+                                </tbody>
                     </table>
-            </div>
-                @if (!$loop->last)
-                    <div style="page-break-after: always;"></div>
-                @endif
-        @endforeach
+                </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
+            @endforeach
         </body>
     </html>

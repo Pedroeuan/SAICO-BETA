@@ -15,7 +15,6 @@
                     2.1cm /* inferior */
                     2.2cm; /* izquierdo */
                 }
-
                 header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
@@ -60,7 +59,24 @@
                     border-bottom: 1px solid black;
                     text-align: center;
                 }
-                    
+
+                .lineaSuperior{
+                    border-top: 2px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+
+                .lineaIzquierda{
+                    border-left: 1px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+                .lineaDerecha{
+                    border-right: 1px solid black;
+                    text-align: center;
+                    font-size: 6px;
+                }
+
                 .simbologia {
                     border-collapse: collapse;  /*separate No colapsar bordes */
                     border-spacing: 0px;        /* Espacio entre celdas */
@@ -120,48 +136,17 @@
         }
 
         .datosresultados{
-            border-collapse: collapse;  /*separate No colapsar bordes */
+            border-collapse: separate;  /*separate No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
             font-size: 8px;
-            border: none;
+            table-layout: fixed;
+            /*border: 1px solid black;*/
         }
 
         .datosresultados td, .datosresultados th {
-            border: .5px solid black; 
-        }
-
-        .datosresultados .celdaOculta {
-            border: none !important;
-            border-bottom: none !important;
-            padding: 0 !important;
-            height: 0 !important;
-            line-height: 0 !important;
-            font-size: 0 !important;
-            background: #ffffff;
-        }
-
-        .datosresultados .longitudInspeccionada {
-            border-top: .8px solid black !important;
-            border-bottom: .8px solid black !important;
-            white-space: nowrap;
-            padding-top: 3px;
-            padding-bottom: 3px;
-            background: #ffffff;
-        }
-
-        .datosresultados .longitudEtiqueta {
-            text-align: right;
-            border-left: .8px solid black !important;
-            border-right: .8px solid black !important;
-            padding-right: 6px;
-        }
-
-        .datosresultados .longitudValor {
-            text-align: left;
-            border-right: .8px solid black !important;
-            padding-left: 6px;
+            border: .6px solid black; 
         }
         .celdaGris{
             background-color: #DBDBDB;
@@ -236,6 +221,41 @@
                 <div style="margin-bottom: 4px;"></div> <!-- Espacio entre la tabla y el borde inferior del header -->
             </header>    
                 <footer>
+                    
+                    <table class="simbologia">
+                        <thead>
+                            <tr>
+                                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
+                            </tr>
+
+                            <tr>
+                                <td style="width: 20px;"><strong>GT</strong></td>
+                                <td style="width: 110px;">GRIETA LONGITUDINAL</td>
+                                <td style="width: 20px;"><strong>IR</strong></td>
+                                <td style="width: 150px;">INDICACIÓN REDONDEADA</td>
+                                <td style="width: 20px;"><strong>LA</strong></td>
+                                <td style="width: 180px;">LONGITUD AXIAL</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>IL</strong></td>
+                                <td>INDICACIÓN LINEAL</td>
+                                <td><strong>GT</strong></td>
+                                <td>GRIETAS TRANSVERSAL</td>
+                                <td><strong>LC</strong></td>
+                                <td>LONGITUD CIRCUNFERENCIAL</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>CC</strong></td>
+                                <td>CAMBIO DE CONDUCTIVIDAD</td>
+                                <td><strong>ZG</strong></td>
+                                <td>ZONA DE GRIETAS</td>
+                                <td><strong>H.T.</strong></td>
+                                <td>HORARIO TÉCNICO</td>
+                            </tr>
+                        </thead>
+                    </table>
                     <br>
                     <table class="datosgenerales" style="width: 100%;">                               
                         <tr>                                     
@@ -397,9 +417,9 @@
                         </thead>                            
                     </table>
             </footer>
-        @foreach ($Grupo_Juntas_Detalles_Re as $grupo)
+
+        @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
-                <div style="margin-bottom: 0px;"></div>
                 <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
@@ -546,129 +566,86 @@
 
                 <div style="margin-bottom: 5px;"></div>
 
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="13">RESULTADOS</th>
-                        </tr>
-                </table>
                     <table class="datosresultados">
+                    
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="13">RESULTADOS</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="13"></th></tr></thead> <!-- Fila vacia -->
+
                         <thead>
                             <tr class="celdaGris">
-                            <th style="width: 30px;" colspan="2">DATOS DE INSPECCIÓN</th>
-                                <th style="width: 40px;" colspan="6">DATOS DE LA INDICACIÓN</th>
-                                <th style="width: 30px;" colspan="2">Área Inspeccionada</th>
-                                <th style="width: 30px;" rowspan="2">Evaluación</th>
-                                <th style="width: 30px;" rowspan="2">Fotos</th>
-                                <th style="width: 30px;" rowspan="2">Observaciones</th>
+                                <th  colspan="2">DATOS DE INSPECCIÓN</th>
+                                <th  colspan="6">DATOS DE LA INDICACIÓN</th>
+                                <th  colspan="2">Área Inspeccionada</th>
+                                <th  rowspan="2">Evaluación</th>
+                                <th  style="width: 6%;" rowspan="2">Fotos</th>
+                                <th  style="width: 10%;" rowspan="2">Observaciones</th>
                             </tr>  
                             <tr class="celdaGris">
-                                <th style="width: 30px;">Junta / Elemento</th>
-                                <th style="width: 40px;">Zona de Barrido</th>
-                                <th style="width: 30px;">No. IndIcación</th>
-                                <th style="width: 30px;">Tipo de Indicación</th>
-                                <th style="width: 30px;">LA</th>
-                                <th style="width: 30px;">LC</th>
-                                <th style="width: 30px;">H.T.</th>
-                                <th style="width: 30px;">AMP</th>
-                                <th style="width: 30px;">Largo</th>
-                                <th style="width: 30px;">Ancho</th>
+                                <th>Junta / Elemento</th>
+                                <th>Zona de Barrido</th>
+                                <th>No. IndIcación</th>
+                                <th>Tipo de Indicación</th>
+                                <th style="width: 6%;">LA</th>
+                                <th style="width: 6%;">LC</th>
+                                <th style="width: 6%;">H.T.</th>
+                                <th>AMP</th>
+                                <th>Largo</th>
+                                <th>Ancho</th>
                             </tr>                               
                         </thead>
                                 <tbody>
-                                {{-- TÍTULO --}}
-                                @if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO'))
-                                    <tr class="titulo-row">
-                                        <td colspan="13" style="border:.5px solid black;">
-                                            {{ $grupo['titulos_juntas'] }}
-                                        </td>
-                                    </tr>
-                                @endif
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-                                {{-- 🔹 FILAS DEL BLOQUE --}}
-                                @foreach ($grupo['resultados'] as $junta)
-                                    <tr class="juntas">
-                                        <td>{{ $junta['Junta'] }}</td>
-                                        <td>{{ $junta['Zona_barrido'] }}</td>
-                                        <td>{{ $junta['No_Ind'] }}</td>
-                                        <td>{{ $junta['Tipo_Ind'] }}</td>
-                                        <td>{{ $junta['LA'] }}</td>
-                                        <td>{{ $junta['LC'] }}</td>
-                                        <td>{{ $junta['HT'] }}</td>
-                                        <td>{{ $junta['AMP'] }}</td>
-                                        <td>{{ $junta['Largo'] }}</td>
-                                        <td>{{ $junta['Ancho'] }}</td>
-                                        <td>{{ $junta['Evaluacion'] }}</td>
-                                        <td>{{ $junta['Fotos'] }}</td>
-                                        <td>{{ $junta['Observaciones'] }}</td>
-                                    </tr>
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="13" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
+
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                    <td>{{ $item['data']['Junta'] }}</td>
+                                                    <td>{{ $item['data']['Zona_barrido'] }}</td>
+                                                    <td>{{ $item['data']['No_Ind'] }}</td>
+                                                    <td>{{ $item['data']['Tipo_Ind'] }}</td>
+                                                    <td>{{ $item['data']['LA'] }}</td>
+                                                    <td>{{ $item['data']['LC'] }}</td>
+                                                    <td>{{ $item['data']['HT'] }}</td>
+                                                    <td>{{ $item['data']['AMP'] }}</td>
+                                                    <td>{{ $item['data']['Largo'] }}</td>
+                                                    <td>{{ $item['data']['Ancho'] }}</td>
+                                                    <td>{{ $item['data']['Evaluacion'] }}</td>
+                                                    <td>{{ $item['data']['Fotos'] }}</td>
+                                                    <td>{{ $item['data']['Observaciones'] }}</td>
+                                                </tr>
+                                            @endif
+
+                                            {{-- LONGITUD --}}
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="8"></td>
+                                                    <th colspan="4">Longitud inspeccionada:</th>
+                                                    <th>{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
+
                                 @endforeach
-
-                                {{-- 🔹 LONGITUD INSPECCIONADA --}}
-                                <tr>
-                                    <!-- Espacio izquierdo -->
-                                    <td colspan="4" class="celdaOculta"></td>
-
-                                    <!-- Título -->
-                                    <td colspan="3" class="longitudInspeccionada longitudEtiqueta">
-                                        Longitud inspeccionada:
-                                    </td>
-
-                                    <!-- Valor -->
-                                    <td colspan="2" class="longitudInspeccionada longitudValor">
-                                        {{ $grupo['Long_Inspecc'][0] ?? '---' }} m
-                                    </td>
-
-                                    <!-- Espacio derecho -->
-                                    <td colspan="4" class="celdaOculta"></td>
-                                </tr>
-                            
-
-                                {{-- 🔹 SALTO DE PÁGINA POR BLOQUE 
-                                <tr style="page-break-after: always;" class="sinBordetd">
-                                    <td colspan="13"></td>
-                                </tr>--}}
                             </tbody>
-                    </table>
-                    <div style="margin-bottom: 5px;"></div>
-
-                    <table class="simbologia">
-                        <thead>
-                            <tr>
-                                <th colspan="6" class="celdaAmarillo">SIMBOLOGÍA</th>
-                            </tr>
-
-                            <tr>
-                                <td style="width: 20px;"><strong>GT</strong></td>
-                                <td style="width: 110px;">GRIETA LONGITUDINAL</td>
-                                <td style="width: 20px;"><strong>IR</strong></td>
-                                <td style="width: 150px;">INDICACIÓN REDONDEADA</td>
-                                <td style="width: 20px;"><strong>LA</strong></td>
-                                <td style="width: 180px;">LONGITUD AXIAL</td>
-                            </tr>
-
-                            <tr>
-                                <td><strong>IL</strong></td>
-                                <td>INDICACIÓN LINEAL</td>
-                                <td><strong>GT</strong></td>
-                                <td>GRIETAS TRANSVERSAL</td>
-                                <td><strong>LC</strong></td>
-                                <td>LONGITUD CIRCUNFERENCIAL</td>
-                            </tr>
-
-                            <tr>
-                                <td><strong>CC</strong></td>
-                                <td>CAMBIO DE CONDUCTIVIDAD</td>
-                                <td><strong>ZG</strong></td>
-                                <td>ZONA DE GRIETAS</td>
-                                <td><strong>H.T.</strong></td>
-                                <td>HORARIO TÉCNICO</td>
-                            </tr>
-                        </thead>
-                    </table>
-            </div>
-                @if (!$loop->last)
-                    <div style="page-break-after: always;"></div>
-                @endif
+                        </table>
+                    </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
             @endforeach
         </body>
     </html>
