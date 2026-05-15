@@ -943,7 +943,7 @@
             contadorBloque++;
 
             // 🎯 Cuando llega a 10 → insertar longitud
-            if (contadorBloque === 20) {
+            if (contadorBloque === 22) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 

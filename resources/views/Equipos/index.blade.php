@@ -204,22 +204,20 @@
                                 <td>{{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}</td>
                                 <!-- Factura --> 
                                 <td scope="row"> 
-                                    @if ($general_eyc->Factura != 'ESPERA DE DATO')
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Factura) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
-                                        @elseif($general_eyc->Factura == 'ESPERA DE DATO')
-                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @if ($general_eyc->Factura == 'ESPERA DE DATO' || $general_eyc->Factura == 'EN ESPERA DE DATOS')
+                                        <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a> 
+                                        @else
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->Factura) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                     
                                     @endif
                                 </td>
                                 <!-- No Certificado --> 
                                 <td scope="row">{{$general_eyc->certificados->No_certificado}}</td>
                                 <!-- Certificado Actual --> 
                                 <td scope="row"> 
-                                    @if ($general_eyc->certificados->Certificados_Actual != 'ESPERA DE DATO')
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->  
-                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->certificados->Certificados_Actual) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                              
-                                        @elseif($general_eyc->certificados->Certificados_Actual == 'ESPERA DE DATO')
-                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                            
+                                    @if ($general_eyc->certificados->Certificado_Actual == 'ESPERA DE DATO' || $general_eyc->certificados->Certificado_Actual == 'N/A')
+                                            <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                        @else
+                                            <a class="btn btn-primary" href="{{ asset('storage/' . $general_eyc->certificados->Certificado_Actual) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>                                                                                        
                                     @endif
                                 </td> 
                                 <!-- Fecha Calibración/Caducidad -->  

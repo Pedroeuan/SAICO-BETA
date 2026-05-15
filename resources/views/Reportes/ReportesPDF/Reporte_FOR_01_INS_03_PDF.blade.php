@@ -4,7 +4,7 @@
             <meta charset="UTF-8">
             <title>FORMATO FOR-INS-03/01</title>
             <style>
-              @page {
+                @page {
                     margin: 3.0cm 1.2cm 2.1cm 2.2cm;
                 }
 
@@ -38,7 +38,7 @@
                     padding-bottom: 0;
                     font-family: 'arial', sans-serif;
                 }
-                  .content {
+                .content {
                     margin-top: 0;
                 }
 
@@ -174,7 +174,7 @@
                         <tr>
                             <th style="width: 400%;">FORMATO</th>
                             <th style="width: 70%;">Código:</th>
-                            <th style="width: 100%;">FOR-INS-03/01</th>
+                            <th style="width: 80%;">FOR-INS-03/01</th>
                             <th rowspan="3" style="width: 80%;"><img src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -593,8 +593,9 @@
 
                                         {{-- LONGITUD --}}
                                         @if (($item['tipo'] ?? null) == 'longitud')
-                                            <tr>
-                                                <th colspan="9">Longitud inspeccionada:</th>
+                                            <tr class="sinBordetd">
+                                                <td colspan="7"></td>
+                                                <th colspan="2">Longitud inspeccionada:</th>
                                                 <th>{{ $item['valor'] ?? '' }} m</th>
                                             </tr>
                                         @endif

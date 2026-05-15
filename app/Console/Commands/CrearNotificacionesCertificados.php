@@ -53,9 +53,6 @@ class NotificacionController extends Controller
 
     public function crearNotificacionesCertificados()
     {
-        // Obtener el usuario autenticado
-        //$user = Auth::user();
-
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
         $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
@@ -94,12 +91,12 @@ class NotificacionController extends Controller
                 {
                     if ($tipo === 'EQUIPOS') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
-                            Log::info('***********************');
-                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);
+                            /*Log::info('***********************');
+                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);*/
                     } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Fecha_calibracion;
-                            Log::info('***********************');
-                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);
+                            /*Log::info('***********************');
+                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);*/
                     } else {
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;

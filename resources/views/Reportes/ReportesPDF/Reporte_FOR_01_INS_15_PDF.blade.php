@@ -447,14 +447,12 @@
             </footer>
             @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
-                <div class="content">
-                
-                <div style="margin-bottom: 0px;"></div>
                 <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
+
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
-                    </thead>   
+                    </thead>  
 
                     <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
@@ -515,12 +513,14 @@
                 </table>
                 <div style="margin-bottom: 5px;"></div>
 
-                <table class="encabezadoAzul">
-                        <tr>
-                            <th colspan="12">RESULTADOS</th>
-                        </tr>
-                </table>
                     <table class="datosresultados">
+                    
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="12">RESULTADOS</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="12"></th></tr></thead> <!-- Fila vacia -->
+
                         <thead>
                             <tr class="celdaGris">
                             <th style="width: 50px;">ID</th>
@@ -546,7 +546,7 @@
                                             {{-- TITULO --}}
                                             @if (($item['tipo'] ?? null) == 'titulo')
                                                 <tr class="titulo-row">
-                                                    <td colspan="17" style="border:.5px solid black;">
+                                                    <td colspan="12" style="border:.5px solid black;">
                                                         {{ $item['texto'] }}
                                                     </td>
                                                 </tr>

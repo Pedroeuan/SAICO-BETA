@@ -306,6 +306,8 @@
                                         </div>
                                     </div>
 
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC1" name="Datos_Equipo[ID_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.ID_PENETRANTES')}}">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -366,6 +368,8 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC2" name="Datos_Equipo[ID_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.ID_REMOVEDOR')}}">
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -428,6 +432,8 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC3" name="Datos_Equipo[ID_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.ID_REMOVEDOR')}}">
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -930,6 +936,32 @@
                                             </div>
                                         </div>
 
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                                @error('Num_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                                @error('Nombre_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -1315,29 +1347,29 @@ $(document).ready(function() {
             }
         });
     }
-    
-
 
     /*Selects */
         $(document).ready(function() {
             function actualizarInputsC1() {
                 var selectedOption = $('#consumiblesSelect1').find('option:selected');
-
+                
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC1').val(ID);
                 $('#marcaInputC1').val(marca);
                 $('#modeloInputC1').val(modelo);
                 $('#loteInputC1').val(lote);
             }
-
-            // Evento cuando se cambia la selección en el select
-            $('#consumiblesSelect1').on('change', function() {
-                actualizarInputsC1();
-            });
+                // Evento cuando se cambia la selección en el select
+                $('#consumiblesSelect1').on('change', function() {
+                    actualizarInputsC1();
+                });
 
             const selectedOptionLocalCons1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
             selectedOptionLocalCons1 != null ?  ($('#consumiblesSelect1').val(selectedOptionLocalCons1),actualizarInputsC1()):"";
@@ -1350,12 +1382,15 @@ $(document).ready(function() {
             function actualizarInputsC2() {
                 var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC2').val(ID);
                 $('#marcaInputC2').val(marca);
                 $('#modeloInputC2').val(modelo);
                 $('#loteInputC2').val(lote);
@@ -1372,12 +1407,15 @@ $(document).ready(function() {
             function actualizarInputsC3() {
                 var selectedOption = $('#consumiblesSelect3').find('option:selected');
 
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC3').val(ID);
                 $('#marcaInputC3').val(marca);
                 $('#modeloInputC3').val(modelo);
                 $('#loteInputC3').val(lote);

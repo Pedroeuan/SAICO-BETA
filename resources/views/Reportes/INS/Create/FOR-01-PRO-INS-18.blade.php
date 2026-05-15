@@ -317,7 +317,7 @@
                             <select class="form-select inputForm" name="accesoriosSelect" id="accesoriosSelect">
                             <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
+                                    <option value="{{ $accesorios->idGeneral_EyC }}"
                                             data-marca="{{ $accesorios->Marca }}"
                                             data-modelo="{{ $accesorios->Modelo }}"
                                             data-ns="{{ $accesorios->Serie }}">
@@ -1202,7 +1202,7 @@ $(document).ready(function() {
             contadorBloque++;
 
             // 🎯 Cuando llega a 10 → insertar longitud
-            if (contadorBloque === 10) {
+            if (contadorBloque === 12) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
 

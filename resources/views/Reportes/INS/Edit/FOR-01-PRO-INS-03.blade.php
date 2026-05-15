@@ -263,6 +263,8 @@
                                         </div>
                                     </div>
 
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC1" name="Datos_Equipo[ID_PENETRANTES]" placeholder="" value="{{old('Datos_Equipo.ID_PENETRANTES', $Datos_Equipo['ID_PENETRANTES'] ?? '')}}">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -323,6 +325,8 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC2" name="Datos_Equipo[ID_REMOVEDOR]" placeholder="" value="{{old('Datos_Equipo.ID_REMOVEDOR', $Datos_Equipo['ID_REMOVEDOR'] ?? '')}}">
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -385,6 +389,8 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" class="form-control  inputForm" id="IDInputC3" name="Datos_Equipo[ID_REVELEADOR]" placeholder="" value="{{old('Datos_Equipo.ID_REVELEADOR', $Datos_Equipo['ID_REVELEADOR'] ?? '')}}">
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -995,6 +1001,70 @@
                                             </div>
                                         </div>
 
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{ old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '') }}">
+                                                @error('Num_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
+                                                @error('Nombre_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>
+                                        
+                                        <p>
+
+                                        <div class="row justify-content-center text-center">
+                                            {{-- Columna para Subir/Sustituir Archivo --}}
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputSuccess"> 
+                                                        @if ($Detalles_Generales['Reporte_Firmado'] ?? '') 
+                                                            SUSTITUIR REPORTE FIRMADO 
+                                                        @else 
+                                                            SUBIR REPORTE FIRMADO 
+                                                        @endif
+                                                    </label>
+                                                    <input type="file" class="form-control-file inputForm" name="Detalles_Generales[Reporte_Firmado]">
+                                                    @if ($errors->any())
+                                                        <div class="invalid-feedback d-block">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            {{-- Columna para Ver Reporte (Solo aparece si existe el archivo) --}}
+                                            @if ($Detalles_Generales['Reporte_Firmado'] ?? '')
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label" for="inputSuccess">Ver Reporte Firmado</label>  
+                                                        <div>                                           
+                                                            <a href="{{ asset($Detalles_Generales['Reporte_Firmado']) }}" target="_blank" class="btn btn-primary long-button" role="button">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a>                                                                                    
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -1214,12 +1284,16 @@ $(document).ready(function() {
             function actualizarInputsC1() {
                 var selectedOption = $('#consumiblesSelect1').find('option:selected');
 
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
+                var ID = selectedOption.data('ID') || '';
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC1').val(ID);
                 $('#marcaInputC1').val(marca);
                 $('#modeloInputC1').val(modelo);
                 $('#loteInputC1').val(lote);
@@ -1232,12 +1306,15 @@ $(document).ready(function() {
             function actualizarInputsC2() {
                 var selectedOption = $('#consumiblesSelect2').find('option:selected');
 
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC2').val(ID);
                 $('#marcaInputC2').val(marca);
                 $('#modeloInputC2').val(modelo);
                 $('#loteInputC2').val(lote);
@@ -1249,13 +1326,16 @@ $(document).ready(function() {
 
             function actualizarInputsC3() {
                 var selectedOption = $('#consumiblesSelect3').find('option:selected');
-
+                
+                // En lugar de .data(), usamos .val() porque el ID es el value del option
+                var ID = selectedOption.val() || '';
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var lote = selectedOption.data('lote') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputC3').val(ID);
                 $('#marcaInputC3').val(marca);
                 $('#modeloInputC3').val(modelo);
                 $('#loteInputC3').val(lote);

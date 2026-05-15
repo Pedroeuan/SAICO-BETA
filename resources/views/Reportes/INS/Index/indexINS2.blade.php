@@ -41,7 +41,8 @@
                         <th>Nombre del Proyecto</th>
                         <th>No. Reporte</th>
                         <th>Fecha</th>
-                        <th>PDF</th>
+                        <th>PDF GENERADO</th>
+                        <th>PDF FIRMADO</th>
                         <th>Editar</th>
                         <th>Siguiente Reporte</th>
                         <th>Eliminar</th>
@@ -51,6 +52,7 @@
                     @foreach($reportesEncontrados as $reporte)
                         @php
                             $detalles = json_decode($reporte->Detalles_Generales, true);
+                            $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
                         @endphp
                         <tr>
                             <td>{{ $detalles['Contrato'] }}</td>
@@ -59,7 +61,19 @@
                             <td>{{ $detalles['Fecha'] }}</td>
                             <td>
                                 <a class="btn btn-primary" href="{{ route('Obtener.RutaPDF', ['id' => $reporte->idReportes]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
-                            </td>  
+                            </td>
+                            <td>
+                                @if ($Reporte_Firmado == '')
+                                    <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                        <i class="far fa-file-pdf"></i>
+                                    </span>
+                                    @else
+                                    <a href="{{ asset($Reporte_Firmado) }}" 
+                                        class="btn btn-primary" target="_blank">
+                                            <i class="far fa-file-pdf"></i>
+                                    </a>
+                                @endif
+                            </td> 
                             <td>
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
