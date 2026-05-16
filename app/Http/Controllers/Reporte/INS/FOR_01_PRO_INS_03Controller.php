@@ -68,100 +68,149 @@ class FOR_01_PRO_INS_03Controller extends Controller
         // Unificar rutas
         $todasLasRutas = array_merge($facturas, $certificados);
 
-        // Filtrar rutas inválidas
-        $todasLasRutas = array_filter($todasLasRutas, function ($ruta) {
+        // Reindexar
+        $todasLasRutas = array_values($todasLasRutas);
 
-            if (empty($ruta)) {
+        Log::info('todasLasRutas', $todasLasRutas);
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTRAR RUTAS INVALIDAS
+        |--------------------------------------------------------------------------
+        */
+
+        $rutasInvalidas = [
+            'EN ESPERA DE DATOS',
+            'ESPERA DE DATO',
+            'N/A'
+        ];
+
+        $rutasValidas = array_filter($todasLasRutas, function ($ruta) use ($rutasInvalidas) {
+
+            if (!$ruta) {
                 return false;
             }
 
-            $ruta = trim($ruta);
-
-            $valoresInvalidos = [
-                'EN ESPERA DE DATOS',
-                'ESPERA DE DATO',
-                'N/A',
-                '-'
-            ];
-
-            return !in_array(strtoupper($ruta), $valoresInvalidos);
+            return !in_array(trim(strtoupper($ruta)), $rutasInvalidas);
         });
 
-        // Reindexar array
-        $todasLasRutas = array_values($todasLasRutas);
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO TEMPORAL
+        |--------------------------------------------------------------------------
+        */
 
-        Log::info('***********************');
-        Log::info('todasLasRutas: ', ['todasLasRutas' => $todasLasRutas]);
+        $directorioTemporal = storage_path(
+            "app/temp_pdfs/{$Contrato}_{$No_Reporte}"
+        );
 
-        // Nombre del PDF final
-        $nombreArchivo = "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
-
-        $directorioFinal = "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
-
-        $rutaDirectorio = storage_path("app/public/" . $directorioFinal);
-
-        // Crear directorio si no existe
-        if (!file_exists($rutaDirectorio)) {
-            mkdir($rutaDirectorio, 0755, true);
+        if (!File::exists($directorioTemporal)) {
+            File::makeDirectory($directorioTemporal, 0777, true);
         }
 
-        // Ruta final del PDF unido
-        $pathDestino = $rutaDirectorio . $nombreArchivo;
+        $pdfsTemporales = [];
 
-        // Crear instancia FPDI
-        $pdf = new Fpdi();
+        /*
+        |--------------------------------------------------------------------------
+        | COPIAR PDFs AL TEMPORAL
+        |--------------------------------------------------------------------------
+        */
 
-        foreach ($todasLasRutas as $rutaPDF)
-        {
-            try {
+        foreach ($rutasValidas as $rutaPdf) {
 
-                // Ruta completa física
-                $rutaCompleta = storage_path('app/public/' . $rutaPDF);
+            // Ruta completa
+            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
 
-                // Verificar existencia
-                if (!file_exists($rutaCompleta)) {
-                    Log::warning("No existe el archivo: {$rutaCompleta}");
-                    continue;
-                }
+            if (File::exists($rutaOriginal)) {
 
-                // Contar páginas
-                $totalPaginas = $pdf->setSourceFile($rutaCompleta);
+                $nombreArchivo = basename($rutaOriginal);
 
-                // Importar cada página
-                for ($pagina = 1; $pagina <= $totalPaginas; $pagina++)
-                {
-                    $template = $pdf->importPage($pagina);
+                $rutaTemporal = $directorioTemporal . '/' . $nombreArchivo;
 
-                    $size = $pdf->getTemplateSize($template);
+                File::copy($rutaOriginal, $rutaTemporal);
 
-                    // Crear página con mismo tamaño/orientación
-                    $pdf->AddPage(
-                        $size['orientation'],
-                        [$size['width'], $size['height']]
-                    );
-
-                    // Dibujar página
-                    $pdf->useTemplate($template);
-                }
-
-            } catch (\Exception $e) {
-
-                Log::error("Error procesando PDF: {$rutaPDF}");
-                Log::error($e->getMessage());
+                $pdfsTemporales[] = $rutaTemporal;
             }
         }
 
-        // Guardar PDF final
-        $pdf->Output($pathDestino, 'F');
+        /*
+        |--------------------------------------------------------------------------
+        | UNIR PDFs
+        |--------------------------------------------------------------------------
+        */
 
-        Log::info("PDF unido generado correctamente", [
-            'ruta' => $pathDestino
+        $pdf = new Fpdi();
+
+        foreach ($pdfsTemporales as $archivoPdf) {
+
+            // PDF compatible temporal
+            $archivoCompatible = str_replace(
+                '.pdf',
+                '_compatible.pdf',
+                $archivoPdf
+            );
+
+            // Comando Ghostscript
+            $comando = 'gswin64c -sDEVICE=pdfwrite '
+                . '-dCompatibilityLevel=1.4 '
+                . '-dNOPAUSE -dQUIET -dBATCH '
+                . '-sOutputFile="' . $archivoCompatible . '" '
+                . '"' . $archivoPdf . '"';
+
+            exec($comando);
+
+            // Usar PDF compatible
+            $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
+
+            for ($pagina = 1; $pagina <= $cantidadPaginas; $pagina++) {
+
+                $template = $pdf->importPage($pagina);
+
+                $size = $pdf->getTemplateSize($template);
+
+                $pdf->AddPage(
+                    $size['orientation'],
+                    [$size['width'], $size['height']]
+                );
+
+                $pdf->useTemplate($template);
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO FINAL
+        |--------------------------------------------------------------------------
+        */
+
+        $directorioFinal = "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
+
+        $rutaDirectorioFinal = storage_path("app/public/" . $directorioFinal);
+
+        if (!File::exists($rutaDirectorioFinal)) {
+            File::makeDirectory($rutaDirectorioFinal, 0777, true);
+        }
+
+        $nombreArchivoFinal = "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
+
+        $rutaPdfFinal = $rutaDirectorioFinal . $nombreArchivoFinal;
+
+        // Guardar PDF unido
+        $pdf->Output($rutaPdfFinal, 'F');
+
+        /*
+        |--------------------------------------------------------------------------
+        | ELIMINAR TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
+        File::deleteDirectory($directorioTemporal);
+
+        Log::info('PDF final generado', [
+            'ruta' => $rutaPdfFinal
         ]);
 
-        return [
-            'nombreArchivo' => $nombreArchivo,
-            'ruta' => $pathDestino
-        ];
+        return $rutaPdfFinal;
     }
         
     public function OS_OC($datosParaCrearOS_OC)
