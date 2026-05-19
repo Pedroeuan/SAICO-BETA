@@ -35,17 +35,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
-/*PDF */
+/*PDF*/
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
+/*QR*/
+use Illuminate\Support\Str;
 
 class FOR_01_PRO_INS_03Controller extends Controller
 {
+
     public function Datos_QR($datosParaCrearQR)
     {
-        $Contrato   = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
+        $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = [
             $datosParaCrearQR['idPenetrante'],
@@ -53,23 +57,31 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $datosParaCrearQR['idRevelador']
         ];
 
-        // Obtener rutas de facturas
-        $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)
-            ->whereNotNull('Factura')
-            ->pluck('Factura')
-            ->toArray();
+        /*
+        |--------------------------------------------------------------------------
+        | OBTENER FACTURAS Y CERTIFICADOS
+        |--------------------------------------------------------------------------
+        */
 
-        // Obtener rutas de certificados
-        $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)
-            ->whereNotNull('Certificado_Actual')
-            ->pluck('Certificado_Actual')
-            ->toArray();
+        $facturas = general_eyc::whereIn(
+            'idGeneral_EyC',
+            $idsConsumibles
+        )
+        ->whereNotNull('Factura')
+        ->pluck('Factura')
+        ->toArray();
 
-        // Unificar rutas
-        $todasLasRutas = array_merge($facturas, $certificados);
+        $certificados = certificados::whereIn(
+            'idGeneral_EyC',
+            $idsConsumibles
+        )
+        ->whereNotNull('Certificado_Actual')
+        ->pluck('Certificado_Actual')
+        ->toArray();
 
-        // Reindexar
-        $todasLasRutas = array_values($todasLasRutas);
+        $todasLasRutas = array_values(
+            array_merge($facturas, $certificados)
+        );
 
         Log::info('todasLasRutas', $todasLasRutas);
 
@@ -85,14 +97,20 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'N/A'
         ];
 
-        $rutasValidas = array_filter($todasLasRutas, function ($ruta) use ($rutasInvalidas) {
+        $rutasValidas = array_filter(
+            $todasLasRutas,
+            function ($ruta) use ($rutasInvalidas) {
 
-            if (!$ruta) {
-                return false;
+                if (!$ruta) {
+                    return false;
+                }
+
+                return !in_array(
+                    trim(strtoupper($ruta)),
+                    $rutasInvalidas
+                );
             }
-
-            return !in_array(trim(strtoupper($ruta)), $rutasInvalidas);
-        });
+        );
 
         /*
         |--------------------------------------------------------------------------
@@ -101,36 +119,72 @@ class FOR_01_PRO_INS_03Controller extends Controller
         */
 
         $directorioTemporal = storage_path(
-            "app/temp_pdfs/{$Contrato}_{$No_Reporte}"
+            "app/temp_pdfs/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}"
         );
 
         if (!File::exists($directorioTemporal)) {
-            File::makeDirectory($directorioTemporal, 0777, true);
+            File::makeDirectory(
+                $directorioTemporal,
+                0777,
+                true
+            );
         }
 
         $pdfsTemporales = [];
 
         /*
         |--------------------------------------------------------------------------
-        | COPIAR PDFs AL TEMPORAL
+        | COPIAR PDFs TEMPORALES
         |--------------------------------------------------------------------------
         */
 
         foreach ($rutasValidas as $rutaPdf) {
 
-            // Ruta completa
-            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
+            $rutaOriginal = storage_path(
+                'app/public/' . $rutaPdf
+            );
 
-            if (File::exists($rutaOriginal)) {
+            if (!File::exists($rutaOriginal)) {
 
-                $nombreArchivo = basename($rutaOriginal);
+                Log::warning(
+                    'PDF no encontrado',
+                    ['ruta' => $rutaOriginal]
+                );
 
-                $rutaTemporal = $directorioTemporal . '/' . $nombreArchivo;
-
-                File::copy($rutaOriginal, $rutaTemporal);
-
-                $pdfsTemporales[] = $rutaTemporal;
+                continue;
             }
+
+            $nombreArchivo = basename($rutaOriginal);
+
+            $rutaTemporal =
+                $directorioTemporal .
+                DIRECTORY_SEPARATOR .
+                $nombreArchivo;
+
+            File::copy(
+                $rutaOriginal,
+                $rutaTemporal
+            );
+
+            $pdfsTemporales[] = $rutaTemporal;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDAR PDFs
+        |--------------------------------------------------------------------------
+        */
+
+        if (empty($pdfsTemporales)) {
+
+            Log::warning(
+                'No hay PDFs válidos para unir.'
+            );
+
+            return [
+                'pdf' => null,
+                'qr' => null
+            ];
         }
 
         /*
@@ -143,37 +197,83 @@ class FOR_01_PRO_INS_03Controller extends Controller
 
         foreach ($pdfsTemporales as $archivoPdf) {
 
-            // PDF compatible temporal
-            $archivoCompatible = str_replace(
-                '.pdf',
-                '_compatible.pdf',
-                $archivoPdf
-            );
+            try {
 
-            // Comando Ghostscript
-            $comando = 'gswin64c -sDEVICE=pdfwrite '
-                . '-dCompatibilityLevel=1.4 '
-                . '-dNOPAUSE -dQUIET -dBATCH '
-                . '-sOutputFile="' . $archivoCompatible . '" '
-                . '"' . $archivoPdf . '"';
+                /*
+                |--------------------------------------------------------------------------
+                | HACER PDF COMPATIBLE CON FPDI
+                |--------------------------------------------------------------------------
+                */
 
-            exec($comando);
-
-            // Usar PDF compatible
-            $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
-
-            for ($pagina = 1; $pagina <= $cantidadPaginas; $pagina++) {
-
-                $template = $pdf->importPage($pagina);
-
-                $size = $pdf->getTemplateSize($template);
-
-                $pdf->AddPage(
-                    $size['orientation'],
-                    [$size['width'], $size['height']]
+                $archivoCompatible = str_replace(
+                    '.pdf',
+                    '_compatible.pdf',
+                    $archivoPdf
                 );
 
-                $pdf->useTemplate($template);
+                $comando =
+                    'gswin64c -sDEVICE=pdfwrite '
+                    . '-dCompatibilityLevel=1.4 '
+                    . '-dNOPAUSE '
+                    . '-dQUIET '
+                    . '-dBATCH '
+                    . '-sOutputFile="'
+                    . $archivoCompatible
+                    . '" "'
+                    . $archivoPdf
+                    . '"';
+
+                exec($comando);
+
+                /*
+                |--------------------------------------------------------------------------
+                | IMPORTAR PAGINAS
+                |--------------------------------------------------------------------------
+                */
+
+                $cantidadPaginas =
+                    $pdf->setSourceFile(
+                        $archivoCompatible
+                    );
+
+                for (
+                    $pagina = 1;
+                    $pagina <= $cantidadPaginas;
+                    $pagina++
+                ) {
+
+                    $template =
+                        $pdf->importPage($pagina);
+
+                    $size =
+                        $pdf->getTemplateSize(
+                            $template
+                        );
+
+                    $pdf->AddPage(
+                        $size['orientation'],
+                        [
+                            $size['width'],
+                            $size['height']
+                        ]
+                    );
+
+                    $pdf->useTemplate(
+                        $template
+                    );
+                }
+
+            } catch (\Exception $e) {
+
+                Log::error(
+                    'Error procesando PDF',
+                    [
+                        'archivo' => $archivoPdf,
+                        'error' => $e->getMessage()
+                    ]
+                );
+
+                continue;
             }
         }
 
@@ -183,34 +283,128 @@ class FOR_01_PRO_INS_03Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $directorioFinal = "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
+        $directorioFinal =
+            "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
 
-        $rutaDirectorioFinal = storage_path("app/public/" . $directorioFinal);
+        $rutaDirectorioFinal = storage_path(
+            "app/public/" . $directorioFinal
+        );
 
         if (!File::exists($rutaDirectorioFinal)) {
-            File::makeDirectory($rutaDirectorioFinal, 0777, true);
+
+            File::makeDirectory(
+                $rutaDirectorioFinal,
+                0777,
+                true
+            );
         }
-
-        $nombreArchivoFinal = "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
-
-        $rutaPdfFinal = $rutaDirectorioFinal . $nombreArchivoFinal;
-
-        // Guardar PDF unido
-        $pdf->Output($rutaPdfFinal, 'F');
 
         /*
         |--------------------------------------------------------------------------
-        | ELIMINAR TEMPORALES
+        | GUARDAR PDF FINAL
         |--------------------------------------------------------------------------
         */
 
-        File::deleteDirectory($directorioTemporal);
+        $nombreArchivoFinal =
+            "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
 
-        Log::info('PDF final generado', [
-            'ruta' => $rutaPdfFinal
-        ]);
+        $rutaPdfFinal =
+            $rutaDirectorioFinal .
+            $nombreArchivoFinal;
 
-        return $rutaPdfFinal;
+        $pdf->Output(
+            $rutaPdfFinal,
+            'F'
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | URL PUBLICA DEL PDF (TOKEN)
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaPublicaPdf = route(
+            'qr.reporte',
+            ['token' => $token]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR QR
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreQR =
+            "QR_{$Contrato}_{$No_Reporte}.svg";
+
+        $directorioQR = storage_path(
+            "app/public/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/QR_REPORTES"
+        );
+
+        if (!File::exists($directorioQR)) {
+
+            File::makeDirectory(
+                $directorioQR,
+                0777,
+                true
+            );
+        }
+
+        $rutaQrCompleta =
+            $directorioQR .
+            DIRECTORY_SEPARATOR .
+            $nombreQR;
+
+        \QrCode::format('svg')
+            ->size(300)
+            ->margin(0)
+            ->generate(
+                $rutaPublicaPdf,
+                $rutaQrCompleta
+            );
+
+        /*
+        |--------------------------------------------------------------------------
+        | RUTAS RELATIVAS
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaQrPublica =
+            "storage/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/QR_REPORTES/"
+            . $nombreQR;
+
+        $rutaPdfRelativa =
+            "storage/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/"
+            . $nombreArchivoFinal;
+
+        /*
+        |--------------------------------------------------------------------------
+        | LIMPIAR TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
+        File::deleteDirectory(
+            $directorioTemporal
+        );
+
+        Log::info(
+            'PDF final generado',
+            [
+                'pdf' => $rutaPdfRelativa,
+                'qr' => $rutaQrPublica
+            ]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETORNO
+        |--------------------------------------------------------------------------
+        */
+
+        return [
+            'pdf' => $rutaPdfRelativa,
+            'qr' => $rutaQrPublica
+        ];
     }
         
     public function OS_OC($datosParaCrearOS_OC)
@@ -1055,6 +1249,24 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR TOKEN QR PUBLICO
+        |--------------------------------------------------------------------------
+        */
+
+        // Solo generarlo si no existe
+        if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
+
+            $validatedData['Datos_Equipo']['QR_TOKEN'] =
+                (string) Str::uuid();
+        }
+        /*
+        |--------------------------------------------------------------------------
+        | DATOS PARA CREAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
+
         $datosParaCrearQR = [
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
@@ -1062,21 +1274,58 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'idPenetrante' => $idPenetrante,
             'idRemovedor' => $idRemovedor,
             'idRevelador' => $idRevelador,
+
+            // Token del QR público
+            'qr_token' =>
+                $validatedData['Datos_Equipo']['QR_TOKEN'],
         ];
 
-        $this->Datos_QR($datosParaCrearQR);
-        // 1. Captura el nombre que devuelve la función
-        $nombreGenerado = $this->Datos_QR($datosParaCrearQR);
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
 
-        // 2. ASIGNA la llave al array para que deje de marcar error
-        $validatedData['Datos_Equipo']['QR_PDF'] = $nombreGenerado;
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
 
-        // 3. Ahora sí, ya existe la llave y puedes usarla
-        $QR_PDF = $validatedData['Datos_Equipo']['QR_PDF'];
-        // Actualizar el reporte
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR RUTAS EN DATOS_EQUIPO
+        |--------------------------------------------------------------------------
+        */
+
+        // Ruta del QR (svg/png)
+        $validatedData['Datos_Equipo']['QR_PDF'] =
+            $resultadoQR['qr'];
+
+        // Ruta del PDF unificado
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
+            $resultadoQR['pdf'];
+
+        /*
+        |--------------------------------------------------------------------------
+        | VARIABLES DE APOYO (OPCIONAL)
+        |--------------------------------------------------------------------------
+        */
+
+        $QR_PDF =
+            $validatedData['Datos_Equipo']['QR_PDF'];
+
+        $PDF_UNIFICADO =
+            $validatedData['Datos_Equipo']['PDF_UNIFICADO'];
+
+        $QR_TOKEN =
+            $validatedData['Datos_Equipo']['QR_TOKEN'];
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTUALIZAR REPORTE
+        |--------------------------------------------------------------------------
+        */
+
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
-            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])
         ]);
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -1413,7 +1662,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
-
+        //dd($Datos_Equipo['QR_PDF'] );
         $totalTitulos = 0;
         $totalFilas = 0;
 
@@ -1450,8 +1699,17 @@ class FOR_01_PRO_INS_03Controller extends Controller
             }
         }
 
+        $qrPdf = null;
+
+        if (!empty($Datos_Equipo['QR_PDF'])) {
+            $qrPdf = public_path(
+                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
+            );
+        }
+
         $data = [
             'title' => 'Reporte_FOR-01-INS-03.PDF',
+            'QR_PDF' => $qrPdf,
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1502,7 +1760,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             // Posicionar el número de página dentro de la celda "Página" del encabezado
-            $combinedPdf->SetXY(129, -266);
+            $combinedPdf->SetXY(134.5, -265.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1515,7 +1773,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $combinedPdf->SetFont('Arial', 'B', 8);
             // Posicionar el número de página dentro de la celda "Página" del encabezado
             $combinedPdf->SetXY(138, -265.5);
-            // Para que el conteo sea consecutivo
+            //Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
