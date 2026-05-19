@@ -760,7 +760,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
