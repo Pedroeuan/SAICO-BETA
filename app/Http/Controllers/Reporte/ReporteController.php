@@ -1148,6 +1148,75 @@ class ReporteController extends Controller
         }
     }
 
+    public function VerPdfQR($token)
+    {
+        // Buscar todos los reportes
+        $reportes = reporte::all();
+
+        $datosEquipoEncontrado = null;
+
+        foreach ($reportes as $reporte) {
+
+            $datosEquipo = json_decode(
+                $reporte->Datos_Equipo,
+                true
+            );
+
+            // Comparar token
+            if (
+                !empty($datosEquipo['QR_TOKEN']) &&
+                $datosEquipo['QR_TOKEN'] === $token
+            ) {
+
+                $datosEquipoEncontrado = $datosEquipo;
+                break;
+            }
+        }
+
+        // Si no existe
+        if (!$datosEquipoEncontrado) {
+            abort(404, 'Reporte no encontrado');
+        }
+
+        // Validar PDF
+        if (empty($datosEquipoEncontrado['PDF_UNIFICADO'])) {
+            abort(404, 'PDF no encontrado');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | RUTA REAL DEL PDF
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaPdf = storage_path(
+            'app/public/' .
+            str_replace(
+                'storage/',
+                '',
+                $datosEquipoEncontrado['PDF_UNIFICADO']
+            )
+        );
+
+        // Verificar existencia
+        if (!file_exists($rutaPdf)) {
+            abort(404, 'Archivo no existe');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | MOSTRAR PDF
+        |--------------------------------------------------------------------------
+        */
+
+        return response()->file(
+            $rutaPdf,
+            [
+                'Content-Type' => 'application/pdf'
+            ]
+        );
+    }
+    
     public function ObtenerRutaPDF($id)
     {
         $Reporte = reporte::where('idReportes',$id)->first();
