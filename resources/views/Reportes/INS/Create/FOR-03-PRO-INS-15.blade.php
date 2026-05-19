@@ -171,7 +171,7 @@
                         </div>
                     </div>
 
-                                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Descripción del Equipo</label>
                                             <input type="text" class="form-control  inputForm @error('Orden_Trabajo') is-invalid @enderror" name="Detalles_Generales[Orden_Trabajo]"  placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . . " value="{{old('Detalles_Generales.Orden_Trabajo')}}">
@@ -191,7 +191,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
                             <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Isometrico_Plano]" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Detalles_Generales.Isometrico_Plano')}}</textarea>
@@ -243,13 +243,13 @@
                                 <tr id="inputRow">
                                     <th></th> <!-- Para ID vacío -->
                                     <th><input type="text" class="form-control default-input" data-column="1" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control default-input" data-column="2" style="width: 240px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="3" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="4" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="5" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="6" style="width: 100px;"></th>
                                     <th><input type="text" class="form-control default-input" data-column="7" style="width: 100px;"></th>
-                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 100px;"></th>        
+                                    <th><input type="text" class="form-control default-input" data-column="8" style="width: 140px;"></th>        
                                     <th></th> <!-- Para botón de eliminar -->
                                 </tr>
                             </thead>
@@ -259,6 +259,7 @@
                                 </tbody>
                         </table>
                     </div>
+
                     <input type="hidden" name="titulos_data" id="titulos_hidden"> <!---------------------------------------Agregar -->
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
@@ -476,8 +477,27 @@
                                 </thead>                            
                             </table>
                         </div>
-
                         <p>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                @error('Num_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                @error('Nombre_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="container">
                             <div class="float-right">
@@ -571,7 +591,7 @@ $(document).ready(function() {
             //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
             const newTitle = `
             <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="10">
+                <td colspan="9">
                 <div class="d-flex justify-content-between align-items-center">
                     <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
@@ -661,6 +681,7 @@ $(document).ready(function() {
         //TERMINA  restoreData()
         
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -690,6 +711,7 @@ $(document).ready(function() {
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 1;
             // Recontar filas existentes que NO son títulos
@@ -704,7 +726,7 @@ $(document).ready(function() {
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID"></td>
+                    </td><td><input type="text" class="form-control" name="ID[${lastTitle}][]" value="${rowCountGlobal}" placeholder="ID"></td>
                     <td><input type="text" class="form-control" name="Descripcion_del_Elemento[${lastTitle}][]" placeholder="Descripcion_del_Elemento"></td>
                     <td><input type="text" class="form-control" name="Nivel[${lastTitle}][]" placeholder="Nivel"></td>
                     <td><input type="text" class="form-control" name="0[${lastTitle}][]" placeholder="Ø"></td>
@@ -717,7 +739,7 @@ $(document).ready(function() {
                 $('#dynamicTable tbody').append(newRow);
             }
             //saveData(document.querySelectorAll("form")[1].id);
-            //verificarYAgregarLongitud();
+            verificarYAgregarLongitud();
             saveData($(this).closest('form').attr('id'));
         }
     );
@@ -725,8 +747,81 @@ $(document).ready(function() {
             restoreData();
 });
 
+    function verificarYAgregarLongitud() {
 
+        const $rows = $('#dynamicTable tbody tr');
 
+        let contadorBloque = 0;
 
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            // ✅ Si ya hay longitud → cerrar bloque
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
+            }
+
+            contadorBloque++;
+
+            // 🎯 Cuando llega a 10 → insertar longitud
+            if (contadorBloque === 22) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                /*const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="14">Longitud Inspeccionada</td>
+                        <td>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
+                }*/
+
+                // 🔄 cerrar bloque
+                contadorBloque = 0;
+            }
+        });
+    }
+    /*FOR-03-PRO-INS-15*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-03-PRO-INS-15');
+        if (!form) return;
+        
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            el.addEventListener('input', function () {
+                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                localStorage.setItem('FOR-03-PRO-INS-15_' + el.name, el.value);
+            });
+        });
+
+        // Restaurar al cargar la página (solo si el campo está vacío)
+        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (!el.value) {
+                const value = localStorage.getItem('FOR-03-PRO-INS-15_' + el.name);
+                if (value !== null) el.value = value;
+            }
+        });
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+                localStorage.removeItem('FOR-03-PRO-INS-15_' + el.name);
+                //localStorage.clear();
+            });
+        });
+    });
 </script>
 @endsection

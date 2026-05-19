@@ -1,19 +1,3 @@
-@php
-    $filas = [];
-
-    foreach ($Grupo_Juntas_Detalles_Re as $grupo) {
-
-        if (!str_starts_with($grupo['titulos_juntas'], 'SIN TITULO')) {
-            $filas[] = ['tipo' => 'titulo', 'valor' => $grupo['titulos_juntas']];
-        }
-
-        foreach ($grupo['resultados'] as $junta) {
-            $filas[] = ['tipo' => 'dato', 'valor' => $junta];
-        }
-    }
-
-    $chunks = array_chunk($filas, 30);
-@endphp
 <!DOCTYPE html>
         <html lang="es">
         <head>
@@ -231,7 +215,7 @@
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-15/03</th>
+                            <th style="width: 100%;">FOR-INS-15/03</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -429,111 +413,118 @@
                         </thead>                            
                     </table>
             </footer>
-    @foreach ($chunks as $pageIndex => $chunk)
 
-    @if($pageIndex > 0)
-        <div style="page-break-after: always;"></div>
-    @endif
+            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
 
-    {{-- ================= DATOS GENERALES ================= --}}
-    <div style="margin-bottom: 0px;"></div>
+            {{-- ================= DATOS GENERALES ================= --}}
+        <div class="content">
+            <table class="datosgenerales">
 
-    <table class="datosgenerales">
+                <thead class="encabezadoAzul">
+                    <tr><th colspan="4">DATOS GENERALES</th></tr>
+                </thead>   
 
-        <thead class="encabezadoAzul">
-            <tr><th colspan="4">DATOS GENERALES</th></tr>
-        </thead>   
+                <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead>
 
-        <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead>
+                <tbody>
+                    <tr>
+                        <th style="width: 12%;">FECHA:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
+                        <th style="width: 15%;">NO. REPORTE:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>CLIENTE:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
+                        <th>CONTRATO:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>PROYECTO:</th>
+                        <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>DESCRIPCION DEL EQUIPO:</th>
+                        <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>LUGAR:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
+                        <th>ISOMETRICO/PLANO:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <tbody>
-            <tr>
-                <th style="width: 12%;">FECHA:</th>
-                <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
-                <th style="width: 15%;">NO. REPORTE:</th>
-                <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
-            </tr>
-            <tr>
-                <th>CLIENTE:</th>
-                <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
-                <th>CONTRATO:</th>
-                <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
-            </tr>
-            <tr>
-                <th>PROYECTO:</th>
-                <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
-            </tr>
-            <tr>
-                <th>DESCRIPCION DEL EQUIPO:</th>
-                <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
-            </tr>
-            <tr>
-                <th>LUGAR:</th>
-                <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
-                <th>ISOMETRICO/PLANO:</th>
-                <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
-            </tr>
-        </tbody>
-    </table>
+            <div style="margin-bottom: 5px;"></div>
 
-    <div style="margin-bottom: 5px;"></div>
+            {{-- ================= ENCABEZADO RESULTADOS ================= --}}
+                    <table class="datosresultados">
+                    
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="8">RESULTADOS</th></tr>
+                        </thead>
+            {{-- ================= TABLA RESULTADOS ================= --}}
+                        <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
 
-    {{-- ================= ENCABEZADO RESULTADOS ================= --}}
-    <table class="encabezadoAzul">
-        <tr>
-            <th colspan="12">RESULTADOS</th>
-        </tr>
-    </table>
+                        <thead>
+                            <tr class="celdaGris">
+                                <th style="width: 30px;">ID</th>
+                                <th style="width: 50px;">DESCRIPCIÓN DEL ELEMENTO</th>
+                                <th style="width: 30px;">NIVEL</th>
+                                <th style="width: 30px;">Ø</th>
+                                <th style="width: 30px;">LONGITUD (m)</th>
+                                <th style="width: 30px;">CLASE</th>
+                                <th style="width: 50px;">ESPECIFICACIÓN</th>
+                                <th style="width: 100px;">OBSERVACIONES</th>
+                            </tr>
+                        </thead>
 
-    {{-- ================= TABLA RESULTADOS ================= --}}
-    <table class="datosresultados">
+                        <tbody>
+                                @foreach ($bloque as $item)
+                                            @if (!is_array($item))
+                                                @continue
+                                            @endif
 
-        <thead>
-            <tr>
-                <th style="width: 30px;">ID</th>
-                <th style="width: 50px;">DESCRIPCIÓN DEL ELEMENTO</th>
-                <th style="width: 30px;">NIVEL</th>
-                <th style="width: 30px;">Ø</th>
-                <th style="width: 30px;">LONGITUD (m)</th>
-                <th style="width: 30px;">CLASE</th>
-                <th style="width: 50px;">ESPECIFICACIÓN</th>
-                <th style="width: 100px;">OBSERVACIONES</th>
-            </tr>
-        </thead>
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="8" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
 
-        <tbody>
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                    <td>{{ $item['data']['ID'] }}</td>
+                                                    <td>{{ $item['data']['Descripcion_del_Elemento'] }}</td>
+                                                    <td>{{ $item['data']['Nivel'] }}</td>
+                                                    <td>{{ $item['data']['0'] }}</td>
+                                                    <td>{{ $item['data']['Longitud_(m)'] }}</td>
+                                                    <td>{{ $item['data']['Clase'] }}</td>
+                                                    <td>{{ $item['data']['Especificación'] }}</td>
+                                                    <td>{{ $item['data']['Observaciones'] }}</td>
+                                                </tr>
+                                            @endif
 
-        @foreach ($chunk as $fila)
-
-            {{-- TITULO --}}
-            @if($fila['tipo'] === 'titulo')
-                <tr>
-                    <td colspan="8">{{ $fila['valor'] }}</td>
-                </tr>
-            @else
-
-            {{-- FILA NORMAL --}}
-            <tr class="juntas">
-                <td>{{ $fila['valor']['ID'] }}</td>
-                <td>{{ $fila['valor']['Descripcion_del_Elemento'] }}</td>
-                <td>{{ $fila['valor']['Nivel'] }}</td>
-                <td>{{ $fila['valor']['0'] }}</td>
-                <td>{{ $fila['valor']['Longitud_(m)'] }}</td>
-                <td>{{ $fila['valor']['Clase'] }}</td>
-                <td>{{ $fila['valor']['Especificación'] }}</td>
-                <td>{{ $fila['valor']['Observaciones'] }}</td>
-            </tr>
-
-            @endif
-
-        @endforeach
-
-        </tbody>
-    </table>
-
-@endforeach
-</table>
-
-</div> <!-- cierre del content -->
+                                            {{-- LONGITUD 
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="12"></td>
+                                                    <th colspan="4">Longitud inspeccionada:</th>
+                                                    <th>{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
+                                            --}}
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
+            @endforeach
         </body>
     </html>

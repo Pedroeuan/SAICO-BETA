@@ -799,14 +799,14 @@ class ReporteController extends Controller
         $reportesDetalles_Generales = [];
         foreach ($Reportes as $reporte) {
             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
-$reportesDetalles_Generales[] = [
-    'Contrato' => $detalles['Contrato'] ?? '',
-    'Proyecto' => $detalles['Proyecto'] ?? '',
-    'Cliente' => $detalles['Cliente'] ?? '',
-    'Fecha' => $detalles['Fecha'] ?? '',
-    'No_Reporte' => $detalles['No_Reporte'] ?? '',
-    'idReportes' => $reporte->idReportes
-];
+            $reportesDetalles_Generales[] = [
+                'Contrato' => $detalles['Contrato'] ?? '',
+                'Proyecto' => $detalles['Proyecto'] ?? '',
+                'Cliente' => $detalles['Cliente'] ?? '',
+                'Fecha' => $detalles['Fecha'] ?? '',
+                'No_Reporte' => $detalles['No_Reporte'] ?? '',
+                'idReportes' => $reporte->idReportes
+            ];
         }
         // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
         $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
@@ -1135,6 +1135,11 @@ $reportesDetalles_Generales[] = [
         $Proyecto = $request->input('Proyecto');
 
         $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $contratoSeleccionado)->get();
+    // Obtener solo las rutas de los archivos firmados
+        /*$Rerpote_Firmado = $reportesEncontrados->map(function ($reporte) {
+            $detalles = json_decode($reporte->Detalles_Generales, true);
+            return $detalles['Reporte_Firmado'] ?? null;
+        })->filter(); // filter() elimina los valores nulos*/
 
         if ($reportesEncontrados->isNotEmpty()) {
             return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados', 'contratoSeleccionado', 'Proyecto'));
@@ -1274,8 +1279,30 @@ $reportesDetalles_Generales[] = [
         }
 
         //Tercero Eliminar el registro de la tabla 'Fotos_Reporte'
-        $Fotos_Reporte  = Fotos_Reporte::where('idReportes', $id)->first();
+        $Fotos_Reporte = Fotos_Reporte::where('idReportes', $id)->first();
+
         if ($Fotos_Reporte) {
+
+            // Convertir JSON a array
+            $fotos = json_decode($Fotos_Reporte->Fotos_Reportes, true);
+
+            if (is_array($fotos)) {
+
+                foreach ($fotos as $foto) {
+
+                    if (!empty($foto['ruta'])) {
+
+                        // Quitar "storage/" porque Storage trabaja desde "public"
+                        $ruta = str_replace('storage/', '', $foto['ruta']);
+
+                        if (Storage::disk('public')->exists($ruta)) {
+                            Storage::disk('public')->delete($ruta);
+                        }
+                    }
+                }
+            }
+
+            // Eliminar registro de la BD
             $Fotos_Reporte->delete();
         }
 

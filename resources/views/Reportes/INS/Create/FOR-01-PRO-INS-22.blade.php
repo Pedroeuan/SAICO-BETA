@@ -1012,6 +1012,32 @@
                             </div>
                         </div>
 
+                        <p>
+
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                        <p>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                @error('Num_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                @error('Nombre_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="container">
                             <div class="float-right">
                                 <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
@@ -1262,6 +1288,7 @@ $(document).ready(function() {
         //TERMINA  restoreData()
         
         $('#addTituloBtn').click(function () {
+            verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0; // Reiniciar el contador de filas para este título
             // ID único: counter + timestamp (evita duplicados aunque el texto sea igual)
@@ -1291,6 +1318,7 @@ $(document).ready(function() {
         });
 
         $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1321,6 +1349,7 @@ $(document).ready(function() {
         });
 
         $('#addBtn').click(function () {
+            verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
             // Recontar filas existentes que NO son títulos
@@ -1359,8 +1388,8 @@ $(document).ready(function() {
 
                 $('#dynamicTable tbody').append(newRow);
             }
-            //saveData(document.querySelectorAll("form")[1].id);
             verificarYAgregarLongitud();
+            //saveData(document.querySelectorAll("form")[1].id);
             saveData($(this).closest('form').attr('id'));
         }
     );
@@ -1369,66 +1398,54 @@ $(document).ready(function() {
 });
 
 
-function verificarYAgregarLongitud() {
+    function verificarYAgregarLongitud() {
 
-    const $tbody = $('#dynamicTable tbody');
-    const $rows = $tbody.children('tr');
+        const $rows = $('#dynamicTable tbody tr');
 
-    let contadorBloque = 0;
-    let $ultimoElementoBloque = null;
+        let contadorBloque = 0;
 
-    $rows.each(function () {
+        $rows.each(function () {
 
-        const $row = $(this);
+            const $row = $(this);
 
-        //  Ignorar longitudes existentes (no cuentan)
-        if ($row.hasClass('long-row')) {
-            contadorBloque = 0;
-            $ultimoElementoBloque = null;
-            return;
-        }
-
-        //  Contar título o fila normal
-        //if ($row.hasClass('titulo-row') || !$row.hasClass('titulo-row')) {//MODIFICAR
-        if (!$row.hasClass('titulo-row') && !$row.hasClass('long-row')) { 
-            contadorBloque++;
-            $ultimoElementoBloque = $row;
-        }
-        //-----------------------------------------Hacer ajuste de "N" filas por bloque
-        //  Cuando llegue a 11 → insertar longitud
-        if (contadorBloque === 10) {
-
-            const lastTitle = $row.data('titulo') || 'sin_titulo';
-
-            const newLong = `
-                <tr class="long-row" data-titulo="${lastTitle}">
-                    <td colspan="18">Longitud Inspeccionada</td>
-                    <td>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <input type="text"
-                                class="form-control w-90 long-text"
-                                name="Long_Inspecc[${lastTitle}][]"
-                                placeholder="Ingrese Longitud Inspeccionada...">
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminar">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </div>
-                    </td>
-                </tr>`;
-
-            // 👉 Evitar duplicados
-            if (!$ultimoElementoBloque.next().hasClass('long-row')) {
-                $ultimoElementoBloque.after(newLong);
+            // ✅ Si ya hay longitud → cerrar bloque
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
             }
 
-            // 🔄 Reiniciar contador para siguiente bloque
-            contadorBloque = 0;
-            $ultimoElementoBloque = null;
-        }
-    });
-}
+            contadorBloque++;
+
+            // 🎯 Cuando llega a 10 → insertar longitud
+            if (contadorBloque === 11) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="18">Longitud Inspeccionada</td>
+                        <td>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
+                }
+
+                // 🔄 cerrar bloque
+                contadorBloque = 0;
+            }
+        });
+    }
 
 
     $(document).ready(function() {

@@ -100,22 +100,47 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Cliente</label>
-                                            <input type="text" class="form-control  inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]"  placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{old('Detalles_Generales.Cliente')}}">
-                                            @error('Cliente')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label">
+                                                    ¿Cliente existente?
+                                                    <span class="ml-3">
+                                                        <label class="mr-2">
+                                                            <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio" name="TieneCliente" value="no"> No
+                                                        </label>
+                                                    </span>
+                                                </label>
+
+                                                <!-- SELECT cuando es SI -->
+                                                <select id="campoClienteSelect"
+                                                        class="form-select"
+                                                        name="ClienteSelect">
+                                                    <option value="" selected disabled>Seleccione un Cliente</option>
+                                                    @foreach($Clientes as $Cliente)
+                                                        <option value="{{ $Cliente->Cliente }}">
+                                                            {{ $Cliente->Cliente }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
+                                                <!-- INPUT cuando es NO -->
+                                                <input type="text"
+                                                    id="campoClienteInput"
+                                                    class="form-control inputForm mt-2"
+                                                    name="ClienteInput"
+                                                    placeholder="Ingrese nombre del cliente"
+                                                    style="display:none;">
+                                            </div>
                                         </div>
-                                    </div>
 
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
-                                                Contrato
-
+                                                ¿Contrato existente?
                                                 <span class="ml-3">
                                                     <label class="mr-2">
                                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -127,15 +152,13 @@
                                             </label>
 
                                             <!-- Input visible solo si es "SI" -->
-                                            <input type="text" id="campoContrato" class="form-control inputForm" name="Detalles_Generales[Contrato]" placeholder="Ejemplo: 640853841">
-
-                                            <!-- Input oculto donde guardaremos el contrato interno -->
-                                            <input type="hidden" id="contratoInternoHidden" name="Detalles_Generales[Contrato]">
-
-                                            <!-- Texto para mostrar contrato interno -->
-                                            <small id="contratoInternoTexto" class="form-text text-primary" style="display:none;">
-                                                Contrato interno asignado: <b id="numeroInterno"></b>
-                                            </small>
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Detalles_Generales[Contrato]"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
 
@@ -331,8 +354,7 @@
                         </table>
                         </div>
 
-                        <p>
-
+                        <input type="hidden" name="titulos_data" id="titulos_hidden">
                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                         <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                             <div>
@@ -643,7 +665,27 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <p>
 
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                                @error('Num_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                                @error('Nombre_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -689,7 +731,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
-/*Juntas-Resultados */
+/*Juntas-Resultados CAMBIAR JUNTAS CHECAR*/
     $(document).ready(function() {
         let tituloCount = 0;
         let rowCount = 0;
@@ -799,6 +841,7 @@
 
                 $('#dynamicTable tbody').append(newRow);
             }
+            verificarYAgregarLongitud();
             saveData(document.querySelectorAll("form")[1].id);
         }
     );
@@ -829,6 +872,55 @@
             restoreData();
     });
 
+    function verificarYAgregarLongitud() {
+
+        const $rows = $('#dynamicTable tbody tr');
+
+        let contadorBloque = 0;
+
+        $rows.each(function () {
+
+            const $row = $(this);
+
+            // ✅ Si ya hay longitud → cerrar bloque
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
+            }
+
+            contadorBloque++;
+
+            // 🎯 Cuando llega a 10 → insertar longitud
+            if (contadorBloque === 22) {
+
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+
+                /*const newLong = `
+                    <tr class="long-row" data-titulo="${lastTitle}">
+                        <td colspan="14">Longitud Inspeccionada</td>
+                        <td>
+                            <input type="text"
+                                class="form-control long-text"
+                                name="Long_Inspecc[${lastTitle}][]">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+
+                // 👉 evitar duplicado
+                if (!$row.next().hasClass('long-row')) {
+                    $row.after(newLong);
+                }*/
+
+                // 🔄 cerrar bloque
+                contadorBloque = 0;
+            }
+        });
+    }
+    
     /*FOR-01-PRO-INS-15*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-02-PRO-INS-15');
