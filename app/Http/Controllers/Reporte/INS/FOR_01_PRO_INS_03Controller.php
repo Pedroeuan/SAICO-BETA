@@ -781,7 +781,15 @@ class FOR_01_PRO_INS_03Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
-        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
+        // Después de $validatedData = $request->validate(...)
+
+        // ========================================
+        // GENERAR TOKEN QR (si no existe)
+        // ========================================
+        if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
+            $validatedData['Datos_Equipo']['QR_TOKEN'] = (string) Str::uuid();
+        }
+        
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -792,6 +800,39 @@ class FOR_01_PRO_INS_03Controller extends Controller
         // Guardar el registro en la base de datos   
         $Reportes->save();
 
+        //QR
+        // Obtener datos desde validatedData
+        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'] ?? null;
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $idPenetrante = $validatedData['Datos_Equipo']['ID_PENETRANTES'] ?? null;
+        $idRemovedor = $validatedData['Datos_Equipo']['ID_REMOVEDOR'] ?? null;
+        $idRevelador = $validatedData['Datos_Equipo']['ID_REVELEADOR'] ?? null;
+
+        // Datos para el QR/PDF
+        $datosParaCrearQR = [
+            'Contrato'     => $Contrato,
+            'No_Reporte'   => $No_Reporte,
+            'idSolicitud'  => $idSolicitud,
+            'idPenetrante' => $idPenetrante,
+            'idRemovedor'  => $idRemovedor,
+            'idRevelador'  => $idRevelador,
+            'qr_token'     => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ];
+
+        // Generar QR y PDF
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+
+        // Actualizar el registro recién creado con las rutas
+        $Reportes->update([
+            'Datos_Equipo' => json_encode(array_merge(
+                $validatedData['Datos_Equipo'],
+                [
+                    'QR_PDF'        => $resultadoQR['qr'],
+                    'PDF_UNIFICADO' => $resultadoQR['pdf'],
+                ]
+            )),
+        ]);
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
@@ -1043,18 +1084,8 @@ class FOR_01_PRO_INS_03Controller extends Controller
             
         ];
 
-        $datosParaCrearQR = [
-            'Contrato' => $Contrato,
-            'No_Reporte' => $No_Reporte,
-            'idSolicitud' => $idSolicitud,
-            'idPenetrante' => $idPenetrante,
-            'idRemovedor' => $idRemovedor,
-            'idRevelador' => $idRevelador,
-        ];
-
         $this->OS_OC($datosParaCrearOS_OC);
-        $this->Datos_QR($datosParaCrearQR);
-        $QR_PDF = $validatedData['Datos_Equipo']['QR_PDF'];
+
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
