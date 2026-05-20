@@ -550,7 +550,7 @@
                                 </tbody>
                         </table>
                         </div>
-                        <input type="text" name="titulos_data" id="titulos_hidden">
+                        <input type="hidden" name="titulos_data" id="titulos_hidden">
                         <p>
 
                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
