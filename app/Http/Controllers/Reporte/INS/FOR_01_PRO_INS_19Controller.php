@@ -651,7 +651,7 @@ class FOR_01_PRO_INS_19Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_01_PRO_INS_19/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null,
-                'hoja' => $imagenHoja,
+                'una_hoja' => $imagenHoja,
                 'detalles_junta' => $detallesJunta,
                 'datos_junta' => $datosJunta
             ];
