@@ -216,7 +216,7 @@
                     </table>
 
                     <br>
-                                                
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
