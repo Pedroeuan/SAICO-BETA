@@ -263,6 +263,8 @@
                                         </div>
                                     </div>
 
+                                    <input type="hidden" class="form-control inputForm" id="IDInputE" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -303,6 +305,8 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" class="form-control inputForm" id="IDInputA" name="Datos_Equipo[ID_TRANSDUCTOR]" value="{{ old('Datos_Equipo.ID_TRANSDUCTOR', $Datos_Equipo['ID_TRANSDUCTOR'] ?? '') }}">
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
@@ -351,6 +355,8 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <input type="hidden" class="form-control inputForm" id="IDInputBYP" name="Datos_Equipo[ID_BLOCK]" value="{{ old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '') }}">
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -1175,11 +1181,13 @@
             var selectedOption = $('#equiposSelect').find('option:selected');
 
             // Extraer los datos de los atributos "data-"
+            var id = selectedOption.val() || '';
             var marca = selectedOption.data('marca') || '';
             var modelo = selectedOption.data('modelo') || '';
             var ns = selectedOption.data('ns') || '';
 
             // Rellenar los inputs con los valores obtenidos
+            $('#IDInputE').val(id);
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
@@ -1194,11 +1202,13 @@
                 var selectedOption = $('#accesoriosSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
+                var id = selectedOption.val() || '';
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputA').val(id);
                 $('#marcaInputA').val(marca);
                 $('#modeloInputA').val(modelo);
                 $('#nsInputA').val(ns);
@@ -1213,11 +1223,13 @@
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
+                var id = selectedOption.val() || '';
                 var marca = selectedOption.data('marca') || '';
                 var modelo = selectedOption.data('modelo') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputBYP').val(id);
                 $('#marcaInputbyp').val(marca);
                 $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);

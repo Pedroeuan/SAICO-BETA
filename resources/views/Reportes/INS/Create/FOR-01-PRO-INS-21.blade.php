@@ -1335,6 +1335,10 @@
                         </div>
                         <p>
 
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                        
+                        <p>
+
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>

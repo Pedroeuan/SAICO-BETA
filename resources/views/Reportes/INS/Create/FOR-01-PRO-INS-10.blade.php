@@ -301,6 +301,7 @@
                                                 </option>
                                         @endforeach
                                     </select>
+                                    <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                             </div>
                         </div>
 
@@ -341,6 +342,7 @@
                                                 </option>
                                             @endforeach
                                     </select>
+                                    <input type="hidden" name="Datos_Equipo[ID_TR]" id="IDInputA" value="{{ old('Datos_Equipo.ID_TR') }}">
                             </div>
                         </div>
 
@@ -389,6 +391,7 @@
                                                 </option>
                                             @endforeach
                                     </select>
+                                    <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK') }}">
                             </div>
                         </div>
 
@@ -921,6 +924,10 @@
                                 </div>
                             </div>
                             <p>
+
+                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                            
+                            <p>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
@@ -1369,6 +1376,7 @@ $(document).ready(function() {
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val(selectedOption.val() || '');
         }
 
             const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
@@ -1393,6 +1401,7 @@ $(document).ready(function() {
                 $('#marcaInputA').val(marca);
                 $('#modeloInputA').val(modelo);
                 $('#nsInputA').val(ns);
+                $('#IDInputA').val(selectedOption.val() || '');
             }
 
             const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios');
@@ -1418,6 +1427,7 @@ $(document).ready(function() {
                 $('#marcaInputbyp').val(marca);
                 $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
+                $('#IDInputbyp').val(selectedOption.val() || '');
             }
 
             const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');

@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -45px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -207,9 +207,35 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="3" style="width:80%; padding:0; margin:0;">
+
+                                <div style="
+                                    width:100%;
+                                    height:7.2%;
+                                    text-align:center;
+                                    vertical-align:middle;
+                                    padding:0;
+                                    margin:0;
+                                ">
+                                    @if(!empty($QR_PDF))
+                                    <img
+                                        src="{{ $QR_PDF }}"
+                                        alt="QR"
+                                        style="
+                                            width:65px;
+                                            height:65px;
+                                            display:block;
+                                            margin:auto;
+                                            padding:0;
+                                        "
+                                    >
+                                    @endif
+                                </div>
+
+                            </th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-06/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 65%; height: auto;"></th>
                         </tr>
                     </thead>
 
@@ -230,6 +256,13 @@
             </header>
             
             <footer>
+                <table class="datosgenerales">                               
+                        <tr>                                     
+                            <th>OBSERVACIONES:</th>                   
+                            <td class="lineaInferior" style="width: 606.5px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
+                        </tr>                      
+                    </table>
+                    
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -510,7 +543,7 @@
                                                 </td>
                                                 @if(($index + 1) % 2 == 0)
                                                     </tr><tr>
-                                         @endif
+                                        @endif
                                             @endif
                                         @endforeach
                                     @endif

@@ -264,6 +264,8 @@
                         </div>
                     </div>
 
+                    <input type="hidden" class="form-control inputForm" id="IDInputE" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -1202,17 +1204,24 @@ $(document).ready(function() {
             var selectedOption = $('#equiposSelect').find('option:selected');
 
             // Extraer los datos de los atributos "data-"
+            var id = selectedOption.val() || '';
             var marca = selectedOption.data('marca') || '';
             var modelo = selectedOption.data('modelo') || '';
             var ns = selectedOption.data('ns') || '';
 
             // Rellenar los inputs con los valores obtenidos
+            $('#IDInputE').val(id);
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
         }
 
             // Evento cuando se cambia la selección en el select
+            if ($('#IDInputE').val()) {
+                $('#equiposSelect').val($('#IDInputE').val());
+                actualizarInputsE();
+            }
+
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
