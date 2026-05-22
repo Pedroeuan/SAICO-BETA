@@ -212,7 +212,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 605px;"></td>                            
+                            <td class="lineaInferior" style="width: 605px;">{{ $Datos_Equipo['Observaciones'] }}</td>                             
                         </tr>                      
                     </table>
 

@@ -12,7 +12,7 @@
                     2.2cm; /* izquierdo */
                 }
 
-            header {
+                header {
                     position: fixed;
                     top: -30px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
@@ -25,7 +25,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: 30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -178,6 +178,22 @@
 
         .cross-line::after {
             transform: rotate(-27deg);
+        }
+
+        .foto-full {
+            width: 100% !important;
+            height: 435px !important;
+        }
+
+        .foto-full img {
+            width: 100% !important;
+            height: 404px !important;
+            object-fit: contain;
+        }
+
+        .foto-full .comment {
+            margin-top: 0px;
+            font-size: 12px;
         }
             </style>
         </head>
@@ -362,34 +378,33 @@
                         </thead>                            
                     </table>
             </footer>
-            
-                @php
-                    $chunks = [];
-                    $grupoActual = [];
-                    foreach ($Fotos as $foto) {
-                        // Si la imagen es de hoja completa
-                        if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
-                            // Guardar grupo previo (si existe)
+                        @php
+                            $chunks = [];
+                            $grupoActual = [];
+
+                            foreach ($Fotos as $foto) {
+                                if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
+                                    if (!empty($grupoActual)) {
+                                        $chunks[] = $grupoActual;
+                                        $grupoActual = [];
+                                    }
+
+                                    $chunks[] = [$foto];
+                                    continue;
+                                }
+
+                                $grupoActual[] = $foto;
+
+                                if (count($grupoActual) == 4) {
+                                    $chunks[] = $grupoActual;
+                                    $grupoActual = [];
+                                }
+                            }
+
                             if (!empty($grupoActual)) {
                                 $chunks[] = $grupoActual;
-                                $grupoActual = [];
                             }
-                            // La imagen va SOLA
-                            $chunks[] = [$foto];
-                            continue;
-                        }
-                        // Imagen normal
-                        $grupoActual[] = $foto;
-                        if (count($grupoActual) == 4) {
-                            $chunks[] = $grupoActual;
-                            $grupoActual = [];
-                        }
-                    }
-                    if (!empty($grupoActual)) {
-                        $chunks[] = $grupoActual;
-                    }
-                @endphp
-
+                        @endphp
         @foreach($chunks as $fotosGrupo)
             <div class="content">
 
