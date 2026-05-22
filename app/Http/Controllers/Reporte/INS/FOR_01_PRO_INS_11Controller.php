@@ -314,7 +314,7 @@ class FOR_01_PRO_INS_11Controller extends Controller
 
         $titulos = $request->input('titulos', []);
         $datosAgrupados = [];
-        
+        /* CAMBIAR AL NUEVO FORMATO CUANDO ESTE LISTO DONDEO COLOCARLO */
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
         $filasSinTitulo = $request->input("elemento_tubo.$sinTituloKey", []);
