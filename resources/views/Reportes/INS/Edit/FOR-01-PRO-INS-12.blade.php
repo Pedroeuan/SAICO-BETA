@@ -260,6 +260,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                             </div>
                         </div>
 
@@ -300,6 +301,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_SONDA]" id="IDInputA" value="{{ old('Datos_Equipo.ID_SONDA', $Datos_Equipo['ID_SONDA'] ?? '') }}">
                             </div>
                         </div>
 
@@ -341,6 +343,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '') }}">
                             </div>
                         </div>
 
@@ -381,6 +384,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_ENCODER1]" id="IDInputA2" value="{{ old('Datos_Equipo.ID_ENCODER1', $Datos_Equipo['ID_ENCODER1'] ?? '') }}">
                             </div>
                         </div>
 
@@ -421,6 +425,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_ENCODER2]" id="IDInputA3" value="{{ old('Datos_Equipo.ID_ENCODER2', $Datos_Equipo['ID_ENCODER2'] ?? '') }}">
                             </div>
                         </div>
 
@@ -1310,24 +1315,54 @@
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val($('#equiposSelect').val() || $('#IDInputE').val() || '');
         }
+
+            $('#equiposSelect').val($('#IDInputE').val());
+            actualizarInputsE();
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
 
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+                $('#IDInputA').val($('#accesoriosSelect').val() || $('#IDInputA').val() || '');
+            }
+
+            $('#accesoriosSelect').val($('#IDInputA').val());
+            actualizarInputsA();
+
+            $('#accesoriosSelect').on('change', function() {
+                actualizarInputsA();
+            });
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
-                var nombre = selectedOption.data('nombre') || '';
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#nombreInputbyp').val(nombre);
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
+                $('#IDInputbyp').val($('#blockyprobetaSelect').val() || $('#IDInputbyp').val() || '');
             }
+
+            $('#blockyprobetaSelect').val($('#IDInputbyp').val());
+            actualizarInputsbyp();
 
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {
@@ -1365,8 +1400,12 @@
                 $('#marcaInputA2').val(marca);
                 $('#modeloInputA2').val(modelo);
                 $('#nsInputA2').val(ns);
+                $('#IDInputA2').val($('#accesoriosSelect2').val() || $('#IDInputA2').val() || '');
             }
-            
+
+                $('#accesoriosSelect2').val($('#IDInputA2').val());
+                actualizarInputsA2();
+
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect2').on('change', function() {
                     actualizarInputsA2();
@@ -1384,8 +1423,12 @@
                 $('#marcaInputA3').val(marca);
                 $('#modeloInputA3').val(modelo);
                 $('#nsInputA3').val(ns);
+                $('#IDInputA3').val($('#accesoriosSelect3').val() || $('#IDInputA3').val() || '');
             }
-            
+
+                $('#accesoriosSelect3').val($('#IDInputA3').val());
+                actualizarInputsA3();
+
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect3').on('change', function() {
                     actualizarInputsA3();

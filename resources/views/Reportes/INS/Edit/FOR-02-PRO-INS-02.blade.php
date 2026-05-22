@@ -271,6 +271,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_PARTICULAS]" id="IDInputC1" value="{{ old('Datos_Equipo.ID_PARTICULAS', $Datos_Equipo['ID_PARTICULAS'] ?? '') }}">                                        
                                         </div>
                                     </div>
 
@@ -332,6 +333,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_CONSTRASTANTE]" id="IDInputC2" value="{{ old('Datos_Equipo.ID_CONSTRASTANTE', $Datos_Equipo['ID_CONSTRASTANTE'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -395,6 +397,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">                                        
                                         </div>
                                     </div>
 
@@ -1273,67 +1276,43 @@ $(document).ready(function() {
             }
         });
     }
-
-    /*Selects */
+    //SELECT
     $(document).ready(function() {
+
+        function actualizarInputsC1() {
+            var selectedOption = $('#consumiblesSelect1').find('option:selected');
+
+            $('#marcaInputC1').val(selectedOption.data('marca') || '');
+            $('#modeloInputC1').val(selectedOption.data('modelo') || '');
+            $('#loteInputC1').val(selectedOption.data('lote') || '');
+            $('#IDInputC1').val($('#consumiblesSelect1').val() || '');
+        }
+
+        $('#consumiblesSelect1').on('change', actualizarInputsC1);
+
+        function actualizarInputsC2() {
+            var selectedOption = $('#consumiblesSelect2').find('option:selected');
+
+            $('#marcaInputC').val(selectedOption.data('marca') || '');
+            $('#modeloInputC').val(selectedOption.data('modelo') || '');
+            $('#loteInputC').val(selectedOption.data('lote') || '');
+            $('#IDInputC2').val($('#consumiblesSelect2').val() || '');
+        }
+
+        $('#consumiblesSelect2').on('change', actualizarInputsC2);
+
         function actualizarInputsE() {
             var selectedOption = $('#equiposSelect').find('option:selected');
 
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
+            $('#marcaInputE').val(selectedOption.data('marca') || '');
+            $('#modeloInputE').val(selectedOption.data('modelo') || '');
+            $('#nsInputE').val(selectedOption.data('ns') || '');
+            $('#IDInputEquipo').val($('#equiposSelect').val() || '');
         }
 
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
+        $('#equiposSelect').on('change', actualizarInputsE);
 
-            function actualizarInputsA() {
-                var selectedOption = $('#accesoriosSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA').val(marca);
-                $('#modeloInputA').val(modelo);
-                $('#nsInputA').val(ns);
-            }
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').on('change', function() {
-                    actualizarInputsA();
-                });
-                
-
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputbyp').val(marca);
-                $('#modeloInputbyp').val(modelo);
-                $('#nsInputbyp').val(ns);
-            }
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
-
-        });
+    });
 
 </script>
 @endsection

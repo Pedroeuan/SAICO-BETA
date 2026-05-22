@@ -22,6 +22,7 @@ use App\Models\OrdenServicio\Orden_Servicio;
 use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
@@ -38,9 +39,252 @@ use Illuminate\Support\Facades\File;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
+/*QR*/
+use Illuminate\Support\Str;
 
 class FOR_01_PRO_INS_13Controller extends Controller
 {
+    public function Datos_QR($datosParaCrearQR)
+    {
+        $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
+        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $token = $datosParaCrearQR['qr_token'] ?? null;
+
+        $idsConsumibles = array_filter([
+            $datosParaCrearQR['idEquipo'] ?? null,
+            $datosParaCrearQR['idBlock'] ?? null,
+            $datosParaCrearQR['idSonda1'] ?? null,
+            $datosParaCrearQR['idSonda2'] ?? null,
+            $datosParaCrearQR['idSonda3'] ?? null,
+            $datosParaCrearQR['idSonda4'] ?? null,
+            $datosParaCrearQR['idTrans1'] ?? null,
+            $datosParaCrearQR['idTrans2'] ?? null,
+            $datosParaCrearQR['idTrans3'] ?? null,
+            $datosParaCrearQR['idTrans4'] ?? null,
+            $datosParaCrearQR['idEncoder1'] ?? null,
+            $datosParaCrearQR['idEncoder2'] ?? null,
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | OBTENER FACTURAS Y CERTIFICADOS
+        |--------------------------------------------------------------------------
+        */
+
+        $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)
+            ->whereNotNull('Factura')
+            ->pluck('Factura')
+            ->toArray();
+
+        $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)
+            ->whereNotNull('Certificado_Actual')
+            ->pluck('Certificado_Actual')
+            ->toArray();
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+
+        Log::info('todasLasRutas', $todasLasRutas);
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTRAR RUTAS INVALIDAS
+        |--------------------------------------------------------------------------
+        */
+
+        $rutasInvalidas = ['EN ESPERA DE DATOS', 'ESPERA DE DATO', 'N/A'];
+
+        $rutasValidas = array_filter($todasLasRutas, function ($ruta) use ($rutasInvalidas) {
+            if (!$ruta) {
+                return false;
+            }
+
+            return !in_array(trim(strtoupper($ruta)), $rutasInvalidas);
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO TEMPORAL
+        |--------------------------------------------------------------------------
+        */
+
+        $directorioTemporal = storage_path("app/temp_pdfs/FOR_01_PRO_INS_13/{$Contrato}/{$No_Reporte}");
+
+        if (!File::exists($directorioTemporal)) {
+            File::makeDirectory($directorioTemporal, 0777, true);
+        }
+
+        $pdfsTemporales = [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | COPIAR PDFs TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($rutasValidas as $rutaPdf) {
+            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
+
+            if (!File::exists($rutaOriginal)) {
+                Log::warning('PDF no encontrado', ['ruta' => $rutaOriginal]);
+                continue;
+            }
+
+            $nombreArchivo = basename($rutaOriginal);
+            $rutaTemporal = $directorioTemporal . DIRECTORY_SEPARATOR . $nombreArchivo;
+
+            File::copy($rutaOriginal, $rutaTemporal);
+
+            $pdfsTemporales[] = $rutaTemporal;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | URL PUBLICA DEL PDF (TOKEN)
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaPublicaPdf = route('qr.reporte', ['token' => $token]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR QR
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreQR = "QR_{$Contrato}_{$No_Reporte}.svg";
+        $directorioQR = storage_path("app/public/Reportes/FOR_01_PRO_INS_13/{$Contrato}/{$No_Reporte}/QR_REPORTES");
+
+        if (!File::exists($directorioQR)) {
+            File::makeDirectory($directorioQR, 0777, true);
+        }
+
+        $rutaQrCompleta = $directorioQR . DIRECTORY_SEPARATOR . $nombreQR;
+
+        \QrCode::format('svg')
+            ->size(300)
+            ->margin(0)
+            ->generate($rutaPublicaPdf, $rutaQrCompleta);
+
+        $rutaQrPublica = "storage/Reportes/FOR_01_PRO_INS_13/{$Contrato}/{$No_Reporte}/QR_REPORTES/" . $nombreQR;
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDAR PDFs
+        |--------------------------------------------------------------------------
+        */
+
+        if (empty($pdfsTemporales)) {
+            Log::warning('No hay PDFs válidos para unir.');
+
+            return [
+                'pdf' => null,
+                'qr' => $rutaQrPublica
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | UNIR PDFs
+        |--------------------------------------------------------------------------
+        */
+
+        $pdf = new Fpdi();
+
+        foreach ($pdfsTemporales as $archivoPdf) {
+            try {
+                /*
+                |--------------------------------------------------------------------------
+                | HACER PDF COMPATIBLE CON FPDI
+                |--------------------------------------------------------------------------
+                */
+
+                $archivoCompatible = str_replace('.pdf', '_compatible.pdf', $archivoPdf);
+
+                $comando =
+                    'gswin64c -sDEVICE=pdfwrite '
+                    . '-dCompatibilityLevel=1.4 '
+                    . '-dNOPAUSE '
+                    . '-dQUIET '
+                    . '-dBATCH '
+                    . '-sOutputFile="'
+                    . $archivoCompatible
+                    . '" "'
+                    . $archivoPdf
+                    . '"';
+
+                exec($comando);
+
+                /*
+                |--------------------------------------------------------------------------
+                | IMPORTAR PAGINAS
+                |--------------------------------------------------------------------------
+                */
+
+                $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
+
+                for ($pagina = 1; $pagina <= $cantidadPaginas; $pagina++) {
+                    $template = $pdf->importPage($pagina);
+                    $size = $pdf->getTemplateSize($template);
+
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($template);
+                }
+            } catch (\Exception $e) {
+                Log::error('Error procesando PDF', [
+                    'archivo' => $archivoPdf,
+                    'error' => $e->getMessage()
+                ]);
+
+                continue;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO FINAL
+        |--------------------------------------------------------------------------
+        */
+
+        $directorioFinal = "Reportes/FOR_01_PRO_INS_13/{$Contrato}/{$No_Reporte}/";
+        $rutaDirectorioFinal = storage_path("app/public/" . $directorioFinal);
+
+        if (!File::exists($rutaDirectorioFinal)) {
+            File::makeDirectory($rutaDirectorioFinal, 0777, true);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR PDF FINAL
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreArchivoFinal = "QR_FOR_01_PRO_INS_13_{$Contrato}_{$No_Reporte}.pdf";
+        $rutaPdfFinal = $rutaDirectorioFinal . $nombreArchivoFinal;
+
+        $pdf->Output($rutaPdfFinal, 'F');
+
+        /*
+        |--------------------------------------------------------------------------
+        | RUTAS RELATIVAS
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaPdfRelativa = $directorioFinal . $nombreArchivoFinal;
+
+        /*
+        |--------------------------------------------------------------------------
+        | LIMPIAR TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
+        File::deleteDirectory($directorioTemporal);
+
+        return [
+            'pdf' => "storage/" . $rutaPdfRelativa,
+            'qr' => $rutaQrPublica
+        ];
+    }
+
 
     public function OS_OC($datosParaCrearOS_OC)
     {
@@ -242,68 +486,80 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
             'Datos_Equipo.ACOPLANTE' => 'nullable|string',
             'Datos_Equipo.LONG_CAB' => 'nullable|string',
 
             'Datos_Equipo.NOMB_BLOCK' => 'nullable|string',
             'Datos_Equipo.NS_BLOCK' => 'nullable|string',
+            'Datos_Equipo.ID_BLOCK' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA1' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA1' => 'nullable|string',
             'Datos_Equipo.NS_SONDA1' => 'nullable|string',
+            'Datos_Equipo.ID_SONDA1' => 'nullable|string',
             'Datos_Equipo.ZAPATA_SONDA1' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA1' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA2' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA2' => 'nullable|string',
             'Datos_Equipo.NS_SONDA2' => 'nullable|string',
+            'Datos_Equipo.ID_SONDA2' => 'nullable|string',
             'Datos_Equipo.ZAPATA_SONDA2' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA2' => 'nullable|string',
             
             'Datos_Equipo.MARCA_SONDA3' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA3' => 'nullable|string',
             'Datos_Equipo.NS_SONDA3' => 'nullable|string',
+            'Datos_Equipo.ID_SONDA3' => 'nullable|string',
             'Datos_Equipo.ZAPATA_SONDA3' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA3' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA4' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA4' => 'nullable|string',
             'Datos_Equipo.NS_SONDA4' => 'nullable|string',
+            'Datos_Equipo.ID_SONDA4' => 'nullable|string',
             'Datos_Equipo.ZAPATA_SONDA4' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA4' => 'nullable|string',
 
             'Datos_Equipo.MARCA_TRANS1' => 'nullable|string',
             'Datos_Equipo.MODELO_TRANS1' => 'nullable|string',
             'Datos_Equipo.NS_TRANS1' => 'nullable|string',
+            'Datos_Equipo.ID_TRANS1' => 'nullable|string',
             'Datos_Equipo.ZAPATA_TRANS1' => 'nullable|string',
             'Datos_Equipo.FREC_TRANS1' => 'nullable|string',
 
             'Datos_Equipo.MARCA_TRANS2' => 'nullable|string',
             'Datos_Equipo.MODELO_TRANS2' => 'nullable|string',
             'Datos_Equipo.NS_TRANS2' => 'nullable|string',
+            'Datos_Equipo.ID_TRANS2' => 'nullable|string',
             'Datos_Equipo.ZAPATA_TRANS2' => 'nullable|string',
             'Datos_Equipo.FREC_TRANS2' => 'nullable|string',
 
             'Datos_Equipo.MARCA_TRANS3' => 'nullable|string',
             'Datos_Equipo.MODELO_TRANS3' => 'nullable|string',
             'Datos_Equipo.NS_TRANS3' => 'nullable|string',
+            'Datos_Equipo.ID_TRANS3' => 'nullable|string',
             'Datos_Equipo.ZAPATA_TRANS3' => 'nullable|string',
             'Datos_Equipo.FREC_TRANS3' => 'nullable|string',
 
             'Datos_Equipo.MARCA_TRANS4' => 'nullable|string',
             'Datos_Equipo.MODELO_TRANS4' => 'nullable|string',
             'Datos_Equipo.NS_TRANS4' => 'nullable|string',
+            'Datos_Equipo.ID_TRANS4' => 'nullable|string',
             'Datos_Equipo.ZAPATA_TRANS4' => 'nullable|string',
             'Datos_Equipo.FREC_TRANS4' => 'nullable|string',
 
             'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string',
             'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string',
             'Datos_Equipo.NS_ENCODER1' => 'nullable|string',
+            'Datos_Equipo.ID_ENCODER1' => 'nullable|string',
             'Datos_Equipo.RES_SCAN1' => 'nullable|string',
 
             'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string',
             'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string',
             'Datos_Equipo.NS_ENCODER2' => 'nullable|string',
+            'Datos_Equipo.ID_ENCODER2' => 'nullable|string',
             'Datos_Equipo.RES_SCAN2' => 'nullable|string',
 
             'Datos_Equipo.ANG_INI' => 'nullable|string',
@@ -322,6 +578,9 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'Datos_Equipo.ESPESOR' => 'nullable|string',
 
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -475,6 +734,61 @@ class FOR_01_PRO_INS_13Controller extends Controller
 
         // Guardar el registro en la base de datos   
         $Reportes->save();
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR TOKEN QR PUBLICO
+        |--------------------------------------------------------------------------
+        */
+
+        $validatedData['Datos_Equipo']['QR_TOKEN'] =
+            $validatedData['Datos_Equipo']['QR_TOKEN']
+            ?? (string) Str::uuid();
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATOS PARA CREAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
+
+        $datosParaCrearQR = [
+            'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
+            'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
+            'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
+            'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null,
+            'idSonda1' => $validatedData['Datos_Equipo']['ID_SONDA1'] ?? null,
+            'idSonda2' => $validatedData['Datos_Equipo']['ID_SONDA2'] ?? null,
+            'idSonda3' => $validatedData['Datos_Equipo']['ID_SONDA3'] ?? null,
+            'idSonda4' => $validatedData['Datos_Equipo']['ID_SONDA4'] ?? null,
+            'idTrans1' => $validatedData['Datos_Equipo']['ID_TRANS1'] ?? null,
+            'idTrans2' => $validatedData['Datos_Equipo']['ID_TRANS2'] ?? null,
+            'idTrans3' => $validatedData['Datos_Equipo']['ID_TRANS3'] ?? null,
+            'idTrans4' => $validatedData['Datos_Equipo']['ID_TRANS4'] ?? null,
+            'idEncoder1' => $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? null,
+            'idEncoder2' => $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? null,
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
+
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR RUTAS EN DATOS_EQUIPO
+        |--------------------------------------------------------------------------
+        */
+
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'];
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'];
+
+        $Reportes->update([
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])
+        ]);
 
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
@@ -773,68 +1087,80 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
             'Datos_Equipo.ACOPLANTE' => 'nullable|string',
             'Datos_Equipo.LONG_CAB' => 'nullable|string',
 
             'Datos_Equipo.NOMB_BLOCK' => 'nullable|string',
             'Datos_Equipo.NS_BLOCK' => 'nullable|string',
+            'Datos_Equipo.ID_BLOCK' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA1' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA1' => 'nullable|string',
             'Datos_Equipo.NS_SONDA1' => 'nullable|string',
+            'Datos_Equipo.ID_SONDA1' => 'nullable|string',
             'Datos_Equipo.ZAPATA_SONDA1' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA1' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA2' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA2' => 'nullable|string',
             'Datos_Equipo.NS_SONDA2' => 'nullable|string',
+            'Datos_Equipo.ID_SONDA2' => 'nullable|string',
             'Datos_Equipo.ZAPATA_SONDA2' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA2' => 'nullable|string',
             
             'Datos_Equipo.MARCA_SONDA3' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA3' => 'nullable|string',
             'Datos_Equipo.NS_SONDA3' => 'nullable|string',
+            'Datos_Equipo.ID_SONDA3' => 'nullable|string',
             'Datos_Equipo.ZAPATA_SONDA3' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA3' => 'nullable|string',
 
             'Datos_Equipo.MARCA_SONDA4' => 'nullable|string',
             'Datos_Equipo.MODELO_SONDA4' => 'nullable|string',
             'Datos_Equipo.NS_SONDA4' => 'nullable|string',
+            'Datos_Equipo.ID_SONDA4' => 'nullable|string',
             'Datos_Equipo.ZAPATA_SONDA4' => 'nullable|string',
             'Datos_Equipo.FREC_SONDA4' => 'nullable|string',
 
             'Datos_Equipo.MARCA_TRANS1' => 'nullable|string',
             'Datos_Equipo.MODELO_TRANS1' => 'nullable|string',
             'Datos_Equipo.NS_TRANS1' => 'nullable|string',
+            'Datos_Equipo.ID_TRANS1' => 'nullable|string',
             'Datos_Equipo.ZAPATA_TRANS1' => 'nullable|string',
             'Datos_Equipo.FREC_TRANS1' => 'nullable|string',
 
             'Datos_Equipo.MARCA_TRANS2' => 'nullable|string',
             'Datos_Equipo.MODELO_TRANS2' => 'nullable|string',
             'Datos_Equipo.NS_TRANS2' => 'nullable|string',
+            'Datos_Equipo.ID_TRANS2' => 'nullable|string',
             'Datos_Equipo.ZAPATA_TRANS2' => 'nullable|string',
             'Datos_Equipo.FREC_TRANS2' => 'nullable|string',
 
             'Datos_Equipo.MARCA_TRANS3' => 'nullable|string',
             'Datos_Equipo.MODELO_TRANS3' => 'nullable|string',
             'Datos_Equipo.NS_TRANS3' => 'nullable|string',
+            'Datos_Equipo.ID_TRANS3' => 'nullable|string',
             'Datos_Equipo.ZAPATA_TRANS3' => 'nullable|string',
             'Datos_Equipo.FREC_TRANS3' => 'nullable|string',
 
             'Datos_Equipo.MARCA_TRANS4' => 'nullable|string',
             'Datos_Equipo.MODELO_TRANS4' => 'nullable|string',
             'Datos_Equipo.NS_TRANS4' => 'nullable|string',
+            'Datos_Equipo.ID_TRANS4' => 'nullable|string',
             'Datos_Equipo.ZAPATA_TRANS4' => 'nullable|string',
             'Datos_Equipo.FREC_TRANS4' => 'nullable|string',
 
             'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string',
             'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string',
             'Datos_Equipo.NS_ENCODER1' => 'nullable|string',
+            'Datos_Equipo.ID_ENCODER1' => 'nullable|string',
             'Datos_Equipo.RES_SCAN1' => 'nullable|string',
 
             'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string',
             'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string',
             'Datos_Equipo.NS_ENCODER2' => 'nullable|string',
+            'Datos_Equipo.ID_ENCODER2' => 'nullable|string',
             'Datos_Equipo.RES_SCAN2' => 'nullable|string',
 
             'Datos_Equipo.ANG_INI' => 'nullable|string',
@@ -853,6 +1179,9 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'Datos_Equipo.ESPESOR' => 'nullable|string',
 
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -958,6 +1287,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
+        $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
@@ -984,6 +1314,85 @@ class FOR_01_PRO_INS_13Controller extends Controller
         } else {
             $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR TOKEN QR PUBLICO
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ([
+            'ID_EQUIPO',
+            'ID_BLOCK',
+            'ID_SONDA1',
+            'ID_SONDA2',
+            'ID_SONDA3',
+            'ID_SONDA4',
+            'ID_TRANS1',
+            'ID_TRANS2',
+            'ID_TRANS3',
+            'ID_TRANS4',
+            'ID_ENCODER1',
+            'ID_ENCODER2',
+        ] as $campoId) {
+            $validatedData['Datos_Equipo'][$campoId] =
+                $validatedData['Datos_Equipo'][$campoId]
+                ?? $datosEquipoActuales[$campoId]
+                ?? null;
+        }
+
+        $validatedData['Datos_Equipo']['QR_TOKEN'] =
+            $validatedData['Datos_Equipo']['QR_TOKEN']
+            ?? $datosEquipoActuales['QR_TOKEN']
+            ?? (string) Str::uuid();
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATOS PARA CREAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
+
+        $datosParaCrearQR = [
+            'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
+            'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
+            'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
+            'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null,
+            'idSonda1' => $validatedData['Datos_Equipo']['ID_SONDA1'] ?? null,
+            'idSonda2' => $validatedData['Datos_Equipo']['ID_SONDA2'] ?? null,
+            'idSonda3' => $validatedData['Datos_Equipo']['ID_SONDA3'] ?? null,
+            'idSonda4' => $validatedData['Datos_Equipo']['ID_SONDA4'] ?? null,
+            'idTrans1' => $validatedData['Datos_Equipo']['ID_TRANS1'] ?? null,
+            'idTrans2' => $validatedData['Datos_Equipo']['ID_TRANS2'] ?? null,
+            'idTrans3' => $validatedData['Datos_Equipo']['ID_TRANS3'] ?? null,
+            'idTrans4' => $validatedData['Datos_Equipo']['ID_TRANS4'] ?? null,
+            'idEncoder1' => $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? null,
+            'idEncoder2' => $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? null,
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
+
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR RUTAS EN DATOS_EQUIPO
+        |--------------------------------------------------------------------------
+        */
+
+        $validatedData['Datos_Equipo']['QR_PDF'] =
+            $resultadoQR['qr']
+            ?? $datosEquipoActuales['QR_PDF']
+            ?? null;
+
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
+            $resultadoQR['pdf']
+            ?? $datosEquipoActuales['PDF_UNIFICADO']
+            ?? null;
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
@@ -1360,6 +1769,14 @@ class FOR_01_PRO_INS_13Controller extends Controller
         $numFirmas = $Firmas_Reportes['numFirmas'];
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
+        $qrPdf = null;
+
+        if (!empty($Datos_Equipo['QR_PDF'])) {
+            $qrPdf = public_path(
+                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
+            );
+        }
+
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
@@ -1396,6 +1813,8 @@ class FOR_01_PRO_INS_13Controller extends Controller
             'numFirmas' => $numFirmas,
             //Firmas
             'Firmas_Reportes' => $Firmas_Reportes,
+            //QR
+            'QR_PDF' => $qrPdf,
         ];
 
         // Generar el PDF principal en orientación horizontal
@@ -1426,7 +1845,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(137, -266);
+            $combinedPdf->SetXY(143.5, -266);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1437,7 +1856,7 @@ class FOR_01_PRO_INS_13Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -265.5);
+            $combinedPdf->SetXY(143.5, -266.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }

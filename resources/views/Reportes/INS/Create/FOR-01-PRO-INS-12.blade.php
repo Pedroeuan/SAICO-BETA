@@ -287,6 +287,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                             </div>
                         </div>
 
@@ -327,6 +328,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_SONDA]" id="IDInputA" value="{{ old('Datos_Equipo.ID_SONDA') }}">
                             </div>
                         </div>
 
@@ -368,6 +370,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK') }}">
                             </div>
                         </div>
 
@@ -408,6 +411,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_ENCODER1]" id="IDInputA2" value="{{ old('Datos_Equipo.ID_ENCODER1') }}">
                             </div>
                         </div>
 
@@ -448,6 +452,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="Datos_Equipo[ID_ENCODER2]" id="IDInputA3" value="{{ old('Datos_Equipo.ID_ENCODER2') }}">
                             </div>
                         </div>
 
@@ -1337,6 +1342,7 @@
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val($('#equiposSelect').val() || '');
         }
         
             const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
@@ -1347,16 +1353,39 @@
                 actualizarInputsE();
             });
 
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+                $('#IDInputA').val($('#accesoriosSelect').val() || '');
+            }
+
+            const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios');
+            selectedOptionLocalA != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA),actualizarInputsA()):"";
+
+            $('#accesoriosSelect').on('change', function() {
+                actualizarInputsA();
+            });
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
-                var nombre = selectedOption.data('nombre') || '';
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#nombreInputbyp').val(nombre);
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
+                $('#IDInputbyp').val($('#blockyprobetaSelect').val() || '');
             }
 
             const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
@@ -1401,6 +1430,7 @@
                 $('#marcaInputA2').val(marca);
                 $('#modeloInputA2').val(modelo);
                 $('#nsInputA2').val(ns);
+                $('#IDInputA2').val($('#accesoriosSelect2').val() || '');
             }
 
             const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
@@ -1423,6 +1453,7 @@
                 $('#marcaInputA3').val(marca);
                 $('#modeloInputA3').val(modelo);
                 $('#nsInputA3').val(ns);
+                $('#IDInputA3').val($('#accesoriosSelect3').val() || '');
             }
 
             const selectedOptionLocalA3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios3');
