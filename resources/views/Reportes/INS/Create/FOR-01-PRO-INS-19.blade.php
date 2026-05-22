@@ -550,7 +550,7 @@
                                 </tbody>
                         </table>
                         </div>
-                        <input type="text" name="titulos_data" id="titulos_hidden">
+                        <input type="hidden" name="titulos_data" id="titulos_hidden">
                         <p>
 
                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
@@ -817,6 +817,10 @@
                                 </thead>                            
                             </table>
                         </div>
+                        <p>
+
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                        
                         <p>
 
                         <div class="col-sm-6">

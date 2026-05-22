@@ -275,6 +275,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -316,6 +317,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_TRANSDUCTOR]" id="IDInputA" value="{{ old('Datos_Equipo.ID_TRANSDUCTOR', $Datos_Equipo['ID_TRANSDUCTOR'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -364,6 +366,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -1251,10 +1254,16 @@ $(document).ready(function() {
             var ns = selectedOption.data('ns') || '';
 
             // Rellenar los inputs con los valores obtenidos
+            $('#IDInputE').val(selectedOption.val() || '');
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
         }
+
+            if ($('#IDInputE').val()) {
+                $('#equiposSelect').val($('#IDInputE').val());
+                actualizarInputsE();
+            }
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
@@ -1270,10 +1279,16 @@ $(document).ready(function() {
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputA').val(selectedOption.val() || '');
                 $('#marcaInputA').val(marca);
                 $('#modeloInputA').val(modelo);
                 $('#nsInputA').val(ns);
             }
+
+                if ($('#IDInputA').val()) {
+                    $('#accesoriosSelect').val($('#IDInputA').val());
+                    actualizarInputsA();
+                }
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
@@ -1288,9 +1303,15 @@ $(document).ready(function() {
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
+                $('#IDInputbyp').val(selectedOption.val() || '');
                 $('#marcaInputbyp').val(marca);
                 $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
+            }
+
+            if ($('#IDInputbyp').val()) {
+                $('#blockyprobetaSelect').val($('#IDInputbyp').val());
+                actualizarInputsbyp();
             }
 
             // Evento cuando se cambia la selección en el select

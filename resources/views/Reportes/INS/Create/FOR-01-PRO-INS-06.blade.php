@@ -282,6 +282,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                                         </div>
                                     </div>
 
@@ -323,6 +324,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_TRANSDUCTOR]" id="IDInputA" value="{{ old('Datos_Equipo.ID_TRANSDUCTOR') }}">
                                         </div>
                                     </div>
 
@@ -371,6 +373,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK') }}">
                                         </div>
                                     </div>
 
@@ -838,6 +841,10 @@
                                         </div>
                                         <p>
 
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
+
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
@@ -1292,33 +1299,50 @@ $(document).ready(function() {
             var ns = selectedOption.data('ns') || '';
 
             // Rellenar los inputs con los valores obtenidos
+            $('#IDInputE').val(selectedOption.val() || '');
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
         }
-        
-            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
-            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
 
+            function actualizarInputsA() {
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
+
+                // Extraer los datos de los atributos "data-"
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
+                var ns = selectedOption.data('ns') || '';
+
+                // Rellenar los inputs con los valores obtenidos
+                $('#IDInputA').val(selectedOption.val() || '');
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+            }
+
+            $('#accesoriosSelect').on('change', function() {
+                actualizarInputsA();
+            });
+
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
-                var nombre = selectedOption.data('nombre') || '';
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#nombreInputbyp').val(nombre);
+                $('#IDInputbyp').val(selectedOption.val() || '');
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
             }
-
-            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
-            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
 
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {

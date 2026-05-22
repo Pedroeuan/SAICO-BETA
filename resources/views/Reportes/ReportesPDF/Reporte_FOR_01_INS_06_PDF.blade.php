@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -40px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -42px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -225,9 +225,35 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="3" style="width:80%; padding:0; margin:0;">
+
+                                <div style="
+                                    width:100%;
+                                    height:auto;
+                                    text-align:center;
+                                    vertical-align:middle;
+                                    padding:0;
+                                    margin:0;
+                                ">
+                                    @if(!empty($QR_PDF))
+                                    <img
+                                        src="{{ $QR_PDF }}"
+                                        alt="QR"
+                                        style="
+                                            width:58px;
+                                            height:58px;
+                                            display:block;
+                                            margin:auto;
+                                            padding:0;
+                                        "
+                                    >
+                                    @endif
+                                </div>
+
+                            </th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-06/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 58%; height: auto;"></th>
                         </tr>
                     </thead>
 
@@ -251,7 +277,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 605px;"></td>                            
+                            <td class="lineaInferior" style="width: 605px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
                         </tr>                      
                     </table>
 
