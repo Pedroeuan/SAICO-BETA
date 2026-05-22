@@ -305,6 +305,8 @@
                         </div>
                     </div>
 
+                    <input type="hidden" id="IDInputEquipo" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -845,6 +847,10 @@
                             </div>
                         </div>
                         <p>
+
+                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+
+                        <p>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
@@ -1246,11 +1252,13 @@
             var selectedOption = $('#equiposSelect').find('option:selected');
 
             // Extraer los datos de los atributos "data-"
+            var id = selectedOption.val() || '';
             var marca = selectedOption.data('marca') || '';
             var modelo = selectedOption.data('modelo') || '';
             var ns = selectedOption.data('ns') || '';
 
             // Rellenar los inputs con los valores obtenidos
+            $('#IDInputEquipo').val(id);
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);

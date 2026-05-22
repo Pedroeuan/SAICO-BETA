@@ -18,10 +18,10 @@
 
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -45px;
                     left: 0;
                     right: 0;
-                    height: auto; /* Permite que el header crezca dinámicamente */
+                    height: auto;
                     text-align: center;
                     /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
@@ -39,7 +39,7 @@
                 }
 
                 body {
-                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
                     /*margin: 0;*/
                     padding-top: 0px; /* Altura del header */
                     padding-bottom: 0px; /* Altura del footer */
@@ -98,13 +98,12 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
                 .tablaheader th {
-                    /*width: 70%;*/
-                    border: 1px solid black; 
+                    border: 1px solid black;
                 }
 
         .encabezadoAzul{
@@ -200,16 +199,66 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
+                            <th style="width: 400%;">FORMATO</th>
+                            <th rowspan="3" style="width:80%; padding:0; margin:0;">
+    
+                                <div style="
+                                    width:100%;
+                                    height:7.2%;
+                                    text-align:center;
+                                    vertical-align:middle;
+                                    padding:0;
+                                    margin:0;
+                                ">
+
+                                    <img
+                                        src="{{ $QR_PDF }}"
+                                        alt="QR"
+                                        style="
+                                            width:65px;
+                                            height:65px;
+                                            display:block;
+                                            margin:auto;
+                                            padding:0;
+                                        "
+                                    >
+                                </div>
+
+                            </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-05/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th style="width: 90%;">FOR-INS-03/01</th>
+                                                        <th rowspan="3" style="width:80%; padding:0; margin:0;">
+    
+                                <div style="
+                                    width:100%;
+                                    height:7.2%;
+                                    text-align:center;
+                                    vertical-align:middle;
+                                    padding:0;
+                                    margin:0;
+                                ">
+
+                                    <img
+                                        src="{{ $Logo }}"
+                                        alt="Logo"
+                                        style="
+                                            width:65px;
+                                            height:65px;
+                                            display:block;
+                                            margin:auto;
+                                            padding:0;
+                                        "
+                                    >
+                                </div>
+
+                            </th>
+
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> Informe de Inspección con Ultrasonido de  Acuerdo con API RP 2X </th>
+                            <th rowspan="2" style="font-size: 9pt;"> Informe de Inspección con Ultrasonido de Acuerdo con API RP 2X </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
