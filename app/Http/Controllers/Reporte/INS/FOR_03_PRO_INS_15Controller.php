@@ -445,7 +445,6 @@ class FOR_03_PRO_INS_15Controller extends Controller
                     'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                     ]
                     ]);
-                }
 
                     // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
                     if (($i + 1) % $filasPorLongitud === 0) {
