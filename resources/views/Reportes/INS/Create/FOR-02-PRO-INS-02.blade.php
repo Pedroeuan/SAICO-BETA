@@ -314,6 +314,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_PARTICULAS]" id="IDInputC1" value="{{ old('Datos_Equipo.ID_PARTICULAS') }}">
                                         </div>
                                     </div>
 
@@ -375,6 +376,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_CONSTRASTANTE]" id="IDInputC2" value="{{ old('Datos_Equipo.ID_CONSTRASTANTE') }}">
                                         </div>
                                     </div>
 
@@ -438,6 +440,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                                         </div>
                                     </div>
 
@@ -913,6 +916,10 @@
                                             </div>
                                         </div>
                                         <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
@@ -1318,6 +1325,8 @@
                 $('#marcaInputC1').val(marca);
                 $('#modeloInputC1').val(modelo);
                 $('#loteInputC1').val(lote);
+                $('#IDInputC1').val($('#consumiblesSelect1').val() || '');
+
             }
 
             const selectedOptionLocalCons1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible1');
@@ -1340,6 +1349,7 @@
                 $('#marcaInputC2').val(marca);
                 $('#modeloInputC2').val(modelo);
                 $('#loteInputC2').val(lote);
+                $('#IDInputC2').val($('#consumiblesSelect2').val() || '');
             }
 
             const selectedOptionLocalCons2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Consumible2');
@@ -1362,6 +1372,7 @@
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val($('#equiposSelect').val() || '');
         }
 
             const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
