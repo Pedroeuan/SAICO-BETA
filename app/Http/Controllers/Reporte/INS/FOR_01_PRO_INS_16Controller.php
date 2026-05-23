@@ -238,6 +238,8 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Stndr_refe' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.Num_Soldador' => 'nullable|string',
+            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -541,6 +543,8 @@ class FOR_01_PRO_INS_16Controller extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Stndr_refe' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.Num_Soldador' => 'nullable|string',
+            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -644,6 +648,35 @@ class FOR_01_PRO_INS_16Controller extends Controller
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        // 1. Obtener los detalles actuales que ya están en la base de datos
+        $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
+
+        if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
+            
+            // 1. ELIMINAR ARCHIVO ANTERIOR (si existe)
+            if (!empty($detallesActuales['Reporte_Firmado'])) {
+                // Convertimos la ruta de la base de datos (storage/...) de vuelta a la ruta del disco (public/...)
+                $archivoViejo = str_replace('storage/', 'public/', $detallesActuales['Reporte_Firmado']);
+                
+                if (Storage::exists($archivoViejo)) {
+                    Storage::delete($archivoViejo);
+                }
+            }
+
+            // 2. PROCESAR NUEVO ARCHIVO
+            $file = $request->file('Detalles_Generales.Reporte_Firmado');
+            $rutaBase = "public/Reportes/FOR_01_PRO_INS_16/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
+            $nombreArchivo = 'Reporte_Firmado_' . $No_Reporte . '_' . time() . '.pdf';
+            
+            $file->storeAs($rutaBase, $nombreArchivo);
+
+            $rutaPublica = str_replace('public/', 'storage/', $rutaBase) . '/' . $nombreArchivo;
+            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $rutaPublica;
+
+        } else {
+            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
+        }
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
@@ -858,14 +891,29 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $totalPageCount = $pageCount1 + $pageCount2;
 
         // Añadir páginas del primer PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(128, -264.5);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }*/
+            
+        // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 12);
-            //$combinedPdf->SetXY(138, -266.5);
-            //$combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            
+            // No mostrar número en la primera página (portada)
+            if ($i != 1) {
+                $combinedPdf->SetFont('Arial', 'B', 8);
+                $combinedPdf->SetXY(128, -264.5);
+                $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            }
         }
 
         // Añadir páginas del segundo PDF
@@ -874,7 +922,7 @@ class FOR_01_PRO_INS_16Controller extends Controller
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 12);
+            $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(138, -265.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');

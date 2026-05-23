@@ -781,7 +781,15 @@ class FOR_01_PRO_INS_03Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
-        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
+        // Después de $validatedData = $request->validate(...)
+
+        // ========================================
+        // GENERAR TOKEN QR (si no existe)
+        // ========================================
+        if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
+            $validatedData['Datos_Equipo']['QR_TOKEN'] = (string) Str::uuid();
+        }
+        
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -792,6 +800,39 @@ class FOR_01_PRO_INS_03Controller extends Controller
         // Guardar el registro en la base de datos   
         $Reportes->save();
 
+        //QR
+        // Obtener datos desde validatedData
+        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'] ?? null;
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $idPenetrante = $validatedData['Datos_Equipo']['ID_PENETRANTES'] ?? null;
+        $idRemovedor = $validatedData['Datos_Equipo']['ID_REMOVEDOR'] ?? null;
+        $idRevelador = $validatedData['Datos_Equipo']['ID_REVELEADOR'] ?? null;
+
+        // Datos para el QR/PDF
+        $datosParaCrearQR = [
+            'Contrato'     => $Contrato,
+            'No_Reporte'   => $No_Reporte,
+            'idSolicitud'  => $idSolicitud,
+            'idPenetrante' => $idPenetrante,
+            'idRemovedor'  => $idRemovedor,
+            'idRevelador'  => $idRevelador,
+            'qr_token'     => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ];
+
+        // Generar QR y PDF
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+
+        // Actualizar el registro recién creado con las rutas
+        $Reportes->update([
+            'Datos_Equipo' => json_encode(array_merge(
+                $validatedData['Datos_Equipo'],
+                [
+                    'QR_PDF'        => $resultadoQR['qr'],
+                    'PDF_UNIFICADO' => $resultadoQR['pdf'],
+                ]
+            )),
+        ]);
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
@@ -841,35 +882,51 @@ class FOR_01_PRO_INS_03Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
-                for ($i = 0; $i < $numFilasSin; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $sinTituloKey,
-                    'data' => [
-                    'No' => $request->input("No.$sinTituloKey.$i"),
-                    'componente' => $request->input("componente.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'largo' => $request->input("largo.$sinTituloKey.$i"),
-                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
-                    ]
-                    ]);
-                }
-                
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
+                $filasPorLongitud = 15;
 
-                foreach ($longitudesSin as $long) {
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                    $agregarElemento([
+                        'tipo' => 'fila',
+                        'grupo' => $sinTituloKey,
+                        'data' => [
+                            'No' => $request->input("No.$sinTituloKey.$i"),
+                            'componente' => $request->input("componente.$sinTituloKey.$i"),
+                            'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
+                            'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                            'largo' => $request->input("largo.$sinTituloKey.$i"),
+                            'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                            'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                            'ht' => $request->input("ht.$sinTituloKey.$i"),
+                            'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                            'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
+                        ]
+                    ]);
+
+                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
+                    if (($i + 1) % $filasPorLongitud === 0) {
+                        $idxLong = intdiv($i, $filasPorLongitud);
+                        if (isset($longitudesSin[$idxLong])) {
+                            $agregarElemento([
+                                'tipo' => 'longitud',
+                                'grupo' => $sinTituloKey,
+                                'valor' => $longitudesSin[$idxLong]
+                            ]);
+                            $cerrarBloque();
+                        }
+                    }
+                }
+
+                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
+                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+                $totalLongs = count($longitudesSin);
+                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
                     $agregarElemento([
                         'tipo' => 'longitud',
                         'grupo' => $sinTituloKey,
-                        'valor' => $long
+                        'valor' => $longitudesSin[$j]
                     ]);
-
-                    // cerrar bloque al encontrar longitud
                     $cerrarBloque();
                 }
 
@@ -1043,18 +1100,8 @@ class FOR_01_PRO_INS_03Controller extends Controller
             
         ];
 
-        $datosParaCrearQR = [
-            'Contrato' => $Contrato,
-            'No_Reporte' => $No_Reporte,
-            'idSolicitud' => $idSolicitud,
-            'idPenetrante' => $idPenetrante,
-            'idRemovedor' => $idRemovedor,
-            'idRevelador' => $idRevelador,
-        ];
-
         $this->OS_OC($datosParaCrearOS_OC);
-        $this->Datos_QR($datosParaCrearQR);
-        $QR_PDF = $validatedData['Datos_Equipo']['QR_PDF'];
+
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
@@ -1373,35 +1420,51 @@ class FOR_01_PRO_INS_03Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
-                for ($i = 0; $i < $numFilasSin; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $sinTituloKey,
-                    'data' => [
-                    'No' => $request->input("No.$sinTituloKey.$i"),
-                    'componente' => $request->input("componente.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'largo' => $request->input("largo.$sinTituloKey.$i"),
-                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
-                    ]
-                    ]);
-                }
-                
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
+                $filasPorLongitud = 15;
 
-                foreach ($longitudesSin as $long) {
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                    $agregarElemento([
+                        'tipo' => 'fila',
+                        'grupo' => $sinTituloKey,
+                        'data' => [
+                            'No' => $request->input("No.$sinTituloKey.$i"),
+                            'componente' => $request->input("componente.$sinTituloKey.$i"),
+                            'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
+                            'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                            'largo' => $request->input("largo.$sinTituloKey.$i"),
+                            'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                            'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                            'ht' => $request->input("ht.$sinTituloKey.$i"),
+                            'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                            'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
+                        ]
+                    ]);
+
+                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
+                    if (($i + 1) % $filasPorLongitud === 0) {
+                        $idxLong = intdiv($i, $filasPorLongitud);
+                        if (isset($longitudesSin[$idxLong])) {
+                            $agregarElemento([
+                                'tipo' => 'longitud',
+                                'grupo' => $sinTituloKey,
+                                'valor' => $longitudesSin[$idxLong]
+                            ]);
+                            $cerrarBloque();
+                        }
+                    }
+                }
+
+                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
+                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+                $totalLongs = count($longitudesSin);
+                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
                     $agregarElemento([
                         'tipo' => 'longitud',
                         'grupo' => $sinTituloKey,
-                        'valor' => $long
+                        'valor' => $longitudesSin[$j]
                     ]);
-
-                    // cerrar bloque al encontrar longitud
                     $cerrarBloque();
                 }
         /*

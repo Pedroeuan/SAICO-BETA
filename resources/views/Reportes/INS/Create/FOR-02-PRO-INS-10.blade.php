@@ -306,6 +306,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                                         </div>
                                     </div>
 
@@ -347,6 +348,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_TR]" id="IDInputA" value="{{ old('Datos_Equipo.ID_TR') }}">
                                         </div>
                                     </div>
 
@@ -395,6 +397,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK') }}">
                                         </div>
                                     </div>
 
@@ -912,6 +915,29 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                                @error('Num_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Perez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                                @error('Nombre_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
 
                                         <div class="container">
                                             <div class="float-right">
@@ -1333,6 +1359,7 @@ $(document).ready(function() {
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val(selectedOption.val() || '');
         }
 
         const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
@@ -1355,6 +1382,7 @@ $(document).ready(function() {
                 $('#marcaInputA').val(marca);
                 $('#modeloInputA').val(modelo);
                 $('#nsInputA').val(ns);
+                $('#IDInputA').val(selectedOption.val() || '');
             }
 
             const selectedOptionLocalA = localStorage.getItem(document.querySelectorAll("form")[1].id+'_accesorios');
@@ -1377,6 +1405,7 @@ $(document).ready(function() {
                 $('#marcaInputbyp').val(marca);
                 $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
+                $('#IDInputbyp').val(selectedOption.val() || '');
             }
 
             const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_blockyprobeta');
@@ -1426,5 +1455,4 @@ $(document).ready(function() {
 
     </script>
 @endsection
-
 

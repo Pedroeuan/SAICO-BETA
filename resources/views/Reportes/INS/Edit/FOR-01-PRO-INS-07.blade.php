@@ -261,6 +261,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -316,7 +317,8 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            {{--<input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA1]" id="accesorioNombreSonda1" value="{{ old('Datos_Equipo.ACCESORIO_SONDA1', $Datos_Equipo['ACCESORIO_SONDA1'] ?? '') }}">--}}
+                                            <input type="hidden" name="Datos_Equipo[ID_SONDA1]" id="IDInputA1" value="{{ old('Datos_Equipo.ID_SONDA1', $Datos_Equipo['ID_SONDA1'] ?? '') }}">
+                                            <input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA1]" id="accesorioNombreSonda1" value="{{ old('Datos_Equipo.ACCESORIO_SONDA1', $Datos_Equipo['ACCESORIO_SONDA1'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -365,7 +367,8 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            {{--<input type="hidden" name="Datos_Equipo[BLOCK_SENSIBILIDAD]" id="blockSensibilidadNombre" value="{{ old('Datos_Equipo.BLOCK_SENSIBILIDAD', $Datos_Equipo['BLOCK_SENSIBILIDAD'] ?? '') }}">--}}
+                                            <input type="hidden" name="Datos_Equipo[ID_BLOCK_SEN]" id="IDInputbyp1" value="{{ old('Datos_Equipo.ID_BLOCK_SEN', $Datos_Equipo['ID_BLOCK_SEN'] ?? '') }}">
+                                            <input type="hidden" name="Datos_Equipo[BLOCK_SENSIBILIDAD]" id="blockSensibilidadNombre" value="{{ old('Datos_Equipo.BLOCK_SENSIBILIDAD', $Datos_Equipo['BLOCK_SENSIBILIDAD'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -407,7 +410,8 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            {{--<input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA', $Datos_Equipo['BLOCK_DISTANCIA'] ?? '') }}"> --}}
+                                            <input type="hidden" name="Datos_Equipo[ID_BLOCK_DIS]" id="IDInputbyp2" value="{{ old('Datos_Equipo.ID_BLOCK_DIS', $Datos_Equipo['ID_BLOCK_DIS'] ?? '') }}">
+                                            <input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA', $Datos_Equipo['BLOCK_DISTANCIA'] ?? '') }}">
                                         </div>
                                     </div>
 
@@ -449,6 +453,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_SONDA2]" id="IDInputA2" value="{{ old('Datos_Equipo.ID_SONDA2', $Datos_Equipo['ID_SONDA2'] ?? '') }}">
                                             <input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA2]" id="accesorioNombreSonda2" value="{{ old('Datos_Equipo.ACCESORIO_SONDA2', $Datos_Equipo['ACCESORIO_SONDA2'] ?? '') }}">
                                         </div>
                                     </div>
@@ -982,7 +987,70 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <p>
 
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                                        
+                                        <p>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{ old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '') }}">
+                                                @error('Num_Soldador')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
+                                                @error('Nombre_Soldador')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>
+                                                        
+                                        <p>
+
+                                        <div class="row justify-content-center text-center">
+                                            {{-- Columna para Subir/Sustituir Archivo --}}
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputSuccess"> 
+                                                        @if ($Detalles_Generales['Reporte_Firmado'] ?? '') 
+                                                            SUSTITUIR REPORTE FIRMADO 
+                                                        @else 
+                                                            SUBIR REPORTE FIRMADO 
+                                                        @endif
+                                                    </label>
+                                                    <input type="file" class="form-control-file inputForm" name="Detalles_Generales[Reporte_Firmado]">
+                                                    @if ($errors->any())
+                                                        <div class="invalid-feedback d-block">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            {{-- Columna para Ver Reporte (Solo aparece si existe el archivo) --}}
+                                            @if ($Detalles_Generales['Reporte_Firmado'] ?? '')
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label" for="inputSuccess">Ver Reporte Firmado</label>  
+                                                        <div>                                           
+                                                            <a href="{{ asset($Detalles_Generales['Reporte_Firmado']) }}" target="_blank" class="btn btn-primary long-button" role="button">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a>                                                                                    
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -1214,10 +1282,16 @@
             var ns = selectedOption.data('ns') || '';
 
             // Rellenar los inputs con los valores obtenidos
+            $('#IDInputE').val(selectedOption.val() || '');
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
         }
+
+            if ($('#IDInputE').val()) {
+                $('#equiposSelect').val($('#IDInputE').val());
+                actualizarInputsE();
+            }
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
@@ -1226,34 +1300,58 @@
         
             function actualizarInputsA1() {
                 const selectedOption = $('#accesoriosSelect1').find('option:selected');
+                $('#IDInputA1').val(selectedOption.val() || '');
                 $('#marcaInputA1').val(selectedOption.data('marca') || '');
                 $('#modeloInputA1').val(selectedOption.data('modelo') || '');
                 $('#nsInputA1').val(selectedOption.data('ns') || '');
                 $('#accesorioNombreSonda1').val(selectedOption.text().trim() || '');
             }
 
+            if ($('#IDInputA1').val()) {
+                $('#accesoriosSelect1').val($('#IDInputA1').val());
+                actualizarInputsA1();
+            }
+
             function actualizarInputsA2() {
                 const selectedOption = $('#accesoriosSelect2').find('option:selected');
+                $('#IDInputA2').val(selectedOption.val() || '');
                 $('#marcaInputA2').val(selectedOption.data('marca') || '');
                 $('#modeloInputA2').val(selectedOption.data('modelo') || '');
                 $('#nsInputA2').val(selectedOption.data('ns') || '');
                 $('#accesorioNombreSonda2').val(selectedOption.text().trim() || '');
             }
 
+            if ($('#IDInputA2').val()) {
+                $('#accesoriosSelect2').val($('#IDInputA2').val());
+                actualizarInputsA2();
+            }
+
             function actualizarInputsbyp1() {
                 const selectedOption = $('#blockyprobetaSelect1').find('option:selected');
+                $('#IDInputbyp1').val(selectedOption.val() || '');
                 $('#marcaInputbyp1').val(selectedOption.data('marca') || '');
                 $('#modeloInputbyp1').val(selectedOption.data('modelo') || '');
                 $('#nsInputbyp1').val(selectedOption.data('ns') || '');
                 $('#blockSensibilidadNombre').val(selectedOption.text().trim() || '');
             }
 
+            if ($('#IDInputbyp1').val()) {
+                $('#blockyprobetaSelect1').val($('#IDInputbyp1').val());
+                actualizarInputsbyp1();
+            }
+
             function actualizarInputsbyp2() {
                 const selectedOption = $('#blockyprobetaSelect2').find('option:selected');
+                $('#IDInputbyp2').val(selectedOption.val() || '');
                 $('#marcaInputbyp2').val(selectedOption.data('marca') || '');
                 $('#modeloInputbyp2').val(selectedOption.data('modelo') || '');
                 $('#nsInputbyp2').val(selectedOption.data('ns') || '');
                 $('#blockDistanciaNombre').val(selectedOption.text().trim() || '');
+            }
+
+            if ($('#IDInputbyp2').val()) {
+                $('#blockyprobetaSelect2').val($('#IDInputbyp2').val());
+                actualizarInputsbyp2();
             }
 
             $('#accesoriosSelect1').on('change', actualizarInputsA1);

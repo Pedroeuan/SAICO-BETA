@@ -18,7 +18,7 @@
 
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -45px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -39,7 +39,7 @@
                 }
 
                 body {
-                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
                     /*margin: 0;*/
                     padding-top: 0px; /* Altura del header */
                     padding-bottom: 0px; /* Altura del footer */
@@ -52,13 +52,15 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 9px !important;
+                    font-family: 'arial', sans-serif;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
+                    font-size: 8px;
                 }
                     
                 .simbologia {
@@ -81,7 +83,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -182,9 +184,35 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="3" style="width:80%; padding:0; margin:0;">
+
+                                <div style="
+                                    width:100%;
+                                    height:7.2%;
+                                    text-align:center;
+                                    vertical-align:middle;
+                                    padding:0;
+                                    margin:0;
+                                ">
+                                    @if(!empty($QR_PDF))
+                                    <img
+                                        src="{{ $QR_PDF }}"
+                                        alt="QR"
+                                        style="
+                                            width:65px;
+                                            height:65px;
+                                            display:block;
+                                            margin:auto;
+                                            padding:0;
+                                        "
+                                    >
+                                    @endif
+                                </div>
+
+                            </th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-09/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 65%; height: auto;"></th>
                         </tr>
                     </thead>
 

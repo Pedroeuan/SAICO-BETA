@@ -329,11 +329,8 @@
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
                     <div class="col-12">
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                            <input type="text"
-                                class="form-control inputForm @error('Datos_Equipo.Stndr_refe1') is-invalid @enderror"
-                                name="Datos_Equipo[Stndr_refe1]"
-                                placeholder="IMAGEN DE REFERENCIA"
-                                value="{{ old('Datos_Equipo.Stndr_refe1', 'IMAGEN DE REFERENCIA . . .') }}">
+                            <input type="text" class="form-control inputForm @error('Datos_Equipo.Stndr_refe1') is-invalid @enderror" 
+                            name="Datos_Equipo[Stndr_refe1]"placeholder="" value="{{old('Datos_Equipo.Stndr_refe1', $Datos_Equipo['Stndr_refe1'] ?? '')}}">
 
                             @error('Datos_Equipo.Stndr_refe1')
                                 <div class="invalid-feedback">
@@ -403,11 +400,8 @@
                         <br>
                         <div class="col-12">
                             <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                                <input type="text"
-                                    class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror"
-                                    name="Datos_Equipo[Stndr_refe2]"
-                                    placeholder="IMAGEN DE REFERENCIA"
-                                    value="{{ old('Datos_Equipo.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
+                            <input type="text" class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror" 
+                            name="Datos_Equipo[Stndr_refe2]"placeholder="" value="{{old('Datos_Equipo.Stndr_refe2', $Datos_Equipo['Stndr_refe2'] ?? '')}}">
 
                                 @error('Datos_Equipo.Stndr_refe2')
                                     <div class="invalid-feedback">
@@ -809,6 +803,70 @@
                                 </thead>                            
                             </table>
                         </div>
+                        <p>
+
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                        <p>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{ old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '') }}">
+                                @error('Num_Soldador')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
+                                @error('Nombre_Soldador')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <p>
+
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>
+                                        
+                        <p>
+
+                        <div class="row justify-content-center text-center">
+                            {{-- Columna para Subir/Sustituir Archivo --}}
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="inputSuccess"> 
+                                        @if ($Detalles_Generales['Reporte_Firmado'] ?? '') 
+                                            SUSTITUIR REPORTE FIRMADO 
+                                        @else 
+                                            SUBIR REPORTE FIRMADO 
+                                        @endif
+                                    </label>
+                                    <input type="file" class="form-control-file inputForm" name="Detalles_Generales[Reporte_Firmado]">
+                                    @if ($errors->any())
+                                        <div class="invalid-feedback d-block">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Columna para Ver Reporte (Solo aparece si existe el archivo) --}}
+                            @if ($Detalles_Generales['Reporte_Firmado'] ?? '')
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="inputSuccess">Ver Reporte Firmado</label>  
+                                        <div>                                           
+                                            <a href="{{ asset($Detalles_Generales['Reporte_Firmado']) }}" target="_blank" class="btn btn-primary long-button" role="button">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                            </a>                                                                                    
+                                        </div> 
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
 
                         <div class="container">
                             <div class="float-right">
@@ -819,7 +877,6 @@
                                 <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
                             </div>
                         </div>
-
                 </div>
             </form>
         </div>

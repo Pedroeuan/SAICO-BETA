@@ -18,7 +18,7 @@
 
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -50px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -39,7 +39,7 @@
                 }
 
                 body {
-                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
                     /*margin: 0;*/
                     padding-top: 0px; /* Altura del header */
                     padding-bottom: 0px; /* Altura del footer */
@@ -52,13 +52,15 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 9px !important;
+                    font-family: 'arial', sans-serif;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
+                    font-size: 8px;
                 }
                     
                 .simbologia {
@@ -81,7 +83,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -104,7 +106,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 7px;
         }
 
         .datosinspeccion td, .datosinspeccion th {
@@ -124,7 +126,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 7px;
             /*border: 1px solid black; */
         }
 
@@ -183,15 +185,20 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="3" style="width: 80%;">
+                                @if(!empty($QR_PDF))
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                @endif
+                            </th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-13/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1 </th>
+                            <th rowspan="2" style="font-size: 8pt;"> INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1 </th>
                             <th>Versión</th>
                             <th>0</th>
                         </tr>
@@ -216,7 +223,7 @@
                     </table>
 
                     <br>
-                                                
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -682,23 +689,23 @@
                     <table class="datosresultados">
                         <thead>
                             <tr class="celdaGris">
-                                <th style="width: 30px;" rowspan="2">Junta / Elemento</th>
-                                <th style="width: 40px;" rowspan="2">Tipo de ind.</th>
+                                <th style="width: 50px;" rowspan="2">Junta / Elemento</th>
+                                <th style="width: 20px;" rowspan="2">Tipo de ind.</th>
                                 <th style="width: 30px;" rowspan="2">L(PLG)</th>
                                 <th style="width: 30px;" rowspan="2">A(PLG)</th>
-                                <th style="width: 30px;" rowspan="2">ALTURA(PLG)</th>
-                                <th style="width: 30px;" colspan="2">EJE DE LA SOLD.</th>
+                                <th style="width: 5px;" rowspan="2">ALTURA(PLG)</th>
+                                <th colspan="2">EJE DE LA SOLD.</th>
                                 <th style="width: 30px;" rowspan="2">DA(PROF)</th>
                                 <th style="width: 30px;" rowspan="2">PA</th>
                                 <th style="width: 30px;" rowspan="2">SA</th>
-                                <th style="width: 30px;" rowspan="2">Tmin</th>
+                                <th style="width: 5px;" rowspan="2">Tmin</th>
                                 <th style="width: 30px;" rowspan="2">DATOS DEL ARCHIVO (Escaneo)</th>
                                 <th style="width: 30px;" rowspan="2">EVALUACION</th>
                                 <th style="width: 30px;" rowspan="2">FOTOS</th>
                             </tr>  
                             <tr class="celdaGris">
-                                <td style="width: 30px;">X</td>
-                                <td style="width: 30px;">Y</td>
+                                <td style="width: 20px;">X</td>
+                                <td style="width: 20px;">Y</td>
                             </tr>                               
                         </thead>
                                 <tbody>

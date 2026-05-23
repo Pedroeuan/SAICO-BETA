@@ -228,6 +228,8 @@ class FOR_03_PRO_INS_15Controller extends Controller
             'Detalles_Generales.Lugar' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.Num_Soldador' => 'nullable|string',
+            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'nullable|array',  // Asegura que es un array
@@ -425,6 +427,9 @@ class FOR_03_PRO_INS_15Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
+                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
+                $filasPorLongitud = 21;
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
                     'tipo' => 'fila',
@@ -440,19 +445,30 @@ class FOR_03_PRO_INS_15Controller extends Controller
                     'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                     ]
                     ]);
-                }
-                
-                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-                // tomar la longitud correspondiente al bloque
 
-                foreach ($longitudesSin as $long) {
+                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
+                    if (($i + 1) % $filasPorLongitud === 0) {
+                        $idxLong = intdiv($i, $filasPorLongitud);
+                        if (isset($longitudesSin[$idxLong])) {
+                            $agregarElemento([
+                                'tipo' => 'longitud',
+                                'grupo' => $sinTituloKey,
+                                'valor' => $longitudesSin[$idxLong]
+                            ]);
+                            $cerrarBloque();
+                        }
+                    }
+                }
+
+                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
+                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+                $totalLongs = count($longitudesSin);
+                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
                     $agregarElemento([
                         'tipo' => 'longitud',
                         'grupo' => $sinTituloKey,
-                        'valor' => $long
+                        'valor' => $longitudesSin[$j]
                     ]);
-
-                    // cerrar bloque al encontrar longitud
                     $cerrarBloque();
                 }
 
@@ -647,6 +663,8 @@ class FOR_03_PRO_INS_15Controller extends Controller
             'Detalles_Generales.Lugar' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.Num_Soldador' => 'nullable|string',
+            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'nullable|array',  // Asegura que es un array
@@ -738,6 +756,35 @@ class FOR_03_PRO_INS_15Controller extends Controller
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        // 1. Obtener los detalles actuales que ya están en la base de datos
+        $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
+
+        if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
+            
+            // 1. ELIMINAR ARCHIVO ANTERIOR (si existe)
+            if (!empty($detallesActuales['Reporte_Firmado'])) {
+                // Convertimos la ruta de la base de datos (storage/...) de vuelta a la ruta del disco (public/...)
+                $archivoViejo = str_replace('storage/', 'public/', $detallesActuales['Reporte_Firmado']);
+                
+                if (Storage::exists($archivoViejo)) {
+                    Storage::delete($archivoViejo);
+                }
+            }
+
+            // 2. PROCESAR NUEVO ARCHIVO
+            $file = $request->file('Detalles_Generales.Reporte_Firmado');
+            $rutaBase = "public/Reportes/FOR_03_PRO_INS_15/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
+            $nombreArchivo = 'Reporte_Firmado_' . $No_Reporte . '_' . time() . '.pdf';
+            
+            $file->storeAs($rutaBase, $nombreArchivo);
+
+            $rutaPublica = str_replace('public/', 'storage/', $rutaBase) . '/' . $nombreArchivo;
+            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $rutaPublica;
+
+        } else {
+            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
+        }
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
@@ -790,6 +837,9 @@ class FOR_03_PRO_INS_15Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
+                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
+                $filasPorLongitud = 21;
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
                     'tipo' => 'fila',
@@ -805,19 +855,30 @@ class FOR_03_PRO_INS_15Controller extends Controller
                     'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
                     ]
                     ]);
-                }
-                
-                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-                // tomar la longitud correspondiente al bloque
 
-                foreach ($longitudesSin as $long) {
+                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
+                    if (($i + 1) % $filasPorLongitud === 0) {
+                        $idxLong = intdiv($i, $filasPorLongitud);
+                        if (isset($longitudesSin[$idxLong])) {
+                            $agregarElemento([
+                                'tipo' => 'longitud',
+                                'grupo' => $sinTituloKey,
+                                'valor' => $longitudesSin[$idxLong]
+                            ]);
+                            $cerrarBloque();
+                        }
+                    }
+                }
+
+                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
+                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+                $totalLongs = count($longitudesSin);
+                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
                     $agregarElemento([
                         'tipo' => 'longitud',
                         'grupo' => $sinTituloKey,
-                        'valor' => $long
+                        'valor' => $longitudesSin[$j]
                     ]);
-
-                    // cerrar bloque al encontrar longitud
                     $cerrarBloque();
                 }
 
