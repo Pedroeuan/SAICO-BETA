@@ -91,12 +91,10 @@ class NotificacionController extends Controller
                 {
                     if ($tipo === 'EQUIPOS') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
-                            /*Log::info('***********************');
-                            Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);*/
+                        $fechaMantenimiento = $certificado->Prox_fecha_mantenimiento;
+                        //$fechaVerificacion = $certificado->Prox_fecha_verificacion;
                     } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Fecha_calibracion;
-                            /*/Log::info('***********************');
-                            Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);*/
                     } else {
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
                         continue;
@@ -106,6 +104,8 @@ class NotificacionController extends Controller
                 {
                     if ($tipo === 'EQUIPOS' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Prox_fecha_calibracion;
+                        $fechaMantenimiento = $certificado->Prox_fecha_mantenimiento;
+                        $fechaVerificacion = $certificado->Prox_fecha_verificacion;
                     } elseif ($tipo === 'CONSUMIBLES') {
                         $fechaCalibracion = $certificado->Fecha_calibracion;
                     } else {
@@ -116,13 +116,17 @@ class NotificacionController extends Controller
 
                 // Convertir la fecha al formato DD-MM-YYYY
                 $fechaCalibracionFormateada = Carbon::parse($fechaCalibracion)->format('d-m-Y');
+                $fechaMantenimientoFormateada = Carbon::parse($fechaMantenimiento)->format('d-m-Y');
+                $fechaVerificacionFormateada = Carbon::parse($fechaVerificacion)->format('d-m-Y');
 
                 // Determinar los días restantes para la calibración
                 //$diasRestantes = Carbon::parse($fechaActual)->diffInDays($fechaCalibracion);
-                $diasRestantes = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
+                $diasRestantesC = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
+                $diasRestantesM = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaMantenimiento)->startOfDay(),false);
+                $diasRestantesV = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaVerificacion)->startOfDay(),false);
 
-                // Crear los mensajes corto y largo
-                if ($diasRestantes == 0) 
+                // Crear los mensajes corto y largo para Calibraciones
+                if ($diasRestantesC == 0) 
                 {
                     if ($tipo === 'EQUIPOS') 
                     {
@@ -146,7 +150,7 @@ class NotificacionController extends Controller
                         $mensajeLargoemail = "El Block y Probeta: ".$Nombre_C.", <br>La Calibración del No. economico: " . $No_economico . "<br>esta <span style='color: #E01A22;'> VENCIDA </span><br>(Fecha de vencimiento: <span style='color: #E01A22;'>" . $fechaCalibracionFormateada . "</span>)";
                     }
                 } 
-                else 
+                else
                 {
                     if ($tipo === 'EQUIPOS') 
                     {
