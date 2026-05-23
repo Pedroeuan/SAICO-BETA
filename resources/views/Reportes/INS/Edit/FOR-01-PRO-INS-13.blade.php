@@ -269,6 +269,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                         </div>
                     </div>
 
@@ -323,6 +324,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '') }}">
                         </div>
                     </div>
 
@@ -356,6 +358,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_SONDA1]" id="IDInputA1" value="{{ old('Datos_Equipo.ID_SONDA1', $Datos_Equipo['ID_SONDA1'] ?? '') }}">
                         </div>
                     </div>
 
@@ -410,6 +413,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_SONDA2]" id="IDInputA2" value="{{ old('Datos_Equipo.ID_SONDA2', $Datos_Equipo['ID_SONDA2'] ?? '') }}">
                         </div>
                     </div>
 
@@ -465,6 +469,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_SONDA3]" id="IDInputA3" value="{{ old('Datos_Equipo.ID_SONDA3', $Datos_Equipo['ID_SONDA3'] ?? '') }}">
                         </div>
                     </div>
 
@@ -519,6 +524,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_SONDA4]" id="IDInputA4" value="{{ old('Datos_Equipo.ID_SONDA4', $Datos_Equipo['ID_SONDA4'] ?? '') }}">
                         </div>
                     </div>
 
@@ -573,6 +579,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_TRANS1]" id="IDInputA5" value="{{ old('Datos_Equipo.ID_TRANS1', $Datos_Equipo['ID_TRANS1'] ?? '') }}">
                         </div>
                     </div>
 
@@ -627,6 +634,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_TRANS2]" id="IDInputA6" value="{{ old('Datos_Equipo.ID_TRANS2', $Datos_Equipo['ID_TRANS2'] ?? '') }}">
                         </div>
                     </div>
 
@@ -681,6 +689,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_TRANS3]" id="IDInputA7" value="{{ old('Datos_Equipo.ID_TRANS3', $Datos_Equipo['ID_TRANS3'] ?? '') }}">
                         </div>
                     </div>
 
@@ -735,6 +744,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_TRANS4]" id="IDInputA8" value="{{ old('Datos_Equipo.ID_TRANS4', $Datos_Equipo['ID_TRANS4'] ?? '') }}">
                         </div>
                     </div>
 
@@ -789,6 +799,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_ENCODER1]" id="IDInputE2" value="{{ old('Datos_Equipo.ID_ENCODER1', $Datos_Equipo['ID_ENCODER1'] ?? '') }}">
                         </div>
                     </div>
 
@@ -836,6 +847,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_ENCODER2]" id="IDInputE3" value="{{ old('Datos_Equipo.ID_ENCODER2', $Datos_Equipo['ID_ENCODER2'] ?? '') }}">
                         </div>
                     </div>
 
@@ -1731,7 +1743,11 @@ $(document).ready(function() {
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val($('#equiposSelect').val() || $('#IDInputE').val() || '');
         }
+
+            $('#equiposSelect').val($('#IDInputE').val());
+            actualizarInputsE();
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
@@ -1748,7 +1764,11 @@ $(document).ready(function() {
                 // Rellenar los inputs con los valores obtenidos
                 $('#nombreInputbyp').val(nombre);
                 $('#nsInputbyp').val(ns);
+                $('#IDInputbyp').val($('#blockyprobetaSelect').val() || $('#IDInputbyp').val() || '');
             }
+
+            $('#blockyprobetaSelect').val($('#IDInputbyp').val());
+            actualizarInputsbyp();
 
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {
@@ -1767,7 +1787,11 @@ $(document).ready(function() {
                 $('#marcaInputA1').val(marca);
                 $('#modeloInputA1').val(modelo);
                 $('#nsInputA1').val(ns);
+                $('#IDInputA1').val($('#accesoriosSelect1').val() || $('#IDInputA1').val() || '');
             }
+
+            $('#accesoriosSelect1').val($('#IDInputA1').val());
+            actualizarInputsA1();
             
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect1').on('change', function() {
@@ -1786,7 +1810,11 @@ $(document).ready(function() {
                 $('#marcaInputA2').val(marca);
                 $('#modeloInputA2').val(modelo);
                 $('#nsInputA2').val(ns);
+                $('#IDInputA2').val($('#accesoriosSelect2').val() || $('#IDInputA2').val() || '');
             }
+
+            $('#accesoriosSelect2').val($('#IDInputA2').val());
+            actualizarInputsA2();
             
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect2').on('change', function() {
@@ -1805,7 +1833,11 @@ $(document).ready(function() {
                 $('#marcaInputA3').val(marca);
                 $('#modeloInputA3').val(modelo);
                 $('#nsInputA3').val(ns);
+                $('#IDInputA3').val($('#accesoriosSelect3').val() || $('#IDInputA3').val() || '');
             }
+
+            $('#accesoriosSelect3').val($('#IDInputA3').val());
+            actualizarInputsA3();
             
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect3').on('change', function() {
@@ -1824,7 +1856,11 @@ $(document).ready(function() {
                 $('#marcaInputA4').val(marca);
                 $('#modeloInputA4').val(modelo);
                 $('#nsInputA4').val(ns);
+                $('#IDInputA4').val($('#accesoriosSelect4').val() || $('#IDInputA4').val() || '');
             }
+
+            $('#accesoriosSelect4').val($('#IDInputA4').val());
+            actualizarInputsA4();
             
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect4').on('change', function() {
@@ -1843,7 +1879,11 @@ $(document).ready(function() {
                 $('#marcaInputA5').val(marca);
                 $('#modeloInputA5').val(modelo);
                 $('#nsInputA5').val(ns);
+                $('#IDInputA5').val($('#accesoriosSelect5').val() || $('#IDInputA5').val() || '');
             }
+
+            $('#accesoriosSelect5').val($('#IDInputA5').val());
+            actualizarInputsA5();
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect5').on('change', function() {
                     actualizarInputsA5();
@@ -1861,7 +1901,11 @@ $(document).ready(function() {
                 $('#marcaInputA6').val(marca);
                 $('#modeloInputA6').val(modelo);
                 $('#nsInputA6').val(ns);
+                $('#IDInputA6').val($('#accesoriosSelect6').val() || $('#IDInputA6').val() || '');
             }
+
+            $('#accesoriosSelect6').val($('#IDInputA6').val());
+            actualizarInputsA6();
             
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect6').on('change', function() {
@@ -1880,7 +1924,11 @@ $(document).ready(function() {
                 $('#marcaInputA7').val(marca);
                 $('#modeloInputA7').val(modelo);
                 $('#nsInputA7').val(ns);
+                $('#IDInputA7').val($('#accesoriosSelect7').val() || $('#IDInputA7').val() || '');
             }
+
+            $('#accesoriosSelect7').val($('#IDInputA7').val());
+            actualizarInputsA7();
             
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect7').on('change', function() {
@@ -1899,7 +1947,11 @@ $(document).ready(function() {
                 $('#marcaInputA8').val(marca);
                 $('#modeloInputA8').val(modelo);
                 $('#nsInputA8').val(ns);
+                $('#IDInputA8').val($('#accesoriosSelect8').val() || $('#IDInputA8').val() || '');
             }
+
+            $('#accesoriosSelect8').val($('#IDInputA8').val());
+            actualizarInputsA8();
             
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect8').on('change', function() {
@@ -1918,7 +1970,11 @@ $(document).ready(function() {
             $('#marcaInputE2').val(marca);
             $('#modeloInputE2').val(modelo);
             $('#nsInputE2').val(ns);
+            $('#IDInputE2').val($('#equiposSelect2').val() || $('#IDInputE2').val() || '');
         }
+
+            $('#equiposSelect2').val($('#IDInputE2').val());
+            actualizarInputsE2();
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect2').on('change', function() {
@@ -1937,7 +1993,11 @@ $(document).ready(function() {
             $('#marcaInputE3').val(marca);
             $('#modeloInputE3').val(modelo);
             $('#nsInputE3').val(ns);
+            $('#IDInputE3').val($('#equiposSelect3').val() || $('#IDInputE3').val() || '');
         }
+
+            $('#equiposSelect3').val($('#IDInputE3').val());
+            actualizarInputsE3();
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect3').on('change', function() {
