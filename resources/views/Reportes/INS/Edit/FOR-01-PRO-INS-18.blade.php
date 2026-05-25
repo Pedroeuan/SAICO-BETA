@@ -260,6 +260,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                         </div>
                     </div>
 
@@ -299,6 +300,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_SONDA]" id="IDInputA" value="{{ old('Datos_Equipo.ID_SONDA', $Datos_Equipo['ID_SONDA'] ?? '') }}">
                         </div>
                     </div>
 
@@ -338,6 +340,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '') }}">
                         </div>
                     </div>
 
@@ -377,6 +380,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_CABLE]" id="IDInputA2" value="{{ old('Datos_Equipo.ID_CABLE', $Datos_Equipo['ID_CABLE'] ?? '') }}">
                         </div>
                     </div>
 
@@ -1120,8 +1124,8 @@ $(document).ready(function() {
                     <td class="align-middle">${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
                     </td><td><input type="text" class="form-control" name="Junta[${lastTitle}][]" placeholder="Junta"></td>
                     <td><input type="text" class="form-control" name="Zona_barrido[${lastTitle}][]" placeholder="Zona de Barrido"></td>
-                    <td><input type="text" class="form-control" name="no indicacion[${lastTitle}][]" placeholder="No  IndIcación"></td>
-                    <td><input type="text" class="form-control" name="tipo de indicacion[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
+                    <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No  IndIcación"></td>
+                    <td><input type="text" class="form-control" name="Tipo_Ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
                     <td><input type="text" class="form-control" name="LA[${lastTitle}][]" placeholder="LA"></td>
                     <td><input type="text" class="form-control" name="LC[${lastTitle}][]" placeholder="LC"></td>
                     <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="H.T."></td>
@@ -1229,8 +1233,11 @@ $(document).ready(function() {
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val($('#equiposSelect').val() || '');
         }
 
+            $('#equiposSelect').val($('#IDInputE').val() || '');
+            actualizarInputsE();
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
@@ -1240,21 +1247,26 @@ $(document).ready(function() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
-                var nombre = selectedOption.data('nombre') || '';
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#nombreInputbyp').val(nombre);
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
+                $('#IDInputbyp').val($('#blockyprobetaSelect').val() || '');
             }
 
+            $('#blockyprobetaSelect').val($('#IDInputbyp').val() || '');
+            actualizarInputsbyp();
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
 
             function actualizarInputsA1() {
-                var selectedOption = $('#accesoriosSelect1').find('option:selected');
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
@@ -1262,18 +1274,21 @@ $(document).ready(function() {
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA1').val(marca);
-                $('#modeloInputA1').val(modelo);
-                $('#nsInputA1').val(ns);
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+                $('#IDInputA').val($('#accesoriosSelect').val() || '');
             }
             
+                $('#accesoriosSelect').val($('#IDInputA').val() || '');
+                actualizarInputsA1();
                 // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect1').on('change', function() {
+                $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA1();
                 });
 
             function actualizarInputsA2() {
-                var selectedOption = $('#accesoriosSelect2').find('option:selected');
+                var selectedOption = $('#accesoriosSelectA2').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
@@ -1284,10 +1299,13 @@ $(document).ready(function() {
                 $('#marcaInputA2').val(marca);
                 $('#modeloInputA2').val(modelo);
                 $('#nsInputA2').val(ns);
+                $('#IDInputA2').val($('#accesoriosSelectA2').val() || '');
             }
             
+                $('#accesoriosSelectA2').val($('#IDInputA2').val() || '');
+                actualizarInputsA2();
                 // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect2').on('change', function() {
+                $('#accesoriosSelectA2').on('change', function() {
                     actualizarInputsA2();
                 });
 

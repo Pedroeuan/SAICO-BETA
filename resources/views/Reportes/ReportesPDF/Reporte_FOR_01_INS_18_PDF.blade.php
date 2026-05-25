@@ -17,7 +17,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -50px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -38,7 +38,7 @@
                 }
 
                 body {
-                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
                     /*margin: 0;*/
                     padding-top: 0px; /* Altura del header */
                     padding-bottom: 0px; /* Altura del footer */
@@ -51,13 +51,14 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 8px !important;
+                    font-size: 9px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
+                    font-size: 8px;
                 }
 
                 .lineaSuperior{
@@ -97,7 +98,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -200,15 +201,20 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="3" style="width: 80%;">
+                                @if(!empty($QR_PDF))
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width: 65px; height: 65px; display:block; margin:auto; padding:0;">
+                                @endif
+                            </th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-18/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> Informe de Detección de Discontinuidades con Corrientes de Eddy </th>
+                            <th rowspan="2" style="font-size: 8pt;"> Informe de Detección de Discontinuidades con Corrientes de Eddy </th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>

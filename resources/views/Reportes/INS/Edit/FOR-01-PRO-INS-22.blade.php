@@ -276,7 +276,8 @@
                                                 {{ $equipo->Nombre_E_P_BP }}
                                             </option>
                                         @endforeach
-                                </select>
+                                    </select>
+                                    <input type="hidden" id="IDInputEquipo" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                         </div>
                     </div>
 
@@ -317,7 +318,8 @@
                                                     {{ $accesorios->Nombre_E_P_BP }}
                                             </option>
                                         @endforeach
-                                </select>
+                                    </select>
+                                    <input type="hidden" id="IDInputA1" name="Datos_Equipo[ID_AN1]" value="{{ old('Datos_Equipo.ID_AN1', $Datos_Equipo['ID_AN1'] ?? '') }}">
                         </div>
                     </div>
 
@@ -358,7 +360,8 @@
                                                     {{ $accesorios->Nombre_E_P_BP }}
                                             </option>
                                         @endforeach
-                                </select>
+                                    </select>
+                                    <input type="hidden" id="IDInputA2" name="Datos_Equipo[ID_AN2]" value="{{ old('Datos_Equipo.ID_AN2', $Datos_Equipo['ID_AN2'] ?? '') }}">
                         </div>
                     </div>
 
@@ -1652,6 +1655,17 @@ $(document).ready(function() {
             $('#equiposSelect3').on('change', function() {
                 actualizarInputsE3();
             });
+
+            function sincronizarIdsQR() {
+                $('#IDInputEquipo').val($('#equiposSelect').val() || '');
+                $('#IDInputA1').val($('#accesoriosSelect').val() || '');
+                $('#IDInputA2').val($('#accesoriosSelect2').val() || '');
+            }
+
+            $('#equiposSelect, #accesoriosSelect, #accesoriosSelect2')
+                .on('change', sincronizarIdsQR);
+
+            sincronizarIdsQR();
     });
 </script>
 @endsection
