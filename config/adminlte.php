@@ -292,7 +292,57 @@ return [
     |
     */
 
-    'menu' => [
+    'menu' => true ? [
+        [
+            'text' => 'Publicaciones',
+            'icon' => 'fas fa-bullhorn',
+            'url' => '/publicaciones',
+        ],
+        [
+            'text' => 'Gestion de Vehiculos',
+            'icon' => 'fas fa-car',
+            'can' => 'vehiculos-admin-access',
+            'submenu' => [
+                [
+                    'text' => 'Vehiculos',
+                    'icon' => 'fas fa-truck',
+                    'url' => '/vehiculos',
+                ],
+                [
+                    'text' => 'Salidas de Vehiculos',
+                    'icon' => 'fas fa-sign-out-alt',
+                    'url' => '/salidas-vehiculos',
+                ],
+                [
+                    'text' => 'Panel Vehicular',
+                    'icon' => 'fas fa-chart-bar',
+                    'url' => '/salidas-vehiculos/panel',
+                ],
+                [
+                    'text' => 'Encuestas de Satisfaccion',
+                    'icon' => 'fas fa-star',
+                    'url' => '/vehiculos/encuestas/satisfaccion',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Usuarios',
+            'icon' => 'fas fa-users',
+            'can' => 'administrador-access',
+            'submenu' => [
+                [
+                    'text' => 'Ver usuarios',
+                    'icon' => 'fas fa-list',
+                    'url' => '/Admin/index',
+                ],
+                [
+                    'text' => 'Registrar usuario',
+                    'icon' => 'fas fa-user-plus',
+                    'url' => '/Admin/create',
+                ],
+            ],
+        ],
+    ] : [
                 [
                     'type' => 'navbar-notification', // Indica que este elemento es un ícono de notificaciones en la barra superior.
                     'id' => 'my-notification',       // ID único para identificar este componente (requerido para actualizarlo vía JS/AJAX).

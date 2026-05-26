@@ -79,7 +79,7 @@ use App\Http\Controllers\Vehiculos\EncuestaSatisfaccionVehicularController; // c
 
     Route::redirect('/', '/dashboard');
     Route::redirect('/register', '/dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 
     Route::get('Reporte/FOR_PIMP_02_B/03', [ReporteController::class, 'FOR_PIMP_02_B_03'])->name('Reporte_FOR_PIMP_02_B_03.PDF');
     Route::get('Reporte/FOR_PIMP_02_B/04', [ReporteController::class, 'FOR_PIMP_02_B_04'])->name('Reporte_FOR_PIMP_02_B_04.PDF');
@@ -113,8 +113,6 @@ use App\Http\Controllers\Vehiculos\EncuestaSatisfaccionVehicularController; // c
     Route::get('/estatus-solicitudes', [SolicitudADController::class, 'obtenerEstatus'])->name('estatus.solicitudes');
 
     });
-    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
