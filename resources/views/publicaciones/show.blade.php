@@ -24,14 +24,25 @@
 
 @section('content')
 <div class="container-fluid">
+    @php($metricas = $publicacion->metricas_facebook_json ?? [])
+    @php($interaccionesTotales = (int) ($metricas['reacciones'] ?? 0) + (int) ($metricas['comentarios'] ?? 0) + (int) ($metricas['compartidos'] ?? 0))
     <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
         <div>
+            <div class="mb-2">
+                <span class="badge bg-light text-dark border">PUB-{{ $publicacion->id }}</span>
+            </div>
             <h1 class="h3 mb-1">{{ $publicacion->titulo }}</h1>
             <div class="d-flex flex-wrap gap-2">
                 @php($tipo = \App\Enums\TipoPublicacion::from($publicacion->tipo))
                 <span class="badge bg-{{ $tipo->color() }}">{{ $tipo->label() }}</span>
                 <span class="badge bg-{{ $publicacion->activo ? 'success' : 'secondary' }}">{{ $publicacion->activo ? 'Activa' : 'Inactiva' }}</span>
                 <span class="badge bg-{{ $publicacion->trashed() ? 'danger' : 'light text-dark border' }}">{{ $publicacion->trashed() ? 'Eliminada' : 'Visible' }}</span>
+                <span class="badge bg-{{ $publicacion->esImportadaDesdeFacebook() ? 'primary' : 'dark' }}">
+                    {{ $publicacion->esImportadaDesdeFacebook() ? 'Facebook importada' : 'Creada en sistema' }}
+                </span>
+                <span class="badge bg-{{ $interaccionesTotales > 0 ? 'success' : 'secondary' }}">
+                    {{ $interaccionesTotales > 0 ? 'Con interaccion' : 'Sin interaccion visible' }}
+                </span>
             </div>
         </div>
         <div class="d-flex gap-2">
@@ -124,11 +135,17 @@
 
                         <dt class="col-sm-5">Modo</dt>
                         <dd class="col-sm-7">{{ $publicacion->estaProgramada() ? 'Programada' : 'Publicacion inmediata' }}</dd>
+
+                        <dt class="col-sm-5">Facebook Post ID</dt>
+                        <dd class="col-sm-7">{{ $publicacion->facebook_post_id ?: 'No vinculado' }}</dd>
+
+                        <dt class="col-sm-5">Ultimo sync</dt>
+                        <dd class="col-sm-7">{{ optional($publicacion->sincronizado_metricas_at)->format('d/m/Y H:i') ?: 'Pendiente' }}</dd>
                     </dl>
                 </div>
             </div>
 
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body">
                     <div class="alert alert-info">
                         La operacion productiva actual del modulo esta habilitada solo para Facebook. Instagram y LinkedIn permanecen deshabilitados por configuracion.
@@ -167,6 +184,94 @@
                             </div>
                         @endforeach
                     </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Impacto Facebook</h2>
+                    @if (($metricas['insights_pendientes_meta'] ?? false) === true)
+                        <div class="alert alert-secondary">
+                            Las interacciones visibles ya se sincronizan automaticamente. Alcance, impresiones y engagement siguen pendientes por acceso adicional de Meta.
+                        </div>
+                    @endif
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="border rounded p-3 bg-light">
+                                <div class="small text-muted">Interacciones totales visibles</div>
+                                <div class="h4 mb-0">{{ number_format($interaccionesTotales) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-2 h-100">
+                                <div class="small text-muted">Reacciones</div>
+                                <div class="h5 mb-0">{{ number_format((int) ($metricas['reacciones'] ?? 0)) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-2 h-100">
+                                <div class="small text-muted">Comentarios</div>
+                                <div class="h5 mb-0">{{ number_format((int) ($metricas['comentarios'] ?? 0)) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-2 h-100">
+                                <div class="small text-muted">Compartidos</div>
+                                <div class="h5 mb-0">{{ number_format((int) ($metricas['compartidos'] ?? 0)) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-2 h-100">
+                                <div class="small text-muted">Alcance</div>
+                                <div class="h5 mb-0">{{ $metricas['alcance'] === null ? 'Pendiente' : number_format((int) $metricas['alcance']) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-2 h-100">
+                                <div class="small text-muted">Impresiones</div>
+                                <div class="h5 mb-0">{{ $metricas['impresiones'] === null ? 'Pendiente' : number_format((int) $metricas['impresiones']) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-2 h-100">
+                                <div class="small text-muted">Engagement</div>
+                                <div class="h5 mb-0">{{ $metricas['engagement'] === null ? 'Pendiente' : number_format((float) $metricas['engagement'], 2) . '%' }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if ($publicacion->facebook_permalink)
+                        <a href="{{ $publicacion->facebook_permalink }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
+                            <i class="fab fa-facebook mr-1"></i>Ver publicacion real en Facebook
+                        </a>
+                    @endif
+
+                    @if ($publicacion->metricasHistorial->isNotEmpty())
+                        <hr>
+                        <h3 class="h6 mb-3">Ultimos cortes sincronizados</h3>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Alcance</th>
+                                        <th>Interacciones</th>
+                                        <th>Engagement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($publicacion->metricasHistorial as $corte)
+                                        <tr>
+                                            <td>{{ optional($corte->fecha_corte)->format('d/m/Y') }}</td>
+                                            <td>{{ number_format((int) $corte->alcance) }}</td>
+                                            <td>{{ number_format((int) ($corte->reacciones + $corte->comentarios + $corte->compartidos)) }}</td>
+                                            <td>{{ number_format((float) $corte->engagement, 2) }}%</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

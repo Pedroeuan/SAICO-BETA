@@ -14,8 +14,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Commands\ActualizarPublicacionesFacebook::class,
         Commands\CrearNotificacionesCertificados::class,
+        Commands\ImportarPublicacionesFacebook::class,
         Commands\PublicarPublicacionesProgramadas::class,
+        Commands\SincronizarMetricasFacebook::class,
     ];
 
     /**
@@ -26,6 +29,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('notificaciones:crear-certificados')->daily();
         $schedule->job(new RevisarVencimientosVehiculosJob)->daily();
         $schedule->command('publicaciones:procesar-programadas')->everyMinute()->withoutOverlapping();
+        $schedule->command('publicaciones:facebook-actualizar --limit=10')
+            ->name('publicaciones.facebook.actualizar')
+            ->everyMinute()
+            ->withoutOverlapping();
     }
 
     protected $routeMiddleware = [

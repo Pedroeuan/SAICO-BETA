@@ -42,7 +42,7 @@ class PublicacionService
                         'exito' => false,
                         'post_id' => null,
                         'red' => 'general',
-                        'error' => 'Publicacion automatica deshabilitada hasta configurar credenciales y entorno Python.',
+                        'error' => $this->mensajeAutopublicacionDeshabilitada(),
                     ],
                 ],
                 'publicado_en_redes' => false,
@@ -413,7 +413,20 @@ class PublicacionService
 
     protected function autopublicacionHabilitada(): bool
     {
+        if ((bool) config('publicaciones.solo_lectura_analytics', true)) {
+            return false;
+        }
+
         return (bool) config('publicaciones.autopublicar', false);
+    }
+
+    protected function mensajeAutopublicacionDeshabilitada(): string
+    {
+        if ((bool) config('publicaciones.solo_lectura_analytics', true)) {
+            return 'Publicacion automatica bloqueada por modo solo lectura para analitica local.';
+        }
+
+        return 'Publicacion automatica deshabilitada hasta configurar credenciales y entorno Python.';
     }
 
     protected function resolverFechaProgramada(array $datos): ?Carbon

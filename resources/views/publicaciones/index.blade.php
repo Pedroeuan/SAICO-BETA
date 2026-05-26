@@ -49,6 +49,18 @@
         line-height: 1.2;
     }
 
+    .publicaciones-folio {
+        display: inline-flex;
+        align-items: center;
+        padding: .2rem .5rem;
+        border-radius: 999px;
+        background: #eef2f7;
+        color: #334155;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .03em;
+    }
+
     .publicaciones-slug {
         font-size: .8rem;
         color: #6c757d;
@@ -93,6 +105,72 @@
     .publicaciones-table td {
         vertical-align: middle;
     }
+
+    .publicaciones-impacto {
+        min-width: 210px;
+    }
+
+    .publicaciones-impacto-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: .25rem .55rem;
+        border-radius: 999px;
+        font-size: .75rem;
+        font-weight: 600;
+    }
+
+    .publicaciones-impacto-badge.is-active {
+        background: #d1e7dd;
+        color: #0f5132;
+        border: 1px solid #badbcc;
+    }
+
+    .publicaciones-impacto-badge.is-idle {
+        background: #f8f9fa;
+        color: #6c757d;
+        border: 1px solid #dee2e6;
+    }
+
+    .publicaciones-analitica-card {
+        border: 1px solid #e9ecef;
+        border-radius: .75rem;
+        padding: 1rem;
+        height: 100%;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .publicaciones-analitica-kicker {
+        font-size: .75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: #6c757d;
+    }
+
+    .publicaciones-analitica-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2d3d;
+        line-height: 1;
+    }
+
+    .publicaciones-analitica-note {
+        font-size: .85rem;
+        color: #6c757d;
+    }
+
+    .publicaciones-destacada {
+        border: 1px solid #dbe7f3;
+        border-radius: .75rem;
+        background: #f8fbff;
+        padding: 1rem;
+    }
+
+    .publicaciones-chart-wrap {
+        position: relative;
+        min-height: 290px;
+    }
 </style>
 @endsection
 
@@ -117,6 +195,36 @@
     $publicadasExito = $publicacionesColeccion->filter(fn ($item) => $item->estadoRedes() === 'exito')->count();
     $publicacionesParciales = $publicacionesColeccion->filter(fn ($item) => $item->estadoRedes() === 'parcial')->count();
     $publicacionesPendientes = $publicacionesColeccion->filter(fn ($item) => $item->estadoRedes() === 'pendiente')->count();
+    $publicacionesImportadas = $publicacionesColeccion->filter(fn ($item) => $item->esImportadaDesdeFacebook())->count();
+@endphp
+
+@php
+    $graficaTopPublicaciones = $panelAnalitica['graficaTop'] ?? [
+        'labels' => [],
+        'reacciones' => [],
+        'comentarios' => [],
+        'compartidos' => [],
+    ];
+    $graficaTimelinePublicaciones = $panelAnalitica['graficaLinea'] ?? [
+        'labels' => [],
+        'interacciones' => [],
+    ];
+    $graficaEstadoInteraccion = $panelAnalitica['graficaEstadoInteraccion'] ?? [
+        'labels' => ['Con interacción', 'Sin interacción'],
+        'values' => [0, 0],
+    ];
+    $graficaTipoPublicacion = $panelAnalitica['graficaTipoPublicacion'] ?? [
+        'labels' => [],
+        'values' => [],
+    ];
+    $graficaComentarios = $panelAnalitica['graficaComentarios'] ?? [
+        'labels' => [],
+        'values' => [],
+    ];
+    $graficaReacciones = $panelAnalitica['graficaReacciones'] ?? [
+        'labels' => [],
+        'values' => [],
+    ];
 @endphp
 
 <div class="container-fluid">
@@ -193,6 +301,140 @@
         </div>
     </div>
 
+    <div class="row publicaciones-summary-card mb-4">
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    <h3>{{ $publicacionesImportadas }}</h3>
+                    <p>Importadas de Facebook</p>
+                </div>
+                <div class="icon">
+                    <i class="fab fa-facebook"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box bg-teal">
+                <div class="inner">
+                    <h3>{{ number_format((int) ($resumenMetricas->alcance ?? 0)) }}</h3>
+                    <p>Alcance acumulado hoy</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box bg-navy">
+                <div class="inner">
+                    <h3>{{ number_format((int) (($resumenMetricas->reacciones ?? 0) + ($resumenMetricas->comentarios ?? 0) + ($resumenMetricas->compartidos ?? 0))) }}</h3>
+                    <p>Interacciones hoy</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="small-box bg-dark">
+                <div class="inner">
+                    <h3>{{ number_format((float) ($resumenMetricas->engagement_promedio ?? 0), 2) }}%</h3>
+                    <p>Engagement promedio</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-percentage"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if(false)
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-chart-bar mr-1"></i>Panel de rendimiento en publicaciones
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="publicaciones-analitica-card">
+                        <div class="publicaciones-analitica-kicker">Interacciones visibles</div>
+                        <div class="publicaciones-analitica-value">{{ number_format((int) ($panelAnalitica['interaccionesVisibles'] ?? 0)) }}</div>
+                        <div class="publicaciones-analitica-note">Suma de reacciones, comentarios y compartidos disponibles.</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="publicaciones-analitica-card">
+                        <div class="publicaciones-analitica-kicker">Publicaciones con respuesta</div>
+                        <div class="publicaciones-analitica-value">{{ number_format((int) ($panelAnalitica['totalConInteraccion'] ?? 0)) }}</div>
+                        <div class="publicaciones-analitica-note">Contenido que ya registró actividad visible del público.</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="publicaciones-analitica-card">
+                        <div class="publicaciones-analitica-kicker">Sin interacción visible</div>
+                        <div class="publicaciones-analitica-value">{{ number_format((int) ($panelAnalitica['totalSinInteraccion'] ?? 0)) }}</div>
+                        <div class="publicaciones-analitica-note">Publicaciones importadas o sincronizadas sin reacción observable.</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="publicaciones-destacada h-100">
+                        <div class="publicaciones-analitica-kicker mb-2">Publicación destacada</div>
+                        @if (!empty($panelAnalitica['publicacionDestacada']))
+                            <div class="font-weight-bold mb-2">{{ $panelAnalitica['publicacionDestacada']['titulo'] }}</div>
+                            <div class="small text-muted mb-2">
+                                Según interacciones visibles sincronizadas.
+                            </div>
+                            <div class="small"><strong>Total:</strong> {{ number_format((int) $panelAnalitica['publicacionDestacada']['interacciones']) }}</div>
+                            <div class="small"><strong>Reacciones:</strong> {{ number_format((int) $panelAnalitica['publicacionDestacada']['reacciones']) }}</div>
+                            <div class="small"><strong>Comentarios:</strong> {{ number_format((int) $panelAnalitica['publicacionDestacada']['comentarios']) }}</div>
+                            <div class="small"><strong>Último sync:</strong> {{ $panelAnalitica['publicacionDestacada']['sincronizado_metricas_at'] ?: 'Pendiente' }}</div>
+                        @else
+                            <div class="small text-muted">
+                                Todavía no hay publicaciones con actividad suficiente para destacar una pieza.
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-chart-column mr-1"></i>Gráfica de publicaciones destacadas
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="publicaciones-chart-wrap">
+                <canvas id="publicacionesTopChart"></canvas>
+            </div>
+            <div class="small text-muted mt-3">
+                Comparativo visible por reacciones, comentarios y compartidos.
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-chart-line mr-1"></i>Evolución reciente de interacciones
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="publicaciones-chart-wrap">
+                <canvas id="publicacionesTimelineChart"></canvas>
+            </div>
+            <div class="small text-muted mt-3">
+                Alcance, impresiones y engagement siguen sujetos al nivel de acceso habilitado por Meta.
+            </div>
+        </div>
+    </div>
+
+    @endif
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">
@@ -236,7 +478,12 @@
         <div class="card-header p-0 pt-1">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#tab-listado" data-toggle="tab" role="tab">
+                    <a class="nav-link active" href="#tab-dashboard" data-toggle="tab" role="tab">
+                        <i class="fas fa-chart-pie mr-1"></i>Dashboard de publicaciones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tab-listado" data-toggle="tab" role="tab">
                         <i class="fas fa-list mr-1"></i>Listado de publicaciones
                     </a>
                 </li>
@@ -249,15 +496,151 @@
         </div>
         <div class="card-body">
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="tab-listado" role="tabpanel">
+                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel">
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="publicaciones-analitica-card">
+                                <div class="publicaciones-analitica-kicker">Interacciones visibles</div>
+                                <div class="publicaciones-analitica-value">{{ number_format((int) ($panelAnalitica['interaccionesVisibles'] ?? 0)) }}</div>
+                                <div class="publicaciones-analitica-note">Suma de reacciones, comentarios y compartidos disponibles.</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="publicaciones-analitica-card">
+                                <div class="publicaciones-analitica-kicker">Publicaciones con respuesta</div>
+                                <div class="publicaciones-analitica-value">{{ number_format((int) ($panelAnalitica['totalConInteraccion'] ?? 0)) }}</div>
+                                <div class="publicaciones-analitica-note">Contenido que ya registró actividad visible del público.</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="publicaciones-analitica-card">
+                                <div class="publicaciones-analitica-kicker">Sin interacción visible</div>
+                                <div class="publicaciones-analitica-value">{{ number_format((int) ($panelAnalitica['totalSinInteraccion'] ?? 0)) }}</div>
+                                <div class="publicaciones-analitica-note">Publicaciones importadas o sincronizadas sin reacción observable.</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="publicaciones-destacada h-100">
+                                <div class="publicaciones-analitica-kicker mb-2">Publicación destacada</div>
+                                @if (!empty($panelAnalitica['publicacionDestacada']))
+                                    <div class="mb-2">
+                                        <span class="publicaciones-folio">{{ $panelAnalitica['publicacionDestacada']['folio'] }}</span>
+                                    </div>
+                                    <div class="font-weight-bold mb-2" title="{{ $panelAnalitica['publicacionDestacada']['titulo'] }}">
+                                        <a href="{{ route('publicaciones.show', $panelAnalitica['publicacionDestacada']['id']) }}" class="text-dark">
+                                            {{ $panelAnalitica['publicacionDestacada']['titulo_corto'] }}
+                                        </a>
+                                    </div>
+                                    <div class="small text-muted mb-2">
+                                        Según interacciones visibles sincronizadas.
+                                    </div>
+                                    <div class="small"><strong>Total:</strong> {{ number_format((int) $panelAnalitica['publicacionDestacada']['interacciones']) }}</div>
+                                    <div class="small"><strong>Reacciones:</strong> {{ number_format((int) $panelAnalitica['publicacionDestacada']['reacciones']) }}</div>
+                                    <div class="small"><strong>Comentarios:</strong> {{ number_format((int) $panelAnalitica['publicacionDestacada']['comentarios']) }}</div>
+                                    <div class="small"><strong>Último sync:</strong> {{ $panelAnalitica['publicacionDestacada']['sincronizado_metricas_at'] ?: 'Pendiente' }}</div>
+                                @else
+                                    <div class="small text-muted">
+                                        Todavía no hay publicaciones con actividad suficiente para destacar una pieza.
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Gráfica de publicaciones destacadas</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="publicaciones-chart-wrap">
+                                <canvas id="publicacionesTopChart"></canvas>
+                            </div>
+                            <div class="small text-muted mt-3">
+                                Comparativo visible por reacciones, comentarios y compartidos.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-outline card-info mb-0">
+                        <div class="card-header">
+                            <h3 class="card-title">Evolución reciente de interacciones</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="publicaciones-chart-wrap">
+                                <canvas id="publicacionesTimelineChart"></canvas>
+                            </div>
+                            <div class="small text-muted mt-3">
+                                Alcance, impresiones y engagement siguen sujetos al nivel de acceso habilitado por Meta.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-lg-6 mb-4">
+                            <div class="card card-outline card-secondary h-100">
+                                <div class="card-header">
+                                    <h3 class="card-title">Pastel: interacción visible</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="publicaciones-chart-wrap">
+                                        <canvas id="publicacionesEstadoChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4">
+                            <div class="card card-outline card-secondary h-100">
+                                <div class="card-header">
+                                    <h3 class="card-title">Pastel: interacciones por tipo</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="publicaciones-chart-wrap">
+                                        <canvas id="publicacionesTipoChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 mb-0">
+                            <div class="card card-outline card-success h-100">
+                                <div class="card-header">
+                                    <h3 class="card-title">Ranking de publicaciones más comentadas</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="publicaciones-chart-wrap">
+                                        <canvas id="publicacionesComentariosChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-0">
+                            <div class="card card-outline card-primary h-100">
+                                <div class="card-header">
+                                    <h3 class="card-title">Ranking de publicaciones más reaccionadas</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="publicaciones-chart-wrap">
+                                        <canvas id="publicacionesReaccionesChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-listado" role="tabpanel">
                     <div class="table-responsive">
                         <table class="table table-sm table-hover table-bordered publicaciones-table mb-0">
                             <thead class="table-light">
                                 <tr>
                                     <th>Imagen</th>
                                     <th>Publicación</th>
+                                    <th>Origen</th>
                                     <th>Tipo</th>
                                     <th>Redes</th>
+                                    <th>Impacto Facebook</th>
                                     <th>Estado</th>
                                     <th>Fecha</th>
                                     <th class="text-center publicaciones-actions">Ver</th>
@@ -282,6 +665,8 @@
                                             default => 'Pendiente',
                                         };
                                         $resultado = collect($publicacion->resultado_publicacion ?? []);
+                                        $folioPublicacion = 'PUB-' . $publicacion->id;
+                                        $tituloCorto = \Illuminate\Support\Str::limit($publicacion->titulo, 58);
                                     @endphp
                                     <tr class="{{ $publicacion->trashed() ? 'table-danger' : '' }}">
                                         <td>
@@ -297,8 +682,15 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <div class="publicaciones-title">{{ $publicacion->titulo }}</div>
-                                            <div class="publicaciones-slug mb-1">{{ $publicacion->slug }}</div>
+                                            <div class="mb-2">
+                                                <span class="publicaciones-folio">{{ $folioPublicacion }}</span>
+                                            </div>
+                                            <div class="publicaciones-title" title="{{ $publicacion->titulo }}">
+                                                <a href="{{ route('publicaciones.show', $publicacion) }}" class="text-dark">
+                                                    {{ $tituloCorto }}
+                                                </a>
+                                            </div>
+                                            <div class="publicaciones-slug mb-1" title="{{ $publicacion->slug }}">{{ \Illuminate\Support\Str::limit($publicacion->slug, 70) }}</div>
                                             <small class="text-muted">
                                                 {{ \Illuminate\Support\Str::limit(strip_tags($publicacion->contenido), 110) }}
                                             </small>
@@ -306,6 +698,14 @@
                                                 <div class="small text-danger mt-1">
                                                     Eliminada el {{ optional($publicacion->deleted_at)->format('d/m/Y H:i') }}
                                                 </div>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-{{ $publicacion->esImportadaDesdeFacebook() ? 'primary' : 'dark' }}">
+                                                {{ $publicacion->esImportadaDesdeFacebook() ? 'Facebook importada' : 'Sistema web' }}
+                                            </span>
+                                            @if ($publicacion->facebook_post_id)
+                                                <div class="small text-muted mt-1">{{ $publicacion->facebook_post_id }}</div>
                                             @endif
                                         </td>
                                         <td>
@@ -327,6 +727,37 @@
                                                         @endif
                                                     </span>
                                                 @endforeach
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @php($metricas = $publicacion->metricas_facebook_json ?? [])
+                                            @php($interacciones = (int) ($metricas['reacciones'] ?? 0) + (int) ($metricas['comentarios'] ?? 0) + (int) ($metricas['compartidos'] ?? 0))
+                                            <div class="publicaciones-impacto">
+                                                <div class="mb-2">
+                                                    <span class="publicaciones-impacto-badge {{ $interacciones > 0 ? 'is-active' : 'is-idle' }}">
+                                                        <i class="fas {{ $interacciones > 0 ? 'fa-bolt' : 'fa-minus-circle' }}"></i>
+                                                        {{ $interacciones > 0 ? 'Con interaccion real' : 'Sin interaccion visible' }}
+                                                    </span>
+                                                </div>
+                                                <div class="small"><strong>Total:</strong> {{ number_format($interacciones) }}</div>
+                                                <div class="small"><strong>Reacciones:</strong> {{ number_format((int) ($metricas['reacciones'] ?? 0)) }}</div>
+                                                <div class="small"><strong>Comentarios:</strong> {{ number_format((int) ($metricas['comentarios'] ?? 0)) }}</div>
+                                                <div class="small"><strong>Compartidos:</strong> {{ number_format((int) ($metricas['compartidos'] ?? 0)) }}</div>
+                                            </div>
+                                            @if (($metricas['insights_pendientes_meta'] ?? false) === true)
+                                                <div class="small text-muted mt-2">
+                                                    Alcance e impresiones pendientes por acceso adicional de Meta.
+                                                </div>
+                                            @endif
+                                            <div class="small text-muted mt-1">
+                                                Sync:
+                                                @if ($publicacion->estado_sync_metricas === 'ok')
+                                                    {{ optional($publicacion->sincronizado_metricas_at)->format('d/m H:i') ?: 'OK' }}
+                                                @elseif ($publicacion->estado_sync_metricas === 'error')
+                                                    Con error
+                                                @else
+                                                    Pendiente
+                                                @endif
                                             </div>
                                         </td>
                                         <td>
@@ -367,7 +798,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="9" class="text-center py-4 text-muted">
+                                        <td colspan="11" class="text-center py-4 text-muted">
                                             <i class="fas fa-info-circle mr-1"></i>No hay publicaciones registradas todavía.
                                         </td>
                                     </tr>
@@ -408,7 +839,7 @@
 
         @if ($publicaciones->hasPages())
             <div class="card-footer">
-                {{ $publicaciones->links() }}
+                {{ $publicaciones->links('pagination::bootstrap-4') }}
             </div>
         @endif
     </div>
@@ -421,6 +852,12 @@
 <script>
     const updateNotificationUrl = "{{ url('notificaciones/update') }}";
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+    const publicacionesTopData = @json($graficaTopPublicaciones);
+    const publicacionesTimelineData = @json($graficaTimelinePublicaciones);
+    const publicacionesEstadoData = @json($graficaEstadoInteraccion);
+    const publicacionesTipoData = @json($graficaTipoPublicacion);
+    const publicacionesComentariosData = @json($graficaComentarios);
+    const publicacionesReaccionesData = @json($graficaReacciones);
 
     document.addEventListener('DOMContentLoaded', function () {
         const notificationMenu = document.querySelector('#my-notification .dropdown-menu');
@@ -442,6 +879,206 @@
         const observer = new MutationObserver(normalizeNotificationMenu);
         observer.observe(notificationMenu, { childList: true, subtree: true });
         normalizeNotificationMenu();
+
+        if (typeof Chart !== 'undefined') {
+            const topChart = document.getElementById('publicacionesTopChart');
+            if (topChart) {
+                new Chart(topChart, {
+                    type: 'bar',
+                    data: {
+                        labels: publicacionesTopData.labels,
+                        datasets: [
+                            {
+                                label: 'Reacciones',
+                                data: publicacionesTopData.reacciones,
+                                backgroundColor: '#1877f2',
+                                borderRadius: 6,
+                            },
+                            {
+                                label: 'Comentarios',
+                                data: publicacionesTopData.comentarios,
+                                backgroundColor: '#20c997',
+                                borderRadius: 6,
+                            },
+                            {
+                                label: 'Compartidos',
+                                data: publicacionesTopData.compartidos,
+                                backgroundColor: '#f59f00',
+                                borderRadius: 6,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    maxRotation: 0,
+                                    autoSkip: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const timelineChart = document.getElementById('publicacionesTimelineChart');
+            if (timelineChart) {
+                new Chart(timelineChart, {
+                    type: 'line',
+                    data: {
+                        labels: publicacionesTimelineData.labels,
+                        datasets: [
+                            {
+                                label: 'Interacciones visibles',
+                                data: publicacionesTimelineData.interacciones,
+                                borderColor: '#0d6efd',
+                                backgroundColor: 'rgba(13, 110, 253, 0.12)',
+                                fill: true,
+                                tension: 0.35,
+                                pointRadius: 4,
+                                pointHoverRadius: 5,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const estadoChart = document.getElementById('publicacionesEstadoChart');
+            if (estadoChart) {
+                new Chart(estadoChart, {
+                    type: 'pie',
+                    data: {
+                        labels: publicacionesEstadoData.labels,
+                        datasets: [{
+                            data: publicacionesEstadoData.values,
+                            backgroundColor: ['#198754', '#adb5bd'],
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }
+
+            const tipoChart = document.getElementById('publicacionesTipoChart');
+            if (tipoChart) {
+                new Chart(tipoChart, {
+                    type: 'pie',
+                    data: {
+                        labels: publicacionesTipoData.labels,
+                        datasets: [{
+                            data: publicacionesTipoData.values,
+                            backgroundColor: ['#0d6efd', '#20c997', '#ffc107', '#dc3545', '#6f42c1'],
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }
+
+            const comentariosChart = document.getElementById('publicacionesComentariosChart');
+            if (comentariosChart) {
+                new Chart(comentariosChart, {
+                    type: 'bar',
+                    data: {
+                        labels: publicacionesComentariosData.labels,
+                        datasets: [{
+                            label: 'Comentarios',
+                            data: publicacionesComentariosData.values,
+                            backgroundColor: '#20c997',
+                            borderRadius: 6,
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const reaccionesChart = document.getElementById('publicacionesReaccionesChart');
+            if (reaccionesChart) {
+                new Chart(reaccionesChart, {
+                    type: 'bar',
+                    data: {
+                        labels: publicacionesReaccionesData.labels,
+                        datasets: [{
+                            label: 'Reacciones',
+                            data: publicacionesReaccionesData.values,
+                            backgroundColor: '#1877f2',
+                            borderRadius: 6,
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            }
+                        }
+                    }
+                });
+            }
+        }
     });
 </script>
 @endsection

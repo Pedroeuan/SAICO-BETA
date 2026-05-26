@@ -89,6 +89,12 @@
 
 @section('content')
 <div class="container-fluid">
+    @if (config('publicaciones.solo_lectura_analytics', true))
+        <div class="alert alert-warning">
+            <i class="fas fa-shield-alt mr-1"></i>La sincronizacion automatica con Facebook esta protegida en este entorno de trabajo. Puedes actualizar la informacion y consultar metricas sin lanzar publicaciones nuevas o republicaciones desde esta vista.
+        </div>
+    @endif
+
     @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
@@ -223,12 +229,18 @@
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="1" id="republicar_redes" name="republicar_redes" @checked(old('republicar_redes'))>
+                            <input class="form-check-input" type="checkbox" value="1" id="republicar_redes" name="republicar_redes" @checked(old('republicar_redes')) @disabled(config('publicaciones.solo_lectura_analytics', true))>
                             <label class="form-check-label" for="republicar_redes">
                                 Publicar ahora en redes sociales
                             </label>
                         </div>
-                        <small class="text-muted d-block mt-1">Si programas la publicacion, esta opcion se desactiva para evitar conflicto.</small>
+                        <small class="text-muted d-block mt-1">
+                            @if (config('publicaciones.solo_lectura_analytics', true))
+                                Esta accion se mantiene protegida en este entorno para evitar envios accidentales a Facebook.
+                            @else
+                                Si programas la publicacion, esta opcion se desactiva para evitar conflicto.
+                            @endif
+                        </small>
                     </div>
                 </div>
                 <div class="card-footer bg-white text-right publicacion-form-footer">

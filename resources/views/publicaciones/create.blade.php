@@ -89,6 +89,12 @@
 
 @section('content')
 <div class="container-fluid">
+    @if (config('publicaciones.solo_lectura_analytics', true))
+        <div class="alert alert-warning">
+            <i class="fas fa-shield-alt mr-1"></i>La sincronizacion automatica con Facebook esta protegida en este entorno de trabajo. Puedes preparar contenido y revisar metricas sin enviar publicaciones nuevas desde esta vista.
+        </div>
+    @endif
+
     @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}

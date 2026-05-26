@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TipoPublicacion;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,6 +41,15 @@ class Publicacion extends Model
         'publicado_en_redes',
         'publicado_at',
         'programado_at',
+        'origen_publicacion',
+        'facebook_post_id',
+        'facebook_page_id',
+        'facebook_permalink',
+        'facebook_created_at',
+        'sincronizado_metricas_at',
+        'estado_sync_metricas',
+        'metricas_facebook_json',
+        'ultima_respuesta_api',
         'activo',
     ];
 
@@ -55,6 +65,10 @@ class Publicacion extends Model
             'activo' => 'boolean',
             'publicado_at' => 'datetime',
             'programado_at' => 'datetime',
+            'facebook_created_at' => 'datetime',
+            'sincronizado_metricas_at' => 'datetime',
+            'metricas_facebook_json' => 'array',
+            'ultima_respuesta_api' => 'array',
         ];
     }
 
@@ -150,6 +164,10 @@ class Publicacion extends Model
             return 'pendiente';
         }
 
+        if (($resultados['_general']['error'] ?? null) === 'Publicacion automatica bloqueada por modo solo lectura para analitica local.') {
+            return 'pendiente';
+        }
+
         $total = count($resultados);
         $exitos = collect($resultados)->filter(fn (array $item): bool => (bool) ($item['exito'] ?? false))->count();
 
@@ -167,6 +185,16 @@ class Publicacion extends Model
     public function estaProgramada(): bool
     {
         return $this->programado_at !== null && !$this->publicado_en_redes;
+    }
+
+    public function metricasHistorial(): HasMany
+    {
+        return $this->hasMany(PublicacionMetricaHistorial::class, 'publicacion_id');
+    }
+
+    public function esImportadaDesdeFacebook(): bool
+    {
+        return $this->origen_publicacion === 'facebook_importada';
     }
 
     protected static function generarSlugUnico(string $titulo, ?int $ignorarId = null): string
