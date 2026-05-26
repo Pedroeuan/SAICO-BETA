@@ -4,6 +4,9 @@ namespace App\Models\Vehiculos;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Vehiculos\CargaCombustible;
+use App\Models\Vehiculos\EncuestaSatisfaccionVehicular;
+use App\Models\Vehiculos\HistorialLlanta;
 use App\Models\Vehiculos\Mantenimiento;
 use App\Models\Vehiculos\PagoVehiculo;
 use Carbon\Carbon;
@@ -67,6 +70,18 @@ class Vehiculo extends Model
     public function pagosVehiculo()
     {
     return $this->hasMany(PagoVehiculo::class, 'vehiculo_id');
+    }
+    public function cargasCombustible()
+    {
+        return $this->hasMany(CargaCombustible::class, 'vehiculo_id');
+    }
+    public function historialLlantas()
+    {
+        return $this->hasMany(HistorialLlanta::class, 'vehiculo_id');
+    }
+    public function encuestasSatisfaccion()
+    {
+        return $this->hasMany(EncuestaSatisfaccionVehicular::class, 'vehiculo_id');
     }
 
     protected static function boot(){

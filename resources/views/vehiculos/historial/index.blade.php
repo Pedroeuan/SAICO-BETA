@@ -98,6 +98,51 @@
             </div>
         </div>
     </div>
+
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Combustible (ultimos 5)</h6>
+                    <a href="{{ route('vehiculos.combustible.index', $vehiculo->id) }}" class="btn btn-light btn-sm">
+                        Ver historial completo
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Kilometraje</th>
+                                    <th>Litros</th>
+                                    <th>Costo</th>
+                                    <th>Tipo</th>
+                                    <th>Proveedor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($ultimasCargas ?? [] as $carga)
+                                    <tr>
+                                        <td>{{ optional($carga->fecha_carga)->format('Y-m-d') }}</td>
+                                        <td>{{ number_format($carga->kilometraje) }}</td>
+                                        <td>{{ number_format((float) $carga->litros, 3) }}</td>
+                                        <td>${{ number_format((float) $carga->costo_total, 2) }}</td>
+                                        <td>{{ ucfirst($carga->tipo_combustible) }}</td>
+                                        <td>{{ $carga->proveedor ?: 'N/A' }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center">Sin registros</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @stop
 
@@ -123,5 +168,4 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 @endsection
-
 

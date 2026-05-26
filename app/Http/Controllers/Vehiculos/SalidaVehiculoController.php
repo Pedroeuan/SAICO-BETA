@@ -9,6 +9,7 @@ use App\Http\Requests\Vehiculos\SalidaVehiculoRequest;
 use App\Models\Notificacion\Notificacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -42,6 +43,15 @@ class SalidaVehiculoController extends Controller
         ->get();
         }
         $metricas = $this->metricas();
+        if (Schema::hasTable('encuestas_satisfaccion_vehicular')) {
+            $salidas->load([
+                'encuestasSatisfaccion' => function ($query) {
+                    $query->select(['id', 'salida_vehiculo_id', 'user_id'])
+                        ->where('user_id', auth()->id());
+                }
+            ]);
+            $salidas->loadCount('encuestasSatisfaccion');
+        }
         $this->crearNotificacionesLicencias();
         return view('salidas.index', compact('salidas','metricas'));
     }

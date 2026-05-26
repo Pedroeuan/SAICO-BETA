@@ -68,6 +68,9 @@ use App\Http\Controllers\Vehiculos\SalidaChecklistController; //accesso a checkl
 use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendimiento vehiculos
 use App\Http\Controllers\Vehiculos\MantenimientoController;// Controlador de mantenimientos
 use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
+use App\Http\Controllers\Vehiculos\CargaCombustibleController; // controlador combustible
+use App\Http\Controllers\Vehiculos\HistorialLlantaController; // controlador llantas
+use App\Http\Controllers\Vehiculos\EncuestaSatisfaccionVehicularController; // controlador encuestas
 
 
     require __DIR__.'/auth.php';
@@ -711,6 +714,21 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         // Elimina pago específico del vehículo.
         Route::delete('/vehiculos/{vehiculo}/pagos/delete/{id}', [PagoVehiculoController::class, 'destroy'])->name('vehiculos.pagos.destroy');
 
+        Route::get('/vehiculos/{vehiculo}/combustible', [CargaCombustibleController::class, 'index'])->name('vehiculos.combustible.index');
+        Route::get('/vehiculos/{vehiculo}/combustible/create', [CargaCombustibleController::class, 'create'])->name('vehiculos.combustible.create');
+        Route::post('/vehiculos/{vehiculo}/combustible/store', [CargaCombustibleController::class, 'store'])->name('vehiculos.combustible.store');
+        Route::get('/vehiculos/{vehiculo}/combustible/edit/{id}', [CargaCombustibleController::class, 'edit'])->name('vehiculos.combustible.edit');
+        Route::match(['post', 'put'], '/vehiculos/{vehiculo}/combustible/update/{id}', [CargaCombustibleController::class, 'update'])->name('vehiculos.combustible.update');
+        Route::delete('/vehiculos/{vehiculo}/combustible/delete/{id}', [CargaCombustibleController::class, 'destroy'])->name('vehiculos.combustible.destroy');
+
+        Route::get('/vehiculos/{vehiculo}/llantas', [HistorialLlantaController::class, 'index'])->name('vehiculos.llantas.index');
+        Route::get('/vehiculos/{vehiculo}/llantas/create', [HistorialLlantaController::class, 'create'])->name('vehiculos.llantas.create');
+        Route::post('/vehiculos/{vehiculo}/llantas/store', [HistorialLlantaController::class, 'store'])->name('vehiculos.llantas.store');
+        Route::get('/vehiculos/{vehiculo}/llantas/edit/{id}', [HistorialLlantaController::class, 'edit'])->name('vehiculos.llantas.edit');
+        Route::match(['post', 'put'], '/vehiculos/{vehiculo}/llantas/update/{id}', [HistorialLlantaController::class, 'update'])->name('vehiculos.llantas.update');
+        Route::delete('/vehiculos/{vehiculo}/llantas/delete/{id}', [HistorialLlantaController::class, 'destroy'])->name('vehiculos.llantas.destroy');
+
+        Route::get('/vehiculos/encuestas/satisfaccion', [EncuestaSatisfaccionVehicularController::class, 'index'])->name('vehiculos.encuestas.index');
     });
 
     /*SALIDAS VEHICULOS*/
@@ -737,6 +755,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     Route::get('/salidas-vehiculos/checklist/{salida}/{tipo}', [SalidaChecklistController::class, 'show'])->name('salidas.checklist.show');
     /*Ruta de PDF de Checklist*/
     Route::get('/salidas-vehiculos/checklist-pdf/{salida}', [SalidaChecklistController::class, 'pdf'])->name('salidas.checklist.pdf');
+    Route::get('/salidas-vehiculos/{salida}/encuesta-satisfaccion/create', [EncuestaSatisfaccionVehicularController::class, 'create'])->name('salidas.encuestas.create');
+    Route::post('/salidas-vehiculos/{salida}/encuesta-satisfaccion/store', [EncuestaSatisfaccionVehicularController::class, 'store'])->name('salidas.encuestas.store');
 
 
 

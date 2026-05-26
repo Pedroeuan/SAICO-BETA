@@ -79,6 +79,11 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Vehiculos\SalidaVehiculo::class, 'solicitado_por');
     }
 
+    public function encuestasSatisfaccionVehicular()
+    {
+        return $this->hasMany(\App\Models\Vehiculos\EncuestaSatisfaccionVehicular::class, 'user_id');
+    }
+
     //validacion de documentos de usuario
     protected static function boot()
     {

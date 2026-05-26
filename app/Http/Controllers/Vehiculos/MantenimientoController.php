@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vehiculos;
 
 use App\Http\Controllers\Controller;
+use App\Models\Vehiculos\CargaCombustible;
 use App\Models\Vehiculos\Mantenimiento;
 use App\Models\Vehiculos\PagoVehiculo;
 use App\Models\Vehiculos\Vehiculo;
@@ -124,6 +125,11 @@ class MantenimientoController extends Controller
             ->limit(5)
             ->get();
 
-        return view('vehiculos.historial.index', compact('vehiculo', 'ultimosMantenimientos', 'ultimosPagos'));
+        $ultimasCargas = CargaCombustible::where('vehiculo_id', $vehiculoId)
+            ->orderByDesc('fecha_carga')
+            ->limit(5)
+            ->get();
+
+        return view('vehiculos.historial.index', compact('vehiculo', 'ultimosMantenimientos', 'ultimosPagos', 'ultimasCargas'));
     }
 }

@@ -48,7 +48,7 @@
         }
 
         .kpis td { 
-            width: 33.33%; 
+            width: 25%; 
             border: 1px solid #d1d5db; 
             padding: 10px; 
             vertical-align: top; 
@@ -140,13 +140,25 @@
         9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
     ];
 
-    $totalCantidad = max(1, $resumen['mantenimientos_count'] + $resumen['pagos_count']);
-    $pctManttoCantidad = ($resumen['mantenimientos_count'] / $totalCantidad) * 100;
-    $pctPagosCantidad = 100 - $pctManttoCantidad;
+    $totalCantidad = max(1, $resumen['mantenimientos_count'] + $resumen['pagos_count'] + $resumen['combustible_count'] + $resumen['llantas_count']);
+    $indicadoresCantidad = [
+        'Mantenimientos' => ($resumen['mantenimientos_count'] / $totalCantidad) * 100,
+        'Pagos' => ($resumen['pagos_count'] / $totalCantidad) * 100,
+        'Combustible' => ($resumen['combustible_count'] / $totalCantidad) * 100,
+        'Llantas' => ($resumen['llantas_count'] / $totalCantidad) * 100,
+    ];
 
-    $totalMonto = max(1, $resumen['mantenimientos_total'] + $resumen['pagos_total']);
-    $pctManttoMonto = ($resumen['mantenimientos_total'] / $totalMonto) * 100;
-    $pctPagosMonto = 100 - $pctManttoMonto;
+    $totalMonto = max(1, $resumen['mantenimientos_total'] + $resumen['pagos_total'] + $resumen['combustible_total'] + $resumen['llantas_total']);
+    $indicadoresMonto = [
+        'Mantenimiento' => ($resumen['mantenimientos_total'] / $totalMonto) * 100,
+        'Pagos' => ($resumen['pagos_total'] / $totalMonto) * 100,
+        'Combustible' => ($resumen['combustible_total'] / $totalMonto) * 100,
+        'Llantas' => ($resumen['llantas_total'] / $totalMonto) * 100,
+    ];
+
+    $costoPromedioKm = $resumen['km_recorridos_total'] > 0
+        ? $resumen['total_general'] / $resumen['km_recorridos_total']
+        : 0;
 @endphp
 
 @php
@@ -177,7 +189,7 @@
                 <span style="font-size:10px; color:#666;">Sin logo</span>
             @endif
         </th>
-        <th style="width: 78%; text-align: center;">Reporte Mensual de Movimientos de Vehiculos</th>
+        <th style="width: 78%; text-align: center;">Reporte Ejecutivo Mensual del Parque Vehicular</th>
     </tr>
     <tr>
         <td><strong>Panel Vehicular</strong></td>
@@ -196,8 +208,12 @@
         <td>
             <div class="kpi-label">Cantidad total de movimientos</div>
             <div class="kpi-value">
-                {{ $resumen['mantenimientos_count'] + $resumen['pagos_count'] }}
+                {{ $resumen['mantenimientos_count'] + $resumen['pagos_count'] + $resumen['combustible_count'] + $resumen['llantas_count'] }}
             </div>
+        </td>
+        <td>
+            <div class="kpi-label">Uso efectivo</div>
+            <div class="kpi-value">{{ $resumen['salidas_count'] }} salidas</div>
         </td>
         <td>
             <div class="kpi-label">Monto total mensual</div>
@@ -211,12 +227,23 @@
 <p class="desc">
     Total Mantenimientos: <strong>${{ number_format($resumen['mantenimientos_total'], 2) }}</strong> |
     Total Pagos Administrativos: <strong>${{ number_format($resumen['pagos_total'], 2) }}</strong> |
+    Total Combustible: <strong>${{ number_format($resumen['combustible_total'], 2) }}</strong> |
+    Total Llantas: <strong>${{ number_format($resumen['llantas_total'], 2) }}</strong> |
     Total General del Mes: <strong>${{ number_format($resumen['total_general'], 2) }}</strong>
 </p>
 
 <p class="desc">
     Se registraron <strong>{{ $resumen['mantenimientos_count'] }}</strong> mantenimientos y
-    <strong>{{ $resumen['pagos_count'] }}</strong> pagos administrativos en el periodo.
+    <strong>{{ $resumen['pagos_count'] }}</strong> pagos administrativos,
+    <strong>{{ $resumen['combustible_count'] }}</strong> cargas de combustible y
+    <strong>{{ $resumen['llantas_count'] }}</strong> movimientos de llantas.
+</p>
+
+<p class="desc">
+    Uso efectivo del periodo: <strong>{{ $resumen['salidas_count'] }}</strong> salidas,
+    <strong>{{ $resumen['salidas_finalizadas'] }}</strong> finalizadas y
+    <strong>{{ number_format($resumen['km_recorridos_total'], 2) }} km</strong> recorridos.
+    Costo promedio por km: <strong>${{ number_format($costoPromedioKm, 2) }}</strong>
 </p>
 
 <div class="section">Conceptos de gasto registrados (mes)</div>
@@ -253,16 +280,18 @@
             <div class="section" style="margin-top:0;">Distribucion por cantidad</div>
             <img class="chart-img" src="{{ $chartCantidadSrc }}" alt="Distribucion por cantidad">
             <div class="indicator">
-                Mantenimientos: {{ number_format($pctManttoCantidad, 1) }}% |
-                Pagos: {{ number_format($pctPagosCantidad, 1) }}%
+                @foreach($indicadoresCantidad as $label => $pct)
+                    {{ $label }}: {{ number_format($pct, 1) }}%@if(!$loop->last) | @endif
+                @endforeach
             </div>
         </td>
         <td>
             <div class="section" style="margin-top:0;">Distribucion por monto</div>
             <img class="chart-img" src="{{ $chartMontoSrc }}" alt="Distribucion por monto">
             <div class="indicator">
-                Mantenimiento: {{ number_format($pctManttoMonto, 1) }}% |
-                Pagos: {{ number_format($pctPagosMonto, 1) }}%
+                @foreach($indicadoresMonto as $label => $pct)
+                    {{ $label }}: {{ number_format($pct, 1) }}%@if(!$loop->last) | @endif
+                @endforeach
             </div>
         </td>
     </tr>
@@ -277,6 +306,9 @@
             <strong>{{ $row->placa }}</strong>:
             Mantto ${{ number_format($row->mantenimientos_total, 2) }} |
             Pagos ${{ number_format($row->pagos_total, 2) }} |
+            Combustible ${{ number_format($row->combustible_total, 2) }} |
+            Llantas ${{ number_format($row->llantas_total, 2) }} |
+            Km {{ number_format($row->km_recorridos_total, 2) }} |
             Total ${{ number_format($row->total_general, 2) }}
             @if(!$loop->last) <br> @endif
         @endforeach
@@ -293,8 +325,11 @@
                 <thead>
                     <tr>
                         <th>Placa</th>
+                        <th class="text-right">Km</th>
                         <th class="text-right">Mantto.</th>
                         <th class="text-right">Pagos</th>
+                        <th class="text-right">Comb.</th>
+                        <th class="text-right">Llantas</th>
                         <th class="text-right">Monto</th>
                     </tr>
                 </thead>
@@ -302,21 +337,62 @@
                     @forelse($topPlacas as $row)
                         <tr>
                             <td>{{ $row->placa }}</td>
+                            <td class="text-right">{{ number_format($row->km_recorridos_total, 2) }}</td>
                             <td class="text-right">${{ number_format($row->mantenimientos_total, 2) }}</td>
                             <td class="text-right">${{ number_format($row->pagos_total, 2) }}</td>
+                            <td class="text-right">${{ number_format($row->combustible_total, 2) }}</td>
+                            <td class="text-right">${{ number_format($row->llantas_total, 2) }}</td>
                             <td class="text-right">
                                 ${{ number_format($row->total_general, 2) }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center">Sin datos</td>
+                            <td colspan="7" class="text-center">Sin datos</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </td>
     </tr>
+</table>
+
+<div class="section">Resumen ejecutivo por unidad</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Vehiculo</th>
+            <th class="text-center">Salidas</th>
+            <th class="text-right">Km</th>
+            <th class="text-right">Mantto.</th>
+            <th class="text-right">Pagos</th>
+            <th class="text-right">Combustible</th>
+            <th class="text-right">Llantas</th>
+            <th class="text-right">Total</th>
+            <th class="text-right">Costo / km</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($movimientosMensuales as $row)
+            <tr>
+                <td>{{ $row->placa }}<br><span style="font-size:11px; color:#6b7280;">{{ $row->marca }} {{ $row->modelo }}</span></td>
+                <td class="text-center">{{ $row->salidas_count }} / {{ $row->salidas_finalizadas }}</td>
+                <td class="text-right">{{ number_format($row->km_recorridos_total, 2) }}</td>
+                <td class="text-right">${{ number_format($row->mantenimientos_total, 2) }}</td>
+                <td class="text-right">${{ number_format($row->pagos_total, 2) }}</td>
+                <td class="text-right">${{ number_format($row->combustible_total, 2) }}</td>
+                <td class="text-right">${{ number_format($row->llantas_total, 2) }}</td>
+                <td class="text-right">${{ number_format($row->total_general, 2) }}</td>
+                <td class="text-right">
+                    ${{ number_format($row->km_recorridos_total > 0 ? ($row->total_general / $row->km_recorridos_total) : 0, 2) }}
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="9" class="text-center">Sin movimientos para el periodo</td>
+            </tr>
+        @endforelse
+    </tbody>
 </table>
 
 <p class="desc">

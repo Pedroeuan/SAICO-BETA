@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', ' Salida Vehiculos')
+@section('title', 'Salida Vehiculos')
 @section('css')
 <style>
     #my-notification .dropdown-menu {
@@ -21,119 +21,136 @@
 <br>
 <br>
 <div class="container mt-4">
+    <h4>Salidas de Vehiculos</h4>
 
-    <h4>Salidas de Vehículos</h4>
+    @if (session('warning'))
+        <div class="alert alert-warning">
+            {{ session('warning') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <a href="{{ route('salidas.create') }}" class="btn btn-primary mb-3">
         + Nueva salida
     </a>
 
+    @can('vehiculos-admin-access')
+        <a href="{{ route('vehiculos.encuestas.index') }}" class="btn btn-dark mb-3 ml-2">
+            <i class="fas fa-chart-line"></i> Analitica de encuestas
+        </a>
+    @endcan
+
     <div class="table-responsive">
         <table id="tablaJs" class="table table-sm table-hover table-bordered align-middle text-center">
-        <thead>
-            <tr>
-                <th>Vehículo</th>
-                {{--<th>Modelo</th>
-                <th>Año</th>
-                <th>Placa</th>--}}
-                <th>Chofer</th>
-                <th>Solicitado por</th>
-                <th>Fecha salida</th>
-                <th>Checklist salida</th>
-                <th>Checklist entrada</th>
-                <th>PDF</th>
-                <th>Ver Salida</th>
-                <th>Ver Entrada</th>
-            </tr>
-        </thead>
+            <thead>
+                <tr>
+                    <th>Vehiculo</th>
+                    <th>Chofer</th>
+                    <th>Solicitado por</th>
+                    <th>Fecha salida</th>
+                    <th>Checklist salida</th>
+                    <th>Checklist entrada</th>
+                    <th>PDF</th>
+                    <th>Ver salida</th>
+                    <th>Ver entrada</th>
+                    <th>Encuesta</th>
+                </tr>
+            </thead>
 
-        <tbody>
-        @foreach($salidas as $salida)
-            <tr>
-                <td>{{ $salida->vehiculo->marca }}</td>
-                {{--<td>{{ $salida->vehiculo->modelo }}</td>
-                <td>{{ $salida->vehiculo->anio }}</td>
-                <td>{{ $salida->vehiculo->placa }}</td> --}}
-                <td>{{ $salida->chofer->name }}</td>
-                <td>{{ $salida->solicitante->name ?? 'N/A' }}</td>
-                <td>{{ $salida->fecha_salida }}</td>
-                
+            <tbody>
+            @foreach($salidas as $salida)
+                <tr>
+                    <td>{{ $salida->vehiculo->marca }}</td>
+                    <td>{{ $salida->chofer->name }}</td>
+                    <td>{{ $salida->solicitante->name ?? 'N/A' }}</td>
+                    <td>{{ $salida->fecha_salida }}</td>
 
-                {{-- CHECKLIST SALIDA --}}
-                <td class="text-center">
-                    @if($salida->checklistSalida)
-                        <span class="badge bg-success">Registrado</span>
-                    @else
-                        <a href="{{ route('salidas.checklist.salida.create',$salida->id) }}"
-                            class="btn btn-sm btn-primary px-3">
-                            Registrar
-                        </a>
-                    @endif
-                </td>
+                    <td class="text-center">
+                        @if($salida->checklistSalida)
+                            <span class="badge bg-success">Registrado</span>
+                        @else
+                            <a href="{{ route('salidas.checklist.salida.create',$salida->id) }}" class="btn btn-sm btn-primary px-3">
+                                Registrar
+                            </a>
+                        @endif
+                    </td>
 
-                {{-- CHECKLIST ENTRADA --}}
-                <td class="text-center">
-                    @if($salida->checklistEntrada)
-                        <span class="badge bg-success">Registrado</span>
-                    @elseif($salida->checklistSalida)
-                        <a href="{{ route('salidas.checklist.entrada.create',$salida->id) }}"
-                            class="btn btn-sm btn-warning px-3">
-                            Registrar
-                        </a>
-                    @else
-                        <span class="text-muted">Pendiente salida</span>
-                    @endif
-                </td>
+                    <td class="text-center">
+                        @if($salida->checklistEntrada)
+                            <span class="badge bg-success">Registrado</span>
+                        @elseif($salida->checklistSalida)
+                            <a href="{{ route('salidas.checklist.entrada.create',$salida->id) }}" class="btn btn-sm btn-warning px-3">
+                                Registrar
+                            </a>
+                        @else
+                            <span class="text-muted">Pendiente salida</span>
+                        @endif
+                    </td>
 
-                {{-- ACCIONES --}}
+                    <td>
+                        @if($salida->checklistSalida && $salida->checklistEntrada)
+                            <a href="{{ route('salidas.checklist.pdf',$salida->id) }}" target="_blank" class="btn btn-sm btn-danger px-3" title="Descargar PDF completo">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </a>
+                        @else
+                            <button class="btn btn-sm btn-secondary px-3" disabled title="Requiere checklist de salida y entrada">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                        @endif
+                    </td>
 
-                <td>
-                    @if($salida->checklistSalida && $salida->checklistEntrada)
-                        <a href="{{ route('salidas.checklist.pdf',$salida->id) }}" target="_blank" class="btn btn-sm btn-danger px-3" title="Descargar PDF completo">
-                            <i class="fas fa-file-pdf"></i> PDF
-                        </a>
-                    @else
-                        <button class="btn btn-sm btn-secondary px-3" disabled title="Requiere checklist de salida y entrada">
-                            <i class="fas fa-file-pdf"></i> PDF
-                        </button>
-                    @endif
-                </td>
+                    <td>
+                        @if($salida->checklistSalida)
+                            <a href="{{ route('salidas.checklist.show',[$salida->id,'salida']) }}" class="btn btn-sm btn-info">Ver salida</a>
+                        @endif
+                    </td>
 
-                <td>
-                    {{-- SALIDA --}}
-                    @if($salida->checklistSalida)
-                        <a href="{{ route('salidas.checklist.show',[$salida->id,'salida']) }}" class="btn btn-sm btn-info">Ver salida</a>
-                    @endif
-                </td> 
+                    <td>
+                        @if($salida->checklistEntrada)
+                            <a href="{{ route('salidas.checklist.show',[$salida->id,'entrada']) }}" class="btn btn-sm btn-secondary px-3">
+                                Ver entrada
+                            </a>
+                        @endif
+                    </td>
 
-                <td>
-                    {{-- ENTRADA --}}
-                    @if($salida->checklistEntrada)
-                        <a href="{{ route('salidas.checklist.show',[$salida->id,'entrada']) }}"
-                            class="btn btn-sm btn-secondary px-3">
-                            Ver entrada
-                        </a>
+                    <td>
+                        @php
+                            $puedeResponderEncuesta = in_array($salida->estatus, ['finalizado', 'finaliizado'], true)
+                                && (auth()->id() === (int) $salida->chofer_id || auth()->id() === (int) $salida->solicitado_por);
+                            $encuestaUsuarioActual = isset($salida->encuestasSatisfaccion)
+                                ? $salida->encuestasSatisfaccion->first()
+                                : null;
+                        @endphp
 
-                    @endif
-                </td>
-            </tr>
-        @endforeach
-    </table>
+                        @if($encuestaUsuarioActual && $puedeResponderEncuesta)
+                            <span class="badge bg-success">Respondida</span>
+                        @elseif($puedeResponderEncuesta)
+                            <a href="{{ route('salidas.encuestas.create', $salida->id) }}" class="btn btn-sm btn-dark">
+                                Responder
+                            </a>
+                        @elseif(in_array($salida->estatus, ['finalizado', 'finaliizado'], true))
+                            <span class="text-muted">Disponible al usuario</span>
+                        @else
+                            <span class="text-muted">Al finalizar</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 @stop
-</div>
+
 @section('js')
-
-<!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css">
-
-<!-- DataTables JS -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
-
-<!-- SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- Scripts personalizados -->
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 
@@ -162,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function () {
         normalizeNotificationMenu();
     }
 
-
     let table = new DataTable('#tablaJs', {
         responsive: true,
         autoWidth: false,
@@ -181,20 +197,16 @@ document.addEventListener('DOMContentLoaded', function () {
             zeroRecords: "No se encontraron registros coincidentes",
             paginate: {
                 first: "Primero",
-                last: "Último",
+                last: "Ultimo",
                 next: "Siguiente",
                 previous: "Anterior"
             }
         }
     });
 
-    // Resetear scroll horizontal al cambiar página
     table.on('draw', function () {
         document.querySelector('.table-responsive').scrollLeft = 0;
     });
-
 });
 </script>
-
 @endsection
-

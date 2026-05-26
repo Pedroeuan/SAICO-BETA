@@ -31,11 +31,29 @@
     <a href="{{ route('vehiculos.mantenimientos.index', $vehiculo->id) }}" class="btn btn-info btn-sm mr-2">
         <i class="fas fa-tools"></i> Mantenimientos
     </a>
-    <a href="{{ route('vehiculos.pagos.index', $vehiculo->id) }}" class="btn btn-warning btn-sm">
+    <a href="{{ route('vehiculos.pagos.index', $vehiculo->id) }}" class="btn btn-warning btn-sm mr-2">
         <i class="fas fa-file-invoice-dollar"></i> Pagos Vehículo
+    </a>
+    <a href="{{ route('vehiculos.combustible.index', $vehiculo->id) }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-gas-pump"></i> Combustible
+    </a>
+    <a href="{{ route('vehiculos.llantas.index', $vehiculo->id) }}" class="btn btn-dark btn-sm ml-2">
+        <i class="fas fa-dot-circle"></i> Llantas
     </a>
 </div>
 
+
+    @if (session('warning'))
+        <div class="alert alert-warning">
+            {{ session('warning') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     @if ($errors->any())
         <div class="alert alert-danger">

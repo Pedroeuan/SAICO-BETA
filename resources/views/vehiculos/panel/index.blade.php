@@ -185,6 +185,28 @@
                     </div>
                 </div>
 
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h6 class="text-center">Costo de Combustible por Mes</h6>
+                        <canvas id="graficaCostoCombustibleMes"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-center">Top 5 Vehiculos por Gasto de Combustible</h6>
+                        <canvas id="graficaCombustibleVehiculo"></canvas>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h6 class="text-center">Costo de Llantas por Mes</h6>
+                        <canvas id="graficaCostoLlantasMes"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-center">Costo de Llantas por Posicion</h6>
+                        <canvas id="graficaLlantasPosicion"></canvas>
+                    </div>
+                </div>
+
             </div>
 
             <!-- TAB 3 RANKING -->
@@ -291,6 +313,137 @@
                 <div class="card-body text-center py-4">
                     <h6>Vehiculo con Mas Incidencias</h6>
                     <h5 class="fw-bold">{{ $vehiculoMasIncidencias->placa ?? 'Sin incidencias' }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-teal text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Gasto Combustible Mes</h6>
+                    <h3 class="fw-bold">${{ number_format($gastoCombustibleMes ?? 0, 2) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-olive text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Litros del Mes</h6>
+                    <h3 class="fw-bold">{{ number_format($litrosCombustibleMes ?? 0, 2) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-navy text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Precio Promedio Litro</h6>
+                    <h3 class="fw-bold">${{ number_format($precioPromedioLitroMes ?? 0, 2) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-maroon text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Costo Combustible / Km</h6>
+                    <h3 class="fw-bold">${{ number_format($costoCombustiblePorKmMes ?? 0, 2) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-dark text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Llantas Activas</h6>
+                    <h3 class="fw-bold">{{ $llantasActivas ?? 0 }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-warning text-dark">
+                <div class="card-body text-center py-4">
+                    <h6>Llantas Rotadas</h6>
+                    <h3 class="fw-bold">{{ $llantasRotadas ?? 0 }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-danger text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Llantas Baja</h6>
+                    <h3 class="fw-bold">{{ $llantasBaja ?? 0 }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-secondary text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Costo Historico Llantas</h6>
+                    <h3 class="fw-bold">${{ number_format($costoLlantasTotal ?? 0, 2) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-primary text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Encuestas del Mes</h6>
+                    <h3 class="fw-bold">{{ $totalEncuestasMes ?? 0 }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-success text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Satisfaccion Promedio</h6>
+                    <h3 class="fw-bold">{{ number_format($satisfaccionPromedioMes ?? 0, 2) }}/5</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-info text-white">
+                <div class="card-body text-center py-4">
+                    <h6>NPS Interno</h6>
+                    <h3 class="fw-bold">{{ number_format($npsInternoMes ?? 0, 2) }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-purple text-white">
+                <div class="card-body text-center py-4">
+                    <h6>Sentimiento Dominante</h6>
+                    <h3 class="fw-bold">{{ $sentimientoDominante ?? 'Neutro' }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <strong>Satisfaccion Promedio por Mes</strong>
+                </div>
+                <div class="card-body">
+                    <canvas id="graficaSatisfaccionMes"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <strong>Distribucion de Sentimiento</strong>
+                </div>
+                <div class="card-body">
+                    <canvas id="graficaSentimiento"></canvas>
                 </div>
             </div>
         </div>
@@ -912,6 +1065,155 @@ $(document).ready(function() {
                 responsive: true,
                 scales: {
                     y: { beginAtZero: true, ticks: { precision: 0 } }
+                }
+            }
+        });
+    }
+
+    const ctxCostoCombustibleMes = document.getElementById('graficaCostoCombustibleMes');
+    if (ctxCostoCombustibleMes) {
+        new Chart(ctxCostoCombustibleMes, {
+            type: 'line',
+            data: {
+                labels: [
+                    'Ene','Feb','Mar','Abr','May','Jun',
+                    'Jul','Ago','Sep','Oct','Nov','Dic'
+                ],
+                datasets: [{
+                    label: 'Costo combustible',
+                    data: @json($datosCostoCombustibleMeses ?? []),
+                    borderColor: '#20c997',
+                    backgroundColor: 'rgba(32, 201, 151, 0.18)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    const ctxCombustibleVehiculo = document.getElementById('graficaCombustibleVehiculo');
+    if (ctxCombustibleVehiculo) {
+        new Chart(ctxCombustibleVehiculo, {
+            type: 'bar',
+            data: {
+                labels: @json($labelsCombustibleVehiculos ?? []),
+                datasets: [{
+                    label: 'Gasto combustible',
+                    data: @json($dataCombustibleVehiculos ?? []),
+                    backgroundColor: '#0d6efd'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    const ctxCostoLlantasMes = document.getElementById('graficaCostoLlantasMes');
+    if (ctxCostoLlantasMes) {
+        new Chart(ctxCostoLlantasMes, {
+            type: 'line',
+            data: {
+                labels: [
+                    'Ene','Feb','Mar','Abr','May','Jun',
+                    'Jul','Ago','Sep','Oct','Nov','Dic'
+                ],
+                datasets: [{
+                    label: 'Costo llantas',
+                    data: @json($datosCostoLlantasMeses ?? []),
+                    borderColor: '#6f42c1',
+                    backgroundColor: 'rgba(111, 66, 193, 0.18)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    const ctxLlantasPosicion = document.getElementById('graficaLlantasPosicion');
+    if (ctxLlantasPosicion) {
+        new Chart(ctxLlantasPosicion, {
+            type: 'bar',
+            data: {
+                labels: @json($labelsLlantasPosicion ?? []),
+                datasets: [{
+                    label: 'Costo por posicion',
+                    data: @json($dataLlantasPosicion ?? []),
+                    backgroundColor: '#343a40'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    const ctxSatisfaccionMes = document.getElementById('graficaSatisfaccionMes');
+    if (ctxSatisfaccionMes) {
+        new Chart(ctxSatisfaccionMes, {
+            type: 'line',
+            data: {
+                labels: [
+                    'Ene','Feb','Mar','Abr','May','Jun',
+                    'Jul','Ago','Sep','Oct','Nov','Dic'
+                ],
+                datasets: [{
+                    label: 'Satisfaccion promedio',
+                    data: @json($datosSatisfaccionMeses ?? []),
+                    borderColor: '#198754',
+                    backgroundColor: 'rgba(25, 135, 84, 0.16)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5
+                    }
+                }
+            }
+        });
+    }
+
+    const ctxSentimiento = document.getElementById('graficaSentimiento');
+    if (ctxSentimiento) {
+        new Chart(ctxSentimiento, {
+            type: 'doughnut',
+            data: {
+                labels: @json($labelsSentimiento ?? []),
+                datasets: [{
+                    data: @json($dataSentimiento ?? []),
+                    backgroundColor: ['#28a745', '#17a2b8', '#dc3545']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
                 }
             }
         });

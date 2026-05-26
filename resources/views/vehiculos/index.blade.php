@@ -30,6 +30,18 @@
 
 @section('content')
 
+@if (session('warning'))
+    <div class="alert alert-warning">
+        {{ session('warning') }}
+    </div>
+@endif
+
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="card">
     <div class="card-header p-0 pt-1">
         <ul class="nav nav-tabs" role="tablist">
@@ -75,6 +87,8 @@
                             <th style="width: 90px;">Baja</th>
                             <th style="width: 120px;">Mantenimientos</th>
                             <th style="width: 100px;">Pagos</th>
+                            <th style="width: 120px;">Combustible</th>
+                            <th style="width: 100px;">Llantas</th>
 
                         </tr>
                     </thead>
@@ -153,6 +167,20 @@
                                 class="btn btn-warning btn-sm"
                                 title="Pagos">
                                     <i class="fas fa-file-invoice-dollar"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ route('vehiculos.combustible.index', $vehiculo->id) }}"
+                                class="btn btn-primary btn-sm"
+                                title="Combustible">
+                                    <i class="fas fa-gas-pump"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ route('vehiculos.llantas.index', $vehiculo->id) }}"
+                                class="btn btn-dark btn-sm"
+                                title="Llantas">
+                                    <i class="fas fa-dot-circle"></i>
                                 </a>
                             </td>
                         </tr>
@@ -295,16 +323,62 @@
                     </div>
                 </form>
 
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <small class="text-muted d-block">Vehiculos con actividad</small>
+                                <h4 class="mb-1">{{ $resumenMovimientos['vehiculos_con_movimientos'] ?? 0 }}</h4>
+                                <small class="text-muted">Con costos o uso efectivo en el periodo.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <small class="text-muted d-block">Uso efectivo</small>
+                                <h4 class="mb-1">{{ $resumenMovimientos['salidas_count'] ?? 0 }} salidas</h4>
+                                <small class="text-muted">
+                                    {{ $resumenMovimientos['salidas_finalizadas'] ?? 0 }} finalizadas |
+                                    {{ number_format((float) ($resumenMovimientos['km_recorridos_total'] ?? 0), 2) }} km
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <small class="text-muted d-block">Costo total del mes</small>
+                                <h4 class="mb-1">${{ number_format((float) ($resumenMovimientos['total_general'] ?? 0), 2) }}</h4>
+                                <small class="text-muted">
+                                    Mantto., pagos, combustible y llantas.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <small class="text-muted d-block">Costo promedio por km</small>
+                                <h4 class="mb-1">${{ number_format((float) ($resumenMovimientos['costo_promedio_km'] ?? 0), 2) }}</h4>
+                                <small class="text-muted">Costo total dividido entre km recorridos.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="table-responsive">
                     <table class="table table-sm table-hover table-bordered">
                         <thead class="table-light">
                             <tr>
                                 <th>Vehiculo</th>
-                                <th class="text-center">Mantenimientos</th>
+                                <th class="text-center">Uso efectivo</th>
                                 <th class="text-right">Monto Mantto.</th>
-                                <th class="text-center">Pagos</th>
                                 <th class="text-right">Monto Pagos</th>
+                                <th class="text-right">Combustible</th>
+                                <th class="text-right">Llantas</th>
                                 <th class="text-right">Total Mes</th>
+                                <th class="text-right">Costo / km</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -314,15 +388,25 @@
                                         <strong>{{ $mov->placa }}</strong><br>
                                         <small class="text-muted">{{ $mov->marca }} {{ $mov->modelo }}</small>
                                     </td>
-                                    <td class="text-center">{{ $mov->mantenimientos_count }}</td>
+                                    <td class="text-center">
+                                        <strong>{{ $mov->salidas_count }}</strong> salidas<br>
+                                        <small class="text-muted">
+                                            {{ $mov->salidas_finalizadas }} finalizadas |
+                                            {{ number_format((float) $mov->km_recorridos_total, 2) }} km
+                                        </small>
+                                    </td>
                                     <td class="text-right">${{ number_format($mov->mantenimientos_total, 2) }}</td>
-                                    <td class="text-center">{{ $mov->pagos_count }}</td>
                                     <td class="text-right">${{ number_format($mov->pagos_total, 2) }}</td>
+                                    <td class="text-right">${{ number_format($mov->combustible_total, 2) }}</td>
+                                    <td class="text-right">${{ number_format($mov->llantas_total, 2) }}</td>
                                     <td class="text-right font-weight-bold">${{ number_format($mov->total_general, 2) }}</td>
+                                    <td class="text-right">
+                                        ${{ number_format($mov->km_recorridos_total > 0 ? ($mov->total_general / $mov->km_recorridos_total) : 0, 2) }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4">
+                                    <td colspan="8" class="text-center py-4">
                                         <i class="fas fa-info-circle text-muted"></i>
                                         Sin movimientos en el periodo seleccionado
                                     </td>
@@ -420,4 +504,3 @@ $(document).ready(function() {
 
 @endsection
 @endsection
-

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 
 class VehiculoController extends Controller
@@ -85,39 +86,9 @@ class VehiculoController extends Controller
         $finMes = \Carbon\Carbon::createFromDate($anioSeleccionado, $mesSeleccionado, 1)->endOfMonth()->toDateString();
 
         $movimientosMensuales = collect();
+        $resumenMovimientos = $this->emptyMovimientosResumen();
         if ($tabActiva === 'movimientos') {
-            $subMantenimientos = DB::table('mantenimientos')
-                ->selectRaw('vehiculo_id, COUNT(*) as mantenimientos_count, COALESCE(SUM(costo), 0) as mantenimientos_total')
-                ->whereBetween('fecha', [$inicioMes, $finMes])
-                ->groupBy('vehiculo_id');
-
-            $subPagos = DB::table('pagos_vehiculo')
-                ->selectRaw('vehiculo_id, COUNT(*) as pagos_count, COALESCE(SUM(monto), 0) as pagos_total')
-                ->whereBetween('fecha_pago', [$inicioMes, $finMes])
-                ->groupBy('vehiculo_id');
-
-            $movimientosMensuales = DB::table('vehiculos as v')
-                ->leftJoinSub($subMantenimientos, 'm', function ($join) {
-                    $join->on('m.vehiculo_id', '=', 'v.id');
-                })
-                ->leftJoinSub($subPagos, 'p', function ($join) {
-                    $join->on('p.vehiculo_id', '=', 'v.id');
-                })
-                ->selectRaw('
-                    v.id,
-                    v.placa,
-                    v.marca,
-                    v.modelo,
-                    COALESCE(m.mantenimientos_count, 0) as mantenimientos_count,
-                    COALESCE(m.mantenimientos_total, 0) as mantenimientos_total,
-                    COALESCE(p.pagos_count, 0) as pagos_count,
-                    COALESCE(p.pagos_total, 0) as pagos_total,
-                    (COALESCE(m.mantenimientos_total, 0) + COALESCE(p.pagos_total, 0)) as total_general
-                ')
-                ->where(function ($q) {
-                    $q->whereRaw('COALESCE(m.mantenimientos_count, 0) > 0')
-                        ->orWhereRaw('COALESCE(p.pagos_count, 0) > 0');
-                })
+            $movimientosMensuales = $this->buildMovimientosMensualesQuery($inicioMes, $finMes)
                 ->orderByDesc('total_general')
                 ->paginate(15)
                 ->appends([
@@ -125,6 +96,10 @@ class VehiculoController extends Controller
                     'anio' => $anioSeleccionado,
                     'tab' => 'movimientos',
                 ]);
+
+            $resumenMovimientos = $this->buildMovimientosMensualesResumen(
+                collect($movimientosMensuales->items())
+            );
         }
 
         return view('vehiculos.index', compact(
@@ -138,6 +113,7 @@ class VehiculoController extends Controller
             'documentosSinRegistrar',
             'vencidosCount',
             'movimientosMensuales',
+            'resumenMovimientos',
             'mesSeleccionado',
             'anioSeleccionado',
             'tabActiva'
@@ -156,49 +132,11 @@ class VehiculoController extends Controller
         $inicioMes = \Carbon\Carbon::createFromDate($anioSeleccionado, $mesSeleccionado, 1)->startOfMonth()->toDateString();
         $finMes = \Carbon\Carbon::createFromDate($anioSeleccionado, $mesSeleccionado, 1)->endOfMonth()->toDateString();
 
-        $subMantenimientos = DB::table('mantenimientos')
-            ->selectRaw('vehiculo_id, COUNT(*) as mantenimientos_count, COALESCE(SUM(costo), 0) as mantenimientos_total')
-            ->whereBetween('fecha', [$inicioMes, $finMes])
-            ->groupBy('vehiculo_id');
-
-        $subPagos = DB::table('pagos_vehiculo')
-            ->selectRaw('vehiculo_id, COUNT(*) as pagos_count, COALESCE(SUM(monto), 0) as pagos_total')
-            ->whereBetween('fecha_pago', [$inicioMes, $finMes])
-            ->groupBy('vehiculo_id');
-
-        $movimientosMensuales = DB::table('vehiculos as v')
-            ->leftJoinSub($subMantenimientos, 'm', function ($join) {
-                $join->on('m.vehiculo_id', '=', 'v.id');
-            })
-            ->leftJoinSub($subPagos, 'p', function ($join) {
-                $join->on('p.vehiculo_id', '=', 'v.id');
-            })
-            ->selectRaw('
-                v.id,
-                v.placa,
-                v.marca,
-                v.modelo,
-                COALESCE(m.mantenimientos_count, 0) as mantenimientos_count,
-                COALESCE(m.mantenimientos_total, 0) as mantenimientos_total,
-                COALESCE(p.pagos_count, 0) as pagos_count,
-                COALESCE(p.pagos_total, 0) as pagos_total,
-                (COALESCE(m.mantenimientos_total, 0) + COALESCE(p.pagos_total, 0)) as total_general
-            ')
-            ->where(function ($q) {
-                $q->whereRaw('COALESCE(m.mantenimientos_count, 0) > 0')
-                    ->orWhereRaw('COALESCE(p.pagos_count, 0) > 0');
-            })
+        $movimientosMensuales = $this->buildMovimientosMensualesQuery($inicioMes, $finMes)
             ->orderByDesc('total_general')
             ->get();
 
-        $resumen = [
-            'vehiculos_con_movimientos' => $movimientosMensuales->count(),
-            'mantenimientos_count' => (int) $movimientosMensuales->sum('mantenimientos_count'),
-            'pagos_count' => (int) $movimientosMensuales->sum('pagos_count'),
-            'mantenimientos_total' => (float) $movimientosMensuales->sum('mantenimientos_total'),
-            'pagos_total' => (float) $movimientosMensuales->sum('pagos_total'),
-            'total_general' => (float) $movimientosMensuales->sum('total_general'),
-        ];
+        $resumen = $this->buildMovimientosMensualesResumen($movimientosMensuales);
 
         $chartDir = storage_path('app/tmp/vehiculos_charts');
         if (!is_dir($chartDir)) {
@@ -210,8 +148,10 @@ class VehiculoController extends Controller
             [
                 'Mantenimientos' => $resumen['mantenimientos_count'],
                 'Pagos' => $resumen['pagos_count'],
+                'Combustible' => $resumen['combustible_count'],
+                'Llantas' => $resumen['llantas_count'],
             ],
-            ['#7c3aed', '#06b6d4'],
+            ['#7c3aed', '#06b6d4', '#f97316', '#22c55e'],
             $chartDir . DIRECTORY_SEPARATOR . $chartToken . '_cantidad.png'
         );
 
@@ -219,8 +159,10 @@ class VehiculoController extends Controller
             [
                 'Mantenimiento' => $resumen['mantenimientos_total'],
                 'Pagos' => $resumen['pagos_total'],
+                'Combustible' => $resumen['combustible_total'],
+                'Llantas' => $resumen['llantas_total'],
             ],
-            ['#f97316', '#2563eb'],
+            ['#f97316', '#2563eb', '#0ea5e9', '#22c55e'],
             $chartDir . DIRECTORY_SEPARATOR . $chartToken . '_monto.png'
         );
 
@@ -254,8 +196,40 @@ class VehiculoController extends Controller
             ")
             ->get();
 
+        $detalleCombustible = collect();
+        if (Schema::hasTable('cargas_combustible')) {
+            $detalleCombustible = DB::table('cargas_combustible as c')
+                ->join('vehiculos as v', 'v.id', '=', 'c.vehiculo_id')
+                ->whereBetween('c.fecha_carga', [$inicioMes, $finMes])
+                ->selectRaw("
+                    c.fecha_carga as fecha,
+                    v.placa as placa,
+                    'Combustible' as origen,
+                    CONCAT(UCASE(LEFT(c.tipo_combustible, 1)), SUBSTRING(c.tipo_combustible, 2), ' - ', COALESCE(c.proveedor, 'Sin proveedor')) as concepto,
+                    COALESCE(c.costo_total, 0) as monto
+                ")
+                ->get();
+        }
+
+        $detalleLlantas = collect();
+        if (Schema::hasTable('historial_llantas')) {
+            $detalleLlantas = DB::table('historial_llantas as l')
+                ->join('vehiculos as v', 'v.id', '=', 'l.vehiculo_id')
+                ->whereBetween('l.fecha_instalacion', [$inicioMes, $finMes])
+                ->selectRaw("
+                    l.fecha_instalacion as fecha,
+                    v.placa as placa,
+                    'Llantas' as origen,
+                    CONCAT(COALESCE(l.posicion, 'Sin posicion'), ' - ', COALESCE(l.marca, 'Sin marca')) as concepto,
+                    COALESCE(l.costo, 0) as monto
+                ")
+                ->get();
+        }
+
         $detalleGastos = $detalleMantenimientos
             ->merge($detallePagos)
+            ->merge($detalleCombustible)
+            ->merge($detalleLlantas)
             ->sortByDesc('fecha')
             ->values()
             ->take(12);
@@ -295,6 +269,174 @@ class VehiculoController extends Controller
               'isHtml5ParserEnabled' => true,
           ])
           ->stream("movimientos_vehiculos_{$anioSeleccionado}_{$mesSeleccionado}.pdf");
+    }
+
+    private function buildMovimientosMensualesQuery(string $inicioMes, string $finMes)
+    {
+        $subMantenimientos = DB::table('mantenimientos')
+            ->selectRaw('vehiculo_id, COUNT(*) as mantenimientos_count, COALESCE(SUM(costo), 0) as mantenimientos_total')
+            ->whereBetween('fecha', [$inicioMes, $finMes])
+            ->groupBy('vehiculo_id');
+
+        $subPagos = DB::table('pagos_vehiculo')
+            ->selectRaw('vehiculo_id, COUNT(*) as pagos_count, COALESCE(SUM(monto), 0) as pagos_total')
+            ->whereBetween('fecha_pago', [$inicioMes, $finMes])
+            ->groupBy('vehiculo_id');
+
+        $subUso = DB::table('salidas_vehiculos as sv')
+            ->leftJoin('salidas_checklists as scs', function ($join) {
+                $join->on('scs.salida_vehiculo_id', '=', 'sv.id')
+                    ->where('scs.tipo', '=', 'salida');
+            })
+            ->leftJoin('checklist_condiciones as ccs', 'ccs.salida_checklist_id', '=', 'scs.id')
+            ->leftJoin('salidas_checklists as sce', function ($join) {
+                $join->on('sce.salida_vehiculo_id', '=', 'sv.id')
+                    ->where('sce.tipo', '=', 'entrada');
+            })
+            ->leftJoin('checklist_condiciones as cce', 'cce.salida_checklist_id', '=', 'sce.id')
+            ->whereBetween('sv.fecha_salida', [$inicioMes . ' 00:00:00', $finMes . ' 23:59:59'])
+            ->selectRaw("
+                sv.vehiculo_id,
+                COUNT(DISTINCT sv.id) as salidas_count,
+                SUM(CASE WHEN sv.estatus IN ('finalizado', 'finaliizado') THEN 1 ELSE 0 END) as salidas_finalizadas,
+                COALESCE(SUM(GREATEST(COALESCE(cce.kilometraje, 0) - COALESCE(ccs.kilometraje, 0), 0)), 0) as km_recorridos_total,
+                COALESCE(AVG(COALESCE(sv.duracion_minutos, TIMESTAMPDIFF(MINUTE, sv.fecha_salida, sv.fecha_regreso))), 0) as duracion_promedio_minutos
+            ")
+            ->groupBy('sv.vehiculo_id');
+
+        $hasCombustible = Schema::hasTable('cargas_combustible');
+        $hasLlantas = Schema::hasTable('historial_llantas');
+
+        $totalParts = [
+            'COALESCE(m.mantenimientos_total, 0)',
+            'COALESCE(p.pagos_total, 0)',
+        ];
+
+        $query = DB::table('vehiculos as v')
+            ->leftJoinSub($subMantenimientos, 'm', function ($join) {
+                $join->on('m.vehiculo_id', '=', 'v.id');
+            })
+            ->leftJoinSub($subPagos, 'p', function ($join) {
+                $join->on('p.vehiculo_id', '=', 'v.id');
+            })
+            ->leftJoinSub($subUso, 'u', function ($join) {
+                $join->on('u.vehiculo_id', '=', 'v.id');
+            })
+            ->selectRaw('
+                v.id,
+                v.placa,
+                v.marca,
+                v.modelo,
+                COALESCE(m.mantenimientos_count, 0) as mantenimientos_count,
+                COALESCE(m.mantenimientos_total, 0) as mantenimientos_total,
+                COALESCE(p.pagos_count, 0) as pagos_count,
+                COALESCE(p.pagos_total, 0) as pagos_total,
+                COALESCE(u.salidas_count, 0) as salidas_count,
+                COALESCE(u.salidas_finalizadas, 0) as salidas_finalizadas,
+                COALESCE(u.km_recorridos_total, 0) as km_recorridos_total,
+                COALESCE(u.duracion_promedio_minutos, 0) as duracion_promedio_minutos
+            ');
+
+        if ($hasCombustible) {
+            $subCombustible = DB::table('cargas_combustible')
+                ->selectRaw('vehiculo_id, COUNT(*) as combustible_count, COALESCE(SUM(costo_total), 0) as combustible_total')
+                ->whereBetween('fecha_carga', [$inicioMes, $finMes])
+                ->groupBy('vehiculo_id');
+
+            $query->leftJoinSub($subCombustible, 'c', function ($join) {
+                $join->on('c.vehiculo_id', '=', 'v.id');
+            })->selectRaw('
+                COALESCE(c.combustible_count, 0) as combustible_count,
+                COALESCE(c.combustible_total, 0) as combustible_total
+            ');
+
+            $totalParts[] = 'COALESCE(c.combustible_total, 0)';
+        } else {
+            $query->selectRaw('0 as combustible_count, 0 as combustible_total');
+            $totalParts[] = '0';
+        }
+
+        if ($hasLlantas) {
+            $subLlantas = DB::table('historial_llantas')
+                ->selectRaw('vehiculo_id, COUNT(*) as llantas_count, COALESCE(SUM(costo), 0) as llantas_total')
+                ->whereBetween('fecha_instalacion', [$inicioMes, $finMes])
+                ->groupBy('vehiculo_id');
+
+            $query->leftJoinSub($subLlantas, 'l', function ($join) {
+                $join->on('l.vehiculo_id', '=', 'v.id');
+            })->selectRaw('
+                COALESCE(l.llantas_count, 0) as llantas_count,
+                COALESCE(l.llantas_total, 0) as llantas_total
+            ');
+
+            $totalParts[] = 'COALESCE(l.llantas_total, 0)';
+        } else {
+            $query->selectRaw('0 as llantas_count, 0 as llantas_total');
+            $totalParts[] = '0';
+        }
+
+        $totalExpression = '(' . implode(' + ', $totalParts) . ')';
+
+        return $query
+            ->selectRaw($totalExpression . ' as total_general')
+            ->where(function ($q) use ($hasCombustible, $hasLlantas) {
+                $q->whereRaw('COALESCE(m.mantenimientos_count, 0) > 0')
+                    ->orWhereRaw('COALESCE(p.pagos_count, 0) > 0')
+                    ->orWhereRaw('COALESCE(u.salidas_count, 0) > 0')
+                    ->orWhereRaw('COALESCE(u.km_recorridos_total, 0) > 0');
+
+                if ($hasCombustible) {
+                    $q->orWhereRaw('COALESCE(c.combustible_count, 0) > 0');
+                }
+
+                if ($hasLlantas) {
+                    $q->orWhereRaw('COALESCE(l.llantas_count, 0) > 0');
+                }
+            });
+    }
+
+    private function buildMovimientosMensualesResumen($movimientosMensuales): array
+    {
+        $resumen = $this->emptyMovimientosResumen();
+
+        $resumen['vehiculos_con_movimientos'] = (int) $movimientosMensuales->count();
+        $resumen['mantenimientos_count'] = (int) $movimientosMensuales->sum('mantenimientos_count');
+        $resumen['pagos_count'] = (int) $movimientosMensuales->sum('pagos_count');
+        $resumen['combustible_count'] = (int) $movimientosMensuales->sum('combustible_count');
+        $resumen['llantas_count'] = (int) $movimientosMensuales->sum('llantas_count');
+        $resumen['salidas_count'] = (int) $movimientosMensuales->sum('salidas_count');
+        $resumen['salidas_finalizadas'] = (int) $movimientosMensuales->sum('salidas_finalizadas');
+        $resumen['mantenimientos_total'] = (float) $movimientosMensuales->sum('mantenimientos_total');
+        $resumen['pagos_total'] = (float) $movimientosMensuales->sum('pagos_total');
+        $resumen['combustible_total'] = (float) $movimientosMensuales->sum('combustible_total');
+        $resumen['llantas_total'] = (float) $movimientosMensuales->sum('llantas_total');
+        $resumen['km_recorridos_total'] = (float) $movimientosMensuales->sum('km_recorridos_total');
+        $resumen['total_general'] = (float) $movimientosMensuales->sum('total_general');
+        $resumen['costo_promedio_km'] = $resumen['km_recorridos_total'] > 0
+            ? round($resumen['total_general'] / $resumen['km_recorridos_total'], 2)
+            : 0.0;
+
+        return $resumen;
+    }
+
+    private function emptyMovimientosResumen(): array
+    {
+        return [
+            'vehiculos_con_movimientos' => 0,
+            'mantenimientos_count' => 0,
+            'pagos_count' => 0,
+            'combustible_count' => 0,
+            'llantas_count' => 0,
+            'salidas_count' => 0,
+            'salidas_finalizadas' => 0,
+            'mantenimientos_total' => 0.0,
+            'pagos_total' => 0.0,
+            'combustible_total' => 0.0,
+            'llantas_total' => 0.0,
+            'km_recorridos_total' => 0.0,
+            'total_general' => 0.0,
+            'costo_promedio_km' => 0.0,
+        ];
     }
 
     private function renderPie3DFile(array $data, array $palette, string $outputPath): string

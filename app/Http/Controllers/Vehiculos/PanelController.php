@@ -11,6 +11,7 @@ use App\Models\Notificacion\Notificacion;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class PanelController extends Controller
 {
@@ -190,6 +191,160 @@ class PanelController extends Controller
             ? round(((float) $kmRecorridosAnio) / $fechaActual->month, 2)
             : 0;
 
+        $gastoCombustibleMes = 0.0;
+        $litrosCombustibleMes = 0.0;
+        $precioPromedioLitroMes = 0.0;
+        $costoCombustiblePorKmMes = 0.0;
+        $datosCostoCombustibleMeses = array_fill(0, 12, 0.0);
+        $labelsCombustibleVehiculos = collect();
+        $dataCombustibleVehiculos = collect();
+
+        if (Schema::hasTable('cargas_combustible')) {
+            $resumenCombustibleMes = DB::table('cargas_combustible')
+                ->whereMonth('fecha_carga', $mesActualNum)
+                ->whereYear('fecha_carga', $anioActual)
+                ->selectRaw('COALESCE(SUM(costo_total), 0) as costo_total')
+                ->selectRaw('COALESCE(SUM(litros), 0) as litros_total')
+                ->selectRaw('COALESCE(AVG(precio_por_litro), 0) as precio_promedio')
+                ->first();
+
+            $gastoCombustibleMes = round((float) ($resumenCombustibleMes->costo_total ?? 0), 2);
+            $litrosCombustibleMes = round((float) ($resumenCombustibleMes->litros_total ?? 0), 2);
+            $precioPromedioLitroMes = round((float) ($resumenCombustibleMes->precio_promedio ?? 0), 2);
+            $costoCombustiblePorKmMes = $kmRecorridosMes > 0
+                ? round($gastoCombustibleMes / (float) $kmRecorridosMes, 2)
+                : 0.0;
+
+            $costoCombustiblePorMes = DB::table('cargas_combustible')
+                ->whereYear('fecha_carga', $anioActual)
+                ->selectRaw('MONTH(fecha_carga) as mes, COALESCE(SUM(costo_total), 0) as total_costo')
+                ->groupBy('mes')
+                ->orderBy('mes')
+                ->pluck('total_costo', 'mes');
+
+            for ($i = 1; $i <= 12; $i++) {
+                $datosCostoCombustibleMeses[$i - 1] = round((float) ($costoCombustiblePorMes[$i] ?? 0), 2);
+            }
+
+            $topCombustibleVehiculos = DB::table('cargas_combustible as cc')
+                ->join('vehiculos as v', 'v.id', '=', 'cc.vehiculo_id')
+                ->whereYear('cc.fecha_carga', $anioActual)
+                ->selectRaw('cc.vehiculo_id, v.placa, v.marca, COALESCE(SUM(cc.costo_total), 0) as gasto_total')
+                ->groupBy('cc.vehiculo_id', 'v.placa', 'v.marca')
+                ->orderByDesc('gasto_total')
+                ->take(5)
+                ->get();
+
+            $labelsCombustibleVehiculos = $topCombustibleVehiculos->map(function ($item) {
+                return trim(($item->placa ?? 'N/A') . ' - ' . ($item->marca ?? 'N/A'));
+            })->values();
+
+            $dataCombustibleVehiculos = $topCombustibleVehiculos->pluck('gasto_total')
+                ->map(fn ($value) => round((float) $value, 2))
+                ->values();
+        }
+
+        $llantasActivas = 0;
+        $llantasRotadas = 0;
+        $llantasBaja = 0;
+        $costoLlantasTotal = 0.0;
+        $datosCostoLlantasMeses = array_fill(0, 12, 0.0);
+        $labelsLlantasPosicion = collect();
+        $dataLlantasPosicion = collect();
+        $totalEncuestasMes = 0;
+        $satisfaccionPromedioMes = 0.0;
+        $npsInternoMes = 0.0;
+        $sentimientoDominante = 'Neutro';
+        $datosSatisfaccionMeses = array_fill(0, 12, 0.0);
+        $labelsSentimiento = collect(['Positivo', 'Neutro', 'Negativo']);
+        $dataSentimiento = collect([0, 0, 0]);
+
+        if (Schema::hasTable('historial_llantas')) {
+            $resumenLlantas = DB::table('historial_llantas')
+                ->selectRaw("SUM(CASE WHEN estado = 'activa' THEN 1 ELSE 0 END) as activas")
+                ->selectRaw("SUM(CASE WHEN estado = 'rotada' THEN 1 ELSE 0 END) as rotadas")
+                ->selectRaw("SUM(CASE WHEN estado = 'baja' THEN 1 ELSE 0 END) as bajas")
+                ->selectRaw('COALESCE(SUM(costo), 0) as costo_total')
+                ->first();
+
+            $llantasActivas = (int) ($resumenLlantas->activas ?? 0);
+            $llantasRotadas = (int) ($resumenLlantas->rotadas ?? 0);
+            $llantasBaja = (int) ($resumenLlantas->bajas ?? 0);
+            $costoLlantasTotal = round((float) ($resumenLlantas->costo_total ?? 0), 2);
+
+            $costoLlantasPorMes = DB::table('historial_llantas')
+                ->whereYear('fecha_instalacion', $anioActual)
+                ->selectRaw('MONTH(fecha_instalacion) as mes, COALESCE(SUM(costo), 0) as total_costo')
+                ->groupBy('mes')
+                ->orderBy('mes')
+                ->pluck('total_costo', 'mes');
+
+            for ($i = 1; $i <= 12; $i++) {
+                $datosCostoLlantasMeses[$i - 1] = round((float) ($costoLlantasPorMes[$i] ?? 0), 2);
+            }
+
+            $costoLlantasPorPosicion = DB::table('historial_llantas')
+                ->selectRaw('posicion, COALESCE(SUM(costo), 0) as total_costo')
+                ->groupBy('posicion')
+                ->orderByDesc('total_costo')
+                ->take(6)
+                ->get();
+
+            $labelsLlantasPosicion = $costoLlantasPorPosicion->map(function ($item) {
+                return ucfirst(str_replace('_', ' ', $item->posicion ?? 'n/a'));
+            })->values();
+
+            $dataLlantasPosicion = $costoLlantasPorPosicion->pluck('total_costo')
+                ->map(fn ($value) => round((float) $value, 2))
+                ->values();
+        }
+
+        if (Schema::hasTable('encuestas_satisfaccion_vehicular')) {
+            $resumenEncuestasMes = DB::table('encuestas_satisfaccion_vehicular')
+                ->whereMonth('fecha_encuesta', $mesActualNum)
+                ->whereYear('fecha_encuesta', $anioActual)
+                ->selectRaw('COUNT(*) as total')
+                ->selectRaw('COALESCE(AVG((calificacion_servicio + calificacion_estado_unidad + calificacion_tiempo_respuesta) / 3), 0) as satisfaccion_promedio')
+                ->selectRaw("SUM(CASE WHEN sentimiento = 'positivo' THEN 1 ELSE 0 END) as positivas")
+                ->selectRaw("SUM(CASE WHEN sentimiento = 'neutro' THEN 1 ELSE 0 END) as neutras")
+                ->selectRaw("SUM(CASE WHEN sentimiento = 'negativo' THEN 1 ELSE 0 END) as negativas")
+                ->selectRaw("SUM(CASE WHEN nps >= 9 THEN 1 ELSE 0 END) as promotores")
+                ->selectRaw("SUM(CASE WHEN nps <= 6 THEN 1 ELSE 0 END) as detractores")
+                ->first();
+
+            $totalEncuestasMes = (int) ($resumenEncuestasMes->total ?? 0);
+            $satisfaccionPromedioMes = round((float) ($resumenEncuestasMes->satisfaccion_promedio ?? 0), 2);
+            $positivasMes = (int) ($resumenEncuestasMes->positivas ?? 0);
+            $neutrasMes = (int) ($resumenEncuestasMes->neutras ?? 0);
+            $negativasMes = (int) ($resumenEncuestasMes->negativas ?? 0);
+            $promotoresMes = (int) ($resumenEncuestasMes->promotores ?? 0);
+            $detractoresMes = (int) ($resumenEncuestasMes->detractores ?? 0);
+
+            $npsInternoMes = $totalEncuestasMes > 0
+                ? round((($promotoresMes / $totalEncuestasMes) * 100) - (($detractoresMes / $totalEncuestasMes) * 100), 2)
+                : 0.0;
+
+            $sentimientoMap = collect([
+                'Positivo' => $positivasMes,
+                'Neutro' => $neutrasMes,
+                'Negativo' => $negativasMes,
+            ]);
+            $sentimientoDominante = (string) $sentimientoMap->sortDesc()->keys()->first();
+            $dataSentimiento = $sentimientoMap->values();
+
+            $satisfaccionPorMes = DB::table('encuestas_satisfaccion_vehicular')
+                ->whereYear('fecha_encuesta', $anioActual)
+                ->selectRaw('MONTH(fecha_encuesta) as mes')
+                ->selectRaw('COALESCE(AVG((calificacion_servicio + calificacion_estado_unidad + calificacion_tiempo_respuesta) / 3), 0) as promedio_satisfaccion')
+                ->groupBy('mes')
+                ->orderBy('mes')
+                ->pluck('promedio_satisfaccion', 'mes');
+
+            for ($i = 1; $i <= 12; $i++) {
+                $datosSatisfaccionMeses[$i - 1] = round((float) ($satisfaccionPorMes[$i] ?? 0), 2);
+            }
+        }
+
         // INCIDENCIAS: salida con al menos una observacion en checklist de salida/entrada
         $incidenciasPorVehiculo = DB::table('salidas_vehiculos as sv')
             ->join('vehiculos as v', 'v.id', '=', 'sv.vehiculo_id')
@@ -283,6 +438,27 @@ class PanelController extends Controller
             'datosKmMeses',
             'kmRecorridosMes',
             'promedioKmMensual',
+            'gastoCombustibleMes',
+            'litrosCombustibleMes',
+            'precioPromedioLitroMes',
+            'costoCombustiblePorKmMes',
+            'datosCostoCombustibleMeses',
+            'labelsCombustibleVehiculos',
+            'dataCombustibleVehiculos',
+            'llantasActivas',
+            'llantasRotadas',
+            'llantasBaja',
+            'costoLlantasTotal',
+            'datosCostoLlantasMeses',
+            'labelsLlantasPosicion',
+            'dataLlantasPosicion',
+            'totalEncuestasMes',
+            'satisfaccionPromedioMes',
+            'npsInternoMes',
+            'sentimientoDominante',
+            'datosSatisfaccionMeses',
+            'labelsSentimiento',
+            'dataSentimiento',
             'vehiculoMasIncidencias',
             'incidenciasMes',
             'labelsIncidencias',

@@ -2,6 +2,7 @@
 
 namespace App\Models\Vehiculos;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Vehiculos\EncuestaSatisfaccionVehicular;
 use App\Models\Vehiculos\Vehiculo;
 use App\Models\Vehiculos\Checklist\SalidaChecklist;
 use App\Models\User;
@@ -55,5 +56,10 @@ class SalidaVehiculo extends Model
     }
     public function checklist(){
         return $this->hasMany(SalidaChecklist::class,'salida_vehiculo_id');
+    }
+
+    public function encuestasSatisfaccion()
+    {
+        return $this->hasMany(EncuestaSatisfaccionVehicular::class, 'salida_vehiculo_id');
     }
 }
