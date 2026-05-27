@@ -82,6 +82,10 @@ class NotificacionController extends Controller
             $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
             // Obtener el ISO relacionado
             $iso = $generalEyc->ISO ? $generalEyc->ISO->NombreISO : null;
+            Log::info('***********************');
+            Log::info('***********************');
+            Log::info('generalEyc: ', ['generalEyc' => $generalEyc]);
+            Log::info('No_economico: ', ['No_economico' => $No_economico]);
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
                 $tipo = $generalEyc->Tipo;
