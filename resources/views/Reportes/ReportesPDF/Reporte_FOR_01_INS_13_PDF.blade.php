@@ -106,7 +106,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 7px;
         }
 
         .datosinspeccion td, .datosinspeccion th {
@@ -126,7 +126,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 7px;
             /*border: 1px solid black; */
         }
 
@@ -223,7 +223,7 @@
                     </table>
 
                     <br>
-                                                
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 2)
@@ -689,23 +689,23 @@
                     <table class="datosresultados">
                         <thead>
                             <tr class="celdaGris">
-                                <th style="width: 30px;" rowspan="2">Junta / Elemento</th>
-                                <th style="width: 40px;" rowspan="2">Tipo de ind.</th>
+                                <th style="width: 50px;" rowspan="2">Junta / Elemento</th>
+                                <th style="width: 20px;" rowspan="2">Tipo de ind.</th>
                                 <th style="width: 30px;" rowspan="2">L(PLG)</th>
                                 <th style="width: 30px;" rowspan="2">A(PLG)</th>
-                                <th style="width: 30px;" rowspan="2">ALTURA(PLG)</th>
-                                <th style="width: 30px;" colspan="2">EJE DE LA SOLD.</th>
+                                <th style="width: 5px;" rowspan="2">ALTURA(PLG)</th>
+                                <th colspan="2">EJE DE LA SOLD.</th>
                                 <th style="width: 30px;" rowspan="2">DA(PROF)</th>
                                 <th style="width: 30px;" rowspan="2">PA</th>
                                 <th style="width: 30px;" rowspan="2">SA</th>
-                                <th style="width: 30px;" rowspan="2">Tmin</th>
+                                <th style="width: 5px;" rowspan="2">Tmin</th>
                                 <th style="width: 30px;" rowspan="2">DATOS DEL ARCHIVO (Escaneo)</th>
                                 <th style="width: 30px;" rowspan="2">EVALUACION</th>
                                 <th style="width: 30px;" rowspan="2">FOTOS</th>
                             </tr>  
                             <tr class="celdaGris">
-                                <td style="width: 30px;">X</td>
-                                <td style="width: 30px;">Y</td>
+                                <td style="width: 20px;">X</td>
+                                <td style="width: 20px;">Y</td>
                             </tr>                               
                         </thead>
                                 <tbody>

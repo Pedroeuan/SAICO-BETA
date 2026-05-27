@@ -330,11 +330,8 @@
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
                     <div class="col-12">
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                            <input type="text"
-                                class="form-control inputForm @error('Datos_Equipo.Stndr_refe1') is-invalid @enderror"
-                                name="Datos_Equipo[Stndr_refe1]"
-                                placeholder="IMAGEN DE REFERENCIA"
-                                value="{{ old('Datos_Equipo.Stndr_refe1', 'IMAGEN DE REFERENCIA . . .') }}">
+                            <input type="text" class="form-control inputForm @error('Datos_Equipo.Stndr_refe1') is-invalid @enderror" 
+                            name="Datos_Equipo[Stndr_refe1]"placeholder="" value="{{old('Datos_Equipo.Stndr_refe1', $Datos_Equipo['Stndr_refe1'] ?? '')}}">
 
                             @error('Datos_Equipo.Stndr_refe1')
                                 <div class="invalid-feedback">
@@ -404,11 +401,8 @@
                         <br>
                         <div class="col-12">
                             <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                                <input type="text"
-                                    class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror"
-                                    name="Datos_Equipo[Stndr_refe2]"
-                                    placeholder="IMAGEN DE REFERENCIA"
-                                    value="{{ old('Datos_Equipo.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
+                            <input type="text" class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror" 
+                            name="Datos_Equipo[Stndr_refe2]"placeholder="" value="{{old('Datos_Equipo.Stndr_refe2', $Datos_Equipo['Stndr_refe2'] ?? '')}}">
 
                                 @error('Datos_Equipo.Stndr_refe2')
                                     <div class="invalid-feedback">

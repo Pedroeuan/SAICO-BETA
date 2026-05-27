@@ -401,7 +401,7 @@
                             @endif
                         </thead>                            
                     </table>
-            </footer>
+                </footer>
                         @php
                             $chunks = [];
                             $grupoActual = [];

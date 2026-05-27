@@ -882,35 +882,51 @@ class FOR_01_PRO_INS_03Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
-                for ($i = 0; $i < $numFilasSin; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $sinTituloKey,
-                    'data' => [
-                    'No' => $request->input("No.$sinTituloKey.$i"),
-                    'componente' => $request->input("componente.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'largo' => $request->input("largo.$sinTituloKey.$i"),
-                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
-                    ]
-                    ]);
-                }
-                
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
+                $filasPorLongitud = 15;
 
-                foreach ($longitudesSin as $long) {
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                    $agregarElemento([
+                        'tipo' => 'fila',
+                        'grupo' => $sinTituloKey,
+                        'data' => [
+                            'No' => $request->input("No.$sinTituloKey.$i"),
+                            'componente' => $request->input("componente.$sinTituloKey.$i"),
+                            'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
+                            'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                            'largo' => $request->input("largo.$sinTituloKey.$i"),
+                            'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                            'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                            'ht' => $request->input("ht.$sinTituloKey.$i"),
+                            'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                            'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
+                        ]
+                    ]);
+
+                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
+                    if (($i + 1) % $filasPorLongitud === 0) {
+                        $idxLong = intdiv($i, $filasPorLongitud);
+                        if (isset($longitudesSin[$idxLong])) {
+                            $agregarElemento([
+                                'tipo' => 'longitud',
+                                'grupo' => $sinTituloKey,
+                                'valor' => $longitudesSin[$idxLong]
+                            ]);
+                            $cerrarBloque();
+                        }
+                    }
+                }
+
+                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
+                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+                $totalLongs = count($longitudesSin);
+                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
                     $agregarElemento([
                         'tipo' => 'longitud',
                         'grupo' => $sinTituloKey,
-                        'valor' => $long
+                        'valor' => $longitudesSin[$j]
                     ]);
-
-                    // cerrar bloque al encontrar longitud
                     $cerrarBloque();
                 }
 
@@ -1404,35 +1420,51 @@ class FOR_01_PRO_INS_03Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
-                for ($i = 0; $i < $numFilasSin; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $sinTituloKey,
-                    'data' => [
-                    'No' => $request->input("No.$sinTituloKey.$i"),
-                    'componente' => $request->input("componente.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'largo' => $request->input("largo.$sinTituloKey.$i"),
-                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
-                    ]
-                    ]);
-                }
-                
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
+                $filasPorLongitud = 15;
 
-                foreach ($longitudesSin as $long) {
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                    $agregarElemento([
+                        'tipo' => 'fila',
+                        'grupo' => $sinTituloKey,
+                        'data' => [
+                            'No' => $request->input("No.$sinTituloKey.$i"),
+                            'componente' => $request->input("componente.$sinTituloKey.$i"),
+                            'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
+                            'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                            'largo' => $request->input("largo.$sinTituloKey.$i"),
+                            'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                            'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                            'ht' => $request->input("ht.$sinTituloKey.$i"),
+                            'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                            'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
+                        ]
+                    ]);
+
+                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
+                    if (($i + 1) % $filasPorLongitud === 0) {
+                        $idxLong = intdiv($i, $filasPorLongitud);
+                        if (isset($longitudesSin[$idxLong])) {
+                            $agregarElemento([
+                                'tipo' => 'longitud',
+                                'grupo' => $sinTituloKey,
+                                'valor' => $longitudesSin[$idxLong]
+                            ]);
+                            $cerrarBloque();
+                        }
+                    }
+                }
+
+                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
+                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+                $totalLongs = count($longitudesSin);
+                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
                     $agregarElemento([
                         'tipo' => 'longitud',
                         'grupo' => $sinTituloKey,
-                        'valor' => $long
+                        'valor' => $longitudesSin[$j]
                     ]);
-
-                    // cerrar bloque al encontrar longitud
                     $cerrarBloque();
                 }
         /*

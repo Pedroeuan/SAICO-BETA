@@ -1033,14 +1033,28 @@ class FOR_01_PRO_INS_17Controller extends Controller
         $totalPageCount = $pageCount1 + $pageCount2;
 
         // Añadir páginas del primer PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            //$combinedPdf->SetXY(138, -266.5);
+            //$combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }*/
+
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 12);
-            //$combinedPdf->SetXY(138, -266.5);
-            //$combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            
+            // No mostrar número en la primera página (portada)
+            if ($i != 1) {
+                $combinedPdf->SetFont('Arial', 'B', 8);
+                $combinedPdf->SetXY(128, -264.5);
+                $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            }
         }
 
         // Añadir páginas del segundo PDF
@@ -1049,7 +1063,7 @@ class FOR_01_PRO_INS_17Controller extends Controller
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 12);
+            $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(138, -265.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');

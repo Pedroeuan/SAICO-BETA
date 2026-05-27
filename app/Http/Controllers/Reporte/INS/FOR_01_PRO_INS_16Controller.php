@@ -1089,6 +1089,17 @@ class FOR_01_PRO_INS_16Controller extends Controller
         $totalPageCount = $pageCount1 + $pageCount2;
 
         // Añadir páginas del primer PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(128, -264.5);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }*/
+            
+        // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
