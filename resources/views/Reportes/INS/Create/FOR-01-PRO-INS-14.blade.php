@@ -303,6 +303,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" id="IDInputEquipo" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                         </div>
                     </div>
 
@@ -358,6 +359,7 @@
                                 @endforeach
                             </select>
                         </div>
+                        <input type="hidden" id="IDInputbyp" name="Datos_Equipo[ID_BLOCK]" value="{{ old('Datos_Equipo.ID_BLOCK') }}">
                     </div>
 
                     <div class="col-sm-6">
@@ -390,6 +392,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputA1" name="Datos_Equipo[ID_SONDA1]" value="{{ old('Datos_Equipo.ID_SONDA1') }}">
                         </div>
                     </div>
 
@@ -444,6 +447,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputA2" name="Datos_Equipo[ID_SONDA2]" value="{{ old('Datos_Equipo.ID_SONDA2') }}">
                         </div>
                     </div>
 
@@ -499,6 +503,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputA3" name="Datos_Equipo[ID_SONDA3]" value="{{ old('Datos_Equipo.ID_SONDA3') }}">
                         </div>
                     </div>
 
@@ -553,6 +558,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputA4" name="Datos_Equipo[ID_SONDA4]" value="{{ old('Datos_Equipo.ID_SONDA4') }}">
                         </div>
                     </div>
 
@@ -607,6 +613,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputA5" name="Datos_Equipo[ID_TRANS1]" value="{{ old('Datos_Equipo.ID_TRANS1') }}">
                         </div>
                     </div>
 
@@ -661,6 +668,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputA6" name="Datos_Equipo[ID_TRANS2]" value="{{ old('Datos_Equipo.ID_TRANS2') }}">
                         </div>
                     </div>
 
@@ -715,6 +723,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputA7" name="Datos_Equipo[ID_TRANS3]" value="{{ old('Datos_Equipo.ID_TRANS3') }}">
                         </div>
                     </div>
 
@@ -769,6 +778,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputA8" name="Datos_Equipo[ID_TRANS4]" value="{{ old('Datos_Equipo.ID_TRANS4') }}">
                         </div>
                     </div>
 
@@ -823,6 +833,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputE2" name="Datos_Equipo[ID_ENCODER1]" value="{{ old('Datos_Equipo.ID_ENCODER1') }}">
                         </div>
                     </div>
 
@@ -870,6 +881,7 @@
                                         </option>
                                     @endforeach
                             </select>
+                            <input type="hidden" id="IDInputE3" name="Datos_Equipo[ID_ENCODER2]" value="{{ old('Datos_Equipo.ID_ENCODER2') }}">
                         </div>
                     </div>
 
@@ -2067,6 +2079,28 @@ $(document).ready(function() {
                 //localStorage.clear();
             });
         });
+    });
+
+    $(document).ready(function() {
+        function sincronizarHidden(selectId, hiddenId) {
+            $(hiddenId).val($(selectId).val() || '');
+            $(selectId).on('change.qrHidden', function() {
+                $(hiddenId).val($(selectId).val() || '');
+            });
+        }
+
+        sincronizarHidden('#equiposSelect', '#IDInputEquipo');
+        sincronizarHidden('#blockyprobetaSelect', '#IDInputbyp');
+        sincronizarHidden('#accesoriosSelect1', '#IDInputA1');
+        sincronizarHidden('#accesoriosSelect2', '#IDInputA2');
+        sincronizarHidden('#accesoriosSelect3', '#IDInputA3');
+        sincronizarHidden('#accesoriosSelect4', '#IDInputA4');
+        sincronizarHidden('#accesoriosSelect5', '#IDInputA5');
+        sincronizarHidden('#accesoriosSelect6', '#IDInputA6');
+        sincronizarHidden('#accesoriosSelect7', '#IDInputA7');
+        sincronizarHidden('#accesoriosSelect8', '#IDInputA8');
+        sincronizarHidden('#equiposSelect2', '#IDInputE2');
+        sincronizarHidden('#equiposSelect3', '#IDInputE3');
     });
 </script>
 @endsection

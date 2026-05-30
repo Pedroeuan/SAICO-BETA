@@ -366,6 +366,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                                         </div>
                                     </div>
 
@@ -724,6 +725,7 @@
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val($('#equiposSelect').val() || '');
         }
 
         const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
