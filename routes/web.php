@@ -33,7 +33,7 @@ use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 use App\Http\Controllers\Reporte\IM\FOR_PIMP_07_B_01Controller;
 use App\Http\Controllers\Reporte\ReporteController;
-use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_03Controller;
+use App\Http\Controllers\Reporte\INS\FOR_PINS_04_01Controller;
 use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_05Controller;
 use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_06Controller;
@@ -214,12 +214,12 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::get('/Reporte/FOR_PIMP_07_B_01/PDF/{id}', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01'])->name('Reporte_FOR_PIMP_07_B_01.PDF');
 
         /*Ruta de Guardado Reportes/INS*/
-        /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_03*/
-        Route::post('/Reportes_FOR_01_PRO_INS_03/store', [FOR_01_PRO_INS_03Controller::class, 'FOR_01_PRO_INS_03_store'])->name('Reportes_FOR_01_PRO_INS_03.store');
-        /*Ruta de Actualización Reportes/INS FOR_01_PRO_INS_03*/
-        Route::post('/Reportes_FOR_01_PRO_INS_03/update/{id}', [FOR_01_PRO_INS_03Controller::class, 'FOR_01_PRO_INS_03_update'])->name('Reportes_FOR_01_PRO_INS_03.update');
-        /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_03*/
-        Route::get('/Reporte/FOR-01-INS-03/PDF/{id}', [FOR_01_PRO_INS_03Controller::class, 'FOR_01_INS_03'])->name('Reporte_FOR_01_INS_03.PDF');
+        /*Ruta de Guardado Reportes/INS FOR_PINS_04_01*/
+        Route::post('/Reportes_FOR_PINS_04_01/store', [FOR_PINS_04_01Controller::class, 'FOR_PINS_04_01_store'])->name('Reportes_FOR_PINS_04_01.store');
+        /*Ruta de Actualización Reportes/INS FOR_PINS_04_01*/
+        Route::post('/Reportes_FOR_PINS_04_01/update/{id}', [FOR_PINS_04_01Controller::class, 'FOR_PINS_04_01_update'])->name('Reportes_FOR_PINS_04_01.update');
+        /*Ruta del PDF de Reportes/INS FOR_PINS_04_01*/
+        Route::get('/Reporte/FOR-PINS-04_01/PDF/{id}', [FOR_PINS_04_01Controller::class, 'FOR_PINS_04_01'])->name('Reporte_FOR_PINS_04_01.PDF');
 
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_04*/
         Route::post('/Reportes_FOR_01_PRO_INS_04/store', [FOR_01_PRO_INS_04Controller::class, 'FOR_01_PRO_INS_04_store'])->name('Reportes_FOR_01_PRO_INS_04.store');

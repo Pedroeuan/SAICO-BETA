@@ -663,88 +663,106 @@ class ReporteController extends Controller
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-02');
     }
-    public function FOR_01_PRO_INS_03()
+    public function FOR_PINS_04_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-03');
+        return view('Reportes.INS.Create.FOR-PINS-04_01');
     }
-    public function FOR_01_PRO_INS_04()
+    public function FOR_PINS_05_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-04');
+        return view('Reportes.INS.Create.FOR-PINS-05_01');
     }
-    public function FOR_02_PRO_INS_04()
+    public function FOR_PINS_05_02()
     {
-        return view('Reportes.INS.Create.FOR-02-PRO-INS-04');
+        return view('Reportes.INS.Create.FOR-PINS-05_02');
     }
-    public function FOR_01_PRO_INS_05()
+    public function FOR_PINS_06_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-05');
+        return view('Reportes.INS.Create.FOR-PINS-06_01');
     }
-    public function FOR_01_PRO_INS_06()
+    public function FOR_PINS_07_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-06');
+        return view('Reportes.INS.Create.FOR-PINS-07_01');
     }
-    public function FOR_01_PRO_INS_07()
+    public function FOR_PINS_08_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-07');
+        return view('Reportes.INS.Create.FOR-PINS-08_01');
     }
-    public function FOR_01_PRO_INS_08()
+    public function FOR_PINS_09_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-08');
+        return view('Reportes.INS.Create.FOR-PINS-09_01');
     }
-    public function FOR_01_PRO_INS_09()
+    public function FOR_PINS_10_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-09');
+        return view('Reportes.INS.Create.FOR-PINS-10_01');
     }
-    public function FOR_01_PRO_INS_10()
+    public function FOR_PINS_11_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-10');
+        return view('Reportes.INS.Create.FOR-PINS-11_01');
     }
-    public function FOR_01_PRO_INS_12()
+    public function FOR_PINS_11_02()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-12');
+        return view('Reportes.INS.Create.FOR-PINS-11_02');
     }
-    public function FOR_01_PRO_INS_13()
+    public function FOR_PINS_12_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-13');
+        return view('Reportes.INS.Create.FOR-PINS-12_01');
     }
-    public function FOR_01_PRO_INS_14()
+    public function FOR_PINS_13_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-14');
+        return view('Reportes.INS.Create.FOR-PINS-13_01');
     }
-    public function FOR_01_PRO_INS_15()
+    public function FOR_PINS_14_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-15');
-    }
-    
-    public function FOR_02_PRO_INS_15()
-    {
-        return view('Reportes.INS.Create.FOR-02-PRO-INS-15');
-    }
-    public function FOR_03_PRO_INS_15()
-    {
-        return view('Reportes.INS.Create.FOR-03-PRO-INS-15');
-    }
-    public function FOR_01_PRO_INS_16()
-    {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-16');
-    }
-    public function FOR_01_PRO_INS_17()
-    {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-17');
-    }
-    public function FOR_01_PRO_INS_18()
-    {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
+        return view('Reportes.INS.Create.FOR-PINS-14_01');
     }
     
-    public function FOR_01_PRO_INS_20()
+    public function FOR_PINS_15_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-20');
+        return view('Reportes.INS.Create.FOR-PINS-15_01');
     }
-    
-    public function FOR_01_PRO_INS_21()
+    public function FOR_PINS_16_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
+        return view('Reportes.INS.Create.FOR-PINS-16_01');
+    }
+    public function FOR_PINS_17_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-17_01');
+    }
+    public function FOR_PINS_17_01_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-17-01_01');
+    }
+    public function FOR_PINS_18_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-18_01');
+    }
+    public function FOR_PINS_19_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-19_01');
+    }
+    public function FOR_PINS_20_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-20_01');
+    }
+    public function FOR_PINS_21_01 ()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-21_01');
+    }
+    public function FOR_PINS_22_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-22_01');
+    }
+    public function FOR_PINS_23_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-23_01');
+    }
+    public function FOR_PINS_24_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-24_01');
+    }
+    public function FOR_PINS_25_01()
+    {
+        return view('Reportes.INS.Create.FOR-PINS-25_01');
     }
 
     /*public function FOR_PIMP_07_B_01()
@@ -945,13 +963,13 @@ class ReporteController extends Controller
     public function formatoNombrePersonalizado ($Nombre_Formato)
     {
         $nombresPersonalizados = [
-            "FOR-02-PRO-INS-02" => "INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS",
-            "FOR-01-PRO-INS-03" => "INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES",
-            "FOR-01-PRO-INS-04" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES",
-            "FOR-02-PRO-INS-04" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES",
-            "FOR-01-PRO-INS-05" => "INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X",
-            "FOR-01-PRO-INS-06" => "INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES",
-            "FOR-01-PRO-INS-07" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES",
+            "FOR-PINS-03-02" => "INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS",
+            "FOR-PINS-04-01" => "INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES",
+            "FOR-PINS-05-01" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES",
+            "FOR-PINS-05-02" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES",
+            "FOR-PINS-06-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X",
+            "FOR-PINS-07-01" => "INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES",
+            "FOR-PINS-08-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD",
             "FOR-01-PRO-INS-08" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
             "FOR-01-PRO-INS-09" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
             "FOR-01-PRO-INS-10" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
@@ -1228,9 +1246,9 @@ class ReporteController extends Controller
         $Formato = formato::where('idFormato',$idFormato)->first();
         $Nombre_Formato = $Formato->Nombre;
 
-        if($Nombre_Formato == "FOR-01-PRO-INS-03")
+        if($Nombre_Formato == "FOR-PINS-04/01" || $Nombre_Formato == "FOR-PINS-04-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_03.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_04_01.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-04")
         {
@@ -1495,3 +1513,5 @@ class ReporteController extends Controller
 
 
 }
+
+

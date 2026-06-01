@@ -50,8 +50,8 @@
 
 @section('content')
 
-    @if($Nombre_Formato == 'FOR-01-PRO-INS-03') 
-        @include('Reportes.INS.Edit.FOR-01-PRO-INS-03')
+    @if($Nombre_Formato == 'FOR-PINS-04/01' || $Nombre_Formato == 'FOR-PINS-04-01') 
+        @include('Reportes.INS.Edit.FOR-PINS-04_01')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-04')
         @include('Reportes.INS.Edit.FOR-01-PRO-INS-04')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-05')
@@ -176,5 +176,3 @@ $(document).ready(function() {
 
     </script>
 @endsection
-
-

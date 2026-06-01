@@ -50,8 +50,8 @@
 
 @section('content')
     /*PND*/
-    @if($Nombre_Formato == 'FOR-01-PRO-INS-03') 
-        @include('Reportes.INS.Create.FOR-01-PRO-INS-03')
+    @if($Nombre_Formato == 'FOR-PINS-04/01' || $Nombre_Formato == 'FOR-PINS-04-01') 
+        @include('Reportes.INS.Create.FOR-PINS-04_01')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-04') 
         @include('Reportes.INS.Create.FOR-01-PRO-INS-04')
     @elseif($Nombre_Formato == 'FOR-01-PRO-INS-05') 
@@ -131,5 +131,3 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 
 @endsection
-
-
