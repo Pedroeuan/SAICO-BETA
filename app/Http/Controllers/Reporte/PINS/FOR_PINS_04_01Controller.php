@@ -171,6 +171,56 @@ class FOR_PINS_04_01Controller extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | URL PUBLICA DEL PDF (TOKEN)
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaPublicaPdf = route(
+            'qr.reporte',
+            ['token' => $token]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR QR
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreQR =
+            "QR_{$Contrato}_{$No_Reporte}.svg";
+
+        $directorioQR = storage_path(
+            "app/public/Reportes/FOR_PINS_04_01/{$Contrato}/{$No_Reporte}/QR_REPORTES"
+        );
+
+        if (!File::exists($directorioQR)) {
+
+            File::makeDirectory(
+                $directorioQR,
+                0777,
+                true
+            );
+        }
+
+        $rutaQrCompleta =
+            $directorioQR .
+            DIRECTORY_SEPARATOR .
+            $nombreQR;
+
+        \QrCode::format('svg')
+            ->size(300)
+            ->margin(0)
+            ->generate(
+                $rutaPublicaPdf,
+                $rutaQrCompleta
+            );
+
+        $rutaQrPublica =
+            "storage/Reportes/FOR_PINS_04_01/{$Contrato}/{$No_Reporte}/QR_REPORTES/"
+            . $nombreQR;
+
+        /*
+        |--------------------------------------------------------------------------
         | VALIDAR PDFs
         |--------------------------------------------------------------------------
         */
@@ -183,7 +233,7 @@ class FOR_PINS_04_01Controller extends Controller
 
             return [
                 'pdf' => null,
-                'qr' => null
+                'qr' => $rutaQrPublica
             ];
         }
 
@@ -316,62 +366,6 @@ class FOR_PINS_04_01Controller extends Controller
             $rutaPdfFinal,
             'F'
         );
-
-        /*
-        |--------------------------------------------------------------------------
-        | URL PUBLICA DEL PDF (TOKEN)
-        |--------------------------------------------------------------------------
-        */
-
-        $rutaPublicaPdf = route(
-            'qr.reporte',
-            ['token' => $token]
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | GENERAR QR
-        |--------------------------------------------------------------------------
-        */
-
-        $nombreQR =
-            "QR_{$Contrato}_{$No_Reporte}.svg";
-
-        $directorioQR = storage_path(
-            "app/public/Reportes/FOR_PINS_04_01/{$Contrato}/{$No_Reporte}/QR_REPORTES"
-        );
-
-        if (!File::exists($directorioQR)) {
-
-            File::makeDirectory(
-                $directorioQR,
-                0777,
-                true
-            );
-        }
-
-        $rutaQrCompleta =
-            $directorioQR .
-            DIRECTORY_SEPARATOR .
-            $nombreQR;
-
-        \QrCode::format('svg')
-            ->size(300)
-            ->margin(0)
-            ->generate(
-                $rutaPublicaPdf,
-                $rutaQrCompleta
-            );
-
-        /*
-        |--------------------------------------------------------------------------
-        | RUTAS RELATIVAS
-        |--------------------------------------------------------------------------
-        */
-
-        $rutaQrPublica =
-            "storage/Reportes/FOR_PINS_04_01/{$Contrato}/{$No_Reporte}/QR_REPORTES/"
-            . $nombreQR;
 
         $rutaPdfRelativa =
             "storage/Reportes/FOR_PINS_04_01/{$Contrato}/{$No_Reporte}/"
