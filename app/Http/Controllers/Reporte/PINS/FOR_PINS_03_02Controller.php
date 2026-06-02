@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reporte\INS;
+namespace App\Http\Controllers\Reporte\PINS;
 
 use App\Http\Controllers\Controller;
 
@@ -43,7 +43,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 
 
-class FOR_02_PRO_INS_02Controller extends Controller
+class FOR_PINS_03_02Controller extends Controller
 {
     public function Datos_QR($datosParaCrearQR)
     {
@@ -99,7 +99,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $directorioTemporal = storage_path("app/temp_pdfs/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}");
+        $directorioTemporal = storage_path("app/temp_pdfs/FOR_PINS_03_02/{$Contrato}/{$No_Reporte}");
 
         if (!File::exists($directorioTemporal)) {
             File::makeDirectory($directorioTemporal, 0777, true);
@@ -144,7 +144,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         */
 
         $nombreQR = "QR_{$Contrato}_{$No_Reporte}.svg";
-        $directorioQR = storage_path("app/public/Reportes/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}/QR_REPORTES");
+        $directorioQR = storage_path("app/public/Reportes/FOR_PINS_03_02/{$Contrato}/{$No_Reporte}/QR_REPORTES");
 
         if (!File::exists($directorioQR)) {
             File::makeDirectory($directorioQR, 0777, true);
@@ -157,7 +157,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             ->margin(0)
             ->generate($rutaPublicaPdf, $rutaQrCompleta);
 
-        $rutaQrPublica = "storage/Reportes/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}/QR_REPORTES/" . $nombreQR;
+        $rutaQrPublica = "storage/Reportes/FOR_PINS_03_02/{$Contrato}/{$No_Reporte}/QR_REPORTES/" . $nombreQR;
 
         /*
         |--------------------------------------------------------------------------
@@ -237,7 +237,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $directorioFinal = "Reportes/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}/";
+        $directorioFinal = "Reportes/FOR_PINS_03_02/{$Contrato}/{$No_Reporte}/";
         $rutaDirectorioFinal = storage_path("app/public/" . $directorioFinal);
 
         if (!File::exists($rutaDirectorioFinal)) {
@@ -250,7 +250,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $nombreArchivoFinal = "QR_FOR_02_PRO_INS_02_{$Contrato}_{$No_Reporte}.pdf";
+        $nombreArchivoFinal = "QR_FOR_PINS_03_02_{$Contrato}_{$No_Reporte}.pdf";
         $rutaPdfFinal = $rutaDirectorioFinal . $nombreArchivoFinal;
 
         $pdf->Output($rutaPdfFinal, 'F');
@@ -452,7 +452,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
     }
 
-    public function FOR_02_PRO_INS_02_store(Request $request)
+    public function FOR_PINS_03_02_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los datos del formulario
@@ -906,14 +906,14 @@ class FOR_02_PRO_INS_02Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
+            $rutaCarpeta = "public/Reportes/FOR_PINS_03_02/{$Contrato}/{$No_Reporte}/Fotos"; /* Ruta personalizada CAMBIAR */
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
+                'ruta' => "storage/Reportes/FOR_PINS_03_02/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}", /* Ruta personalizada CAMBIAR */
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
                 'una_hoja' => $request->imagen_hoja[$index] ?? 0, //
             ];
@@ -972,7 +972,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
     
     }
 
-    public function FOR_02_PRO_INS_02_update(Request $request, $id)
+    public function FOR_PINS_03_02_update(Request $request, $id)
     {
         //dd($request->all());
         $Estatus = "ACTUALIZADO";
@@ -1146,7 +1146,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
             // 2. PROCESAR NUEVO ARCHIVO
             $file = $request->file('Detalles_Generales.Reporte_Firmado');
-            $rutaBase = "public/Reportes/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
+            $rutaBase = "public/Reportes/FOR_PINS_03_02/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
             $nombreArchivo = 'Reporte_Firmado_' . $No_Reporte . '_' . time() . '.pdf';
             
             $file->storeAs($rutaBase, $nombreArchivo);
@@ -1428,7 +1428,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_02_PRO_INS_02/{$Contrato}/{$No_Reporte}/Fotos";
+        $rutaCarpeta = "public/Reportes/FOR_PINS_03_02/{$Contrato}/{$No_Reporte}/Fotos";
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -1562,7 +1562,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
 
     }
 
-    public function FOR_02_INS_02($id)
+    public function FOR_PINS_03_02($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -1621,7 +1621,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-02-INS-02.PDF',
+            'title' => 'Reporte_FOR-PINS-03_02.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1646,10 +1646,10 @@ class FOR_02_PRO_INS_02Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación vertical
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_02_INS_02_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_03_02_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_02_INS_02_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_03_02_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -1689,7 +1689,7 @@ class FOR_02_PRO_INS_02Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_02_INS_02.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_PINS_03_02.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

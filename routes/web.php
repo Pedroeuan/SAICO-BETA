@@ -33,7 +33,7 @@ use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 use App\Http\Controllers\Reporte\IM\FOR_PIMP_07_B_01Controller;
 use App\Http\Controllers\Reporte\ReporteController;
-use App\Http\Controllers\Reporte\INS\FOR_PINS_04_01Controller;
+use App\Http\Controllers\Reporte\PINS\FOR_PINS_04_01Controller;
 use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_05Controller;
 use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_06Controller;
@@ -53,7 +53,7 @@ Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_19Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_20Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_21Controller;
 Use App\Http\Controllers\Reporte\INS\FOR_01_PRO_INS_22Controller;
-use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_02Controller;
+use App\Http\Controllers\Reporte\PINS\FOR_PINS_03_02Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_04Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_10Controller;
 use App\Http\Controllers\Reporte\INS\FOR_02_PRO_INS_15Controller;
@@ -214,11 +214,11 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::get('/Reporte/FOR_PIMP_07_B_01/PDF/{id}', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01'])->name('Reporte_FOR_PIMP_07_B_01.PDF');
 
         /*Ruta de Guardado Reportes/INS*/
-        /*Ruta de Guardado Reportes/INS FOR_PINS_04_01*/
+        /*Ruta de Guardado Reportes/PINS FOR_PINS_04_01*/
         Route::post('/Reportes_FOR_PINS_04_01/store', [FOR_PINS_04_01Controller::class, 'FOR_PINS_04_01_store'])->name('Reportes_FOR_PINS_04_01.store');
-        /*Ruta de Actualización Reportes/INS FOR_PINS_04_01*/
+        /*Ruta de Actualización Reportes/PINS FOR_PINS_04_01*/
         Route::post('/Reportes_FOR_PINS_04_01/update/{id}', [FOR_PINS_04_01Controller::class, 'FOR_PINS_04_01_update'])->name('Reportes_FOR_PINS_04_01.update');
-        /*Ruta del PDF de Reportes/INS FOR_PINS_04_01*/
+        /*Ruta del PDF de Reportes/PINS FOR_PINS_04_01*/
         Route::get('/Reporte/FOR-PINS-04_01/PDF/{id}', [FOR_PINS_04_01Controller::class, 'FOR_PINS_04_01'])->name('Reporte_FOR_PINS_04_01.PDF');
 
         /*Ruta de Guardado Reportes/INS FOR_01_PRO_INS_04*/
@@ -354,12 +354,12 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         /*Ruta del PDF de Reportes/INS FOR_01_PRO_INS_22*/
         Route::get('/Reporte/FOR-01-INS-22/PDF/{id}', [FOR_01_PRO_INS_22Controller::class, 'FOR_01_INS_22'])->name('Reporte_FOR_01_INS_22.PDF');
 
-        /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_02*/
-        Route::post('/Reportes_FOR_02_PRO_INS_02/store', [FOR_02_PRO_INS_02Controller::class, 'FOR_02_PRO_INS_02_store'])->name('Reportes_FOR_02_PRO_INS_02.store');
-        /*Ruta de Actualización Reportes/INS FOR_02_PRO_INS_02*/
-        Route::post('/Reportes_FOR_02_PRO_INS_02/update/{id}', [FOR_02_PRO_INS_02Controller::class, 'FOR_02_PRO_INS_02_update'])->name('Reportes_FOR_02_PRO_INS_02.update');
+        /*Ruta de Guardado Reportes/PINS FOR_PINS_03_02*/
+        Route::post('/Reportes_FOR_PINS_03_02/store', [FOR_PINS_03_02Controller::class, 'FOR_PINS_03_02_store'])->name('Reportes_FOR_PINS_03_02.store');
+        /*Ruta de Actualización Reportes/PINS FOR_PINS_03_02*/
+        Route::post('/Reportes_FOR_PINS_03_02/update/{id}', [FOR_PINS_03_02Controller::class, 'FOR_PINS_03_02_update'])->name('Reportes_FOR_PINS_03_02.update');
         /*Ruta del PDF de Reportes/INS FOR_02_PRO_INS_10*/
-        Route::get('/Reporte/FOR-02-INS-02/PDF/{id}', [FOR_02_PRO_INS_02Controller::class, 'FOR_02_INS_02'])->name('Reporte_FOR_02_INS_02.PDF');
+        Route::get('/Reporte/FOR-PINS-03_02/PDF/{id}', [FOR_PINS_03_02Controller::class, 'FOR_PINS_03_02'])->name('Reporte_FOR_PINS_03_02.PDF');
 
         /*Ruta de Guardado Reportes/INS FOR_02_PRO_INS_04*/
         Route::post('/Reportes_FOR_02_PRO_INS_04/store', [FOR_02_PRO_INS_04Controller::class, 'FOR_02_PRO_INS_04_store'])->name('Reportes_FOR_02_PRO_INS_04.store');
@@ -737,4 +737,3 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
 
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
-

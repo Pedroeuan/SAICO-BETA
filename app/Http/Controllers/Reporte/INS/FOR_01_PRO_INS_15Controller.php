@@ -678,7 +678,7 @@ class FOR_01_PRO_INS_15Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    /*public function FOR_01_PRO_INS_03_update1(Request $request) 
+    /*public function FOR_PINS_04_01_update1(Request $request) 
     {
         // Verificar los datos recibidos antes de procesarlos
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando

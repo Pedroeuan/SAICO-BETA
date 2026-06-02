@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-INS-03/01</title>
+            <title>FORMATO FOR-PINS-04/01</title>
             <style>
                 @page {
                     margin: 3.0cm 1.2cm 2.1cm 2.2cm;
@@ -10,7 +10,7 @@
 
                 header {
                     position: fixed;
-                    top: -42px; /* Sube el encabezado para que no se monte con "DATOS GENERALES" */
+                    top: -51px; /* Sube el encabezado para que no se monte con "DATOS GENERALES" */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -199,8 +199,8 @@
 
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 90%;">FOR-INS-03/01</th>
-                                                        <th rowspan="3" style="width:80%; padding:0; margin:0;">
+                            <th style="width: 90%;">FOR-PINS-04/01</th>
+                            <th rowspan="3" style="width:80%; padding:0; margin:0;">
     
                                 <div style="
                                     width:100%;

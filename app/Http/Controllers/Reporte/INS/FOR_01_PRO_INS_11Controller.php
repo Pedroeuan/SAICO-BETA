@@ -506,7 +506,7 @@ class FOR_01_PRO_INS_11Controller extends Controller
     }
 
 
-    public function FOR_01_PRO_INS_03_update(Request $request, $id)
+    public function FOR_PINS_04_01_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales

@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-INS-03/01</title>
+            <title>FORMATO FOR-PINS-04/01</title>
             <style>
                 @page {
                     margin: 
@@ -14,7 +14,7 @@
 
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -45px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -235,7 +235,7 @@
 
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 90%;">FOR-INS-03/01</th>
+                            <th style="width: 90%;">FOR-PINS-04/01</th>
                             <th rowspan="3" style="width:80%; padding:0; margin:0;">
     
                                 <div style="

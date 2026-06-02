@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-INS-02/02</title>
+            <title>FORMATO FOR-PINS-03/02</title>
             <style>
                 @page {
                     margin: 
@@ -215,7 +215,7 @@
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-02/02</th>
+                            <th style="width: 80%;">FOR-PINS-03/02</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
