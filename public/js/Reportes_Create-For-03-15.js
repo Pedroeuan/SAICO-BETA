@@ -458,7 +458,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
-    const formularios = ["FOR-PINS-04_01", "FOR-01-PRO-INS-04", "FOR-01-PRO-INS-05", "FOR-01-PRO-INS-06", "FOR-01-PRO-INS-07", "FOR-01-PRO-INS-08", "FOR-01-PRO-INS-09", "FOR-01-PRO-INS-10", "FOR-01-PRO-INS-11", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13","FOR-01-PRO-INS-14", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19","FOR-01-PRO-INS-20","FOR-01-PRO-INS-21","FOR-01-PRO-INS-22", "FOR-PINS-03_02", "FOR-02-PRO-INS-04", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
+    const formularios = ["FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01", "FOR-01-PRO-INS-11", "FOR-01-PRO-INS-12", "FOR-01-PRO-INS-13","FOR-01-PRO-INS-14", "FOR-01-PRO-INS-15", "FOR-01-PRO-INS-16", "FOR-01-PRO-INS-17", "FOR-01-PRO-INS-18", "FOR-01-PRO-INS-19","FOR-01-PRO-INS-20","FOR-01-PRO-INS-21","FOR-01-PRO-INS-22", "FOR-PINS-03_02", "FOR-PINS-05_02", "FOR-02-PRO-INS-10", "FOR-02-PRO-INS-15", "FOR-03-PRO-INS-15"];
 
     formularios.forEach(formId => {
         const form = document.getElementById(formId);

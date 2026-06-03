@@ -669,35 +669,35 @@ class ReporteController extends Controller
     }
     public function FOR_PINS_05_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-05_01');
+        return view('Reportes.PINS.Create.FOR-PINS-05_01');
     }
     public function FOR_PINS_05_02()
     {
-        return view('Reportes.INS.Create.FOR-PINS-05_02');
+        return view('Reportes.PINS.Create.FOR-PINS-05_02');
     }
     public function FOR_PINS_06_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-06_01');
+        return view('Reportes.PINS.Create.FOR-PINS-06_01');
     }
     public function FOR_PINS_07_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-07_01');
+        return view('Reportes.PINS.Create.FOR-PINS-07_01');
     }
     public function FOR_PINS_08_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-08_01');
+        return view('Reportes.PINS.Create.FOR-PINS-08_01');
     }
     public function FOR_PINS_09_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-09_01');
+        return view('Reportes.PINS.Create.FOR-PINS-09_01');
     }
     public function FOR_PINS_10_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-10_01');
+        return view('Reportes.PINS.Create.FOR-PINS-10_01');
     }
     public function FOR_PINS_11_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-11_01');
+        return view('Reportes.PINS.Create.FOR-PINS-11_01');
     }
     public function FOR_PINS_11_02()
     {
@@ -829,7 +829,7 @@ class ReporteController extends Controller
         // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
         $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
             //return $item['Contrato'] . $item['Proyecto'];
-            return $item['Contrato']; //Solo contrato si se agrega poryecto, genera repeticoones, por no pones el proyecto de la misma manera (Usuarios ¬¬).
+            return $item['Contrato']; //Solo contrato si se agrega poryecto, genera repeticoones, por no pones el proyecto de la misma manera (Usuarios Â¬Â¬).
         })->values()->all();
 
         return view('Reportes.INS.Index.indexINS1', compact('reportesDetalles_Generales'));
@@ -970,9 +970,9 @@ class ReporteController extends Controller
             "FOR-PINS-06-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X",
             "FOR-PINS-07-01" => "INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES",
             "FOR-PINS-08-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD",
-            "FOR-01-PRO-INS-08" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
-            "FOR-01-PRO-INS-09" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
-            "FOR-01-PRO-INS-10" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
+            "FOR-PINS-09-01" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
+            "FOR-PINS-10-01" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
+            "FOR-PINS-11-01" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
             "FOR-02-PRO-INS-10" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA",
             "FOR-01-PRO-INS-11" => "REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR",
             "FOR-01-PRO-INS-12" => "INFORME DE INSPECCIÓN CON CORRIENTES EDDY",
@@ -1246,37 +1246,37 @@ class ReporteController extends Controller
         $Formato = formato::where('idFormato',$idFormato)->first();
         $Nombre_Formato = $Formato->Nombre;
 
-        if($Nombre_Formato == "FOR-PINS-04/01" || $Nombre_Formato == "FOR-PINS-04-01")
+        if($Nombre_Formato == "FOR-PINS-04-01")
         {
             return redirect()->route('Reporte_FOR_PINS_04_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-04")
+        elseif($Nombre_Formato == "FOR-PINS-05-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_04.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_05_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-05")
+        elseif($Nombre_Formato == "FOR-PINS-06-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_05.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_06_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-06")
+        elseif($Nombre_Formato == "FOR-PINS-07-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_06.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_07_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-07")
+        elseif($Nombre_Formato == "FOR-PINS-08-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_07.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_08_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-08")
+        elseif($Nombre_Formato == "FOR-PINS-09-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_08.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_09_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-09")
+        elseif($Nombre_Formato == "FOR-PINS-10-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_09.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_10_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-10")
+        elseif($Nombre_Formato == "FOR-PINS-11-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_10.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_11_01.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-01-PRO-INS-12")
         {
@@ -1322,13 +1322,13 @@ class ReporteController extends Controller
         {
             return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-PINS-03/02" || $Nombre_Formato == "FOR-PINS-03-02")
+        elseif($Nombre_Formato == "FOR-PINS-03-02")
         {
             return redirect()->route('Reporte_FOR_PINS_03_02.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-02-PRO-INS-04")
+        elseif($Nombre_Formato == "FOR-PINS-05-02")
         {
-            return redirect()->route('Reporte_FOR_02_INS_04.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_05_02.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
         {
@@ -1406,7 +1406,7 @@ class ReporteController extends Controller
         }
 
         
-        // ✅ Retornar respuesta JSON para el AJAX
+        // âœ… Retornar respuesta JSON para el AJAX
         return response()->json([
             'success' => true,
             'message' => 'Reporte eliminado correctamente.'
@@ -1418,13 +1418,13 @@ class ReporteController extends Controller
     {
         DB::transaction(function () use ($id, &$nuevoId) {
 
-            // 1️ Obtener reporte original
+            // 1ï¸ Obtener reporte original
             $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
 
-            // 2️ Clonar reporte
+            // 2ï¸ Clonar reporte
             $NuevoReporte = $ReporteOriginal->replicate();
 
-            // 3️ Decodificar JSON
+            // 3ï¸ Decodificar JSON
             $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true);
 
             $numeroActual = $Detalles_Generales['No_Reporte'];
@@ -1438,20 +1438,20 @@ class ReporteController extends Controller
                 $nuevoNoReporte = $numeroActual . '-001';
             }
 
-            // 4️ Reemplazar valores
+            // 4ï¸ Reemplazar valores
             $Detalles_Generales['No_Reporte'] = $nuevoNoReporte;
             $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
 
             $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
             $NuevoReporte->Estatus = 'CREADO';
 
-            // 5️ Guardar nuevo reporte
+            // 5ï¸ Guardar nuevo reporte
             $NuevoReporte->save();
 
             $nuevoId = $NuevoReporte->idReportes;
 
             // =====================================
-            // 🔹 CLONAR FIRMAS
+            // ðŸ”¹ CLONAR FIRMAS
             // =====================================
 
             $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
@@ -1459,7 +1459,7 @@ class ReporteController extends Controller
             if ($FirmaOriginal) {
 
                 $NuevaFirma = $FirmaOriginal->replicate();
-                $NuevaFirma->idReportes = $nuevoId; // 👈 AQUÍ está la clave
+                $NuevaFirma->idReportes = $nuevoId; // ðŸ‘ˆ AQUÍ está la clave
                 $NuevaFirma->save();
             }
 
