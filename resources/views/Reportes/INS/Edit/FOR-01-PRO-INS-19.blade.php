@@ -256,6 +256,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                         </div>
                     </div>
 
@@ -334,6 +335,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_SONDA]" id="IDInputA" value="{{ old('Datos_Equipo.ID_SONDA', $Datos_Equipo['ID_SONDA'] ?? '') }}">
                         </div>
                     </div>
 
@@ -373,6 +375,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '') }}">
                         </div>
                     </div>
 
@@ -1270,8 +1273,11 @@ $(document).ready(function() {
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val($('#equiposSelect').val() || '');
         }
 
+            $('#equiposSelect').val($('#IDInputE').val() || '');
+            actualizarInputsE();
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
@@ -1289,8 +1295,11 @@ $(document).ready(function() {
                 $('#marcaInputA').val(marca);
                 $('#modeloInputA').val(modelo);
                 $('#nsInputA').val(ns);
+                $('#IDInputA').val($('#accesoriosSelect').val() || '');
             }
 
+                $('#accesoriosSelect').val($('#IDInputA').val() || '');
+                actualizarInputsA();
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
@@ -1308,8 +1317,11 @@ $(document).ready(function() {
                 $('#marcaInputbyp').val(marca);
                 $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
+                $('#IDInputbyp').val($('#blockyprobetaSelect').val() || '');
             }
 
+            $('#blockyprobetaSelect').val($('#IDInputbyp').val() || '');
+            actualizarInputsbyp();
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();

@@ -82,6 +82,10 @@ class NotificacionController extends Controller
             $url = url('edicion/editEyC/' . $certificado->idGeneral_EyC);
             // Obtener el ISO relacionado
             $iso = $generalEyc->ISO ? $generalEyc->ISO->NombreISO : null;
+            Log::info('***********************');
+            Log::info('***********************');
+            Log::info('generalEyc: ', ['generalEyc' => $generalEyc]);
+            Log::info('No_economico: ', ['No_economico' => $No_economico]);
             // Determinar el tipo de general_eyc
             if ($generalEyc) {
                 $tipo = $generalEyc->Tipo;
@@ -95,7 +99,7 @@ class NotificacionController extends Controller
                             Log::info('fechaCalibracionEQUIPOS: ', ['fechaCalibracion' => $fechaCalibracion]);*/
                     } elseif ($tipo === 'CONSUMIBLES' || $tipo === 'BLOCK Y PROBETA') {
                         $fechaCalibracion = $certificado->Fecha_calibracion;
-                            /*/Log::info('***********************');
+                            /*Log::info('***********************');
                             Log::info('fechaCalibracionCONSUMIBLES: ', ['fechaCalibracion' => $fechaCalibracion]);*/
                     } else {
                         // Si no corresponde a ninguno de los tipos, continuar con el siguiente
@@ -203,7 +207,7 @@ class NotificacionController extends Controller
                         $notificacion->save();
 
                         // 📧 Enviar correo
-                    //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                        //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                     }
 
                 }
