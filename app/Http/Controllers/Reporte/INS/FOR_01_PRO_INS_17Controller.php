@@ -22,6 +22,7 @@ use App\Models\OrdenServicio\Orden_Servicio;
 use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\Solicitudes\detalles_solicitud;
 use App\Models\EquiposyConsumibles\general_eyc;
+use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
@@ -41,6 +42,91 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_01_PRO_INS_17Controller extends Controller
 {
+    public function Datos_QR($datosParaCrearQR)
+    {
+        $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
+        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $token = $datosParaCrearQR['qr_token'] ?? null;
+        $idsConsumibles = array_filter([$datosParaCrearQR['idEquipo'] ?? null]);
+
+        $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)->whereNotNull('Factura')->pluck('Factura')->toArray();
+        $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)->whereNotNull('Certificado_Actual')->pluck('Certificado_Actual')->toArray();
+        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+        Log::info('todasLasRutas', $todasLasRutas);
+
+        $rutasInvalidas = ['EN ESPERA DE DATOS', 'ESPERA DE DATO', 'N/A'];
+        $rutasValidas = array_filter($todasLasRutas, function ($ruta) use ($rutasInvalidas) {
+            if (!$ruta) {
+                return false;
+            }
+            return !in_array(trim(strtoupper($ruta)), $rutasInvalidas);
+        });
+
+        $directorioTemporal = storage_path("app/temp_pdfs/FOR_01_PRO_INS_17/{$Contrato}/{$No_Reporte}");
+        if (!File::exists($directorioTemporal)) {
+            File::makeDirectory($directorioTemporal, 0777, true);
+        }
+
+        $pdfsTemporales = [];
+        foreach ($rutasValidas as $rutaPdf) {
+            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
+            if (!File::exists($rutaOriginal)) {
+                Log::warning('PDF no encontrado', ['ruta' => $rutaOriginal]);
+                continue;
+            }
+            $nombreArchivo = basename($rutaOriginal);
+            $rutaTemporal = $directorioTemporal . DIRECTORY_SEPARATOR . $nombreArchivo;
+            File::copy($rutaOriginal, $rutaTemporal);
+            $pdfsTemporales[] = $rutaTemporal;
+        }
+
+        $rutaPublicaPdf = route('qr.reporte', ['token' => $token]);
+        $nombreQR = "QR_{$Contrato}_{$No_Reporte}.svg";
+        $directorioQR = storage_path("app/public/Reportes/FOR_01_PRO_INS_17/{$Contrato}/{$No_Reporte}/QR_REPORTES");
+        if (!File::exists($directorioQR)) {
+            File::makeDirectory($directorioQR, 0777, true);
+        }
+        $rutaQrCompleta = $directorioQR . DIRECTORY_SEPARATOR . $nombreQR;
+        \QrCode::format('svg')->size(300)->margin(0)->generate($rutaPublicaPdf, $rutaQrCompleta);
+        $rutaQrPublica = "storage/Reportes/FOR_01_PRO_INS_17/{$Contrato}/{$No_Reporte}/QR_REPORTES/" . $nombreQR;
+
+        if (empty($pdfsTemporales)) {
+            Log::warning('No hay PDFs válidos para unir.');
+            return ['pdf' => null, 'qr' => $rutaQrPublica];
+        }
+
+        $pdf = new Fpdi();
+        foreach ($pdfsTemporales as $archivoPdf) {
+            try {
+                $archivoCompatible = str_replace('.pdf', '_compatible.pdf', $archivoPdf);
+                $comando = 'gswin64c -sDEVICE=pdfwrite ' . '-dCompatibilityLevel=1.4 ' . '-dNOPAUSE ' . '-dQUIET ' . '-dBATCH ' . '-sOutputFile="' . $archivoCompatible . '" "' . $archivoPdf . '"';
+                exec($comando);
+                $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
+                for ($pagina = 1; $pagina <= $cantidadPaginas; $pagina++) {
+                    $template = $pdf->importPage($pagina);
+                    $size = $pdf->getTemplateSize($template);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($template);
+                }
+            } catch (\Exception $e) {
+                Log::error('Error procesando PDF', ['archivo' => $archivoPdf, 'error' => $e->getMessage()]);
+                continue;
+            }
+        }
+
+        $directorioFinal = "Reportes/FOR_01_PRO_INS_17/{$Contrato}/{$No_Reporte}/";
+        $rutaDirectorioFinal = storage_path("app/public/" . $directorioFinal);
+        if (!File::exists($rutaDirectorioFinal)) {
+            File::makeDirectory($rutaDirectorioFinal, 0777, true);
+        }
+        $nombreArchivoFinal = "QR_FOR_01_PRO_INS_17_{$Contrato}_{$No_Reporte}.pdf";
+        $rutaPdfFinal = $rutaDirectorioFinal . $nombreArchivoFinal;
+        $pdf->Output($rutaPdfFinal, 'F');
+        File::deleteDirectory($directorioTemporal);
+
+        return ['pdf' => "storage/" . $directorioFinal . $nombreArchivoFinal, 'qr' => $rutaQrPublica];
+    }
+
 
     public function OS_OC($datosParaCrearOS_OC)
     {
@@ -238,12 +324,16 @@ class FOR_01_PRO_INS_17Controller extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Stndr_refe' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.Num_Soldador' => 'nullable|string',
+            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
 
             'Datos_Equipo.FEC_CAL' => 'nullable|string',
             'Datos_Equipo.CER_POR' => 'nullable|string',
@@ -266,6 +356,12 @@ class FOR_01_PRO_INS_17Controller extends Controller
             'Datos_Equipo.severidad' => 'nullable|string',
             'Datos_Equipo.Nota' => 'nullable|string',
             'Datos_Equipo.Recomendaciones' => 'nullable|string',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -399,6 +495,24 @@ class FOR_01_PRO_INS_17Controller extends Controller
 
         // Guardar el registro en la base de datos   
         $Reportes->save();
+
+        $validatedData['Datos_Equipo']['QR_TOKEN'] =
+            $validatedData['Datos_Equipo']['QR_TOKEN']
+            ?? (string) Str::uuid();
+
+        $resultadoQR = $this->Datos_QR([
+            'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
+            'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
+            'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ]);
+
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'];
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'];
+
+        $Reportes->update([
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])
+        ]);
 
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
@@ -535,6 +649,8 @@ class FOR_01_PRO_INS_17Controller extends Controller
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Stndr_refe' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            'Detalles_Generales.Num_Soldador' => 'nullable|string',
+            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -638,7 +754,64 @@ class FOR_01_PRO_INS_17Controller extends Controller
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        // 1. Obtener los detalles actuales que ya están en la base de datos
+        $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
+        $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
+        if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
+            
+            // 1. ELIMINAR ARCHIVO ANTERIOR (si existe)
+            if (!empty($detallesActuales['Reporte_Firmado'])) {
+                // Convertimos la ruta de la base de datos (storage/...) de vuelta a la ruta del disco (public/...)
+                $archivoViejo = str_replace('storage/', 'public/', $detallesActuales['Reporte_Firmado']);
+                
+                if (Storage::exists($archivoViejo)) {
+                    Storage::delete($archivoViejo);
+                }
+            }
+
+            // 2. PROCESAR NUEVO ARCHIVO
+            $file = $request->file('Detalles_Generales.Reporte_Firmado');
+            $rutaBase = "public/Reportes/FOR_01_PRO_INS_17/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
+            $nombreArchivo = 'Reporte_Firmado_' . $No_Reporte . '_' . time() . '.pdf';
+            
+            $file->storeAs($rutaBase, $nombreArchivo);
+
+            $rutaPublica = str_replace('public/', 'storage/', $rutaBase) . '/' . $nombreArchivo;
+            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $rutaPublica;
+
+        } else {
+            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
+        }
+
+        $validatedData['Datos_Equipo']['ID_EQUIPO'] =
+            $validatedData['Datos_Equipo']['ID_EQUIPO']
+            ?? $datosEquipoActuales['ID_EQUIPO']
+            ?? null;
+
+        $validatedData['Datos_Equipo']['QR_TOKEN'] =
+            $validatedData['Datos_Equipo']['QR_TOKEN']
+            ?? $datosEquipoActuales['QR_TOKEN']
+            ?? (string) Str::uuid();
+
+        $resultadoQR = $this->Datos_QR([
+            'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
+            'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
+            'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ]);
+
+        $validatedData['Datos_Equipo']['QR_PDF'] =
+            $resultadoQR['qr']
+            ?? $datosEquipoActuales['QR_PDF']
+            ?? null;
+
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
+            $resultadoQR['pdf']
+            ?? $datosEquipoActuales['PDF_UNIFICADO']
+            ?? null;
+        
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
@@ -789,6 +962,13 @@ class FOR_01_PRO_INS_17Controller extends Controller
         $numFirmas = $Firmas_Reportes['numFirmas'];
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
+        $qrPdf = null;
+
+        if (!empty($Datos_Equipo['QR_PDF'])) {
+            $qrPdf = public_path(
+                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
+            );
+        }
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
                 $Fotos = [];
@@ -828,6 +1008,7 @@ class FOR_01_PRO_INS_17Controller extends Controller
             'numFirmas' => $numFirmas,
             //Firmas
             'Firmas_Reportes' => $Firmas_Reportes,
+            'QR_PDF' => $qrPdf,
         ];
 
         // Generar el PDF principal en orientación horizontal
@@ -852,14 +1033,28 @@ class FOR_01_PRO_INS_17Controller extends Controller
         $totalPageCount = $pageCount1 + $pageCount2;
 
         // Añadir páginas del primer PDF
+        /*$combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            //$combinedPdf->SetXY(138, -266.5);
+            //$combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }*/
+
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 12);
-            //$combinedPdf->SetXY(138, -266.5);
-            //$combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            
+            // No mostrar número en la primera página (portada)
+            if ($i != 1) {
+                $combinedPdf->SetFont('Arial', 'B', 8);
+                $combinedPdf->SetXY(128, -264.5);
+                $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            }
         }
 
         // Añadir páginas del segundo PDF
@@ -868,7 +1063,7 @@ class FOR_01_PRO_INS_17Controller extends Controller
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 12);
+            $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(138, -265.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');

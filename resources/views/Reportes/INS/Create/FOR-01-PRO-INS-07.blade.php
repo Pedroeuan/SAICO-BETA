@@ -303,6 +303,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                                         </div>
                                     </div>
 
@@ -358,6 +359,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_SONDA1]" id="IDInputA1" value="{{ old('Datos_Equipo.ID_SONDA1') }}">
                                             <input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA1]" id="accesorioNombreSonda1" value="{{ old('Datos_Equipo.ACCESORIO_SONDA1') }}">
                                         </div>
                                     </div>
@@ -407,6 +409,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            <input type="hidden" name="Datos_Equipo[ID_BLOCK_SEN]" id="IDInputbyp1" value="{{ old('Datos_Equipo.ID_BLOCK_SEN') }}">
                                             <input type="hidden" name="Datos_Equipo[BLOCK_SENSIBILIDAD]" id="blockSensibilidadNombre" value="{{ old('Datos_Equipo.BLOCK_SENSIBILIDAD') }}">
                                         </div>
                                     </div>
@@ -449,7 +452,8 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            {{-- <input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA') }}"> --}}
+                                            <input type="hidden" name="Datos_Equipo[ID_BLOCK_DIS]" id="IDInputbyp2" value="{{ old('Datos_Equipo.ID_BLOCK_DIS') }}">
+                                            <input type="hidden" name="Datos_Equipo[BLOCK_DISTANCIA]" id="blockDistanciaNombre" value="{{ old('Datos_Equipo.BLOCK_DISTANCIA') }}">
                                         </div>
                                     </div>
 
@@ -491,7 +495,8 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            {{--<input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA2]" id="accesorioNombreSonda2" value="{{ old('Datos_Equipo.ACCESORIO_SONDA2') }}">--}}
+                                            <input type="hidden" name="Datos_Equipo[ID_SONDA2]" id="IDInputA2" value="{{ old('Datos_Equipo.ID_SONDA2') }}">
+                                            <input type="hidden" name="Datos_Equipo[ACCESORIO_SONDA2]" id="accesorioNombreSonda2" value="{{ old('Datos_Equipo.ACCESORIO_SONDA2') }}">
                                         </div>
                                     </div>
 
@@ -934,7 +939,30 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <p>
 
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                                @error('Num_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                                @error('Nombre_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
@@ -1272,8 +1300,9 @@ $(document).ready(function() {
         }
     );
 
-            // Restaurar datos al cargar la página
-            restoreData();
+            // En create no se restauran registros anteriores:
+            // un formato nuevo debe abrir en blanco.
+            sessionStorage.removeItem('dynamicTableData');
 });
 
     function verificarYAgregarLongitud() {
@@ -1336,6 +1365,7 @@ $(document).ready(function() {
             var ns = selectedOption.data('ns') || '';
 
             // Rellenar los inputs con los valores obtenidos
+            $('#IDInputE').val(selectedOption.val() || '');
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
@@ -1347,12 +1377,9 @@ $(document).ready(function() {
         });
 
 
-        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
-        selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
-
-
         function actualizarInputsA1() {
             const selectedOption = $('#accesoriosSelect1').find('option:selected');
+            $('#IDInputA1').val(selectedOption.val() || '');
             $('#marcaInputA1').val(selectedOption.data('marca') || '');
             $('#modeloInputA1').val(selectedOption.data('modelo') || '');
             $('#nsInputA1').val(selectedOption.data('ns') || '');
@@ -1361,6 +1388,7 @@ $(document).ready(function() {
 
         function actualizarInputsA2() {
             const selectedOption = $('#accesoriosSelect2').find('option:selected');
+            $('#IDInputA2').val(selectedOption.val() || '');
             $('#marcaInputA2').val(selectedOption.data('marca') || '');
             $('#modeloInputA2').val(selectedOption.data('modelo') || '');
             $('#nsInputA2').val(selectedOption.data('ns') || '');
@@ -1369,6 +1397,7 @@ $(document).ready(function() {
 
         function actualizarInputsbyp1() {
             const selectedOption = $('#blockyprobetaSelect1').find('option:selected');
+            $('#IDInputbyp1').val(selectedOption.val() || '');
             $('#marcaInputbyp1').val(selectedOption.data('marca') || '');
             $('#modeloInputbyp1').val(selectedOption.data('modelo') || '');
             $('#nsInputbyp1').val(selectedOption.data('ns') || '');
@@ -1377,6 +1406,7 @@ $(document).ready(function() {
 
         function actualizarInputsbyp2() {
             const selectedOption = $('#blockyprobetaSelect2').find('option:selected');
+            $('#IDInputbyp2').val(selectedOption.val() || '');
             $('#marcaInputbyp2').val(selectedOption.data('marca') || '');
             $('#modeloInputbyp2').val(selectedOption.data('modelo') || '');
             $('#nsInputbyp2').val(selectedOption.data('ns') || '');
@@ -1394,27 +1424,9 @@ $(document).ready(function() {
         const form = document.getElementById('FOR-01-PRO-INS-07');
         if (!form) return;
 
+        // Limpiar cualquier arrastre de capturas anteriores al abrir create.
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-            el.addEventListener('input', function () {
-                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-01-PRO-INS-07_' + el.name, el.value);
-            });
-        });
-
-        // Restaurar al cargar la página (solo si el campo está vacío)
-        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-            if (!el.value) {
-                const value = localStorage.getItem('FOR-01-PRO-INS-07_' + el.name);
-                if (value !== null) el.value = value;
-            }
-        });
-
-        // Limpiar localStorage al enviar el formulario
-        form.addEventListener('submit', function () {
-            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-01-PRO-INS-07_' + el.name);
-                //localStorage.clear();
-            });
+            localStorage.removeItem('FOR-01-PRO-INS-07_' + el.name);
         });
     });
 

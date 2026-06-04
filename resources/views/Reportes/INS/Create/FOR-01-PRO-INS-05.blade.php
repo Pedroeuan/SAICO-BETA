@@ -305,6 +305,8 @@
                         </div>
                     </div>
 
+                    <input type="hidden" id="IDInputEquipo" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
+
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -844,7 +846,30 @@
                                 </div>
                             </div>
                         </div>
+                        <p>
 
+                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+
+                        <p>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                    <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                    @error('Num_Soldador')
+                                            <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                    <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                    @error('Nombre_Soldador')
+                                            <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                    @enderror
+                                </div>
+                            </div>
                         <div class="container">
                             <div class="float-right">
                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -1227,11 +1252,13 @@
             var selectedOption = $('#equiposSelect').find('option:selected');
 
             // Extraer los datos de los atributos "data-"
+            var id = selectedOption.val() || '';
             var marca = selectedOption.data('marca') || '';
             var modelo = selectedOption.data('modelo') || '';
             var ns = selectedOption.data('ns') || '';
 
             // Rellenar los inputs con los valores obtenidos
+            $('#IDInputEquipo').val(id);
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);

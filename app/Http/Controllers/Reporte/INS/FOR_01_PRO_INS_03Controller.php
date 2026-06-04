@@ -35,81 +35,376 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
-/*PDF */
+/*PDF*/
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
+/*QR*/
+use Illuminate\Support\Str;
 
 class FOR_01_PRO_INS_03Controller extends Controller
 {
+
     public function Datos_QR($datosParaCrearQR)
     {
-        $Contrato   = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
-        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte'; 
-        $idsConsumibles = [$datosParaCrearQR['idPenetrante'], $datosParaCrearQR['idRemovedor'], $datosParaCrearQR['idRevelador']];
+        $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
+        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $token = $datosParaCrearQR['qr_token'] ?? null;
 
-        // 1. Obtener las rutas de la base de datos
-        $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)
-                    ->whereNotNull('Factura')->pluck('Factura')->toArray();
+        $idsConsumibles = [
+            $datosParaCrearQR['idPenetrante'],
+            $datosParaCrearQR['idRemovedor'],
+            $datosParaCrearQR['idRevelador']
+        ];
 
-        $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)
-                    ->whereNotNull('Certificado_Actual')->pluck('Certificado_Actual')->toArray();
+        /*
+        |--------------------------------------------------------------------------
+        | OBTENER FACTURAS Y CERTIFICADOS
+        |--------------------------------------------------------------------------
+        */
 
-        $todasLasRutas = array_merge($facturas, $certificados);
+        $facturas = general_eyc::whereIn(
+            'idGeneral_EyC',
+            $idsConsumibles
+        )
+        ->whereNotNull('Factura')
+        ->pluck('Factura')
+        ->toArray();
 
-        // 2. Inicializar FPDI
-        $pdf = new Fpdi();
-        $paginasAgregadas = 0;
+        $certificados = certificados::whereIn(
+            'idGeneral_EyC',
+            $idsConsumibles
+        )
+        ->whereNotNull('Certificado_Actual')
+        ->pluck('Certificado_Actual')
+        ->toArray();
 
-        // 3. Recolectar copias de los PDFs y unirlos
-        foreach ($todasLasRutas as $ruta) {
-            // Omitir textos de espera
-            $textosA_Omitir = ['EN ESPERA DE DATOS', 'ESPERA DE DATO', 'ESPERA DE DATOS', 'N/A', '', null];
-            if (in_array(trim($ruta), $textosA_Omitir)) continue;
+        $todasLasRutas = array_values(
+            array_merge($facturas, $certificados)
+        );
 
-            // Como confirmas que todo está en "Equipos y Consumibles", 
-            // la ruta de la BD ya es el camino relativo correcto desde 'public'
-            $file = storage_path("app/public/" . trim($ruta));
+        Log::info('todasLasRutas', $todasLasRutas);
 
-            if (file_exists($file)) {
-                try {
-                    $pageCount = $pdf->setSourceFile($file);
-                    for ($n = 1; $n <= $pageCount; $n++) {
-                        $tplIdx = $pdf->importPage($n);
-                        $specs = $pdf->getImportedPageSize($tplIdx);
-                        
-                        $pdf->AddPage($specs['orientation'], [$specs['width'], $specs['height']]);
-                        $pdf->useTemplate($tplIdx);
-                        $paginasAgregadas++;
-                    }
-                    Log::info("Archivo combinado exitosamente: " . $ruta);
-                } catch (\Exception $e) {
-                    Log::error("Error al procesar el archivo {$ruta}: " . $e->getMessage());
-                    continue;
+        /*
+        |--------------------------------------------------------------------------
+        | FILTRAR RUTAS INVALIDAS
+        |--------------------------------------------------------------------------
+        */
+
+        $rutasInvalidas = [
+            'EN ESPERA DE DATOS',
+            'ESPERA DE DATO',
+            'N/A'
+        ];
+
+        $rutasValidas = array_filter(
+            $todasLasRutas,
+            function ($ruta) use ($rutasInvalidas) {
+
+                if (!$ruta) {
+                    return false;
                 }
-            } else {
-                Log::warning("No se encontró el archivo físico en: " . $file);
+
+                return !in_array(
+                    trim(strtoupper($ruta)),
+                    $rutasInvalidas
+                );
+            }
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO TEMPORAL
+        |--------------------------------------------------------------------------
+        */
+
+        $directorioTemporal = storage_path(
+            "app/temp_pdfs/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}"
+        );
+
+        if (!File::exists($directorioTemporal)) {
+            File::makeDirectory(
+                $directorioTemporal,
+                0777,
+                true
+            );
+        }
+
+        $pdfsTemporales = [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | COPIAR PDFs TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($rutasValidas as $rutaPdf) {
+
+            $rutaOriginal = storage_path(
+                'app/public/' . $rutaPdf
+            );
+
+            if (!File::exists($rutaOriginal)) {
+
+                Log::warning(
+                    'PDF no encontrado',
+                    ['ruta' => $rutaOriginal]
+                );
+
+                continue;
+            }
+
+            $nombreArchivo = basename($rutaOriginal);
+
+            $rutaTemporal =
+                $directorioTemporal .
+                DIRECTORY_SEPARATOR .
+                $nombreArchivo;
+
+            File::copy(
+                $rutaOriginal,
+                $rutaTemporal
+            );
+
+            $pdfsTemporales[] = $rutaTemporal;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDAR PDFs
+        |--------------------------------------------------------------------------
+        */
+
+        if (empty($pdfsTemporales)) {
+
+            Log::warning(
+                'No hay PDFs válidos para unir.'
+            );
+
+            return [
+                'pdf' => null,
+                'qr' => null
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | UNIR PDFs
+        |--------------------------------------------------------------------------
+        */
+
+        $pdf = new Fpdi();
+
+        foreach ($pdfsTemporales as $archivoPdf) {
+
+            try {
+
+                /*
+                |--------------------------------------------------------------------------
+                | HACER PDF COMPATIBLE CON FPDI
+                |--------------------------------------------------------------------------
+                */
+
+                $archivoCompatible = str_replace(
+                    '.pdf',
+                    '_compatible.pdf',
+                    $archivoPdf
+                );
+
+                $comando =
+                    'gswin64c -sDEVICE=pdfwrite '
+                    . '-dCompatibilityLevel=1.4 '
+                    . '-dNOPAUSE '
+                    . '-dQUIET '
+                    . '-dBATCH '
+                    . '-sOutputFile="'
+                    . $archivoCompatible
+                    . '" "'
+                    . $archivoPdf
+                    . '"';
+
+                exec($comando);
+
+                /*
+                |--------------------------------------------------------------------------
+                | IMPORTAR PAGINAS
+                |--------------------------------------------------------------------------
+                */
+
+                $cantidadPaginas =
+                    $pdf->setSourceFile(
+                        $archivoCompatible
+                    );
+
+                for (
+                    $pagina = 1;
+                    $pagina <= $cantidadPaginas;
+                    $pagina++
+                ) {
+
+                    $template =
+                        $pdf->importPage($pagina);
+
+                    $size =
+                        $pdf->getTemplateSize(
+                            $template
+                        );
+
+                    $pdf->AddPage(
+                        $size['orientation'],
+                        [
+                            $size['width'],
+                            $size['height']
+                        ]
+                    );
+
+                    $pdf->useTemplate(
+                        $template
+                    );
+                }
+
+            } catch (\Exception $e) {
+
+                Log::error(
+                    'Error procesando PDF',
+                    [
+                        'archivo' => $archivoPdf,
+                        'error' => $e->getMessage()
+                    ]
+                );
+
+                continue;
             }
         }
 
-        // 4. Definir destino del nuevo archivo (El PDF unido)
-        $nombreArchivo = "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
-        $directorioFinal = "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
-        $pathDestino = storage_path("app/public/" . $directorioFinal . $nombreArchivo);
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO FINAL
+        |--------------------------------------------------------------------------
+        */
 
-        // Crear la carpeta del reporte si no existe
-        if (!file_exists(storage_path("app/public/" . $directorioFinal))) {
-            mkdir(storage_path("app/public/" . $directorioFinal), 0755, true);
+        $directorioFinal =
+            "Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/";
+
+        $rutaDirectorioFinal = storage_path(
+            "app/public/" . $directorioFinal
+        );
+
+        if (!File::exists($rutaDirectorioFinal)) {
+
+            File::makeDirectory(
+                $rutaDirectorioFinal,
+                0777,
+                true
+            );
         }
 
-        // Guardar el PDF final solo si tiene contenido
-        if ($paginasAgregadas > 0) {
-            $pdf->Output('F', $pathDestino);
-        } else {
-            Log::error("El PDF final no se generó porque no se encontraron archivos válidos.");
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR PDF FINAL
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreArchivoFinal =
+            "QR_FOR_01_PRO_INS_03_{$Contrato}_{$No_Reporte}.pdf";
+
+        $rutaPdfFinal =
+            $rutaDirectorioFinal .
+            $nombreArchivoFinal;
+
+        $pdf->Output(
+            $rutaPdfFinal,
+            'F'
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | URL PUBLICA DEL PDF (TOKEN)
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaPublicaPdf = route(
+            'qr.reporte',
+            ['token' => $token]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR QR
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreQR =
+            "QR_{$Contrato}_{$No_Reporte}.svg";
+
+        $directorioQR = storage_path(
+            "app/public/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/QR_REPORTES"
+        );
+
+        if (!File::exists($directorioQR)) {
+
+            File::makeDirectory(
+                $directorioQR,
+                0777,
+                true
+            );
         }
 
-        return $nombreArchivo;
+        $rutaQrCompleta =
+            $directorioQR .
+            DIRECTORY_SEPARATOR .
+            $nombreQR;
+
+        \QrCode::format('svg')
+            ->size(300)
+            ->margin(0)
+            ->generate(
+                $rutaPublicaPdf,
+                $rutaQrCompleta
+            );
+
+        /*
+        |--------------------------------------------------------------------------
+        | RUTAS RELATIVAS
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaQrPublica =
+            "storage/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/QR_REPORTES/"
+            . $nombreQR;
+
+        $rutaPdfRelativa =
+            "storage/Reportes/FOR_01_PRO_INS_03/{$Contrato}/{$No_Reporte}/"
+            . $nombreArchivoFinal;
+
+        /*
+        |--------------------------------------------------------------------------
+        | LIMPIAR TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
+        File::deleteDirectory(
+            $directorioTemporal
+        );
+
+        Log::info(
+            'PDF final generado',
+            [
+                'pdf' => $rutaPdfRelativa,
+                'qr' => $rutaQrPublica
+            ]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETORNO
+        |--------------------------------------------------------------------------
+        */
+
+        return [
+            'pdf' => $rutaPdfRelativa,
+            'qr' => $rutaQrPublica
+        ];
     }
         
     public function OS_OC($datosParaCrearOS_OC)
@@ -486,7 +781,15 @@ class FOR_01_PRO_INS_03Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
-        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
+        // Después de $validatedData = $request->validate(...)
+
+        // ========================================
+        // GENERAR TOKEN QR (si no existe)
+        // ========================================
+        if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
+            $validatedData['Datos_Equipo']['QR_TOKEN'] = (string) Str::uuid();
+        }
+        
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -497,6 +800,39 @@ class FOR_01_PRO_INS_03Controller extends Controller
         // Guardar el registro en la base de datos   
         $Reportes->save();
 
+        //QR
+        // Obtener datos desde validatedData
+        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'] ?? null;
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $idPenetrante = $validatedData['Datos_Equipo']['ID_PENETRANTES'] ?? null;
+        $idRemovedor = $validatedData['Datos_Equipo']['ID_REMOVEDOR'] ?? null;
+        $idRevelador = $validatedData['Datos_Equipo']['ID_REVELEADOR'] ?? null;
+
+        // Datos para el QR/PDF
+        $datosParaCrearQR = [
+            'Contrato'     => $Contrato,
+            'No_Reporte'   => $No_Reporte,
+            'idSolicitud'  => $idSolicitud,
+            'idPenetrante' => $idPenetrante,
+            'idRemovedor'  => $idRemovedor,
+            'idRevelador'  => $idRevelador,
+            'qr_token'     => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ];
+
+        // Generar QR y PDF
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+
+        // Actualizar el registro recién creado con las rutas
+        $Reportes->update([
+            'Datos_Equipo' => json_encode(array_merge(
+                $validatedData['Datos_Equipo'],
+                [
+                    'QR_PDF'        => $resultadoQR['qr'],
+                    'PDF_UNIFICADO' => $resultadoQR['pdf'],
+                ]
+            )),
+        ]);
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
@@ -546,35 +882,51 @@ class FOR_01_PRO_INS_03Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
-                for ($i = 0; $i < $numFilasSin; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $sinTituloKey,
-                    'data' => [
-                    'No' => $request->input("No.$sinTituloKey.$i"),
-                    'componente' => $request->input("componente.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'largo' => $request->input("largo.$sinTituloKey.$i"),
-                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
-                    ]
-                    ]);
-                }
-                
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
+                $filasPorLongitud = 15;
 
-                foreach ($longitudesSin as $long) {
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                    $agregarElemento([
+                        'tipo' => 'fila',
+                        'grupo' => $sinTituloKey,
+                        'data' => [
+                            'No' => $request->input("No.$sinTituloKey.$i"),
+                            'componente' => $request->input("componente.$sinTituloKey.$i"),
+                            'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
+                            'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                            'largo' => $request->input("largo.$sinTituloKey.$i"),
+                            'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                            'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                            'ht' => $request->input("ht.$sinTituloKey.$i"),
+                            'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                            'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
+                        ]
+                    ]);
+
+                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
+                    if (($i + 1) % $filasPorLongitud === 0) {
+                        $idxLong = intdiv($i, $filasPorLongitud);
+                        if (isset($longitudesSin[$idxLong])) {
+                            $agregarElemento([
+                                'tipo' => 'longitud',
+                                'grupo' => $sinTituloKey,
+                                'valor' => $longitudesSin[$idxLong]
+                            ]);
+                            $cerrarBloque();
+                        }
+                    }
+                }
+
+                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
+                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+                $totalLongs = count($longitudesSin);
+                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
                     $agregarElemento([
                         'tipo' => 'longitud',
                         'grupo' => $sinTituloKey,
-                        'valor' => $long
+                        'valor' => $longitudesSin[$j]
                     ]);
-
-                    // cerrar bloque al encontrar longitud
                     $cerrarBloque();
                 }
 
@@ -748,18 +1100,8 @@ class FOR_01_PRO_INS_03Controller extends Controller
             
         ];
 
-        $datosParaCrearQR = [
-            'Contrato' => $Contrato,
-            'No_Reporte' => $No_Reporte,
-            'idSolicitud' => $idSolicitud,
-            'idPenetrante' => $idPenetrante,
-            'idRemovedor' => $idRemovedor,
-            'idRevelador' => $idRevelador,
-        ];
-
         $this->OS_OC($datosParaCrearOS_OC);
-        $this->Datos_QR($datosParaCrearQR);
-        $QR_PDF = $validatedData['Datos_Equipo']['QR_PDF'];
+
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
@@ -954,6 +1296,24 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR TOKEN QR PUBLICO
+        |--------------------------------------------------------------------------
+        */
+
+        // Solo generarlo si no existe
+        if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
+
+            $validatedData['Datos_Equipo']['QR_TOKEN'] =
+                (string) Str::uuid();
+        }
+        /*
+        |--------------------------------------------------------------------------
+        | DATOS PARA CREAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
+
         $datosParaCrearQR = [
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
@@ -961,21 +1321,58 @@ class FOR_01_PRO_INS_03Controller extends Controller
             'idPenetrante' => $idPenetrante,
             'idRemovedor' => $idRemovedor,
             'idRevelador' => $idRevelador,
+
+            // Token del QR público
+            'qr_token' =>
+                $validatedData['Datos_Equipo']['QR_TOKEN'],
         ];
 
-        $this->Datos_QR($datosParaCrearQR);
-        // 1. Captura el nombre que devuelve la función
-        $nombreGenerado = $this->Datos_QR($datosParaCrearQR);
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
 
-        // 2. ASIGNA la llave al array para que deje de marcar error
-        $validatedData['Datos_Equipo']['QR_PDF'] = $nombreGenerado;
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
 
-        // 3. Ahora sí, ya existe la llave y puedes usarla
-        $QR_PDF = $validatedData['Datos_Equipo']['QR_PDF'];
-        // Actualizar el reporte
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR RUTAS EN DATOS_EQUIPO
+        |--------------------------------------------------------------------------
+        */
+
+        // Ruta del QR (svg/png)
+        $validatedData['Datos_Equipo']['QR_PDF'] =
+            $resultadoQR['qr'];
+
+        // Ruta del PDF unificado
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
+            $resultadoQR['pdf'];
+
+        /*
+        |--------------------------------------------------------------------------
+        | VARIABLES DE APOYO (OPCIONAL)
+        |--------------------------------------------------------------------------
+        */
+
+        $QR_PDF =
+            $validatedData['Datos_Equipo']['QR_PDF'];
+
+        $PDF_UNIFICADO =
+            $validatedData['Datos_Equipo']['PDF_UNIFICADO'];
+
+        $QR_TOKEN =
+            $validatedData['Datos_Equipo']['QR_TOKEN'];
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTUALIZAR REPORTE
+        |--------------------------------------------------------------------------
+        */
+
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
-            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])
         ]);
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -1023,35 +1420,51 @@ class FOR_01_PRO_INS_03Controller extends Controller
         | 1. BLOQUE SIN TITULO
         |--------------------------------------------------------------------------
         */
-                for ($i = 0; $i < $numFilasSin; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $sinTituloKey,
-                    'data' => [
-                    'No' => $request->input("No.$sinTituloKey.$i"),
-                    'componente' => $request->input("componente.$sinTituloKey.$i"),
-                    'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
-                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
-                    'largo' => $request->input("largo.$sinTituloKey.$i"),
-                    'ancho' => $request->input("ancho.$sinTituloKey.$i"),
-                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
-                    'ht' => $request->input("ht.$sinTituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                    'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
-                    ]
-                    ]);
-                }
-                
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
+                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
+                $filasPorLongitud = 15;
 
-                foreach ($longitudesSin as $long) {
+                for ($i = 0; $i < $numFilasSin; $i++) {
+                    $agregarElemento([
+                        'tipo' => 'fila',
+                        'grupo' => $sinTituloKey,
+                        'data' => [
+                            'No' => $request->input("No.$sinTituloKey.$i"),
+                            'componente' => $request->input("componente.$sinTituloKey.$i"),
+                            'no_indicacion' => $request->input("no_indicacion.$sinTituloKey.$i"),
+                            'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                            'largo' => $request->input("largo.$sinTituloKey.$i"),
+                            'ancho' => $request->input("ancho.$sinTituloKey.$i"),
+                            'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                            'ht' => $request->input("ht.$sinTituloKey.$i"),
+                            'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                            'long_inspeccionada' => $request->input("long_inspeccionada.$sinTituloKey.$i"),
+                        ]
+                    ]);
+
+                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
+                    if (($i + 1) % $filasPorLongitud === 0) {
+                        $idxLong = intdiv($i, $filasPorLongitud);
+                        if (isset($longitudesSin[$idxLong])) {
+                            $agregarElemento([
+                                'tipo' => 'longitud',
+                                'grupo' => $sinTituloKey,
+                                'valor' => $longitudesSin[$idxLong]
+                            ]);
+                            $cerrarBloque();
+                        }
+                    }
+                }
+
+                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
+                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+                $totalLongs = count($longitudesSin);
+                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
                     $agregarElemento([
                         'tipo' => 'longitud',
                         'grupo' => $sinTituloKey,
-                        'valor' => $long
+                        'valor' => $longitudesSin[$j]
                     ]);
-
-                    // cerrar bloque al encontrar longitud
                     $cerrarBloque();
                 }
         /*
@@ -1312,7 +1725,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
-
+        //dd($Datos_Equipo['QR_PDF'] );
         $totalTitulos = 0;
         $totalFilas = 0;
 
@@ -1349,8 +1762,17 @@ class FOR_01_PRO_INS_03Controller extends Controller
             }
         }
 
+        $qrPdf = null;
+
+        if (!empty($Datos_Equipo['QR_PDF'])) {
+            $qrPdf = public_path(
+                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
+            );
+        }
+
         $data = [
             'title' => 'Reporte_FOR-01-INS-03.PDF',
+            'QR_PDF' => $qrPdf,
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -1401,7 +1823,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             // Posicionar el número de página dentro de la celda "Página" del encabezado
-            $combinedPdf->SetXY(129, -266);
+            $combinedPdf->SetXY(134.5, -265.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1414,7 +1836,7 @@ class FOR_01_PRO_INS_03Controller extends Controller
             $combinedPdf->SetFont('Arial', 'B', 8);
             // Posicionar el número de página dentro de la celda "Página" del encabezado
             $combinedPdf->SetXY(138, -265.5);
-            // Para que el conteo sea consecutivo
+            //Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 

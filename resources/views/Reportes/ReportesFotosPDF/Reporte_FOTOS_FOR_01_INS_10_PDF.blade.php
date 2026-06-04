@@ -73,6 +73,15 @@
                     border: 1px solid black; 
                 }
 
+                /* Igualar posicion del encabezado al formato 09 de fotos */
+                header {
+                    top: -50px;
+                }
+
+                footer {
+                    bottom: -45px;
+                }
+
         .encabezadoAzul{
             text-align: center;
             width: 100%;
@@ -209,6 +218,30 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="3" style="width: 80%;">
+                                <div style="
+                                    width:100%;
+                                    height:7.2%;
+                                    text-align:center;
+                                    vertical-align:middle;
+                                    padding:0;
+                                    margin:0;
+                                ">
+                                    @if(!empty($QR_PDF))
+                                    <img
+                                        src="{{ $QR_PDF }}"
+                                        alt="QR"
+                                        style="
+                                            width:50px;
+                                            height:50px;
+                                            display:block;
+                                            margin:auto;
+                                            padding:0;
+                                        "
+                                    >
+                                    @endif
+                                </div>
+                            </th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-INS-10/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>

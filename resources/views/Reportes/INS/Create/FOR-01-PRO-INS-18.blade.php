@@ -286,6 +286,7 @@
                                     </option>
                                 @endforeach 
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                         </div>
                     </div>
 
@@ -325,6 +326,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_SONDA]" id="IDInputA" value="{{ old('Datos_Equipo.ID_SONDA') }}">
                         </div>
                     </div>
 
@@ -364,6 +366,7 @@
                                     </option>
                                 @endforeach 
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_BLOCK]" id="IDInputbyp" value="{{ old('Datos_Equipo.ID_BLOCK') }}">
                         </div>
                     </div>
 
@@ -403,6 +406,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" name="Datos_Equipo[ID_CABLE]" id="IDInputA2" value="{{ old('Datos_Equipo.ID_CABLE') }}">
                         </div>
                     </div>
 
@@ -838,6 +842,31 @@
                                 </div>
                             </div>
                         </div>
+                        <p>
+
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                        
+                        <p>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                @error('Num_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                @error('Nombre_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="container">
                             <div class="float-right">
@@ -1246,6 +1275,7 @@ $(document).ready(function() {
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            $('#IDInputE').val($('#equiposSelect').val() || '');
         }
         
             const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
@@ -1260,12 +1290,15 @@ $(document).ready(function() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
-                var nombre = selectedOption.data('nombre') || '';
+                var marca = selectedOption.data('marca') || '';
+                var modelo = selectedOption.data('modelo') || '';
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#nombreInputbyp').val(nombre);
+                $('#marcaInputbyp').val(marca);
+                $('#modeloInputbyp').val(modelo);
                 $('#nsInputbyp').val(ns);
+                $('#IDInputbyp').val($('#blockyprobetaSelect').val() || '');
             }
 
             const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
@@ -1277,7 +1310,7 @@ $(document).ready(function() {
             });
 
             function actualizarInputsA1() {
-                var selectedOption = $('#accesoriosSelect1').find('option:selected');
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
@@ -1285,21 +1318,22 @@ $(document).ready(function() {
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA1').val(marca);
-                $('#modeloInputA1').val(modelo);
-                $('#nsInputA1').val(ns);
+                $('#marcaInputA').val(marca);
+                $('#modeloInputA').val(modelo);
+                $('#nsInputA').val(ns);
+                $('#IDInputA').val($('#accesoriosSelect').val() || '');
             }
 
             const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios1');
-            selectedOptionLocalA1 != null ?  ($('#accesoriosSelect1').val(selectedOptionLocalA1),actualizarInputsA1()):"";
+            selectedOptionLocalA1 != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA1),actualizarInputsA1()):"";
             
                 // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect1').on('change', function() {
+                $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA1();
                 });
 
             function actualizarInputsA2() {
-                var selectedOption = $('#accesoriosSelect2').find('option:selected');
+                var selectedOption = $('#accesoriosSelectA2').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
@@ -1310,13 +1344,14 @@ $(document).ready(function() {
                 $('#marcaInputA2').val(marca);
                 $('#modeloInputA2').val(modelo);
                 $('#nsInputA2').val(ns);
+                $('#IDInputA2').val($('#accesoriosSelectA2').val() || '');
             }
 
             const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
-            selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
+            selectedOptionLocalA2 != null ?  ($('#accesoriosSelectA2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
             
                 // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect2').on('change', function() {
+                $('#accesoriosSelectA2').on('change', function() {
                     actualizarInputsA2();
                 });
 

@@ -287,6 +287,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" id="IDInputEquipo" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                         </div>
                     </div>
 
@@ -341,6 +342,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden" id="IDInputbyp" name="Datos_Equipo[ID_BLOCK]" value="{{ old('Datos_Equipo.ID_BLOCK') }}">
                         </div>
                     </div>
 
@@ -373,7 +375,8 @@
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputA1" name="Datos_Equipo[ID_SONDA1]" value="{{ old('Datos_Equipo.ID_SONDA1') }}">
                         </div>
                     </div>
 
@@ -427,7 +430,8 @@
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputA2" name="Datos_Equipo[ID_SONDA2]" value="{{ old('Datos_Equipo.ID_SONDA2') }}">
                         </div>
                     </div>
 
@@ -482,7 +486,8 @@
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputA3" name="Datos_Equipo[ID_SONDA3]" value="{{ old('Datos_Equipo.ID_SONDA3') }}">
                         </div>
                     </div>
 
@@ -536,7 +541,8 @@
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputA4" name="Datos_Equipo[ID_SONDA4]" value="{{ old('Datos_Equipo.ID_SONDA4') }}">
                         </div>
                     </div>
 
@@ -590,7 +596,8 @@
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputA5" name="Datos_Equipo[ID_TRANS1]" value="{{ old('Datos_Equipo.ID_TRANS1') }}">
                         </div>
                     </div>
 
@@ -644,7 +651,8 @@
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputA6" name="Datos_Equipo[ID_TRANS2]" value="{{ old('Datos_Equipo.ID_TRANS2') }}">
                         </div>
                     </div>
 
@@ -698,7 +706,8 @@
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputA7" name="Datos_Equipo[ID_TRANS3]" value="{{ old('Datos_Equipo.ID_TRANS3') }}">
                         </div>
                     </div>
 
@@ -752,7 +761,8 @@
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputA8" name="Datos_Equipo[ID_TRANS4]" value="{{ old('Datos_Equipo.ID_TRANS4') }}">
                         </div>
                     </div>
 
@@ -806,7 +816,8 @@
                                             {{ $equipo->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputE2" name="Datos_Equipo[ID_ENCODER1]" value="{{ old('Datos_Equipo.ID_ENCODER1') }}">
                         </div>
                     </div>
 
@@ -853,7 +864,8 @@
                                             {{ $equipo->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
-                            </select>
+                                </select>
+                            <input type="hidden" id="IDInputE3" name="Datos_Equipo[ID_ENCODER2]" value="{{ old('Datos_Equipo.ID_ENCODER2') }}">
                         </div>
                     </div>
 
@@ -1331,6 +1343,31 @@
                                         <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <p>
+
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                        
+                        <p>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                @error('Num_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                @error('Nombre_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
                             </div>
                         </div>
 
@@ -1990,6 +2027,26 @@ $(document).ready(function() {
             $('#equiposSelect3').on('change', function() {
                 actualizarInputsE3();
             });
+
+            function sincronizarIdsQR() {
+                $('#IDInputEquipo').val($('#equiposSelect').val() || '');
+                $('#IDInputbyp').val($('#blockyprobetaSelect').val() || '');
+                $('#IDInputA1').val($('#accesoriosSelect1').val() || '');
+                $('#IDInputA2').val($('#accesoriosSelect2').val() || '');
+                $('#IDInputA3').val($('#accesoriosSelect3').val() || '');
+                $('#IDInputA4').val($('#accesoriosSelect4').val() || '');
+                $('#IDInputA5').val($('#accesoriosSelect5').val() || '');
+                $('#IDInputA6').val($('#accesoriosSelect6').val() || '');
+                $('#IDInputA7').val($('#accesoriosSelect7').val() || '');
+                $('#IDInputA8').val($('#accesoriosSelect8').val() || '');
+                $('#IDInputE2').val($('#equiposSelect2').val() || '');
+                $('#IDInputE3').val($('#equiposSelect3').val() || '');
+            }
+
+            $('#equiposSelect, #blockyprobetaSelect, #accesoriosSelect1, #accesoriosSelect2, #accesoriosSelect3, #accesoriosSelect4, #accesoriosSelect5, #accesoriosSelect6, #accesoriosSelect7, #accesoriosSelect8, #equiposSelect2, #equiposSelect3')
+                .on('change', sincronizarIdsQR);
+
+            sincronizarIdsQR();
     });
     
     /*FOR-01-PRO-INS-21*/

@@ -306,7 +306,7 @@
                                             </select>
                                         </div>
                                     </div>
-
+                                    <input type="hidden" id="IDInputEquipo" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -347,7 +347,8 @@
                                             </select>
                                         </div>
                                     </div>
-
+                                    
+                                    <input type="hidden" id="IDInputTransductor" name="Datos_Equipo[ID_TRANSDUCTOR]" value="{{ old('Datos_Equipo.ID_TRANSDUCTOR') }}">
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -396,6 +397,7 @@
                                         </div>
                                     </div>
 
+                                    <input type="hidden" id="IDInputBlock" name="Datos_Equipo[ID_BLOCK]" value="{{ old('Datos_Equipo.ID_BLOCK') }}">
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
@@ -427,8 +429,6 @@
                                     <div class="col-sm-12">
                                             <hr style="border: none; height: 3px; background-color: black;">
                                     </div>
-
-                                    
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -843,7 +843,29 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <p>
 
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                                        <p>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                                @error('Num_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                                @error('Nombre_Soldador')
+                                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
@@ -1247,267 +1269,116 @@
     }
     /*Selects */
     $(document).ready(function() {
-        function actualizarInputsE() {
-            var selectedOption = $('#equiposSelect').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE').val(marca);
-            $('#modeloInputE').val(modelo);
-            $('#nsInputE').val(ns);
-        }
         
-            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
-            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
+        // CONFIGURACIÓN GLOBAL
+        const FORM_ID = document.querySelectorAll("form")[1]?.id || 'FOR-01-PRO-INS-04';
+        const CONFIG = {
+            EQUIPOS: { selectId: '#equiposSelect', inputIds: ['#marcaInputE', '#modeloInputE', '#nsInputE'], hiddenId: '#IDInputEquipo', storageKey: `${FORM_ID}_Equipos` },
+            ACCESORIOS: { selectId: '#accesoriosSelect', inputIds: ['#marcaInputA', '#modeloInputA', '#nsInputA'], hiddenId: '#IDInputTransductor', storageKey: `${FORM_ID}_Accesorios` },
+            BLOCK: { selectId: '#blockyprobetaSelect', inputIds: ['#marcaInputbyp', '#modeloInputbyp', '#nsInputbyp'], hiddenId: '#IDInputBlock', storageKey: `${FORM_ID}_ByP` }
+        };
 
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
+        // FUNCIÓN PRINCIPAL: Actualizar inputs desde SELECT
+        function actualizarInputsDesdeSelect(config) {
+        return function() {
+            const $selectElement = $(config.selectId);
+
+            if ($selectElement.length === 0) {
+                console.warn(`SELECT no encontrado: ${config.selectId}`);
+                return;
+            }
+
+            const selectedOption = $selectElement.find('option:selected');
+            const selectedId = selectedOption.val() || '';
+
+            if (selectedId === '') {
+                config.inputIds.forEach(inputId => $(inputId).val(''));
+                if (config.hiddenId) {
+                    $(config.hiddenId).val('');
+                }
+                return;
+            }
+
+            const marca = selectedOption.data('marca') || '';
+            const modelo = selectedOption.data('modelo') || '';
+            const ns = selectedOption.data('ns') || '';
+
+            config.inputIds.forEach((inputId, index) => {
+                const valor = [marca, modelo, ns][index] || '';
+                $(inputId).val(valor);
             });
 
-            function actualizarInputsbyp() {
-                var selectedOption = $('#blockyprobetaSelect').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var nombre = selectedOption.data('nombre') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#nombreInputbyp').val(nombre);
-                $('#nsInputbyp').val(ns);
+            if (config.hiddenId) {
+                $(config.hiddenId).val(selectedId);
             }
 
-            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
-            selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
-
-            // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').on('change', function() {
-                actualizarInputsbyp();
-            });
-
-            function actualizarInputsA1() {
-                var selectedOption = $('#accesoriosSelect1').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA1').val(marca);
-                $('#modeloInputA1').val(modelo);
-                $('#nsInputA1').val(ns);
+            try {
+                localStorage.setItem(config.storageKey, selectedId);
+            } catch (e) {
+                console.warn('No se pudo guardar en localStorage:', e);
             }
-
-            const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios1');
-            selectedOptionLocalA1 != null ?  ($('#accesoriosSelect1').val(selectedOptionLocalA1),actualizarInputsA1()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect1').on('change', function() {
-                    actualizarInputsA1();
-                });
-
-            function actualizarInputsA2() {
-                var selectedOption = $('#accesoriosSelect2').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA2').val(marca);
-                $('#modeloInputA2').val(modelo);
-                $('#nsInputA2').val(ns);
-            }
-
-            const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
-            selectedOptionLocalA2 != null ?  ($('#accesoriosSelect2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect2').on('change', function() {
-                    actualizarInputsA2();
-                });
-
-            function actualizarInputsA3() {
-                var selectedOption = $('#accesoriosSelect3').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA3').val(marca);
-                $('#modeloInputA3').val(modelo);
-                $('#nsInputA3').val(ns);
-            }
-
-            const selectedOptionLocalA3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios3');
-            selectedOptionLocalA3 != null ?  ($('#accesoriosSelect3').val(selectedOptionLocalA3),actualizarInputsA3()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect3').on('change', function() {
-                    actualizarInputsA3();
-                });
-
-            function actualizarInputsA4() {
-                var selectedOption = $('#accesoriosSelect4').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA4').val(marca);
-                $('#modeloInputA4').val(modelo);
-                $('#nsInputA4').val(ns);
-            }
-
-            const selectedOptionLocalA4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios4');
-            selectedOptionLocalA4 != null ?  ($('#accesoriosSelect4').val(selectedOptionLocalA4),actualizarInputsA4()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect4').on('change', function() {
-                    actualizarInputsA4();
-                });
-
-            function actualizarInputsA5() {
-                var selectedOption = $('#accesoriosSelect5').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA5').val(marca);
-                $('#modeloInputA5').val(modelo);
-                $('#nsInputA5').val(ns);
-            }
-
-            const selectedOptionLocalA5 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios5');
-            selectedOptionLocalA5 != null ?  ($('#accesoriosSelect5').val(selectedOptionLocalA5),actualizarInputsA5()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect5').on('change', function() {
-                    actualizarInputsA5();
-                });
-
-            function actualizarInputsA6() {
-                var selectedOption = $('#accesoriosSelect6').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA6').val(marca);
-                $('#modeloInputA6').val(modelo);
-                $('#nsInputA6').val(ns);
-            }
-
-            const selectedOptionLocalA6 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios6');
-            selectedOptionLocalA6 != null ?  ($('#accesoriosSelect6').val(selectedOptionLocalA6),actualizarInputsA6()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect6').on('change', function() {
-                    actualizarInputsA6();
-                });
-
-            function actualizarInputsA7() {
-                var selectedOption = $('#accesoriosSelect7').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA7').val(marca);
-                $('#modeloInputA7').val(modelo);
-                $('#nsInputA7').val(ns);
-            }
-
-            const selectedOptionLocalA7 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios7');
-            selectedOptionLocalA7 != null ?  ($('#accesoriosSelect7').val(selectedOptionLocalA7),actualizarInputsA7()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect7').on('change', function() {
-                    actualizarInputsA7();
-                });
-
-            function actualizarInputsA8() {
-                var selectedOption = $('#accesoriosSelect8').find('option:selected');
-
-                // Extraer los datos de los atributos "data-"
-                var marca = selectedOption.data('marca') || '';
-                var modelo = selectedOption.data('modelo') || '';
-                var ns = selectedOption.data('ns') || '';
-
-                // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA8').val(marca);
-                $('#modeloInputA8').val(modelo);
-                $('#nsInputA8').val(ns);
-            }
-
-            const selectedOptionLocalA8 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios8');
-            selectedOptionLocalA8 != null ?  ($('#accesoriosSelect8').val(selectedOptionLocalA8),actualizarInputsA8()):"";
-            
-                // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect8').on('change', function() {
-                    actualizarInputsA8();
-                });
-
-        function actualizarInputsE2() {
-            var selectedOption = $('#equiposSelect2').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE2').val(marca);
-            $('#modeloInputE2').val(modelo);
-            $('#nsInputE2').val(ns);
-        }
+        };
+    }
         
-            const selectedOptionLocalE2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos2');
-            selectedOptionLocalE2 != null ?  ($('#equiposSelect2').val(selectedOptionLocalE2),actualizarInputsE2()):"";
 
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect2').on('change', function() {
-                actualizarInputsE2();
+        // FUNCIÓN: Inicializar todos los selects en el documento
+        function inicializarSelects() {
+            Object.keys(CONFIG).forEach(key => {
+                const config = CONFIG[key];
+                const $select = $(config.selectId);
+
+                // Si el select existe
+                if ($select.length > 0) {
+                    // Evento de cambio
+                    $select.off('change').on('change', actualizarInputsDesdeSelect(config));
+
+                    // RESTAURAR VALOR GUARDADO en localStorage (si existe)
+                    try {
+                        const valorGuardado = localStorage.getItem(config.storageKey);
+                        if (valorGuardado && $select.find(`option[value="${valorGuardado}"]`).length > 0) {
+                            $select.val(valorGuardado);
+                            // Dispararevento change para actualizar inputs
+                            $select.trigger('change');
+                        }
+                    } catch (e) {
+                        console.warn('Error restaurando localStorage:', e);
+                    }
+                }
             });
-
-            function actualizarInputsE3() {
-            var selectedOption = $('#equiposSelect3').find('option:selected');
-
-            // Extraer los datos de los atributos "data-"
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            // Rellenar los inputs con los valores obtenidos
-            $('#marcaInputE3').val(marca);
-            $('#modeloInputE3').val(modelo);
-            $('#nsInputE3').val(ns);
         }
-        
-            const selectedOptionLocalE3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos3');
-            selectedOptionLocalE3 != null ?  ($('#equiposSelect3').val(selectedOptionLocalE3),actualizarInputsE3()):"";
 
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect3').on('change', function() {
-                actualizarInputsE3();
-            });
+        // LIMPIAR localStorage cuando se inicia una NUEVA solicitud
+        function limpiarStorageParaNuevaSolicitud() {
+            // Solo limpiar si es una nueva creación (no hay idReportes en URL)
+            const urlParams = new URLSearchParams(window.location.search);
+            const idReporte = urlParams.get('id');
+            
+            if (!idReporte && window.location.pathname.includes('Editar') === false) {
+                // Es una creación nueva, limpiar storage
+                try {
+                    Object.values(CONFIG).forEach(config => {
+                        localStorage.removeItem(config.storageKey);
+                    });
+                } catch (e) {
+                    console.warn('No se pudo limpiar localStorage:', e);
+                }
+            }
+        }
+
+        // EJECUTAR AL CARGAR LA PÁGINA
+        limpiarStorageParaNuevaSolicitud();
+        inicializarSelects();
+
+        // RE-INICIALIZAR cuando cambia el formulario (por si hay AJAX)
+        $(document).on('formUpdated', function() {
+            inicializarSelects();
+        });
+
+        // EXPORTAR FUNCIONES para uso externo si es necesario
+        window.ReporteEquiposManager = {
+            actualizarSelects: inicializarSelects,
+            limpiarStorage: limpiarStorageParaNuevaSolicitud
+        };
     });
 
 

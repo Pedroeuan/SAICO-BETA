@@ -301,7 +301,8 @@
                                                 {{ $equipo->Nombre_E_P_BP }}
                                             </option>
                                         @endforeach
-                                </select>
+                                    </select>
+                                    <input type="hidden" id="IDInputEquipo" name="Datos_Equipo[ID_EQUIPO]" value="{{ old('Datos_Equipo.ID_EQUIPO') }}">
                         </div>
                     </div>
 
@@ -342,7 +343,8 @@
                                                     {{ $accesorios->Nombre_E_P_BP }}
                                             </option>
                                         @endforeach
-                                </select>
+                                    </select>
+                                    <input type="hidden" id="IDInputA1" name="Datos_Equipo[ID_AN1]" value="{{ old('Datos_Equipo.ID_AN1') }}">
                         </div>
                     </div>
 
@@ -383,7 +385,8 @@
                                                     {{ $accesorios->Nombre_E_P_BP }}
                                             </option>
                                         @endforeach
-                                </select>
+                                    </select>
+                                    <input type="hidden" id="IDInputA2" name="Datos_Equipo[ID_AN2]" value="{{ old('Datos_Equipo.ID_AN2') }}">
                         </div>
                     </div>
 
@@ -1009,6 +1012,32 @@
                                         <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <p>
+
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                        
+                        <p>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
+                                @error('Num_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
+                                @error('Nombre_Soldador')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                @enderror
                             </div>
                         </div>
 
@@ -1684,6 +1713,17 @@ $(document).ready(function() {
             $('#equiposSelect3').on('change', function() {
                 actualizarInputsE3();
             });
+
+            function sincronizarIdsQR() {
+                $('#IDInputEquipo').val($('#equiposSelect').val() || '');
+                $('#IDInputA1').val($('#accesoriosSelect').val() || '');
+                $('#IDInputA2').val($('#accesoriosSelect2').val() || '');
+            }
+
+            $('#equiposSelect, #accesoriosSelect, #accesoriosSelect2')
+                .on('change', sincronizarIdsQR);
+
+            sincronizarIdsQR();
     });
 
     /*FOR-01-PRO-INS-22*/

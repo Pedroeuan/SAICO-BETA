@@ -173,9 +173,59 @@
                     <thead>
                         <tr>
                             <th style="width: 400%;">FORMATO</th>
-                            <th style="width: 70%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-03/01</th>
-                            <th rowspan="3" style="width: 80%;"><img src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width:80%; padding:0; margin:0;">
+    
+                                <div style="
+                                    width:100%;
+                                    height:7.2%;
+                                    text-align:center;
+                                    vertical-align:middle;
+                                    padding:0;
+                                    margin:0;
+                                ">
+
+                                    <img
+                                        src="{{ $QR_PDF }}"
+                                        alt="QR"
+                                        style="
+                                            width:65px;
+                                            height:65px;
+                                            display:block;
+                                            margin:auto;
+                                            padding:0;
+                                        "
+                                    >
+                                </div>
+
+                            </th>
+                            <th style="width: 60%;">Código:</th>
+                            <th style="width: 90%;">FOR-INS-03/01</th>
+                                                        <th rowspan="3" style="width:80%; padding:0; margin:0;">
+    
+                                <div style="
+                                    width:100%;
+                                    height:7.2%;
+                                    text-align:center;
+                                    vertical-align:middle;
+                                    padding:0;
+                                    margin:0;
+                                ">
+
+                                    <img
+                                        src="{{ $Logo }}"
+                                        alt="Logo"
+                                        style="
+                                            width:65px;
+                                            height:65px;
+                                            display:block;
+                                            margin:auto;
+                                            padding:0;
+                                        "
+                                    >
+                                </div>
+
+                            </th>
+
                         </tr>
                     </thead>
 
