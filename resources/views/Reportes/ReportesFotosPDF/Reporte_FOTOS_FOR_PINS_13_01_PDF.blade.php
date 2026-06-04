@@ -2,9 +2,9 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-01-INS-13</title>
+            <title>FORMATO FOR-PINS-13/01</title>
             <style>
-            @page {
+                @page {
                     margin: 
                     3.0cm /* superior */
                     1.2cm /* derecho */
@@ -215,16 +215,16 @@
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-13/01</th>
+                            <th style="width: 90%;">FOR-PINS-13/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1</th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON CORRIENTES DE EDDY</th>
                             <th>Versión</th>
-                            <th>2</th>
+                            <th>1</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -236,7 +236,7 @@
                 <div style="margin-bottom: 4px;"></div>
 
             </header>
-            
+
             <footer>
                     <table class="datosgenerales">
                         <thead>
@@ -418,8 +418,6 @@
 
         @foreach($chunks as $fotosGrupo)
             <div class="content">
-
-                <div style="margin-bottom: 0px;"></div>
                 <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
@@ -478,7 +476,8 @@
                     </tbody>
                 </table>
                 <div style="margin-bottom: 6px;"></div>
-
+            </header>
+            
                 <table class="datosgenerales">
                     <thead class="encabezadoAzul">
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>

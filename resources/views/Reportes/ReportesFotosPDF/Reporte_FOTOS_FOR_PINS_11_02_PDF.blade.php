@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-02-INS-10</title>
+            <title>FORMATO FOR-PINS-11/02</title>
             <style>
                 @page {
                     margin: 
@@ -243,7 +243,7 @@
                                 </div>
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-10/02</th>
+                            <th style="width: 90%;">FOR-PINS-11/02</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -252,7 +252,7 @@
                         <tr>
                             <th rowspan="2" style="font-size: 8pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA </th>
                             <th>Versión</th>
-                            <th>2</th>
+                            <th>1</th>
                         </tr>
                         <tr>
                             <th>Página</th>

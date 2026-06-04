@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-INS-14/01</title>
+            <title>FORMATO FOR-PINS-15_01</title>
             <style>
                 @page {
                     margin: 
@@ -190,14 +190,14 @@
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-14/01</th>
+                            <th style="width: 90%;">FOR-PINS-15/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">PROCEDIMIENTO DE INSPECCIÓN CON ULTRASONIDO POR EL METODO TOFD (TIME OF FLIGHT DIFFRACTION) </th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD</th>
                             <th>Versión</th>
                             <th>0</th>
                         </tr>

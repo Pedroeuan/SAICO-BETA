@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-01-INS-12</title>
+            <title>FORMATO FOR-PINS-15_01</title>
             <style>
                 @page {
                     margin: 
@@ -211,18 +211,18 @@
                             <th style="width: 500%;">FORMATO</th>
                             <th rowspan="3" style="width: 80%;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width: 65px; height: 65px; display:block; margin:auto; padding:0;">
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-INS-12/01</th>
+                            <th style="width: 90%;">FOR-PINS-15/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON CORRIENTES DE EDDY</th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD</th>
                             <th>Versión</th>
                             <th>2</th>
                         </tr>
@@ -236,7 +236,7 @@
                 <div style="margin-bottom: 4px;"></div>
 
             </header>
-
+            
             <footer>
                     <table class="datosgenerales">
                         <thead>
@@ -418,7 +418,10 @@
 
         @foreach($chunks as $fotosGrupo)
             <div class="content">
-                <table class="datosgenerales">
+
+            <div style="margin-bottom: 0px;"></div>
+
+            <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
@@ -475,9 +478,9 @@
                         </tr>
                     </tbody>
                 </table>
+
                 <div style="margin-bottom: 6px;"></div>
-            </header>
-            
+
                 <table class="datosgenerales">
                     <thead class="encabezadoAzul">
                         <tr><th>REGISTRO FOTOGRÁFICO</th></tr>

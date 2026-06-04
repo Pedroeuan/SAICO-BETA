@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-02-PRO-INS-10')
+@section('title', 'FOR-PINS-11/02')
 
 @section('css')
 <!--datatable -->
@@ -74,7 +74,7 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-02-PRO-INS-10" action="{{route('Reportes_FOR_02_PRO_INS_10.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-PINS-11_02" action="{{route('Reportes_FOR_PINS_11_02.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -1417,29 +1417,29 @@ $(document).ready(function() {
             });
         });
 
-    /*FOR-02-PRO-INS-10*/
+    /*FOR-PINS-11_02*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-02-PRO-INS-10');
+        const form = document.getElementById('FOR-PINS-11_02');
         if (!form) return;
 
         // Guardar en localStorage al escribir
         //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
           //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-02-PRO-INS-10_' + el.name, el.value);
+            //    localStorage.setItem('FOR-PINS-11_02_' + el.name, el.value);
             //});
         //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-02-PRO-INS-10_' + el.name, el.value);
+                localStorage.setItem('FOR-PINS-11_02_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
-                const value = localStorage.getItem('FOR-02-PRO-INS-10_' + el.name);
+                const value = localStorage.getItem('FOR-PINS-11_02_' + el.name);
                 if (value !== null) el.value = value;
             }
         });
@@ -1447,7 +1447,7 @@ $(document).ready(function() {
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-02-PRO-INS-10_' + el.name);
+                localStorage.removeItem('FOR-PINS-11_02_' + el.name);
                 //localStorage.clear();
             });
         });
@@ -1455,4 +1455,3 @@ $(document).ready(function() {
 
     </script>
 @endsection
-

@@ -225,15 +225,15 @@
                                     text-align:center;
                                     vertical-align:middle;
                                     padding:0;
-                                    margin:0;
+                                    margin:1PX;
                                 ">
                                     @if(!empty($QR_PDF))
                                     <img
                                         src="{{ $QR_PDF }}"
                                         alt="QR"
                                         style="
-                                            width:50px;
-                                            height:50px;
+                                            width:60px;
+                                            height:60px;
                                             display:block;
                                             margin:auto;
                                             padding:0;
@@ -244,7 +244,7 @@
                             </th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-PINS-11/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 

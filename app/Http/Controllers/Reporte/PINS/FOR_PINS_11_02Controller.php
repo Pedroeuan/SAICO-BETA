@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reporte\INS;
+namespace App\Http\Controllers\Reporte\PINS;
 
 use App\Http\Controllers\Controller;
 
@@ -41,7 +41,8 @@ use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
 /*QR*/
 use Illuminate\Support\Str;
-class FOR_01_PRO_INS_14Controller extends Controller
+
+class FOR_PINS_11_02Controller extends Controller
 {
     public function Datos_QR($datosParaCrearQR)
     {
@@ -51,17 +52,8 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
         $idsConsumibles = array_filter([
             $datosParaCrearQR['idEquipo'] ?? null,
-            $datosParaCrearQR['idBlock'] ?? null,
-            $datosParaCrearQR['idSonda1'] ?? null,
-            $datosParaCrearQR['idSonda2'] ?? null,
-            $datosParaCrearQR['idSonda3'] ?? null,
-            $datosParaCrearQR['idSonda4'] ?? null,
-            $datosParaCrearQR['idTrans1'] ?? null,
-            $datosParaCrearQR['idTrans2'] ?? null,
-            $datosParaCrearQR['idTrans3'] ?? null,
-            $datosParaCrearQR['idTrans4'] ?? null,
-            $datosParaCrearQR['idEncoder1'] ?? null,
-            $datosParaCrearQR['idEncoder2'] ?? null,
+            $datosParaCrearQR['idTransductor'] ?? null,
+            $datosParaCrearQR['idBlock'] ?? null
         ]);
 
         /*
@@ -70,25 +62,17 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $facturas = general_eyc::whereIn(
-            'idGeneral_EyC',
-            $idsConsumibles
-        )
-        ->whereNotNull('Factura')
-        ->pluck('Factura')
-        ->toArray();
+        $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)
+            ->whereNotNull('Factura')
+            ->pluck('Factura')
+            ->toArray();
 
-        $certificados = certificados::whereIn(
-            'idGeneral_EyC',
-            $idsConsumibles
-        )
-        ->whereNotNull('Certificado_Actual')
-        ->pluck('Certificado_Actual')
-        ->toArray();
+        $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)
+            ->whereNotNull('Certificado_Actual')
+            ->pluck('Certificado_Actual')
+            ->toArray();
 
-        $todasLasRutas = array_values(
-            array_merge($facturas, $certificados)
-        );
+        $todasLasRutas = array_values(array_merge($facturas, $certificados));
 
         Log::info('todasLasRutas', $todasLasRutas);
 
@@ -98,26 +82,15 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $rutasInvalidas = [
-            'EN ESPERA DE DATOS',
-            'ESPERA DE DATO',
-            'N/A'
-        ];
+        $rutasInvalidas = ['EN ESPERA DE DATOS', 'ESPERA DE DATO', 'N/A'];
 
-        $rutasValidas = array_filter(
-            $todasLasRutas,
-            function ($ruta) use ($rutasInvalidas) {
-
-                if (!$ruta) {
-                    return false;
-                }
-
-                return !in_array(
-                    trim(strtoupper($ruta)),
-                    $rutasInvalidas
-                );
+        $rutasValidas = array_filter($todasLasRutas, function ($ruta) use ($rutasInvalidas) {
+            if (!$ruta) {
+                return false;
             }
-        );
+
+            return !in_array(trim(strtoupper($ruta)), $rutasInvalidas);
+        });
 
         /*
         |--------------------------------------------------------------------------
@@ -125,16 +98,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $directorioTemporal = storage_path(
-            "app/temp_pdfs/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}"
-        );
+        $directorioTemporal = storage_path("app/temp_pdfs/FOR_PINS_11_02/{$Contrato}/{$No_Reporte}");
 
         if (!File::exists($directorioTemporal)) {
-            File::makeDirectory(
-                $directorioTemporal,
-                0777,
-                true
-            );
+            File::makeDirectory($directorioTemporal, 0777, true);
         }
 
         $pdfsTemporales = [];
@@ -146,32 +113,17 @@ class FOR_01_PRO_INS_14Controller extends Controller
         */
 
         foreach ($rutasValidas as $rutaPdf) {
-
-            $rutaOriginal = storage_path(
-                'app/public/' . $rutaPdf
-            );
+            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
 
             if (!File::exists($rutaOriginal)) {
-
-                Log::warning(
-                    'PDF no encontrado',
-                    ['ruta' => $rutaOriginal]
-                );
-
+                Log::warning('PDF no encontrado', ['ruta' => $rutaOriginal]);
                 continue;
             }
 
             $nombreArchivo = basename($rutaOriginal);
+            $rutaTemporal = $directorioTemporal . DIRECTORY_SEPARATOR . $nombreArchivo;
 
-            $rutaTemporal =
-                $directorioTemporal .
-                DIRECTORY_SEPARATOR .
-                $nombreArchivo;
-
-            File::copy(
-                $rutaOriginal,
-                $rutaTemporal
-            );
+            File::copy($rutaOriginal, $rutaTemporal);
 
             $pdfsTemporales[] = $rutaTemporal;
         }
@@ -183,14 +135,11 @@ class FOR_01_PRO_INS_14Controller extends Controller
         */
 
         if (empty($pdfsTemporales)) {
-
-            Log::warning(
-                'No hay PDFs válidos para unir.'
-            );
+            Log::warning('No hay PDFs válidos para unir.');
 
             return [
                 'pdf' => null,
-                'qr' => $rutaQrPublica
+                'qr' => null
             ];
         }
 
@@ -203,20 +152,14 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $pdf = new Fpdi();
 
         foreach ($pdfsTemporales as $archivoPdf) {
-
             try {
-
                 /*
                 |--------------------------------------------------------------------------
                 | HACER PDF COMPATIBLE CON FPDI
                 |--------------------------------------------------------------------------
                 */
 
-                $archivoCompatible = str_replace(
-                    '.pdf',
-                    '_compatible.pdf',
-                    $archivoPdf
-                );
+                $archivoCompatible = str_replace('.pdf', '_compatible.pdf', $archivoPdf);
 
                 $comando =
                     'gswin64c -sDEVICE=pdfwrite '
@@ -238,47 +181,20 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 |--------------------------------------------------------------------------
                 */
 
-                $cantidadPaginas =
-                    $pdf->setSourceFile(
-                        $archivoCompatible
-                    );
+                $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
 
-                for (
-                    $pagina = 1;
-                    $pagina <= $cantidadPaginas;
-                    $pagina++
-                ) {
+                for ($pagina = 1; $pagina <= $cantidadPaginas; $pagina++) {
+                    $template = $pdf->importPage($pagina);
+                    $size = $pdf->getTemplateSize($template);
 
-                    $template =
-                        $pdf->importPage($pagina);
-
-                    $size =
-                        $pdf->getTemplateSize(
-                            $template
-                        );
-
-                    $pdf->AddPage(
-                        $size['orientation'],
-                        [
-                            $size['width'],
-                            $size['height']
-                        ]
-                    );
-
-                    $pdf->useTemplate(
-                        $template
-                    );
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($template);
                 }
-
             } catch (\Exception $e) {
-
-                Log::error(
-                    'Error procesando PDF',
-                    [
-                        'archivo' => $archivoPdf,
-                        'error' => $e->getMessage()
-                    ]
-                );
+                Log::error('Error procesando PDF', [
+                    'archivo' => $archivoPdf,
+                    'error' => $e->getMessage()
+                ]);
 
                 continue;
             }
@@ -290,20 +206,11 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $directorioFinal =
-            "Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/";
-
-        $rutaDirectorioFinal = storage_path(
-            "app/public/" . $directorioFinal
-        );
+        $directorioFinal = "Reportes/FOR_PINS_11_02/{$Contrato}/{$No_Reporte}/";
+        $rutaDirectorioFinal = storage_path("app/public/" . $directorioFinal);
 
         if (!File::exists($rutaDirectorioFinal)) {
-
-            File::makeDirectory(
-                $rutaDirectorioFinal,
-                0777,
-                true
-            );
+            File::makeDirectory($rutaDirectorioFinal, 0777, true);
         }
 
         /*
@@ -312,17 +219,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $nombreArchivoFinal =
-            "QR_FOR_01_PRO_INS_14_{$Contrato}_{$No_Reporte}.pdf";
+        $nombreArchivoFinal = "QR_FOR_PINS_11_02_{$Contrato}_{$No_Reporte}.pdf";
+        $rutaPdfFinal = $rutaDirectorioFinal . $nombreArchivoFinal;
 
-        $rutaPdfFinal =
-            $rutaDirectorioFinal .
-            $nombreArchivoFinal;
-
-        $pdf->Output(
-            $rutaPdfFinal,
-            'F'
-        );
+        $pdf->Output($rutaPdfFinal, 'F');
 
         /*
         |--------------------------------------------------------------------------
@@ -330,10 +230,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $rutaPublicaPdf = route(
-            'qr.reporte',
-            ['token' => $token]
-        );
+        $rutaPublicaPdf = route('qr.reporte', ['token' => $token]);
 
         /*
         |--------------------------------------------------------------------------
@@ -341,34 +238,19 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $nombreQR =
-            "QR_{$Contrato}_{$No_Reporte}.svg";
-
-        $directorioQR = storage_path(
-            "app/public/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/QR_REPORTES"
-        );
+        $nombreQR = "QR_{$Contrato}_{$No_Reporte}.svg";
+        $directorioQR = storage_path("app/public/Reportes/FOR_PINS_11_02/{$Contrato}/{$No_Reporte}/QR_REPORTES");
 
         if (!File::exists($directorioQR)) {
-
-            File::makeDirectory(
-                $directorioQR,
-                0777,
-                true
-            );
+            File::makeDirectory($directorioQR, 0777, true);
         }
 
-        $rutaQrCompleta =
-            $directorioQR .
-            DIRECTORY_SEPARATOR .
-            $nombreQR;
+        $rutaQrCompleta = $directorioQR . DIRECTORY_SEPARATOR . $nombreQR;
 
         \QrCode::format('svg')
             ->size(300)
             ->margin(0)
-            ->generate(
-                $rutaPublicaPdf,
-                $rutaQrCompleta
-            );
+            ->generate($rutaPublicaPdf, $rutaQrCompleta);
 
         /*
         |--------------------------------------------------------------------------
@@ -376,13 +258,8 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $rutaQrPublica =
-            "storage/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/QR_REPORTES/"
-            . $nombreQR;
-
-        $rutaPdfRelativa =
-            "storage/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/"
-            . $nombreArchivoFinal;
+        $rutaQrPublica = "storage/Reportes/FOR_PINS_11_02/{$Contrato}/{$No_Reporte}/QR_REPORTES/" . $nombreQR;
+        $rutaPdfUnificado = "storage/{$directorioFinal}{$nombreArchivoFinal}";
 
         /*
         |--------------------------------------------------------------------------
@@ -390,158 +267,32 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        File::deleteDirectory(
-            $directorioTemporal
-        );
-
-        Log::info(
-            'PDF final generado',
-            [
-                'pdf' => $rutaPdfRelativa,
-                'qr' => $rutaQrPublica
-            ]
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | RETORNO
-        |--------------------------------------------------------------------------
-        */
+        File::deleteDirectory($directorioTemporal);
 
         return [
-            'pdf' => $rutaPdfRelativa,
+            'pdf' => $rutaPdfUnificado,
             'qr' => $rutaQrPublica
         ];
     }
-    /*public function OS_OC($datosParaCrearOS_OC)
-    {
-        return DB::transaction(function () use ($datosParaCrearOS_OC) {
-
-            /** =======================
-             *  Datos de entrada
-             ======================= */
-            /* $idPrueba_Aplica        = $datosParaCrearOS_OC['idPrueba_Aplica'];
-            $Cliente               = trim($datosParaCrearOS_OC['Cliente']);
-            $Lugar                 = $datosParaCrearOS_OC['Lugar'];
-            $Contrato              = trim($datosParaCrearOS_OC['Contrato']);
-            $Proyecto              = $datosParaCrearOS_OC['Proyecto'];
-            $Material              = $datosParaCrearOS_OC['Material'];
-            $Isometrico_Plano       = $datosParaCrearOS_OC['Isometrico_Plano'];
-            $ResultadosJuntas       = $datosParaCrearOS_OC['ResultadosJuntas'];
-            $idSolicitud            = $datosParaCrearOS_OC['idSolicitud'];
-            $idReportes             = $datosParaCrearOS_OC['idReportes'];
-
-            /** =======================
-             *  CLIENTE
-             ======================= */
-            /*$cliente = clientes::where('Cliente', $Cliente)->first();
-
-            if (!$cliente) {
-                $cliente = clientes::firstOrCreate(
-                    ['Cliente' => 'POR DEFINIR'],
-                    [
-                        'RFC'      => 'N/A',
-                        'Telefono' => 'N/A',
-                        'Correo'   => 'N/A'
-                    ]
-                );
-            }
-
-            /** =======================
-             *  ORDEN DE SERVICIO
-             ======================= */
-            /*$ordenServicio = Orden_Servicio::where('Contrato', $Contrato)->first();
-
-            if (!$ordenServicio) {
-
-                $ordenServicio = Orden_Servicio::create([
-                    'idClientes'         => $cliente->idClientes,
-                    'Fecha'              => '2001-01-01',
-                    'Lugar'              => $Lugar,
-                    'Contrato'           => $Contrato,
-                    'Proyecto_actividad' => $Proyecto,
-                    'Material'           => $Material,
-                    'Plano_isometrico'   => $Isometrico_Plano,
-                ]);
-
-                // Relacionados
-                Orden_Servicio_Prueba::create([
-                    'idOrden_Servicio' => $ordenServicio->idOrden_Servicio,
-                    'idPrueba_Aplica'  => $idPrueba_Aplica,
-                ]);
-
-                Firmantes_OS::create([
-                    'idOrden_Servicio' => $ordenServicio->idOrden_Servicio,
-                    'Nombre_Cargo'     => '[]',
-                ]);
-
-                Grupo_Juntas_Detalles_OS::create([
-                    'idOrden_Servicio' => $ordenServicio->idOrden_Servicio,
-                    'Juntas_grupo'     => $ResultadosJuntas,
-                ]);
-            }
-
-            /** =======================
-             *  OC
-             ======================= */
-            /*$oc = OC::where('Contrato', $Contrato)->first();
-
-            if (!$oc) {
-
-                $EsperaDato = 'ESPERA DE DATOS';
-
-                $oc = OC::create([
-                    'Contrato'        => $Contrato,
-                    'Num_OC'          => $EsperaDato,
-                    'Requisicion'     => $EsperaDato,
-                    'Proyecto'        => $Proyecto,
-                    'Lugar_trabajo'   => $EsperaDato,
-                    'Fecha_solicitud' => '2001-01-01',
-                    'Tipo_servicio'   => $EsperaDato,
-                    'Estatus'         => 'OC',
-                    'OC_archivo'      => $EsperaDato,
-                ]);
-
-                detallesOC::create([
-                    'idOC'      => $oc->idOC,
-                    'Detalles' => $EsperaDato,
-                ]);
-            }
-
-            /** =======================
-             *  LINEAL IDEAL
-             ======================= */
-            /*$lineal = Lineal_Ideal::create([
-                'idOC'              => $oc->idOC,
-                'idOrden_Servicio'  => $ordenServicio->idOrden_Servicio,
-                'idSolicitud'       => $idSolicitud,
-                'idReportes'        => $idReportes,
-                'Estatus'           => 'CREADO',
-            ]);
-
-            return $lineal; // opcional
-        });
-    }*/
 
     public function OS_OC($datosParaCrearOS_OC)
     {
-        /*Datos del Formulario */
-        $idPrueba_Aplica  = $datosParaCrearOS_OC['idPrueba_Aplica'];
-        $Cliente          = $datosParaCrearOS_OC['Cliente'];
-        $Lugar            = $datosParaCrearOS_OC['Lugar'];
-        $Contrato         = $datosParaCrearOS_OC['Contrato'];
+        $idPrueba_Aplica = $datosParaCrearOS_OC['idPrueba_Aplica'];
+        $Cliente = $datosParaCrearOS_OC['Cliente'];
+        $Lugar = $datosParaCrearOS_OC['Lugar'];
+        $Contrato= $datosParaCrearOS_OC['Contrato'];
         //$Contrato = trim(strtoupper($datosParaCrearOS_OC['Contrato']));
-        $Proyecto         = $datosParaCrearOS_OC['Proyecto'];
-        $Material         = $datosParaCrearOS_OC['Material'];
+        $Proyecto = $datosParaCrearOS_OC['Proyecto'];
+        $Material = $datosParaCrearOS_OC['Material'];
         $Isometrico_Plano = $datosParaCrearOS_OC['Isometrico_Plano'];
-        $Pieza            = $datosParaCrearOS_OC['Pieza'];
+        $Pieza = $datosParaCrearOS_OC['Pieza'];
         $Norma_cod_Criterio_Eva = $datosParaCrearOS_OC['Norma_cod_Criterio_Eva'];
-        $ResultadosJuntas       = $datosParaCrearOS_OC['ResultadosJuntas'];
-        $idSolicitud            = $datosParaCrearOS_OC['idSolicitud'];
-        $idReportes             = $datosParaCrearOS_OC['idReportes'];
-
+        $ResultadosJuntas = $datosParaCrearOS_OC['ResultadosJuntas'];
+        $idSolicitud = $datosParaCrearOS_OC['idSolicitud'];
+        $idReportes = $datosParaCrearOS_OC['idReportes'];
+        
         $EsperaDato = "ESPERA DE DATOS";
-        /*Instancias */
+        /*Instancias*/
         $Orden_Servicio = new Orden_Servicio;
         $Orden_Servicio_Prueba = new Orden_Servicio_Prueba;
         $Firmantes_OS = new Firmantes_OS;
@@ -553,11 +304,12 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $BusquedaCliente = clientes::where('Cliente', 'like', '%' . $Cliente . '%')->first();
 
         if ($BusquedaCliente) {
-            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria AGREGAR "S" a clientes
+            $idCliente = $BusquedaCliente->idClientes; // O el campo que sea clave primaria
+
             //$nombreReal = $BusquedaCliente->Cliente; // Nombre exacto encontrado
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
-            if($BusquedaContratoOS) 
+            if($BusquedaContratoOS)
             {
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
@@ -593,14 +345,14 @@ class FOR_01_PRO_INS_14Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-
+            $EsperaDato = "ESPERA DE DATOS";
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
             $OC->Lugar_trabajo = $EsperaDato;
-            $OC->Fecha_solicitud = '2001-01-01';
-            $OC->Tipo_servicio = $EsperaDato;
+            $OC->Fecha_Solicitud = '2001/01/01';
+            $OC->Tipo_Servicio = $EsperaDato;
             $OC->Estatus = 'OC';
             $OC->OC_archivo = $EsperaDato;
             $OC->save();
@@ -619,12 +371,18 @@ class FOR_01_PRO_INS_14Controller extends Controller
             $Lineal_Ideal->save();
 
         } else {
-                $NewCliente = new clientes();
-                $NewCliente->Cliente = $Cliente;
-                $NewCliente->RFC = $EsperaDato;
-                $NewCliente->Telefono = $EsperaDato;
-                $NewCliente->Correo = $EsperaDato;
-                $NewCliente->save();
+            // Cliente no encontrado
+            $Cliente = "POR DEFINIR";
+            $Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
+            // Si no existe, crea el cliente "POR DEFINIR"
+            if (!$Busqueda2Cliente) {
+                $Busqueda2Cliente = new clientes();
+                $Busqueda2Cliente->Cliente = $Cliente;
+                $Busqueda2Cliente->RFC = 'N/A';
+                $Busqueda2Cliente->Telefono = 'N/A';
+                $Busqueda2Cliente->Correo = 'N/A';
+                $Busqueda2Cliente->save();
+            }
 
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -633,9 +391,9 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             // Obtén el ID del cliente "POR DEFINIR"
-            $idClientes = $NewCliente->idClientes; 
+            $idClientes = $Busqueda2Cliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
-            $Orden_Servicio->Fecha = '2001-01-01';
+            $Orden_Servicio->Fecha = '2001/01/01';
             $Orden_Servicio->Lugar = $Lugar;
             $Orden_Servicio->Contrato = $Contrato;
             $Orden_Servicio->Proyecto_actividad = $Proyecto;
@@ -666,14 +424,14 @@ class FOR_01_PRO_INS_14Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-
+            $EsperaDato = "ESPERA DE DATOS";
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
             $OC->Lugar_trabajo = $EsperaDato;
-            $OC->Fecha_solicitud = '2001-01-01';
-            $OC->Tipo_servicio = $EsperaDato;
+            $OC->Fecha_Solicitud = '2001/01/01';
+            $OC->Tipo_Servicio = $EsperaDato;
             $OC->Estatus = 'OC';
             $OC->OC_archivo = $EsperaDato;
             $OC->save();
@@ -694,220 +452,159 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
     }
 
-    public function FOR_01_PRO_INS_14_store(Request $request)
+    public function FOR_PINS_11_02_store(Request $request)
     {
-        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
-            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
-            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
-            'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
-            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
-            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
-            'Detalles_Generales.Material' => 'nullable|string|max:255',
-            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
-            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+            'Detalles_Generales.No_Reporte' => 'nullable|string',
+            'Detalles_Generales.Cliente' => 'nullable|string',
+            'Detalles_Generales.Contrato' => 'nullable|string',
+            'Detalles_Generales.Proyecto' => 'nullable|string',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
+            'Detalles_Generales.Folio' => 'nullable|string',
+            'Detalles_Generales.Partida' => 'nullable|string',
+            'Detalles_Generales.Lugar' => 'nullable|string',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Material' => 'nullable|string',
+            'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.idSolicitud' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.ID_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONG_CAB' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.NOMB_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_SONDA1' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_SONDA2' => 'nullable|string|max:255',
-            
-            'Datos_Equipo.ID_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_SONDA3' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_SONDA4' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANS1' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANS2' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANS3' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANS4' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.RES_SCAN1' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.RES_SCAN2' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ANG_INI' => 'nullable|string|max:255',
-            'Datos_Equipo.ANG_FIN' => 'nullable|string|max:255',
-            'Datos_Equipo.VELOCIDAD' => 'nullable|string|max:255',
-            'Datos_Equipo.FILTRO' => 'nullable|string|max:255',
-            'Datos_Equipo.COD_EVA' => 'nullable|string|max:255',
-            'Datos_Equipo.TIP_BARR' => 'nullable|string|max:255',
-            'Datos_Equipo.AREA_SCAN' => 'nullable|string|max:255',
-            'Datos_Equipo.PROCEDIMIENTO' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.TIP_JUNTA' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
-            'Datos_Equipo.TEMP' => 'nullable|string|max:255',
-            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
-
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string',
+            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string',
+            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string',
+            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string',
+            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string',
+            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string',
+            'Datos_Equipo.N_S_BLOCK' => 'nullable|string',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string',
+            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string',
+            'Datos_Equipo.GANANCIA' => 'nullable|string',
+            'Datos_Equipo.RANGO' => 'nullable|string',
+            'Datos_Equipo.RECHAZO' => 'nullable|string',
+            'Datos_Equipo.SUPERFICIE' => 'nullable|string',
+            'Datos_Equipo.PINTURA' => 'nullable|string',
+            'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.ID_TR' => 'nullable|string',
+            'Datos_Equipo.ID_BLOCK' => 'nullable|string',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.ID_TR' => 'nullable|string',
+            'Datos_Equipo.ID_BLOCK' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            /*Titulos Juntas */
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
             'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
-            'no_junta' => 'nullable|array',
-            'Tip_Ind' => 'nullable|array',
-            'L_PGL' => 'nullable|array',
-            'A_PGL' => 'nullable|array',
-            'AL_PGL' => 'nullable|array',
-            'X' => 'nullable|array',
-            'Y' => 'nullable|array',
-            'DA_PROF' => 'nullable|array',
-            'PA' => 'nullable|array',
-            'SA' => 'nullable|array',
-            'TMIN' => 'nullable|array',
-            'SCAN' => 'nullable|array',
-            'EVAL' => 'nullable|array',
-            'FOTOS' => 'nullable|array',
+            'ID' => 'nullable|array',
+            'elemento_tubo' => 'nullable|array',
+            'no_aceptacion' => 'nullable|array',
+            'no_serie' => 'nullable|array',
+            'no_colada' => 'nullable|array',
+            'tnominal' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'no_ind' => 'nullable|array',
+            'tipo_indicacion' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'prof' => 'nullable|array',
+            'la' => 'nullable|array',
+            'lc' => 'nullable|array',
+            'tmax' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'metros_lineales' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'observaciones' => 'nullable|array',
 
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
-
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
-            'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
+            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
+            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
 
             /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Realizo' => 'nullable|string',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
-            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string',
 
             /*3 FIRMAS */
             'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Realizo' => 'nullable|string',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
-            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Realizo' => 'nullable|string',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
-            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
@@ -922,7 +619,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $idPrueba_Aplica = $request->input('idPrueba_Aplica');
 
         $Reportes->idPrueba_Aplica = $idPrueba_Aplica;
-
         // ==========================
         // Lógica para manejar Cliente
         // ==========================
@@ -966,7 +662,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
-        //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -976,6 +671,57 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
         // Guardar el registro en la base de datos   
         $Reportes->save();
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATOS PARA CREAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
+
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'] ?? null;
+        $idEquipo = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null;
+        $idTransductor = $validatedData['Datos_Equipo']['ID_TR'] ?? null;
+        $idBlock = $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null;
+
+        if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
+            $validatedData['Datos_Equipo']['QR_TOKEN'] = (string) Str::uuid();
+        }
+
+        $datosParaCrearQR = [
+            'Contrato' => $Contrato,
+            'No_Reporte' => $No_Reporte,
+            'idSolicitud' => $idSolicitud,
+            'idEquipo' => $idEquipo,
+            'idTransductor' => $idTransductor,
+            'idBlock' => $idBlock,
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR PDF + QR
+        |--------------------------------------------------------------------------
+        */
+
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR RUTAS EN DATOS_EQUIPO
+        |--------------------------------------------------------------------------
+        */
+
+        $Reportes->update([
+            'Datos_Equipo' => json_encode(array_merge(
+                $validatedData['Datos_Equipo'],
+                [
+                    'QR_PDF' => $resultadoQR['qr'],
+                    'PDF_UNIFICADO' => $resultadoQR['pdf'],
+                ]
+            )),
+        ]);
 
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
@@ -987,7 +733,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
         $numFilasSin = count($filasSinTitulo);//agregar
 
@@ -1034,20 +780,26 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'tipo' => 'fila',
                     'grupo' => $sinTituloKey,
                     'data' => [
-                        'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
-                        'Tip_Ind'  => $request->input("Tip_Ind.$sinTituloKey.$i"),
-                        'L_PGL'    => $request->input("L_PGL.$sinTituloKey.$i"),
-                        'A_PGL'    => $request->input("A_PGL.$sinTituloKey.$i"),
-                        'AL_PGL'   => $request->input("AL_PGL.$sinTituloKey.$i"),
-                        'X'        => $request->input("X.$sinTituloKey.$i"),
-                        'Y'        => $request->input("Y.$sinTituloKey.$i"),
-                        'DA_PROF'  => $request->input("DA_PROF.$sinTituloKey.$i"),
-                        'PA'       => $request->input("PA.$sinTituloKey.$i"),
-                        'SA'       => $request->input("SA.$sinTituloKey.$i"),
-                        'TMIN'     => $request->input("TMIN.$sinTituloKey.$i"),
-                        'SCAN'     => $request->input("SCAN.$sinTituloKey.$i"),
-                        'EVAL'     => $request->input("EVAL.$sinTituloKey.$i"),
-                        'FOTOS'    => $request->input("FOTOS.$sinTituloKey.$i"),
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
+                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
+                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
+                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
+                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
+                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'nr' => $request->input("nr.$sinTituloKey.$i"),
+                    'ni' => $request->input("ni.$sinTituloKey.$i"),
+                    'ht' => $request->input("ht.$sinTituloKey.$i"),
+                    'prof' => $request->input("prof.$sinTituloKey.$i"),
+                    'la' => $request->input("la.$sinTituloKey.$i"),
+                    'lc' => $request->input("lc.$sinTituloKey.$i"),
+                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
+                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
+                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                     ]
                     ]);
                     // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
@@ -1076,6 +828,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $cerrarBloque();
                 }
 
+
         /*
         |--------------------------------------------------------------------------
         | 2. TITULOS + FILAS + LONGITUDES
@@ -1093,7 +846,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 'texto' => $tituloText
             ]);
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             //$resultados = [];
@@ -1103,20 +856,26 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'tipo' => 'fila',
                     'grupo' => $tituloKey,
                     'data' => [
-                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
-                    'Tip_Ind'  => $request->input("Tip_Ind.$tituloKey.$i"),
-                    'L_PGL'    => $request->input("L_PGL.$tituloKey.$i"),
-                    'A_PGL'    => $request->input("A_PGL.$tituloKey.$i"),
-                    'AL_PGL'   => $request->input("AL_PGL.$tituloKey.$i"),
-                    'X'        => $request->input("X.$tituloKey.$i"),
-                    'Y'        => $request->input("Y.$tituloKey.$i"),
-                    'DA_PROF'  => $request->input("DA_PROF.$tituloKey.$i"),
-                    'PA'       => $request->input("PA.$tituloKey.$i"),
-                    'SA'       => $request->input("SA.$tituloKey.$i"),
-                    'TMIN'     => $request->input("TMIN.$tituloKey.$i"),
-                    'SCAN'     => $request->input("SCAN.$tituloKey.$i"),
-                    'EVAL'     => $request->input("EVAL.$tituloKey.$i"),
-                    'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
+                    'ID' => $request->input("ID.$tituloKey.$i"),
+                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
+                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
+                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
+                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
+                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'nr' => $request->input("nr.$tituloKey.$i"),
+                    'ni' => $request->input("ni.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'prof' => $request->input("prof.$tituloKey.$i"),
+                    'la' => $request->input("la.$tituloKey.$i"),
+                    'lc' => $request->input("lc.$tituloKey.$i"),
+                    'tmax' => $request->input("tmax.$tituloKey.$i"),
+                    'tmin' => $request->input("tmin.$tituloKey.$i"),
+                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                     ]
                 ]);
             }
@@ -1191,16 +950,16 @@ class FOR_01_PRO_INS_14Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/Fotos";
+            $rutaCarpeta = "public/Reportes/FOR_PINS_11_02/{$Contrato}/{$No_Reporte}/Fotos";
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'ruta' => "storage/Reportes/FOR_PINS_11_02/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
-                'una_hoja' => $request->imagen_hoja[$index] ?? 0, // 👈 AQUÍ
+                'una_hoja' => $request->imagen_hoja[$index] ?? 0, //
             ];
         }
 
@@ -1222,7 +981,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Lugar = $validatedData['Detalles_Generales']['Lugar'];
-        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
         $Material = $validatedData['Detalles_Generales']['Material'];
@@ -1230,19 +988,6 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
         $Pieza = $validatedData['Detalles_Generales']['Pieza'];
         $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
-
-        $idEquipo = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null;
-        $idBlock = $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null;
-        $idSonda1 = $validatedData['Datos_Equipo']['ID_SONDA1'] ?? null;
-        $idSonda2 = $validatedData['Datos_Equipo']['ID_SONDA2'] ?? null;
-        $idSonda3 = $validatedData['Datos_Equipo']['ID_SONDA3'] ?? null;
-        $idSonda4 = $validatedData['Datos_Equipo']['ID_SONDA4'] ?? null;
-        $idTrans1 = $validatedData['Datos_Equipo']['ID_TRANS1'] ?? null;
-        $idTrans2 = $validatedData['Datos_Equipo']['ID_TRANS2'] ?? null;
-        $idTrans3 = $validatedData['Datos_Equipo']['ID_TRANS3'] ?? null;
-        $idTrans4 = $validatedData['Datos_Equipo']['ID_TRANS4'] ?? null;
-        $idEncoder1 = $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? null;
-        $idEncoder2 = $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? null;
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -1257,44 +1002,11 @@ class FOR_01_PRO_INS_14Controller extends Controller
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
-        ];
-
-        if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
-            $validatedData['Datos_Equipo']['QR_TOKEN'] =
-                (string) Str::uuid();
-        }
-
-        $datosParaCrearQR = [
-            "Contrato" => $Contrato,
-            "No_Reporte" => $No_Reporte,
-            "idSolicitud" => $idSolicitud,
-            "idEquipo" => $idEquipo,
-            "idBlock" => $idBlock,
-            "idSonda1" => $idSonda1,
-            "idSonda2" => $idSonda2,
-            "idSonda3" => $idSonda3,
-            "idSonda4" => $idSonda4,
-            "idTrans1" => $idTrans1,
-            "idTrans2" => $idTrans2,
-            "idTrans3" => $idTrans3,
-            "idTrans4" => $idTrans4,
-            "idEncoder1" => $idEncoder1,
-            "idEncoder2" => $idEncoder2,
-            "qr_token" => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            
         ];
 
         $this->OS_OC($datosParaCrearOS_OC);
 
-        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
-
-        $validatedData['Datos_Equipo']['QR_PDF'] =
-            $resultadoQR['qr'];
-        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
-            $resultadoQR['pdf'];
-
-        $Reportes->update([
-            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])
-        ]);
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
@@ -1302,7 +1014,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_01_PRO_INS_14_update(Request $request, $id)
+    public function FOR_PINS_11_02_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -1310,145 +1022,78 @@ class FOR_01_PRO_INS_14Controller extends Controller
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
-            'Detalles_Generales.No_Reporte' => 'required|string|max:255',
-            'Detalles_Generales.Cliente' => 'nullable|string|max:255',
-            'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
-            'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
-            'Detalles_Generales.Lugar' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
-            'Detalles_Generales.Pieza' => 'nullable|string|max:255',
-            'Detalles_Generales.Material' => 'nullable|string|max:255',
-            'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string|max:255',
-            'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
+            'Detalles_Generales.No_Reporte' => 'nullable|string',
+            'Detalles_Generales.Cliente' => 'nullable|string',
+            'Detalles_Generales.Contrato' => 'nullable|string',
+            'Detalles_Generales.Proyecto' => 'nullable|string',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
+            'Detalles_Generales.Folio' => 'nullable|string',
+            'Detalles_Generales.Partida' => 'nullable|string',
+            'Detalles_Generales.Lugar' => 'nullable|string',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Material' => 'nullable|string',
+            'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.idSolicitud' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
-            'Datos_Equipo.ID_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.ACOPLANTE' => 'nullable|string|max:255',
-            'Datos_Equipo.LONG_CAB' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.NOMB_BLOCK' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_BLOCK' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_SONDA1' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_SONDA1' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_SONDA2' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_SONDA2' => 'nullable|string|max:255',
-            
-            'Datos_Equipo.ID_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_SONDA3' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_SONDA3' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_SONDA4' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_SONDA4' => 'nullable|string|max:255',
-
-        
-            'Datos_Equipo.ID_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_TRANS1' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANS1' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_TRANS2' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANS2' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_TRANS3' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANS3' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.ZAPATA_TRANS4' => 'nullable|string|max:255',
-            'Datos_Equipo.FREC_TRANS4' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_ENCODER1' => 'nullable|string|max:255',
-            'Datos_Equipo.RES_SCAN1' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ID_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.MARCA_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.MODELO_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.NS_ENCODER2' => 'nullable|string|max:255',
-            'Datos_Equipo.RES_SCAN2' => 'nullable|string|max:255',
-
-            'Datos_Equipo.ANG_INI' => 'nullable|string|max:255',
-            'Datos_Equipo.ANG_FIN' => 'nullable|string|max:255',
-            'Datos_Equipo.VELOCIDAD' => 'nullable|string|max:255',
-            'Datos_Equipo.FILTRO' => 'nullable|string|max:255',
-            'Datos_Equipo.COD_EVA' => 'nullable|string|max:255',
-            'Datos_Equipo.TIP_BARR' => 'nullable|string|max:255',
-            'Datos_Equipo.AREA_SCAN' => 'nullable|string|max:255',
-            'Datos_Equipo.PROCEDIMIENTO' => 'nullable|string|max:255',
-            'Datos_Equipo.GANANCIA' => 'nullable|string|max:255',
-            'Datos_Equipo.TIP_JUNTA' => 'nullable|string|max:255',
-            'Datos_Equipo.RECHAZO' => 'nullable|string|max:255',
-            'Datos_Equipo.DIAMETRO' => 'nullable|string|max:255',
-            'Datos_Equipo.TEMP' => 'nullable|string|max:255',
-            'Datos_Equipo.ESPESOR' => 'nullable|string|max:255',
-
+            'Datos_Equipo.MARCA_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.N_S_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.MARCA_TRANSDUCTOR' => 'nullable|string',
+            'Datos_Equipo.MODELO_TRANSDUCTOR' => 'nullable|string',
+            'Datos_Equipo.N_S_TRANSDUCTOR' => 'nullable|string',
+            'Datos_Equipo.FREC_TRANSDUCTOR' => 'nullable|string',
+            'Datos_Equipo.MARCA_BLOCK' => 'nullable|string',
+            'Datos_Equipo.MODELO_BLOCK' => 'nullable|string',
+            'Datos_Equipo.N_S_BLOCK' => 'nullable|string',
+            'Datos_Equipo.ACOPLANTE' => 'nullable|string',
+            'Datos_Equipo.LONGITUD_CABLE' => 'nullable|string',
+            'Datos_Equipo.GANANCIA' => 'nullable|string',
+            'Datos_Equipo.RANGO' => 'nullable|string',
+            'Datos_Equipo.RECHAZO' => 'nullable|string',
+            'Datos_Equipo.SUPERFICIE' => 'nullable|string',
+            'Datos_Equipo.PINTURA' => 'nullable|string',
+            'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.ID_TR' => 'nullable|string',
+            'Datos_Equipo.ID_BLOCK' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            /*Titulos Juntas */
+            //'titulos' => 'nullable|array',  // Asegura que sea un array
+            //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
             'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
-            'no_junta' => 'nullable|array',
-            'Tip_Ind' => 'nullable|array',
-            'L_PGL' => 'nullable|array',
-            'A_PGL' => 'nullable|array',
-            'AL_PGL' => 'nullable|array',
-            'X' => 'nullable|array',
-            'Y' => 'nullable|array',
-            'DA_PROF' => 'nullable|array',
-            'PA' => 'nullable|array',
-            'SA' => 'nullable|array',
-            'TMIN' => 'nullable|array',
-            'SCAN' => 'nullable|array',
-            'EVAL' => 'nullable|array',
-            'FOTOS' => 'nullable|array',
+            'ID' => 'nullable|array',
+            'elemento_tubo' => 'nullable|array',
+            'no_aceptacion' => 'nullable|array',
+            'no_serie' => 'nullable|array',
+            'no_colada' => 'nullable|array',
+            'tnominal' => 'nullable|array',
+            'diametro' => 'nullable|array',
+            'no_ind' => 'nullable|array',
+            'tipo_indicacion' => 'nullable|array',
+            'nr' => 'nullable|array',
+            'ni' => 'nullable|array',
+            'ht' => 'nullable|array',
+            'prof' => 'nullable|array',
+            'la' => 'nullable|array',
+            'lc' => 'nullable|array',
+            'tmax' => 'nullable|array',
+            'tmin' => 'nullable|array',
+            'metros_lineales' => 'nullable|array',
+            'evaluacion' => 'nullable|array',
+            'observaciones' => 'nullable|array',
 
-            /* Longitudes inspeccionadas */
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
@@ -1459,64 +1104,64 @@ class FOR_01_PRO_INS_14Controller extends Controller
             /*1 FIRMAS */
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
-            'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
+            'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
+            'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
+            'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
 
-             /*2 FIRMAS */
+            /*2 FIRMAS */
             'Firmas_Reportes2' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
+            'Firmas_Reportes2.Realizo' => 'nullable|string',
+            'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
-            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
+            'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.CARGO_TECNICO' => 'nullable|string',
+            'Firmas_Reportes2.PUESTO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes2.EMPRESA_TECNICO' => 'nullable|string',
+            'Firmas_Reportes2.EMPRESA_ENCARGADO' => 'nullable|string',
 
             /*3 FIRMAS */
             'Firmas_Reportes3' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes3.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
+            'Firmas_Reportes3.Realizo' => 'nullable|string',
+            'Firmas_Reportes3.Vobo1' => 'nullable|string',
+            'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
-            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
+            'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.CARGO_TECNICO' => 'nullable|string',
+            'Firmas_Reportes3.PUESTO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.PUESTO_2DO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string',
+            'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
-            'Firmas_Reportes4.Realizo' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo1' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
-            'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
+            'Firmas_Reportes4.Realizo' => 'nullable|string',
+            'Firmas_Reportes4.Vobo1' => 'nullable|string',
+            'Firmas_Reportes4.Vobo2' => 'nullable|string',
+            'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
-            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
+            'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NOMBRE_3RO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.CARGO_TECNICO' => 'nullable|string',
+            'Firmas_Reportes4.PUESTO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.PUESTO_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.PUESTO_3RO_ENCARGADO' => 'nullable|string',
 
-            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
-            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
+            'Firmas_Reportes4.EMPRESA_TECNICO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
@@ -1526,75 +1171,38 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
-        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
 
-        $idEquipo = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null;
-        $idBlock = $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null;
-        $idSonda1 = $validatedData['Datos_Equipo']['ID_SONDA1'] ?? null;
-        $idSonda2 = $validatedData['Datos_Equipo']['ID_SONDA2'] ?? null;
-        $idSonda3 = $validatedData['Datos_Equipo']['ID_SONDA3'] ?? null;
-        $idSonda4 = $validatedData['Datos_Equipo']['ID_SONDA4'] ?? null;
-        $idTrans1 = $validatedData['Datos_Equipo']['ID_TRANS1'] ?? null;
-        $idTrans2 = $validatedData['Datos_Equipo']['ID_TRANS2'] ?? null;
-        $idTrans3 = $validatedData['Datos_Equipo']['ID_TRANS3'] ?? null;
-        $idTrans4 = $validatedData['Datos_Equipo']['ID_TRANS4'] ?? null;
-        $idEncoder1 = $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? null;
-        $idEncoder2 = $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? null;
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
-        // 1. Obtener los detalles actuales que ya están en la base de datos
-        $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
 
-        if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
-            
-            // 1. ELIMINAR ARCHIVO ANTERIOR (si existe)
-            if (!empty($detallesActuales['Reporte_Firmado'])) {
-                // Convertimos la ruta de la base de datos (storage/...) de vuelta a la ruta del disco (public/...)
-                $archivoViejo = str_replace('storage/', 'public/', $detallesActuales['Reporte_Firmado']);
-                
-                if (Storage::exists($archivoViejo)) {
-                    Storage::delete($archivoViejo);
-                }
-            }
+        $validatedData['Datos_Equipo']['ID_EQUIPO'] =
+            $validatedData['Datos_Equipo']['ID_EQUIPO']
+            ?? $datosEquipoActuales['ID_EQUIPO']
+            ?? null;
+        $validatedData['Datos_Equipo']['ID_TR'] =
+            $validatedData['Datos_Equipo']['ID_TR']
+            ?? $datosEquipoActuales['ID_TR']
+            ?? null;
+        $validatedData['Datos_Equipo']['ID_BLOCK'] =
+            $validatedData['Datos_Equipo']['ID_BLOCK']
+            ?? $datosEquipoActuales['ID_BLOCK']
+            ?? null;
+        $validatedData['Datos_Equipo']['QR_TOKEN'] =
+            $validatedData['Datos_Equipo']['QR_TOKEN']
+            ?? $datosEquipoActuales['QR_TOKEN']
+            ?? null;
 
-            // 2. PROCESAR NUEVO ARCHIVO
-            $file = $request->file('Detalles_Generales.Reporte_Firmado');
-            $rutaBase = "public/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
-            $nombreArchivo = 'Reporte_Firmado_' . $No_Reporte . '_' . time() . '.pdf';
-            
-            $file->storeAs($rutaBase, $nombreArchivo);
-
-            $rutaPublica = str_replace('public/', 'storage/', $rutaBase) . '/' . $nombreArchivo;
-            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $rutaPublica;
-
-        } else {
-            $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
-        }
         /*
         |--------------------------------------------------------------------------
         | GENERAR TOKEN QR PUBLICO
         |--------------------------------------------------------------------------
         */
 
-        $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
-        $validatedData['Datos_Equipo']['ID_BLOCK'] = $validatedData['Datos_Equipo']['ID_BLOCK'] ?? ($datosEquipoActuales['ID_BLOCK'] ?? null);
-        $validatedData['Datos_Equipo']['ID_SONDA1'] = $validatedData['Datos_Equipo']['ID_SONDA1'] ?? ($datosEquipoActuales['ID_SONDA1'] ?? null);
-        $validatedData['Datos_Equipo']['ID_SONDA2'] = $validatedData['Datos_Equipo']['ID_SONDA2'] ?? ($datosEquipoActuales['ID_SONDA2'] ?? null);
-        $validatedData['Datos_Equipo']['ID_SONDA3'] = $validatedData['Datos_Equipo']['ID_SONDA3'] ?? ($datosEquipoActuales['ID_SONDA3'] ?? null);
-        $validatedData['Datos_Equipo']['ID_SONDA4'] = $validatedData['Datos_Equipo']['ID_SONDA4'] ?? ($datosEquipoActuales['ID_SONDA4'] ?? null);
-        $validatedData['Datos_Equipo']['ID_TRANS1'] = $validatedData['Datos_Equipo']['ID_TRANS1'] ?? ($datosEquipoActuales['ID_TRANS1'] ?? null);
-        $validatedData['Datos_Equipo']['ID_TRANS2'] = $validatedData['Datos_Equipo']['ID_TRANS2'] ?? ($datosEquipoActuales['ID_TRANS2'] ?? null);
-        $validatedData['Datos_Equipo']['ID_TRANS3'] = $validatedData['Datos_Equipo']['ID_TRANS3'] ?? ($datosEquipoActuales['ID_TRANS3'] ?? null);
-        $validatedData['Datos_Equipo']['ID_TRANS4'] = $validatedData['Datos_Equipo']['ID_TRANS4'] ?? ($datosEquipoActuales['ID_TRANS4'] ?? null);
-        $validatedData['Datos_Equipo']['ID_ENCODER1'] = $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? ($datosEquipoActuales['ID_ENCODER1'] ?? null);
-        $validatedData['Datos_Equipo']['ID_ENCODER2'] = $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? ($datosEquipoActuales['ID_ENCODER2'] ?? null);
-
-        // Solo generarlo si no existe
         if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
-            $validatedData['Datos_Equipo']['QR_TOKEN'] =
-                $datosEquipoActuales['QR_TOKEN'] ?? (string) Str::uuid();
+            $validatedData['Datos_Equipo']['QR_TOKEN'] = (string) Str::uuid();
         }
+
         /*
         |--------------------------------------------------------------------------
         | DATOS PARA CREAR PDF + QR
@@ -1604,21 +1212,14 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $datosParaCrearQR = [
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
-            'idSolicitud' => $idSolicitud,
-            'idEquipo' => $idEquipo,
-            'idBlock' => $idBlock,
-            'idSonda1' => $idSonda1,
-            'idSonda2' => $idSonda2,
-            'idSonda3' => $idSonda3,
-            'idSonda4' => $idSonda4,
-            'idTrans1' => $idTrans1,
-            'idTrans2' => $idTrans2,
-            'idTrans3' => $idTrans3,
-            'idTrans4' => $idTrans4,
-            'idEncoder1' => $idEncoder1,
-            'idEncoder2' => $idEncoder2,
-
-            // Token del QR público
+            'idSolicitud' =>
+                $validatedData['Detalles_Generales']['idSolicitud'] ?? null,
+            'idEquipo' =>
+                $validatedData['Datos_Equipo']['ID_EQUIPO'],
+            'idTransductor' =>
+                $validatedData['Datos_Equipo']['ID_TR'],
+            'idBlock' =>
+                $validatedData['Datos_Equipo']['ID_BLOCK'],
             'qr_token' =>
                 $validatedData['Datos_Equipo']['QR_TOKEN'],
         ];
@@ -1637,48 +1238,28 @@ class FOR_01_PRO_INS_14Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        // Ruta del QR (svg/png)
         $validatedData['Datos_Equipo']['QR_PDF'] =
-            $resultadoQR['qr'] ?? ($datosEquipoActuales['QR_PDF'] ?? null);
-
-        // Ruta del PDF unificado
+            $resultadoQR['qr']
+            ?? $datosEquipoActuales['QR_PDF']
+            ?? null;
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
-            $resultadoQR['pdf'] ?? ($datosEquipoActuales['PDF_UNIFICADO'] ?? null);
-
-        /*
-        |--------------------------------------------------------------------------
-        | VARIABLES DE APOYO (OPCIONAL)
-        |--------------------------------------------------------------------------
-        */
-
-        $QR_PDF =
-            $validatedData['Datos_Equipo']['QR_PDF'];
-
-        $PDF_UNIFICADO =
-            $validatedData['Datos_Equipo']['PDF_UNIFICADO'];
-
-        $QR_TOKEN =
-            $validatedData['Datos_Equipo']['QR_TOKEN'];
-
-        /*
-        |--------------------------------------------------------------------------
-        | ACTUALIZAR REPORTE
-        |--------------------------------------------------------------------------
-        */
+            $resultadoQR['pdf']
+            ?? $datosEquipoActuales['PDF_UNIFICADO']
+            ?? null;
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
-
+        
         $titulos_json = $request->input('titulos_data', '[]');
         $titulos = json_decode($titulos_json, true); // array asociativo
         $datosAgrupados = [];
         
         // 1. Procesar filas SIN título (si existen)
         $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no_junta.$sinTituloKey", []);
+        $filasSinTitulo = $request->input("ID.$sinTituloKey", []);
         //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
         $numFilasSin = count($filasSinTitulo);//agregar
 
@@ -1725,20 +1306,26 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'tipo' => 'fila',
                     'grupo' => $sinTituloKey,
                     'data' => [
-                        'no_junta' => $request->input("no_junta.$sinTituloKey.$i"),
-                        'Tip_Ind'  => $request->input("Tip_Ind.$sinTituloKey.$i"),
-                        'L_PGL'    => $request->input("L_PGL.$sinTituloKey.$i"),
-                        'A_PGL'    => $request->input("A_PGL.$sinTituloKey.$i"),
-                        'AL_PGL'   => $request->input("AL_PGL.$sinTituloKey.$i"),
-                        'X'        => $request->input("X.$sinTituloKey.$i"),
-                        'Y'        => $request->input("Y.$sinTituloKey.$i"),
-                        'DA_PROF'  => $request->input("DA_PROF.$sinTituloKey.$i"),
-                        'PA'       => $request->input("PA.$sinTituloKey.$i"),
-                        'SA'       => $request->input("SA.$sinTituloKey.$i"),
-                        'TMIN'     => $request->input("TMIN.$sinTituloKey.$i"),
-                        'SCAN'     => $request->input("SCAN.$sinTituloKey.$i"),
-                        'EVAL'     => $request->input("EVAL.$sinTituloKey.$i"),
-                        'FOTOS'    => $request->input("FOTOS.$sinTituloKey.$i"),
+                    'ID' => $request->input("ID.$sinTituloKey.$i"),
+                    'elemento_tubo' => $request->input("elemento_tubo.$sinTituloKey.$i"),
+                    'no_aceptacion' => $request->input("no_aceptacion.$sinTituloKey.$i"),
+                    'no_serie' => $request->input("no_serie.$sinTituloKey.$i"),
+                    'no_colada' => $request->input("no_colada.$sinTituloKey.$i"),
+                    'tnominal' => $request->input("tnominal.$sinTituloKey.$i"),
+                    'diametro' => $request->input("diametro.$sinTituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$sinTituloKey.$i"),
+                    'nr' => $request->input("nr.$sinTituloKey.$i"),
+                    'ni' => $request->input("ni.$sinTituloKey.$i"),
+                    'ht' => $request->input("ht.$sinTituloKey.$i"),
+                    'prof' => $request->input("prof.$sinTituloKey.$i"),
+                    'la' => $request->input("la.$sinTituloKey.$i"),
+                    'lc' => $request->input("lc.$sinTituloKey.$i"),
+                    'tmax' => $request->input("tmax.$sinTituloKey.$i"),
+                    'tmin' => $request->input("tmin.$sinTituloKey.$i"),
+                    'metros_lineales' => $request->input("metros_lineales.$sinTituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$sinTituloKey.$i"),
                     ]
                     ]);
                     // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
@@ -1767,6 +1354,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     $cerrarBloque();
                 }
 
+
         /*
         |--------------------------------------------------------------------------
         | 2. TITULOS + FILAS + LONGITUDES
@@ -1784,7 +1372,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 'texto' => $tituloText
             ]);
 
-            $filas = $request->input("no_junta.$tituloKey", []);
+            $filas = $request->input("ID.$tituloKey", []);
             $numFilas = count($filas);
         
             //$resultados = [];
@@ -1794,20 +1382,26 @@ class FOR_01_PRO_INS_14Controller extends Controller
                     'tipo' => 'fila',
                     'grupo' => $tituloKey,
                     'data' => [
-                    'no_junta' => $request->input("no_junta.$tituloKey.$i"),
-                    'Tip_Ind'  => $request->input("Tip_Ind.$tituloKey.$i"),
-                    'L_PGL'    => $request->input("L_PGL.$tituloKey.$i"),
-                    'A_PGL'    => $request->input("A_PGL.$tituloKey.$i"),
-                    'AL_PGL'   => $request->input("AL_PGL.$tituloKey.$i"),
-                    'X'        => $request->input("X.$tituloKey.$i"),
-                    'Y'        => $request->input("Y.$tituloKey.$i"),
-                    'DA_PROF'  => $request->input("DA_PROF.$tituloKey.$i"),
-                    'PA'       => $request->input("PA.$tituloKey.$i"),
-                    'SA'       => $request->input("SA.$tituloKey.$i"),
-                    'TMIN'     => $request->input("TMIN.$tituloKey.$i"),
-                    'SCAN'     => $request->input("SCAN.$tituloKey.$i"),
-                    'EVAL'     => $request->input("EVAL.$tituloKey.$i"),
-                    'FOTOS' => $request->input("FOTOS.$tituloKey.$i"),
+                    'ID' => $request->input("ID.$tituloKey.$i"),
+                    'elemento_tubo' => $request->input("elemento_tubo.$tituloKey.$i"),
+                    'no_aceptacion' => $request->input("no_aceptacion.$tituloKey.$i"),
+                    'no_serie' => $request->input("no_serie.$tituloKey.$i"),
+                    'no_colada' => $request->input("no_colada.$tituloKey.$i"),
+                    'tnominal' => $request->input("tnominal.$tituloKey.$i"),
+                    'diametro' => $request->input("diametro.$tituloKey.$i"),
+                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
+                    'tipo_indicacion' => $request->input("tipo_indicacion.$tituloKey.$i"),
+                    'nr' => $request->input("nr.$tituloKey.$i"),
+                    'ni' => $request->input("ni.$tituloKey.$i"),
+                    'ht' => $request->input("ht.$tituloKey.$i"),
+                    'prof' => $request->input("prof.$tituloKey.$i"),
+                    'la' => $request->input("la.$tituloKey.$i"),
+                    'lc' => $request->input("lc.$tituloKey.$i"),
+                    'tmax' => $request->input("tmax.$tituloKey.$i"),
+                    'tmin' => $request->input("tmin.$tituloKey.$i"),
+                    'metros_lineales' => $request->input("metros_lineales.$tituloKey.$i"),
+                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
+                    'observaciones' => $request->input("observaciones.$tituloKey.$i"),
                     ]
                 ]);
             }
@@ -1841,6 +1435,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $Grupo_Juntas_Detalles_Re->update([
             'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
         ]);
+
 
         /*Firmas */
         // Guardar las firmas
@@ -1881,7 +1476,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_01_PRO_INS_14/{$Contrato}/{$No_Reporte}/Fotos";
+        $rutaCarpeta = "public/Reportes/FOR_PINS_11_02/{$Contrato}/{$No_Reporte}/Fotos";
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -2014,7 +1609,8 @@ class FOR_01_PRO_INS_14Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_01_INS_14($id)
+
+    public function FOR_PINS_11_02($id)
     {
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -2060,7 +1656,7 @@ class FOR_01_PRO_INS_14Controller extends Controller
                 $Fotos[] = [
                     'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
                     'comment' => $foto['comentario'] ?? '',
-                    'una_hoja'  => $foto['una_hoja'] ?? 0, // 👈 CLAVE
+                    'una_hoja'  => $foto['una_hoja'] ?? 0,
                 ];
             }
         }
@@ -2074,9 +1670,9 @@ class FOR_01_PRO_INS_14Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-01-INS-14.PDF',
-            'QR_PDF' => $qrPdf,
+            'title' => 'Reporte_FOR-PINS-11/02.PDF',
             'Logo' => $Logo,
+            'QR_PDF' => $qrPdf,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
@@ -2098,10 +1694,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_01_INS_14_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_11_02_PDF', $data)->setPaper('letter', 'landscape');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_01_INS_14_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_11_02_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -2122,10 +1718,10 @@ class FOR_01_PRO_INS_14Controller extends Controller
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->AddPage('L');
+            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(143.5, -266);
+            $combinedPdf->SetXY(186.5, -181);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -2136,12 +1732,12 @@ class FOR_01_PRO_INS_14Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(143.5, -265.5);
+            $combinedPdf->SetXY(144.5, -266.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_01_INS_14.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_PINS_11_02.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

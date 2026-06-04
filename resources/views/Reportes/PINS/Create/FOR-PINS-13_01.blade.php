@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-01-PRO-INS-12')
+@section('title', 'FOR-PINS-13-01')
 
 @section('css')
 <!--datatable -->
@@ -73,7 +73,7 @@
     <section class="content w-100">
         <div class="card w-100 p-3">
             <div class="card-body w-100">
-                <form id="FOR-01-PRO-INS-12" action="{{route('Reportes_FOR_01_PRO_INS_12.store')}}" method="post" enctype="multipart/form-data">
+                <form id="FOR-PINS-13_01" action="{{route('Reportes_FOR_PINS_13_01.store')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                     <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -1619,29 +1619,29 @@
             });
     });
 
-    /*FOR-01-PRO-INS-12*/
+    /*FOR-PINS-13_01*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-01-PRO-INS-12');
+        const form = document.getElementById('FOR-PINS-13_01');
         if (!form) return;
 
         // Guardar en localStorage al escribir
         //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
           //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-01-PRO-INS-12_' + el.name, el.value);
+            //    localStorage.setItem('FOR-PINS-13_01_' + el.name, el.value);
             //});
         //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-01-PRO-INS-12_' + el.name, el.value);
+                localStorage.setItem('FOR-PINS-13_01_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
-                const value = localStorage.getItem('FOR-01-PRO-INS-12_' + el.name);
+                const value = localStorage.getItem('FOR-PINS-13_01_' + el.name);
                 if (value !== null) el.value = value;
             }
         });
@@ -1649,7 +1649,7 @@
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-01-PRO-INS-12_' + el.name);
+                localStorage.removeItem('FOR-PINS-13_01_' + el.name);
                 //localStorage.clear();
             });
         });

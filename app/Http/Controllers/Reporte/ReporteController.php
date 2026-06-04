@@ -701,68 +701,68 @@ class ReporteController extends Controller
     }
     public function FOR_PINS_11_02()
     {
-        return view('Reportes.INS.Create.FOR-PINS-11_02');
+        return view('Reportes.PINS.Create.FOR-PINS-11_02');
     }
     public function FOR_PINS_12_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-12_01');
+        return view('Reportes.PINS.Create.FOR-PINS-12_01');
     }
     public function FOR_PINS_13_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-13_01');
+        return view('Reportes.PINS.Create.FOR-PINS-13_01');
     }
     public function FOR_PINS_14_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-14_01');
+        return view('Reportes.PINS.Create.FOR-PINS-14_01');
     }
     
     public function FOR_PINS_15_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-15_01');
+        return view('Reportes.PINS.Create.FOR-PINS-15_01');
     }
     public function FOR_PINS_16_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-16_01');
+        return view('Reportes.PINS.Create.FOR-PINS-16_01');
     }
     public function FOR_PINS_17_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-17_01');
+        return view('Reportes.PINS.Create.FOR-PINS-17_01');
     }
     public function FOR_PINS_17_01_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-17-01_01');
+        return view('Reportes.PINS.Create.FOR-PINS-17-01_01');
     }
     public function FOR_PINS_18_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-18_01');
+        return view('Reportes.PINS.Create.FOR-PINS-18_01');
     }
     public function FOR_PINS_19_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-19_01');
+        return view('Reportes.PINS.Create.FOR-PINS-19_01');
     }
     public function FOR_PINS_20_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-20_01');
+        return view('Reportes.PINS.Create.FOR-PINS-20_01');
     }
     public function FOR_PINS_21_01 ()
     {
-        return view('Reportes.INS.Create.FOR-PINS-21_01');
+        return view('Reportes.PINS.Create.FOR-PINS-21_01');
     }
     public function FOR_PINS_22_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-22_01');
+        return view('Reportes.PINS.Create.FOR-PINS-22_01');
     }
     public function FOR_PINS_23_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-23_01');
+        return view('Reportes.PINS.Create.FOR-PINS-23_01');
     }
     public function FOR_PINS_24_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-24_01');
+        return view('Reportes.PINS.Create.FOR-PINS-24_01');
     }
     public function FOR_PINS_25_01()
     {
-        return view('Reportes.INS.Create.FOR-PINS-25_01');
+        return view('Reportes.PINS.Create.FOR-PINS-25_01');
     }
 
     /*public function FOR_PIMP_07_B_01()
@@ -973,21 +973,23 @@ class ReporteController extends Controller
             "FOR-PINS-09-01" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
             "FOR-PINS-10-01" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
             "FOR-PINS-11-01" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
-            "FOR-02-PRO-INS-10" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA",
-            "FOR-01-PRO-INS-11" => "REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR",
-            "FOR-01-PRO-INS-12" => "INFORME DE INSPECCIÓN CON CORRIENTES EDDY",
-            "FOR-01-PRO-INS-13" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1",
-            "FOR-01-PRO-INS-14" => "PROCEDIMIENTO DE INSPECCIÓN CON ULTRASONIDO POR EL METODO TOFD (TIME OF FLIGHT DIFFRACTION)",
-            "FOR-01-PRO-INS-15" => "INFORME DE INSPECCIÓN VISUAL",
-            "FOR-02-PRO-INS-15" => "INFORME DE INSPECCIÓN VISUAL DE TUBERIAS Y RECIPIENTES SUJETOS A PRESION",
-            "FOR-03-PRO-INS-15" => "LISTADO DE COMPONENTES",
-            "FOR-01-PRO-INS-16" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA",
-            "FOR-01-PRO-INS-17" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
-            "FOR-01-PRO-INS-18" => "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
-            "FOR-01-PRO-INS-19" => "INFORME DE INSPECCIÓN CON ACFM",
-            "FOR-01-PRO-INS-20" => "Informe de ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT)",
-            "FOR-01-PRO-INS-21" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
-            "FOR-01-PRO-INS-22" => "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
+            "FOR-PINS-11-02" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA",
+            "FOR-PINS-12-01" => "REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR",
+            "FOR-PINS-13-01" => "INFORME DE INSPECCIÓN CON CORRIENTES EDDY",
+            "FOR-PINS-14-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1",
+            "FOR-PINS-15-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD",
+            "FOR-PINS-16-01" => "INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO",
+            "FOR-PINS-17-01" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA",
+            "FOR-PINS-17-01_01" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
+            "FOR-PINS-18-01" => "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
+            "FOR-PINS-19-01" => "INFORME DE INSPECCIÓN CON ACFM",
+            "FOR-PINS-20-01" => "INFORME DE ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT).",
+            "FOR-PINS-21-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO API 1104",
+            "FOR-PINS-22-01" => "INFORME DE  INSPECCIÓN DE TUBERIA POR CORREINTES EDDY.", //NUEVO FORMATO
+            "FOR-PINS-23-01" => "INFORME DE INSPECCIÓN CON EL MÉTODO DE ONDAS GUIADAS",
+            "FOR-PINS-24-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES y TOFD", //MISMO FORMATO QUE EL 15-01 
+            "FOR-PINS-25-01" => "INSPECCIÓN VISUAL EN RSP",
+            "FOR-03-PRO-INS-15" => "LISTADO DE COMPONENTES", //Mantiene su mismo formato pero con un nombre personalizado
         ];
     
         return $nombresPersonalizados[$Nombre_Formato] ?? $Nombre_Formato;
@@ -1278,49 +1280,61 @@ class ReporteController extends Controller
         {
             return redirect()->route('Reporte_FOR_PINS_11_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-12")
+        elseif($Nombre_Formato == "FOR-PINS-12-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_12.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_12_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-13")
+        elseif($Nombre_Formato == "FOR-PINS-13-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_13.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_13_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-14")
+        elseif($Nombre_Formato == "FOR-PINS-14-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_14.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_14_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-15")
+        elseif($Nombre_Formato == "FOR-PINS-15-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_15.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_15_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-16")
+        elseif($Nombre_Formato == "FOR-PINS-16-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_16.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_16_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-17")
+        elseif($Nombre_Formato == "FOR-PINS-17-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_17.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_17_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
+        elseif($Nombre_Formato == "FOR-PINS-18-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_18_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-19")
+        elseif($Nombre_Formato == "FOR-PINS-19-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_19.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_19_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-20")
+        elseif($Nombre_Formato == "FOR-PINS-20-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_20.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_20_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-21")
+        elseif($Nombre_Formato == "FOR-PINS-21-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_21.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_21_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
+        elseif($Nombre_Formato == "FOR-PINS-22-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_22_01.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PINS-23-01")
+        {
+            return redirect()->route('Reporte_FOR_PINS_23_01.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PINS-24-01")
+        {
+            return redirect()->route('Reporte_FOR_PINS_24_01.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PINS-25-01")
+        {
+            return redirect()->route('Reporte_FOR_PINS_25_01.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-PINS-03-02")
         {
@@ -1330,17 +1344,13 @@ class ReporteController extends Controller
         {
             return redirect()->route('Reporte_FOR_PINS_05_02.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
+        elseif($Nombre_Formato == "FOR-PINS-11-02")
         {
-            return redirect()->route('Reporte_FOR_02_INS_10.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_11_02.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-02-PRO-INS-15")
+        elseif($Nombre_Formato == "FOR-PINS-17-01_01")
         {
-            return redirect()->route('Reporte_FOR_02_INS_15.PDF', ['id' => $id]);
-        }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
-        {
-            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_17_01_01.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-03-PRO-INS-15")
         {

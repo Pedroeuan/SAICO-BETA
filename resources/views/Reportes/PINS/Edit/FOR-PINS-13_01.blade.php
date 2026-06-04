@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-01-PRO-INS-12')
+@section('title', 'FOR-PINS-13-01')
 
 @section('css')
 <!--datatable -->
@@ -72,7 +72,7 @@
     <section class="content w-100">
         <div class="card w-100 p-3">
             <div class="card-body w-100">
-                <form id="FOR-01-PRO-INS-12" action="{{ route('Reportes_FOR_01_PRO_INS_12.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                <form id="FOR-PINS-13-01" action="{{ route('Reportes_FOR_PINS_13_01.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                     <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -250,12 +250,13 @@
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Equipos:</label>
                                 <select class="form-select inputForm" name="equiposSelect" id="equiposSelect">
-                                <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                <option value="" {{ empty(old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '')) ? 'selected' : '' }} disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                     @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                         <option value="{{ $equipo->idGeneral_EyC }}"
                                                 data-marca="{{ $equipo->Marca }}"
                                                 data-modelo="{{ $equipo->Modelo }}"
-                                                data-ns="{{ $equipo->Serie }}">
+                                                data-ns="{{ $equipo->Serie }}"
+                                                {{ (string) old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') === (string) $equipo->idGeneral_EyC ? 'selected' : '' }}>
                                             {{ $equipo->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
@@ -291,12 +292,13 @@
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Sonda:</label>
                                 <select class="form-select inputForm" name="accesoriosSelect" id="accesoriosSelect">
-                                <option value="" selected disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
+                                <option value="" {{ empty(old('Datos_Equipo.ID_SONDA', $Datos_Equipo['ID_SONDA'] ?? '')) ? 'selected' : '' }} disabled>Seleccione una Sonda</option> <!-- Opción por defecto -->
                                     @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                         <option value="{{ $accesorios->idGeneral_EyC }}"
                                                 data-marca="{{ $accesorios->Marca }}"
                                                 data-modelo="{{ $accesorios->Modelo }}"
-                                                data-ns="{{ $accesorios->Serie }}">
+                                                data-ns="{{ $accesorios->Serie }}"
+                                                {{ (string) old('Datos_Equipo.ID_SONDA', $Datos_Equipo['ID_SONDA'] ?? '') === (string) $accesorios->idGeneral_EyC ? 'selected' : '' }}>
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
@@ -333,12 +335,13 @@
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Block de Calibración:</label>
                                 <select class="form-select inputForm" name="blockyprobetaSelect" id="blockyprobetaSelect">
-                                <option value="" selected disabled>Seleccione un Block de Calibración</option>
+                                <option value="" {{ empty(old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '')) ? 'selected' : '' }} disabled>Seleccione un Block de Calibración</option>
                                     @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                         <option value="{{ $blockyprobeta->idGeneral_EyC }}"
                                                 data-marca="{{ $blockyprobeta->Marca }}"
                                                 data-modelo="{{ $blockyprobeta->Modelo }}"
-                                                data-ns="{{ $blockyprobeta->Serie }}">
+                                                data-ns="{{ $blockyprobeta->Serie }}"
+                                                {{ (string) old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '') === (string) $blockyprobeta->idGeneral_EyC ? 'selected' : '' }}>
                                             {{ $blockyprobeta->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
@@ -374,12 +377,13 @@
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Encoder:</label>
                                 <select class="form-select inputForm" name="accesoriosSelect2" id="accesoriosSelect2">
-                                <option value="" selected disabled>Seleccione un Encoder</option>
+                                <option value="" {{ empty(old('Datos_Equipo.ID_ENCODER1', $Datos_Equipo['ID_ENCODER1'] ?? '')) ? 'selected' : '' }} disabled>Seleccione un Encoder</option>
                                     @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                         <option value="{{ $accesorios->idGeneral_EyC }}"
                                                 data-marca="{{ $accesorios->Marca }}"
                                                 data-modelo="{{ $accesorios->Modelo }}"
-                                                data-ns="{{ $accesorios->Serie }}">
+                                                data-ns="{{ $accesorios->Serie }}"
+                                                {{ (string) old('Datos_Equipo.ID_ENCODER1', $Datos_Equipo['ID_ENCODER1'] ?? '') === (string) $accesorios->idGeneral_EyC ? 'selected' : '' }}>
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
@@ -415,12 +419,13 @@
                             <div class="form-group text-center">
                                 <label class="col-form-label" for="inputSuccess">Encoder:</label>
                                 <select class="form-select inputForm" name="accesoriosSelect3" id="accesoriosSelect3">
-                                <option value="" selected disabled>Seleccione un Encoder</option>
+                                <option value="" {{ empty(old('Datos_Equipo.ID_ENCODER2', $Datos_Equipo['ID_ENCODER2'] ?? '')) ? 'selected' : '' }} disabled>Seleccione un Encoder</option>
                                     @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                         <option value="{{ $accesorios->idGeneral_EyC }}"
                                                 data-marca="{{ $accesorios->Marca }}"
                                                 data-modelo="{{ $accesorios->Modelo }}"
-                                                data-ns="{{ $accesorios->Serie }}">
+                                                data-ns="{{ $accesorios->Serie }}"
+                                                {{ (string) old('Datos_Equipo.ID_ENCODER2', $Datos_Equipo['ID_ENCODER2'] ?? '') === (string) $accesorios->idGeneral_EyC ? 'selected' : '' }}>
                                             {{ $accesorios->Nombre_E_P_BP }}
                                         </option>
                                     @endforeach
@@ -1318,8 +1323,12 @@
             $('#IDInputE').val($('#equiposSelect').val() || $('#IDInputE').val() || '');
         }
 
-            $('#equiposSelect').val($('#IDInputE').val());
-            actualizarInputsE();
+            if ($('#IDInputE').val()) {
+                $('#equiposSelect').val($('#IDInputE').val());
+                if ($('#equiposSelect').val()) {
+                    actualizarInputsE();
+                }
+            }
 
             // Evento cuando se cambia la selección en el select
             $('#equiposSelect').on('change', function() {
@@ -1339,8 +1348,12 @@
                 $('#IDInputA').val($('#accesoriosSelect').val() || $('#IDInputA').val() || '');
             }
 
-            $('#accesoriosSelect').val($('#IDInputA').val());
-            actualizarInputsA();
+            if ($('#IDInputA').val()) {
+                $('#accesoriosSelect').val($('#IDInputA').val());
+                if ($('#accesoriosSelect').val()) {
+                    actualizarInputsA();
+                }
+            }
 
             $('#accesoriosSelect').on('change', function() {
                 actualizarInputsA();
@@ -1361,8 +1374,12 @@
                 $('#IDInputbyp').val($('#blockyprobetaSelect').val() || $('#IDInputbyp').val() || '');
             }
 
-            $('#blockyprobetaSelect').val($('#IDInputbyp').val());
-            actualizarInputsbyp();
+            if ($('#IDInputbyp').val()) {
+                $('#blockyprobetaSelect').val($('#IDInputbyp').val());
+                if ($('#blockyprobetaSelect').val()) {
+                    actualizarInputsbyp();
+                }
+            }
 
             // Evento cuando se cambia la selección en el select
             $('#blockyprobetaSelect').on('change', function() {
@@ -1403,8 +1420,12 @@
                 $('#IDInputA2').val($('#accesoriosSelect2').val() || $('#IDInputA2').val() || '');
             }
 
-                $('#accesoriosSelect2').val($('#IDInputA2').val());
-                actualizarInputsA2();
+                if ($('#IDInputA2').val()) {
+                    $('#accesoriosSelect2').val($('#IDInputA2').val());
+                    if ($('#accesoriosSelect2').val()) {
+                        actualizarInputsA2();
+                    }
+                }
 
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect2').on('change', function() {
@@ -1426,8 +1447,12 @@
                 $('#IDInputA3').val($('#accesoriosSelect3').val() || $('#IDInputA3').val() || '');
             }
 
-                $('#accesoriosSelect3').val($('#IDInputA3').val());
-                actualizarInputsA3();
+                if ($('#IDInputA3').val()) {
+                    $('#accesoriosSelect3').val($('#IDInputA3').val());
+                    if ($('#accesoriosSelect3').val()) {
+                        actualizarInputsA3();
+                    }
+                }
 
                 // Evento cuando se cambia la selección en el select
                 $('#accesoriosSelect3').on('change', function() {

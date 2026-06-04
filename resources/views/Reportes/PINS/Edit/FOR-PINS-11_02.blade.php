@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-02-PRO-INS-10')
+@section('title', 'FOR-PINS-11/02')
 
 @section('css')
 <!--datatable -->
@@ -73,7 +73,7 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                        <form id="FOR-02-PRO-INS-10" action="{{ route('Reportes_FOR_02_PRO_INS_10.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                        <form id="FOR-PINS-11_02" action="{{ route('Reportes_FOR_PINS_11_02.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -254,12 +254,13 @@
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
                                             <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                                            <option value="" selected disabled>Seleccione un equipo</option> <!-- Opción por defecto -->
+                                            <option value="" {{ empty(old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '')) ? 'selected' : '' }} disabled>Seleccione un equipo</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
                                                             data-modelo="{{ $equipo->Modelo }}"
-                                                            data-ns="{{ $equipo->Serie }}">
+                                                            data-ns="{{ $equipo->Serie }}"
+                                                            {{ (string) old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') === (string) $equipo->idGeneral_EyC ? 'selected' : '' }}>
                                                         {{ $equipo->Nombre_E_P_BP }}
                                                     </option>
                                                 @endforeach
@@ -296,12 +297,13 @@
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Accesorios:</label>
                                             <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
-                                            <option value="" selected disabled>Seleccione un Accesorio</option>
+                                            <option value="" {{ empty(old('Datos_Equipo.ID_TR', $Datos_Equipo['ID_TR'] ?? '')) ? 'selected' : '' }} disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
                                                             data-marca="{{ $accesorios->Marca }}"
                                                             data-modelo="{{ $accesorios->Modelo }}"
-                                                            data-ns="{{ $accesorios->Serie }}">
+                                                            data-ns="{{ $accesorios->Serie }}"
+                                                            {{ (string) old('Datos_Equipo.ID_TR', $Datos_Equipo['ID_TR'] ?? '') === (string) $accesorios->idGeneral_EyC ? 'selected' : '' }}>
                                                         {{ $accesorios->Nombre_E_P_BP }}
                                                     </option>
                                                 @endforeach
@@ -345,12 +347,13 @@
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Block y Probeta:</label>
                                             <select class="form-select inputForm" name="blockyprobeta" id="blockyprobetaSelect">
-                                            <option value="" selected disabled>Seleccione un Block o Probeta</option>
+                                            <option value="" {{ empty(old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '')) ? 'selected' : '' }} disabled>Seleccione un Block o Probeta</option>
                                                 @foreach($idsGeneral_EyCs_BlockyProbeta as $blockyprobeta)
                                                     <option value="{{ $blockyprobeta->idGeneral_EyC }}"
                                                             data-marca="{{ $blockyprobeta->Marca }}"
                                                             data-modelo="{{ $blockyprobeta->Modelo }}"
-                                                            data-ns="{{ $blockyprobeta->Serie }}">
+                                                            data-ns="{{ $blockyprobeta->Serie }}"
+                                                            {{ (string) old('Datos_Equipo.ID_BLOCK', $Datos_Equipo['ID_BLOCK'] ?? '') === (string) $blockyprobeta->idGeneral_EyC ? 'selected' : '' }}>
                                                         {{ $blockyprobeta->Nombre_E_P_BP }}
                                                     </option>
                                                 @endforeach
@@ -1010,7 +1013,70 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <p>
 
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
+                                                        
+                                        <p>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
+                                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{ old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '') }}">
+                                                @error('Num_Soldador')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
+                                                @error('Nombre_Soldador')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <p>
+
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>
+                                                        
+                                        <p>
+
+                                        <div class="row justify-content-center text-center">
+                                            {{-- Columna para Subir/Sustituir Archivo --}}
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label" for="inputSuccess"> 
+                                                        @if ($Detalles_Generales['Reporte_Firmado'] ?? '') 
+                                                            SUSTITUIR REPORTE FIRMADO 
+                                                        @else 
+                                                            SUBIR REPORTE FIRMADO 
+                                                        @endif
+                                                    </label>
+                                                    <input type="file" class="form-control-file inputForm" name="Detalles_Generales[Reporte_Firmado]">
+                                                    @if ($errors->any())
+                                                        <div class="invalid-feedback d-block">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            {{-- Columna para Ver Reporte (Solo aparece si existe el archivo) --}}
+                                            @if ($Detalles_Generales['Reporte_Firmado'] ?? '')
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label" for="inputSuccess">Ver Reporte Firmado</label>  
+                                                        <div>                                           
+                                                            <a href="{{ asset($Detalles_Generales['Reporte_Firmado']) }}" target="_blank" class="btn btn-primary long-button" role="button">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a>                                                                                    
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -1254,8 +1320,10 @@ $(document).ready(function() {
         }
 
             // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').val($('#IDInputE').val());
-            actualizarInputsE();
+            if ($('#IDInputE').val()) {
+                $('#equiposSelect').val($('#IDInputE').val());
+                actualizarInputsE();
+            }
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
@@ -1275,8 +1343,10 @@ $(document).ready(function() {
             $('#IDInputA').val(selectedOption.val() || '');
             }
                 // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect').val($('#IDInputA').val());
-                actualizarInputsA();
+                if ($('#IDInputA').val()) {
+                    $('#accesoriosSelect').val($('#IDInputA').val());
+                    actualizarInputsA();
+                }
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
@@ -1297,8 +1367,10 @@ $(document).ready(function() {
             }
 
             // Evento cuando se cambia la selección en el select
-            $('#blockyprobetaSelect').val($('#IDInputbyp').val());
-            actualizarInputsbyp();
+            if ($('#IDInputbyp').val()) {
+                $('#blockyprobetaSelect').val($('#IDInputbyp').val());
+                actualizarInputsbyp();
+            }
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
