@@ -249,7 +249,7 @@ class NotificacionController extends Controller
                     if ($tipo === 'EQUIPOS') 
                     {
                         // Mensaje para certificados próximos a vencer
-                        $mensajeCorto = "Mantenimiento Prox. a VENCER en $diasRestantesM días";
+                        $mensajeCorto = "Mant. Prox. a VENCER en $diasRestantesM días";
                         $mensajeLargo = "El Mantenimiento del Equipo: ".$Nombre_C.", Con No. economico: " . $No_economico . " está próximo a VENCER en $diasRestantesM días (Fecha de vencimiento: " . $fechaCalibracionFormateada . ")";
                         $mensajeLargoemail = "El Mantenimiento del Equipo: ".$Nombre_C.", <br>Con No. economico: " . $No_economico . " <br>está próximo a <span style='color: #E01A22;'>VENCER en $diasRestantesM días</span><br>(Fecha de vencimiento: <span style='color: #E01A22;'>" . $fechaCalibracionFormateada . "</span>)";
                     }
