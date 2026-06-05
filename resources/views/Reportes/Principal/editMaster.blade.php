@@ -107,7 +107,7 @@
     @elseif($Nombre_Formato == 'FOR-03-PRO-INS-15') 
         @include('Reportes.INS.Edit.FOR-03-PRO-INS-15')
     @elseif($Nombre_Formato == 'FOR-PINS-17-01_01') 
-        @include('Reportes.PINS.Edit.FOR-PINS-17_01_01')
+        @include('Reportes.PINS.Edit.FOR-PINS-17-01_01')
         /*IM*/
     @elseif($Nombre_Formato == 'FOR-PIMP-07_B/01') 
         @include('Reportes.IM.Edit.FOR-PIMP-07_B_01')
