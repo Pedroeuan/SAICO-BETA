@@ -79,7 +79,7 @@ class DevolucionController extends Controller
             $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
             // Obtener todos los idSolicitud de los folios similares
             $idsSolicitud = $foliosSimilares->pluck('idSolicitud')->toArray(); // Convertir a array
-            log::info('IDs de Solicitudes obtenidos para folios similares: ' . implode(', ', $idsSolicitud)); // Log para verificar los IDs obtenidos
+            //log::info('IDs de Solicitudes obtenidos para folios similares: ' . implode(', ', $idsSolicitud)); // Log para verificar los IDs obtenidos
             // Obtener los Folios asociados a cada idSolicitud desde la tabla manifiesto
             $foliosManifiestos = manifiesto::whereIn('idSolicitud', $idsSolicitud)
                 ->get(['idSolicitud', 'Folio'])
