@@ -95,8 +95,18 @@ class DevolucionController extends Controller
             $idsGeneralEyC = $detallesSolicitud->pluck('idGeneral_EyC')->toArray(); // Convertir a array
 
             // Buscar los idGeneral_EyC en la tabla General_EyC para obtener el Nombre
+            /*$generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
+                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo','No_economico','Serie']);*/
             $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
-                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo','No_economico','Serie']);
+                ->whereIn('Disponibilidad_Estado', ['NO DISPONIBLE', 'En Servicio'])
+                ->get([
+                    'idGeneral_EyC',
+                    'Nombre_E_P_BP',
+                    'Disponibilidad_Estado',
+                    'Tipo',
+                    'No_economico',
+                    'Serie'
+                ]);
 
             // Preparar un array asociativo para la vista con el Nombre, cantidad y Folio
             $datosManifiesto = [];
