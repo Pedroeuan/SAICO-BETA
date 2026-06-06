@@ -663,88 +663,106 @@ class ReporteController extends Controller
     {
         return view('Reportes.INS.Create.FOR-01-PRO-INS-02');
     }
-    public function FOR_01_PRO_INS_03()
+    public function FOR_PINS_04_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-03');
+        return view('Reportes.PINS.Create.FOR-PINS-04_01');
     }
-    public function FOR_01_PRO_INS_04()
+    public function FOR_PINS_05_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-04');
+        return view('Reportes.PINS.Create.FOR-PINS-05_01');
     }
-    public function FOR_02_PRO_INS_04()
+    public function FOR_PINS_05_02()
     {
-        return view('Reportes.INS.Create.FOR-02-PRO-INS-04');
+        return view('Reportes.PINS.Create.FOR-PINS-05_02');
     }
-    public function FOR_01_PRO_INS_05()
+    public function FOR_PINS_06_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-05');
+        return view('Reportes.PINS.Create.FOR-PINS-06_01');
     }
-    public function FOR_01_PRO_INS_06()
+    public function FOR_PINS_07_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-06');
+        return view('Reportes.PINS.Create.FOR-PINS-07_01');
     }
-    public function FOR_01_PRO_INS_07()
+    public function FOR_PINS_08_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-07');
+        return view('Reportes.PINS.Create.FOR-PINS-08_01');
     }
-    public function FOR_01_PRO_INS_08()
+    public function FOR_PINS_09_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-08');
+        return view('Reportes.PINS.Create.FOR-PINS-09_01');
     }
-    public function FOR_01_PRO_INS_09()
+    public function FOR_PINS_10_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-09');
+        return view('Reportes.PINS.Create.FOR-PINS-10_01');
     }
-    public function FOR_01_PRO_INS_10()
+    public function FOR_PINS_11_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-10');
+        return view('Reportes.PINS.Create.FOR-PINS-11_01');
     }
-    public function FOR_01_PRO_INS_12()
+    public function FOR_PINS_11_02()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-12');
+        return view('Reportes.PINS.Create.FOR-PINS-11_02');
     }
-    public function FOR_01_PRO_INS_13()
+    public function FOR_PINS_12_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-13');
+        return view('Reportes.PINS.Create.FOR-PINS-12_01');
     }
-    public function FOR_01_PRO_INS_14()
+    public function FOR_PINS_13_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-14');
+        return view('Reportes.PINS.Create.FOR-PINS-13_01');
     }
-    public function FOR_01_PRO_INS_15()
+    public function FOR_PINS_14_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-15');
-    }
-    
-    public function FOR_02_PRO_INS_15()
-    {
-        return view('Reportes.INS.Create.FOR-02-PRO-INS-15');
-    }
-    public function FOR_03_PRO_INS_15()
-    {
-        return view('Reportes.INS.Create.FOR-03-PRO-INS-15');
-    }
-    public function FOR_01_PRO_INS_16()
-    {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-16');
-    }
-    public function FOR_01_PRO_INS_17()
-    {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-17');
-    }
-    public function FOR_01_PRO_INS_18()
-    {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-18');
+        return view('Reportes.PINS.Create.FOR-PINS-14_01');
     }
     
-    public function FOR_01_PRO_INS_20()
+    public function FOR_PINS_15_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-20');
+        return view('Reportes.PINS.Create.FOR-PINS-15_01');
     }
-    
-    public function FOR_01_PRO_INS_21()
+    public function FOR_PINS_16_01()
     {
-        return view('Reportes.INS.Create.FOR-01-PRO-INS-21');
+        return view('Reportes.PINS.Create.FOR-PINS-16_01');
+    }
+    public function FOR_PINS_17_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-17_01');
+    }
+    public function FOR_PINS_17_01_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-17-01_01');
+    }
+    public function FOR_PINS_18_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-18_01');
+    }
+    public function FOR_PINS_19_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-19_01');
+    }
+    public function FOR_PINS_20_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-20_01');
+    }
+    public function FOR_PINS_21_01 ()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-21_01');
+    }
+    public function FOR_PINS_22_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-22_01');
+    }
+    public function FOR_PINS_23_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-23_01');
+    }
+    public function FOR_PINS_24_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-24_01');
+    }
+    public function FOR_PINS_25_01()
+    {
+        return view('Reportes.PINS.Create.FOR-PINS-25_01');
     }
 
     /*public function FOR_PIMP_07_B_01()
@@ -801,7 +819,7 @@ class ReporteController extends Controller
             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
             $reportesDetalles_Generales[] = [
                 'Contrato' => $detalles['Contrato'] ?? '',
-                'Proyecto' => $detalles['Proyecto'] ?? '',
+                'Proyecto' => $detalles['Proyecto'] ?? $detalles['Identificacion'] ?? '',
                 'Cliente' => $detalles['Cliente'] ?? '',
                 'Fecha' => $detalles['Fecha'] ?? '',
                 'No_Reporte' => $detalles['No_Reporte'] ?? '',
@@ -811,7 +829,7 @@ class ReporteController extends Controller
         // Filtrar elementos únicos por 'Contrato' y 'Proyecto'
         $reportesDetalles_Generales = collect($reportesDetalles_Generales)->unique(function ($item) {
             //return $item['Contrato'] . $item['Proyecto'];
-            return $item['Contrato']; //Solo contrato si se agrega poryecto, genera repeticoones, por no pones el proyecto de la misma manera (Usuarios ¬¬).
+            return $item['Contrato']; //Solo contrato si se agrega poryecto, genera repeticoones, por no pones el proyecto de la misma manera (Usuarios Â¬Â¬).
         })->values()->all();
 
         return view('Reportes.INS.Index.indexINS1', compact('reportesDetalles_Generales'));
@@ -830,7 +848,7 @@ class ReporteController extends Controller
                 $detalles = json_decode($reporte->Detalles_Generales, true);
                 $reporte->detalles = $detalles; // Añadir los detalles decodificados al objeto reporte
             }
-            $Proyecto = $reportesEncontrados[0]->detalles['Proyecto'];
+            $Proyecto = $reportesEncontrados[0]->detalles['Proyecto'] ?? $reportesEncontrados[0]->detalles['Identificacion'] ?? '';
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto, 'reportesEncontrados' => $reportesEncontrados]);
     }
@@ -945,31 +963,33 @@ class ReporteController extends Controller
     public function formatoNombrePersonalizado ($Nombre_Formato)
     {
         $nombresPersonalizados = [
-            "FOR-02-PRO-INS-02" => "INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS",
-            "FOR-01-PRO-INS-03" => "INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES",
-            "FOR-01-PRO-INS-04" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES",
-            "FOR-02-PRO-INS-04" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES",
-            "FOR-01-PRO-INS-05" => "INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X",
-            "FOR-01-PRO-INS-06" => "INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES",
-            "FOR-01-PRO-INS-07" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES",
-            "FOR-01-PRO-INS-08" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
-            "FOR-01-PRO-INS-09" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
-            "FOR-01-PRO-INS-10" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
-            "FOR-02-PRO-INS-10" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA",
-            "FOR-01-PRO-INS-11" => "REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR",
-            "FOR-01-PRO-INS-12" => "INFORME DE INSPECCIÓN CON CORRIENTES EDDY",
-            "FOR-01-PRO-INS-13" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1",
-            "FOR-01-PRO-INS-14" => "PROCEDIMIENTO DE INSPECCIÓN CON ULTRASONIDO POR EL METODO TOFD (TIME OF FLIGHT DIFFRACTION)",
-            "FOR-01-PRO-INS-15" => "INFORME DE INSPECCIÓN VISUAL",
-            "FOR-02-PRO-INS-15" => "INFORME DE INSPECCIÓN VISUAL DE TUBERIAS Y RECIPIENTES SUJETOS A PRESION",
-            "FOR-03-PRO-INS-15" => "LISTADO DE COMPONENTES",
-            "FOR-01-PRO-INS-16" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA",
-            "FOR-01-PRO-INS-17" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
-            "FOR-01-PRO-INS-18" => "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
-            "FOR-01-PRO-INS-19" => "INFORME DE INSPECCIÓN CON ACFM",
-            "FOR-01-PRO-INS-20" => "Informe de ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT)",
-            "FOR-01-PRO-INS-21" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO POR ARREGLO DE FASES, DE ACUERDO CON API 1104",
-            "FOR-01-PRO-INS-22" => "INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS"
+            "FOR-PINS-03-02" => "INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS",
+            "FOR-PINS-04-01" => "INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES",
+            "FOR-PINS-05-01" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES",
+            "FOR-PINS-05-02" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES",
+            "FOR-PINS-06-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X",
+            "FOR-PINS-07-01" => "INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES",
+            "FOR-PINS-08-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD",
+            "FOR-PINS-09-01" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR",
+            "FOR-PINS-10-01" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104",
+            "FOR-PINS-11-01" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE",
+            "FOR-PINS-11-02" => "INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA",
+            "FOR-PINS-12-01" => "REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR",
+            "FOR-PINS-13-01" => "INFORME DE INSPECCIÓN CON CORRIENTES EDDY",
+            "FOR-PINS-14-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1",
+            "FOR-PINS-15-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD",
+            "FOR-PINS-16-01" => "INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO",
+            "FOR-PINS-17-01" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA",
+            "FOR-PINS-17-01_01" => "INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS",
+            "FOR-PINS-18-01" => "INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY",
+            "FOR-PINS-19-01" => "INFORME DE INSPECCIÓN CON ACFM",
+            "FOR-PINS-20-01" => "INFORME DE ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT).",
+            "FOR-PINS-21-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO API 1104",
+            "FOR-PINS-22-01" => "INFORME DE  INSPECCIÓN DE TUBERIA POR CORREINTES EDDY.", //NUEVO FORMATO
+            "FOR-PINS-23-01" => "INFORME DE INSPECCIÓN CON EL MÉTODO DE ONDAS GUIADAS",
+            "FOR-PINS-24-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES y TOFD", //MISMO FORMATO QUE EL 15-01 
+            "FOR-PINS-25-01" => "INSPECCIÓN VISUAL EN RSP",
+            "FOR-03-PRO-INS-15" => "LISTADO DE COMPONENTES", //Mantiene su mismo formato pero con un nombre personalizado
         ];
     
         return $nombresPersonalizados[$Nombre_Formato] ?? $Nombre_Formato;
@@ -1228,101 +1248,109 @@ class ReporteController extends Controller
         $Formato = formato::where('idFormato',$idFormato)->first();
         $Nombre_Formato = $Formato->Nombre;
 
-        if($Nombre_Formato == "FOR-01-PRO-INS-03")
+        if($Nombre_Formato == "FOR-PINS-04-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_03.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_04_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-04")
+        elseif($Nombre_Formato == "FOR-PINS-05-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_04.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_05_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-05")
+        elseif($Nombre_Formato == "FOR-PINS-06-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_05.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_06_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-06")
+        elseif($Nombre_Formato == "FOR-PINS-07-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_06.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_07_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-07")
+        elseif($Nombre_Formato == "FOR-PINS-08-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_07.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_08_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-08")
+        elseif($Nombre_Formato == "FOR-PINS-09-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_08.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_09_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-09")
+        elseif($Nombre_Formato == "FOR-PINS-10-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_09.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_10_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-10")
+        elseif($Nombre_Formato == "FOR-PINS-11-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_10.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_11_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-12")
+        elseif($Nombre_Formato == "FOR-PINS-12-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_12.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_12_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-13")
+        elseif($Nombre_Formato == "FOR-PINS-13-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_13.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_13_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-14")
+        elseif($Nombre_Formato == "FOR-PINS-14-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_14.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_14_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-15")
+        elseif($Nombre_Formato == "FOR-PINS-15-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_15.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_15_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-16")
+        elseif($Nombre_Formato == "FOR-PINS-16-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_16.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_16_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-17")
+        elseif($Nombre_Formato == "FOR-PINS-17-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_17.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_17_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-18")
+        elseif($Nombre_Formato == "FOR-PINS-18-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_18.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_18_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-19")
+        elseif($Nombre_Formato == "FOR-PINS-19-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_19.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_19_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-20")
+        elseif($Nombre_Formato == "FOR-PINS-20-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_20.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_20_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-21")
+        elseif($Nombre_Formato == "FOR-PINS-21-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_21.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_21_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
+        elseif($Nombre_Formato == "FOR-PINS-22-01")
         {
-            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_22_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-02-PRO-INS-02")
+        elseif($Nombre_Formato == "FOR-PINS-23-01")
         {
-            return redirect()->route('Reporte_FOR_02_INS_02.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_23_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-02-PRO-INS-04")
+        elseif($Nombre_Formato == "FOR-PINS-24-01")
         {
-            return redirect()->route('Reporte_FOR_02_INS_04.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_24_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-02-PRO-INS-10")
+        elseif($Nombre_Formato == "FOR-PINS-25-01")
         {
-            return redirect()->route('Reporte_FOR_02_INS_10.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_25_01.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-02-PRO-INS-15")
+        elseif($Nombre_Formato == "FOR-PINS-03-02")
         {
-            return redirect()->route('Reporte_FOR_02_INS_15.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_03_02.PDF', ['id' => $id]);
         }
-        elseif($Nombre_Formato == "FOR-01-PRO-INS-22")
+        elseif($Nombre_Formato == "FOR-PINS-05-02")
         {
-            return redirect()->route('Reporte_FOR_01_INS_22.PDF', ['id' => $id]);
+            return redirect()->route('Reporte_FOR_PINS_05_02.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PINS-11-02")
+        {
+            return redirect()->route('Reporte_FOR_PINS_11_02.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PINS-17-01_01")
+        {
+            return redirect()->route('Reporte_FOR_PINS_17_01_01.PDF', ['id' => $id]);
         }
         elseif($Nombre_Formato == "FOR-03-PRO-INS-15")
         {
@@ -1388,7 +1416,7 @@ class ReporteController extends Controller
         }
 
         
-        // ✅ Retornar respuesta JSON para el AJAX
+        // âœ… Retornar respuesta JSON para el AJAX
         return response()->json([
             'success' => true,
             'message' => 'Reporte eliminado correctamente.'
@@ -1400,13 +1428,13 @@ class ReporteController extends Controller
     {
         DB::transaction(function () use ($id, &$nuevoId) {
 
-            // 1️ Obtener reporte original
+            // 1ï¸ Obtener reporte original
             $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
 
-            // 2️ Clonar reporte
+            // 2ï¸ Clonar reporte
             $NuevoReporte = $ReporteOriginal->replicate();
 
-            // 3️ Decodificar JSON
+            // 3ï¸ Decodificar JSON
             $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true);
 
             $numeroActual = $Detalles_Generales['No_Reporte'];
@@ -1420,20 +1448,20 @@ class ReporteController extends Controller
                 $nuevoNoReporte = $numeroActual . '-001';
             }
 
-            // 4️ Reemplazar valores
+            // 4ï¸ Reemplazar valores
             $Detalles_Generales['No_Reporte'] = $nuevoNoReporte;
             $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
 
             $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
             $NuevoReporte->Estatus = 'CREADO';
 
-            // 5️ Guardar nuevo reporte
+            // 5ï¸ Guardar nuevo reporte
             $NuevoReporte->save();
 
             $nuevoId = $NuevoReporte->idReportes;
 
             // =====================================
-            // 🔹 CLONAR FIRMAS
+            // ðŸ”¹ CLONAR FIRMAS
             // =====================================
 
             $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
@@ -1441,7 +1469,7 @@ class ReporteController extends Controller
             if ($FirmaOriginal) {
 
                 $NuevaFirma = $FirmaOriginal->replicate();
-                $NuevaFirma->idReportes = $nuevoId; // 👈 AQUÍ está la clave
+                $NuevaFirma->idReportes = $nuevoId; // ðŸ‘ˆ AQUÍ está la clave
                 $NuevaFirma->save();
             }
 
