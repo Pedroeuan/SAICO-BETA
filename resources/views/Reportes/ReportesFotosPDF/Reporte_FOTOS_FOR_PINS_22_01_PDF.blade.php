@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -48px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -55px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -79,6 +79,14 @@
             background-color: #305496;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
+        }
+
+        .encabezadoAzul th {
+            text-align: center !important;
+        }
+
+        .datos-generales-info tbody th {
+            text-align: center !important;
         }
 
         .border {
@@ -208,7 +216,7 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width:80%; padding:0; margin:0;">
+                            <th rowspan="4" style="width:80%; padding:0; margin:0;">
 
                                 <div style="
                                     width:100%;
@@ -236,18 +244,22 @@
                             </th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 90%;">FOR-PINS-22/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE INSPECCIÓN DE TUBERIA POR CORRIENTES EDDY</th>
+                            <th rowspan="3" style="font-size: 8pt;">INFORME DE INSPECCIÓN DE TUBERIA POR CORRIENTES EDDY</th>
                             <th>Versión</th>
                             <th>0</th>
                         </tr>
                         <tr>
-                            <th>Fecha de elaboración</th>
+                            <th style="width: 90%;">Fecha de elaboración</th>
+                            <th>28-may-26</th>
+                        </tr>
+                        <tr>
+                            <th>Página</th>
                             <th></th>
                         </tr>
                     </tbody>
@@ -408,7 +420,7 @@
                         </thead>                            
                     </table>
             </footer>
-             @php
+            @php
                     $chunks = [];
                     $grupoActual = [];
                     foreach ($Fotos as $foto) {
@@ -437,7 +449,7 @@
         @foreach($chunks as $fotosGrupo)
 
             <div class="content">
-            <table class="datosgenerales">
+            <table class="datosgenerales datos-generales-info">
 
                     <thead class="encabezadoAzul">
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
