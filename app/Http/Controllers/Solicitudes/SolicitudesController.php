@@ -574,25 +574,20 @@ class SolicitudesController extends Controller
                 ->where('Fecha', $fechaSalida)
                 ->whereIn('Tipo', $Tipo)
                 ->get();
-    
+
+            $almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
+            $generalEyC = general_eyc::with('ISO', 'almacen')->find($idGeneral_EyC);
             foreach ($Historial_Almacen as $h_almacen) {
+
                 // Obtener el registro en la tabla Almacen
-                $almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
-    
-                if ($almacen) {
+                if ($almacen && $generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $almacen && $generalEyC->Disponibilidad_Estado == 'En Servicio') {
                     // Actualizar el Stock en Almacen
                     $nuevoStock = $almacen->Stock + $detalle->Cantidad;
                     $almacen->update(['Stock' => $nuevoStock]);
                 }
-    
-                // Actualizar el estado de General_EyC a "DISPONIBLE"
-                //$generalEyC = general_eyc::find($idGeneral_EyC);
                 // Obtener el equipo con su relación ISO
-                $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
-    
-                /*if ($generalEyC) {
-                    $generalEyC->update(['Disponibilidad_Estado' => $disponibilidadEstado]);
-                }*/
+                //$generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
+                
                 if ($generalEyC) {
                 // Verificar si el equipo pertenece a la ISO 17025
                 if ($generalEyC->ISO->NombreISO == '17025') {
@@ -611,7 +606,10 @@ class SolicitudesController extends Controller
                 $h_almacen->delete();
             }
         }
-    
+        // Eliminar el manifiesto relacionado con la solicitud
+        devolucion::where('idSolicitud', $id)->delete();
+        // Eliminar el manifiesto relacionado con la solicitud
+        manifiesto::where('idSolicitud', $id)->delete();
         // Eliminar el manifiesto relacionado con la solicitud
         manifiesto::where('idSolicitud', $id)->delete();
     
