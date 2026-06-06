@@ -790,7 +790,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
         }
 
         $data = [
-            'title' => 'Reporte_FOR-02-INS-10.PDF',
+            'title' => 'Reporte_FOR_PINS_11_02.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -813,10 +813,10 @@ class FOR_PIMP_07_B_01Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_02_INS_10_PDF', $data)->setPaper('letter', 'landscape');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_11_02_PDF', $data)->setPaper('letter', 'landscape');
 
         // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_02_INS_10_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_11_02_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -856,7 +856,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_02_INS_10.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_PINS_11_02.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 

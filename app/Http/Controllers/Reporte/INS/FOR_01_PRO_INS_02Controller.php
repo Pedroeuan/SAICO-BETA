@@ -216,7 +216,7 @@ class FOR_01_PRO_INS_02Controller extends Controller
 
     }
 
-    public function FOR_01_PRO_INS_03_store(Request $request)
+    public function FOR_PINS_04_01_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -600,7 +600,7 @@ class FOR_01_PRO_INS_02Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_01_PRO_INS_03_update(Request $request, $id)
+    public function FOR_PINS_04_01_update(Request $request, $id)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
