@@ -52,6 +52,7 @@ Use App\Http\Controllers\Reporte\PINS\FOR_PINS_18_01Controller;
 Use App\Http\Controllers\Reporte\PINS\FOR_PINS_19_01Controller;
 Use App\Http\Controllers\Reporte\PINS\FOR_PINS_20_01Controller;
 Use App\Http\Controllers\Reporte\PINS\FOR_PINS_21_01Controller;
+Use App\Http\Controllers\Reporte\PINS\FOR_PINS_22_01Controller;
 Use App\Http\Controllers\Reporte\PINS\FOR_PINS_23_01Controller;
 Use App\Http\Controllers\Reporte\PINS\FOR_PINS_24_01Controller;
 Use App\Http\Controllers\Reporte\PINS\FOR_PINS_25_01Controller;
@@ -347,6 +348,13 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::post('/Reportes_FOR_PINS_21_01/update/{id}', [FOR_PINS_21_01Controller::class, 'FOR_PINS_21_01_update'])->name('Reportes_FOR_PINS_21_01.update');
         /*Ruta del PDF de Reportes/PINS FOR_PINS_21_01*/
         Route::get('/Reporte/FOR-PINS-21-01/PDF/{id}', [FOR_PINS_21_01Controller::class, 'FOR_PINS_21_01'])->name('Reporte_FOR_PINS_21_01.PDF');
+
+        /*Ruta de Guardado Reportes/PINS FOR_PINS_22_01*/
+        Route::post('/Reportes_FOR_PINS_22_01/store', [FOR_PINS_22_01Controller::class, 'FOR_PINS_22_01_store'])->name('Reportes_FOR_PINS_22_01.store');
+        /*Ruta de Actualización Reportes/PINS FOR_PINS_22_01*/
+        Route::post('/Reportes_FOR_PINS_22_01/update/{id}', [FOR_PINS_22_01Controller::class, 'FOR_PINS_22_01_update'])->name('Reportes_FOR_PINS_22_01.update');
+        /*Ruta del PDF de Reportes/PINS FOR_PINS_22_01*/
+        Route::get('/Reporte/FOR-PINS-22-01/PDF/{id}', [FOR_PINS_22_01Controller::class, 'FOR_PINS_22_01'])->name('Reporte_FOR_PINS_22_01.PDF');
 
         /*Ruta de Guardado Reportes/PINS FOR_PINS_23_01*/
         Route::post('/Reportes_FOR_PINS_23_01/store', [FOR_PINS_23_01Controller::class, 'FOR_PINS_23_01_store'])->name('Reportes_FOR_PINS_23_01.store');

@@ -819,7 +819,7 @@ class ReporteController extends Controller
             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
             $reportesDetalles_Generales[] = [
                 'Contrato' => $detalles['Contrato'] ?? '',
-                'Proyecto' => $detalles['Proyecto'] ?? '',
+                'Proyecto' => $detalles['Proyecto'] ?? $detalles['Identificacion'] ?? '',
                 'Cliente' => $detalles['Cliente'] ?? '',
                 'Fecha' => $detalles['Fecha'] ?? '',
                 'No_Reporte' => $detalles['No_Reporte'] ?? '',
@@ -848,7 +848,7 @@ class ReporteController extends Controller
                 $detalles = json_decode($reporte->Detalles_Generales, true);
                 $reporte->detalles = $detalles; // Añadir los detalles decodificados al objeto reporte
             }
-            $Proyecto = $reportesEncontrados[0]->detalles['Proyecto'];
+            $Proyecto = $reportesEncontrados[0]->detalles['Proyecto'] ?? $reportesEncontrados[0]->detalles['Identificacion'] ?? '';
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto, 'reportesEncontrados' => $reportesEncontrados]);
     }
