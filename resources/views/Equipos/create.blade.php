@@ -413,14 +413,14 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Fecha Calibración @elseif($rol == 'Equipos') Ultima calibración @else Fecha Calibración/Ultima calibración  @endif</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Fecha Calibración @elseif($rol == 'Equipos') Ultima calibración @else Fecha Calibración/Ultima Calibración  @endif</label>
                                             <input type="date" class="form-control inputForm" id="fechac" name="Fecha_calibracion" value="{{ old('Fecha_calibracion') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Siguiente Calibración @elseif($rol == 'Equipos') Próxima calibración @else Siguiente Calibración/Próxima calibración @endif</label>
+                                            <label class="col-form-label" for="inputSuccess">@if($rol == 'Laboratorio' ) Siguiente Calibración @elseif($rol == 'Equipos') Próxima calibración @else Sig. Calibración/Prox. Calibración @endif</label>
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_calibracion" value="{{ old('Prox_fecha_calibracion') }}">
                                         </div>
                                     </div>
@@ -450,7 +450,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Siguiente Mantenimiento @elseif($rol == 'Equipos') Fecha de Proximo Mantenimiento @else Siguiente Mantenimiento/Fecha de Proximo Mantenimiento @endif</label>
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Siguiente Mantenimiento @elseif($rol == 'Equipos') Fecha de Proximo Mantenimiento @else Sig. Mant./Fecha de Prox. Mant. @endif</label>
                                             <input type="date" class="form-control inputForm" name="Prox_fecha_mantenimiento" value="{{ old('Prox_fecha_mantenimiento') }}">
                                         </div>
                                     </div>
@@ -466,14 +466,14 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Calibración  @elseif($rol == 'Equipos') Mantenimiento Preventivo @else Frecuencia de Calibración/Mantenimiento Preventivo @endif</label>
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Calibración  @elseif($rol == 'Equipos') Mantenimiento Preventivo @else Frec. de Calibración/Mant. Preventivo @endif</label>
                                             <input type="text" class="form-control inputForm" name="Frec_Cali_Mant_Prev" @if($rol == 'Laboratorio' ) placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: SI/NO/N/A" @endif value="{{ old('Frec_Cali_Mant_Prev') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Mantenimiento @elseif($rol == 'Equipos') Intervalo de Tiempo @else Frecuencia de Mantenimiento/Intervalo de Tiempo @endif</label>
+                                            <label class="col-form-label" for="inputSuccess"> @if($rol == 'Laboratorio' ) Frecuencia de Mantenimiento @elseif($rol == 'Equipos') Intervalo de Tiempo @else Frec. de Mant./Intervalo de Tiempo @endif</label>
                                             <input type="text" class="form-control inputForm" name="Frec_Man_Inter_Time" @if($rol == 'Laboratorio' )  placeholder="Ejemplo: ANUAL" @else placeholder="Ejemplo: 12/6 MESES - N/A" @endif value="{{ old('Frec_Man_Inter_Time') }}">
                                         </div>
                                     </div>
@@ -511,6 +511,11 @@
                                                 <option value="PND" {{ old('Clasificacion') == 'PND' ? 'selected' : '' }}>PND</option>
                                                 <option value="IM" {{ old('Clasificacion') == 'IM' ? 'selected' : '' }}>IM</option>
                                             </select>
+                                            @error('Clasificacion')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -526,6 +531,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -547,6 +557,18 @@
                                                         <option value="BLOCK Y PROBETA" {{ old('TIPO') == 'BLOCK Y PROBETA' ? 'selected' : '' }}>BLOCK Y PROBETA</option>
                                                         <option value="HERRAMIENTAS" {{ old('TIPO') == 'HERRAMIENTAS' ? 'selected' : '' }}>HERRAMIENTAS</option>
                                                 </select>
+                                            @error('TIPO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                            </div>
+                                        </div>
+                                        @else($rol == 'Super Administrador' || $rol == 'Administrador')
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="col-form-label" for="inputSuccess">Tipo</label>
+                                                <input type="text" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS" readonly>
                                             @error('TIPO')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
