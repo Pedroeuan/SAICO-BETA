@@ -2,19 +2,18 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-16/01</title>
+            <title>FORMATO FOR-PINS-25-01/01</title>
             <style>
                 @page {
                     margin: 
                     3.0cm /* superior */
-                    1.2cm /* derecho */
+                    2.1cm /* derecho */
                     2.1cm /* inferior */
-                    2.2cm; /* izquierdo */
+                    2.4cm; /* izquierdo */
                 }
-
                 header {
                     position: fixed;
-                    top: -43px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -40px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -25,7 +24,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: 30px; /* Ajusta la posición */
+                    bottom: -30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -35,28 +34,41 @@
                 }
 
                 body {
-                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
+                    margin-top: 25px; /* Ajusta para que el contenido no se sobreponga al header */
                     /*margin: 0;*/
                     padding-top: 0px; /* Altura del header */
-                    padding-bottom: 0px; /* Altura del footer */
+                    padding-bottom: 0; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                     /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
                 }
-
                 .datosgenerales{
                     border: 0px !important;
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 9px !important;
-                    font-family: 'arial', sans-serif;
+                    font-size: 6px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
                 .lineaInferior{
                     border-bottom: 1px solid black;
                     text-align: center;
-                    font-size: 8px;
+                    font-size: 6px;
+                }
+                    
+                .simbologia {
+                    border-collapse: collapse;  /*separate No colapsar bordes */
+                    border-spacing: 0px;        /* Espacio entre celdas */
+                    width: 100%;
+                    text-align: center;
+                    font-size: 5px;
+                }
+
+                .simbologia td, .simbologia th {
+                    border: .6px solid black; 
+                }
+                .celdaAmarillo{
+                    background-color: #FFF2CC;
                 }
 
                 .tablaheader {
@@ -64,7 +76,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 9px;
+                    font-size: 10px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -76,8 +88,8 @@
         .encabezadoAzul{
             text-align: center;
             width: 100%;
-            font-size: 8px;
-            background-color: #305496;
+            font-size: 7px;
+            background-color: #2F75B5;
             color: #ffffff;
             outline: 1px double #000000; /* Contorno externo */
         }
@@ -85,7 +97,78 @@
         .border {
             border: 1px solid black; 
         }
+            
+        .datosinspeccion{
+            border-collapse: separate;  /*separate No colapsar bordes */
+            border-spacing: 0px;        /* Espacio entre celdas */
+            width: 100%;
+            text-align: center;
+            font-size: 6px;
+        }
 
+        .datosinspeccion td, .datosinspeccion th {
+            border: .6px solid black; 
+        }
+        
+
+        .datosinspeccionsinborde{
+            border: 0px !important;
+            text-align: center;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 6px;
+        }
+
+        .datosresultados{
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            }
+        .datosresultados td, .datosresultados th {
+            border: .6px solid black;
+        }
+        .datosresultados .sinBordeth th{
+            border: 0 !important;
+        }
+        .datosresultados td.long-wrap{
+            border: 0 !important;
+            padding: 0 !important;
+        }
+
+        .long-wrap{
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .long-box{
+            width: 36%;
+            margin-left: auto;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .long-box td{
+            border: .6px solid black !important;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
+        .celdaGris{
+            background-color: #DBDBDB;
+            font-size: 6px;
+        }
+
+        .celdaGrisResultados{
+            background-color: #DBDBDB;
+            font-size: 9px;
+        }
+
+        .juntas{
+            font-size: 9px;
+        }
+        
         .sinBordetdth td, .sinBordetdth th {
             border: 0px !important;
             text-align: center;
@@ -106,94 +189,21 @@
             border-collapse: collapse;
             width: 100%;
         }
-        /* ************** */
-        .imagenes-reporte {
-            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
-            width: 106%;
-            border-collapse: separate;
-            /*border-spacing: 20px; /* Espacio entre celdas */
-            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
-            margin-bottom: 0;
-            table-layout: fixed; /* Fija el ancho de las celdas */
+        .rotar-texto-dividido {
+            text-align: center; /* Centra el texto horizontalmente */
+            padding: 0;
+            display: inline-block; /* Necesario para la rotación */
+            transform: rotate(270deg); /* Rota solo el texto */
+            white-space: normal;
         }
 
-        .foto-container {
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
-            width: 312px;  /* Fija el ancho de la celda */
-            height: 170px; /* Fija la altura de la celda */
-            border: 1px solid black; 
-            vertical-align: middle;
-        }
-
-        .foto-container img {
-            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
-            object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 332.5px;  /* Ajusta el ancho de la celda */
-            height: 170px; /* Ajusta la altura de la celda */
-            vertical-align: middle;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Estilo para los comentarios */
-        .comment { 
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 7px; /* Espaciado entre el borde y el texto */
-            margin-top: 0px; /* Espacio entre la imagen y el comentario */
-            text-align: center; /* Centrar el texto */
-            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
-            max-width: 100%; /* Para que el texto no desborde */
-            word-wrap: break-word; /* Permite que el texto se ajuste */
-        }
-        /* Estilo para los "comentarios" en blanco */
-        .empty-comment {
-            margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 0px; /* Espaciado entre el borde y el texto */
-        }
-        
-        .empty-box {
-            background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
-        }
-
-        .cross-line {
-            width: 74%;
-            height: 0px; /* Ajusta según el tamaño de las imágenes */
-            position: relative;
-        }
-
-        .cross-line::before,
-        .cross-line::after {
-            content: "";
-            position: absolute;
-            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
-            left: -21px; /* Ajusta para alinear la línea */
-            width: 152.5%; /* Aumenta el ancho de la línea */
-            height: 100%;
-            border-top: 2px solid black;
-            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
-        }
-
-        .cross-line::after {
-            transform: rotate(-27deg);
-        }
-
-        .foto-full {
-            width: 100% !important;
-            height: 435px !important;
-        }
-
-        .foto-full img {
-            width: 100% !important;
-            height: 404px !important;
-            object-fit: contain;
-        }
-
-        .foto-full .comment {
-            margin-top: 0px;
-            font-size: 12px;
+        .rotar-texto-sin-dividir {
+            text-align: center; /* Centra el texto horizontalmente */
+            padding: 0;
+            display: inline-block; /* Necesario para la rotación */
+            transform: rotate(270deg); /* Rota solo el texto */
+            white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+            max-width: 20px; /* Ajusta al ancho máximo deseado */
         }
             </style>
         </head>
@@ -203,9 +213,9 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th rowspan="4" style="width: 500%; font-size: 8pt;">INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO</th>
+                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INSPECCIÓN VISUAL EN RSP</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-16/01</th>
+                            <th style="width: 100%;">FOR-PINS-25/01</th>
                             <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -227,12 +237,39 @@
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
-            </header>
-            
+
+                <div style="margin-bottom: 4px;"></div>
             <footer>
                     <table class="datosgenerales">
                         <thead>
-                            @if( $numFirmas == 2)
+                            @if( $numFirmas == 1)
+                            <!-- 1 Firmas -->
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                </tr>
+                            @elseif( $numFirmas == 2)
                             <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
@@ -381,39 +418,15 @@
                         </thead>                            
                     </table>
             </footer>
-                        @php
-                            $chunks = [];
-                            $grupoActual = [];
 
-                            foreach ($Fotos as $foto) {
-                                if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
-                                    if (!empty($grupoActual)) {
-                                        $chunks[] = $grupoActual;
-                                        $grupoActual = [];
-                                    }
+            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
 
-                                    $chunks[] = [$foto];
-                                    continue;
-                                }
-
-                                $grupoActual[] = $foto;
-
-                                if (count($grupoActual) == 4) {
-                                    $chunks[] = $grupoActual;
-                                    $grupoActual = [];
-                                }
-                            }
-
-                            if (!empty($grupoActual)) {
-                                $chunks[] = $grupoActual;
-                            }
-                        @endphp
-        @foreach($chunks as $fotosGrupo)
+            {{-- ================= DATOS GENERALES ================= --}}
             <div class="content">
-
                 <table class="datosgenerales">
 
                     <thead class="encabezadoAzul">
+
                         <tr><th colspan="4">DATOS GENERALES</th></tr>
                     </thead>  
 
@@ -422,124 +435,130 @@
                     <tbody>
                         <tr>
                             <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
                             <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>CLIENTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
                         </tr>
                         <tr>
-                            <th>PROYECTO: </th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
+                            <th>PROYECTO:</th>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] }}</td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] }}</td>
+                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>LUGAR:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] ?? '' }}</td>
                             <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] ?? '' }}</td>
                         </tr>
                         <tr>
                             <th>PIEZA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] ?? '' }}</td>
                             <th>MATERIAL:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] ?? '' }}</td>
                         </tr>
                         <tr>
-                            <th >PROCEDIMIENTO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] }}</td>
+                            <th>PROCEDIMIENTO:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
                             <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>TIPO E INTENSIDAD DE ILUMINACIÓN:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Iluminacion'] ?? '' }}</td>
+                            <th style="width: 160px;">TIPO DE INSPECCIÓN:</th>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Inspeccion'] ?? '' }}</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 6px;"></div>
+            <div style="margin-bottom: 5px;"></div>
 
-                <table class="datosgenerales">
-                    <thead class="encabezadoAzul">
-                        <tr><th>REGISTRO FOTOGRÁFICO</th></tr>
-                    </thead>  
-                </table>
+            {{-- ================= ENCABEZADO RESULTADOS ================= --}}
+                    <table class="datosresultados">
+                    
+                        <thead class="encabezadoAzul">
+                            <tr><th colspan="9">RESULTADOS</th></tr>
+                        </thead>
+            {{-- ================= TABLA RESULTADOS ================= --}}
+                        <thead><tr class="sinBordeth"><th colspan="9"></th></tr></thead> <!-- Fila vacia -->
 
-                            @php
-                                $esHojaCompleta = (count($fotosGrupo) == 1 && !empty($fotosGrupo[0]['una_hoja']) && $fotosGrupo[0]['una_hoja'] == 1);
-                            @endphp
-                            <table class="imagenes-reporte">
-                                <tr>
-                                    @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
-                                        <td class="foto-container">
-                                            <img src="{{ $fotosGrupo[0]['path'] }}" alt="Foto 1">
-                                            <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
-                                        </td>
-                                        <td class="foto-container">
-                                            <img src="{{ $fotosGrupo[1]['path'] }}" alt="Foto 2">
-                                            <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
-                                        </td>
-                                        </tr><tr>
-                                        <td class="foto-container" colspan="2">
-                                            <img src="{{ $fotosGrupo[2]['path'] }}" alt="Foto 3">
-                                            <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
-                                        </td>
-                                    @else
-                                        @foreach($fotosGrupo as $index => $foto)
-                                            @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
-                                                <td class="foto-container foto-full" colspan="2">
-                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                                    <p class="comment">{{ $foto['comment'] }}</p>
-                                                </td>
-                                            @else
-                                                <td class="foto-container">
-                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                                    <p class="comment">{{ $foto['comment'] }}</p>
-                                                </td>
-                                                @if(($index + 1) % 2 == 0)
-                                                    </tr><tr>
-                                                @endif
+                        <thead>
+                            <tr class="celdaGris">
+                                <th style="width: 30px;">ID</th>
+                                <th style="width: 50px;">DESCRIPCIÓN DEL ELEMENTO</th>
+                                <th style="width: 30px;">Ø nom (in)</th>
+                                <th style="width: 30px;">Longitud (in)</th>
+                                <th style="width: 30px;">Tipo de Conexión</th>
+                                <th style="width: 30px;">Servicio</th>
+                                <th style="width: 30px;">Clase</th>
+                                <th style="width: 50px;">Especificación de material</th>
+                                <th style="width: 100px;">Observaciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                                @foreach ($bloque as $item)   
+                                            @if (!is_array($item))
+                                                @continue
                                             @endif
-                                        @endforeach
-                                    @endif
 
-                                    @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
-                                        @php $faltantes = 4 - count($fotosGrupo); @endphp
-                                        @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
-                                            @for($i = 0; $i < $faltantes; $i++)
-                                                <td class="foto-container empty-box">
-                                                    <div class="cross-line"></div>
-                                                    <p class="empty-comment">&nbsp;</p>
-                                                </td>
-                                                @if((count($fotosGrupo) + $i + 1) % 2 == 0)
-                                                    </tr><tr>
-                                                @endif
-                                            @endfor
-                                        @endif
-                                    @endif
-                                </tr>
-                            </table>
+                                            {{-- TITULO --}}
+                                            @if (($item['tipo'] ?? null) == 'titulo')
+                                                <tr class="titulo-row">
+                                                    <td colspan="9" style="border:.5px solid black;">
+                                                        {{ $item['texto'] }}
+                                                    </td>
+                                                </tr>
+                                            @endif
 
-                            {{-- Salto de página cada 4 imágenes --}}
-                            @if (!$loop->last)
-                                <div style="page-break-after: always;"></div>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                                            {{-- FILA --}}
+                                            @if (($item['tipo'] ?? null) == 'fila')
+                                                <tr class="juntas">
+                                                    <td>{{ $item['data']['ID'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Descripcion_del_Elemento'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['0'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Longitud_(in)'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Tipo_conexion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['servicio'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Clase'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Especificación_material'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Observaciones'] ?? '' }}</td>
+                                                </tr>
+                                            @endif
 
+                                            {{-- LONGITUD 
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="12"></td>
+                                                    <th colspan="4">Longitud inspeccionada:</th>
+                                                    <th>{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
+                                            --}}
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @if (!$loop->last)
+                        <div style="page-break-after: always;"></div>
+                    @endif
+            @endforeach
         </body>
     </html>

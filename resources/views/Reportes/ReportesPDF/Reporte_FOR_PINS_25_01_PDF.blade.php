@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -40px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -43px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -213,18 +213,21 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INSPECCIÓN VISUAL EN RSP</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-25-01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th style="width: 80%;">FOR-PINS-25/01</th>
+                            <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INSPECCIÓN VISUAL EN RSP</th>
                             <th>Versión</th>
                             <th>0</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 90%;">Fecha de elaboración</th>
+                            <th>28-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -232,8 +235,9 @@
                         </tr>
                     </tbody>
                 </table>
-    
+
                 <div style="margin-bottom: 4px;"></div>
+
             </header>
 
             <footer>
@@ -516,25 +520,27 @@
                     <table class="datosresultados">
                     
                         <thead class="encabezadoAzul">
-                            <tr><th colspan="12">RESULTADOS</th></tr>
+                            <tr><th colspan="14">RESULTADOS</th></tr>
                         </thead>
 
-                        <thead><tr class="sinBordeth"><th colspan="12"></th></tr></thead> <!-- Fila vacia -->
+                        <thead><tr class="sinBordeth"><th colspan="14"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
                             <tr class="celdaGris">
                             <th style="width: 50px;">ID</th>
-                            <th style="width: 50px;">Elemento</th>
-                            <th style="width: 50px;">No. Indicación</th>
-                            <th style="width: 50px;">Tipo de Indicación</th>
-                            <th style="width: 50px;">Referencia</th>
-                            <th style="width: 50px;">DNR (m)</th>
-                            <th style="width: 50px;">H.T.</th>
+                            <th style="width: 50px;">Descripción del elemento</th>
+                            <th style="width: 50px;">Ø nom. (in.)</th>
+                            <th style="width: 50px;">Tipo de material</th>
+                            <th style="width: 50px;">Descripción de la discontinuidad, indicación.</th>
+                            <th style="width: 50px;">No. Ind.</th>
+                            <th style="width: 50px;">LA (in.)</th>
+                            <th style="width: 50px;">LC (in.)</th>
                             <th style="width: 50px;">d(in)</th>
                             <th style="width: 50px;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</th>
-                            <th style="width: 50px;">%Perdida</th>
-                            <th style="width: 50px;">Espesor remanente (in)</th>
-                            <th style="width: 60px;">Observaciones</th>
+                            <th style="width: 50px;">Horario Técnico</th>
+                            <th style="width: 50px;">Referencia</th>
+                            <th style="width: 50px;">Dictamen y/o Recomendación</th>
+                            <th style="width: 50px;">No. Foto</th>
                         </tr>
                     </thead>
                         <tbody>
@@ -546,7 +552,7 @@
                                             {{-- TITULO --}}
                                             @if (($item['tipo'] ?? null) == 'titulo')
                                                 <tr class="titulo-row">
-                                                    <td colspan="12" style="border:.5px solid black;">
+                                                    <td colspan="14" style="border:.5px solid black;">
                                                         {{ $item['texto'] }}
                                                     </td>
                                                 </tr>
@@ -556,17 +562,19 @@
                                             @if (($item['tipo'] ?? null) == 'fila')
                                                 <tr class="juntas">
                                                     <td>{{ $item['data']['ID'] }}</td>
-                                                    <td>{{ $item['data']['Elemento'] }}</td>
-                                                    <td>{{ $item['data']['No_ind'] }}</td>
-                                                    <td>{{ $item['data']['Tipo_Ind'] }}</td>
-                                                    <td>{{ $item['data']['Referencia'] }}</td>
-                                                    <td>{{ $item['data']['DNR'] }}</td>
-                                                    <td>{{ $item['data']['HT'] }}</td>
-                                                    <td>{{ $item['data']['d'] }}</td>
-                                                    <td>{{ $item['data']['ta'] }}</td>
-                                                    <td>{{ $item['data']['Perdida'] }}</td>
-                                                    <td>{{ $item['data']['Espe'] }}</td>
-                                                    <td>{{ $item['data']['Observaciones'] }}</td>
+                                                    <td>{{ $item['data']['Descripcion_del_Elemento'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['0_nom'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Tipo_material'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Descripcion_discontinuidad'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['No_indicacion'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['LA'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['LC'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['d'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['ta'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['t_h'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Referencia'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Dictamen'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['No_foto'] ?? '' }}</td>
                                                 </tr>
                                             @endif
 
@@ -580,4 +588,3 @@
             @endforeach
         </body>
     </html>
-

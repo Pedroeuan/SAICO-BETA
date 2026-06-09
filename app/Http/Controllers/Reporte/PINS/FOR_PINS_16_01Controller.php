@@ -224,6 +224,76 @@ class FOR_PINS_16_01Controller extends Controller
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
+    private function construirBloquesComponentes(Request $request)
+    {
+        $titulosJson = $request->input('componentes_titulos_data', '[]');
+        $titulos = json_decode($titulosJson, true) ?: [];
+        $bloques = [];
+        $bloqueActual = [];
+        $contador = 0;
+        $maxFilasPorBloque = 22;
+
+        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
+            if (!empty($bloqueActual)) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+        };
+
+        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque, $cerrarBloque) {
+            if ($contador >= $maxFilasPorBloque) {
+                $cerrarBloque();
+            }
+
+            $bloqueActual[] = $elemento;
+            $contador++;
+        };
+
+        $procesarFilas = function ($tituloKey) use ($request, $agregarElemento) {
+            $filas = $request->input("Componentes_ID.$tituloKey", []);
+
+            for ($i = 0; $i < count($filas); $i++) {
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $tituloKey,
+                    'data' => [
+                        'ID' => $request->input("Componentes_ID.$tituloKey.$i"),
+                        'Descripcion_del_Elemento' => $request->input("Componentes_Descripcion_del_Elemento.$tituloKey.$i"),
+                        'Nivel' => $request->input("Componentes_Nivel.$tituloKey.$i"),
+                        '0' => $request->input("Componentes_0.$tituloKey.$i"),
+                        'Longitud_(m)' => $request->input("Componentes_Longitud_m.$tituloKey.$i"),
+                        'Clase' => $request->input("Componentes_Clase.$tituloKey.$i"),
+                        'Especificación' => $request->input("Componentes_Especificacion.$tituloKey.$i"),
+                        'Observaciones' => $request->input("Componentes_Observaciones.$tituloKey.$i"),
+                    ],
+                ]);
+            }
+        };
+
+        $procesarFilas('sin_titulo');
+
+        foreach ($titulos as $tituloObj) {
+            $tituloKey = $tituloObj['id'] ?? null;
+
+            if (!$tituloKey) {
+                continue;
+            }
+
+            $agregarElemento([
+                'tipo' => 'titulo',
+                'id' => $tituloKey,
+                'texto' => $tituloObj['text'] ?? '',
+            ]);
+
+            $procesarFilas($tituloKey);
+        }
+
+        $cerrarBloque();
+
+        return $bloques;
+    }
+
     public function FOR_PINS_16_01_store(Request $request)
     {
         $Estatus = "CREADO";
@@ -257,6 +327,7 @@ class FOR_PINS_16_01Controller extends Controller
 
             /*Titulos Juntas */
             'titulos_data' => 'nullable|string',
+            'componentes_titulos_data' => 'nullable|string',
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
@@ -275,6 +346,14 @@ class FOR_PINS_16_01Controller extends Controller
             'Perdida' => 'nullable|array',
             'Espesor_remanente' => 'nullable|array',
             'Observaciones' => 'nullable|array',
+            'Componentes_ID' => 'nullable|array',
+            'Componentes_Descripcion_del_Elemento' => 'nullable|array',
+            'Componentes_Nivel' => 'nullable|array',
+            'Componentes_0' => 'nullable|array',
+            'Componentes_Longitud_m' => 'nullable|array',
+            'Componentes_Clase' => 'nullable|array',
+            'Componentes_Especificacion' => 'nullable|array',
+            'Componentes_Observaciones' => 'nullable|array',
 
 
             //Validar el campo NumFirmas
@@ -575,8 +654,13 @@ class FOR_PINS_16_01Controller extends Controller
         | 4. GUARDAR
         |--------------------------------------------------------------------------
         */
+        $componentesBloques = $this->construirBloquesComponentes($request);
+
         // Guardar en el modelo
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode([
+            'componentes' => $componentesBloques,
+            'inspeccion' => $bloques,
+        ], JSON_UNESCAPED_UNICODE);
         $Grupo_Juntas_Detalles_Re->save();
         
         /*Firmas */
@@ -723,6 +807,7 @@ class FOR_PINS_16_01Controller extends Controller
 
             /*Titulos Juntas */
             'titulos_data' => 'nullable|string',
+            'componentes_titulos_data' => 'nullable|string',
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
@@ -741,6 +826,14 @@ class FOR_PINS_16_01Controller extends Controller
             'Perdida' => 'nullable|array',
             'Espesor_remanente' => 'nullable|array',
             'Observaciones' => 'nullable|array',
+            'Componentes_ID' => 'nullable|array',
+            'Componentes_Descripcion_del_Elemento' => 'nullable|array',
+            'Componentes_Nivel' => 'nullable|array',
+            'Componentes_0' => 'nullable|array',
+            'Componentes_Longitud_m' => 'nullable|array',
+            'Componentes_Clase' => 'nullable|array',
+            'Componentes_Especificacion' => 'nullable|array',
+            'Componentes_Observaciones' => 'nullable|array',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -1017,9 +1110,14 @@ class FOR_PINS_16_01Controller extends Controller
         | 4. GUARDAR
         |--------------------------------------------------------------------------
         */
+        $componentesBloques = $this->construirBloquesComponentes($request);
+
         // Actualizar el campo en la base de datos
         $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
+            'Juntas_Grupo_Re' => json_encode([
+                'componentes' => $componentesBloques,
+                'inspeccion' => $bloques,
+            ], JSON_UNESCAPED_UNICODE)
         ]);
 
         /*Firmas */
@@ -1207,8 +1305,10 @@ class FOR_PINS_16_01Controller extends Controller
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
-        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
-        $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener las tablas del reporte
+        $juntasGrupoRe = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true) ?: [];
+        $Componentes_Detalles_Re = $juntasGrupoRe['componentes'] ?? [];
+        $Grupo_Juntas_Detalles_Re = $juntasGrupoRe['inspeccion'] ?? $juntasGrupoRe;
 
         $totalTitulos = 0;
         $totalFilas = 0;
@@ -1255,6 +1355,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Datos_Equipo' => $Datos_Equipo,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            'Componentes_Detalles_Re' => $Componentes_Detalles_Re,
             //Total de Juntas
             /*'totalTitulos' => $totalTitulos,
             'totalFilas' => $totalFilas,*/
@@ -1269,6 +1370,14 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes' => $Firmas_Reportes,
         ];
 
+        $dataComponentes = $data;
+        $dataComponentes['Grupo_Juntas_Detalles_Re'] = $Componentes_Detalles_Re;
+        $dataComponentes['Codigo_Formato_Componentes'] = 'FOR-PINS-16/01';
+        $dataComponentes['Titulo_Formato_Componentes'] = 'LISTADO DE COMPONENTES';
+
+        // Generar el PDF de componentes en orientación vertical
+        $pdf0 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_16_01_01_PDF', $dataComponentes)->setPaper('letter', 'portrait');
+
         // Generar el PDF principal en orientación horizontal
         $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_16_01_PDF', $data)->setPaper('letter', 'landscape');
 
@@ -1276,10 +1385,14 @@ class FOR_PINS_16_01Controller extends Controller
         $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_16_01_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
+        $pdf0Content = $pdf0->output();
         $pdf1Content = $pdf1->output();
         $pdf2Content = $pdf2->output();
 
        // Crear objetos FPDI independientes para contar páginas
+        $tempPdf0 = new Fpdi();
+        $pageCount0 = $tempPdf0->setSourceFile(StreamReader::createByString($pdf0Content));
+
         $tempPdf1 = new Fpdi();
         $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
 
@@ -1288,29 +1401,40 @@ class FOR_PINS_16_01Controller extends Controller
 
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
-        $totalPageCount = $pageCount1 + $pageCount2;
+        $totalPageCount = $pageCount0 + $pageCount1 + $pageCount2;
 
-        // Añadir páginas del primer PDF
+        // Añadir páginas del PDF de componentes
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf0Content));
+        for ($i = 1; $i <= $pageCount0; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(124.5, -262.5);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        // Añadir páginas del PDF de inspección
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(179, -182.5);
-            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            $combinedPdf->SetXY(183.5, -182.5);
+            $combinedPdf->Cell(0, 10, ($i + $pageCount0) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        // Añadir páginas del segundo PDF
+        // Añadir páginas del PDF de fotos
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
         for ($i = 1; $i <= $pageCount2; $i++) {
             $tplId = $combinedPdf->importPage($i);
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -265.5);
+            $combinedPdf->SetXY(141.5, -265);
             // Para que el conteo sea consecutivo
-            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+            $combinedPdf->Cell(0, 10, ($i + $pageCount0 + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
         return response($combinedPdf->Output('Reporte_FOR_PINS_16_01.PDF', 'I'), 200)
