@@ -538,7 +538,7 @@
                             <th style="width: 50px;">d(in)</th>
                             <th style="width: 50px;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</th>
                             <th style="width: 50px;">Horario Técnico</th>
-                            <th style="width: 50px;">Referencia</th>
+                            <th style="width: 50px;"> SC o referencia</th>
                             <th style="width: 50px;">Dictamen y/o Recomendación</th>
                             <th style="width: 50px;">No. Foto</th>
                         </tr>
