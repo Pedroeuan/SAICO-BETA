@@ -69,6 +69,9 @@ class DevolucionController extends Controller
 
         $solicitud = Solicitudes::where('idSolicitud', $id)->first();
         $EstadoSolicitud = $solicitud->Estatus;
+        /*Log::info('***********************');
+        Log::info('***********************');
+        Log::info('EstadoSolicitud: ', ['EstadoSolicitud' => $EstadoSolicitud]); */
 
             preg_match('/^([A-Z]+-\d+)/', $folioBase, $matches);
             if (count($matches) > 0) {
@@ -77,33 +80,47 @@ class DevolucionController extends Controller
 
             // Usar expresión regular para buscar folios similares
             $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
+            //Log::info('***********************');
+            //Log::info('foliosSimilares: ', ['foliosSimilares' => $foliosSimilares]); 
             // Obtener todos los idSolicitud de los folios similares
             $idsSolicitud = $foliosSimilares->pluck('idSolicitud')->toArray(); // Convertir a array
-            //log::info('IDs de Solicitudes obtenidos para folios similares: ' . implode(', ', $idsSolicitud)); // Log para verificar los IDs obtenidos
+            //Log::info('idsSolicitud: ', ['idsSolicitud' => $idsSolicitud]);
             // Obtener los Folios asociados a cada idSolicitud desde la tabla manifiesto
             $foliosManifiestos = manifiesto::whereIn('idSolicitud', $idsSolicitud)
                 ->get(['idSolicitud', 'Folio'])
                 ->keyBy('idSolicitud'); // Indexar por idSolicitud para fácil acceso
-
+            //Log::info('foliosManifiestos: ', ['foliosManifiestos' => $foliosManifiestos]);
             // Buscar esos idSolicitud en la tabla detalles_solicitud y contar idGeneral_EyC
             $detallesSolicitud = detalles_solicitud::whereIn('idSolicitud', $idsSolicitud)
                 ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(Cantidad) as cantidad'))
                 ->groupBy('idGeneral_EyC', 'idSolicitud')
                 ->get();
-
+            //Log::info('detallesSolicitud: ', ['detallesSolicitud' => $detallesSolicitud]);
             // Obtener los idGeneral_EyC de los resultados obtenidos
             $idsGeneralEyC = $detallesSolicitud->pluck('idGeneral_EyC')->toArray(); // Convertir a array
+            //Log::info('idsGeneralEyC: ', ['idsGeneralEyC' => $idsGeneralEyC]);
 
             // Buscar los idGeneral_EyC en la tabla General_EyC para obtener el Nombre
-            $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
-                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo','No_economico','Serie']);
-
+            /*$generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
+                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo','No_economico','Serie']);*/
+                $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
+                ->whereIn('Disponibilidad_Estado', ['NO DISPONIBLE', 'En Servicio'])
+                ->get([
+                    'idGeneral_EyC',
+                    'Nombre_E_P_BP',
+                    'Disponibilidad_Estado',
+                    'Tipo',
+                    'No_economico',
+                    'Serie'
+                ]);
+            //Log::info('generalesEyC: ', ['generalesEyC' => $generalesEyC]);
             // Preparar un array asociativo para la vista con el Nombre, cantidad y Folio
             $datosManifiesto = [];
             foreach ($detallesSolicitud as $detalle) {
                 $general = $generalesEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                 $folio = $foliosManifiestos->get($detalle->idSolicitud)?->Folio; // Obtener Folio correspondiente desde $foliosManifiestos
-
+                //Log::info('general: ', ['general' => $general]);
+                //Log::info('folio: ', ['folio' => $folio]);
                 // Verificar si el registro está en Historial_Almacen con Tipo "DEVOLUCIÓN"
                 $Fecha = now()->format('Y-m-d');
                 $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
@@ -111,7 +128,7 @@ class DevolucionController extends Controller
                     ->where('Folio', $folio)
                     ->where('Tipo', 'DEVOLUCIÓN')
                     ->exists(); // Si existe el registro con "DEVOLUCIÓN"
-
+                //Log::info('historialAlmacenExistente: ', ['historialAlmacenExistente' => $historialAlmacenExistente]);
                 // Solo incluir en $datosManifiesto si no está en Historial_Almacen
                 if (!$historialAlmacenExistente && $general) {
                     $datosManifiesto[] = [

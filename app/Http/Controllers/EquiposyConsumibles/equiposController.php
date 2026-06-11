@@ -49,6 +49,7 @@ class equiposController extends Controller
      */
     public function storeEquipos(Request $request)
     {
+        //dd($request->all());
             $request->validate([
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'No_economico' => 'required|string|max:255',
@@ -66,19 +67,22 @@ class equiposController extends Controller
             /*Esta validaciones es por el apartado de la 17025*/
             $Tipo = $request->input('TIPO');
 
-            if($Tipo == 'EQUIPOS'){
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
             $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
             $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
 
+            //if($Tipo == 'EQUIPOS'){
              // Verifica si el número económico ya existe (compara el número limpio)
             $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM REGEXP_REPLACE(LOWER(No_economico), '^(no\\.\\s*eco-?|eco-?)', '')) = ?", [$noEconomicoLimpio])
             ->where('Tipo', 'EQUIPOS')
             ->exists();
-
+            /*Log::info('***********************');
+            Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
             }
             elseif($Tipo == 'ACCESORIOS')
             {
+                            Log::info('***********************');
+            Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
                 // Eliminar prefijos como "No. AICO-", "No AICO-", "AICO-" y ceros a la izquierda
                 $noEconomicoLimpio = preg_replace('/^(no\.?\s*aico[- ]?|aico[- ]?)/i', '', $noEconomico);
                 $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
@@ -113,7 +117,10 @@ class equiposController extends Controller
             if ($serie !== '---') {
                 $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
             }
-
+            Log::info('***********************');
+            Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
+            Log::info('***********************');
+            Log::info('existsSerie: ', ['existsSerie' => $existsSerie]);*/
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
             //Si encuentra duplicados, devuelve un mensaje de error en No_economico y Serie.
             if ($existsNo_Economico && $existsSerie)
@@ -478,8 +485,8 @@ class equiposController extends Controller
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
-            Log::info('noEconomico: ', ['noEconomico' => $noEconomico]);
-            Log::info('serie: ', ['serie' => $serie]);
+            //Log::info('noEconomico: ', ['noEconomico' => $noEconomico]);
+            //Log::info('serie: ', ['serie' => $serie]);
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
             $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
             $noEconomicoLimpio = ltrim($noEconomicoLimpio, '0'); // Elimina ceros iniciales
@@ -490,13 +497,13 @@ class equiposController extends Controller
             ->where('idGeneral_EyC', '!=', $id)
             ->where('No_economico', '!=', $noEconomicoLimpio)  // ← EXCLUYE SU PROPIO REGISTRO
             ->exists();
-            Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
+            //Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
 
             // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
             $existsSerie = false;
             if ($serie !== '---') {
                 $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
-                Log::info('existsSerie1: ', ['existsSerie' => $existsSerie]);
+                //Log::info('existsSerie1: ', ['existsSerie' => $existsSerie]);
             }
 
             //exists(): Devuelve true si encuentra algún registro que cumpla con la condición, indicando duplicado.
@@ -515,7 +522,7 @@ class equiposController extends Controller
             }
             elseif ($existsSerie && $existsNo_Economico == true)
             {
-                Log::info('existsSerie2: ', ['existsSerie' => $existsSerie]);
+                //Log::info('existsSerie2: ', ['existsSerie' => $existsSerie]);
                 return redirect()->back()->withErrors([
                     'Serie' => 'La Serie ya existe en la base de datos.',
                 ])->withInput();
