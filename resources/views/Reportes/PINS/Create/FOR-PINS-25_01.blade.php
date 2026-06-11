@@ -279,6 +279,70 @@
                                     </div>
                                     
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
+                                    <div style="margin-bottom: 5px;"></div>
+
+                                        <div class="table-responsive">
+                                            <div class="alert alert-warning alert-dismissible">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                                            </div>
+                                        <table id="componentesTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>ID</th>
+                                                    <th>Descripción del Elemento</th>
+                                                    <th>Ø nom (in)</th>
+                                                    <th>Longitud (in)</th>
+                                                    <th>Tipo de Conexión</th>
+                                                    <th>Servicio</th>
+                                                    <th>Clase</th>
+                                                    <th>Especificación de material</th>
+                                                    <th>Observaciones</th>
+                                                    <th>Eliminar</th>
+                                                </tr>
+                                                <tr id="componentesInputRow">
+                                                    <th></th> <!-- Para ID vacío -->
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="1" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="2" style="width: 240px;"></th>
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="3" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="4" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="5" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="6" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="7" style="width: 100px;"></th>
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="8" style="width: 140px;"></th>
+                                                    <th><input type="text" class="form-control componentes-default-input" data-column="9" style="width: 140px;"></th>          
+                                                    <th></th> <!-- Para botón de eliminar -->
+                                                </tr>
+                                            </thead>
+
+                                                <tbody>
+                                                <!-- Filas dinámicas aparecerán aquí -->
+                                                </tbody>
+                                        </table>
+                                    </div>
+
+                                    <input type="hidden" name="componentes_titulos_data" id="componentes_titulos_hidden"> <!---------------------------------------Agregar -->
+                                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                        <div>
+                                            <label for="componentesNumRows">Número de Filas:</label>
+                                            <select id="componentesNumRows" class="form-select">
+                                                @for ($i = 1; $i <= 500; $i++)
+                                                    <option value="{{ $i }}">{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+
+                                        <button id="componentesAddBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
+
+                                        <button id="componentesAddTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                                        <button id="componentesPreFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
+                                    </div>
+
+                                    <p> 
                                     <!--***************************************** INICIO RESULTADOS *****************************************-->
 
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
@@ -296,19 +360,19 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>ID</th>
-                                                <th>Elemento</th>
-                                                <th>No. Indicación</th>
-                                                <th>Tipo de Indicación</th>
-                                                <th>Referencia</th>
-                                                <th>DNR (m)</th>
-                                                <th>H.T.</th>
-                                                <th>Long. Axial (in)</th>
-                                                <th>Long. Circ. (in)</th>
+                                                <th>Descripción del elemento</th>
+                                                <th>Ø nom. (in.)</th>
+                                                <th>Tipo de material</th>
+                                                <th>Descripción de la discontinuidad, indicación.</th>
+                                                <th>No. Ind.</th>
+                                                <th>LA (in.)</th>
+                                                <th>LC (in.)</th>
                                                 <th>d(in)</th>
                                                 <th><span style="font-size: 20px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</th>
-                                                <th>%Perdida</th>
-                                                <th>Espesor remanente (in)</th>
-                                                <th>Observaciones</th>
+                                                <th>Horario Técnico</th>
+                                                <th>SC o referencia</th>
+                                                <th>Dictamen y/o Recomendación</th>
+                                                <th>No. Foto</th>
                                                 <th>Eliminar</th>
                                             </tr>
 
@@ -713,6 +777,128 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
+    /*Listado de componentes: separado del dynamicTable del informe de inspección*/
+    $(document).ready(function() {
+        let componentesTituloCount = 0;
+        let componentesRowCount = 0;
+
+        function componentesLastTitle() {
+            const $lastTitle = $('#componentesTable tbody tr.componentes-title-row').last();
+            return $lastTitle.length ? $lastTitle.data('titulo') : 'sin_titulo';
+        }
+
+        function componentesUpdateTitulos() {
+            const titulos = [];
+
+            $('#componentesTable tbody tr.componentes-title-row').each(function() {
+                titulos.push({
+                    id: $(this).data('titulo'),
+                    text: $(this).find('.componentes-titulo-text').val() || ''
+                });
+            });
+
+            $('#componentes_titulos_hidden').val(JSON.stringify(titulos));
+        }
+
+        function componentesUpdateRowNumbers() {
+            componentesRowCount = 0;
+
+            $('#componentesTable tbody tr.componentes-data-row').each(function() {
+                componentesRowCount++;
+                $(this).find('.componentes-row-number').text(componentesRowCount);
+                $(this).find('.componentes-id-input').val(componentesRowCount);
+            });
+        }
+
+        $('#componentesAddTituloBtn').click(function() {
+            componentesTituloCount++;
+
+            const titleId = `componentes_titulo_${componentesTituloCount}`;
+            const newTitle = `
+                <tr class="componentes-title-row" data-titulo="${titleId}">
+                    <td colspan="10">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text" class="form-control w-90 componentes-titulo-text" name="componentes_titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3">
+                            <input type="hidden" name="componentes_titulos_ids[]" value="${titleId}">
+                            <button type="button" class="btn btn-danger btnEliminarTituloComponente ml-2">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+
+            $('#componentesTable tbody').append(newTitle);
+            componentesUpdateTitulos();
+        });
+
+        $('#componentesAddBtn').click(function() {
+            const numFilas = parseInt($('#componentesNumRows').val(), 10) || 1;
+            const lastTitle = componentesLastTitle();
+
+            for (let i = 0; i < numFilas; i++) {
+                componentesRowCount++;
+
+                const newRow = `
+                    <tr class="componentes-data-row" data-titulo="${lastTitle}">
+                        <td><span class="componentes-row-number">${componentesRowCount}</span></td>
+                        <td><input type="text" class="form-control componentes-id-input" name="Componentes_ID[${lastTitle}][]" value="${componentesRowCount}" placeholder="ID"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Descripcion_del_Elemento[${lastTitle}][]" placeholder="Descripcion del Elemento"></td>
+                        <td><input type="text" class="form-control" name="Componentes_0[${lastTitle}][]" placeholder="Ø nom (in)"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Longitud_in[${lastTitle}][]" placeholder="Longitud (m)"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Tipo_conexion[${lastTitle}][]" placeholder="Tipo de Conexión"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Servicio[${lastTitle}][]" placeholder="Servicio"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Clase[${lastTitle}][]" placeholder="Clase"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Especificacion_material[${lastTitle}][]" placeholder="Especificación de material"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                        <td><button type="button" class="btn btn-danger btnEliminarComponente"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                    </tr>`;
+
+                $('#componentesTable tbody').append(newRow);
+            }
+        });
+
+        $('#componentesTable').on('click', '.btnEliminarComponente', function() {
+            $(this).closest('tr').remove();
+            componentesUpdateRowNumbers();
+        });
+
+        $('#componentesTable').on('click', '.btnEliminarTituloComponente', function() {
+            const $title = $(this).closest('tr.componentes-title-row');
+            const titleId = $title.data('titulo');
+
+            $('#componentesTable tbody tr').filter(function() {
+                return $(this).data('titulo') === titleId;
+            }).remove();
+
+            componentesUpdateTitulos();
+            componentesUpdateRowNumbers();
+        });
+
+        $('#componentesTable').on('input', '.componentes-titulo-text', componentesUpdateTitulos);
+
+        $('#componentesPreFillBtn').click(function() {
+            $('#componentesTable tbody tr.componentes-data-row input').each(function() {
+                if ($(this).val() === '') {
+                    $(this).val('----');
+                }
+            });
+        });
+
+        document.querySelectorAll('#componentesInputRow .componentes-default-input').forEach(function(input) {
+            input.addEventListener('input', function() {
+                const column = parseInt(input.getAttribute('data-column'), 10);
+
+                if (isNaN(column)) return;
+
+                document.querySelectorAll('#componentesTable tbody tr.componentes-data-row').forEach(function(row) {
+                    const target = row.querySelector(`td:nth-child(${column + 1}) input`);
+                    if (target) {
+                        target.value = input.value;
+                    }
+                });
+            });
+        });
+    });
 /*Juntas-Resultados */
     $(document).ready(function() {
         let tituloCount = 0;
@@ -726,36 +912,35 @@
                 
             const fieldNames = [
                 'ID',
-                'Elemento',
-                'No_ind',
-                'Tipo_Ind',
-                'Referencia',
-                'DNR',
-                'HT',
-                'LAxial',
-                'LCirc',
+                'Descripcion_del_Elemento',
+                '0_nom',
+                'Tipo_material',
+                'Descripcion_discontinuidad',
+                'No_indicacion',
+                'LA',
+                'LC',
                 'd',
                 'ta',
-                'Perdida',
-                'Espe',
-                'Observaciones'
+                't_h',
+                'Referencia',
+                'Dictamen',
+                'No_foto'
                 ];
 
             const placeholders = {
-                ID: 'Junta / Elemento',
-                Elemento: 'Elemento / Tubo',
-                No_ind: 'No. Indicación',
-                Tipo_Ind: 'Tipo de Indicación',
-                Referencia: 'Referencia',
-                DNR: 'DNR (m)',
-                HT: 'H.T.',
-                LAxial: 'Long. Axial (in)',
-                LCirc: 'Long. Circ. (in)',
+                ID: 'ID',
+                Descripcion_del_Elemento: 'Descripción del Elemento',
+                '0_nom': 'Ø nom. (in.)',
+                Tipo_material: 'Tipo de Material',
+                Descripcion_discontinuidad: 'Descripción de la discontinuidad, indicación.',
+                No_indicacion: 'No. Indicación',
+                LA: 'LA (in)',
+                LC: 'LC (in)',
                 d: 'd (in)',
-                ta: 'ta(in)',
-                Perdida: '%Perdida',
-                Espe: 'Espesor Remanente (in)',
-                Observaciones: 'Observaciones'
+                t_h: 'Horario Técnico',
+                Referencia: 'SC o referencia',
+                Dictamen: 'Dictamen y/o Recomendación',
+                No_foto: 'No. Foto'
             };
             
         function esc(v){ return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,"&#39;"); }
@@ -988,21 +1173,21 @@
 
             let newRow = 
                     `<tr data-titulo="${lastTitle}">
-                        <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"> 
+                        <td>${rowCountGlobal} <input type="hidden" value="${rowCount}"></td>
                         <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
-                        <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento / Tubo"></td>
-                        <td><input type="text" class="form-control" name="No_ind[${lastTitle}][]" placeholder="No. Indicación"></td>
-                        <td><input type="text" class="form-control" name="Tipo_Ind[${lastTitle}][]" placeholder="Tipo de Indicación"></td>
-                        <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="Referencia"></td>
-                        <td><input type="text" class="form-control" name="DNR[${lastTitle}][]" placeholder="DNR (in)"></td>
-                        <td><input type="text" class="form-control" name="HT[${lastTitle}][]" placeholder="H.T."></td>
-                        <td><input type="text" class="form-control" name="LAxial[${lastTitle}][]" placeholder="Long. Axial (in)"></td>
-                        <td><input type="text" class="form-control" name="LCirc[${lastTitle}][]" placeholder="Long. Circ. (in)"></td>
+                        <td><input type="text" class="form-control" name="Descripcion_del_Elemento[${lastTitle}][]" placeholder="Descripción del Elemento"></td>
+                        <td><input type="text" class="form-control" name="0_nom[${lastTitle}][]" placeholder="Ø nom. (in.)"></td>
+                        <td><input type="text" class="form-control" name="Tipo_material[${lastTitle}][]" placeholder="Tipo de Material"></td>
+                        <td><input type="text" class="form-control" name="Descripcion_discontinuidad[${lastTitle}][]" placeholder="Descripción de la discontinuidad, indicación."></td>
+                        <td><input type="text" class="form-control" name="No_indicacion[${lastTitle}][]" placeholder="No. Indicación"></td>
+                        <td><input type="text" class="form-control" name="LA[${lastTitle}][]" placeholder="LA (in.)"></td>
+                        <td><input type="text" class="form-control" name="LC[${lastTitle}][]" placeholder="LC (in)"></td>
                         <td><input type="text" class="form-control" name="d[${lastTitle}][]" placeholder="d (in)"></td>
                         <td><input type="text" class="form-control" name="ta[${lastTitle}][]" placeholder="ta (in)"></td>
-                        <td><input type="text" class="form-control" name="Perdida[${lastTitle}][]" placeholder="%Perdida"></td>
-                        <td><input type="text" class="form-control" name="Espe[${lastTitle}][]" placeholder="Espesor Remanente (in)f"></td>
-                        <td><input type="text" class="form-control" name="Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                        <td><input type="text" class="form-control" name="t_h[${lastTitle}][]" placeholder="Horario Técnico"></td>
+                        <td><input type="text" class="form-control" name="Referencia[${lastTitle}][]" placeholder="SC o referencia"></td>
+                        <td><input type="text" class="form-control" name="Dictamen[${lastTitle}][]" placeholder="Dictamen y/o Recomendación"></td>
+                        <td><input type="text" class="form-control" name="No_foto[${lastTitle}][]" placeholder="No. Foto"></td>
                         <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
                 </tr>`;
 

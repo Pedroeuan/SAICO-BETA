@@ -284,6 +284,16 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                                            <label class="col-form-label" for="inputSuccess">Descripción del Equipo</label>
+                                                            <input type="text" class="form-control  inputForm @error('Orden_Trabajo') is-invalid @enderror" name="Detalles_Generales[Orden_Trabajo]"  placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . . " value="{{old('Detalles_Generales.Orden_Trabajo')}}">
+                                            @error('Orden_Trabajo')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
                                         </div>
                                     </div>
@@ -295,9 +305,74 @@
                                     </div>
                                     
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
-                                    <!--***************************************** INICIO RESULTADOS *****************************************-->
+                                     <!--*****************************************LISTADO DE COMPONENTES *****************************************-->
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS LISTADO DE COMPONENTES</div>
+                                    
+                        <div style="margin-bottom: 5px;"></div>
 
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
+                        <div class="table-responsive">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-info"></i> Importante</h5>
+                                <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
+                            </div>
+                        <table id="componentesTable" class="table table-bordered table-striped dt-responsive tablas w-100">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ID</th>
+                                    <th>Descripción del Elemento</th>
+                                    <th>Nivel</th>
+                                    <th>Ø</th>
+                                    <th>Longitud (m)</th>
+                                    <th>Clase</th>
+                                    <th>Especificación</th>
+                                    <th>Observaciones</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                                <tr id="componentesInputRow">
+                                    <th></th> <!-- Para ID vacío -->
+                                    <th><input type="text" class="form-control componentes-default-input" data-column="1" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control componentes-default-input" data-column="2" style="width: 240px;"></th>
+                                    <th><input type="text" class="form-control componentes-default-input" data-column="3" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control componentes-default-input" data-column="4" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control componentes-default-input" data-column="5" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control componentes-default-input" data-column="6" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control componentes-default-input" data-column="7" style="width: 100px;"></th>
+                                    <th><input type="text" class="form-control componentes-default-input" data-column="8" style="width: 140px;"></th>        
+                                    <th></th> <!-- Para botón de eliminar -->
+                                </tr>
+                            </thead>
+
+                                <tbody>
+                                <!-- Filas dinámicas aparecerán aquí -->
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <input type="hidden" name="componentes_titulos_data" id="componentes_titulos_hidden"> <!---------------------------------------Agregar -->
+                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                        <div>
+                            <label for="componentesNumRows">Número de Filas:</label>
+                            <select id="componentesNumRows" class="form-select">
+                                @for ($i = 1; $i <= 500; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <button id="componentesAddBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
+
+                        <button id="componentesAddTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
+
+                        <button id="componentesPreFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
+                    </div>
+
+                    <p> 
+                                    <!--***************************************** INICIO RESULTADOS INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO *****************************************-->
+
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO</div>
                                     
                             <div style="margin-bottom: 5px;"></div>
 
@@ -735,6 +810,128 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
+/*Listado de componentes: separado del dynamicTable del informe de inspección*/
+    $(document).ready(function() {
+        let componentesTituloCount = 0;
+        let componentesRowCount = 0;
+
+        function componentesLastTitle() {
+            const $lastTitle = $('#componentesTable tbody tr.componentes-title-row').last();
+            return $lastTitle.length ? $lastTitle.data('titulo') : 'sin_titulo';
+        }
+
+        function componentesUpdateTitulos() {
+            const titulos = [];
+
+            $('#componentesTable tbody tr.componentes-title-row').each(function() {
+                titulos.push({
+                    id: $(this).data('titulo'),
+                    text: $(this).find('.componentes-titulo-text').val() || ''
+                });
+            });
+
+            $('#componentes_titulos_hidden').val(JSON.stringify(titulos));
+        }
+
+        function componentesUpdateRowNumbers() {
+            componentesRowCount = 0;
+
+            $('#componentesTable tbody tr.componentes-data-row').each(function() {
+                componentesRowCount++;
+                $(this).find('.componentes-row-number').text(componentesRowCount);
+                $(this).find('.componentes-id-input').val(componentesRowCount);
+            });
+        }
+
+        $('#componentesAddTituloBtn').click(function() {
+            componentesTituloCount++;
+
+            const titleId = `componentes_titulo_${componentesTituloCount}`;
+            const newTitle = `
+                <tr class="componentes-title-row" data-titulo="${titleId}">
+                    <td colspan="10">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text" class="form-control w-90 componentes-titulo-text" name="componentes_titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3">
+                            <input type="hidden" name="componentes_titulos_ids[]" value="${titleId}">
+                            <button type="button" class="btn btn-danger btnEliminarTituloComponente ml-2">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+
+            $('#componentesTable tbody').append(newTitle);
+            componentesUpdateTitulos();
+        });
+
+        $('#componentesAddBtn').click(function() {
+            const numFilas = parseInt($('#componentesNumRows').val(), 10) || 1;
+            const lastTitle = componentesLastTitle();
+
+            for (let i = 0; i < numFilas; i++) {
+                componentesRowCount++;
+
+                const newRow = `
+                    <tr class="componentes-data-row" data-titulo="${lastTitle}">
+                        <td><span class="componentes-row-number">${componentesRowCount}</span></td>
+                        <td><input type="text" class="form-control componentes-id-input" name="Componentes_ID[${lastTitle}][]" value="${componentesRowCount}" placeholder="ID"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Descripcion_del_Elemento[${lastTitle}][]" placeholder="Descripcion del Elemento"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Nivel[${lastTitle}][]" placeholder="Nivel"></td>
+                        <td><input type="text" class="form-control" name="Componentes_0[${lastTitle}][]" placeholder="Ø"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Longitud_m[${lastTitle}][]" placeholder="Longitud (m)"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Clase[${lastTitle}][]" placeholder="Clase"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Especificacion[${lastTitle}][]" placeholder="Especificación"></td>
+                        <td><input type="text" class="form-control" name="Componentes_Observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                        <td><button type="button" class="btn btn-danger btnEliminarComponente"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                    </tr>`;
+
+                $('#componentesTable tbody').append(newRow);
+            }
+        });
+
+        $('#componentesTable').on('click', '.btnEliminarComponente', function() {
+            $(this).closest('tr').remove();
+            componentesUpdateRowNumbers();
+        });
+
+        $('#componentesTable').on('click', '.btnEliminarTituloComponente', function() {
+            const $title = $(this).closest('tr.componentes-title-row');
+            const titleId = $title.data('titulo');
+
+            $('#componentesTable tbody tr').filter(function() {
+                return $(this).data('titulo') === titleId;
+            }).remove();
+
+            componentesUpdateTitulos();
+            componentesUpdateRowNumbers();
+        });
+
+        $('#componentesTable').on('input', '.componentes-titulo-text', componentesUpdateTitulos);
+
+        $('#componentesPreFillBtn').click(function() {
+            $('#componentesTable tbody tr.componentes-data-row input').each(function() {
+                if ($(this).val() === '') {
+                    $(this).val('----');
+                }
+            });
+        });
+
+        document.querySelectorAll('#componentesInputRow .componentes-default-input').forEach(function(input) {
+            input.addEventListener('input', function() {
+                const column = parseInt(input.getAttribute('data-column'), 10);
+
+                if (isNaN(column)) return;
+
+                document.querySelectorAll('#componentesTable tbody tr.componentes-data-row').forEach(function(row) {
+                    const target = row.querySelector(`td:nth-child(${column + 1}) input`);
+                    if (target) {
+                        target.value = input.value;
+                    }
+                });
+            });
+        });
+    });
+
 /*Juntas-Resultados CAMBIAR JUNTAS CHECAR*/
     $(document).ready(function() {
         let tituloCount = 0;
@@ -939,7 +1136,7 @@
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
-                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                if (el.closest('#dynamicTable') || el.closest('#componentesTable')) return; // Ignora inputs de las tablas
                 localStorage.setItem('FOR-PINS-16_01_' + el.name, el.value);
             });
         });

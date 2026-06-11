@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FORMATO FOR-PINS-25-01</title>
+            <title>FORMATO FOR-PINS-16-01/01</title>
             <style>
                 @page {
                     margin: 
@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -43px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -40px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -213,9 +213,9 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INSPECCIÓN VISUAL EN RSP</th>
+                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO</th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-25/01</th>
+                            <th style="width: 100%;">FOR-PINS-16/01</th>
                             <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -238,39 +238,8 @@
 
                 <div style="margin-bottom: 4px;"></div>
 
-            </header>
-
+                <div style="margin-bottom: 4px;"></div>
             <footer>
-
-                    {{--SIMBOLOGÍA al final de cada tabla de grupo --}}
-                            <table class="simbologia">
-                                <thead>
-                                    <tr>
-                                        <th colspan="10" class="celdaAmarillo">SIMBOLOGÍA</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 20px;"><strong>DNR:</strong></td>
-                                        <td style="width: 100px;">DISTANCIA DE NIVEL DE REFERENCIA</td>
-                                        <td style="width: 20px;"><strong>d:</strong></td>
-                                        <td style="width: 150px;">PROFUNDIDAD DE LA INDICACION</td>
-                                        <td style="width: 30px;"><strong><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</strong></td>
-                                        <td style="width: 100px;">ESPESOR DE LA PARED EN ZONA SANA ADYACENTE</td>
-                                        <td style="width: 40px;"><strong>C.E. GEN.:</strong></td>
-                                        <td style="width: 100px;">CORROSIÓN EXTERNA GENERALIZADA</td>
-                                        <td style="width: 20px;"><strong>SIR:</strong></td>
-                                        <td style="width: 100px;">SIN INDICACIONES RELEVANTES</td>
-                                    </tr>
-                                </thead>
-                            </table>
-
-                    <table class="datosgenerales">                               
-                        <tr>                                     
-                            <th>OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 805px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
-                        </tr>                      
-                    </table>
-                    <br>
-
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 1)
@@ -449,100 +418,73 @@
                         </thead>                            
                     </table>
             </footer>
+
             @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
-            <div class="content">
-                <table class="datosgenerales">
 
-                    <thead class="encabezadoAzul">
+            {{-- ================= DATOS GENERALES ================= --}}
+        <div class="content">
+            <table class="datosgenerales">
 
-                        <tr><th colspan="4">DATOS GENERALES</th></tr>
-                    </thead>  
+                <thead class="encabezadoAzul">
+                    <tr><th colspan="4">DATOS GENERALES</th></tr>
+                </thead>   
 
-                    <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
+                <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead>
 
-                    <tbody>
-                        <tr>
-                            <th style="width: 12%;">FECHA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
-                            <th style="width: 15%;">NO. REPORTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>CLIENTE:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
-                            <th>CONTRATO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>PROYECTO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>ORDEN DE TRABAJO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>FOLIO:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>PARTIDA:</th>
-                            <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>LUGAR:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] ?? '' }}</td>
-                            <th>ISOMETRICO/PLANO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>PIEZA:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Pieza'] ?? '' }}</td>
-                            <th>MATERIAL:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Material'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>PROCEDIMIENTO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
-                            <th style="width: 160px;">CRITERIO DE EVALUACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>TIPO E INTENSIDAD DE ILUMINACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Iluminacion'] ?? '' }}</td>
-                            <th style="width: 160px;">TIPO DE INSPECCIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Inspeccion'] ?? '' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="margin-bottom: 5px;"></div>
+                <tbody>
+                    <tr>
+                        <th style="width: 12%;">FECHA:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Fecha'] }}</td>
+                        <th style="width: 15%;">NO. REPORTE:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['No_Reporte'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>CLIENTE:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
+                        <th>CONTRATO:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>PROYECTO:</th>
+                        <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Proyecto'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>DESCRIPCION DEL EQUIPO:</th>
+                        <td class="lineaInferior" colspan="3">{{ $Detalles_Generales['Orden_Trabajo'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>LUGAR:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Lugar'] }}</td>
+                        <th>ISOMETRICO/PLANO:</th>
+                        <td class="lineaInferior">{{ $Detalles_Generales['Isometrico_Plano'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
+            <div style="margin-bottom: 5px;"></div>
+
+            {{-- ================= ENCABEZADO RESULTADOS ================= --}}
                     <table class="datosresultados">
                     
                         <thead class="encabezadoAzul">
-                            <tr><th colspan="14">RESULTADOS</th></tr>
+                            <tr><th colspan="8">RESULTADOS</th></tr>
                         </thead>
-
-                        <thead><tr class="sinBordeth"><th colspan="14"></th></tr></thead> <!-- Fila vacia -->
+            {{-- ================= TABLA RESULTADOS ================= --}}
+                        <thead><tr class="sinBordeth"><th colspan="8"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
                             <tr class="celdaGris">
-                            <th style="width: 50px;">ID</th>
-                            <th style="width: 50px;">Descripción del elemento</th>
-                            <th style="width: 50px;">Ø nom. (in.)</th>
-                            <th style="width: 50px;">Tipo de material</th>
-                            <th style="width: 50px;">Descripción de la discontinuidad, indicación.</th>
-                            <th style="width: 50px;">No. Ind.</th>
-                            <th style="width: 50px;">LA (in.)</th>
-                            <th style="width: 50px;">LC (in.)</th>
-                            <th style="width: 50px;">d(in)</th>
-                            <th style="width: 50px;"><span style="font-size: 15px; position: relative; top: 3px;"><sup>t</sup></span>a(in)</th>
-                            <th style="width: 50px;">Horario Técnico</th>
-                            <th style="width: 50px;"> SC o referencia</th>
-                            <th style="width: 50px;">Dictamen y/o Recomendación</th>
-                            <th style="width: 50px;">No. Foto</th>
-                        </tr>
-                    </thead>
+                                <th style="width: 30px;">ID</th>
+                                <th style="width: 50px;">DESCRIPCIÓN DEL ELEMENTO</th>
+                                <th style="width: 30px;">NIVEL</th>
+                                <th style="width: 30px;">Ø</th>
+                                <th style="width: 30px;">LONGITUD (m)</th>
+                                <th style="width: 30px;">CLASE</th>
+                                <th style="width: 50px;">ESPECIFICACIÓN</th>
+                                <th style="width: 100px;">OBSERVACIONES</th>
+                            </tr>
+                        </thead>
+
                         <tbody>
                                 @foreach ($bloque as $item)
                                             @if (!is_array($item))
@@ -552,7 +494,7 @@
                                             {{-- TITULO --}}
                                             @if (($item['tipo'] ?? null) == 'titulo')
                                                 <tr class="titulo-row">
-                                                    <td colspan="14" style="border:.5px solid black;">
+                                                    <td colspan="8" style="border:.5px solid black;">
                                                         {{ $item['texto'] }}
                                                     </td>
                                                 </tr>
@@ -562,22 +504,25 @@
                                             @if (($item['tipo'] ?? null) == 'fila')
                                                 <tr class="juntas">
                                                     <td>{{ $item['data']['ID'] }}</td>
-                                                    <td>{{ $item['data']['Descripcion_del_Elemento'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['0_nom'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['Tipo_material'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['Descripcion_discontinuidad'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['No_indicacion'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['LA'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['LC'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['d'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['ta'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['t_h'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['Referencia'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['Dictamen'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['No_foto'] ?? '' }}</td>
+                                                    <td>{{ $item['data']['Descripcion_del_Elemento'] }}</td>
+                                                    <td>{{ $item['data']['Nivel'] }}</td>
+                                                    <td>{{ $item['data']['0'] }}</td>
+                                                    <td>{{ $item['data']['Longitud_(m)'] }}</td>
+                                                    <td>{{ $item['data']['Clase'] }}</td>
+                                                    <td>{{ $item['data']['Especificación'] }}</td>
+                                                    <td>{{ $item['data']['Observaciones'] }}</td>
                                                 </tr>
                                             @endif
 
+                                            {{-- LONGITUD 
+                                            @if (($item['tipo'] ?? null) == 'longitud')
+                                                <tr class="sinBordetd">
+                                                    <td colspan="12"></td>
+                                                    <th colspan="4">Longitud inspeccionada:</th>
+                                                    <th>{{ $item['valor'] ?? '' }} m</th>
+                                                </tr>
+                                            @endif
+                                            --}}
                                 @endforeach
                             </tbody>
                         </table>

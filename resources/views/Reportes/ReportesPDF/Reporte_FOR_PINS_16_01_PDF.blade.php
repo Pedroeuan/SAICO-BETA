@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -40px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -43px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -180,18 +180,21 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO</th>
                             <th style="width: 60%;">Código:</th>
                             <th style="width: 80%;">FOR-PINS-16/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO</th>
                             <th>Versión</th>
                             <th>0</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 90%;">Fecha de elaboración</th>
+                            <th>28-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -534,4 +537,3 @@
             @endforeach
         </body>
     </html>
-
