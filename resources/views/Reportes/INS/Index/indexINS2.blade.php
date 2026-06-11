@@ -51,14 +51,15 @@
                 <tbody>
                     @foreach($reportesEncontrados as $reporte)
                         @php
-                            $detalles = json_decode($reporte->Detalles_Generales, true);
+                            $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
                             $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
+                            $ProyectoReporte = $detalles['Proyecto'] ?? $detalles['Identificacion'] ?? '';
                         @endphp
                         <tr>
-                            <td>{{ $detalles['Contrato'] }}</td>
-                            <td>{{ $detalles['Proyecto'] }}</td>
-                            <td>{{ $detalles['No_Reporte'] }}</td>
-                            <td>{{ $detalles['Fecha'] }}</td>
+                            <td>{{ $detalles['Contrato'] ?? '' }}</td>
+                            <td>{{ $ProyectoReporte }}</td>
+                            <td>{{ $detalles['No_Reporte'] ?? '' }}</td>
+                            <td>{{ $detalles['Fecha'] ?? '' }}</td>
                             <td>
                                 <a class="btn btn-primary" href="{{ route('Obtener.RutaPDF', ['id' => $reporte->idReportes]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                             </td>
