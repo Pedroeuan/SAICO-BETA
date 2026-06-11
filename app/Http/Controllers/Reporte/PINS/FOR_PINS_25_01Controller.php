@@ -211,6 +211,76 @@ class FOR_PINS_25_01Controller extends Controller
         }
 
     }
+    private function procesarBloques(Request $request)
+    {
+        $titulosJson = $request->input('componentes_titulos_data', '[]');
+        $titulos = json_decode($titulosJson, true) ?: [];
+        $bloques = [];
+        $bloqueActual = [];
+        $contador = 0;
+        $maxFilasPorBloque = 22;
+
+        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
+            if (!empty($bloqueActual)) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+        };
+
+        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque, $cerrarBloque) {
+            if ($contador >= $maxFilasPorBloque) {
+                $cerrarBloque();
+            }
+
+            $bloqueActual[] = $elemento;
+            $contador++;
+        };
+
+        $procesarFilas = function ($tituloKey) use ($request, $agregarElemento) {
+            $filas = $request->input("Componentes_ID.$tituloKey", []);
+
+            for ($i = 0; $i < count($filas); $i++) {
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $tituloKey,
+                    'data' => [
+                        'ID' => $request->input("Componentes_ID.$tituloKey.$i"),
+                        'Descripcion_del_Elemento' => $request->input("Componentes_Descripcion_del_Elemento.$tituloKey.$i"),
+                        '0' => $request->input("Componentes_0.$tituloKey.$i"),
+                        'Longitud_(in)' => $request->input("Componentes_Longitud_in.$tituloKey.$i"),
+                        'Tipo_conexion' => $request->input("Componentes_Tipo_conexion.$tituloKey.$i"),
+                        'servicio' => $request->input("Componentes_Servicio.$tituloKey.$i"),
+                        'Clase' => $request->input("Componentes_Clase.$tituloKey.$i"),
+                        'Especificación_material' => $request->input("Componentes_Especificacion_material.$tituloKey.$i"),
+                        'Observaciones' => $request->input("Componentes_Observaciones.$tituloKey.$i"),
+                    ],
+                ]);
+            }
+        };
+
+        $procesarFilas('sin_titulo');
+
+        foreach ($titulos as $tituloObj) {
+            $tituloKey = $tituloObj['id'] ?? null;
+
+            if (!$tituloKey) {
+                continue;
+            }
+
+            $agregarElemento([
+                'tipo' => 'titulo',
+                'id' => $tituloKey,
+                'texto' => $tituloObj['text'] ?? '',
+            ]);
+
+            $procesarFilas($tituloKey);
+        }
+
+        $cerrarBloque();
+
+        return $bloques;
+    }
 
     /*public function FOR_PINS_25_01_store1(Request $request)
     {
@@ -251,23 +321,35 @@ class FOR_PINS_25_01Controller extends Controller
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
+            'componentes_titulos_data' => 'nullable|string',
 
             /*Resultados_Juntas*/
             'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'ID' => 'nullable|array',
-            'Elemento' => 'nullable|array',
-            'No_ind' => 'nullable|array',
-            'Tipo_Ind' => 'nullable|array',
-            'Referencia' => 'nullable|array',
-            'DNR' => 'nullable|array',
-            'HT' => 'nullable|array',
-            'LAxial' => 'nullable|array',
-            'LCirc' => 'nullable|array',
+            'Descripcion_del_Elemento' => 'nullable|array',
+            '0_nom' => 'nullable|array',
+            'Tipo_material' => 'nullable|array',
+            'Descripcion_discontinuidad' => 'nullable|array',
+            'No_indicacion' => 'nullable|array',
+            'LA' => 'nullable|array',
+            'LC' => 'nullable|array',
             'd' => 'nullable|array',
             'ta' => 'nullable|array',
-            'Perdida' => 'nullable|array',
-            'Espe' => 'nullable|array',
-            'Observaciones' => 'nullable|array',
+            't_h' => 'nullable|array',
+            'Referencia' => 'nullable|array',
+            'Dictamen' => 'nullable|array',
+            'No_foto' => 'nullable|array',
+
+            'Componentes_ID' => 'nullable|array',
+            'Componentes_Descripcion_del_Elemento' => 'nullable|array',
+            'Componentes_0' => 'nullable|array',
+            'Componentes_Longitud_in' => 'nullable|array',
+            'Componentes_Tipo_conexion' => 'nullable|array',
+            'Componentes_Servicio' => 'nullable|array',           
+            'Componentes_Clase' => 'nullable|array',
+            'Componentes_Especificacion_material' => 'nullable|array',
+            'Componentes_Observaciones' => 'nullable|array',
+
 
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
@@ -458,19 +540,19 @@ class FOR_PINS_25_01Controller extends Controller
                     'grupo' => $sinTituloKey,
                     'data' => [
                     'ID' => $request->input("ID.$sinTituloKey.$i"),
-                    'Elemento' => $request->input("Elemento.$sinTituloKey.$i"),
-                    'No_ind' => $request->input("No_ind.$sinTituloKey.$i"),
-                    'Tipo_Ind' => $request->input("Tipo_Ind.$sinTituloKey.$i"),
-                    'Referencia' => $request->input("Referencia.$sinTituloKey.$i"),
-                    'DNR' => $request->input("DNR.$sinTituloKey.$i"),
-                    'HT' => $request->input("HT.$sinTituloKey.$i"),
-                    'LAxial' => $request->input("LAxial.$sinTituloKey.$i"),
-                    'LCirc' => $request->input("LCirc.$sinTituloKey.$i"),
+                    'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$sinTituloKey.$i"),
+                    '0_nom' => $request->input("0_nom.$sinTituloKey.$i"),
+                    'Tipo_material' => $request->input("Tipo_material.$sinTituloKey.$i"),
+                    'Descripcion_discontinuidad' => $request->input("Descripcion_discontinuidad.$sinTituloKey.$i"),
+                    'No_indicacion' => $request->input("No_indicacion.$sinTituloKey.$i"),
+                    'LA' => $request->input("LA.$sinTituloKey.$i"),
+                    'LC' => $request->input("LC.$sinTituloKey.$i"),
                     'd' => $request->input("d.$sinTituloKey.$i"),
                     'ta' => $request->input("ta.$sinTituloKey.$i"),
-                    'Perdida' => $request->input("Perdida.$sinTituloKey.$i"),
-                    'Espe' => $request->input("Espe.$sinTituloKey.$i"),
-                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
+                    't_h' => $request->input("t_h.$sinTituloKey.$i"),
+                    'Referencia' => $request->input("Referencia.$sinTituloKey.$i"),
+                    'Dictamen' => $request->input("Dictamen.$sinTituloKey.$i"),
+                    'No_foto' => $request->input("No_foto.$sinTituloKey.$i"),
                     ]
                     ]);
                     // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
@@ -498,6 +580,9 @@ class FOR_PINS_25_01Controller extends Controller
                     ]);
                     $cerrarBloque();
                 }
+            
+        //
+        
 
         /*
         |--------------------------------------------------------------------------
@@ -527,19 +612,19 @@ class FOR_PINS_25_01Controller extends Controller
                     'grupo' => $tituloKey,
                     'data' => [
                     'ID' => $request->input("ID.$tituloKey.$i"),
-                    'Elemento' => $request->input("Elemento.$tituloKey.$i"),
-                    'No_ind' => $request->input("No_ind.$tituloKey.$i"),
-                    'Tipo_Ind' => $request->input("Tipo_Ind.$tituloKey.$i"),
-                    'Referencia' => $request->input("Referencia.$tituloKey.$i"),
-                    'DNR' => $request->input("DNR.$tituloKey.$i"),
-                    'HT' => $request->input("HT.$tituloKey.$i"),
-                    'LAxial' => $request->input("LAxial.$tituloKey.$i"),
-                    'LCirc' => $request->input("LCirc.$tituloKey.$i"),
+                    'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$tituloKey.$i"),
+                    '0_nom' => $request->input("0_nom.$tituloKey.$i"),
+                    'Tipo_material' => $request->input("Tipo_material.$tituloKey.$i"),
+                    'Descripcion_discontinuidad' => $request->input("Descripcion_discontinuidad.$tituloKey.$i"),
+                    'No_indicacion' => $request->input("No_indicacion.$tituloKey.$i"),
+                    'LA' => $request->input("LA.$tituloKey.$i"),
+                    'LC' => $request->input("LC.$tituloKey.$i"),
                     'd' => $request->input("d.$tituloKey.$i"),
                     'ta' => $request->input("ta.$tituloKey.$i"),
-                    'Perdida' => $request->input("Perdida.$tituloKey.$i"),
-                    'Espe' => $request->input("Espe.$tituloKey.$i"),
-                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
+                    't_h' => $request->input("t_h.$tituloKey.$i"),
+                    'Referencia' => $request->input("Referencia.$tituloKey.$i"),
+                    'Dictamen' => $request->input("Dictamen.$tituloKey.$i"),
+                    'No_foto' => $request->input("No_foto.$tituloKey.$i"),
                     ]
                 ]);
             }
@@ -569,8 +654,11 @@ class FOR_PINS_25_01Controller extends Controller
         | 4. GUARDAR
         |--------------------------------------------------------------------------
         */
-        // Guardar en el modelo
-        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
+        $componentesBloques = $this->procesarBloques($request);
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode([
+            'componentes' => $componentesBloques,
+            'inspeccion' => $bloques,
+        ], JSON_UNESCAPED_UNICODE);
         $Grupo_Juntas_Detalles_Re->save();
         
         /*Firmas */
@@ -720,21 +808,32 @@ class FOR_PINS_25_01Controller extends Controller
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
             /*Resultados_Juntas*/
+            'componentes_titulos_data' => 'nullable|string',
             'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'ID' => 'nullable|array',
-            'Elemento' => 'nullable|array',
-            'No_ind' => 'nullable|array',
-            'Tipo_Ind' => 'nullable|array',
-            'Referencia' => 'nullable|array',
-            'DNR' => 'nullable|array',
-            'HT' => 'nullable|array',
-            'LAxial' => 'nullable|array',
-            'LCirc' => 'nullable|array',
+            'Descripcion_del_Elemento' => 'nullable|array',
+            '0_nom' => 'nullable|array',
+            'Tipo_material' => 'nullable|array',
+            'Descripcion_discontinuidad' => 'nullable|array',
+            'No_indicacion' => 'nullable|array',
+            'LA' => 'nullable|array',
+            'LC' => 'nullable|array',
             'd' => 'nullable|array',
             'ta' => 'nullable|array',
-            'Perdida' => 'nullable|array',
-            'Espe' => 'nullable|array',
-            'Observaciones' => 'nullable|array',
+            't_h' => 'nullable|array',
+            'Referencia' => 'nullable|array',
+            'Dictamen' => 'nullable|array',
+            'No_foto' => 'nullable|array',
+
+            'Componentes_ID' => 'nullable|array',
+            'Componentes_Descripcion_del_Elemento' => 'nullable|array',
+            'Componentes_0' => 'nullable|array',
+            'Componentes_Longitud_in' => 'nullable|array',
+            'Componentes_Tipo_conexion' => 'nullable|array',
+            'Componentes_Servicio' => 'nullable|array',           
+            'Componentes_Clase' => 'nullable|array',
+            'Componentes_Especificacion_material' => 'nullable|array',
+            'Componentes_Observaciones' => 'nullable|array',
 
             /* Longitudes inspeccionadas */
             'Long_Inspecc' => 'nullable|array',
@@ -904,19 +1003,19 @@ class FOR_PINS_25_01Controller extends Controller
                     'grupo' => $sinTituloKey,
                     'data' => [
                     'ID' => $request->input("ID.$sinTituloKey.$i"),
-                    'Elemento' => $request->input("Elemento.$sinTituloKey.$i"),
-                    'No_ind' => $request->input("No_ind.$sinTituloKey.$i"),
-                    'Tipo_Ind' => $request->input("Tipo_Ind.$sinTituloKey.$i"),
-                    'Referencia' => $request->input("Referencia.$sinTituloKey.$i"),
-                    'DNR' => $request->input("DNR.$sinTituloKey.$i"),
-                    'HT' => $request->input("HT.$sinTituloKey.$i"),
-                    'LAxial' => $request->input("LAxial.$sinTituloKey.$i"),
-                    'LCirc' => $request->input("LCirc.$sinTituloKey.$i"),
+                    'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$sinTituloKey.$i"),
+                    '0_nom' => $request->input("0_nom.$sinTituloKey.$i"),
+                    'Tipo_material' => $request->input("Tipo_material.$sinTituloKey.$i"),
+                    'Descripcion_discontinuidad' => $request->input("Descripcion_discontinuidad.$sinTituloKey.$i"),
+                    'No_indicacion' => $request->input("No_indicacion.$sinTituloKey.$i"),
+                    'LA' => $request->input("LA.$sinTituloKey.$i"),
+                    'LC' => $request->input("LC.$sinTituloKey.$i"),
                     'd' => $request->input("d.$sinTituloKey.$i"),
                     'ta' => $request->input("ta.$sinTituloKey.$i"),
-                    'Perdida' => $request->input("Perdida.$sinTituloKey.$i"),
-                    'Espe' => $request->input("Espe.$sinTituloKey.$i"),
-                    'Observaciones' => $request->input("Observaciones.$sinTituloKey.$i"),
+                    't_h' => $request->input("t_h.$sinTituloKey.$i"),
+                    'Referencia' => $request->input("Referencia.$sinTituloKey.$i"),
+                    'Dictamen' => $request->input("Dictamen.$sinTituloKey.$i"),
+                    'No_foto' => $request->input("No_foto.$sinTituloKey.$i"),
                     ]
                     ]);
                     // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
@@ -973,19 +1072,19 @@ class FOR_PINS_25_01Controller extends Controller
                     'grupo' => $tituloKey,
                     'data' => [
                     'ID' => $request->input("ID.$tituloKey.$i"),
-                    'Elemento' => $request->input("Elemento.$tituloKey.$i"),
-                    'No_ind' => $request->input("No_ind.$tituloKey.$i"),
-                    'Tipo_Ind' => $request->input("Tipo_Ind.$tituloKey.$i"),
-                    'Referencia' => $request->input("Referencia.$tituloKey.$i"),
-                    'DNR' => $request->input("DNR.$tituloKey.$i"),
-                    'HT' => $request->input("HT.$tituloKey.$i"),
-                    'LAxial' => $request->input("LAxial.$tituloKey.$i"),
-                    'LCirc' => $request->input("LCirc.$tituloKey.$i"),
+                    'Descripcion_del_Elemento' => $request->input("Descripcion_del_Elemento.$tituloKey.$i"),
+                    '0_nom' => $request->input("0_nom.$tituloKey.$i"),
+                    'Tipo_material' => $request->input("Tipo_material.$tituloKey.$i"),
+                    'Descripcion_discontinuidad' => $request->input("Descripcion_discontinuidad.$tituloKey.$i"),
+                    'No_indicacion' => $request->input("No_indicacion.$tituloKey.$i"),
+                    'LA' => $request->input("LA.$tituloKey.$i"),
+                    'LC' => $request->input("LC.$tituloKey.$i"),
                     'd' => $request->input("d.$tituloKey.$i"),
                     'ta' => $request->input("ta.$tituloKey.$i"),
-                    'Perdida' => $request->input("Perdida.$tituloKey.$i"),
-                    'Espe' => $request->input("Espe.$tituloKey.$i"),
-                    'Observaciones' => $request->input("Observaciones.$tituloKey.$i"),
+                    't_h' => $request->input("t_h.$tituloKey.$i"),
+                    'Referencia' => $request->input("Referencia.$tituloKey.$i"),
+                    'Dictamen' => $request->input("Dictamen.$tituloKey.$i"),
+                    'No_foto' => $request->input("No_foto.$tituloKey.$i"),
                     ]
                 ]);
             }
@@ -1015,9 +1114,13 @@ class FOR_PINS_25_01Controller extends Controller
         | 4. GUARDAR
         |--------------------------------------------------------------------------
         */
+        $componentesBloques = $this->procesarBloques($request);
         // Actualizar el campo en la base de datos
         $Grupo_Juntas_Detalles_Re->update([
-            'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
+            'Juntas_Grupo_Re' => json_encode([
+                'componentes' => $componentesBloques,
+                'inspeccion' => $bloques,
+            ], JSON_UNESCAPED_UNICODE)
         ]);
 
         /*Firmas */
@@ -1206,7 +1309,9 @@ class FOR_PINS_25_01Controller extends Controller
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
-        $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        $juntasGrupoRe = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true) ?: [];
+        $Componentes_Detalles_Re = $juntasGrupoRe['componentes'] ?? [];
+        $Grupo_Juntas_Detalles_Re = $juntasGrupoRe['inspeccion'] ?? $juntasGrupoRe;
 
         $totalTitulos = 0;
         $totalFilas = 0;
@@ -1253,6 +1358,7 @@ class FOR_PINS_25_01Controller extends Controller
             'Datos_Equipo' => $Datos_Equipo,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            'Componentes_Detalles_Re' => $Componentes_Detalles_Re,
             //Total de Juntas
             /*'totalTitulos' => $totalTitulos,
             'totalFilas' => $totalFilas,*/
@@ -1266,6 +1372,12 @@ class FOR_PINS_25_01Controller extends Controller
             //Firmas
             'Firmas_Reportes' => $Firmas_Reportes,
         ];
+        $dataComponentes = $data;
+        $dataComponentes['Grupo_Juntas_Detalles_Re'] = $Componentes_Detalles_Re;
+        $dataComponentes['Codigo_Formato_Componentes'] = 'FOR-PINS-25/01';
+        $dataComponentes['Titulo_Formato_Componentes'] = 'LISTADO DE COMPONENTES';
+        // Generar el PDF de componentes en orientación vertical
+        $pdf0 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_25_01_01_PDF', $dataComponentes)->setPaper('letter', 'portrait');
 
         // Generar el PDF principal en orientación horizontal
         $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_25_01_PDF', $data)->setPaper('letter', 'landscape');
@@ -1274,10 +1386,14 @@ class FOR_PINS_25_01Controller extends Controller
         $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_25_01_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
+        $pdf0Content = $pdf0->output();
         $pdf1Content = $pdf1->output();
         $pdf2Content = $pdf2->output();
 
        // Crear objetos FPDI independientes para contar páginas
+        $tempPdf0 = new Fpdi();
+        $pageCount0 = $tempPdf0->setSourceFile(StreamReader::createByString($pdf0Content));
+
         $tempPdf1 = new Fpdi();
         $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
 
@@ -1286,7 +1402,18 @@ class FOR_PINS_25_01Controller extends Controller
 
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
-        $totalPageCount = $pageCount1 + $pageCount2;
+        $totalPageCount = $pageCount0 + $pageCount1 + $pageCount2;
+
+        // Añadir páginas del PDF de componentes
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf0Content));
+        for ($i = 1; $i <= $pageCount0; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(124.5, -262.5);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
 
         // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
@@ -1295,7 +1422,7 @@ class FOR_PINS_25_01Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(179, -182.5);
+            $combinedPdf->SetXY(182, -182.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1306,7 +1433,7 @@ class FOR_PINS_25_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138, -265.5);
+            $combinedPdf->SetXY(139.5, -265.5);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }

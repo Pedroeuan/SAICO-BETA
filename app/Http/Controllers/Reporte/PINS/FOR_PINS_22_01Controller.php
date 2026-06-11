@@ -1804,7 +1804,6 @@ class FOR_PINS_22_01Controller extends Controller
                 str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
             );
         }
-
         $data = [
             'title' => 'Reporte_FOR-PINS-22_01.PDF',
             'Logo' => $Logo,
@@ -1857,7 +1856,7 @@ class FOR_PINS_22_01Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(270.5, 179.5);
+            $combinedPdf->SetXY(190.5, -183);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1868,7 +1867,7 @@ class FOR_PINS_22_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(193.5, 266);
+            $combinedPdf->SetXY(143.5, -266);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }

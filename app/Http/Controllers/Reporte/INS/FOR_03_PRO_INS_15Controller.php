@@ -1195,10 +1195,13 @@ class FOR_03_PRO_INS_15Controller extends Controller
             'numFirmas' => $numFirmas,
             //Firmas
             'Firmas_Reportes' => $Firmas_Reportes,
+            'Codigo_Formato_Componentes' => 'FOR-INS-15/03',
+            'Titulo_Formato_Componentes' => 'LISTADO DE COMPONENTES',
+            'Tipo_Listado_Componentes' => 'INS15',
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_03_INS_15_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_LISTADO_COMPONENTES_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
         //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_03_INS_15_PDF', $data)->setPaper('letter', 'portrait');
