@@ -1,4 +1,3 @@
-
 @extends('adminlte::page')
 
 @section('title', 'Registro E y C')
