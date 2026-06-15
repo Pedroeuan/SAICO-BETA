@@ -178,23 +178,42 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
+                            <th rowspan="4" style="width: 400%; font-size: 9pt;">
+                                INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS
+                            </th>
+
+                            <th rowspan="4" style="width:80%; padding:0; margin:0; text-align:center; vertical-align:middle;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width: 65px; height: 65px; display:block; margin:auto; padding:0;">
+                                    <img
+                                        src="{{ $QR_PDF }}"
+                                        alt="QR"
+                                        style="width:60px; height:60px; display:inline-block; padding:0; margin:0;">
                                 @endif
                             </th>
+
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-23/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th style="width: 100%;">FOR-PINS-23/01</th>
+
+                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                                <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                    <img
+                                        src="{{ $Logo }}"
+                                        alt="Logo"
+                                        style="width:55px; height:55px; display:block; margin:auto; padding:0;"
+                                    >
+                                </div>
+                            </th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS </th>
                             <th>Versión</th>
                             <th>0</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 90%;">Fecha de elaboración</th>
+                            <th>28-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -202,8 +221,6 @@
                         </tr>
                     </tbody>
                 </table>
-    
-                <div style="margin-bottom: 4px;"></div>
             </header>
 
             <footer>

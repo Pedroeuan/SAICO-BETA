@@ -17,17 +17,17 @@
                 }
                 header {
                     position: fixed;
-                    top: -35px; /* Ajusta para que no interfiera con el margen de la pÃ¡gina */
+                    top: -55px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
-                    height: auto;
+                    height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
                     font-family: 'arial', sans-serif;
                 }
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: 30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -37,23 +37,12 @@
                 }
 
                 body {
-                    margin-top: 25px;
-                    margin-right: 0;
-                    margin-bottom: 0;
-                    margin-left: 0;
-                    padding-top: 0;
-                    padding-bottom: 0;
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin: 0;*/
+                    padding-top: 0px; /* Altura del header */
+                    padding-bottom: 0px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                 }
-
-                .content {
-                    margin-top: 0;
-                }
-
-                .content-separador {
-                    height: 6px;
-                }
-
                 .datosgenerales{
                     border: 5px !important;
                     text-align: center;
@@ -105,48 +94,15 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
                 .tablaheader th {
-                    border: 1px solid black;
-                    padding: 4px 6px;
-                    vertical-align: middle;
-                    line-height: 1.15;
+                    /*width: 70%;*/
+                    border: 1px solid black; 
                 }
 
-                /* Igualar encabezado al PDF de fotos */
-                header {
-                    top: -45px;
-                }
-
-                footer {
-                    bottom: 30px;
-                }
-
-                body {
-                    margin-top: 27px;
-                }
-
-                .datosgenerales {
-                    font-size: 9px !important;
-                    font-family: 'arial', sans-serif;
-                }
-
-                .lineaInferior {
-                    font-size: 8px;
-                }
-
-                .tablaheader {
-                    font-size: 9px;
-                }
-
-                .tablaheader th {
-                    padding: 0;
-                    vertical-align: middle;
-                    line-height: normal;
-                }
 
         .encabezadoAzul{
             text-align: center;
@@ -241,70 +197,45 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
-    
-                                <div style="
-                                    width:100%;
-                                    height:7.2%;
-                                    text-align:center;
-                                    vertical-align:middle;
-                                    padding:0;
-                                    margin:0;
-                                ">
-
-                                    @if(!empty($QR_PDF))
-                                    <img
-                                        src="{{ $QR_PDF }}"
-                                        alt="QR"
-                                        style="
-                                            width:65px;
-                                            height:65px;
-                                            display:block;
-                                            margin:auto;
-                                            padding:0;
-                                        "
-                                    >
-                                    @endif
-                                </div>
-
+                            <th rowspan="4" style="width: 400%; font-size: 9pt;">
+                                INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES
                             </th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-05/01</th>
-                            <th rowspan="3" style="width: 80%;">
-    
-                                <div style="
-                                    width:100%;
-                                    height:7.2%;
-                                    text-align:center;
-                                    vertical-align:middle;
-                                    padding:0;
-                                    margin:0;
-                                ">
 
+                            <th rowspan="4" style="width:85%; padding:0; margin:0;">
+                                @if(!empty($QR_PDF))
+                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                        <img
+                                            src="{{ $QR_PDF }}"
+                                            alt="QR"
+                                            style="width:70px; height:70px; display:block; margin:auto; padding:0;"
+                                        >
+                                    </div>
+                                @endif
+                            </th>
+
+                            <th style="width: 60%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-05/01</th>
+
+                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                                <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
                                     <img
                                         src="{{ $Logo }}"
                                         alt="Logo"
-                                        style="
-                                            width:65px;
-                                            height:65px;
-                                            display:block;
-                                            margin:auto;
-                                            padding:0;
-                                        "
+                                        style="width:65px; height:65px; display:block; margin:auto; padding:0;"
                                     >
                                 </div>
-
                             </th>
-
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES</th>
                             <th>Versión</th>
-                            <th>3</th>
+                            <th>1</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 90%;">Fecha de elaboración</th>
+                            <th>28-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -312,8 +243,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <div style="margin-bottom: 0px;"></div>
             </header>
         
             <footer>

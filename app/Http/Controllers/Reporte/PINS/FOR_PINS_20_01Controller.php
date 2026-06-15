@@ -1122,7 +1122,7 @@ class FOR_PINS_20_01Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(202.5, -179.5);
+            $combinedPdf->SetXY(195.5, -179.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
