@@ -14,7 +14,7 @@
 
             header {
                     position: fixed;
-                    top: -52px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -50px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -263,23 +263,41 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
+                            <th rowspan="4" style="width: 400%; font-size: 9pt;">
+                                INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS
+                            </th>
+
+                            <th rowspan="4" style="width:70%; padding:0; margin:0; text-align:center; vertical-align:middle; line-height:0;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width: 65px; height: 65px; display:block; margin:auto; padding:0;">
+                                    <img
+                                        src="{{ $QR_PDF }}"
+                                        alt="QR"
+                                        style="width:60px; height:60px; display:inline-block; margin:0; padding:0;"
+                                    >
                                 @endif
                             </th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-23/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
+
+                            <th style="width: 60%; text-align:center; vertical-align:middle;">Código:</th>
+                            <th style="width: 100%; text-align:center; vertical-align:middle;">FOR-PINS-23/01</th>
+
+                            <th rowspan="4" style="width:70%; padding:0; margin:0; text-align:center; vertical-align:middle; line-height:0;">
+                                <img        
+                                    src="{{ $Logo }}"
+                                    alt="Logo"
+                                    style="width:60px; height:60px; display:inline-block; margin:0; padding:0;"
+                                >
+                            </th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE  INSPECCIÓN ULTRASÓNICA CON EL METODO DE ONDAS GUIADAS</th>
                             <th>Versión</th>
                             <th>0</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 90%;">Fecha de elaboración</th>
+                            <th>28-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -287,8 +305,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <div style="margin-bottom: 4px;"></div>
             </header>
             
             <footer>

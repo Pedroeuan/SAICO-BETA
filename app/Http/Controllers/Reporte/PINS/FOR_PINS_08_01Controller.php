@@ -1901,7 +1901,7 @@ class FOR_PINS_08_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(142.5, -267);
+            $combinedPdf->SetXY(134, -266.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1912,12 +1912,12 @@ class FOR_PINS_08_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(143.5, -266.5);
+            $combinedPdf->SetXY(134, -266);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_01-INS_07.PDF', 'I'), 200)
+        return response($combinedPdf->Output('Reporte_FOR_PINS_08_01.PDF', 'I'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 
