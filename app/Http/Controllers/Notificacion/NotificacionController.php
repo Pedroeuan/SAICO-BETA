@@ -25,7 +25,7 @@ use App\Models\EquiposyConsumibles\detalles_kits;
 use App\Models\EquiposyConsumibles\kits;
 use App\Models\Notificacion\Notificacion;
 use App\Models\User;
-
+use App\Notifications\NotificacionCertificadoMailable;
 
 class NotificacionController extends Controller
 {
@@ -124,7 +124,7 @@ class NotificacionController extends Controller
                     $fechaCalibracionFormateada = Carbon::parse($fechaCalibracion)->format('d-m-Y');
                     $fechaMantenimientoFormateada = Carbon::parse($fechaMantenimiento)->format('d-m-Y');
                     $fechaVerificacionFormateada = Carbon::parse($fechaVerificacion)->format('d-m-Y');
-
+                    
                     // Determinar los días restantes para la calibración
                     $diasRestantesC = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaCalibracion)->startOfDay(),false);
                     $diasRestantesM = Carbon::now()->startOfDay()->diffInDays(Carbon::parse($fechaMantenimiento)->startOfDay(),false);
@@ -189,8 +189,9 @@ class NotificacionController extends Controller
                             $notificacion->url = $url;
                             $notificacion->leida = false;
                             $notificacion->save();
+                            Log::info('Enviando correo a: ' . $usuario->email);
                             //📧 Enviar correo
-                            //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                         }
                     }
                 }
@@ -226,7 +227,8 @@ class NotificacionController extends Controller
                             $notificacion->leida = false;
                             $notificacion->save();
                             //📧 Enviar correo
-                            //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            Log::info('Enviando correo a: ' . $usuario->email);
+                            $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                         }
                     }
                 }
@@ -262,7 +264,8 @@ class NotificacionController extends Controller
                             $notificacion->leida = false;
                             $notificacion->save();
                             //📧 Enviar correo
-                            //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            Log::info('Enviando correo a: ' . $usuario->email);
+                            $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                         }
                     }
                 }
