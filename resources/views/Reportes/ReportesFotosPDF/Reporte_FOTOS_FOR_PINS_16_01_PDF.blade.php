@@ -14,7 +14,7 @@
 
                 header {
                     position: fixed;
-                    top: -43px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -217,7 +217,7 @@
                         </tr>
                         <tr>
                             <th style="width: 90%;">Fecha de elaboración</th>
-                            <th>28-may-26</th>
+                            <th>18-feb-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>

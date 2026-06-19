@@ -18,7 +18,7 @@
 
                 header {
                     position: fixed;
-                    top: -45px;
+                    top: -55px;
                     left: 0;
                     right: 0;
                     height: auto;
@@ -199,78 +199,52 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 400%;">FORMATO</th>
-                            <th rowspan="3" style="width:80%; padding:0; margin:0;">
-    
-                                <div style="
-                                    width:100%;
-                                    height:7.2%;
-                                    text-align:center;
-                                    vertical-align:middle;
-                                    padding:0;
-                                    margin:0;
-                                ">
-
-                                    <img
-                                        src="{{ $QR_PDF }}"
-                                        alt="QR"
-                                        style="
-                                            width:65px;
-                                            height:65px;
-                                            display:block;
-                                            margin:auto;
-                                            padding:0;
-                                        "
-                                    >
-                                </div>
-
+                            <th rowspan="4" style="width: 400%; font-size: 9pt;">
+                                INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X
                             </th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 90%;">FOR-INS-03/01</th>
-                                                        <th rowspan="3" style="width:80%; padding:0; margin:0;">
-    
-                                <div style="
-                                    width:100%;
-                                    height:7.2%;
-                                    text-align:center;
-                                    vertical-align:middle;
-                                    padding:0;
-                                    margin:0;
-                                ">
 
+                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                                @if(!empty($QR_PDF))
+                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                        <img
+                                            src="{{ $QR_PDF }}"
+                                            alt="QR"
+                                            style="width:70px; height:70px; display:block; margin:auto; padding:0;"
+                                        >
+                                    </div>
+                                @endif
+                            </th>
+
+                            <th style="width: 60%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-06/01</th>
+
+                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                                <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
                                     <img
                                         src="{{ $Logo }}"
                                         alt="Logo"
-                                        style="
-                                            width:65px;
-                                            height:65px;
-                                            display:block;
-                                            margin:auto;
-                                            padding:0;
-                                        "
+                                        style="width:65px; height:65px; display:block; margin:auto; padding:0;"
                                     >
                                 </div>
-
                             </th>
-
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> Informe de Inspección con Ultrasonido de Acuerdo con API RP 2X </th>
-                            <th>Versión</th>
+                            <th>Versión:</th>
                             <th>2</th>
                         </tr>
                         <tr>
-                            <th>Página</th>
+                            <th style="width: 90%;">Fecha de elaboración:</th>
+                            <th>28-may-26</th>
+                        </tr>
+                        <tr>
+                            <th>Página:</th>
                             <th></th>
                         </tr>
                     </tbody>
                 </table>
-
-                <div style="margin-bottom: 4px;"></div>
-
             </header>
 
             <footer>

@@ -1817,7 +1817,7 @@ class FOR_PINS_04_01Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             // Posicionar el número de página dentro de la celda "Página" del encabezado
-            $combinedPdf->SetXY(134.5, -265.5);
+            $combinedPdf->SetXY(134.5, -266);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1829,7 +1829,7 @@ class FOR_PINS_04_01Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             // Posicionar el número de página dentro de la celda "Página" del encabezado
-            $combinedPdf->SetXY(138, -265.5);
+            $combinedPdf->SetXY(134.5, -266);
             //Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
