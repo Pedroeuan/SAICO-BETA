@@ -702,8 +702,8 @@
                                                                     </select>
 
                                                                     <!-- hidden si quieres guardar el ID explícitamente -->
-                                                                    <input type="text" name="Firmas_Reportes1[ID_TECNICO]" id="IDTECNICO" value="{{ old('Firmas_Reportes1.ID_TECNICO') }}">
-                                                                    <input type="text" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{old('NOMBRE_TECNICO')}}">
+                                                                    <input type="hidden" name="Firmas_Reportes1[ID_TECNICO]" id="IDTECNICO" value="{{ old('Firmas_Reportes1.ID_TECNICO') }}">
+                                                                    <input type="hidden" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{old('NOMBRE_TECNICO')}}">
                                                                 </div>
                                                             </div>
 
@@ -1412,15 +1412,15 @@
             var name = selectedOption.data('name') || '';
 
             // Rellenar los inputs con los valores obtenidos
-            $('#IDTECNICO').val(id);
+            $('#IDTECNICO').val($('#tecnicosSelect').val() || '');
             $('#NOMBRE_TECNICO').val(name);
         }
 
-            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
-            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarTecnicos()):"";
+            const selectedOptionLocalT = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos');
+            selectedOptionLocalT != null ?  ($('#tecnicosSelect').val(selectedOptionLocalT),actualizarTecnicos()):"";
 
             // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
+            $('#tecnicosSelect').on('change', function() {
                 actualizarTecnicos();
             });
         });
