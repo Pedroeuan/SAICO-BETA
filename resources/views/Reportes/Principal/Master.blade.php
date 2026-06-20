@@ -109,6 +109,8 @@
     @elseif($Nombre_Formato == 'FOR-PINS-17-01_01') 
         @include('Reportes.PINS.Create.FOR-PINS-17-01_01')
     /*IM*/
+    @elseif($Nombre_Formato == 'FOR-PIMP-02_B_03') 
+        @include('Reportes.IM.Create.FOR-PIMP-02_B_03')
     @elseif($Nombre_Formato == 'FOR-PIMP-07_B/01') 
         @include('Reportes.IM.Create.FOR-PIMP-07_B_01')
     @endif

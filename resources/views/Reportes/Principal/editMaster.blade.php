@@ -137,6 +137,57 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+@if($Nombre_Formato == 'FOR-PIMP-07_B/01')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('FOR-PIMP-07_B_01');
+    if (!form) return;
+
+    const detallesGenerales = @json($Detalles_Generales ?? []);
+    const datosEquipo = @json($Datos_Equipo ?? []);
+    const firmas = @json($Firmas ?? []);
+
+    function setValue(name, value) {
+        if (value === undefined || value === null) return;
+
+        const field = form.elements[name];
+        if (!field) return;
+
+        if (field instanceof RadioNodeList) {
+            field.value = value;
+            return;
+        }
+
+        field.value = value;
+    }
+
+    Object.keys(detallesGenerales).forEach(function (key) {
+        setValue('Detalles_Generales[' + key + ']', detallesGenerales[key]);
+    });
+
+    Object.keys(datosEquipo).forEach(function (key) {
+        setValue('Datos_Equipo[' + key + ']', datosEquipo[key]);
+    });
+
+    if (firmas.numFirmas) {
+        setValue('numFirmas', firmas.numFirmas);
+        const numFirmasSelect = document.getElementById('numFirmas');
+        if (numFirmasSelect) {
+            numFirmasSelect.dispatchEvent(new Event('change'));
+        }
+    }
+
+    ['Firmas_Reportes1', 'Firmas_Reportes2', 'Firmas_Reportes3', 'Firmas_Reportes4'].forEach(function (grupo) {
+        Object.keys(firmas).forEach(function (key) {
+            setValue(grupo + '[' + key + ']', firmas[key]);
+        });
+    });
+});
+</script>
+@endif
 <script>
 
 $(document).ready(function() {

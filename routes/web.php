@@ -32,6 +32,7 @@ use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
 use App\Http\Controllers\Reporte\IM\FOR_PIMP_07_B_01Controller;
+use App\Http\Controllers\Reporte\IM\FOR_PIMP_02_B_03Controller;
 use App\Http\Controllers\Reporte\ReporteController;
 use App\Http\Controllers\Reporte\PINS\FOR_PINS_04_01Controller;
 use App\Http\Controllers\Reporte\PINS\FOR_PINS_05_01Controller;
@@ -81,7 +82,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
     Route::get('Reporte/FOR_PIMP_02_B/03', [ReporteController::class, 'FOR_PIMP_02_B_03'])->name('Reporte_FOR_PIMP_02_B_03.PDF');
     Route::get('Reporte/FOR_PIMP_02_B/04', [ReporteController::class, 'FOR_PIMP_02_B_04'])->name('Reporte_FOR_PIMP_02_B_04.PDF');
-    Route::get('Reporte/FOR_PIMP_07_B/01', [ReporteController::class, 'FOR_PIMP_07_B_01'])->name('Reporte_FOR_PIMP_07_B_01.PDF');
+    Route::get('Reporte/FOR_PIMP_07_B/01', [ReporteController::class, 'FOR_PIMP_07_B_01'])->name('Plantilla_FOR_PIMP_07_B_01.PDF');
     Route::get('Reporte/FOR_PIMP_03/01', [ReporteController::class, 'FOR_PIMP_03_01'])->name('Reporte_FOR_PIMP_03_01.PDF');
     Route::get('Reporte/FOR_PIMP_05_B/01', [ReporteController::class, 'FOR_PIMP_05_B_01'])->name('Reporte_FOR_PIMP_05_B_01.PDF');
     Route::get('Reporte/FOR_PIMP_06_B/01', [ReporteController::class, 'FOR_PIMP_06_B_01'])->name('Reporte_FOR_PIMP_06_B_01.PDF');
@@ -206,14 +207,6 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
         /*API para obtener el siguiente contrato interno*/
         Route::get('/api/siguiente-contrato-interno', [ReporteController::class, 'obtenerSiguienteContratoInterno']);
-
-        /*Ruta de Guardado Reportes/IM*/
-        /*Ruta de Guardado Reportes/IM FOR_PIMP_07_B_01*/
-        Route::post('/Reportes_FOR_PIMP_07_B_01/store', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01_store'])->name('Reportes_FOR_PIMP_07_B_01.store');
-        /*Ruta de Actualización Reportes/IM FOR_PIMP_07_B_01*/
-        Route::post('/Reportes_FOR_PIMP_07_B_01/update/{id}', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01_update'])->name('Reportes_FOR_PIMP_07_B_01.update');
-        /*Ruta del PDF de Reportes/IM FOR_PIMP_07_B_01*/
-        Route::get('/Reporte/FOR_PIMP_07_B_01/PDF/{id}', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01'])->name('Reporte_FOR_PIMP_07_B_01.PDF');
 
         /*Ruta de Guardado Reportes/INS*/
         /*Ruta de Guardado Reportes/PINS FOR_PINS_04_01*/
@@ -405,6 +398,21 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         /*Ruta del PDF de Reportes/INS FOR_03_PRO_INS_15*/
         Route::get('/Reporte/FOR-03-INS-15/PDF/{id}', [FOR_03_PRO_INS_15Controller::class, 'FOR_03_INS_15'])->name('Reporte_FOR_03_INS_15.PDF');
         
+        /*Ruta de Guardado Reportes/IM*/
+        /*Ruta de Guardado Reportes/IM FOR_PIMP_02_B_03*/
+        Route::post('/Reportes_FOR_PIMP_02_B_03/store', [FOR_PIMP_02_B_03Controller::class, 'FOR_PIMP_02_B_03_store'])->name('Reportes_FOR_PIMP_02_B_03.store');
+        /*Ruta de Actualización Reportes/IM FOR_PIMP_02_B_03*/
+        Route::post('/Reportes_FOR_PIMP_02_B_03/update/{id}', [FOR_PIMP_02_B_03Controller::class, 'FOR_PIMP_02_B_03_update'])->name('Reportes_FOR_PIMP_02_B_03.update');
+        /*Ruta del PDF de Reportes/IM FOR_PIMP_02_B_03*/
+        Route::get('/Reporte/FOR_PIMP_02_B_03/PDF/{id}', [FOR_PIMP_02_B_03Controller::class, 'FOR_PIMP_02_B_03'])->name('Reporte_FOR_PIMP_02_B_03.PDF');
+        
+        /*Ruta de Guardado Reportes/IM*/
+        /*Ruta de Guardado Reportes/IM FOR_PIMP_07_B_01*/
+        Route::post('/Reportes_FOR_PIMP_07_B_01/store', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01_store'])->name('Reportes_FOR_PIMP_07_B_01.store');
+        /*Ruta de Actualización Reportes/IM FOR_PIMP_07_B_01*/
+        Route::post('/Reportes_FOR_PIMP_07_B_01/update/{id}', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01_update'])->name('Reportes_FOR_PIMP_07_B_01.update');
+        /*Ruta del PDF de Reportes/IM FOR_PIMP_07_B_01*/
+        Route::get('/Reporte/FOR_PIMP_07_B_01/PDF/{id}', [FOR_PIMP_07_B_01Controller::class, 'FOR_PIMP_07_B_01'])->name('Reporte_FOR_PIMP_07_B_01.PDF');
         });
     });
 

@@ -903,11 +903,16 @@ class ReporteController extends Controller
         // Decodificar el JSON de Datos_Equipo
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el JSON de Datos_Equipo
-        $Firmas = json_decode($Firmas_Reportes->Firmas, true);
+        $Firmas = $Firmas_Reportes ? json_decode($Firmas_Reportes->Firmas, true) : [];
+        $Firmas = is_array($Firmas) ? $Firmas : [];
         // Decodificar el JSON de Datos_Equipo
-        $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
+        $Fotos_Comentarios = $Fotos_Reporte
+            ? json_decode($Fotos_Reporte->Fotos_Reportes, true)
+            : [];
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
-        $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
+        $Grupo_Juntas_Re = $Grupo_Juntas_Detalles_Re
+            ? json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true)
+            : [];
         
         $imagenes = [];
         if ($Fotos_Reporte && $Fotos_Reporte->Fotos_Reportes) {
@@ -916,7 +921,7 @@ class ReporteController extends Controller
 
 
         // Obtener el numero de firmas
-        $numFirmas = $Firmas ['numFirmas'];
+        $numFirmas = $Firmas['numFirmas'] ?? 1;
         // Obtener el idSolicitud
         $idSolicitud = $Detalles_Generales['idSolicitud'];
         $Solicitud = Solicitudes::findOrFail($idSolicitud);
@@ -955,8 +960,9 @@ class ReporteController extends Controller
         $Nombre_Formato = $Buscar_idFormato->Nombre;
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
+        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes'));
 
     }
 
@@ -1355,6 +1361,10 @@ class ReporteController extends Controller
         elseif($Nombre_Formato == "FOR-03-PRO-INS-15")
         {
             return redirect()->route('Reporte_FOR_03_INS_15.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-07_B/01")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_07_B_01.PDF', ['id' => $id]);
         }
     }
 
