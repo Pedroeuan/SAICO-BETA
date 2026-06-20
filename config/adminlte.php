@@ -588,15 +588,25 @@ return [
                         'url' => '/index/ContratoProyecto',
                     ],
                     [
-                        'text' => 'Registro de Pruebas',
+                        'text' => 'Registro de Pruebas PND/IM',
                         'icon' => 'fas fa-indent',
                         'url' => '/Pruebas/Create',
                     ],
                     [
-                        'text' => 'Pruebas',
+                        'text' => 'Pruebas PND/IM',
                         'icon' => 'fas fa-table',
                         'url' => '/index/Pruebas',
 
+                    ],
+                    [
+                        'text' => 'Registro de Normas IM',
+                        'icon' => 'far fa-list-alt',
+                        'url' => '/Normas_IM/Create',
+                    ],
+                    [
+                        'text' => 'Lista deNormas IM',
+                        'icon' => 'far fa-list-alt',
+                        'url' => '/Normas_IM/index',
                     ],
                 ],
             ],
