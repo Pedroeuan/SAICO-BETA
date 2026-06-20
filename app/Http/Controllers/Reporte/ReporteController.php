@@ -25,6 +25,7 @@ use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Models\Admin\Usuario;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -1146,7 +1147,10 @@ class ReporteController extends Controller
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes'));
+        // Obtén todos los usuario que tengan el rol Técnico
+        $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
+
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos'));
     }
 
     public function indexINS2(Request $request)

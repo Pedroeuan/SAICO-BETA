@@ -686,7 +686,28 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                                        <td>
+
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                <div class="form-group text-center">
+
+                                                                    <select class="form-select inputForm" id="tecnicosSelect">
+                                                                        <option value="" selected disabled>Seleccione un técnico</option>
+                                                                        @foreach($Tecnicos as $Tecnico)
+                                                                            <option value="{{ $Tecnico->id }}"
+                                                                                    data-name="{{ $Tecnico->name }}">
+                                                                                {{ $Tecnico->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+
+                                                                    <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                    <input type="text" name="Firmas_Reportes1[ID_TECNICO]" id="IDTECNICO" value="{{ old('Firmas_Reportes1.ID_TECNICO') }}">
+                                                                    <input type="text" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{old('NOMBRE_TECNICO')}}">
+                                                                </div>
+                                                            </div>
+
+                                                        </td>
                                                     </tr>
 
                                                     <tr>
@@ -1383,6 +1404,25 @@
                 actualizarInputsE();
             });
 
+        function actualizarTecnicos() {
+            var selectedOption = $('#tecnicosSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var id = selectedOption.data('id') || '';
+            var name = selectedOption.data('name') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#IDTECNICO').val(id);
+            $('#NOMBRE_TECNICO').val(name);
+        }
+
+            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
+            selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarTecnicos()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#equiposSelect').on('change', function() {
+                actualizarTecnicos();
+            });
         });
 
     /*FOR-PINS-03_02*/
