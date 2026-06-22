@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FOR-PIMP-02_B/03</title>
+    <title>FOR-PIMP-05/01</title>
 
     <style>
         @page {
@@ -160,17 +160,19 @@
 
 <body>
 
-<thead>
+<header>
+    <table class="tablaheader">
+        <thead>
             <tr>
                 <th style="width: 400%;">FORMATO<br>FORMAT</th>
                 <th style="width: 70%;">CÓDIGO<br>CODE</th>
-                <th style="width: 100%;">FOR-PIMP-02_B/03</th>
+                <th style="width: 100%;">FOR-PIMP-05/01</th>
                 <th rowspan="3" style="width: 80%;">
                     <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
                 </th>
             </tr>
             <tr>
-                <th rowspan="2">Informe de Ensayo de Durezas en Metales Base<br>Hardness Test Report on Base Metals</th>
+                <th rowspan="2"> Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)</th>
                 <th>VERSIÓN<br>VERSION</th>
                 <th>2</th>
             </tr>

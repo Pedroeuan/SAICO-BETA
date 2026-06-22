@@ -5,10 +5,7 @@
 
 @section('css')
 <!--datatable -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
 <!-- Select2 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
         table {
@@ -109,6 +106,22 @@
     @elseif($Nombre_Formato == 'FOR-PINS-17-01_01') 
         @include('Reportes.PINS.Edit.FOR-PINS-17-01_01')
         /*IM*/
+    @elseif($Nombre_Formato == 'FOR-PIMP-02_B/03') 
+        @include('Reportes.IM.Edit.FOR-PIMP-02_B_03')
+    @elseif($Nombre_Formato == 'FOR-PIMP-02_B/04') 
+        @include('Reportes.IM.Edit.FOR-PIMP-02_B_04')
+    @elseif($Nombre_Formato == 'FOR-PIMP-03_B/01') 
+        @include('Reportes.IM.Edit.FOR-PIMP-03_B_01')
+    @elseif($Nombre_Formato == 'FOR-PIMP-04/02') 
+        @include('Reportes.IM.Edit.FOR-PIMP-04_02')
+    @elseif($Nombre_Formato == 'FOR-PIMP-04/03') 
+        @include('Reportes.IM.Edit.FOR-PIMP-04_03')
+    @elseif($Nombre_Formato == 'FOR-PIMP-05/01') 
+        @include('Reportes.IM.Edit.FOR-PIMP-05_01')
+    @elseif($Nombre_Formato == 'FOR-PIMP-05_B/01') 
+        @include('Reportes.IM.Edit.FOR-PIMP-05_B_01')
+    @elseif($Nombre_Formato == 'FOR-PIMP-06_B/01') 
+        @include('Reportes.IM.Edit.FOR-PIMP-06_B_01')
     @elseif($Nombre_Formato == 'FOR-PIMP-07_B/01') 
         @include('Reportes.IM.Edit.FOR-PIMP-07_B_01')
     @endif
@@ -117,19 +130,9 @@
 
 @section('js')
 <!-- Incluye jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
-<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
-<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!-- Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!--sweet alert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>

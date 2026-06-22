@@ -344,7 +344,7 @@
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
-    const formularios = ["FOR-PIMP-07_B/01, FOR-PIMP-02_B_03"]; // Agrega aquí los IDs de tus formularios
+    const formularios = ["FOR-PIMP-02_B_03","FOR-PIMP-02_B_04","FOR-PIMP-03_B_01","FOR-PIMP-04_02","FOR-PIMP-04_03","FOR-PIMP-05_01","FOR-PIMP-05_B_01","FOR-PIMP-06_B_01","FOR-PIMP-07_B/01"]; // Agrega aquí los IDs de tus formularios
 
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
