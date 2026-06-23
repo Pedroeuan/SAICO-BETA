@@ -423,10 +423,17 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Instalacion' => 'nullable|string',
             'Detalles_Generales.No_Isometrico' => 'nullable|string',
+            'Detalles_Generales.Nom_Pieza' => 'nullable|string',
             'Detalles_Generales.Elementos_Soldados' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
+            'Detalles_Generales.Accesorio' => 'nullable|string',
+            'Detalles_Generales.Tuberia' => 'nullable|string',
+            'Detalles_Generales.Estructural' => 'nullable|string',
+            'Detalles_Generales.Metodo' => 'nullable|string',
+            'Detalles_Generales.Temp_Pieza' => 'nullable|string',
+            'Detalles_Generales.Esp_Ced' => 'nullable|string',
             'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Codigo_Diseño' => 'nullable|string',
@@ -460,10 +467,22 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.DUREZA_PROMEDIO_MEDIDO' => 'nullable|string',
+            'Datos_Equipo.DUREZA_ESPECIFICACION_REFERENCIA' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
+            'titulos_data' => 'nullable|string',
+            'valor_dureza1' => 'nullable|array',
+            'valor_dureza2' => 'nullable|array',
+            'valor_dureza3' => 'nullable|array',
+            'valor_dureza4' => 'nullable|array',
+            'valor_dureza5' => 'nullable|array',
+            'Long_Inspecc' => 'nullable|array',
+            'Long_Inspecc.*' => 'nullable|array',
+            'Long_Inspecc.*.*' => 'nullable|string|max:255',
+            'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
@@ -669,26 +688,75 @@ class FOR_PIMP_02_B_03Controller extends Controller
             $bloqueActual[] = $elemento;
             $contador++;
         };
+        $bloquesDureza = [];
+        $crearFilasDureza = function (string $grupo) use ($request) {
+            $filas = [];
+            $total = count($request->input("valor_dureza1.$grupo", []));
 
+            for ($i = 0; $i < $total; $i++) {
+                $filas[] = [
+                    'tipo' => 'fila',
+                    'grupo' => $grupo,
+                    'data' => [
+                        'valor_dureza1' => $request->input("valor_dureza1.$grupo.$i"),
+                        'valor_dureza2' => $request->input("valor_dureza2.$grupo.$i"),
+                        'valor_dureza3' => $request->input("valor_dureza3.$grupo.$i"),
+                        'valor_dureza4' => $request->input("valor_dureza4.$grupo.$i"),
+                        'valor_dureza5' => $request->input("valor_dureza5.$grupo.$i"),
+                    ],
+                ];
+            }
+
+            foreach ($request->input("Long_Inspecc.$grupo", []) as $longitud) {
+                $filas[] = [
+                    'tipo' => 'longitud',
+                    'grupo' => $grupo,
+                    'valor' => $longitud,
+                ];
+            }
+
+            return $filas;
+        };
+
+        $sinTituloKey = 'sin_titulo';
+        $filasSinTituloDureza = $crearFilasDureza($sinTituloKey);
+        if (!empty($filasSinTituloDureza)) {
+            $bloquesDureza[] = $filasSinTituloDureza;
+        }
+
+        foreach ($titulos as $tituloObj) {
+            $tituloKey = $tituloObj['id'] ?? 'sin_titulo';
+            $bloque = [[
+                'tipo' => 'titulo',
+                'grupo' => $tituloKey,
+                'texto' => $tituloObj['text'] ?? '',
+            ]];
+
+            $bloque = array_merge($bloque, $crearFilasDureza($tituloKey));
+            $bloquesDureza[] = $bloque;
+        }
+
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloquesDureza, JSON_UNESCAPED_UNICODE);
+        $Grupo_Juntas_Detalles_Re->save();
 
         /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
         if ($numFirmas == 1) {
-            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
+            $validatedData['Firmas_Reportes1']['numFirmas'] = $numFirmas;
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes1']);
         }
         else if ($numFirmas == 2) {
-            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $numFirmas;
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
         }
         else if ($numFirmas == 3) {
-            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $numFirmas;
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
         }
         else{
-            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $numFirmas ?: 4;
             $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
         }
 
@@ -772,15 +840,15 @@ class FOR_PIMP_02_B_03Controller extends Controller
         $Fotos_Reportes->save();
     }
 
-        $Cliente = $validatedData['Detalles_Generales']['Cliente'];
-        $Lugar = $validatedData['Detalles_Generales']['Lugar'];
-        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
-        $Material = $validatedData['Detalles_Generales']['Material'];
-        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
-        $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
-        $Pieza = $validatedData['Detalles_Generales']['Pieza'];
-        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Codigo_Aplicable'];
+        $Cliente = $validatedData['Detalles_Generales']['Cliente'] ?? 'POR DEFINIR';
+        $Lugar = $validatedData['Detalles_Generales']['Instalacion'] ?? '';
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? '';
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'] ?? '';
+        $Material = $validatedData['Detalles_Generales']['Material'] ?? '';
+        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'] ?? null;
+        $Isometrico_Plano = $validatedData['Detalles_Generales']['No_Isometrico'] ?? '';
+        $Pieza = $validatedData['Detalles_Generales']['Nom_Pieza'] ?? '';
+        $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Procedimiento'] ?? '';
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -825,6 +893,16 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Detalles_Generales.Lugar' => 'nullable|string',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
             'Detalles_Generales.Pieza' => 'nullable|string',
+            'Detalles_Generales.Instalacion' => 'nullable|string',
+            'Detalles_Generales.No_Isometrico' => 'nullable|string',
+            'Detalles_Generales.Nom_Pieza' => 'nullable|string',
+            'Detalles_Generales.Trazabilidad' => 'nullable|string',
+            'Detalles_Generales.Accesorio' => 'nullable|string',
+            'Detalles_Generales.Tuberia' => 'nullable|string',
+            'Detalles_Generales.Estructural' => 'nullable|string',
+            'Detalles_Generales.Metodo' => 'nullable|string',
+            'Detalles_Generales.Temp_Pieza' => 'nullable|string',
+            'Detalles_Generales.Esp_Ced' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.Codigo_Aplicable' => 'nullable|string',
@@ -861,6 +939,8 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Datos_Equipo.EXCEP' => 'nullable|string',
             'Datos_Equipo.NOTAS' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.DUREZA_PROMEDIO_MEDIDO' => 'nullable|string',
+            'Datos_Equipo.DUREZA_ESPECIFICACION_REFERENCIA' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
@@ -884,6 +964,12 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'evaluacion' => 'nullable|array',
             'archivo' => 'nullable|array',
             'long_ins' => 'nullable|array',
+            'valor_dureza1' => 'nullable|array',
+            'valor_dureza2' => 'nullable|array',
+            'valor_dureza3' => 'nullable|array',
+            'valor_dureza4' => 'nullable|array',
+            'valor_dureza5' => 'nullable|array',
+            
 
             /* Longitudes inspeccionadas */
             'Long_Inspecc' => 'nullable|array',
@@ -1186,33 +1272,85 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
         ]);
 
+        $titulosDureza = json_decode($request->input('titulos_data', '[]'), true) ?: [];
+        $bloquesDureza = [];
+        $crearFilasDureza = function (string $grupo) use ($request) {
+            $filas = [];
+            $total = count($request->input("valor_dureza1.$grupo", []));
+
+            for ($i = 0; $i < $total; $i++) {
+                $filas[] = [
+                    'tipo' => 'fila',
+                    'grupo' => $grupo,
+                    'data' => [
+                        'valor_dureza1' => $request->input("valor_dureza1.$grupo.$i"),
+                        'valor_dureza2' => $request->input("valor_dureza2.$grupo.$i"),
+                        'valor_dureza3' => $request->input("valor_dureza3.$grupo.$i"),
+                        'valor_dureza4' => $request->input("valor_dureza4.$grupo.$i"),
+                        'valor_dureza5' => $request->input("valor_dureza5.$grupo.$i"),
+                    ],
+                ];
+            }
+
+            foreach ($request->input("Long_Inspecc.$grupo", []) as $longitud) {
+                $filas[] = [
+                    'tipo' => 'longitud',
+                    'grupo' => $grupo,
+                    'valor' => $longitud,
+                ];
+            }
+
+            return $filas;
+        };
+
+        $filasSinTituloDureza = $crearFilasDureza('sin_titulo');
+        if (!empty($filasSinTituloDureza)) {
+            $bloquesDureza[] = $filasSinTituloDureza;
+        }
+
+        foreach ($titulosDureza as $titulo) {
+            $tituloKey = $titulo['id'] ?? 'sin_titulo';
+            $bloque = [[
+                'tipo' => 'titulo',
+                'grupo' => $tituloKey,
+                'texto' => $titulo['text'] ?? '',
+            ]];
+
+            $bloque = array_merge($bloque, $crearFilasDureza($tituloKey));
+            $bloquesDureza[] = $bloque;
+        }
+
+        $Grupo_Juntas_Detalles_Re->update([
+            'Juntas_Grupo_Re' => json_encode($bloquesDureza, JSON_UNESCAPED_UNICODE)
+        ]);
+
         /*Firmas */
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
         if ($numFirmas == 1) {
-            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
+            $validatedData['Firmas_Reportes1']['numFirmas'] = $numFirmas;
             $Firmas1 = json_encode($validatedData['Firmas_Reportes1']);
             $Firmas->update([
                 'Firmas' => $Firmas1
             ]);
         }
         else if ($numFirmas == 2) {
-            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
+            $validatedData['Firmas_Reportes2']['numFirmas'] = $numFirmas;
             $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
             $Firmas->update([
                 'Firmas' => $Firmas2
             ]);
         }
         else if ($numFirmas == 3) {
-            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
+            $validatedData['Firmas_Reportes3']['numFirmas'] = $numFirmas;
             $Firmas3 = json_encode($validatedData['Firmas_Reportes3']);
             $Firmas->update([
                 'Firmas' => $Firmas3
             ]);
         }
         else{
-            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
+            $validatedData['Firmas_Reportes4']['numFirmas'] = $numFirmas ?: 4;
             $Firmas4 = json_encode($validatedData['Firmas_Reportes4']);
             $Firmas->update([
                 'Firmas' => $Firmas4
@@ -1526,12 +1664,12 @@ class FOR_PIMP_02_B_03Controller extends Controller
         $tempPdf1 = new Fpdi();
         $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
 
-        $tempPdf2 = new Fpdi();
-        $pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
+        //$tempPdf2 = new Fpdi();
+        //$pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
 
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
-        $totalPageCount = $pageCount1 + $pageCount2;
+        $totalPageCount = $pageCount1;
 
         // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
@@ -1540,11 +1678,11 @@ class FOR_PIMP_02_B_03Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(138.3, -266);
+            $combinedPdf->SetXY(123, -266);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
-        // Añadir páginas del segundo PDF
+        /* Añadir páginas del segundo PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
         for ($i = 1; $i <= $pageCount2; $i++) {
             $tplId = $combinedPdf->importPage($i);
@@ -1554,7 +1692,7 @@ class FOR_PIMP_02_B_03Controller extends Controller
             $combinedPdf->SetXY(139.5, -266);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
-        }
+        }*/
 
         return response($combinedPdf->Output('Reporte_FOR_PIMP_02_B_03.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
