@@ -735,8 +735,8 @@
                                                                     </select>
 
                                                                     <!-- hidden si quieres guardar el ID explícitamente -->
-                                                                    <input type="hidden" name="Firmas_Reportes1[ID_TECNICO]" id="IDTECNICO" value="{{old('ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
-                                                                    <input type="hidden" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}">
+                                                                    <input type="text" name="Firmas_Reportes1[ID_TECNICO]" id="IDTECNICO" value="{{old('ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                    <input type="text" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}">
                                                                 </div>
                                                             </div>
                                                             
@@ -776,10 +776,11 @@
 
                                                     <tr>
 
-                                                        <td>                                                                <div class="col-sm-50 d-flex justify-content-center">
+                                                        <td>    
+                                                            <div class="col-sm-50 d-flex justify-content-center">
                                                                     <div class="form-group text-center">
 
-                                                                        <select class="form-select inputForm" id="tecnicosSelect">
+                                                                        <select class="form-select inputForm" id="tecnicosSelect2">
                                                                             <option value="" selected disabled>Seleccione un técnico</option>
                                                                             @foreach($Tecnicos as $Tecnico)
                                                                                 <option value="{{ $Tecnico->id }}"
@@ -790,8 +791,8 @@
                                                                         </select>
 
                                                                         <!-- hidden si quieres guardar el ID explícitamente -->
-                                                                        <input type="hidden" name="Firmas_Reportes2[ID_TECNICO]" id="IDTECNICO2" value="{{old('ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
-                                                                        <input type="hidden" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO2" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}">
+                                                                        <input type="text" name="Firmas_Reportes2[ID_TECNICO]" id="IDTECNICO2" value="{{old('ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <input type="text" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO2" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}">
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -849,7 +850,7 @@
                                                             <div class="col-sm-50 d-flex justify-content-center">
                                                                     <div class="form-group text-center">
 
-                                                                        <select class="form-select inputForm" id="tecnicosSelect">
+                                                                        <select class="form-select inputForm" id="tecnicosSelect3">
                                                                             <option value="" selected disabled>Seleccione un técnico</option>
                                                                             @foreach($Tecnicos as $Tecnico)
                                                                                 <option value="{{ $Tecnico->id }}"
@@ -860,8 +861,8 @@
                                                                         </select>
 
                                                                         <!-- hidden si quieres guardar el ID explícitamente -->
-                                                                        <input type="hidden" name="Firmas_Reportes2[ID_TECNICO]" id="IDTECNICO3" value="{{old('ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
-                                                                        <input type="hidden" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO3" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}">
+                                                                        <input type="text" name="Firmas_Reportes3[ID_TECNICO]" id="IDTECNICO3" value="{{old('ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <input type="text" name="Firmas_Reportes3[NOMBRE_TECNICO]" id="NOMBRE_TECNICO3" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}">
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -874,7 +875,7 @@
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO', $Firmas['NOMBRE_2DO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
-                                                                                        
+
                                                     <tr>
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
@@ -934,7 +935,7 @@
                                                                 <div class="col-sm-50 d-flex justify-content-center">
                                                                     <div class="form-group text-center">
 
-                                                                        <select class="form-select inputForm" id="tecnicosSelect">
+                                                                        <select class="form-select inputForm" id="tecnicosSelect4">
                                                                             <option value="" selected disabled>Seleccione un técnico</option>
                                                                             @foreach($Tecnicos as $Tecnico)
                                                                                 <option value="{{ $Tecnico->id }}"
@@ -945,8 +946,8 @@
                                                                         </select>
 
                                                                         <!-- hidden si quieres guardar el ID explícitamente -->
-                                                                        <input type="hidden" name="Firmas_Reportes2[ID_TECNICO]" id="IDTECNICO2" value="{{old('ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
-                                                                        <input type="hidden" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO2" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}">
+                                                                        <input type="hidden" name="Firmas_Reportes4[ID_TECNICO]" id="IDTECNICO4" value="{{old('ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <input type="hidden" name="Firmas_Reportes4[NOMBRE_TECNICO]" id="NOMBRE_TECNICO4" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}">
                                                                     </div>
                                                                 </div>
                                                         </td>
