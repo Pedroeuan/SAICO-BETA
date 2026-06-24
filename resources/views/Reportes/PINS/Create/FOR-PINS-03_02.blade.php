@@ -692,7 +692,7 @@
                                                                 <div class="form-group text-center">
 
                                                                     <select class="form-select inputForm" id="tecnicosSelect" name="Firmas_Reportes1[ID_TECNICO]">
-                                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+                                                                        <option value="" selected disabled>SELECCIÓN DE TÉCNICOS</option>
                                                                         @foreach($Tecnicos as $Tecnico)
                                                                             <option value="{{ $Tecnico->id }}"
                                                                                     data-name="{{ $Tecnico->name }}">
@@ -748,7 +748,7 @@
                                                                 <div class="form-group text-center">
 
                                                                     <select class="form-select inputForm" id="tecnicosSelect2" name="Firmas_Reportes2[ID_TECNICO]">
-                                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+                                                                        <option value="" selected disabled>SELECCIÓN DE TÉCNICOS</option>
                                                                         @foreach($Tecnicos as $Tecnico)
                                                                             <option value="{{ $Tecnico->id }}"
                                                                                     data-name="{{ $Tecnico->name }}">
@@ -816,7 +816,7 @@
                                                                 <div class="form-group text-center">
 
                                                                     <select class="form-select inputForm" id="tecnicosSelect3" name="Firmas_Reportes3[ID_TECNICO]">
-                                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+                                                                        <option value="" selected disabled>SELECCIÓN DE TÉCNICOS</option>
                                                                         @foreach($Tecnicos as $Tecnico)
                                                                             <option value="{{ $Tecnico->id }}"
                                                                                     data-name="{{ $Tecnico->name }}">
@@ -896,7 +896,7 @@
                                                                 <div class="form-group text-center">
 
                                                                     <select class="form-select inputForm" id="tecnicosSelect4" name="Firmas_Reportes4[ID_TECNICO]">
-                                                                        <option value="" selected disabled>Seleccione un técnico</option>
+                                                                        <option value="" selected disabled>SELECCIÓN DE TÉCNICOS</option>
                                                                         @foreach($Tecnicos as $Tecnico)
                                                                             <option value="{{ $Tecnico->id }}"
                                                                                     data-name="{{ $Tecnico->name }}">
