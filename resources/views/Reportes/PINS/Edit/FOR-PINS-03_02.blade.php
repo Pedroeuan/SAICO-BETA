@@ -725,7 +725,7 @@
                                                                     <div class="form-group text-center">
                                                                     <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TECNICOS:</label>
                                                                         <select class="form-select inputForm" id="tecnicosSelect">
-                                                                            <option value="" selected disabled>Seleccione un técnico</option>
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
 
                                                                             @foreach($Tecnicos as $Tecnico)
                                                                                 <option value="{{ $Tecnico->id }}"
@@ -783,7 +783,7 @@
                                                                     <div class="form-group text-center">
                                                                     <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TECNICOS:</label>
                                                                         <select class="form-select inputForm" id="tecnicosSelect2">
-                                                                            <option value="" selected disabled>Seleccione un técnico</option>
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
 
                                                                             @foreach($Tecnicos as $Tecnico)
                                                                                 <option value="{{ $Tecnico->id }}"
@@ -855,7 +855,7 @@
                                                                     <div class="form-group text-center">
                                                                     <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TECNICOS:</label>
                                                                         <select class="form-select inputForm" id="tecnicosSelect3">
-                                                                            <option value="" selected disabled>Seleccione un técnico</option>
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
 
                                                                             @foreach($Tecnicos as $Tecnico)
                                                                                 <option value="{{ $Tecnico->id }}"
@@ -942,7 +942,7 @@
                                                                     <div class="form-group text-center">
                                                                     <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TECNICOS:</label>
                                                                         <select class="form-select inputForm" id="tecnicosSelect4">
-                                                                            <option value="" selected disabled>Seleccione un técnico</option>
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
 
                                                                             @foreach($Tecnicos as $Tecnico)
                                                                                 <option value="{{ $Tecnico->id }}"
