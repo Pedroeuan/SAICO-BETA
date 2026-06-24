@@ -715,7 +715,7 @@
                 actualizarTecnicos4();
             });
 
-            /*Validar seleccion del tecnico */
+            /*Validar seleccion del tecnico 
             function actualizarValidacion() {
 
             document.getElementById('tecnicosSelect').removeAttribute('required');
@@ -744,4 +744,4 @@
 
         document.getElementById('numFirmas').addEventListener('change', actualizarValidacion);
 
-        actualizarValidacion();
+        actualizarValidacion();*/

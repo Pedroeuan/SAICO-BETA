@@ -430,7 +430,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 actualizarTecnicos4();
             });
 
-            /*Validar seleccion del tecnico */
+            /*Validar seleccion del tecnico 
             function actualizarValidacion() {
 
             document.getElementById('tecnicosSelect').removeAttribute('required');
@@ -459,4 +459,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById('numFirmas').addEventListener('change', actualizarValidacion);
 
-        actualizarValidacion();
+        actualizarValidacion();*/
