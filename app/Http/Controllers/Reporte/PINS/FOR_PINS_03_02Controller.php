@@ -454,7 +454,7 @@ class FOR_PINS_03_02Controller extends Controller
 
     public function FOR_PINS_03_02_store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $Estatus = "CREADO";
         // Validar los datos del formulario
         $validatedData = $request->validate([
