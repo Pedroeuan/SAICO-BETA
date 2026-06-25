@@ -1,11 +1,9 @@
-Ôªø@extends('adminlte::page') 
+@extends('adminlte::page') 
 
 @section('title', 'FOR-PINS-22_01')
 
 @section('css')
 <!--datatable -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
 
 <style>
         table {
@@ -51,10 +49,10 @@
         }
 
         .custom-btn:hover {
-            background-color: #218838 !important; /* Verde m√É¬°s oscuro */
+            background-color: #218838 !important; /* Verde m√°s oscuro */
         }
         #my-notification .dropdown-menu {
-        max-height: 200px; /* Ajusta la altura seg√É¬∫n sea necesario */
+        max-height: 200px; /* Ajusta la altura seg√∫n sea necesario */
         overflow-y: auto;
         }
     </style>
@@ -75,7 +73,7 @@
                                 @csrf
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
-                                        <strong>No se pudo guardar la actualizaci√É¬≥n.</strong>
+                                        <strong>No se pudo guardar la actualizaci√≥n.</strong>
                                         <ul class="mb-0 mt-2">
                                             @foreach ($errors->all() as $error)
                                                 <li>{{ $error }}</li>
@@ -138,8 +136,8 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Identificaci√≥n</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Identificacion]" placeholder="Ejemplo: INGENIER√É¬çA, PROCURA, CONSTRUCCI√É‚ÄúN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCI√É‚ÄúN DE PLATAFORMAS GEN√É‚Ä∞RICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE M√É‚Ä∞XICO ...">{{old('Detalles_Generales.Identificacion', $Detalles_Generales['Identificacion'] ?? $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
+                                            <label class="col-form-label" for="inputSuccess">IdentificaciÛn</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Identificacion]" placeholder="Ejemplo: INGENIER√çA, PROCURA, CONSTRUCCI√ìN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCI√ìN DE PLATAFORMAS GEN√âRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE M√âXICO ...">{{old('Detalles_Generales.Identificacion', $Detalles_Generales['Identificacion'] ?? $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
                                             @error('Identificacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -149,7 +147,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Serie</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Serie]" placeholder="Ejemplo: OT-03 INGENIER√É¬çA, PROCURA, CONSTRUCCI√É‚ÄúN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Serie', $Detalles_Generales['Serie'] ?? $Detalles_Generales['Orden_Trabajo'] ?? '')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Serie]" placeholder="Ejemplo: OT-03 INGENIER√çA, PROCURA, CONSTRUCCI√ìN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Serie', $Detalles_Generales['Serie'] ?? $Detalles_Generales['Orden_Trabajo'] ?? '')}}</textarea>
                                             @error('Serie')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -168,7 +166,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">N√∫mero de Tubos</label>
+                                            <label class="col-form-label" for="inputSuccess">N˙mero de Tubos</label>
                                             <input type="text" class="form-control  inputForm @error('Numero_Tubos') is-invalid @enderror" name="Detalles_Generales[Numero_Tubos]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Numero_Tubos', $Detalles_Generales['Numero_Tubos'] ?? $Detalles_Generales['Partida'] ?? '')}}">
                                             @error('Numero_Tubos')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -188,7 +186,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Di√°metro</label>
+                                            <label class="col-form-label" for="inputSuccess">Di·metro</label>
                                             <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Diametro]" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Detalles_Generales.Diametro', $Detalles_Generales['Diametro'] ?? $Detalles_Generales['Isometrico_Plano'] ?? '')}}</textarea>
                                             @error('Diametro')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -208,9 +206,9 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">A√±o de Fabricaci√≥n</label>
-                                            <input type="text" class="form-control inputForm @error('A√±o_Fabricacion') is-invalid @enderror" name="Detalles_Generales[A√±o_Fabricacion]" placeholder="Ejemplo:  " value="{{old('Detalles_Generales.A√±o_Fabricacion', $Detalles_Generales['A√±o_Fabricacion'] ?? '')}}">
-                                            @error('A√±o_Fabricacion')
+                                            <label class="col-form-label" for="inputSuccess">AÒo de FabricaciÛn</label>
+                                            <input type="text" class="form-control inputForm @error('AÒo_Fabricacion') is-invalid @enderror" name="Detalles_Generales[AÒo_Fabricacion]" placeholder="Ejemplo:  " value="{{old('Detalles_Generales.AÒo_Fabricacion', $Detalles_Generales['AÒo_Fabricacion'] ?? '')}}">
+                                            @error('AÒo_Fabricacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
@@ -248,7 +246,7 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Criterio de Evaluaci√≥n</label>
+                                            <label class="col-form-label" for="inputSuccess">Criterio de EvaluaciÛn</label>
                                             <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion', $Detalles_Generales['Criterio_Evaluacion'] ?? '')}}">
                                             @error('Criterio_Evaluacion')
                                                 <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -287,7 +285,7 @@
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
                                             <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opci√É¬≥n por defecto -->
+                                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opci√≥n por defecto -->
                                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
@@ -414,14 +412,14 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de Calibraci√≥n del Equipo:</label>
+                                            <label class="col-form-label" for="inputSuccess">Certificado de CalibraciÛn del Equipo:</label>
                                             <input type="text" class="form-control inputForm" name="Datos_Equipo[CER_CALIBRACION]" placeholder="" value="{{old('Datos_Equipo.CER_CALIBRACION', $Datos_Equipo['CER_CALIBRACION'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Vigencia de Calibraci√≥n del Equipo:</label>
+                                            <label class="col-form-label" for="inputSuccess">Vigencia de CalibraciÛn del Equipo:</label>
                                             <input type="text" class="form-control inputForm" name="Datos_Equipo[VIG_CALIBRACION]" placeholder="" value="{{old('Datos_Equipo.VIG_CALIBRACION', $Datos_Equipo['VIG_CALIBRACION'] ?? '')}}">
                                         </div>
                                     </div>
@@ -464,9 +462,9 @@
                                                 <th>ID</th>
                                                 <th>Elemento</th>
                                                 <th>Referencia (mm)</th>
-                                                <th>Fase ¬∞</th>
+                                                <th>Fase ∞</th>
                                                 <th>Ganancia</th>
-                                                <th>Alcance de Inspecci√≥n</th>
+                                                <th>Alcance de InspecciÛn</th>
                                                 <th>Canal</th>
                                                 <th>%Insp.</th>
                                                 <th>%Obstr.</th>
@@ -517,7 +515,7 @@
                                                                         class="form-control w-90 titulo-text"
                                                                         name="titulos_text[{{ $titleId }}]"
                                                                         value="{{ $item['texto'] }}"
-                                                                        placeholder="Ingrese t√É¬≠tulo...">
+                                                                        placeholder="Ingrese t√≠tulo...">
 
                                                                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
 
@@ -583,7 +581,7 @@
                                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                         <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                             <div>
-                                                <label for="numRows">N√É¬∫mero de Filas:</label>
+                                                <label for="numRows">N√∫mero de Filas:</label>
                                                 <select id="numRows" class="form-select">
                                                     @for ($i = 1; $i <= 500; $i++)
                                                         <option value="{{ $i }}">{{ $i }}</option>
@@ -593,7 +591,7 @@
 
                                             <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
-                                            <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar T√≠tulo</button>
+                                            <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar TÌtulo</button>
                                             
                                             <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
@@ -612,22 +610,22 @@
                                                                 <td><strong>NPIR:</strong></td>
                                                                 <td style="text-align:left;">NO PRESENTA INDICACIONES RELEVANTES</td>
                                                                 <td><strong>CI:</strong></td>
-                                                                <td style="text-align:left;">CORROSI√ìN INTERNA</td>
+                                                                <td style="text-align:left;">CORROSI”N INTERNA</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>I:</strong></td>
-                                                                <td style="text-align:left;">INCLUSI√ìN NO MET√ÅLICA</td>
+                                                                <td style="text-align:left;">INCLUSI”N NO MET¡LICA</td>
                                                                 <td><strong>L:</strong></td>
-                                                                <td style="text-align:left;">LAMINACI√ìN</td>
+                                                                <td style="text-align:left;">LAMINACI”N</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ZI:</strong></td>
-                                                                <td style="text-align:left;">ZONA DE INCLUSIONES NO MET√ÅLICAS</td>
+                                                                <td style="text-align:left;">ZONA DE INCLUSIONES NO MET¡LICAS</td>
                                                                 <td colspan="2" rowspan="2"></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>LE:</strong></td>
-                                                                <td style="text-align:left;">LAMINACI√ìN ESCALONADA</td>
+                                                                <td style="text-align:left;">LAMINACI”N ESCALONADA</td>
                                                             </tr>
                                                         </thead>
                                                     </table>
@@ -640,11 +638,11 @@
                                                     <table>
                                                         <thead>
                                                             <tr>
-                                                                <th colspan="6" class="p-2 alert alert-warning">SIMBOLOG√çA DEL REPORTE</th>
+                                                                <th colspan="6" class="p-2 alert alert-warning">SIMBOLOGÕA DEL REPORTE</th>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>A:</strong></td>
-                                                                <td style="text-align:left;">√ÅNGULO (¬∞)</td>
+                                                                <td style="text-align:left;">¡NGULO (∞)</td>
                                                                 <td><strong>LA:</strong></td>
                                                                 <td style="text-align:left;">LONGITUD AXIAL (IN)</td>
                                                                 <td rowspan="2"><strong>t<sub>a</sub></strong></td>
@@ -662,13 +660,13 @@
                                                                 <td><strong>DNR</strong></td>
                                                                 <td style="text-align:left;">DISTANCIA DE NIVEL DE REFERENCIA (IN)</td>
                                                                 <td><strong>H.T.</strong></td>
-                                                                <td style="text-align:left;">HORARIO T√âCNICO</td>                                     
+                                                                <td style="text-align:left;">HORARIO T…CNICO</td>                                     
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>NI:</strong></td>
-                                                                <td style="text-align:left;">NIVEL DE INDICACI√ìN (%)</td>
+                                                                <td style="text-align:left;">NIVEL DE INDICACI”N (%)</td>
                                                                 <td><strong>t<sub>min</sub></strong></td>
-                                                                <td style="text-align:left;">ESPESOR M√çNIMO REGISTRADO (PULG)</td>
+                                                                <td style="text-align:left;">ESPESOR MÕNIMO REGISTRADO (PULG)</td>
                                                                 <td><strong>d</strong></td>
                                                                 <td style="text-align:left;">PROFUNDIDAD DE LA INDICACION(IN)</td>
                                                             </tr>
@@ -681,12 +679,12 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <textarea class="form-control  is-waning" id="textAreaObs" name="Datos_Equipo[OBS]" placeholder="Ejemplo: LA INSPECCI√É‚ÄúN SE REALIZ√É‚Äú DE LADO A Y B">{{old('Datos_Equipo.OBS', $Datos_Equipo['OBS'] ?? '')}}</textarea>
+                                                <textarea class="form-control  is-waning" id="textAreaObs" name="Datos_Equipo[OBS]" placeholder="Ejemplo: LA INSPECCI√ìN SE REALIZ√ì DE LADO A Y B">{{old('Datos_Equipo.OBS', $Datos_Equipo['OBS'] ?? '')}}</textarea>
                                             </div>
                                         </div>
 
-                                        <!-- Select para elegir el n√∫mero de firmas -->
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">N√∫mero de Firmas:</div>
+                                        <!-- Select para elegir el n˙mero de firmas -->
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">N˙mero de Firmas:</div>
                                         <div class="col-sm-15">
                                             <div class="form-group">
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
@@ -711,7 +709,7 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL T√É‚Ä∞CNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL T√âCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
                                                     </tr>
 
                                                     <tr>
@@ -719,7 +717,7 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesor√≠¬≠a e Inspecci√≥n en Construcci√≥n Costa Fuera, S.C." readonly></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="AsesorÌ≠a e InspecciÛn en ConstrucciÛn Costa Fuera, S.C." readonly></td>
                                                     </tr>
                                                     
                                                 </thead>                            
@@ -731,7 +729,7 @@
                                             <table class="table table-bordered table-striped dt-responsive tablas">
                                                 <thead>
                                                     <tr>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realiz√É¬≥" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realiz√≥" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
                                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
                                                     </tr>
@@ -743,7 +741,7 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL T√É‚Ä∞CNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL T√âCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
@@ -755,7 +753,7 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesor√≠¬≠a e Inspecci√≥n en Construcci√≥n Costa Fuera, S.C." readonly></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="AsesorÌ≠a e InspecciÛn en ConstrucciÛn Costa Fuera, S.C." readonly></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
@@ -789,7 +787,7 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL T√É‚Ä∞CNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL T√âCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
@@ -809,7 +807,7 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="Asesor√≠¬≠a e Inspecci√≥n en Construcci√≥n Costa Fuera, S.C." readonly></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="AsesorÌ≠a e InspecciÛn en ConstrucciÛn Costa Fuera, S.C." readonly></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
@@ -827,7 +825,7 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realiz√≥" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: RealizÛ" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
                                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
@@ -851,7 +849,7 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL T√âCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL T…CNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
@@ -874,7 +872,7 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_TECNICO]" placeholder="" value="Asesor√≠¬≠a e Inspecci√≥n en Construcci√≥n Costa Fuera, S.C." readonly></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_TECNICO]" placeholder="" value="AsesorÌ≠a e InspecciÛn en ConstrucciÛn Costa Fuera, S.C." readonly></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
@@ -897,7 +895,7 @@
 
                                         <!--IMAGENES CON COMENTARIOS-->
                                         <div class="form-group">
-                                            <label for="imageCount">N√∫mero de im√°genes a subir:</label>
+                                            <label for="imageCount">N˙mero de im·genes a subir:</label>
                                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
                                                 @for ($i = 1; $i <= 50; $i++)
@@ -935,21 +933,21 @@
                                                             <!-- Campo oculto para mantener la ruta de la imagen existente -->
                                                             <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
 
-                                                            <!-- Campo oculto para marcar im√°genes eliminadas -->
+                                                            <!-- Campo oculto para marcar im·genes eliminadas -->
                                                             <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
 
-                                                            <!-- Bot√≥n de eliminaci√≥n -->
+                                                            <!-- BotÛn de eliminaciÛn -->
                                                             <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
                                                         </div>
                                                     </div>
                                                 @endforeach
                                             </div>
                                         @else
-                                            <p>No hay im√°genes disponibles.</p>
+                                            <p>No hay im·genes disponibles.</p>
                                         @endif
 
                                         <div id="imageFieldsContainer" class="row">
-                                            <!-- Aqu√≠¬≠ se agregar√°n din√°micamente los campos -->
+                                            <!-- AquÌ≠ se agregar·n din·micamente los campos -->
                                         </div>
 
                                         <!-- Modal para recortar la imagen -->
@@ -969,8 +967,8 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">‚ü≤ Rotar -90¬∞</button>
-                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">‚ü≥ Rotar +90¬∞</button>
+                                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">? Rotar -90∞</button>
+                                                        <button type="button" id="rotateRightBtn" class="btn btn-info">? Rotar +90∞</button>
                                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
                                                         <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                                     </div>
@@ -996,7 +994,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
-                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan P√É¬©rez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan P√©rez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
                                                 @error('Nombre_Soldador')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                 @enderror
@@ -1062,17 +1060,8 @@
 
 @section('js')
 <!-- Incluye jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
-<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
-<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!--sweet alert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
@@ -1092,7 +1081,7 @@
     /*Juntas-Resultados */
 $(document).ready(function() {
     let tituloCount = $('.titulo-row').length;
-    //let tituloCount = 0; //contador de titulos creados (se incrementa al a√±adir un titulo).
+    //let tituloCount = 0; //contador de titulos creados (se incrementa al aÒadir un titulo).
     let rowCount = 0; //contador de filas por titulo (se reinicia a 0 cuando se crea un nuevo titulo).
     let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
 
@@ -1107,7 +1096,7 @@ $(document).ready(function() {
             <tr class="titulo-row" data-titulo="${titleId}">
                 <td colspan="15">
                     <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese t√≠tulo Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
+                        <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese tÌtulo Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
                         <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del titulo -->
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times" aria-hidden="true"></i>
@@ -1142,14 +1131,14 @@ $(document).ready(function() {
         `;
 
         $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de ti¬≠tulos
+        updateTitulos(); // Actualizar lista de ti≠tulos
         });
 
         $('#addBtn').click(function () {
             verificarYAgregarLongitud();
             //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
-            // Recontar filas existentes que NO son t√É¬≠tulos
+            // Recontar filas existentes que NO son t√≠tulos
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
@@ -1164,7 +1153,7 @@ $(document).ready(function() {
                         <td><input type="text" class="form-control" name="referencia[${lastTitle}][]" placeholder="Referencia (mm)"></td>
                         <td><input type="text" class="form-control" name="fase[${lastTitle}][]" placeholder="Fase"></td>
                         <td><input type="text" class="form-control" name="ganancia[${lastTitle}][]" placeholder="Ganancia"></td>
-                        <td><input type="text" class="form-control" name="alcanse_inspeccion[${lastTitle}][]" placeholder="Alcance de Inspecci√≥n"></td>
+                        <td><input type="text" class="form-control" name="alcanse_inspeccion[${lastTitle}][]" placeholder="Alcance de InspecciÛn"></td>
                         <td><input type="text" class="form-control" name="canal[${lastTitle}][]" placeholder="Canal"></td>
                         <td><input type="text" class="form-control" name="inspeccion[${lastTitle}][]" placeholder="%Insp"></td>
                         <td><input type="text" class="form-control" name="obstruccion[${lastTitle}][]" placeholder="%Obstru"></td>
@@ -1183,13 +1172,13 @@ $(document).ready(function() {
         });
 
         $('form').submit(function(e) {
-            // Validar que la tabla no est√© vac√≠a
+            // Validar que la tabla no estÈ vacÌa
             if ($('#dynamicTable tbody tr').length === 0) {
                 e.preventDefault();
                 Swal.fire({
                     icon: 'warning',
                     title: 'Advertencia',
-                    text: 'La tabla no puede estar vac√≠¬≠a. Por favor, agregue al menos una fila.',
+                    text: 'La tabla no puede estar vacÌ≠a. Por favor, agregue al menos una fila.',
                 });
                 return;
             }
@@ -1219,7 +1208,7 @@ function verificarYAgregarLongitud() {
 
             const $row = $(this);
 
-            // Si ya hay longitud √¢‚Ä†‚Äô cerrar bloque
+            // Si ya hay longitud ‚Üí cerrar bloque
             if ($row.hasClass('long-row')) {
                 contadorBloque = 0;
                 return;
@@ -1279,7 +1268,7 @@ function verificarYAgregarLongitud() {
                 actualizarInputsE();
             }
 
-            // Evento cuando se cambia la selecci√≥n en el select
+            // Evento cuando se cambia la selecciÛn en el select
             $('#equiposSelect').on('change', function() {
                 actualizarInputsE();
             });
@@ -1303,7 +1292,7 @@ function verificarYAgregarLongitud() {
                     $('#accesoriosSelect').val($('#IDInputA').val());
                     actualizarInputsA();
                 }
-                // Evento cuando se cambia la selecci√≥n en el select
+                // Evento cuando se cambia la selecciÛn en el select
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
@@ -1328,7 +1317,7 @@ function verificarYAgregarLongitud() {
                 actualizarInputsbyp();
             }
 
-            // Evento cuando se cambia la selecci√≥n en el select
+            // Evento cuando se cambia la selecciÛn en el select
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });

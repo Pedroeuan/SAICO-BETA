@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FOTOS FOR-PIMP-02_B/03</title>
+    <title>FOTOS FOR-PIMP-07_B/01</title>
     <style>
         @page {
             margin: 3cm 1.2cm 2.1cm 2.2cm;
@@ -201,15 +201,15 @@
             <tr>
                 <th style="width: 400%;">FORMATO<br>FORMAT</th>
                 <th style="width: 70%;">CÓDIGO<br>CODE</th>
-                <th style="width: 100%;">FOR-PIMP-02_B/03</th>
+                <th style="width: 100%;">FOR-PIMP-07_B/01</th>
                 <th rowspan="3" style="width: 80%;">
                     <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
                 </th>
             </tr>
             <tr>
-                <th rowspan="2">Informe de Ensayo de Durezas en Metales Base<br>Hardness Test Report on Base Metals</th>
+                <th rowspan="2">INFORME DE RELEVADO DE ESFUERZOS<br>RELIEVED OF STRESS INFORM</th>
                 <th>VERSIÓN<br>VERSION</th>
-                <th>2</th>
+                <th>1</th>
             </tr>
             <tr>
                 <th>PÁGINA<br>PAGE</th>

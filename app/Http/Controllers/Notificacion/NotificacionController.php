@@ -191,7 +191,7 @@ class NotificacionController extends Controller
                             $notificacion->save();
                             Log::info('Enviando correo a: ' . $usuario->email);
                             //📧 Enviar correo
-                            $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            //$usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
                         }
                     }
                 }

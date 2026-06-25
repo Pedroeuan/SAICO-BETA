@@ -1,12 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'FOR-PIMP-07_B_01')
+@section('title', 'FOR-PIMP-04_02')
 
 @section('css')
 <!--datatable -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
-
 <style>
         table {
             width: 100%; /* Opcional: Para que ocupe todo el ancho disponible */
@@ -73,7 +72,7 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-07_B_01" action="{{route('Reportes_FOR_PIMP_07_B_01.update', $id)}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-04_02" action="{{route('Reportes_FOR_PIMP_04_02.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -312,6 +311,7 @@
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
+                                            @selected(old('equipos', $Datos_Equipo['ID_EQUIPO'] ?? '') == $equipo->idGeneral_EyC)
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
                                             data-ns="{{ $equipo->Serie }}">
@@ -352,6 +352,7 @@
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
+                                            @selected(old('equipos1', $Datos_Equipo['ID_EQUIPO1'] ?? '') == $equipo->idGeneral_EyC)
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
                                             data-ns="{{ $equipo->Serie }}">
@@ -849,6 +850,7 @@
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
     const updateNotificationUrl = "{{ url('notificaciones/update') }}";
@@ -863,7 +865,7 @@
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('FOR-PIMP-07_B_01');
+    const form = document.getElementById('FOR-PIMP-04_02');
     if (!form) return;
 
     const detallesGenerales = @json($Detalles_Generales ?? []);
@@ -891,6 +893,18 @@ document.addEventListener('DOMContentLoaded', function () {
     Object.keys(datosEquipo).forEach(function (key) {
         setValue('Datos_Equipo[' + key + ']', datosEquipo[key]);
     });
+
+    const equiposSelect = document.getElementById('equiposSelect');
+    if (equiposSelect && datosEquipo.ID_EQUIPO) {
+        equiposSelect.value = datosEquipo.ID_EQUIPO;
+        equiposSelect.dispatchEvent(new Event('change'));
+    }
+
+    const equiposSelect1 = document.getElementById('equiposSelect1');
+    if (equiposSelect1 && datosEquipo.ID_EQUIPO1) {
+        equiposSelect1.value = datosEquipo.ID_EQUIPO1;
+        equiposSelect1.dispatchEvent(new Event('change'));
+    }
 
     if (firmas.numFirmas) {
         setValue('numFirmas', firmas.numFirmas);
@@ -926,9 +940,13 @@ $(document).ready(function() {
         }
 
         const formId = document.querySelector("form").id;
+        const selectedOptionActual = $('#' + idEquipoId).val();
         const selectedOptionLocal = localStorage.getItem(formId + '_' + localStorageName);
 
-        if (selectedOptionLocal != null) {
+        if (selectedOptionActual) {
+            $('#' + selectId).val(selectedOptionActual);
+            actualizarInputs();
+        } else if (selectedOptionLocal != null) {
             $('#' + selectId).val(selectedOptionLocal);
             actualizarInputs();
         }
@@ -960,29 +978,29 @@ $(document).ready(function() {
     );
 });
 
-    /*FOR-PIMP-07_B_01*/
+    /*FOR-PIMP-04_02*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-PIMP-07_B_01');
+        const form = document.getElementById('FOR-PIMP-04_02');
         if (!form) return;
 
         // Guardar en localStorage al escribir
         //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
           //  el.addEventListener('input', function () {
-            //    localStorage.setItem('FOR-PIMP-07_B_01_Form_' + el.name, el.value);
+            //    localStorage.setItem('FOR-PIMP-04_02_Form_' + el.name, el.value);
             //});
         //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-PIMP-07_B_01_Form_' + el.name, el.value);
+                localStorage.setItem('FOR-PIMP-04_02_Form_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
-                const value = localStorage.getItem('FOR-PIMP-07_B_01_Form_' + el.name);
+                const value = localStorage.getItem('FOR-PIMP-04_02_Form_' + el.name);
                 if (value !== null) el.value = value;
             }
         });
@@ -990,7 +1008,7 @@ $(document).ready(function() {
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-PIMP-07_B_01_Form_' + el.name);
+                localStorage.removeItem('FOR-PIMP-04_02_Form_' + el.name);
                 //localStorage.clear();
             });
         });
