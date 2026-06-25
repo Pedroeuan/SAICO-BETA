@@ -715,3 +715,34 @@
             $('#tecnicosSelect4').on('change', function() {
                 actualizarTecnicos4();
             });
+
+            /*Validar seleccion del tecnico 
+            function actualizarValidacion() {
+
+            document.getElementById('tecnicosSelect').removeAttribute('required');
+            document.getElementById('tecnicosSelect2').removeAttribute('required');
+            document.getElementById('tecnicosSelect3').removeAttribute('required');
+            document.getElementById('tecnicosSelect4').removeAttribute('required');
+
+            let numFirmas = document.getElementById('numFirmas').value;
+
+            if (numFirmas == '1') {
+                document.getElementById('tecnicosSelect').setAttribute('required', true);
+            }
+
+            if (numFirmas == '2') {
+                document.getElementById('tecnicosSelect2').setAttribute('required', true);
+            }
+
+            if (numFirmas == '3') {
+                document.getElementById('tecnicosSelect3').setAttribute('required', true);
+            }
+
+            if (numFirmas == '4') {
+                document.getElementById('tecnicosSelect4').setAttribute('required', true);
+            }
+        }
+
+        document.getElementById('numFirmas').addEventListener('change', actualizarValidacion);
+
+        actualizarValidacion();*/

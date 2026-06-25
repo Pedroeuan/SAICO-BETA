@@ -2,6 +2,7 @@
 
 namespace App\Models\Normas_IM;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Normas_IM extends Model

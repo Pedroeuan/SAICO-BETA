@@ -56,8 +56,6 @@
                                                 </div>
                                             </div>
 
-
-
                                     <div class="table-responsive">
                                     <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
@@ -75,7 +73,7 @@
                                             </tbody>
                                     </table>
                                     </div>
-                                    <input type="hidden" name="titulos_data" id="titulos_hidden">
+                                    <input type="hidden" name="Normas_IM" id="titulos_hidden">
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
@@ -140,7 +138,6 @@
 <script src="{{ asset('js/Normas_IM.js') }}"></script>
 
 <script>
-
 
 $(document).ready(function() {
     let tituloCount = 0; //contador de títulos creados (se incrementa al añadir un título).
