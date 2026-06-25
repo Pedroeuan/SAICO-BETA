@@ -174,7 +174,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">No. Isométrico:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico', $Detalles_Generales['No_Isometrico'] ?? '')}}">
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico', $Detalles_Generales['No_Isometrico'] ?? '')}}">
                             @error('No_Isometrico')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -183,9 +183,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Elementos Soldados:</label>
-                            <input type="text" class="form-control  inputForm @error('Elementos_Soldados') is-invalid @enderror" name="Detalles_Generales[Elementos_Soldados]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Elementos_Soldados', $Detalles_Generales['Elementos_Soldados'] ?? '')}}">
-                            @error('Elementos_Soldados')
+                            <label class="col-form-label" for="inputSuccess">Nombre de la Pieza:</label>
+                            <input type="text" class="form-control inputForm @error('Nom_Pieza') is-invalid @enderror" name="Detalles_Generales[Nom_Pieza]" placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Nom_Pieza', $Detalles_Generales['Nom_Pieza'] ?? '')}}">
+                            @error('Nom_Pieza')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -194,38 +194,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Material</label>
-                            <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material', $Detalles_Generales['Material'] ?? '')}}">
+                            <input type="text" class="form-control inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]" placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material', $Detalles_Generales['Material'] ?? '')}}">
                             @error('Material')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Junta:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta', $Detalles_Generales['No_Junta'] ?? '')}}">
-                            @error('No_Junta')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad', $Detalles_Generales['Trazabilidad'] ?? '')}}">
-                            @error('Trazabilidad')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Espesores:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Espesores]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Espesores', $Detalles_Generales['Espesores'] ?? '')}}">
-                            @error('Espesores')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -234,7 +204,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
+                            <input type="text" class="form-control inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]" placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -243,9 +213,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Codigo de Diseño:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Codigo_Diseno]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Codigo_Diseno', $Detalles_Generales['Codigo_Diseno'] ?? '')}}">
-                            @error('Codigo_Diseno')
+                            <label class="col-form-label" for="inputSuccess">Criterio de Evaluación:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Criterio_Evaluacion]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Criterio_Evaluacion', $Detalles_Generales['Criterio_Evaluacion'] ?? '')}}">
+                            @error('Criterio_Evaluacion')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -253,29 +223,39 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Diám. Nominal:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Diam_Nominal]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Diam_Nominal', $Detalles_Generales['Diam_Nominal'] ?? '')}}">
-                            @error('Diam_Nominal')
+                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad', $Detalles_Generales['Trazabilidad'] ?? '')}}">
+                            @error('Trazabilidad')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Antes del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Antes_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Antes_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Antes_Relevado', $Detalles_Generales['Reporte_Antes_Relevado'] ?? '')}}">
-                            @error('Reporte_Antes_Relevado')
+                            <label class="col-form-label" for="inputSuccess">No. Junta:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta', $Detalles_Generales['No_Junta'] ?? '')}}">
+                            @error('No_Junta')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Después del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Despues_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Despues_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Despues_Relevado', $Detalles_Generales['Reporte_Despues_Relevado'] ?? '')}}">
-                            @error('Reporte_Despues_Relevado')
+                            <label class="col-form-label" for="inputSuccess">Temperatura de la Pieza:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Temperatura_pieza]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Temperatura_pieza', $Detalles_Generales['Temperatura_pieza'] ?? '')}}">
+                            @error('Temperatura_pieza')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Espesor/Cédula:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Espesor_cedula]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Espesor_cedula', $Detalles_Generales['Espesor_cedula'] ?? '')}}">
+                            @error('Espesor_cedula')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -303,174 +283,111 @@
                         <p>Puedes Seleccionar un equipo del menu o escribir directamente</p>
                     </div>
 
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
+                    @php
+                        $resolverMetodoEquipo = function ($equipo) {
+                            $posiblesCampos = [data_get($equipo, 'Metodo_Medicion'), data_get($equipo, 'Metodo'), data_get($equipo, 'Nombre_E_P_BP'), data_get($equipo, 'Modelo'), data_get($equipo, 'Marca'), data_get($equipo, 'Serie')];
+                            foreach ($posiblesCampos as $valorCampo) {
+                                $texto = mb_strtoupper(trim((string) $valorCampo));
+                                if ($texto === '') { continue; }
+                                if (str_contains($texto, 'LEEB')) { return 'LEEB'; }
+                                if (str_contains($texto, 'UCI')) { return 'UCI'; }
+                            }
+                            return '';
+                        };
+                        $metodosEquipo = collect($idsGeneral_EyCs_Equipos ?? [])->map($resolverMetodoEquipo)->filter()->unique()->values();
+                        if ($metodosEquipo->isEmpty() && collect($idsGeneral_EyCs_Equipos ?? [])->isNotEmpty()) { $metodosEquipo = collect(['LEEB', 'UCI']); }
+                        $durezaPromedio = old('Dureza', $Datos_Equipo['DUREZA_PROMEDIO'] ?? []);
+                        $durezaRows = collect(old('Dureza', $Datos_Equipo['DUREZA_ROWS'] ?? []))->filter(function ($row, $key) { return is_numeric($key) && is_array($row); })->values()->all();
+                        if (empty($durezaRows)) {
+                            $durezaRows = [[ 'descripcion' => '', 'horario' => '', 'metal_base_a' => '', 'zac_b' => '', 'soldadura_c' => '', 'zac_b1' => '', 'metal_base_a1' => '', 'observaciones' => '' ]];
+                        }
+                    @endphp
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
+                            <select class="form-select inputForm" id="metodoSelectE" name="Detalles_Generales[Metodo]">
+                                <option value="" selected>Seleccione un Método</option>
+                                @foreach($metodosEquipo as $metodo)
+                                    <option value="{{ $metodo }}" @selected(old('Detalles_Generales.Metodo', $Detalles_Generales['Metodo'] ?? '') == $metodo)>{{ $metodo }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group text-center">
                             <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
+                                <option value="" selected>Seleccione un Equipo</option>
                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
+                                    @php $metodoEquipo = $resolverMetodoEquipo($equipo); @endphp
+                                    <option value="{{ $equipo->idGeneral_EyC }}" @selected(old('equipos', $Datos_Equipo['ID_EQUIPO'] ?? '') == $equipo->idGeneral_EyC) data-marca="{{ $equipo->Marca }}" data-modelo="{{ $equipo->Modelo }}" data-ns="{{ $equipo->Serie }}" data-metodo="{{ $metodoEquipo }}">{{ $equipo->Nombre_E_P_BP }}</option>
                                 @endforeach
                             </select>
                             <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '')}}">
-                        </div>
+                    <div class="col-sm-4"><div class="form-group"><label class="col-form-label" for="inputSuccess">MARCA:</label><input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '')}}"></div></div>
+                    <div class="col-sm-4"><div class="form-group"><label class="col-form-label" for="inputSuccess">MODELO:</label><input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '')}}"></div></div>
+                    <div class="col-sm-4"><div class="form-group"><label class="col-form-label" for="inputSuccess">N.S:</label><input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO', $Datos_Equipo['NS_EQUIPO'] ?? '')}}"></div></div>
+
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">VALORES PROMEDIO DE DUREZAS</div>
+                    <table class="table table-bordered text-center align-middle"><thead><tr><th style="width:25%;">VALORES PROMEDIO DE DUREZAS:<br><small>Average Hardness Values</small></th><th>METAL BASE<br>Base Metal<br>(A)</th><th>ZAC<br>HAZ (B)</th><th>SOLDADURA<br>Welding<br>(C)</th><th>ZAC<br>HAZ (B1)</th><th>METAL BASE<br>Base Metal<br>(B)</th></tr></thead><tbody><tr><td><strong>ANTES DEL RELEVADO DE ESFUERZOS (HB):</strong><br>Before PWHT (HB)</td><td><input type="text" class="form-control" name="Dureza[ANTES_A]" value="{{ old('Dureza.ANTES_A', $durezaPromedio['ANTES_A'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[ANTES_B]" value="{{ old('Dureza.ANTES_B', $durezaPromedio['ANTES_B'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[ANTES_C]" value="{{ old('Dureza.ANTES_C', $durezaPromedio['ANTES_C'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[ANTES_B1]" value="{{ old('Dureza.ANTES_B1', $durezaPromedio['ANTES_B1'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[ANTES_BM]" value="{{ old('Dureza.ANTES_BM', $durezaPromedio['ANTES_BM'] ?? '') }}"></td></tr><tr><td><strong>POSTERIOR AL RELEVADO DE ESFUERZOS (HB):</strong><br>After PWHT (HB)</td><td><input type="text" class="form-control" name="Dureza[DESPUES_A]" value="{{ old('Dureza.DESPUES_A', $durezaPromedio['DESPUES_A'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[DESPUES_B]" value="{{ old('Dureza.DESPUES_B', $durezaPromedio['DESPUES_B'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[DESPUES_C]" value="{{ old('Dureza.DESPUES_C', $durezaPromedio['DESPUES_C'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[DESPUES_B1]" value="{{ old('Dureza.DESPUES_B1', $durezaPromedio['DESPUES_B1'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[DESPUES_BM]" value="{{ old('Dureza.DESPUES_BM', $durezaPromedio['DESPUES_BM'] ?? '') }}"></td></tr></tbody></table>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 w-100 mb-3">
+                        <div class="d-flex align-items-center gap-2"><label for="numRows" class="mb-0 fw-semibold">Número de filas:</label>
+                            <select id="numRows" class="form-select" style="width: 100px;">@for ($i = 1; $i <= 20; $i++)<option value="{{ $i }}">{{ $i }}</option>@endfor</select>
+                        </div><button id="addDurezaRowsBtn" type="button" class="btn btn-success custom-btn">Agregar fila</button>
                     </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO', $Datos_Equipo['NS_EQUIPO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
-
-                    <div class="col-sm-50 d-flex justify-content-center">
-                        <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos1" id="equiposSelect1">
-                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
+                    <div class="d-flex flex-wrap align-items-center merge-tools mb-3">
+                        <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary">Combinar celdas</button>
+                        <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary">Separar celdas</button>
+                        <small class="text-muted">Selecciona celdas solo de `Descripción`, `Horario` u `Observaciones`.</small></div>
+                    <div class="table-responsive mb-3"><input type="hidden" name="Dureza_MergeConfig" id="durezaMergeConfig" value='@json(old("Dureza_MergeConfig", $Datos_Equipo["DUREZA_MERGE_CONFIG"] ?? []))'>
+                        <table class="table table-bordered align-middle text-center tabla-dureza" id="tablaDurezaBrinell">
+                            <thead class="table-light"><tr><th style="min-width: 190px;">DESCRIPCIÓN<br><small>Description</small></th>
+                                <th style="min-width: 120px;">HORARIO<br><small>Schedule</small></th>
+                                <th style="min-width: 120px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
+                                <th style="min-width: 120px;">ZAC / HAZ<br>(B)</th>
+                                <th style="min-width: 120px;">SOLDADURA<br><small>Weld</small><br>(C)</th>
+                                <th style="min-width: 120px;">ZAC / HAZ<br>(B1)</th>
+                                <th style="min-width: 120px;">METAL BASE<br><small>Base Metal</small><br>(A1)</th>
+                                <th style="min-width: 180px;">OBSERVACIONES<br><small>Remarks</small></th>
+                                <th style="width: 80px;">ACCIONES</th></tr>
+                            </thead>
+                            <tbody id="durezaBrinellBody">@foreach($durezaRows as $index => $row)
+                                <tr>
+                                    <td class="mergeable-cell" data-merge-field="descripcion">
+                                        <input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][descripcion]" value="{{ $row['descripcion'] ?? '' }}">
+                                    </td>
+                                    <td class="mergeable-cell" data-merge-field="horario">
+                                        <input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][horario]" value="{{ $row['horario'] ?? '' }}">
+                                    </td>
+                                    <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][metal_base_a]" value="{{ $row['metal_base_a'] ?? '' }}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][zac_b]" value="{{ $row['zac_b'] ?? '' }}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][soldadura_c]" value="{{ $row['soldadura_c'] ?? '' }}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][zac_b1]" value="{{ $row['zac_b1'] ?? '' }}">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][metal_base_a1]" value="{{ $row['metal_base_a1'] ?? '' }}">
+                                    </td>
+                                    <td class="mergeable-cell" data-merge-field="observaciones">
+                                        <input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][observaciones]" value="{{ $row['observaciones'] ?? '' }}">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm btnEliminarDureza">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
                                 @endforeach
-                            </select>
-                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO1]" id="IDInputE1" value="{{ old('Datos_Equipo.ID_EQUIPO1', $Datos_Equipo['ID_EQUIPO1'] ?? '') }}">
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE1" name="Datos_Equipo[MARCA_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO1', $Datos_Equipo['MARCA_EQUIPO1'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE1" name="Datos_Equipo[MODELO_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO1', $Datos_Equipo['MODELO_EQUIPO1'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE1" name="Datos_Equipo[NS_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO1', $Datos_Equipo['NS_EQUIPO1'] ?? '')}}">
-                        </div>
-                    </div>
-                    
-                    <!--***************************************** INICIO DATOS DE PRUEBA *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DE PRUEBA</div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temperatura Inicial:</label>
-                            <input type="text" class="form-control  inputForm" id="tempInputP" name="Datos_Equipo[TEMPERATURA_INICIAL]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_INICIAL', $Datos_Equipo['TEMPERATURA_INICIAL'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaInputP" name="Datos_Equipo[HORA_INICIO]" placeholder="" value="{{old('Datos_Equipo.HORA_INICIO', $Datos_Equipo['HORA_INICIO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. de Calentamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="mrInputP" name="Datos_Equipo[VELOCIDAD_CALENTAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VELOCIDAD_CALENTAMIENTO', $Datos_Equipo['VELOCIDAD_CALENTAMIENTO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Final de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaFinalInputP" name="Datos_Equipo[HORA_FINAL]" placeholder="" value="{{old('Datos_Equipo.HORA_FINAL', $Datos_Equipo['HORA_FINAL'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temp. Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tempSostenimientoInputP" name="Datos_Equipo[TEMPERATURA_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_SOSTENIMIENTO', $Datos_Equipo['TEMPERATURA_SOSTENIMIENTO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaInicioInputP" name="Datos_Equipo[DIA_INICIO]" placeholder="" value="{{old('Datos_Equipo.DIA_INICIO', $Datos_Equipo['DIA_INICIO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Tiempo de Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tiempoSostenimientoInputP" name="Datos_Equipo[TIEMPO_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TIEMPO_SOSTENIMIENTO', $Datos_Equipo['TIEMPO_SOSTENIMIENTO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de Finalización de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaFinalInputP" name="Datos_Equipo[DIA_FINAL]" placeholder="" value="{{old('Datos_Equipo.DIA_FINAL', $Datos_Equipo['DIA_FINAL'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Enfriamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="velEnfriamientoInputP" name="Datos_Equipo[VEL_ENFRIAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VEL_ENFRIAMIENTO', $Datos_Equipo['VEL_ENFRIAMIENTO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Gráfica:</label>
-                            <input type="text" class="form-control  inputForm" id="noGraficaInputP" name="Datos_Equipo[NO_GRAFICA]" placeholder="" value="{{old('Datos_Equipo.NO_GRAFICA', $Datos_Equipo['NO_GRAFICA'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Graficador:</label>
-                            <input type="text" class="form-control  inputForm" id="velGraficadorInputP" name="Datos_Equipo[VEL_GRAFICADOR]" placeholder="" value="{{old('Datos_Equipo.VEL_GRAFICADOR', $Datos_Equipo['VEL_GRAFICADOR'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones', $Datos_Equipo['Observaciones'] ?? '') }}</textarea>
-                        </div>
-                    </div>
-
-                    <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
+                    <div class="col-12"><div class="form-group"><label class="col-form-label" for="observacionesEquipo">Observaciones:</label><textarea class="form-control is-waning" id="observacionesEquipo" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones', $Datos_Equipo['Observaciones'] ?? '') }}</textarea></div></div>
+<!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
 
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -996,5 +913,174 @@ $(document).ready(function() {
         });
     });
 
+function configurarMetodoYEquipo0204Edit() {
+    const $metodo = $('#metodoSelectE');
+    const $equipo = $('#equiposSelect');
+    const $marca = $('#marcaInputE');
+    const $modelo = $('#modeloInputE');
+    const $ns = $('#nsInputE');
+    const $idEquipo = $('#IDInputE');
+    const form = document.getElementById('FOR-PIMP-02_B_04');
+    const formId = form ? form.id : 'FOR-PIMP-02_B_04';
+    const opcionesEquipo = $equipo.find('option').clone();
+
+    function limpiarCamposEquipo() {
+        $marca.val('');
+        $modelo.val('');
+        $ns.val('');
+        $idEquipo.val('');
+    }
+
+    function filtrarEquipos(metodoSeleccionado) {
+        $equipo.empty().append('<option value="">Seleccione un Equipo</option>');
+        opcionesEquipo.each(function() {
+            const $opcion = $(this);
+            const valor = $opcion.attr('value');
+            if (!valor) return;
+            if (!metodoSeleccionado || ($opcion.data('metodo') || '') === metodoSeleccionado) {
+                $equipo.append($opcion.clone());
+            }
+        });
+    }
+
+    function actualizarDatosEquipo() {
+        const $seleccionado = $equipo.find('option:selected');
+        $marca.val($seleccionado.data('marca') || '');
+        $modelo.val($seleccionado.data('modelo') || '');
+        $ns.val($seleccionado.data('ns') || '');
+        $idEquipo.val($equipo.val() || '');
+    }
+
+    const metodoGuardado = form.elements['Detalles_Generales[Metodo]']?.value || localStorage.getItem(formId + '_metodo_equipo') || '';
+    const equipoGuardado = form.elements['Datos_Equipo[ID_EQUIPO]']?.value || localStorage.getItem(formId + '_equipos') || '';
+
+    if (metodoGuardado) $metodo.val(metodoGuardado);
+    filtrarEquipos($metodo.val());
+    if (equipoGuardado && $equipo.find('option[value="' + equipoGuardado + '"]').length) {
+        $equipo.val(equipoGuardado);
+        actualizarDatosEquipo();
+    }
+
+    $metodo.on('change', function() {
+        filtrarEquipos($(this).val() || '');
+        limpiarCamposEquipo();
+        localStorage.setItem(formId + '_metodo_equipo', $(this).val() || '');
+        localStorage.removeItem(formId + '_equipos');
+    });
+
+    $equipo.on('change', function() {
+        actualizarDatosEquipo();
+        localStorage.setItem(formId + '_equipos', $(this).val() || '');
+    });
+}
+
+function construirFilaDureza0204Edit(index, data = {}) {
+    return `<tr>
+        <td class="mergeable-cell" data-merge-field="descripcion"><input type="text" class="form-control inputForm" name="Dureza[${index}][descripcion]" value="${data.descripcion || ''}"></td>
+        <td class="mergeable-cell" data-merge-field="horario"><input type="text" class="form-control inputForm" name="Dureza[${index}][horario]" value="${data.horario || ''}"></td>
+        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][metal_base_a]" value="${data.metal_base_a || ''}"></td>
+        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][zac_b]" value="${data.zac_b || ''}"></td>
+        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][soldadura_c]" value="${data.soldadura_c || ''}"></td>
+        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][zac_b1]" value="${data.zac_b1 || ''}"></td>
+        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][metal_base_a1]" value="${data.metal_base_a1 || ''}"></td>
+        <td class="mergeable-cell" data-merge-field="observaciones"><input type="text" class="form-control inputForm" name="Dureza[${index}][observaciones]" value="${data.observaciones || ''}"></td>
+        <td><button type="button" class="btn btn-danger btn-sm btnEliminarDureza"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+    </tr>`;
+}
+
+function configurarTablaDureza0204Edit() {
+    const $tbody = $('#durezaBrinellBody');
+    const $addButton = $('#addDurezaRowsBtn');
+    const $numRows = $('#numRows');
+    const $mergeButton = $('#mergeSelectedCellsBtn');
+    const $splitButton = $('#splitSelectedCellsBtn');
+    let mergeSelectionAnchor = null;
+
+    function renumerar() {
+        $tbody.find('tr').each(function(index) {
+            $(this).find('input').each(function() {
+                const currentName = $(this).attr('name') || '';
+                $(this).attr('name', currentName.replace(/Dureza\[\d+\]/, 'Dureza[' + index + ']'));
+            });
+        });
+    }
+
+    function limpiarSeleccion() { $tbody.find('.mergeable-cell').removeClass('selected-merge'); }
+    function guardarEstado() {
+        const mergeState = [];
+        $tbody.find('.mergeable-cell[rowspan]').each(function() {
+            const $cell = $(this);
+            mergeState.push({ row: $cell.closest('tr').index(), field: $cell.data('merge-field'), rowspan: parseInt($cell.attr('rowspan') || '1', 10), value: $cell.find('input').val() || '' });
+        });
+        $('#durezaMergeConfig').val(JSON.stringify(mergeState));
+    }
+    function restaurarEstado() {
+        let mergeState = [];
+        try { mergeState = JSON.parse($('#durezaMergeConfig').val() || '[]'); } catch (e) { mergeState = []; }
+        mergeState.forEach(function(item) {
+            const $masterRow = $tbody.find('tr').eq(Number(item.row));
+            const $masterCell = $masterRow.find('.mergeable-cell[data-merge-field="' + item.field + '"]');
+            if (!$masterCell.length || Number(item.rowspan) < 2) return;
+            $masterCell.attr('rowspan', item.rowspan).find('input').val(item.value || '');
+            for (let offset = 1; offset < Number(item.rowspan); offset++) {
+                const $cell = $tbody.find('tr').eq(Number(item.row) + offset).find('.mergeable-cell[data-merge-field="' + item.field + '"]');
+                if ($cell.length) { $cell.find('input').val(item.value || ''); $cell.hide(); }
+            }
+        });
+    }
+    function sincronizar($cell) {
+        const rowspan = parseInt($cell.attr('rowspan') || '1', 10);
+        if (rowspan <= 1) return;
+        const mergeField = $cell.data('merge-field');
+        const value = $cell.find('input').val();
+        const startIndex = $cell.closest('tr').index();
+        for (let offset = 1; offset < rowspan; offset++) {
+            $tbody.find('tr').eq(startIndex + offset).find('.mergeable-cell[data-merge-field="' + mergeField + '"] input').val(value);
+        }
+    }
+    function descombinar($cell) {
+        const rowspan = parseInt($cell.attr('rowspan') || '1', 10);
+        if (rowspan <= 1) return;
+        const mergeField = $cell.data('merge-field');
+        const startIndex = $cell.closest('tr').index();
+        $cell.removeAttr('rowspan');
+        for (let offset = 1; offset < rowspan; offset++) {
+            $tbody.find('tr').eq(startIndex + offset).find('.mergeable-cell[data-merge-field="' + mergeField + '"]').show();
+        }
+        guardarEstado();
+    }
+    function descombinarTodas() { $tbody.find('.mergeable-cell[rowspan]').each(function(){ descombinar($(this)); }); }
+
+    restaurarEstado();
+
+    $tbody.on('click', '.mergeable-cell', function() {
+        const $cell = $(this);
+        if (!$cell.is(':visible')) return;
+        if (!mergeSelectionAnchor) { limpiarSeleccion(); $cell.addClass('selected-merge'); mergeSelectionAnchor = $cell; return; }
+        if (mergeSelectionAnchor.data('merge-field') !== $cell.data('merge-field')) { limpiarSeleccion(); $cell.addClass('selected-merge'); mergeSelectionAnchor = $cell; return; }
+        const start = mergeSelectionAnchor.closest('tr').index();
+        const end = $cell.closest('tr').index();
+        const min = Math.min(start, end), max = Math.max(start, end);
+        limpiarSeleccion();
+        for (let i = min; i <= max; i++) { $tbody.find('tr').eq(i).find('.mergeable-cell[data-merge-field="' + $cell.data('merge-field') + '"]:visible').addClass('selected-merge'); }
+        mergeSelectionAnchor = null;
+    });
+    $tbody.on('click', '.mergeable-cell input', function(e){ e.stopPropagation(); $(this).closest('.mergeable-cell').trigger('click'); });
+    $tbody.on('input', '.mergeable-cell input', function(){ sincronizar($(this).closest('.mergeable-cell')); });
+    $tbody.on('click', '.btnEliminarDureza', function(){ descombinarTodas(); if($tbody.find('tr').length===1){ $(this).closest('tr').find('input').val(''); return; } $(this).closest('tr').remove(); renumerar(); guardarEstado(); });
+    $addButton.on('click', function(){ descombinarTodas(); const amount = parseInt($numRows.val(),10)||1; let startIndex=$tbody.find('tr').length; for(let i=0;i<amount;i++){ $tbody.append(construirFilaDureza0204Edit(startIndex+i)); } renumerar(); guardarEstado(); });
+    $mergeButton.on('click', function(){ const $selected=$tbody.find('.mergeable-cell.selected-merge:visible'); if($selected.length<2){ alert('Selecciona al menos 2 celdas de la misma columna para combinar.'); return; } const field=$selected.first().data('merge-field'); const rows=$selected.map(function(){ return $(this).closest('tr').index(); }).get().sort((a,b)=>a-b); if(!$selected.toArray().every(cell=>$(cell).data('merge-field')===field) || !rows.every((row,idx)=>idx===0||row===rows[idx-1]+1)){ alert('Solo puedes combinar celdas consecutivas de una misma columna.'); return; } const $master=$selected.first(); const value=$master.find('input').val(); $master.attr('rowspan',$selected.length); $selected.slice(1).each(function(){ $(this).find('input').val(value); $(this).hide(); }); limpiarSeleccion(); guardarEstado(); });
+    $splitButton.on('click', function(){ const $selected=$tbody.find('.mergeable-cell.selected-merge:visible'); if(!$selected.length){ alert('Selecciona una celda combinada para separar.'); return; } $selected.each(function(){ descombinar($(this)); }); limpiarSeleccion(); guardarEstado(); });
+
+    const form = document.getElementById('FOR-PIMP-02_B_04');
+    form?.addEventListener('submit', guardarEstado);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    configurarMetodoYEquipo0204Edit();
+    configurarTablaDureza0204Edit();
+});
 </script>
 @endsection
+
+

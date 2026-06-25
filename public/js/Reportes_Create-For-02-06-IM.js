@@ -835,7 +835,12 @@ $(document).ready(function () {
         // ============================
         // VALIDAR QUE LA TABLA NO ESTE VACIA
         // ============================
-        if ($('#dynamicTable tbody tr').length === 0) {
+        const esFormato0204 = $(this).attr('id') === 'FOR-PIMP-02_B_04';
+        const totalFilasTabla = esFormato0204
+            ? $('#durezaBrinellBody tr').length
+            : $('#dynamicTable tbody tr').length;
+
+        if (totalFilasTabla === 0) {
             e.preventDefault();
 
             Swal.fire({

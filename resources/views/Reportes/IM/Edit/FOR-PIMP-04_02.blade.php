@@ -311,6 +311,7 @@
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
+                                            @selected(old('equipos', $Datos_Equipo['ID_EQUIPO'] ?? '') == $equipo->idGeneral_EyC)
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
                                             data-ns="{{ $equipo->Serie }}">
@@ -351,6 +352,7 @@
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                     <option value="{{ $equipo->idGeneral_EyC }}"
+                                            @selected(old('equipos1', $Datos_Equipo['ID_EQUIPO1'] ?? '') == $equipo->idGeneral_EyC)
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
                                             data-ns="{{ $equipo->Serie }}">
@@ -892,6 +894,18 @@ document.addEventListener('DOMContentLoaded', function () {
         setValue('Datos_Equipo[' + key + ']', datosEquipo[key]);
     });
 
+    const equiposSelect = document.getElementById('equiposSelect');
+    if (equiposSelect && datosEquipo.ID_EQUIPO) {
+        equiposSelect.value = datosEquipo.ID_EQUIPO;
+        equiposSelect.dispatchEvent(new Event('change'));
+    }
+
+    const equiposSelect1 = document.getElementById('equiposSelect1');
+    if (equiposSelect1 && datosEquipo.ID_EQUIPO1) {
+        equiposSelect1.value = datosEquipo.ID_EQUIPO1;
+        equiposSelect1.dispatchEvent(new Event('change'));
+    }
+
     if (firmas.numFirmas) {
         setValue('numFirmas', firmas.numFirmas);
         const numFirmasSelect = document.getElementById('numFirmas');
@@ -926,9 +940,13 @@ $(document).ready(function() {
         }
 
         const formId = document.querySelector("form").id;
+        const selectedOptionActual = $('#' + idEquipoId).val();
         const selectedOptionLocal = localStorage.getItem(formId + '_' + localStorageName);
 
-        if (selectedOptionLocal != null) {
+        if (selectedOptionActual) {
+            $('#' + selectId).val(selectedOptionActual);
+            actualizarInputs();
+        } else if (selectedOptionLocal != null) {
             $('#' + selectId).val(selectedOptionLocal);
             actualizarInputs();
         }

@@ -43,6 +43,102 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_02_B_04Controller extends Controller
 {
+    private function sanitizeDurezaRows($rows): array
+    {
+        if (!is_array($rows)) {
+            return [];
+        }
+
+        return collect($rows)
+            ->filter(fn ($row) => is_array($row))
+            ->map(function ($row) {
+                return [
+                    'descripcion' => trim((string) ($row['descripcion'] ?? '')),
+                    'horario' => trim((string) ($row['horario'] ?? '')),
+                    'metal_base_a' => trim((string) ($row['metal_base_a'] ?? '')),
+                    'zac_b' => trim((string) ($row['zac_b'] ?? '')),
+                    'soldadura_c' => trim((string) ($row['soldadura_c'] ?? '')),
+                    'zac_b1' => trim((string) ($row['zac_b1'] ?? '')),
+                    'metal_base_a1' => trim((string) ($row['metal_base_a1'] ?? '')),
+                    'observaciones' => trim((string) ($row['observaciones'] ?? '')),
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
+    private function sanitizeDurezaPromedio($rows): array
+    {
+        if (!is_array($rows)) {
+            return [];
+        }
+
+        $allowedFields = [
+            'ANTES_A',
+            'ANTES_B',
+            'ANTES_C',
+            'ANTES_B1',
+            'ANTES_BM',
+            'DESPUES_A',
+            'DESPUES_B',
+            'DESPUES_C',
+            'DESPUES_B1',
+            'DESPUES_BM',
+        ];
+
+        $promedios = [];
+
+        foreach ($allowedFields as $field) {
+            $promedios[$field] = trim((string) ($rows[$field] ?? ''));
+        }
+
+        return $promedios;
+    }
+
+    private function sanitizeDurezaMergeConfig($mergeConfig, int $rowCount): array
+    {
+        $allowedFields = ['descripcion', 'horario', 'observaciones'];
+
+        if (is_string($mergeConfig)) {
+            $decoded = json_decode($mergeConfig, true);
+            $mergeConfig = is_array($decoded) ? $decoded : [];
+        }
+
+        if (!is_array($mergeConfig)) {
+            return [];
+        }
+
+        $unique = [];
+
+        foreach ($mergeConfig as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $row = isset($item['row']) ? (int) $item['row'] : -1;
+            $rowspan = isset($item['rowspan']) ? (int) $item['rowspan'] : 1;
+            $field = (string) ($item['field'] ?? '');
+
+            if ($row < 0 || $row >= $rowCount || $rowspan < 2 || !in_array($field, $allowedFields, true)) {
+                continue;
+            }
+
+            if (($row + $rowspan) > $rowCount) {
+                continue;
+            }
+
+            $key = $row . '|' . $field;
+            $unique[$key] = [
+                'row' => $row,
+                'field' => $field,
+                'rowspan' => $rowspan,
+                'value' => trim((string) ($item['value'] ?? '')),
+            ];
+        }
+
+        return array_values($unique);
+    }
+
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
@@ -422,16 +518,15 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Instalacion' => 'nullable|string',
             'Detalles_Generales.No_Isometrico' => 'nullable|string',
-            'Detalles_Generales.Elementos_Soldados' => 'nullable|string',
+            'Detalles_Generales.Nom_Pieza' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
-            'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
-            'Detalles_Generales.Diam_Nominal' => 'nullable|string',
-            'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
-            'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Temperatura_pieza' => 'nullable|string',
+            'Detalles_Generales.Espesor_cedula' => 'nullable|string',
+            'Detalles_Generales.Metodo' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
@@ -463,6 +558,16 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+            'Dureza' => 'nullable|array',
+            'Dureza.*.descripcion' => 'nullable|string',
+            'Dureza.*.horario' => 'nullable|string',
+            'Dureza.*.metal_base_a' => 'nullable|string',
+            'Dureza.*.zac_b' => 'nullable|string',
+            'Dureza.*.soldadura_c' => 'nullable|string',
+            'Dureza.*.zac_b1' => 'nullable|string',
+            'Dureza.*.metal_base_a1' => 'nullable|string',
+            'Dureza.*.observaciones' => 'nullable|string',
+            'Dureza_MergeConfig' => 'nullable|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -582,6 +687,14 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
+
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->sanitizeDurezaPromedio($request->input('Dureza', []));
+        $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
+        $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(
+            $request->input('Dureza_MergeConfig', '[]'),
+            count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
+        );
+
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -823,16 +936,15 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Instalacion' => 'nullable|string',
             'Detalles_Generales.No_Isometrico' => 'nullable|string',
-            'Detalles_Generales.Elementos_Soldados' => 'nullable|string',
+            'Detalles_Generales.Nom_Pieza' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
-            'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
-            'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
-            'Detalles_Generales.Diam_Nominal' => 'nullable|string',
-            'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
-            'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Temperatura_pieza' => 'nullable|string',
+            'Detalles_Generales.Espesor_cedula' => 'nullable|string',
+            'Detalles_Generales.Metodo' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
@@ -864,6 +976,16 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+            'Dureza' => 'nullable|array',
+            'Dureza.*.descripcion' => 'nullable|string',
+            'Dureza.*.horario' => 'nullable|string',
+            'Dureza.*.metal_base_a' => 'nullable|string',
+            'Dureza.*.zac_b' => 'nullable|string',
+            'Dureza.*.soldadura_c' => 'nullable|string',
+            'Dureza.*.zac_b1' => 'nullable|string',
+            'Dureza.*.metal_base_a1' => 'nullable|string',
+            'Dureza.*.observaciones' => 'nullable|string',
+            'Dureza_MergeConfig' => 'nullable|string',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -930,10 +1052,6 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
 
-        $detallesRequest = $request->input('Detalles_Generales', []);
-        $validatedData['Detalles_Generales']['Codigo_Diseno'] = $validatedData['Detalles_Generales']['Codigo_Diseno']
-            ?? $detallesRequest['Codigo_Diseno']
-            ?? null;
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
         $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
@@ -976,6 +1094,13 @@ class FOR_PIMP_02_B_04Controller extends Controller
         // Conservar cualquier informacion previa que no venga en el formulario de edicion.
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
+
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->sanitizeDurezaPromedio($request->input('Dureza', []));
+        $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
+        $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(
+            $request->input('Dureza_MergeConfig', '[]'),
+            count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
+        );
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_EQUIPO1'] = $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? ($datosEquipoActuales['ID_EQUIPO1'] ?? null);

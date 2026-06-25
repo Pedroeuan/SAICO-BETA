@@ -56,6 +56,46 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        .tabla-dureza th,
+.tabla-dureza td {
+    border: 1px solid #000 !important;
+    font-size: 11px;
+    padding: 3px;
+    vertical-align: middle;
+}
+
+.tabla-dureza input {
+    height: 22px;
+    padding: 2px;
+    text-align: center;
+    border: none;
+}
+
+.tabla-dureza textarea {
+    border: none;
+    resize: none;
+    min-height: 390px;
+}
+
+.mergeable-cell {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.mergeable-cell.selected-merge {
+    background-color: #ffe3e3 !important;
+    box-shadow: inset 0 0 0 2px #dc3545;
+}
+
+.mergeable-cell.selected-merge input {
+    background-color: #ffd6d6 !important;
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.2) !important;
+}
+
+.merge-tools {
+    gap: 8px;
+}
     </style>
 @endsection
 
@@ -213,7 +253,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">No. Isométrico:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico')}}">
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.No_Isometrico') }}">
                             @error('No_Isometrico')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -222,9 +262,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Elementos Soldados:</label>
-                            <input type="text" class="form-control  inputForm @error('Elementos_Soldados') is-invalid @enderror" name="Detalles_Generales[Elementos_Soldados]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Elementos_Soldados')}}">
-                            @error('Elementos_Soldados')
+                            <label class="col-form-label" for="inputSuccess">Nombre de la Pieza:</label>
+                            <input type="text" class="form-control  inputForm @error('Nom_Pieza') is-invalid @enderror" name="Detalles_Generales[Nom_Pieza]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Nom_Pieza')}}">
+                            @error('Nom_Pieza')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -235,36 +275,6 @@
                             <label class="col-form-label" for="inputSuccess">Material</label>
                             <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material')}}">
                             @error('Material')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Junta:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta')}}">
-                            @error('No_Junta')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad')}}">
-                            @error('Trazabilidad')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Espesores:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Espesores]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Espesores')}}">
-                            @error('Espesores')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -282,9 +292,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Codigo de Diseño:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Codigo_Diseno]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Codigo_Diseno')}}">
-                            @error('Codigo_Diseno')
+                            <label class="col-form-label" for="inputSuccess">Criterio de Evaluación:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Criterio_Evaluacion]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Criterio_Evaluacion') }}">
+                            @error('Criterio_Evaluacion')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -292,29 +302,39 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Diám. Nominal:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Diam_Nominal]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Diam_Nominal')}}">
-                            @error('Diam_Nominal')
+                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Trazabilidad') }}">
+                            @error('Trazabilidad')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Antes del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Antes_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Antes_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Antes_Relevado')}}">
-                            @error('Reporte_Antes_Relevado')
+                            <label class="col-form-label" for="inputSuccess">No. Junta:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.No_Junta') }}">
+                            @error('No_Junta')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Después del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Despues_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Despues_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Despues_Relevado')}}">
-                            @error('Reporte_Despues_Relevado')
+                            <label class="col-form-label" for="inputSuccess">Temperatura de la Pieza:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Temperatura_pieza]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Temperatura_pieza') }}">
+                            @error('Temperatura_pieza')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Espesor/Cedúla:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Espesor_cedula]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Espesor_cedula') }}">
+                            @error('Espesor_cedula')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -331,29 +351,82 @@
                             <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" value="{{ $idPrueba_Aplica }}" readonly>
                         </div>
                     </div>
-                    <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO (EQUIPMENT DATA)</div>
-
-                                    <div style="margin-bottom: 5px;"></div>
-
-                                    <div class="alert alert-warning alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                        <p>Puedes Seleccionar un equipo, menu o escribir directamente</p>
-                                    </div>
-
                     
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">MAQUINA DE RELEVADO (STRESS RELIEF MACHINE)</div>
+                    <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
+
+                    <div style="margin-bottom: 2px;"></div>
+
+                    <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                        <p>Puedes Seleccionar un equipo del menu o escribir directamente</p>
+                    </div>
+
+                    @php
+                        $resolverMetodoEquipo = function ($equipo) {
+                            $posiblesCampos = [
+                                data_get($equipo, 'Metodo_Medicion'),
+                                data_get($equipo, 'Metodo'),
+                                data_get($equipo, 'Nombre_E_P_BP'),
+                                data_get($equipo, 'Modelo'),
+                                data_get($equipo, 'Marca'),
+                                data_get($equipo, 'Serie'),
+                            ];
+
+                            foreach ($posiblesCampos as $valorCampo) {
+                                $texto = mb_strtoupper(trim((string) $valorCampo));
+
+                                if ($texto === '') {
+                                    continue;
+                                }
+
+                                if (str_contains($texto, 'LEEB')) {
+                                    return 'LEEB';
+                                }
+
+                                if (str_contains($texto, 'UCI')) {
+                                    return 'UCI';
+                                }
+
+                            }
+
+                            return '';
+                        };
+                    @endphp
+
 
                     <div class="col-sm-50 d-flex justify-content-center">
+                        <div class="form-group text-center">
+                            @php
+                                $metodosEquipo = collect($idsGeneral_EyCs_Equipos ?? [])
+                                    ->map($resolverMetodoEquipo)
+                                    ->filter()
+                                    ->unique()
+                                    ->values();
+                                if ($metodosEquipo->isEmpty() && collect($idsGeneral_EyCs_Equipos ?? [])->isNotEmpty()) {
+                                    $metodosEquipo = collect(['LEEB', 'UCI']);
+                                }
+                            @endphp
+                            <select class="form-select inputForm" id="metodoSelectE" name="Detalles_Generales[Metodo]">
+                                <option value="" selected>Seleccione un Método</option>
+                                @foreach($metodosEquipo as $metodo)
+                                    <option value="{{ $metodo }}" {{ old('Detalles_Generales.Metodo') == $metodo ? 'selected' : '' }}>{{ $metodo }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group text-center">
                             <select class="form-select inputForm" name="equipos" id="equiposSelect">
                             <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
+                                    @php
+                                        $metodoEquipo = $resolverMetodoEquipo($equipo);
+                                    @endphp
                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
+                                            data-ns="{{ $equipo->Serie }}"
+                                            data-metodo="{{ $metodoEquipo }}">
                                         {{ $equipo->Nombre_E_P_BP }}
                                     </option>
                                 @endforeach
@@ -382,135 +455,310 @@
                             <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO')}}">
                         </div>
                     </div>
-
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">GRAFICADOR (GRAPHIER)</div>
-
-                    <div class="col-sm-50 d-flex justify-content-center">
-                        <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos1" id="equiposSelect1">
-                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO1]" id="IDInputE1" value="{{ old('Datos_Equipo.ID_EQUIPO1') }}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE1" name="Datos_Equipo[MARCA_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO1')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE1" name="Datos_Equipo[MODELO_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO1')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE1" name="Datos_Equipo[NS_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO1')}}">
-                        </div>
-                    </div>
                     
-                    <!--***************************************** INICIO DATOS DE PRUEBA *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DE PRUEBA</div>
+                    <!--***************************************** VALORES DE DUREZA MEDIDOS *****************************************-->
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">VALORES PROMEDIO DE DUREZAS</div>
 
-                    <div class="col-sm-4">
+                    <table class="table table-bordered text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width:25%;">
+                                    VALORES PROMEDIO DE DUREZAS:<br>
+                                    <small>Average Hardness Values</small>
+                                </th>
+                                <th>
+                                    METAL BASE<br>
+                                    Base Metal<br>
+                                    (A)
+                                </th>
+                                <th>
+                                    ZAC<br>
+                                    HAZ (B)
+                                </th>
+                                <th>
+                                    SOLDADURA<br>
+                                    Welding<br>
+                                    (C)
+                                </th>
+                                <th>
+                                    ZAC<br>
+                                    HAZ (B1)
+                                </th>
+                                <th>
+                                    METAL BASE<br>
+                                    Base Metal<br>
+                                    (B)
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>ANTES DEL RELEVADO DE ESFUERZOS (HB):</strong><br>
+                                    Before PWHT (HB)
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[ANTES_A]"
+                                        value="{{ old('Dureza.ANTES_A') }}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[ANTES_B]"
+                                        value="{{ old('Dureza.ANTES_B') }}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[ANTES_C]"
+                                        value="{{ old('Dureza.ANTES_C') }}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[ANTES_B1]"
+                                        value="{{ old('Dureza.ANTES_B1') }}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[ANTES_BM]"
+                                        value="{{ old('Dureza.ANTES_BM') }}">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <strong>POSTERIOR AL RELEVADO DE ESFUERZOS (HB):</strong><br>
+                                    After PWHT (HB)
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[DESPUES_A]"
+                                        value="{{ old('Dureza.DESPUES_A') }}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[DESPUES_B]"
+                                        value="{{ old('Dureza.DESPUES_B') }}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[DESPUES_C]"
+                                        value="{{ old('Dureza.DESPUES_C') }}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[DESPUES_B1]"
+                                        value="{{ old('Dureza.DESPUES_B1') }}">
+                                </td>
+
+                                <td>
+                                    <input type="text" class="form-control"
+                                        name="Dureza[DESPUES_BM]"
+                                        value="{{ old('Dureza.DESPUES_BM') }}">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <fieldset disabled class="d-none">
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">ANTES O DESPUÉS DEL RELEVADO DE ESFUERZOS</div>
+
+                    <div style="margin-bottom: 5px;"></div>
+
+                    <table class="table table-bordered text-center align-middle tabla-dureza d-none">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                    DATOS DE LA JUNTA<br>
+                                    <small>Join Data</small>
+                                </th>
+
+                                <th colspan="5">
+                                    VALORES DE DUREZA (ESCALA BRINELL)<br>
+                                    <small>Hardness Values (Brinell Scale)</small>
+                                </th>
+
+                                <th rowspan="2">
+                                    OBSERVACIONES<br>
+                                    <small>Remarks</small>
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <th style="width: 22%;">
+                                    DESCRIPCIÓN<br>
+                                    <small>Description</small>
+                                </th>
+
+                                <th style="width: 10%;">
+                                    HORARIOS TÉCNICOS<br>
+                                    <small>Technical schedules</small>
+                                </th>
+
+                                <th>METAL BASE<br><small>Base Metal</small><br>(A)</th>
+                                <th>ZAC<br><small>HAZ</small><br>B</th>
+                                <th>SOLDADURA<br><small>Weld</small><br>(C)</th>
+                                <th>ZAC<br><small>HAZ</small><br>(B1)</th>
+                                <th>METAL BASE<br><small>Base Metal</small><br>(A1)</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @php
+                                $horarios = ['12:00', '03:00', '06:00', '09:00'];
+                            @endphp
+
+                            @foreach ($horarios as $index => $horario)
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <tr>
+                                        @if ($index == 0 && $i == 1)
+                                            <td rowspan="20">
+                                                <textarea name="Datos_Dureza[DESCRIPCION]" class="form-control h-100"></textarea>
+                                            </td>
+                                        @endif
+
+                                        @if ($i == 1)
+                                            <td rowspan="5">
+                                                <strong>{{ $horario }}</strong>
+                                            </td>
+                                        @endif
+
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $horario }}][{{ $i }}][METAL_BASE_A]"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $horario }}][{{ $i }}][ZAC_B]"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $horario }}][{{ $i }}][SOLDADURA_C]"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $horario }}][{{ $i }}][ZAC_B1]"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $horario }}][{{ $i }}][METAL_BASE_A1]"></td>
+
+                                        @if ($index == 0 && $i == 1)
+                                            <td rowspan="20">
+                                                <textarea name="Datos_Dureza[OBSERVACIONES]" class="form-control h-100"></textarea>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endfor
+                            @endforeach
+                        </tbody>
+                    </table>
+                    </div>
+                    <input type="hidden" name="titulos_data" id="titulos_hidden_legacy">
+                    <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
+                    <div class="d-none">
+                        <div>
+                            <label for="numRowsLegacy">Número de Filas:</label>
+                            <select id="numRowsLegacy" class="form-select">
+                                @for ($i = 1; $i <= 500; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <button id="addBtnLegacy" type="button" class="btn btn-success custom-btn" onclick="agregarFilaIM0203()">Agregar Fila</button>
+
+                        <button id="addTituloBtnLegacy" type="button" class="btn btn-success custom-btn" onclick="agregarTituloIM0203()">Agregar Título</button>
+
+                        <button id="addLongBtnLegacy" type="button" class="btn btn-success custom-btn" onclick="agregarLongitudIM0203()">Agregar Longitud Inspeccionada</button>
+
+                        <button id="preFillBtnLegacy" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
+                    </div>
+
+                    </fieldset>
+
+                    @php
+                        $durezaRows = collect(old('Dureza', []))
+                            ->filter(function ($row, $key) {
+                                return is_numeric($key) && is_array($row);
+                            })
+                            ->values()
+                            ->all();
+
+                        if (empty($durezaRows)) {
+                            $durezaRows = [[
+                                'descripcion' => '',
+                                'horario' => '',
+                                'metal_base_a' => '',
+                                'zac_b' => '',
+                                'soldadura_c' => '',
+                                'zac_b1' => '',
+                                'metal_base_a1' => '',
+                                'observaciones' => '',
+                            ]];
+                        }
+                    @endphp
+
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 w-100 mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <label for="numRows" class="mb-0 fw-semibold">Número de filas:</label>
+                            <select id="numRows" class="form-select" style="width: 100px;">
+                                @for ($i = 1; $i <= 20; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <button id="addDurezaRowsBtn" type="button" class="btn btn-success custom-btn">Agregar fila</button>
+                    </div>
+
+                    <div class="d-flex flex-wrap align-items-center merge-tools mb-3">
+                        <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary">Combinar celdas</button>
+                        <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary">Separar celdas</button>
+                        <small class="text-muted">Selecciona celdas solo de `Descripción`, `Horario` u `Observaciones`.</small>
+                    </div>
+
+                    <div class="table-responsive mb-3">
+                        <input type="hidden" name="Dureza_MergeConfig" id="durezaMergeConfig" value="{{ old('Dureza_MergeConfig', '[]') }}">
+                        <table class="table table-bordered align-middle text-center" id="tablaDurezaBrinell">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="min-width: 190px;">DESCRIPCIÓN<br><small>Description</small></th>
+                                    <th style="min-width: 120px;">HORARIO<br><small>Schedule</small></th>
+                                    <th style="min-width: 120px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
+                                    <th style="min-width: 120px;">ZAC / HAZ<br>(B)</th>
+                                    <th style="min-width: 120px;">SOLDADURA<br><small>Weld</small><br>(C)</th>
+                                    <th style="min-width: 120px;">ZAC / HAZ<br>(B1)</th>
+                                    <th style="min-width: 120px;">METAL BASE<br><small>Base Metal</small><br>(A1)</th>
+                                    <th style="min-width: 180px;">OBSERVACIONES<br><small>Remarks</small></th>
+                                    <th style="width: 80px;">ACCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody id="durezaBrinellBody">
+                                @foreach($durezaRows as $index => $row)
+                                    <tr>
+                                        <td class="mergeable-cell" data-merge-field="descripcion"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][descripcion]" value="{{ $row['descripcion'] ?? '' }}"></td>
+                                        <td class="mergeable-cell" data-merge-field="horario"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][horario]" value="{{ $row['horario'] ?? '' }}"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][metal_base_a]" value="{{ $row['metal_base_a'] ?? '' }}"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][zac_b]" value="{{ $row['zac_b'] ?? '' }}"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][soldadura_c]" value="{{ $row['soldadura_c'] ?? '' }}"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][zac_b1]" value="{{ $row['zac_b1'] ?? '' }}"></td>
+                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][metal_base_a1]" value="{{ $row['metal_base_a1'] ?? '' }}"></td>
+                                        <td class="mergeable-cell" data-merge-field="observaciones"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][observaciones]" value="{{ $row['observaciones'] ?? '' }}"></td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm btnEliminarDureza">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-12">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temperatura Inicial:</label>
-                            <input type="text" class="form-control  inputForm" id="tempInputP" name="Datos_Equipo[TEMPERATURA_INICIAL]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_INICIAL')}}">
+                            <label class="col-form-label" for="observacionesEquipo">Observaciones:</label>
+                            <textarea class="form-control is-waning" id="observacionesEquipo" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones') }}</textarea>
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaInputP" name="Datos_Equipo[HORA_INICIO]" placeholder="" value="{{old('Datos_Equipo.HORA_INICIO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. de Calentamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="mrInputP" name="Datos_Equipo[VELOCIDAD_CALENTAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VELOCIDAD_CALENTAMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Final de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaFinalInputP" name="Datos_Equipo[HORA_FINAL]" placeholder="" value="{{old('Datos_Equipo.HORA_FINAL')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temp. Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tempSostenimientoInputP" name="Datos_Equipo[TEMPERATURA_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_SOSTENIMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaInicioInputP" name="Datos_Equipo[DIA_INICIO]" placeholder="" value="{{old('Datos_Equipo.DIA_INICIO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Tiempo de Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tiempoSostenimientoInputP" name="Datos_Equipo[TIEMPO_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TIEMPO_SOSTENIMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de Finalización de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaFinalInputP" name="Datos_Equipo[DIA_FINAL]" placeholder="" value="{{old('Datos_Equipo.DIA_FINAL')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Enfriamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="velEnfriamientoInputP" name="Datos_Equipo[VEL_ENFRIAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VEL_ENFRIAMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Gráfica:</label>
-                            <input type="text" class="form-control  inputForm" id="noGraficaInputP" name="Datos_Equipo[NO_GRAFICA]" placeholder="" value="{{old('Datos_Equipo.NO_GRAFICA')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Graficador:</label>
-                            <input type="text" class="form-control  inputForm" id="velGraficadorInputP" name="Datos_Equipo[VEL_GRAFICADOR]" placeholder="" value="{{old('Datos_Equipo.VEL_GRAFICADOR')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones')}}</textarea>
-                        </div>
-                    </div>
-
-                    <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
+                    <!--***************************************** FIN DATOS *****************************************-->
 
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -710,12 +958,10 @@
                                 </thead>                            
                             </table>
                         </div>
-                        
-
                         <p>
 
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                        
+
                         <p>
 
                         <!--IMAGENES CON COMENTARIOS-->
@@ -823,70 +1069,781 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create_IM_02.js') }}"></script>
-
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const radiosCliente = document.querySelectorAll('input[name="TieneCliente"]');
+        const clienteSelect = document.getElementById('campoClienteSelect');
+        const clienteInput = document.getElementById('campoClienteInput');
 
- /*Selects */
-    /* Selects de equipos */
-$(document).ready(function() {
+        function toggleCliente() {
+            const seleccionado = document.querySelector('input[name="TieneCliente"]:checked');
+            if (!seleccionado || !clienteSelect || !clienteInput) return;
 
-    function configurarSelectEquipo(selectId, marcaId, modeloId, nsId, idEquipoId, localStorageName) {
-        function actualizarInputs() {
-            var selectedOption = $('#' + selectId).find('option:selected');
-
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            $('#' + marcaId).val(marca);
-            $('#' + modeloId).val(modelo);
-            $('#' + nsId).val(ns);
-            $('#' + idEquipoId).val($('#' + selectId).val() || '');
+            if (seleccionado.value === 'si') {
+                clienteSelect.style.display = 'block';
+                clienteInput.style.display = 'none';
+                clienteInput.value = '';
+            } else {
+                clienteSelect.style.display = 'none';
+                clienteInput.style.display = 'block';
+                clienteSelect.value = '';
+                clienteInput.focus();
+            }
         }
 
-        const formId = document.querySelector("form").id;
-        const selectedOptionLocal = localStorage.getItem(formId + '_' + localStorageName);
+        radiosCliente.forEach(function (radio) {
+            radio.addEventListener('change', toggleCliente);
+        });
 
-        if (selectedOptionLocal != null) {
-            $('#' + selectId).val(selectedOptionLocal);
-            actualizarInputs();
+        toggleCliente();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const radiosContrato = document.getElementsByName('TieneContrato');
+        const campoContrato = document.getElementById('campoContrato');
+
+        radiosContrato.forEach(function (radio) {
+            radio.addEventListener('change', async function () {
+                sessionStorage.setItem('TieneContrato', this.value);
+
+                if (!campoContrato) return;
+
+                if (this.value === 'si') {
+                    campoContrato.readOnly = false;
+                    campoContrato.required = true;
+                    campoContrato.value = '';
+                    campoContrato.placeholder = 'Ejemplo: 640853841';
+                    return;
+                }
+
+                campoContrato.readOnly = true;
+                campoContrato.required = false;
+                campoContrato.placeholder = 'Generando contrato interno...';
+
+                try {
+                    const response = await fetch('/api/siguiente-contrato-interno');
+                    const data = await response.json();
+                    campoContrato.value = data.siguiente || '';
+                } catch (error) {
+                    console.error('Error al obtener el contrato interno:', error);
+                    alert('No se pudo generar el contrato interno');
+                }
+            });
+        });
+
+        const seleccionado = sessionStorage.getItem('TieneContrato');
+        if (seleccionado) {
+            const radioGuardado = Array.from(radiosContrato).find(function (radio) {
+                return radio.value === seleccionado;
+            });
+
+            if (radioGuardado) {
+                radioGuardado.checked = true;
+                radioGuardado.dispatchEvent(new Event('change'));
+            }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
+            if (element.tagName !== 'TEXTAREA') {
+                element.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                    }
+                });
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-PIMP-02_B_04');
+        const imageCountSelect = document.getElementById('imageCount');
+        const container = document.getElementById('imageFieldsContainer');
+        const cropperImage = document.getElementById('cropperImage');
+        const cropperModal = document.getElementById('cropperModal');
+        const rotateLeftBtn = document.getElementById('rotateLeftBtn');
+        const rotateRightBtn = document.getElementById('rotateRightBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const saveWithoutCropBtn = document.getElementById('saveWithoutCropBtn');
+        const cropImageBtn = document.getElementById('cropImageBtn');
+
+        if (!form || !imageCountSelect || !container || !cropperImage) return;
+
+        const formId = form.id;
+        let cropperInstance = null;
+        let currentInput = null;
+
+        function closeCropperModal() {
+            if (window.jQuery && cropperModal) {
+                $('#cropperModal').modal('hide');
+            }
         }
 
-        $('#' + selectId).on('change', function() {
-            actualizarInputs();
+        function openCropperModal() {
+            if (window.jQuery && cropperModal) {
+                $('#cropperModal').modal('show');
+            }
+        }
 
-            const formId = document.querySelector("form").id;
-            localStorage.setItem(formId + '_' + localStorageName, $(this).val());
+        function bindImageFieldEvents() {
+            container.querySelectorAll('.imagen-hoja-checkbox').forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    const index = this.dataset.index;
+                    const hidden = document.getElementById(`imagenHojaValue${index}`);
+                    if (hidden) {
+                        hidden.value = this.checked ? 1 : 0;
+                    }
+                });
+            });
+
+            container.querySelectorAll('.remove-image').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    const target = document.getElementById(`image-container-${this.dataset.index}`);
+                    if (target) {
+                        target.remove();
+                    }
+
+                    const currentCount = container.querySelectorAll('[id^="image-container-"]').length;
+                    imageCountSelect.value = currentCount || '';
+                    localStorage.setItem(formId + '_imageCount', currentCount);
+                });
+            });
+
+            container.querySelectorAll('.image-input').forEach(function (input) {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor, sube solo imágenes.');
+                        e.target.value = '';
+                        return;
+                    }
+
+                    currentInput = e.target;
+                    const reader = new FileReader();
+
+                    reader.onload = function (event) {
+                        if (cropperInstance) {
+                            cropperInstance.destroy();
+                        }
+
+                        cropperImage.src = event.target.result;
+                        openCropperModal();
+
+                        cropperInstance = new Cropper(cropperImage, {
+                            aspectRatio: 4 / 3,
+                            viewMode: 1,
+                            autoCropArea: 1,
+                            minContainerWidth: 760,
+                            minContainerHeight: 600,
+                            responsive: true
+                        });
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        function generateImageFields(count) {
+            const total = parseInt(count, 10) || 0;
+            container.innerHTML = '';
+
+            for (let i = 1; i <= total; i++) {
+                const col = document.createElement('div');
+                col.classList.add('col-sm-6');
+                col.id = `image-container-${i}`;
+                col.innerHTML = `
+                    <div class="form-group">
+                        <label for="image${i}">Imagen por subir ${i}:</label>
+                        <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
+
+                        <div class="form-check mt-2">
+                            <input type="checkbox" class="form-check-input imagen-hoja-checkbox" data-index="${i}" id="imagenHoja${i}">
+                            <label class="form-check-label" for="imagenHoja${i}">
+                                Imagen en una hoja
+                            </label>
+                        </div>
+
+                        <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">
+
+                        <div class="image-preview mt-2" id="image${i}-preview"></div>
+                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+
+                        <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">
+                            Eliminar
+                        </button>
+                    </div>
+                `;
+                container.appendChild(col);
+            }
+
+            bindImageFieldEvents();
+        }
+
+        imageCountSelect.addEventListener('change', function () {
+            localStorage.setItem(formId + '_imageCount', this.value || 0);
+            generateImageFields(this.value);
+        });
+
+        if (rotateLeftBtn) {
+            rotateLeftBtn.addEventListener('click', function () {
+                if (cropperInstance) cropperInstance.rotate(-90);
+            });
+        }
+
+        if (rotateRightBtn) {
+            rotateRightBtn.addEventListener('click', function () {
+                if (cropperInstance) cropperInstance.rotate(90);
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function () {
+                closeCropperModal();
+            });
+        }
+
+        if (saveWithoutCropBtn) {
+            saveWithoutCropBtn.addEventListener('click', function () {
+                if (!cropperInstance || !currentInput) return;
+
+                try {
+                    const imageData = cropperInstance.getImageData();
+                    const rotation = cropperInstance.getData().rotate || 0;
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    if (Math.abs(rotation) % 180 === 90) {
+                        canvas.width = imageData.naturalHeight;
+                        canvas.height = imageData.naturalWidth;
+                    } else {
+                        canvas.width = imageData.naturalWidth;
+                        canvas.height = imageData.naturalHeight;
+                    }
+
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate((rotation * Math.PI) / 180);
+                    ctx.drawImage(
+                        cropperInstance.element,
+                        -imageData.naturalWidth / 2,
+                        -imageData.naturalHeight / 2,
+                        imageData.naturalWidth,
+                        imageData.naturalHeight
+                    );
+
+                    const base64data = canvas.toDataURL();
+                    const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                    const hiddenInput = document.getElementById(`${currentInput.id}-base64`);
+
+                    if (previewDiv) {
+                        previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />`;
+                    }
+
+                    if (hiddenInput) {
+                        hiddenInput.value = base64data;
+                    }
+                } catch (error) {
+                    console.error('Error al guardar la imagen sin recortar:', error);
+                }
+
+                closeCropperModal();
+            });
+        }
+
+        if (cropImageBtn) {
+            cropImageBtn.addEventListener('click', function () {
+                if (!cropperInstance || !currentInput) return;
+
+                const croppedCanvas = cropperInstance.getCroppedCanvas();
+                if (!croppedCanvas) return;
+
+                const base64data = croppedCanvas.toDataURL();
+                const previewDiv = document.getElementById(`${currentInput.id}-preview`);
+                const hiddenInput = document.getElementById(`${currentInput.id}-base64`);
+
+                if (previewDiv) {
+                    previewDiv.innerHTML = `<img src="${base64data}" class="img-fluid img-thumbnail" />`;
+                }
+
+                if (hiddenInput) {
+                    hiddenInput.value = base64data;
+                }
+
+                closeCropperModal();
+            });
+        }
+
+        if (window.jQuery && cropperModal) {
+            $('#cropperModal').on('hidden.bs.modal', function () {
+                if (cropperInstance) {
+                    cropperInstance.destroy();
+                    cropperInstance = null;
+                }
+            });
+        }
+
+        const savedImageCount = localStorage.getItem(formId + '_imageCount');
+        if (savedImageCount !== null && savedImageCount !== '') {
+            imageCountSelect.value = savedImageCount;
+            generateImageFields(savedImageCount);
+        }
+
+        form.addEventListener('submit', function () {
+            localStorage.removeItem(formId + '_imageCount');
+        });
+    });
+
+    function verificarYAgregarLongitud() {
+        let contadorBloque = 0;
+
+        $('#dynamicTable tbody tr').each(function () {
+            const $row = $(this);
+
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
+            }
+
+            if ($row.hasClass('titulo-row')) {
+                contadorBloque = 0;
+                return;
+            }
+
+            contadorBloque++;
+
+            if (contadorBloque === 10 && !$row.next().hasClass('long-row')) {
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+                $row.after(
+                    '<tr class="long-row" data-titulo="' + lastTitle + '">' +
+                    '<td colspan="6"><div class="d-flex align-items-center">' +
+                    '<span class="mr-2">Longitud Inspeccionada</span>' +
+                    '<input type="text" class="form-control long-text" name="Long_Inspecc[' + lastTitle + '][]">' +
+                    '</div></td>' +
+                    '<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"></i></button></td>' +
+                    '</tr>'
+                );
+                contadorBloque = 0;
+            }
         });
     }
 
-    configurarSelectEquipo(
-        'equiposSelect',
-        'marcaInputE',
-        'modeloInputE',
-        'nsInputE',
-        'IDInputE',
-        'equipos'
-    );
+    function configurarMetodoYEquipo() {
+        const $metodo = $('#metodoSelectE');
+        const $equipo = $('#equiposSelect');
+        const $marca = $('#marcaInputE');
+        const $modelo = $('#modeloInputE');
+        const $ns = $('#nsInputE');
+        const $idEquipo = $('#IDInputE');
+        const form = document.querySelector('form');
+        const formId = form ? form.id : 'FOR-PIMP-02_B_04';
+        const opcionesEquipo = $equipo.find('option').clone();
 
-    configurarSelectEquipo(
-        'equiposSelect1',
-        'marcaInputE1',
-        'modeloInputE1',
-        'nsInputE1',
-        'IDInputE1',
-        'equipos1'
-    );
-});
+        function limpiarCamposEquipo() {
+            $marca.val('');
+            $modelo.val('');
+            $ns.val('');
+            $idEquipo.val('');
+        }
+
+        function filtrarEquipos(metodoSeleccionado) {
+            $equipo.empty().append('<option value="" selected>Seleccione un Equipo</option>');
+
+            opcionesEquipo.each(function() {
+                const $opcion = $(this);
+                const valor = $opcion.attr('value');
+
+                if (!valor) {
+                    return;
+                }
+
+                if (!metodoSeleccionado || ($opcion.data('metodo') || '') === metodoSeleccionado) {
+                    $equipo.append($opcion.clone());
+                }
+            });
+        }
+
+        function actualizarDatosEquipo() {
+            const $seleccionado = $equipo.find('option:selected');
+            $marca.val($seleccionado.data('marca') || '');
+            $modelo.val($seleccionado.data('modelo') || '');
+            $ns.val($seleccionado.data('ns') || '');
+            $idEquipo.val($equipo.val() || '');
+
+            const metodoEquipo = $seleccionado.data('metodo') || '';
+            if (metodoEquipo) {
+                $metodo.val(metodoEquipo);
+                localStorage.setItem(formId + '_metodo_equipo', metodoEquipo);
+            }
+        }
+
+        const metodoLocal = localStorage.getItem(formId + '_metodo_equipo') || '';
+        const equipoLocal = localStorage.getItem(formId + '_equipos');
+
+        if (metodoLocal) {
+            $metodo.val(metodoLocal);
+        }
+
+        filtrarEquipos($metodo.val());
+
+        if (equipoLocal && $equipo.find('option[value="' + equipoLocal + '"]').length) {
+            $equipo.val(equipoLocal);
+            actualizarDatosEquipo();
+        }
+
+        $metodo.on('change', function() {
+            filtrarEquipos($(this).val() || '');
+            limpiarCamposEquipo();
+            localStorage.setItem(formId + '_metodo_equipo', $(this).val() || '');
+            localStorage.removeItem(formId + '_equipos');
+        });
+
+        $equipo.on('change', function() {
+            actualizarDatosEquipo();
+            localStorage.setItem(formId + '_equipos', $(this).val() || '');
+        });
+    }
+
+    $(document).ready(function() {
+        configurarMetodoYEquipo();
+    });
+
+    function construirFilaDureza(index, data = {}) {
+        return `
+            <tr>
+                <td class="mergeable-cell" data-merge-field="descripcion"><input type="text" class="form-control inputForm" name="Dureza[${index}][descripcion]" value="${data.descripcion || ''}"></td>
+                <td class="mergeable-cell" data-merge-field="horario"><input type="text" class="form-control inputForm" name="Dureza[${index}][horario]" value="${data.horario || ''}"></td>
+                <td><input type="text" class="form-control inputForm" name="Dureza[${index}][metal_base_a]" value="${data.metal_base_a || ''}"></td>
+                <td><input type="text" class="form-control inputForm" name="Dureza[${index}][zac_b]" value="${data.zac_b || ''}"></td>
+                <td><input type="text" class="form-control inputForm" name="Dureza[${index}][soldadura_c]" value="${data.soldadura_c || ''}"></td>
+                <td><input type="text" class="form-control inputForm" name="Dureza[${index}][zac_b1]" value="${data.zac_b1 || ''}"></td>
+                <td><input type="text" class="form-control inputForm" name="Dureza[${index}][metal_base_a1]" value="${data.metal_base_a1 || ''}"></td>
+                <td class="mergeable-cell" data-merge-field="observaciones"><input type="text" class="form-control inputForm" name="Dureza[${index}][observaciones]" value="${data.observaciones || ''}"></td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm btnEliminarDureza">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }
+
+    function renumerarFilasDureza() {
+        $('#durezaBrinellBody tr').each(function(index) {
+            $(this).find('input').each(function() {
+                const currentName = $(this).attr('name') || '';
+                const updatedName = currentName.replace(/Dureza\[\d+\]/, 'Dureza[' + index + ']');
+                $(this).attr('name', updatedName);
+            });
+        });
+    }
+
+    function limpiarSeleccionMerge() {
+        $('#durezaBrinellBody .mergeable-cell').removeClass('selected-merge');
+    }
+
+    let mergeSelectionAnchor = null;
+
+    function guardarEstadoMerges() {
+        const mergeState = [];
+
+        $('#durezaBrinellBody .mergeable-cell[rowspan]').each(function() {
+            const $cell = $(this);
+            mergeState.push({
+                row: $cell.closest('tr').index(),
+                field: $cell.data('merge-field'),
+                rowspan: parseInt($cell.attr('rowspan') || '1', 10),
+                value: $cell.find('input').val() || ''
+            });
+        });
+
+        $('#durezaMergeConfig').val(JSON.stringify(mergeState));
+    }
+
+    function restaurarEstadoMerges() {
+        const rawState = $('#durezaMergeConfig').val();
+
+        if (!rawState) {
+            return;
+        }
+
+        let mergeState = [];
+
+        try {
+            mergeState = JSON.parse(rawState);
+        } catch (error) {
+            $('#durezaMergeConfig').val('[]');
+            return;
+        }
+
+        if (!Array.isArray(mergeState)) {
+            $('#durezaMergeConfig').val('[]');
+            return;
+        }
+
+        mergeState.forEach(function(item) {
+            const row = Number(item.row);
+            const rowspan = Number(item.rowspan);
+            const field = item.field;
+
+            if (!field || !rowspan || rowspan < 2) {
+                return;
+            }
+
+            const $masterRow = $('#durezaBrinellBody tr').eq(row);
+            const $masterCell = $masterRow.find(`.mergeable-cell[data-merge-field="${field}"]`);
+
+            if (!$masterCell.length) {
+                return;
+            }
+
+            $masterCell.attr('rowspan', rowspan);
+            $masterCell.find('input').val(item.value || '');
+
+            for (let offset = 1; offset < rowspan; offset++) {
+                const $row = $('#durezaBrinellBody tr').eq(row + offset);
+                const $cell = $row.find(`.mergeable-cell[data-merge-field="${field}"]`);
+
+                if ($cell.length) {
+                    $cell.find('input').val(item.value || '');
+                    $cell.hide();
+                }
+            }
+        });
+    }
+
+    function seleccionarRangoMerge($startCell, $endCell) {
+        const field = $startCell.data('merge-field');
+        const startIndex = $startCell.closest('tr').index();
+        const endIndex = $endCell.closest('tr').index();
+        const minIndex = Math.min(startIndex, endIndex);
+        const maxIndex = Math.max(startIndex, endIndex);
+
+        limpiarSeleccionMerge();
+
+        for (let rowIndex = minIndex; rowIndex <= maxIndex; rowIndex++) {
+            $('#durezaBrinellBody tr')
+                .eq(rowIndex)
+                .find(`.mergeable-cell[data-merge-field="${field}"]:visible`)
+                .addClass('selected-merge');
+        }
+    }
+
+    function manejarSeleccionMerge($cell) {
+        if (!$cell.length || !$cell.is(':visible')) {
+            return;
+        }
+
+        if (!mergeSelectionAnchor) {
+            limpiarSeleccionMerge();
+            $cell.addClass('selected-merge');
+            mergeSelectionAnchor = $cell;
+            return;
+        }
+
+        const sameCell =
+            mergeSelectionAnchor.closest('tr').index() === $cell.closest('tr').index() &&
+            mergeSelectionAnchor.data('merge-field') === $cell.data('merge-field');
+
+        if (sameCell) {
+            $cell.toggleClass('selected-merge');
+            mergeSelectionAnchor = $cell.hasClass('selected-merge') ? $cell : null;
+            return;
+        }
+
+        if (mergeSelectionAnchor.data('merge-field') !== $cell.data('merge-field')) {
+            limpiarSeleccionMerge();
+            $cell.addClass('selected-merge');
+            mergeSelectionAnchor = $cell;
+            return;
+        }
+
+        seleccionarRangoMerge(mergeSelectionAnchor, $cell);
+        mergeSelectionAnchor = null;
+    }
+
+    function descombinarCelda($cell) {
+        if (!$cell.length) {
+            return;
+        }
+
+        const mergeField = $cell.data('merge-field');
+        const rowspan = parseInt($cell.attr('rowspan') || '1', 10);
+
+        if (rowspan <= 1) {
+            return;
+        }
+
+        const startIndex = $cell.closest('tr').index();
+        $cell.removeAttr('rowspan');
+
+        for (let offset = 1; offset < rowspan; offset++) {
+            const $row = $('#durezaBrinellBody tr').eq(startIndex + offset);
+            $row.find(`.mergeable-cell[data-merge-field="${mergeField}"]`).show();
+        }
+
+        guardarEstadoMerges();
+    }
+
+    function descombinarTodasLasCeldas() {
+        $('#durezaBrinellBody .mergeable-cell[rowspan]').each(function() {
+            descombinarCelda($(this));
+        });
+    }
+
+    function sincronizarCeldasCombinadas($cell) {
+        const rowspan = parseInt($cell.attr('rowspan') || '1', 10);
+        const mergeField = $cell.data('merge-field');
+        const value = $cell.find('input').val();
+        const startIndex = $cell.closest('tr').index();
+
+        if (rowspan <= 1) {
+            return;
+        }
+
+        for (let offset = 1; offset < rowspan; offset++) {
+            const $row = $('#durezaBrinellBody tr').eq(startIndex + offset);
+            $row.find(`.mergeable-cell[data-merge-field="${mergeField}"] input`).val(value);
+        }
+    }
+
+    function obtenerCeldasSeleccionadas() {
+        return $('#durezaBrinellBody .mergeable-cell.selected-merge:visible');
+    }
+
+    function combinarCeldasSeleccionadas() {
+        const $selected = obtenerCeldasSeleccionadas();
+
+        if ($selected.length < 2) {
+            alert('Selecciona al menos 2 celdas de la misma columna para combinar.');
+            return;
+        }
+
+        const field = $selected.first().data('merge-field');
+        const rowIndexes = $selected.map(function() {
+            return $(this).closest('tr').index();
+        }).get().sort((a, b) => a - b);
+
+        const sameField = $selected.toArray().every(cell => $(cell).data('merge-field') === field);
+        const consecutive = rowIndexes.every((rowIndex, position) => {
+            return position === 0 || rowIndex === rowIndexes[position - 1] + 1;
+        });
+
+        if (!sameField || !consecutive) {
+            alert('Solo puedes combinar celdas consecutivas de una misma columna.');
+            return;
+        }
+
+        const $masterCell = $selected.first();
+        const masterValue = $masterCell.find('input').val();
+        $masterCell.attr('rowspan', $selected.length);
+
+        $selected.slice(1).each(function() {
+            const $cell = $(this);
+            $cell.find('input').val(masterValue);
+            $cell.hide();
+        });
+
+        limpiarSeleccionMerge();
+        mergeSelectionAnchor = null;
+        guardarEstadoMerges();
+    }
+
+    function separarCeldasSeleccionadas() {
+        const $selected = obtenerCeldasSeleccionadas();
+
+        if ($selected.length === 0) {
+            alert('Selecciona una celda combinada para separar.');
+            return;
+        }
+
+        $selected.each(function() {
+            descombinarCelda($(this));
+        });
+
+        limpiarSeleccionMerge();
+        mergeSelectionAnchor = null;
+        guardarEstadoMerges();
+    }
+
+    function configurarTablaDurezaBrinell() {
+        const $tbody = $('#durezaBrinellBody');
+        const $addButton = $('#addDurezaRowsBtn');
+        const $numRows = $('#numRows');
+        const $mergeButton = $('#mergeSelectedCellsBtn');
+        const $splitButton = $('#splitSelectedCellsBtn');
+
+        restaurarEstadoMerges();
+
+        $tbody.on('click', '.mergeable-cell', function() {
+            manejarSeleccionMerge($(this));
+        });
+
+        $tbody.on('click', '.mergeable-cell input', function(e) {
+            e.stopPropagation();
+            manejarSeleccionMerge($(this).closest('.mergeable-cell'));
+        });
+
+        $tbody.on('input', '.mergeable-cell input', function() {
+            sincronizarCeldasCombinadas($(this).closest('.mergeable-cell'));
+        });
+
+        $addButton.on('click', function() {
+            descombinarTodasLasCeldas();
+            const amount = parseInt($numRows.val(), 10) || 1;
+            let startIndex = $tbody.find('tr').length;
+
+            for (let i = 0; i < amount; i++) {
+                $tbody.append(construirFilaDureza(startIndex + i));
+            }
+
+            renumerarFilasDureza();
+            mergeSelectionAnchor = null;
+            guardarEstadoMerges();
+        });
+
+        $mergeButton.on('click', function() {
+            combinarCeldasSeleccionadas();
+        });
+
+        $splitButton.on('click', function() {
+            separarCeldasSeleccionadas();
+        });
+
+        $tbody.on('click', '.btnEliminarDureza', function() {
+            descombinarTodasLasCeldas();
+            if ($tbody.find('tr').length === 1) {
+                $(this).closest('tr').find('input').val('');
+                return;
+            }
+
+            $(this).closest('tr').remove();
+            renumerarFilasDureza();
+            mergeSelectionAnchor = null;
+            guardarEstadoMerges();
+        });
+    }
 
     /*FOR-PIMP-02_B_04*/
     document.addEventListener('DOMContentLoaded', function () {
+        configurarTablaDurezaBrinell();
+
         const form = document.getElementById('FOR-PIMP-02_B_04');
         if (!form) return;
+        const preFormBtn = document.getElementById('preFormBtn');
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-PIMP-02_B_03_Form_' + el.name, el.value);
+            //});
+        //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
@@ -905,12 +1862,139 @@ $(document).ready(function() {
 
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
+            guardarEstadoMerges();
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
                 localStorage.removeItem('FOR-PIMP-02_B_04_Form_' + el.name);
                 //localStorage.clear();
             });
         });
+
+        if (preFormBtn) {
+            preFormBtn.addEventListener('click', function () {
+                form.querySelectorAll('input, textarea, select').forEach(function (field) {
+                    if (field.disabled || field.readOnly || !field.name) return;
+
+                    const type = (field.type || '').toLowerCase();
+
+                    if (['hidden', 'file', 'checkbox', 'radio', 'button', 'submit'].includes(type)) {
+                        return;
+                    }
+
+                    if (field.tagName === 'SELECT') {
+                        if ((field.value || '').trim() !== '') {
+                            return;
+                        }
+
+                        const firstValidOption = Array.from(field.options).find(function (option) {
+                            return option.value !== '' && !option.disabled;
+                        });
+
+                        if (firstValidOption) {
+                            field.value = firstValidOption.value;
+                            localStorage.setItem('FOR-PIMP-02_B_04_Form_' + field.name, field.value);
+                        }
+                        return;
+                    }
+
+                    if ((field.value || '').trim() !== '') {
+                        return;
+                    }
+
+                    if (type === 'date') {
+                        field.value = new Date().toISOString().split('T')[0];
+                    } else {
+                        field.value = '---';
+                    }
+
+                    localStorage.setItem('FOR-PIMP-02_B_04_Form_' + field.name, field.value);
+                });
+
+                $('#durezaBrinellBody .mergeable-cell[rowspan]').each(function () {
+                    sincronizarCeldasCombinadas($(this));
+                });
+
+                guardarEstadoMerges();
+            });
+        }
     });
+
+    function guardarTablaIM0203() {
+        if (typeof saveDataIM0203 === 'function') saveDataIM0203();
+    }
+
+    function renumerarTablaIM0203() {
+        let index = 0;
+        $('#dynamicTable tbody tr').not('.titulo-row, .long-row').each(function() {
+            index++;
+            $(this).find('td:first').html(index + ' <input type="hidden" value="' + index + '">');
+        });
+    }
+
+    function agregarFilaIM0203() {
+        const amount = parseInt($('#numRows').val(), 10) || 1;
+        const lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+        const fields = [
+            ['valor_dureza1', 'Valor Dureza 1'],
+            ['valor_dureza2', 'Valor Dureza 2'],
+            ['valor_dureza3', 'Valor Dureza 3'],
+            ['valor_dureza4', 'Valor Dureza 4'],
+            ['valor_dureza5', 'Valor Dureza 5']
+        ];
+        let currentRows = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+        for (let i = 0; i < amount; i++) {
+            currentRows++;
+            const inputsHtml = fields.map(function(field) {
+                return '<td><input type="text" class="form-control" name="' + field[0] + '[' + lastTitle + '][]" placeholder="' + field[1] + '"></td>';
+            }).join('');
+
+            $('#dynamicTable tbody').append(
+                '<tr data-titulo="' + lastTitle + '">' +
+                '<td>' + currentRows + ' <input type="hidden" value="' + currentRows + '"></td>' +
+                inputsHtml +
+                '<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>' +
+                '</tr>'
+            );
+        }
+
+        if (typeof verificarYAgregarLongitud === 'function') verificarYAgregarLongitud();
+        renumerarTablaIM0203();
+        guardarTablaIM0203();
+    }
+
+    function agregarTituloIM0203() {
+        if (typeof verificarYAgregarLongitud === 'function') verificarYAgregarLongitud();
+        const titleId = 'titulo_' + ($('.titulo-row').length + 1) + '_' + Date.now();
+
+        $('#dynamicTable tbody').append(
+            '<tr class="titulo-row" data-titulo="' + titleId + '">' +
+            '<td colspan="6"><div class="d-flex align-items-center">' +
+            '<input type="text" class="form-control w-90 titulo-text" name="titulos_text[' + titleId + ']" placeholder="Ingrese titulo Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">' +
+            '<input type="hidden" class="titulo-id" name="titulos_ids[]" value="' + titleId + '">' +
+            '</div></td>' +
+            '<td><button type="button" class="btn btn-danger btnEliminarTitulo"><i class="fa fa-times" aria-hidden="true"></i></button></td>' +
+            '</tr>'
+        );
+
+        guardarTablaIM0203();
+    }
+
+    function agregarLongitudIM0203() {
+        if (typeof verificarYAgregarLongitud === 'function') verificarYAgregarLongitud();
+        const lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+        $('#dynamicTable tbody').append(
+            '<tr class="long-row" data-titulo="' + lastTitle + '">' +
+            '<td colspan="6"><div class="d-flex align-items-center">' +
+            '<span class="mr-2">Longitud Inspeccionada</span>' +
+            '<input type="text" class="form-control w-90 long-text" name="Long_Inspecc[' + lastTitle + '][]" placeholder="Ingrese Longitud Inspeccionada...">' +
+            '</div></td>' +
+            '<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>' +
+            '</tr>'
+        );
+
+        guardarTablaIM0203();
+    }
 
 </script>
 @endsection

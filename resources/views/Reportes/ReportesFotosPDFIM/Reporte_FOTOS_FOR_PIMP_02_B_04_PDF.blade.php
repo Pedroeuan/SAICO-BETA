@@ -1,147 +1,166 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>FOTOS FOR-PIMP-02_B/04</title>
     <style>
         @page {
-            margin: 3cm 1.2cm 2.1cm 2.2cm;
-        }
+                    margin: 
+                    3.0cm /* superior */
+                    1.2cm /* derecho */
+                    2.1cm /* inferior */
+                    2.2cm; /* izquierdo */
+                }
 
-        body {
-            font-family: Arial, sans-serif;
-            margin-top: 27px;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
+            header {
+                    position: fixed;
+                    top: -51px; /* Ajusta para que no interfiera con el margen de la pÃ¡gina */
+                    left: 0;
+                    right: 0;
+                    height: auto; /* Permite que el header crezca dinÃ¡micamente */
+                    text-align: center;
+                    /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
 
-        header {
-            position: fixed;
-            top: -58px;
-            left: 0;
-            right: 0;
+                footer {
+                    position: fixed;
+                    bottom: -30px; /* Ajusta la posiciÃ³n */
+                    left: 0;
+                    right: 0;
+                    height: auto;
+                    text-align: center;
+                    /*background-color: rgb(7, 231, 18)/* Fondo para que sea visible */
+                    font-family: 'arial', sans-serif;
+                }
+
+                body {
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin: 0;*/
+                    padding-top: 0px; /* Altura del header */
+                    padding-bottom: 0px; /* Altura del footer */
+                    font-family: 'arial', sans-serif;
+                    /*background-color:rgb(45, 78, 226); /* Fondo para que sea visible */
+                }
+
+                .datosgenerales{
+                    border: 0px !important;
+                    text-align: center;
+                    border-collapse: collapse;
+                    width: 100%;
+                    font-size: 9px !important;
+                    font-family: 'arial', sans-serif;
+                } 
+                
+                /*muestra solo la linea inferior de la celda*/
+                .lineaInferior{
+                    border-bottom: 1px solid black;
+                    text-align: center;
+                    font-size: 8px;
+                }
+
+                .tablaheader {
+                    border-collapse: collapse; 
+                    border-spacing: 0px;        /* Espacio entre celdas */
+                    width: 100%;
+                    text-align: center;
+                    font-size: 9px;
+                }
+                    
+                /* Aplica el borde a las celdas de la tabla */
+                .tablaheader th {
+                    /*width: 70%;*/
+                    border: 1px solid black; 
+                }
+
+        .encabezadoAzul{
             text-align: center;
-        }
-
-        footer {
-            position: fixed;
-            bottom: -30px;
-            left: 0;
-            right: 0;
-            text-align: center;
-        }
-
-        .tablaheader {
-            border-collapse: collapse;
             width: 100%;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        .tablaheader th {
-            border: 1px solid black;
-        }
-
-        .encabezadoAzul {
-            text-align: center;
+            font-size: 8px;
             background-color: #305496;
-            color: #fff;
-            font-size: 8px;
+            color: #ffffff;
+            outline: 1px double #000000; /* Contorno externo */
         }
 
-        .datosgenerales,
-        .datosinspeccion {
+        .border {
+            border: 1px solid black; 
+        }
+
+        .sinBordetdth td, .sinBordetdth th {
+            border: 0px !important;
+            text-align: center;
             border-collapse: collapse;
             width: 100%;
-            font-size: 8px;
         }
-
-        .datosgenerales th,
-        .datosgenerales td {
-            padding: 3px;
+        
+        .sinBordetd td {
+            border: 0px !important;
             text-align: center;
-            vertical-align: bottom;
+            border-collapse: collapse;
+            width: 100%;
         }
 
-        .datosinspeccion th,
-        .datosinspeccion td {
-            border: .6px solid black;
-            padding: 3px;
-            text-align: center;
-            vertical-align: middle;
+        .sinBordeth th {
+            border: 0px !important;
+            text-align: left;
+            border-collapse: collapse;
+            width: 100%;
         }
-
-        .lineaInferior {
-            border-bottom: 1px solid black;
-        }
-
-        .etiquetaGeneral {
-            width: 12%;
-            font-weight: bold;
-            line-height: 10px;
-        }
-
-        .valorGeneral {
-            border-bottom: 1px solid black;
-            height: 13px;
-        }
-
-        .tablaEquipos {
-            table-layout: fixed;
-        }
-
-        .celdaGris {
-            background-color: #DBDBDB;
-            font-weight: bold;
-            text-align: left !important;
-        }
-
+        /* ************** */
         .imagenes-reporte {
-            margin-left: -15px;
+            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
             width: 106%;
             border-collapse: separate;
-            border-spacing: 20px 14px;
-            table-layout: fixed;
+            /*border-spacing: 20px; /* Espacio entre celdas */
+            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
+            margin-bottom: 0;
+            table-layout: fixed; /* Fija el ancho de las celdas */
         }
 
         .foto-container {
-            width: 312px;
-            height: 170px;
-            border: 1px solid black;
-            padding: 0;
+            padding: 0px; /* Asegura que la imagen toque el borde de la celda de izquierda- a(0) derecha+*/
+            width: 312px;  /* Fija el ancho de la celda */
+            height: 170px; /* Fija la altura de la celda */
+            border: 1px solid black; 
             vertical-align: middle;
-            text-align: center;
         }
 
         .foto-container img {
-            width: 312px;
-            height: 170px;
-            object-fit: cover;
-            display: block;
+            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
+            object-fit: cover; /* Llenar el espacio sin distorsionar */
+            width: 332.5px;  /* Ajusta el ancho de la celda */
+            height: 170px; /* Ajusta la altura de la celda */
+            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .comment {
-            border-top: 1px solid black;
-            padding-top: 5px;
-            margin-top: 0;
-            text-align: center;
-            font-size: 8px;
-            word-wrap: break-word;
+        /* Estilo para los comentarios */
+        .comment { 
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 7px; /* Espaciado entre el borde y el texto */
+            margin-top: 0px; /* Espacio entre la imagen y el comentario */
+            text-align: center; /* Centrar el texto */
+            /*font-size: 12px; /* Ajusta el tamaÃ±o de la fuente si es necesario */
+            max-width: 100%; /* Para que el texto no desborde */
+            word-wrap: break-word; /* Permite que el texto se ajuste */
         }
-
-        .empty-box {
-            background-color: #fff;
-        }
-
+        /* Estilo para los "comentarios" en blanco */
         .empty-comment {
-            margin-top: 170px;
-            border-top: 1px solid black;
-            padding-top: 32px;
+            margin-top: 170px;   /* AÃ±ade espacio entre las lÃ­neas cruzadas y el comentario */
+            border-top: 1px solid black; /* Borde superior de 2px en color negro */
+            padding-top: 42px; /* Espaciado entre el borde y el texto del comentario de las vacios*/
+        }
+        
+        .empty-box {
+            background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacÃ­os */
         }
 
         .cross-line {
             width: 74%;
-            height: 0;
+            height: 0px; /* Ajusta segÃºn el tamaÃ±o de las imÃ¡genes */
             position: relative;
         }
 
@@ -149,48 +168,84 @@
         .cross-line::after {
             content: "";
             position: absolute;
-            top: 84px;
-            left: -21px;
-            width: 152.5%;
+            top: 84px; /* Ajusta esta propiedad para mover la lÃ­nea hacia arriba o hacia abajo */
+            left: -21px; /* Ajusta para alinear la lÃ­nea */
+            width: 152.5%; /* Aumenta el ancho de la lÃ­nea */
             height: 100%;
             border-top: 2px solid black;
-            transform: rotate(27deg);
+            transform: rotate(27deg); /* Ajusta el Ã¡ngulo de la primera lÃ­nea */
         }
 
         .cross-line::after {
             transform: rotate(-27deg);
         }
-
         .foto-container[colspan="2"] img {
             width: 100%;
-            height: 170px;
+            height: 23%;
         }
 
+        /* ===== Imagen que ocupa una hoja completa ===== */
         .foto-full {
             width: 100% !important;
-            height: 300px !important;
+            height: 435px !important;
         }
 
         .foto-full img {
             width: 100% !important;
-            height: 272px !important;
-            object-fit: contain;
+            height: 404px !important;
+            object-fit: contain; /* no recorta */
         }
 
-        .photo-page {
-            page-break-inside: avoid;
+        .foto-full .comment {
+            margin-top: 0px;
+            font-size: 12px;
         }
 
-        footer table {
-            margin-left: auto;
-            margin-right: auto;
+        .tablaGenerales {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+            table-layout: fixed;
+        }
+
+        .tablaGenerales th,
+        .tablaGenerales td {
+            padding: 3px 3px;
+            vertical-align: bottom;
+            text-align: left;
+        }
+
+        .etiquetaGeneral {
+            width: 12%;
+            font-weight: bold;
+            line-height: 10px;
+            text-align: left;
+        }
+
+        .etiquetaGeneralCentrada {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+
+        .etiquetaGeneralCentrada .titulo-es-nowrap {
+            display: block;
+            white-space: nowrap;
             text-align: center;
         }
 
-        footer th,
-        footer td {
+        .valorGeneral {
+            border-bottom: 1px solid black;
+            height: 13px;
             text-align: center;
             vertical-align: middle;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .tituloGeneralPdf {
+            text-align: center !important;
+            line-height: 11px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -208,7 +263,7 @@
             </tr>
             <tr>
                 <th rowspan="2">Informe de Ensayo de Durezas en Soldaduras<br>Test Report on Welding Hardness</th>
-                <th>VERSIÓN<br>VERSION</th>
+                <th>VERSIÃ“N<br>VERSION</th>
                 <th>2</th>
             </tr>
             <tr>
@@ -415,111 +470,75 @@
             $fotosGrupo[0]['una_hoja'] == 1
         );
     @endphp
-    <div class="content photo-page">
-        <table class="datosgenerales">
-            <thead class="encabezadoAzul">
-                <tr><th colspan="6">DATOS GENERALES<br>GENERAL DATA</th></tr>
-            </thead>
-            <tbody>
-                <tr>
-            <th class="etiquetaGeneral">FECHA<br>DATE:</th>
+    <table class="tablaGenerales">
+    <thead class="encabezadoAzul">
+        <tr>
+            <th colspan="6" class="tituloGeneralPdf">DATOS GENERALES<br>General Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th class="etiquetaGeneral">FECHA:<br>Date</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. REPORTE<br>No. REPORT:</th>
+            <th class="etiquetaGeneral">No. REPORTE:<br>No. Report:</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">CLIENTE<br>CLIENT:</th>
+            <th class="etiquetaGeneral">CLIENTE:<br>Client:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. CONTRATO<br>No. CONTRACT:</th>
+            <th class="etiquetaGeneral">No. CONTRATO:<br>No. Contract:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">PROYECTO<br>PROJECT:</th>
+            <th class="etiquetaGeneral">PROYECTO:<br>Project:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO<br>WORK ORDER:</th>
+            <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO:<br>Work Order:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">FOLIO<br>FOLIO:</th>
+            <th class="etiquetaGeneral">FOLIO:<br>Folio:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">PARTIDA<br>LOT:</th>
+            <th class="etiquetaGeneral">PARTIDA:<br>Lot:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">INSTALACION<br>LOCATION:</th>
+            <th class="etiquetaGeneral">INSTALACIÓN:<br>Location:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. ISOMETRICO<br>No. ISOMETRIC:</th>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">NUMERO DE ISOMÉTRICO:</span>No. Isometric:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">ELEMENTOS SOLDADOS<br>WELDINGS:</th>
-            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Elementos_Soldados'] ?? '' }}</td>
-            <th class="etiquetaGeneral">MATERIAL<br>MATERIAL:</th>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">NOMBRE DE LAS PIEZAS:</span>Name of the Pieces:</th>
+            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Nom_Pieza'] ?? '' }}</td>
+            <th class="etiquetaGeneral">MATERIAL:<br>Material:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">No. JUNTA<br>No. JOINT:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
-            <th class="etiquetaGeneral">TRAZABILIDAD<br>TRACEABILITY:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
-            <th class="etiquetaGeneral">ESPESORES<br>THICKNESSES:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Espesores'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral">PROCEDIMIENTO<br>PROCEDURE:</th>
+            <th class="etiquetaGeneral">PROCEDIMIENTO:<br>Procedure</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
-            <th class="etiquetaGeneral">CODIGO DE DISENO<br>DESIGN CODE:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Codigo_Diseno'] ?? '' }}</td>
-            <th class="etiquetaGeneral">DIAM. NOMINAL<br>NOMINAL DIAMETER:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Diam_Nominal'] ?? '' }}</td>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">CRITERIO DE EVALUACIÓN:</span>Evaluation Criteria:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</td>
+            <th class="etiquetaGeneral">TRAZABILIDAD:<br>Traceability:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA ANTES<br>DEL RELEVADO<br>HARDNESS REPORT BEFORE THE<br>RELIEVED OF STRESS:</th>
-                    <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Antes_Relevado'] ?? '' }}</td>
-                    <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA<br>DESPUES DEL RELEVADO<br>HARDNESS REPORT AFTER THE<br>RELIEVED OF STRESS:</th>
-                    <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Despues_Relevado'] ?? '' }}</td>
+            <th class="etiquetaGeneral">No JUNTA:<br>No. Joint:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">TEMPERATURA DE LA PIEZA:</span>Piece Temperature</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Temperatura_pieza'] ?? '' }}</td>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">ESPESOR/CÉDULA:</span>Thickness / Schedule:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Espesor_cedula'] ?? '' }}</td>
         </tr>
-            </tbody>
-        </table>
+    </tbody>
+</table>
 
         @if(!$esHojaCompleta)
         <div style="margin-bottom: 6px;"></div>
 
-        <table class="datosinspeccion tablaEquipos">
-            <colgroup>
-                <col style="width: 40%;">
-                <col style="width: 20%;">
-                <col style="width: 20%;">
-                <col style="width: 20%;">
-            </colgroup>
-            <thead>
-                <tr class="encabezadoAzul"><th colspan="4">DATOS DEL EQUIPO<br>EQUIPMENT DATA</th></tr>
-                <tr>
-                    <th>EQUIPO<br>EQUIPMENT</th>
-                    <th>MARCA<br>BRAND</th>
-                    <th>MODELO<br>MODEL</th>
-                    <th>No. SERIE<br>SERIAL NUMBER</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="celdaGris">MAQUINA DE RELEVADO<br>STRESS RELIEF MACHINE:</td>
-                    <td>{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td>
-                    <td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td>
-                    <td>{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td class="celdaGris">GRAFICADOR<br>GRAPHIER:</td>
-                    <td>{{ $Datos_Equipo['MARCA_EQUIPO1'] ?? '' }}</td>
-                    <td>{{ $Datos_Equipo['MODELO_EQUIPO1'] ?? '' }}</td>
-                    <td>{{ $Datos_Equipo['NS_EQUIPO1'] ?? '' }}</td>
-                </tr>
-            </tbody>
-        </table>
 
         <div style="margin-bottom: 6px;"></div>
         @endif
@@ -559,3 +578,4 @@
 @endforeach
 </body>
 </html>
+
