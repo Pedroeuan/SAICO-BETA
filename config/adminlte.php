@@ -606,7 +606,7 @@ return [
                     [
                         'text' => 'Lista deNormas IM',
                         'icon' => 'far fa-list-alt',
-                        'url' => '/Normas_IM/index',
+                        'url' => '/index/Normas_IM',
                     ],
                 ],
             ],

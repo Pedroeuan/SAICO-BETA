@@ -192,7 +192,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         
         /*NORMAS IM*/
         /*Vista Menu Normas IM*/
-        Route::get('/index/Normas_IM', [NormasIMController::class, 'indexNormasIM'])->name('index.Normas_IM');
+        Route::get('/index/Normas_IM', [NormasIMController::class, 'index'])->name('index.Normas_IM');
         /*vista Normas IM*/
         Route::get('/Normas_IM/Create', [NormasIMController::class, 'create'])->name('Normas_IM.Create');
         /*Ruta de Guardado*/
