@@ -67,9 +67,8 @@
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
-
                                             <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
+
                                             </tbody>
                                     </table>
                                     </div>

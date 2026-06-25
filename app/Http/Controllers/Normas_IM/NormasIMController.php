@@ -55,7 +55,7 @@ class NormasIMController extends Controller
         $Normas_IM->Observaciones = $request->input('Observaciones');
         $Normas_IM->save();
 
-        return view('Normas_IM.create')->with('success', 'Norma registrada exitosamente.');
+        return redirect()->route('index.Normas_IM');
     }
 
     /**
@@ -72,8 +72,13 @@ class NormasIMController extends Controller
     public function edit($id)
     {
         $Normas_IM = Normas_IM::where('idnormas_im', $id)->first();
+
+        // Convertir JSON a arreglo PHP
+        $tabla = json_decode($Normas_IM->Tabla, true);
         
-        return view('Normas_IM.edit', compact('Normas_IM'));
+        //$tabla = $Normas_IM ? json_decode($Normas_IM->Tabla, true) : [];
+
+        return view('Normas_IM.edit', compact('Normas_IM', 'tabla'));
     }
 
     /**
@@ -87,8 +92,15 @@ class NormasIMController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Normas_IM $normas_IM)
+    public function destroy($id)
     {
-        //
+        $Normas_IM = Normas_IM::find($id);
+    
+        if ($Normas_IM) {
+            $Normas_IM->delete();
+            return response()->json(['success' => true, 'message' => 'Norma eliminada correctamente.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No se pudo encontrar la norma.']);
+        }
     }
 }
