@@ -239,7 +239,16 @@
         "FOR-PINS-24-01": "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES y TOFD", //MISMO FORMATO QUE EL 15-01 
         "FOR-PINS-25-01": "INSPECCIÓN VISUAL EN RSP",
         "FOR-03-PRO-INS-15": "LISTADO DE COMPONENTES", //Mantiene su mismo formato pero con un nombre personalizado
-        "FOR-PIMP-07_B/01": "TRATAMIENTO TÉRMICO DE PWHT (INFORME DE RELEVADO DE ESFUERZOS)"
+        // FORMATOS DE INTEGRIDAD MECÁNICA
+        "FOR-PIMP-02_B/03": "Informe de Ensayo de Durezas en Metales Base Hardness Test Report on Base Metals",
+        "FOR-PIMP-02_B/04": "Informe de Ensayo de Durezas en Soldaduras Test Report on Welding Hardness",
+        "FOR-PIMP-03_B/01": "Informe de Análisis Metalográfico Metallographic Analysis Report",
+        "FOR-PIMP-04/02": "Informe de Caracterización de Materiales Mediante la Técnica de Espectrometría de Emisión Óptica (OES)",
+        "FOR-PIMP-04/03": "Informe de Caracterización de Materiales Mediante la Técnica de Fluorescencia de Rx (XRF)",
+        "FOR-PIMP-05/01": "Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)",
+        "FOR-PIMP-05_B/01": "Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)/Chemical Analysis Report Using the Optical Emission Spectrometry Technique (OES",
+        "FOR-PIMP-06_B/01": "Informe de Análisis químico mediante la Técnica de Fluorescencia de Rayos X (XRF)/Chemicals Analysis Report Using the X-Ray Fluorescense Technique (XRF",
+        "FOR-PIMP-07_B/01": "INFORME DE RELEVADO DE ESFUERZOS RELIEVED OF STRESS INFORM"
     };
 
     pruebaSelect.addEventListener('change', function () {

@@ -2,22 +2,48 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FOR-PIMP-02_B/03</title>
+    <title>FOR-PIMP-04/03</title>
 
     <style>
         @page {
-            margin: 1cm 1.2cm 1cm 1.2cm;
+            margin: 3cm 1.2cm 2.1cm 2.2cm;
         }
 
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin-top: 27px;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
-        header, footer {
-            width: 100%;
+        header {
+            position: fixed;
+            top: -56px;
+            left: 0;
+            right: 0;
+            height: auto;
             text-align: center;
+        }
+
+        footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            height: auto;
+            text-align: center;
+        }
+
+        footer table {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        footer th,
+        footer td {
+            text-align: center;
+            vertical-align: middle;
         }
 
         .tablaheader {
@@ -34,79 +60,100 @@
         .encabezadoAzul {
             text-align: center;
             background-color: #305496;
-            color: #ffffff;
+            color: #fff;
             font-size: 8px;
-            font-weight: bold;
         }
 
-        .datosgenerales {
+        .datosgenerales,
+        .datosinspeccion {
             border-collapse: collapse;
             width: 100%;
             font-size: 8px;
+        }
+
+        .datosinspeccion th,
+        .datosinspeccion td {
+            border: .6px solid black;
+            padding: 3px;
+        }
+
+        .tablaEquipos {
+            table-layout: fixed;
+        }
+
+        .celdaGris {
+            background-color: #DBDBDB;
         }
 
         .lineaInferior {
             border-bottom: 1px solid black;
         }
 
-        .celdaGris {
-            background-color: #f2f2f2;
-        }
-
-        /* Espaciadores compactos */
-        br {
-            content: "";
-            display: block;
-            margin: 2px 0;
-            line-height: 2px;
-        }
-
-        /* Microestructura compacta para forzar una hoja */
-        .tabla-micro {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 15px 2px;
-            font-size: 9px;
-        }
-
-        .cuadro {
-            border: 1.5px solid #000;
-            height: 110px; /* Reducido para ahorrar espacio */
-            position: relative;
-            vertical-align: top;
-        }
-
-        .texto-arriba {
-            position: absolute;
-            top: 3px;
-            left: 5px;
-            font-weight: bold;
-            font-size: 7.5px;
-        }
-
-        .texto-abajo {
-            position: absolute;
-            bottom: 3px;
-            left: 0;
-            right: 0;
-            font-size: 7.5px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        /* Tablas Técnicas */
-        .tabla-tecnica {
-            width: 100%;
+        .tablaPrueba {
             border-collapse: collapse;
-            font-size: 7px;
-            margin-top: 3px;
+            width: 100%;
+            font-size: 8px;
+            border: none;
+        }
+
+        .tablaPrueba th {
+            padding: 0;
+            line-height: 9px;
+        }
+
+        .tablaPrueba td {
+            padding: 6px 3px;
+            text-align: center;
+            vertical-align: middle;
+            border: none;
+        }
+
+        .tablaPrueba .encabezadoAzul th {
+            border: .6px solid black;
+        }
+
+        .etiquetaPrueba {
+            width: 28%;
+            font-weight: bold;
+            line-height: 11px;
+        }
+
+        .valorPrueba {
+            width: 18%;
+            border-bottom: 1px solid black;
+            min-height: 12px;
+        }
+
+        .tablaPrueba td.valorPrueba {
+            border-bottom: 1px solid black;
+        }
+
+        .separadorPrueba {
+            width: 8%;
+        }
+
+        .tablaGenerales {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+        }
+
+        .tablaGenerales th,
+        .tablaGenerales td {
+            padding: 3px 3px;
+            vertical-align: bottom;
             text-align: center;
         }
 
-        .tabla-tecnica th, .tabla-tecnica td {
-            border: 1px solid black;
-            height: 11px;
-            padding: 1px;
+        .etiquetaGeneral {
+            width: 12%;
+            font-weight: bold;
+            line-height: 10px;
+        }
+
+        .valorGeneral {
+            border-bottom: 1px solid black;
+            height: 13px;
         }
     </style>
 </head>
@@ -115,223 +162,361 @@
 
 <header>
     <table class="tablaheader">
-        <tr>
-            <th style="width: 50%;">FORMATO</th>
-            <th style="width: 15%;">Código:</th>
-            <th style="width: 20%;">FOR-PIMP-04_/03</th>
-            <th rowspan="3" style="width: 15%;">
-                <img src="{{ $Logo }}" alt="Logo" style="width:50px;">
-            </th>
-        </tr>
-        <tr>
-            <th rowspan="2" style="font-size:9pt;">
-                Informe de Caracterizacíon de Materiales Mediante la Técnica<br>
-                de Fluorescencia de Rx (XRF)
-            </th>
-            <th>Versión</th>
-            <th>0</th>
-        </tr>
-        <tr>
-            <th>Página</th>
-            <th>1 de 1</th>
-        </tr>
+        <thead>
+            <tr>
+                <th style="width: 400%;">FORMATO<br>FORMAT</th>
+                <th style="width: 70%;">CÓDIGO<br>CODE</th>
+                <th style="width: 100%;">FOR-PIMP-04/03</th>
+                <th rowspan="3" style="width: 80%;">
+                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                </th>
+            </tr>
+            <tr>
+                <th rowspan="2">Informe de Caracterización de Materiales Mediante la Técnica de Fluorescencia de Rx (XRF)</th>
+                <th>VERSIÓN<br>VERSION</th>
+                <th>0</th>
+            </tr>
+            <tr>
+                <th>PÁGINA<br>PAGE</th>
+                <th></th>
+            </tr>
+        </thead>
     </table>
 </header>
+<footer>
+        <table class="datosgenerales">                               
+            <tr>                                     
+                <th>OBSERVACIONES<br>
+                REMARKS:</th>                                         
+                <td class="lineaInferior" style="width: 600px;">{{ $Datos_Equipo['Observaciones'] }}</td>                            
+            </tr>                      
+        </table>
 
-<table class="datosgenerales">
-    <tr class="encabezadoAzul">
-        <th colspan="4">DATOS GENERALES</th>
-    </tr>
-    <tr>
-        <th style="width: 20%;">FECHA:</th>
-        <td class="lineaInferior"></td>
-        <th style="width: 20%;">NO. REPORTE:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>CLIENTE:</th>
-        <td class="lineaInferior"></td>
-        <th>No. CONTRATO:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>PROYECTO:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>ORDEN DE TRABAJO:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>FOLIO:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>PARTIDA:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>INSTALACIÓN:</th>
-        <td class="lineaInferior"></td>
-        <th>No. ISOMÉTRICO:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>NOMBRE DE LA PIEZA:</th>
-        <td class="lineaInferior"></td>
-        <th>MATERIAL:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>TRAZABILIDAD:</th>
-        <td class="lineaInferior"></td>
-        <th>PROCEDIMIENTO:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>CRITERIO DE EVALUACIÓN:</th>
-        <td class="lineaInferior"></td>
-        <th>ACCESORIO:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>TUBERÍA:</th>
-        <td class="lineaInferior"></td>
-        <th>ESTRUCTURAL:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-    <tr>
-        <th>OBSERVACIONES Y NOTAS:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
+        <table class="datosgenerales">
+            <thead>
+                @if( $numFirmas == 2)
+                <!-- 2 Firmas -->
+                    <tr>
+                        <td style="width: 30px;"></td>
+                        <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                        <td style="width: 30px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                        <td style="width: 30px;"></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                    </tr>
+                                                        
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                    </tr>
+                @elseif( $numFirmas == 3)
+                <!-- 3 Firmas -->
+                    <tr>
+                        <td style="width: 20px;"></td>
+                        <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                        <td style="width: 20px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                        <td style="width: 20px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
+                        <td style="width: 20px;"></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
+                    </tr>
+                                                        
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
+                    </tr>
+                @elseif( $numFirmas == 4)
+                <!-- 4 Firmas -->
+                    <tr>
+                        <td style="width: 15px;"></td>
+                        <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                        <td style="width: 15px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                        <td style="width: 15px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
+                        <td style="width: 15px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
+                        <td style="width: 15px;"></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                        <th></th>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</strong></td>
+                        <th></th>
+                    </tr>
+                                                        
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_3RO_ENCARGADO'] }}</strong></td>
+                        <th></th>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] }}</strong></td>
+                        <th></th>
+                    </tr>
+                @endif
+            </thead>                            
+        </table>
+</footer>
+
+            {{-- ================= DATOS GENERALES ================= --}}
+<div style="margin-bottom: 2px;"></div>
+
+<table class="tablaGenerales">
+    <thead class="encabezadoAzul">
+        <tr><th colspan="6">DATOS GENERALES</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th class="etiquetaGeneral">FECHA<br>DATE:</th>
+            <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
+            <th class="etiquetaGeneral">No. REPORTE<br>No. REPORT:</th>
+            <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral">CLIENTE<br>CLIENT:</th>
+            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
+            <th class="etiquetaGeneral">No. CONTRATO<br>No. CONTRACT:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral">PROYECTO<br>PROJECT:</th>
+            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO<br>WORK ORDER:</th>
+            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral">FOLIO<br>FOLIO:</th>
+            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral">PARTIDA<br>LOT:</th>
+            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral">INSTALACION<br>LOCATION:</th>
+            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
+            <th class="etiquetaGeneral">No. ISOMETRICO<br>No. ISOMETRIC:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral" style="white-space: nowrap;">ELEMENTOS SOLDADOS<br>WELDINGS:</th>
+            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Elementos_Soldados'] ?? '' }}</td>
+            <th class="etiquetaGeneral">MATERIAL<br>MATERIAL:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral">No. JUNTA<br>No. JOINT:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
+            <th class="etiquetaGeneral">TRAZABILIDAD<br>TRACEABILITY:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
+            <th class="etiquetaGeneral">ESPESORES<br>THICKNESSES:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Espesores'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral">PROCEDIMIENTO<br>PROCEDURE:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
+            <th class="etiquetaGeneral">CODIGO DE DISENO<br>DESIGN CODE:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Codigo_Diseno'] ?? '' }}</td>
+            <th class="etiquetaGeneral">DIAM. NOMINAL<br>NOMINAL DIAMETER:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['Diam_Nominal'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA ANTES<br>DEL RELEVADO<br>HARDNESS REPORT BEFORE THE<br>RELIEVED OF STRESS:</th>
+                    <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Antes_Relevado'] ?? '' }}</td>
+                    <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA<br>DESPUES DEL RELEVADO<br>HARDNESS REPORT AFTER THE<br>RELIEVED OF STRESS:</th>
+                    <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Despues_Relevado'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<div style="margin-bottom: 3px;"></div>
+<table class="datosinspeccion tablaEquipos">
+    <colgroup>
+        <col style="width: 40%;">
+        <col style="width: 20%;">
+        <col style="width: 20%;">
+        <col style="width: 20%;">
+    </colgroup>
+    <thead class="encabezadoAzul">
+        <tr><th colspan="4">DATOS DE EQUIPOS<br> 
+            EQUIPMENT DATA</th></tr>
+    </thead>
+
+    <tbody>
+        <tr class="celdaGris">
+            <th>EQUIPO<br> 
+                EQUIPMENT</th>
+            <th>MARCA<br> 
+                BRAND</th>
+            <th>MODELO<br> 
+                MODEL</th>
+            <th>No. SERIE<br> 
+                SERIAL NUMBER</th>
+        </tr>
+        <tr>
+            <th class="celdaGris">MAQUINA DE RELEVADO<br> 
+                STRESS RELIEF MACHINE:</th>
+            <td>{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th class="celdaGris">GRAFICADOR<br> 
+                GRAPHIER:</th>
+            <td>{{ $Datos_Equipo['MARCA_EQUIPO1'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['MODELO_EQUIPO1'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['NS_EQUIPO1'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<div style="margin-bottom: 2px;"></div>
+<table class="tablaPrueba">
+    <thead class="encabezadoAzul">
+        <tr>
+            <th colspan="5">
+                DATOS DE PRUEBA<br>
+                TEST DATA
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td class="etiquetaPrueba">TEMPERATURA INICIAL<br>INITIAL TEMPERATURE (&deg;F)</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['TEMPERATURA_INICIAL'] ?? '' }}</td>
+            <td class="separadorPrueba"></td>
+            <td class="etiquetaPrueba">HORA INICIO DE PRUEBA<br>TEST START TIME:</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['HORA_INICIO'] ?? '' }}</td>
+        </tr>
+
+        <tr>
+            <td class="etiquetaPrueba">VEL. DE CALENTAMIENTO<br>HEATING RATE (&deg;F/hr)</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['VELOCIDAD_CALENTAMIENTO'] ?? '' }}</td>
+            <td class="separadorPrueba"></td>
+            <td class="etiquetaPrueba">HORA FINAL DE PRUEBA<br>TEST END TIME:</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['HORA_FINAL'] ?? '' }}</td>
+        </tr>
+
+        <tr>
+            <td class="etiquetaPrueba">TEMP. SOSTENIMIENTO<br>HOLDING TEMPERATURE (&deg;F)</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['TEMPERATURA_SOSTENIMIENTO'] ?? '' }}</td>
+            <td class="separadorPrueba"></td>
+            <td class="etiquetaPrueba">DIA DE INICIO DE PRUEBA<br>TEST START DAY</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['DIA_INICIO'] ?? '' }}</td>
+        </tr>
+
+        <tr>
+            <td class="etiquetaPrueba">TIEMPO DE SOSTENIMIENTO<br>HOLDING TIME (MIN)</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['TIEMPO_SOSTENIMIENTO'] ?? '' }}</td>
+            <td class="separadorPrueba"></td>
+            <td class="etiquetaPrueba">DIA DE FINALIZACION DE PRUEBA<br>TEST END DAY:</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['DIA_FINAL'] ?? '' }}</td>
+        </tr>
+
+        <tr>
+            <td class="etiquetaPrueba">VEL. DE ENFRIAMIENTO<br>COOLING RATE (&deg;F/hr)</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['VEL_ENFRIAMIENTO'] ?? '' }}</td>
+            <td class="separadorPrueba"></td>
+            <td class="etiquetaPrueba">No. GRAFICA<br>No.GRAPH</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['NO_GRAFICA'] ?? '' }}</td>
+        </tr>
+
+        <tr>
+            <td class="etiquetaPrueba">VEL. DEL GRAFICADO<br>GRAPHIER SPEED (mm/hr):</td>
+            <td class="valorPrueba">{{ $Datos_Equipo['VEL_GRAFICADOR'] ?? '' }}</td>
+            <td class="separadorPrueba"></td>
+            <td class="etiquetaPrueba"></td>
+            <td></td>
+        </tr>
+    </tbody>
 </table>
 
-<br>
-<table class="tabla-tecnica">
-    <tr class="encabezadoAzul">
-        <th colspan="6">ENSAYO DE DUREZA - DATOS DEL EQUIPO</th>
-    </tr>
-    <tr>
-        <th style="width: 10%;" class="celdaGris">MARCA</th>
-        <td style="width: 23%;"></td>
-        <th style="width: 10%;" class="celdaGris">MODELO</th>
-        <td style="width: 23%;"></td>
-        <th style="width: 15%;" class="celdaGris">NO. DE SERIE</th>
-        <td style="width: 19%;"></td>
-    </tr>
-</table>
-
-<table class="tabla-tecnica">
-    <tr class="encabezadoAzul"><th colspan="6">VALORES DE DUREZA MEDIDOS</th></tr>
-    <tr>
-        <td style="width: 16%;"></td><td style="width: 16%;"></td><td style="width: 16%;"></td><td style="width: 16%;"></td>
-        <th class="celdaGris" style="width: 16%;">PROMEDIO</th><td style="width: 20%;"></td>
-    </tr>
-</table>
-
-<table class="tabla-tecnica">
-    <tr class="encabezadoAzul"><th colspan="5">DATOS OBTENIDOS DEL MATERIAL</th></tr>
-    <tr class="celdaGris">
-        <th>DESCRIPCIÓN</th><th>DUREZA</th><th>R. TENSIÓN (KSI)</th><th>R. CEDENCIA (KSI)</th><th>GRANO</th>
-    </tr>
-    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
-</table>
-
-<table class="tabla-tecnica">
-    <tr class="encabezadoAzul"><th colspan="6">ANÁLISIS QUÍMICO - DATOS DEL EQUIPO</th></tr>
-    <tr>
-        <th class="celdaGris">MARCA</th><td></td>
-        <th class="celdaGris">MODELO</th><td></td>
-        <th class="celdaGris">NO. SERIE</th><td></td>
-    </tr>
-</table>
-
-<table class="shot-container">
-    <tr>
-        <td width="49%">
-            <table width="100%" style="border-collapse: collapse;">
-                <tr><th class="encabezadoAzul">1er. DISPARO </th></tr>
-                <tr><td class="shot-box">Valores obtenidos en la pieza analizada...</td></tr>
-            </table>
-        </td>
-        <td width="2%"></td>
-        <td width="49%">
-            <table width="100%" style="border-collapse: collapse;">
-                <tr><th class="encabezadoAzul">2do. DISPARO </th></tr>
-                <tr><td class="shot-box">Valores obtenidos en la pieza analizada...</td></tr>
-            </table>
-    </tr>
-</table>
-                <table>
-                        <thead> 
-                                4 Firmas 
-                                <tr>
-                                    <td style="width: 15px;"></td>
-                                    <th></th>
-                                    <td style="width: 15px;"></td>
-                                    <th></th>
-                                    <td style="width: 15px;"></td>
-                                    <th></th>
-                                    <td style="width: 15px;"></td>
-                                    <th></th>
-                                    <td style="width: 15px;"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <th></th>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <th></th>
-                                </tr>
-                                                                    
-                                <tr>
-                                    <th></th>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <th></th>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <th></th>
-                                </tr>
-                        </thead>                            
-                </table>
-            </footer>
-
-            <div class="content"> 
-
-                
-            </div>
-        </body>
-        
-    </html>
+</body>
+</html>
