@@ -6,12 +6,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\OC\OCController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TICS\TICSController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
-use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Clientes\ClientesController;
+use App\Http\Controllers\Normas_IM\NormasIMController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\PDFReportes\PDFReportesController;
@@ -189,6 +190,18 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         /*Ruta de crear/Actualizar Formato para las Normas o codigos*/
         Route::post('/Pruebas/Norma_Codigo/Formatos/UpdateCreateFormato/{id}', [PruebaController::class, 'UpdateCreateFormato'])->name('Pruebas.Norma_Codigo.Formatos.UpdateCreateFormato');
         
+        /*NORMAS IM*/
+        /*Vista Menu Normas IM*/
+        Route::get('/index/Normas_IM', [NormasIMController::class, 'index'])->name('index.Normas_IM');
+        /*vista Normas IM*/
+        Route::get('/Normas_IM/Create', [NormasIMController::class, 'create'])->name('Normas_IM.Create');
+        /*Ruta de Guardado*/
+        Route::post('/Normas_IM/store', [NormasIMController::class, 'store'])->name('Normas_IM.store');
+        /*vista Edición Normas IM*/
+        Route::get('/Normas_IM/Edit/{id}', [NormasIMController::class, 'edit'])->name('Normas_IM.Edit');
+        /*Ruta de Actualización*/
+        Route::post('/Normas_IM/update/{id}', [NormasIMController::class, 'update'])->name('Normas_IM.update');
+
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
         /*Controlador del a vista Menu.Servicios (Prueba/Prueba) para obtener el servicio y reedirigir a la vista a Seleccion-Servicios-Pruebas*/
