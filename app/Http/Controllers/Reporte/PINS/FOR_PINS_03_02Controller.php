@@ -9,6 +9,7 @@ use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
 use App\Models\Clientes\clientes;
+use App\Models\Admin\Usuario;
 use App\Models\detallesOC\detallesOC;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Reporte\Firma_Reporte;
@@ -49,6 +50,8 @@ class FOR_PINS_03_02Controller extends Controller
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
+
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -56,6 +59,7 @@ class FOR_PINS_03_02Controller extends Controller
             $datosParaCrearQR['idConstrastante'] ?? null,
             $datosParaCrearQR['idEquipo'] ?? null,
         ]);
+
 
         /*
         |--------------------------------------------------------------------------
@@ -73,7 +77,12 @@ class FOR_PINS_03_02Controller extends Controller
             ->pluck('Certificado_Actual')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+        $tecnicos = Usuario::where('id', $ID_TECNICO)
+            ->whereNotNull('cv_pdf')
+            ->pluck('cv_pdf')
+            ->toArray();
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
 
         Log::info('todasLasRutas', $todasLasRutas);
 
@@ -684,6 +693,11 @@ class FOR_PINS_03_02Controller extends Controller
             'idConstrastante' => $validatedData['Datos_Equipo']['ID_CONTRASTANTE'] ?? null,
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+                ?? null,
         ];
 
         /*
@@ -964,7 +978,7 @@ class FOR_PINS_03_02Controller extends Controller
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
-            
+            'ID_TECNICO' => $ID_TECNICO
         ];
 
         $this->OS_OC($datosParaCrearOS_OC);
@@ -1204,6 +1218,11 @@ class FOR_PINS_03_02Controller extends Controller
             'idConstrastante' => $validatedData['Datos_Equipo']['ID_CONSTRASTANTE'] ?? null,
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null,
         ];
 
         /*

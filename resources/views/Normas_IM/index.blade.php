@@ -47,11 +47,11 @@
                         <td>{{ $Norma->Nombre_Espe }}</td>
                         <td>{{ $Norma->Variable }}</td>
                             <td>
-                                <a href="{{ route('edicion.editUsuarios', ['id' => $Usuario->id]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                <a href= "{{route('Normas_IM.Edit',['id'=>$Norma->idnormas_im]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-danger btnEliminar" idUsuario="{{$Usuario->id}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-danger btnEliminar" idNorma="{{$Norma->idnormas_im}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </td>
                     </tr>
                 @endforeach
@@ -113,9 +113,9 @@ let table = new DataTable('#tablaJs', {
 });
 
     $(document).on("click", ".btnEliminar", function() {
-        var idUsuario = $(this).attr("idUsuario");
+        var idNorma = $(this).attr("idNorma");
         Swal.fire({
-            title: "¿Solo se dara de BAJA el Usuario?",
+            title: "¿Desea eliminar la Norma?",
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: "Sí",
@@ -123,7 +123,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/Usuarios/eliminar/' + idUsuario,
+                    url: '/Normas_IM/eliminar/' + idNorma,
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}'
@@ -131,7 +131,7 @@ let table = new DataTable('#tablaJs', {
                     success: function(response) {
                         if (response.success) {
                             Swal.fire({
-                                title: "BAJA!",
+                                title: "¡Eliminada!",
                                 text: response.message,
                                 icon: "success",
                                 didClose: function() {

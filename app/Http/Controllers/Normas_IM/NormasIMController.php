@@ -72,9 +72,8 @@ class NormasIMController extends Controller
     public function edit($id)
     {
         $Normas_IM = Normas_IM::where('idnormas_im', $id)->first();
-
         
-        return view('Admin.edit', compact('Normas_IM'));
+        return view('Normas_IM.edit', compact('Normas_IM'));
     }
 
     /**
