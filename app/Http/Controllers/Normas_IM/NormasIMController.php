@@ -37,7 +37,7 @@ class NormasIMController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-        // Validar los datos del formulario
+        //Validar los datos del formulario
         $validatedData = $request->validate([
             /* Resultados Juntas */
             'Normas_IM' => 'nullable|string', // JSON con [{id,text},...]
@@ -46,12 +46,24 @@ class NormasIMController extends Controller
             'Composicion' => 'nullable|array',
         ]);
 
+        $tabla = [];
+
+        if ($request->has('Elemento')) {
+
+            foreach ($request->Elemento as $i => $elemento) {
+
+                $tabla[] = [
+                    'Elemento'     => $elemento,
+                    'Promedio'     => $request->Promedio[$i] ?? '',
+                    'Composicion'  => $request->Composicion[$i] ?? '',
+                ];
+            }
+        }
+
         $Normas_IM = new Normas_IM();
         $Normas_IM->Nombre_Espe = $request->input('NombreESP');
         $Normas_IM->Variable = $request->input('Variable');
-
-        $Normas_IM->Tabla = $request->input('Normas_IM');
-
+        $Normas_IM->Tabla = json_encode($tabla);
         $Normas_IM->Observaciones = $request->input('Observaciones');
         $Normas_IM->save();
 
@@ -75,8 +87,6 @@ class NormasIMController extends Controller
 
         // Convertir JSON a arreglo PHP
         $tabla = json_decode($Normas_IM->Tabla, true);
-        
-        //$tabla = $Normas_IM ? json_decode($Normas_IM->Tabla, true) : [];
 
         return view('Normas_IM.edit', compact('Normas_IM', 'tabla'));
     }
