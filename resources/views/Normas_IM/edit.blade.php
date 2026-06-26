@@ -182,18 +182,18 @@ $(document).ready(function() {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
 
             let newRow = `
-                <tr data-titulo="${lastTitle}">
+                <tr>
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento" value="${rowCountGlobal}"></td>
-                    <td><input type="text" class="form-control" name="Promedio[${lastTitle}][]" placeholder="Promedio"></td>
-                    <td><input type="text" class="form-control" name="Composicion[${lastTitle}][]" placeholder="Composicion"></td>
+                    <td><input type="text" class="form-control" name="Elemento[]" placeholder="Elemento" value="${rowCountGlobal}"></td>
+                    <td><input type="text" class="form-control" name="Promedio[]" placeholder="Promedio"></td>
+                    <td><input type="text" class="form-control" name="Composicion[]" placeholder="Composicion"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>
             `;

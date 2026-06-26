@@ -94,9 +94,40 @@ class NormasIMController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Normas_IM $normas_IM)
+    public function update(Request $request, $id)
     {
-        //
+        //dd($request->all());
+        $Normas_IM = Normas_IM::where('idnormas_im', $id)->first();
+        $validatedData = $request->validate([
+            /* Resultados Juntas */
+            'Normas_IM' => 'nullable|string', // JSON con [{id,text},...]
+            'Elemento' => 'nullable|array',
+            'Promedio' => 'nullable|array',
+            'Composicion' => 'nullable|array',
+        ]);
+
+        $tabla = [];
+
+        if ($request->has('Elemento')) {
+
+            foreach ($request->Elemento as $i => $elemento) {
+
+                $tabla[] = [
+                    'Elemento'     => $elemento,
+                    'Promedio'     => $request->Promedio[$i] ?? '',
+                    'Composicion'  => $request->Composicion[$i] ?? '',
+                ];
+            }
+        }
+
+        $Normas_IM->update([
+            'Nombre_Espe' => $request->input('NombreESP'),
+            'Variable' => $request->input('Variable'),
+            'Tabla' => json_encode($tabla),
+            'Observaciones' => $request->input('Observaciones'),
+        ]);
+
+        return redirect()->route('index.Normas_IM');
     }
 
     /**
