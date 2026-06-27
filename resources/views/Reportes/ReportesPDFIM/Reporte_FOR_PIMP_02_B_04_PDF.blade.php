@@ -660,7 +660,7 @@
 
 @php
     $durezaRows = $Datos_Equipo['DUREZA_ROWS'] ?? [];
-    $durezaMergeConfig = $Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? [];
+    $durezaMergeConfig = $durezaMergeConfig ?? ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? []);
 
     if (!is_array($durezaRows)) {
         $durezaRows = [];
@@ -670,24 +670,56 @@
         $durezaMergeConfig = [];
     }
 
-    $durezaRowspans = [];
-    $durezaHiddenCells = [];
+    $durezaMergeConfig = array_values(array_filter(array_map(function ($merge) {
+        if (!is_array($merge)) {
+            return null;
+        }
 
-    foreach ($durezaMergeConfig as $merge) {
-        $row = isset($merge['row']) ? (int) $merge['row'] : -1;
-        $field = $merge['field'] ?? '';
+        $row = isset($merge['row']) ? (int) $merge['row'] : (isset($merge['startRow']) ? (int) $merge['startRow'] : -1);
         $rowspan = isset($merge['rowspan']) ? (int) $merge['rowspan'] : 1;
+        $field = (string) ($merge['field'] ?? '');
 
         if ($row < 0 || $rowspan < 2 || $field === '') {
-            continue;
+            return null;
         }
 
-        $durezaRowspans[$row . '|' . $field] = $rowspan;
+        return [
+            'row' => $row,
+            'field' => $field,
+            'rowspan' => $rowspan,
+        ];
+    }, $durezaMergeConfig)));
 
-        for ($offset = 1; $offset < $rowspan; $offset++) {
-            $durezaHiddenCells[($row + $offset) . '|' . $field] = true;
+    $getMerge = function (array $mergeConfig, string $field, int $rowIndex) {
+        foreach ($mergeConfig as $merge) {
+            $startRow = (int) ($merge['row'] ?? $merge['startRow'] ?? -1);
+            $rowspan = (int) ($merge['rowspan'] ?? 1);
+
+            if (($merge['field'] ?? '') === $field && $startRow === $rowIndex && $rowspan > 1) {
+                return [
+                    'field' => $field,
+                    'row' => $startRow,
+                    'rowspan' => $rowspan,
+                ];
+            }
         }
-    }
+
+        return null;
+    };
+
+    $isMergedHidden = function (array $mergeConfig, string $field, int $rowIndex) {
+        foreach ($mergeConfig as $merge) {
+            $startRow = (int) ($merge['row'] ?? $merge['startRow'] ?? -1);
+            $rowspan = (int) ($merge['rowspan'] ?? 1);
+            $endRow = $startRow + $rowspan - 1;
+
+            if (($merge['field'] ?? '') === $field && $rowIndex > $startRow && $rowIndex <= $endRow) {
+                return true;
+            }
+        }
+
+        return false;
+    };
 @endphp
 
 @if(!empty($durezaRows))
@@ -717,14 +749,24 @@
     <tbody>
         @foreach($durezaRows as $index => $row)
             <tr>
-                @if(empty($durezaHiddenCells[$index . '|descripcion']))
-                    <td @if(isset($durezaRowspans[$index . '|descripcion'])) rowspan="{{ $durezaRowspans[$index . '|descripcion'] }}" @endif>
+                @php $merge = $getMerge($durezaMergeConfig, 'descripcion', $index); @endphp
+                @if($merge)
+                    <td rowspan="{{ $merge['rowspan'] }}">
+                        {{ $row['descripcion'] ?? '' }}
+                    </td>
+                @elseif(! $isMergedHidden($durezaMergeConfig, 'descripcion', $index))
+                    <td>
                         {{ $row['descripcion'] ?? '' }}
                     </td>
                 @endif
 
-                @if(empty($durezaHiddenCells[$index . '|horario']))
-                    <td @if(isset($durezaRowspans[$index . '|horario'])) rowspan="{{ $durezaRowspans[$index . '|horario'] }}" @endif>
+                @php $merge = $getMerge($durezaMergeConfig, 'horario', $index); @endphp
+                @if($merge)
+                    <td rowspan="{{ $merge['rowspan'] }}">
+                        {{ $row['horario'] ?? '' }}
+                    </td>
+                @elseif(! $isMergedHidden($durezaMergeConfig, 'horario', $index))
+                    <td>
                         {{ $row['horario'] ?? '' }}
                     </td>
                 @endif
@@ -735,8 +777,13 @@
                 <td>{{ $row['zac_b1'] ?? '' }}</td>
                 <td>{{ $row['metal_base_a1'] ?? '' }}</td>
 
-                @if(empty($durezaHiddenCells[$index . '|observaciones']))
-                    <td @if(isset($durezaRowspans[$index . '|observaciones'])) rowspan="{{ $durezaRowspans[$index . '|observaciones'] }}" @endif>
+                @php $merge = $getMerge($durezaMergeConfig, 'observaciones', $index); @endphp
+                @if($merge)
+                    <td rowspan="{{ $merge['rowspan'] }}">
+                        {{ $row['observaciones'] ?? '' }}
+                    </td>
+                @elseif(! $isMergedHidden($durezaMergeConfig, 'observaciones', $index))
+                    <td>
                         {{ $row['observaciones'] ?? '' }}
                     </td>
                 @endif
