@@ -964,6 +964,7 @@ class FOR_PINS_03_02Controller extends Controller
         $Isometrico_Plano = $validatedData['Detalles_Generales']['Isometrico_Plano'];
         $Pieza = $validatedData['Detalles_Generales']['Pieza'];
         $Norma_cod_Criterio_Eva = $validatedData['Detalles_Generales']['Criterio_Evaluacion'];
+        
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
