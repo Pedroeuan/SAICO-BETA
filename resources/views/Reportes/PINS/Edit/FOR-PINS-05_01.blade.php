@@ -58,6 +58,24 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        .mergeable-cell {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .mergeable-cell:hover {
+            background-color: #e7f1ff;
+        }
+
+        .mergeable-cell.selected-merge,
+        .mergeable-cell.merge-preview {
+            background-color: #cfe2ff !important;
+        }
+
+        .mergeable-cell.merge-anchor {
+            background-color: #9ec5fe !important;
+            box-shadow: inset 0 0 0 2px #0d6efd;
+        }
     </style>
 @endsection
 
@@ -595,6 +613,7 @@
                                     </div>
 
                                     <input type="hidden" id="titulos_hidden" name="titulos_data">
+                                    <input type="hidden" name="Tabla_CombinacionConfig" id="tablaCombinacionConfig" value="{{ old('Tabla_CombinacionConfig', $Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? '[]') }}">
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 m-3">
                                         <div>
@@ -613,6 +632,12 @@
                                         <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
+                                        <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary">Combinar celdas</button>
+                                        <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary">Separar celdas</button>
+                                    </div>
+                                    <div class="mb-3">
+                                        <small class="text-muted">Columnas combinables: Numero de Junta, Angulo de inspeccion y Observaciones.</small>
+                                        <span id="tablaMergeSelectionInfo" class="text-primary fw-semibold ms-2"></span>
                                     </div>
 
                                     <p>
@@ -1364,4 +1389,6 @@
             });
         });
 </script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit-FOR-PINS-05_01.js') }}"></script>
 @endsection

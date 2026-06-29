@@ -192,6 +192,77 @@
             </style>
         </head>
         <body>
+            @php
+                // Reconstruye la configuracion persistida para aplicar rowspan en PDF.
+                $tablaCombinacionConfig = $tablaCombinacionConfig ?? ($Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? []);
+
+                if (is_string($tablaCombinacionConfig)) {
+                    $tablaCombinacionConfig = json_decode($tablaCombinacionConfig, true);
+                }
+
+                if (!is_array($tablaCombinacionConfig)) {
+                    $tablaCombinacionConfig = [];
+                }
+
+                $tablaCombinacionConfig = array_values(array_filter(array_map(function ($merge) {
+                    if (!is_array($merge)) {
+                        return null;
+                    }
+
+                    $groupId = !empty($merge['groupId']) ? (string) $merge['groupId'] : 'sin_titulo';
+                    $field = (string) ($merge['field'] ?? '');
+                    $startRow = isset($merge['startRow']) ? (int) $merge['startRow'] : -1;
+                    $rowspan = isset($merge['rowspan']) ? (int) $merge['rowspan'] : 1;
+
+                    if ($field === '' || $startRow < 0 || $rowspan < 2) {
+                        return null;
+                    }
+
+                    return [
+                        'groupId' => $groupId,
+                        'field' => $field,
+                        'startRow' => $startRow,
+                        'rowspan' => $rowspan,
+                    ];
+                }, $tablaCombinacionConfig)));
+
+                $obtenerCombinacionTabla = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                    foreach ($mergeConfig as $merge) {
+                        if (
+                            ($merge['groupId'] ?? 'sin_titulo') === $groupId &&
+                            ($merge['field'] ?? '') === $field &&
+                            (int) ($merge['startRow'] ?? -1) === $rowIndex &&
+                            (int) ($merge['rowspan'] ?? 1) > 1
+                        ) {
+                            return $merge;
+                        }
+                    }
+
+                    return null;
+                };
+
+                $esCeldaOcultaPorCombinacion = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                    foreach ($mergeConfig as $merge) {
+                        $inicio = (int) ($merge['startRow'] ?? -1);
+                        $rowspan = (int) ($merge['rowspan'] ?? 1);
+                        $fin = $inicio + $rowspan - 1;
+
+                        if (
+                            ($merge['groupId'] ?? 'sin_titulo') === $groupId &&
+                            ($merge['field'] ?? '') === $field &&
+                            $rowIndex > $inicio &&
+                            $rowIndex <= $fin
+                        ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                };
+
+                // Mantiene el indice real por grupo para que el PDF use la misma numeracion del merge guardado.
+                $contadorFilasPorGrupo = [];
+            @endphp
 
             <header>
                 <table class="tablaheader">
@@ -621,10 +692,27 @@
 
                                             {{-- FILA --}}
                                             @if (($item['tipo'] ?? null) == 'fila')
+                                                @php
+                                                    $grupoActual = $item['grupo'] ?? 'sin_titulo';
+                                                    $indiceFilaGrupo = $contadorFilasPorGrupo[$grupoActual] ?? 0;
+                                                @endphp
                                                 <tr class="juntas">
-                                                    <td>{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    @php $mergeNumeroJunta = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'numero_junta', $indiceFilaGrupo); @endphp
+                                                    @if($mergeNumeroJunta)
+                                                        <td rowspan="{{ $mergeNumeroJunta['rowspan'] }}">{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'numero_junta', $indiceFilaGrupo))
+                                                        <td>{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    @endif
+
                                                     <td>{{ $item['data']['no_indicacion'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
+
+                                                    @php $mergeAngulo = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'angulo_inspeccion', $indiceFilaGrupo); @endphp
+                                                    @if($mergeAngulo)
+                                                        <td rowspan="{{ $mergeAngulo['rowspan'] }}">{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
+                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'angulo_inspeccion', $indiceFilaGrupo))
+                                                        <td>{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
+                                                    @endif
+
                                                     <td>{{ $item['data']['dsd_cara'] ?? '' }}</td>
                                                     <td>{{ $item['data']['pierna'] ?? '' }}</td>
                                                     <td>{{ $item['data']['decibel_a'] ?? '' }}</td>
@@ -638,8 +726,17 @@
                                                     <td>{{ $item['data']['pos_y'] ?? '' }}</td>
                                                     <td>{{ $item['data']['discontinuidad'] ?? '' }}</td>
                                                     <td>{{ $item['data']['evaluacion'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['observaciones'] ?? '' }}</td>
+
+                                                    @php $mergeObservaciones = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'observaciones', $indiceFilaGrupo); @endphp
+                                                    @if($mergeObservaciones)
+                                                        <td rowspan="{{ $mergeObservaciones['rowspan'] }}">{{ $item['data']['observaciones'] ?? '' }}</td>
+                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'observaciones', $indiceFilaGrupo))
+                                                        <td>{{ $item['data']['observaciones'] ?? '' }}</td>
+                                                    @endif
                                                 </tr>
+                                                @php
+                                                    $contadorFilasPorGrupo[$grupoActual] = $indiceFilaGrupo + 1;
+                                                @endphp
                                             @endif
 
                                             {{-- LONGITUD --}}
