@@ -9,6 +9,7 @@ use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
 use App\Models\Clientes\clientes;
+use App\Models\Admin\Usuario;
 use App\Models\detallesOC\detallesOC;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Reporte\Firma_Reporte;
@@ -48,6 +49,7 @@ class FOR_PINS_11_02Controller extends Controller
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -72,7 +74,12 @@ class FOR_PINS_11_02Controller extends Controller
             ->pluck('Certificado_Actual')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+        $tecnicos = Usuario::where('id', $ID_TECNICO)
+            ->whereNotNull('cv_pdf')
+            ->pluck('cv_pdf')
+            ->toArray();
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
 
         Log::info('todasLasRutas', $todasLasRutas);
 
@@ -503,12 +510,6 @@ class FOR_PINS_11_02Controller extends Controller
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
-            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.ID_TR' => 'nullable|string',
-            'Datos_Equipo.ID_BLOCK' => 'nullable|string',
-            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
-            'Datos_Equipo.QR_PDF' => 'nullable|string',
-            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -548,6 +549,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -557,6 +559,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -572,6 +575,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -591,6 +595,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -689,6 +694,12 @@ class FOR_PINS_11_02Controller extends Controller
             $validatedData['Datos_Equipo']['QR_TOKEN'] = (string) Str::uuid();
         }
 
+        $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null;
+
         $datosParaCrearQR = [
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
@@ -697,6 +708,7 @@ class FOR_PINS_11_02Controller extends Controller
             'idTransductor' => $idTransductor,
             'idBlock' => $idBlock,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $ID_TECNICO,
         ];
 
         /*
@@ -1002,6 +1014,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
+            'ID_TECNICO' => $ID_TECNICO
             
         ];
 
@@ -1105,6 +1118,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -1114,6 +1128,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -1129,6 +1144,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1148,6 +1164,7 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1212,16 +1229,16 @@ class FOR_PINS_11_02Controller extends Controller
         $datosParaCrearQR = [
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
-            'idSolicitud' =>
-                $validatedData['Detalles_Generales']['idSolicitud'] ?? null,
-            'idEquipo' =>
-                $validatedData['Datos_Equipo']['ID_EQUIPO'],
-            'idTransductor' =>
-                $validatedData['Datos_Equipo']['ID_TR'],
-            'idBlock' =>
-                $validatedData['Datos_Equipo']['ID_BLOCK'],
-            'qr_token' =>
-                $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'idSolicitud' => $validatedData['Detalles_Generales']['idSolicitud'] ?? null,
+            'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'],
+            'idTransductor' => $validatedData['Datos_Equipo']['ID_TR'],
+            'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'],
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null,
         ];
 
         /*
@@ -1721,7 +1738,7 @@ class FOR_PINS_11_02Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(186.5, -181);
+            $combinedPdf->SetXY(178, -181);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1732,7 +1749,7 @@ class FOR_PINS_11_02Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(144.5, -266.5);
+            $combinedPdf->SetXY(138.5, -266);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }

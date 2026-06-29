@@ -33,7 +33,7 @@ class DashboardController extends Controller
     {
         // Llamar al método del controlador de Notificaciones
         $notificacionController = new NotificacionController();
-        $notificacionController->crearNotificacionesCertificados();
+        $notificacionController->crearNotificacionesCertificadosInterno();
         $notificacionController->getNotificaciones();
         
         // Obtener el usuario autenticado

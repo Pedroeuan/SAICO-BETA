@@ -474,7 +474,7 @@
     const formularios = ["FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01",
         "FOR-PINS-12_01", "FOR-PINS-13_01", "FOR-PINS-14_01", "FOR-PINS-15_01", "FOR-PINS-16_01", "FOR-PINS-17_01", "FOR-PINS-18_01", "FOR-PINS-19_01", "FOR-PINS-20_01",
         "FOR-PINS-21_01", "FOR-PINS-22_01", "FOR-PINS-22_01", "FOR-PINS-23_01", "FOR-PINS-24_01", "FOR-PINS-25_01", "FOR-PINS-03_02", "FOR-PINS-05_02", "FOR-PINS-11_02",
-        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15"
+        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02"
     ];
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
@@ -571,63 +571,139 @@
 
     /*Selección de Firmas */
     document.addEventListener('DOMContentLoaded', function() {
-    const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
     const numFirmasSelect = document.getElementById('numFirmas');
     const firmas1 = document.getElementById('firmas1');
     const firmas2 = document.getElementById('firmas2');
     const firmas3 = document.getElementById('firmas3');
     const firmas4 = document.getElementById('firmas4');
 
-    //numFirmasSelect.value = numFirmasLocal;
-    //numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
+    if (!numFirmasSelect || !firmas1 || !firmas2 || !firmas3 || !firmas4) return;
+
+    function mostrarFirmas(valor) {
+        firmas1.style.display = valor == '1' ? 'block' : 'none';
+        firmas2.style.display = valor == '2' ? 'block' : 'none';
+        firmas3.style.display = valor == '3' ? 'block' : 'none';
+        firmas4.style.display = valor == '4' ? 'block' : 'none';
+    }
+
     numFirmasSelect.addEventListener('change', function() {
-        if (this.value == '1') {
-            firmas1.style.display = 'block';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        }
-        else if (this.value == '2') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'block';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        }
-        else if (this.value == '3') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (this.value == '4') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
-        }
+        mostrarFirmas(this.value);
     });
 
-    // Inicializar la visibilidad de las secciones de firmas
-    if (numFirmasSelect.value == '1') {
-        firmas1.style.display = 'block';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'none';
-    }
-    else if (numFirmasSelect.value == '2') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'block';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'none';
-    }
-    else if (numFirmasSelect.value == '3') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'block';
-        firmas4.style.display = 'none';
-    } else if (numFirmasSelect.value == '4') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'block';
-    }
+    mostrarFirmas(numFirmasSelect.value || '1');
     });
+
+        /*SELECT DE Firmas*/
+        function actualizarTecnicos() {
+            var selectedOption = $('#tecnicosSelect').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var id = selectedOption.data('id') || '';
+            var name = selectedOption.data('name') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#IDTECNICO').val($('#tecnicosSelect').val() || '');
+            $('#NOMBRE_TECNICO').val(name);
+        }
+
+            const selectedOptionLocalT = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos');
+            selectedOptionLocalT != null ?  ($('#tecnicosSelect').val(selectedOptionLocalT),actualizarTecnicos()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#tecnicosSelect').on('change', function() {
+                actualizarTecnicos();
+            });
+
+            /*2*/
+            function actualizarTecnicos2() {
+            var selectedOption = $('#tecnicosSelect2').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var id = selectedOption.data('id') || '';
+            var name = selectedOption.data('name') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#IDTECNICO2').val($('#tecnicosSelect2').val() || '');
+            $('#NOMBRE_TECNICO2').val(name);
+        }
+
+            const selectedOptionLocalT2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos2');
+            selectedOptionLocalT2 != null ?  ($('#tecnicosSelect2').val(selectedOptionLocalT2),actualizarTecnicos2()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#tecnicosSelect2').on('change', function() {
+                actualizarTecnicos2();
+            });
+
+            /*3*/
+            function actualizarTecnicos3() {
+            var selectedOption = $('#tecnicosSelect3').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var id = selectedOption.data('id') || '';
+            var name = selectedOption.data('name') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#IDTECNICO3').val($('#tecnicosSelect3').val() || '');
+            $('#NOMBRE_TECNICO3').val(name);
+        }
+
+            const selectedOptionLocalT3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos3');
+            selectedOptionLocalT3 != null ?  ($('#tecnicosSelect3').val(selectedOptionLocalT3),actualizarTecnicos3()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#tecnicosSelect3').on('change', function() {
+                actualizarTecnicos3();
+            });
+
+            /*4*/
+            function actualizarTecnicos4() {
+            var selectedOption = $('#tecnicosSelect4').find('option:selected');
+
+            // Extraer los datos de los atributos "data-"
+            var id = selectedOption.data('id') || '';
+            var name = selectedOption.data('name') || '';
+
+            // Rellenar los inputs con los valores obtenidos
+            $('#IDTECNICO4').val($('#tecnicosSelect4').val() || '');
+            $('#NOMBRE_TECNICO4').val(name);
+        }
+
+            const selectedOptionLocalT4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos4');
+            selectedOptionLocalT4 != null ?  ($('#tecnicosSelect4').val(selectedOptionLocalT4),actualizarTecnicos4()):"";
+
+            // Evento cuando se cambia la selección en el select
+            $('#tecnicosSelect4').on('change', function() {
+                actualizarTecnicos4();
+            });
+
+            /*Validar seleccion del tecnico 
+            function actualizarValidacion() {
+
+            document.getElementById('tecnicosSelect').removeAttribute('required');
+            document.getElementById('tecnicosSelect2').removeAttribute('required');
+            document.getElementById('tecnicosSelect3').removeAttribute('required');
+            document.getElementById('tecnicosSelect4').removeAttribute('required');
+
+            let numFirmas = document.getElementById('numFirmas').value;
+
+            if (numFirmas == '1') {
+                document.getElementById('tecnicosSelect').setAttribute('required', true);
+            }
+
+            if (numFirmas == '2') {
+                document.getElementById('tecnicosSelect2').setAttribute('required', true);
+            }
+
+            if (numFirmas == '3') {
+                document.getElementById('tecnicosSelect3').setAttribute('required', true);
+            }
+
+            if (numFirmas == '4') {
+                document.getElementById('tecnicosSelect4').setAttribute('required', true);
+            }
+        }
+
+        document.getElementById('numFirmas').addEventListener('change', actualizarValidacion);
+
+        actualizarValidacion();*/

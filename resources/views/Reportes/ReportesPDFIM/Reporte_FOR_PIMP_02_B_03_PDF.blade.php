@@ -6,18 +6,48 @@
 
     <style>
         @page {
-            margin: 3cm 1.2cm 2.1cm 2.2cm;
+            margin: 
+            3cm
+            1.2cm 
+            2.1cm 
+            1.5cm;
         }
 
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding-bottom: 60px;
+            margin-top: 27px;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
-        header, footer {
-            width: 100%;
+        header {
+            position: fixed;
+            top: -56px;
+            left: 0;
+            right: 0;
+            height: auto;
             text-align: center;
+        }
+
+        footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            height: auto;
+            text-align: center;
+        }
+
+        footer table {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        footer th,
+        footer td {
+            text-align: center;
+            vertical-align: middle;
         }
 
         .tablaheader {
@@ -34,7 +64,7 @@
         .encabezadoAzul {
             text-align: center;
             background-color: #305496;
-            color: #ffffff;
+            color: #fff;
             font-size: 8px;
         }
 
@@ -51,6 +81,10 @@
             padding: 3px;
         }
 
+        .tablaEquipos {
+            table-layout: fixed;
+        }
+
         .celdaGris {
             background-color: #DBDBDB;
         }
@@ -59,269 +93,613 @@
             border-bottom: 1px solid black;
         }
 
+        .observacionesBox {
+            width: 100%;
+            border: 1px solid black;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-bottom: 4px;
+        }
+
+        .observacionesBox td {
+            padding: 3px 5px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 8px;
+        }
+
+        .observacionesTitulo {
+            font-weight: bold;
+            line-height: 10px;
+            padding-bottom: 1px;
+        }
+
+        .observacionesLineas {
+            height: 38px;
+            background-image: linear-gradient(to bottom, transparent 11px, black 11px, black 12px, transparent 12px);
+            background-size: 100% 12px;
+            background-repeat: repeat-y;
+        }
+
+        .firmasDosPorDos {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 0;
+        }
+
+        .firmasDosPorDos td {
+            width: 50%;
+            text-align: center;
+            vertical-align: top;
+            padding: 2px 12px 0 12px;
+            font-size: 8px;
+        }
+
+        .bloqueFirma {
+            width: 100%;
+        }
+
+        .tituloFirma {
+            font-weight: bold;
+            line-height: 11px;
+            min-height: 18px;
+        }
+
+        .lineaFirma {
+            border-bottom: 1px solid black;
+            height: 10px;
+            margin-top: 2px;
+        }
+
+        .nombreFirma,
+        .cargoFirma,
+        .empresaFirma {
+            margin-top: 2px;
+            font-weight: bold;
+            line-height: 10px;
+        }
+
+        .tablaPrueba {
+            border-collapse: collapse;
+            width: 20%;
+            font-size: 8px;
+            border: none;
+        }
+
+        .tablaPrueba th {
+            padding: 0;
+            line-height: 9px;
+        }
+
+        .tablaPrueba td {
+            padding: 6px 3px;
+            text-align: center;
+            vertical-align: middle;
+            border: none;
+        }
+
+        .tablaPrueba .encabezadoAzul th {
+            border: .6px solid black;
+        }
+
+        .etiquetaPrueba {
+            width: 28%;
+            font-weight: bold;
+            line-height: 11px;
+        }
+
+        .valorPrueba {
+            width: 18%;
+            border-bottom: 1px solid black;
+            min-height: 12px;
+        }
+
+        .tablaPrueba td.valorPrueba {
+            border-bottom: 1px solid black;
+        }
+
+        .separadorPrueba {
+            width: 8%;
+        }
+
+        
+        .tablaGenerales {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+        }
+
+        .filaGeneral {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+            table-layout: fixed;
+        }
+
+        .filaGeneral th,
+        .filaGeneral td {
+            padding: 1px 3px;
+            vertical-align: bottom;
+        }
+
+        .filaGeneral th {
+            text-align: left;
+            font-weight: bold;
+            line-height: 10px;
+        }
+
+        .filaGeneral .valorGeneral {
+            border-bottom: 1px solid black;
+            text-align: center;
+            height: 13px;
+        }
+
+        .filaGeneral .valorGeneralAlto {
+            height: 15px;
+        }
+
+        .tablaDureza {
+            border-collapse: collapse;
+            width: 53%;
+            font-size: 8px;
+        }
+
+        .tablaDureza th,
+        .tablaDureza td {
+            border: .3px solid black;
+            padding: 2px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .tituloDureza {
+            background-color: #DBDBDB;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .longitudDureza {
+            text-align: left;
+            font-weight: bold;
+        }
+        .tablaDurezaResumen {
+            width: 40%;
+            border-collapse: collapse;
+            margin-left: 0;
+        }
+
+        .fotoDurezaBox {
+            position: absolute;
+            left: 56%;
+            top: 405px;
+            width: 43.7%;
+            height: 250px;
+            border: 1px solid black;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .fotoDurezaBox img {
+            width: 100%;
+            height: 205px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .fotoDurezaComentario {
+            border-top: 1px solid black;
+            height: 45px;
+            margin: 0;
+            padding: 5px 3px 0 3px;
+            text-align: center;
+            font-size: 8px;
+            line-height: 10px;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 
 <body>
+@php
+    $filasDureza = [];
+    foreach (($Grupo_Juntas_Detalles_Re ?? []) as $bloque) {
+        if (is_array($bloque) && array_key_exists('tipo', $bloque)) {
+            $filasDureza[] = $bloque;
+            continue;
+        }
 
+        if (is_array($bloque)) {
+            foreach ($bloque as $item) {
+                if (is_array($item) && array_key_exists('tipo', $item)) {
+                    $filasDureza[] = $item;
+                }
+            }
+        }
+    }
+@endphp
 
+<header>
+    <table class="tablaheader">
+        <thead>
+            <tr>
+                <th style="width: 400%;">FORMATO<br>Format</th>
+                <th style="width: 70%;">Código:<br>Code:</th>
+                <th style="width: 100%;">FOR-PIMP-02_B/03</th>
+                <th rowspan="3" style="width: 80%;">
+                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                </th>
+            </tr>
+            <tr>
+                <th rowspan="2">Informe de Ensayo de Durezas en Metales Base<br>Hardness Test Report on Base Metals</th>
+                <th>Versión:<br>Version:</th>
+                <th>2</th>
+            </tr>
+            <tr>
+                <th>Página:<br>Page:</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</header>
+<footer>
+        <table class="observacionesBox">
+            <tr>
+                <td>
+                    <div class="observacionesTitulo">OBSERVACIONES O CONCLUSIONES:<br>Remarks:</div>
+                    <div class="observacionesLineas">{{ $Datos_Equipo['Observaciones'] ?? '' }}</div>
+                </td>
+            </tr>
+        </table>
 
-            <header>
-                <table class="tablaheader">
-                    <thead>
-                        <tr>
-                            <th style="width: 400%;">FORMATO</th>
-                            <th style="width: 70%;">Código:</th>
-                            <th style="width: 100%;">FOR-PIMP-02_B/03</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
-                        </tr>
-                    </thead>
+        <table class="datosgenerales">
+            <thead>
+                @if( $numFirmas == 2)
+                <!-- 2 Firmas -->
+                    <tr>
+                        <td style="width: 30px;"></td>
+                        <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                        <td style="width: 30px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                        <td style="width: 30px;"></td>
+                    </tr>
 
-                    <tbody>
-                        <tr>
-                            <th rowspan="2" style="font-size: 9pt;"> Informe de Ensayo de Durezas en Metales Base Hardness Test Report on Base Metals</th>
-                            <th>Versión</th>
-                            <th>2</th>
-                        </tr>
-                        <tr>
-                            <th>Página</th>
-                            <th></th>
-                        </tr>
-                    </tbody>
-                </table>
+                    <tr>
+                        <th></th>
+                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                    </tr>
 
-                <!-- <div style="margin-bottom: 4px;"></div>
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                    </tr>
+                                                        
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
+                    </tr>
 
-                <table class="datosgenerales">
+                    <tr>
+                        <th></th>
+                        <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                    </tr>
+                @elseif( $numFirmas == 3)
+                <!-- 3 Firmas -->
+                    <tr>
+                        <td style="width: 20px;"></td>
+                        <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                        <td style="width: 20px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                        <td style="width: 20px;"></td>
+                        <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
+                        <td style="width: 20px;"></td>
+                    </tr>
 
-                    <thead class="encabezadoAzul">
-                        <tr><th colspan="6">DATOS GENERALES</th></tr>
-                    </thead>  -->
-<!-- DATOS GENERALES -->
-<br>
+                    <tr>
+                        <th></th>
+                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                        <td></td>
+                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                    </tr>
 
-<table class="datosgenerales">
-    <tr class="encabezadoAzul">
-        <th colspan="4">DATOS GENERALES</th>
-    </tr>
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
+                    </tr>
 
-    <tr>
-        <th style="width: 20%;">FECHA:</th>
-        <td class="lineaInferior"></td>
-        <th style="width: 20%;">NO. REPORTE:</th>
-        <td class="lineaInferior"></td>
-    </tr>
+                    <tr>
+                        <th></th>
+                        <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
+                    </tr>
 
-    <tr>
-        <th>CLIENTE:</th>
-        <td class="lineaInferior"></td>
-        <th>No. CONTRATO:</th>
-        <td class="lineaInferior"></td>
-    </tr>
+                    <tr>
+                        <th></th>
+                        <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                        <td></td>
+                        <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
+                    </tr>
+                @elseif( $numFirmas == 4)
+                <!-- 4 Firmas -->
+                    <tr>
+                        <td colspan="9" style="padding: 0;">
+                            <table class="firmasDosPorDos">
+                                <tr>
+                                    <td>
+                                        <div class="bloqueFirma">
+                                            <div class="tituloFirma">{{ $Firmas_Reportes['Realizo'] }}</div>
+                                            <div class="lineaFirma"></div>
+                                            <div class="nombreFirma">{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</div>
+                                            <div class="cargoFirma">{{ $Firmas_Reportes['CARGO_TECNICO'] }}</div>
+                                            <div class="empresaFirma">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="bloqueFirma">
+                                            <div class="tituloFirma">{{ $Firmas_Reportes['Vobo1'] }}</div>
+                                            <div class="lineaFirma"></div>
+                                            <div class="nombreFirma">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</div>
+                                            <div class="cargoFirma">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</div>
+                                            <div class="empresaFirma">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 16px;">
+                                        <div class="bloqueFirma">
+                                            <div class="tituloFirma">{{ $Firmas_Reportes['Vobo2'] }}</div>
+                                            <div class="lineaFirma"></div>
+                                            <div class="nombreFirma">{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</div>
+                                            <div class="cargoFirma">{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</div>
+                                            <div class="empresaFirma">{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</div>
+                                        </div>
+                                    </td>
+                                    <td style="padding-top: 16px;">
+                                        <div class="bloqueFirma">
+                                            <div class="tituloFirma">{{ $Firmas_Reportes['Vobo3'] }}</div>
+                                            <div class="lineaFirma"></div>
+                                            <div class="nombreFirma">{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</div>
+                                            <div class="cargoFirma">{{ $Firmas_Reportes['PUESTO_3RO_ENCARGADO'] }}</div>
+                                            <div class="empresaFirma">{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                @endif
+            </thead>                            
+        </table>
+</footer>
 
-    <tr>
-        <th>PROYECTO:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
+            {{-- ================= DATOS GENERALES ================= --}}
+<div style="margin-bottom: 2px;"></div>
 
-    <tr>
-        <th>ORDEN DE TRABAJO:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
-
-    <tr>
-        <th>FOLIO:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
-
-    <tr>
-        <th>PARTIDA:</th>
-        <td colspan="3" class="lineaInferior"></td>
-    </tr>
-
-    <tr>
-        <th>INSTALACIÓN:</th>
-        <td class="lineaInferior"></td>
-        <th>No. ISOMÉTRICO:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-
-    <tr>
-        <th>NOMBRE DE LA PIEZA:</th>
-        <td class="lineaInferior"></td>
-        <th>MATERIAL:</th>
-        <td class="lineaInferior"></td>
-    </tr>
-
-    <tr>
-        <th>PROCEDIMIENTO:</th>
-        <td class="lineaInferior"></td>
-        <th>TRAZABILIDAD:</th>
-        <td class="lineaInferior"></td>
-    </tr>
+<table class="tablaGenerales">
+    <thead class="encabezadoAzul">
+        <tr><th>DATOS GENERALES<br>General Data</th></tr>
+    </thead>
 </table>
-
-<br>
-
-<!-- DATOS DE LA PRUEBA -->
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 11%;">FECHA:<br>Date</th>
+            <td class="valorGeneral" style="width: 57%;">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
+            <th style="width: 14%;">No. REPORTE:<br>No. Report</th>
+            <td class="valorGeneral" style="width: 18%;">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 11%;">CLIENTE:<br>Client:</th>
+            <td class="valorGeneral" style="width: 57%;">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
+            <th style="width: 14%;">No. CONTRATO:<br>No. Contract:</th>
+            <td class="valorGeneral" style="width: 18%;">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 11%;">PROYECTO:<br>Project:</th>
+            <td class="valorGeneral" style="width: 89%;">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 22%;">ORDEN DE TRABAJO:<br>Work Order:</th>
+            <td class="valorGeneral" style="width: 78%;">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 11%;">FOLIO:<br>Folio:</th>
+            <td class="valorGeneral" style="width: 89%;">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 11%;">PARTIDA:<br>Lot:</th>
+            <td class="valorGeneral" style="width: 89%;">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 11%;">INSTALACIÓN:<br>Location:</th>
+            <td class="valorGeneral valorGeneralAlto" style="width: 46%;">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
+            <th style="width: 12%;">No. ISOMÉTRICO:<br>No. Isometric:</th>
+            <td class="valorGeneral valorGeneralAlto" style="width: 31%;">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 22%;">NOMBRE DE LA PIEZA:<br>Name of the piece:</th>
+            <td class="valorGeneral valorGeneralAlto" style="width: 35%;">{{ $Detalles_Generales['Nom_Pieza'] ?? '' }}</td>
+            <th style="width: 12%;">MATERIAL:<br>Material:</th>
+            <td class="valorGeneral valorGeneralAlto" style="width: 31%;">{{ $Detalles_Generales['Material'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 11%;">PROCEDIMIENTO:<br>Procedure:</th>
+            <td class="valorGeneral" style="width: 46%;">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
+            <th style="width: 12%;">TRAZABILIDAD:<br>Traceability:</th>
+            <td class="valorGeneral" style="width: 31%;">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<table class="filaGeneral">
+    <tbody>
+        <tr>
+            <th style="width: 11%;">ACCESORIO:<br>Fitting:</th>
+            <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Accesorio'] ?? '' }}</td>
+            <th style="width: 11%;">TUBERIA:<br>Tube:</th>
+            <td class="valorGeneral" style="width: 15%;">{{ $Detalles_Generales['Tuberia'] ?? '' }}</td>
+            <th style="width: 13%;">ESTRUCTURAL:<br>Structural:</th>
+            <td class="valorGeneral" style="width: 28%;">{{ $Detalles_Generales['Estructural'] ?? '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<div style="margin-bottom: 3px;"></div>
 <table class="datosinspeccion">
-    <tr class="encabezadoAzul">
-        <th colspan="6">DATOS DE LA PRUEBA</th>
-    </tr>
-
-    <tr class="celdaGris">
-        <th>MÉTODO:</th>
-        <td></td>
-        <th>TEMPERATURA PIEZA:</th>
-        <td></td>
-        <th>ESPESOR/CÉDULA:</th>
-        <td></td>
-    </tr>
+    <thead class="encabezadoAzul">
+        <tr><th colspan="6">DATOS DE LA PRUEBA<br>Test Data</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th style="width: 8%;">MÉTODO<br>Method:</th>
+            <td style="width: 11%;">{{ $Detalles_Generales['Metodo'] ?? '' }}</td>
+            <th style="width: 21%;">TEMPERATURA DE LA PIEZA<br>Piece Temperature:</th>
+            <td style="width: 14%;">{{ $Detalles_Generales['Temp_Pieza'] ?? '' }}</td>
+            <th style="width: 16%;">ESPESOR/CEDÚLA<br>Thickness/Schedule:</th>
+            <td style="width: 17%;">{{ $Detalles_Generales['Esp_Ced'] ?? '' }}</td>
+        </tr>
+    </tbody>
 </table>
-
-<br>
-
-<!-- DATOS DEL EQUIPO -->
+<div style="margin-bottom: 3px;"></div>
 <table class="datosinspeccion">
-    <tr class="encabezadoAzul">
-        <th colspan="6">DATOS DEL EQUIPO</th>
-    </tr>
+    <thead class="encabezadoAzul">
+        <tr>
+            <th colspan="6">
+                DATOS DEL EQUIPO<br>
+                Equipment Data
+            </th>
+        </tr>
+    </thead>
 
-    <tr class="celdaGris">
-        <th>MARCA:</th>
-        <td></td>
-        <th>MODELO:</th>
-        <td></td>
-        <th>NO. SERIE:</th>
-        <td></td>
-    </tr>
+    <tbody>
+        <tr>
+            <th style="width:12%;">
+                MARCA:<br>Brand
+            </th>
+
+            <td style="width:30%;">
+                {{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}
+            </td>
+
+            <th style="width:13%;">
+                MODELO:<br>Model
+            </th>
+
+            <td style="width:20%;">
+                {{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}
+            </td>
+            <th style="width:13%;">
+                NO. DE SERIE:<br>Serial Number
+            </th>
+
+            <td style="width:24%;">
+                {{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}
+            </td>
+        </tr>
+    </tbody>
 </table>
-
-<br>
-
-<table width="100%" style="border-collapse: collapse;">
-    <tr>
-        <!-- IZQUIERDA -->
-        <td width="70%" valign="top">
-
-            <table class="datosinspeccion" style="margin-bottom: 25px;">
-                <tr class="encabezadoAzul">
-                        <th colspan="5">VALORES DE DUREZA MEDIDOS (ESCALA BRINELL)</th>
-                            </tr>
-
-                                <tr>
-                                        <td height="25px"></td><td></td><td></td><td></td><td></td>
-                                            </tr>
-                                                <tr>
-                                                        <td height="25px"></td><td></td><td></td><td></td><td></td>
-                                                            </tr>
-                                                            </table>
-
-
-            <table border="1" width="100%" style="border-collapse: collapse;">
+<div style="margin-bottom: 12px;"></div>
+<table class="tablaDureza">
+    <thead class="encabezadoAzul">
+        <tr>
+            <th colspan="5">VALORES DE DUREZA MEDIDOS (ESCALA BRINELL)<br>Measured Hardness Values (Brinell)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @php $contadorDureza = 1; @endphp
+        @forelse($filasDureza as $item)
+            @if(($item['tipo'] ?? '') === 'titulo')
                 <tr>
-                    <td style="padding:6px; width:80%;">
-                        <strong>DUREZA PROMEDIO MEDIDO</strong><br>
-                        <em>Measured Average Hardness</em>
-                    </td>
-                    <td colspan="3"></td>
+                    <td class="tituloDureza" colspan="5">{{ $item['texto'] ?? '' }}</td>
                 </tr>
-
+            @elseif(($item['tipo'] ?? '') === 'longitud')
                 <tr>
-                    <td style="padding:6px;">
-                        <strong>DUREZA SEGÚN ESPECIFICACIÓN</strong><br>
-                        <em>Hardness per Specification</em>
-                    </td>
-                    <td colspan="3"></td>
+                    <td class="longitudDureza" colspan="5">LONGITUD INSPECCIONADA: {{ $item['valor'] ?? '' }}</td>
                 </tr>
-            </table>
-        </td>
-
-        <!-- DERECHA -->
-        <td width="30%" align="center" valign="top">
-            <img src="{{ asset('storage/fotos/' . ($foto ?? 'default.png')) }}" width="180">
-        </td>
-    </tr>
+            @elseif(($item['tipo'] ?? '') === 'fila')
+                <tr>
+                    <td>{{ $item['data']['valor_dureza1'] ?? '' }}</td>
+                    <td>{{ $item['data']['valor_dureza2'] ?? '' }}</td>
+                    <td>{{ $item['data']['valor_dureza3'] ?? '' }}</td>
+                    <td>{{ $item['data']['valor_dureza4'] ?? '' }}</td>
+                    <td>{{ $item['data']['valor_dureza5'] ?? '' }}</td>
+                </tr>
+            @endif
+        @empty
+            <tr>
+                <td colspan="5">Sin valores registrados</td>
+            </tr>
+        @endforelse
+    </tbody>
 </table>
-
-<table class="datosgenerales" style="margin-top: 25px;">                               
-    <tr>                                     
-        <th>OBSERVACIONES:</th>                   
-        <td class="lineaInferior" style="width: 606.5px;"></td>                            
-    </tr>                      
+<div style="margin-bottom: 10px;"></div>
+<table class="datosinspeccion" style="width:42.5%;">
+    <tbody>
+        <tr>
+            <th style="width: 88%;">DUREZA PROMEDIO MEDIDO<br>Measured Average Hardness</th>
+            <td style="width: 30%;">{{ $Datos_Equipo['DUREZA_PROMEDIO_MEDIDO'] ?? '' }}</td>
+        </tr>
+        <tr>
+            <th style="width: 88%;">DUREZA DE ACUERDO A LA ESPECIFICACION DE REFERENCIA<br>Hardness According To Reference Specification</th>
+            <td style="width: 30%;">{{ $Datos_Equipo['DUREZA_ESPECIFICACION_REFERENCIA'] ?? '' }}</td>
+        </tr>
+    </tbody>
 </table>
+<div class="fotoDurezaBox">
+    @if(!empty($Fotos[0]['path']))
+        <img src="{{ $Fotos[0]['path'] }}" alt="Imagen del reporte">
+    @endif
+    <p class="fotoDurezaComentario">{{ $Fotos[0]['comment'] ?? '' }}</p>
+</div>
 
-
-                    <table>
-                        <thead> 
-                                4 Firmas 
-                                <tr>
-                                    <td style="width: 15px;"></td>
-                                    <th></th>
-                                    <td style="width: 15px;"></td>
-                                    <th></th>
-                                    <td style="width: 15px;"></td>
-                                    <th></th>
-                                    <td style="width: 15px;"></td>
-                                    <th></th>
-                                    <td style="width: 15px;"></td>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <td></td>
-                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                                    <th></th>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <th></th>
-                                </tr>
-                                                                    
-                                <tr>
-                                    <th></th>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <th></th>
-                                </tr>
-
-                                <tr>
-                                    <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <td></td>
-                                    <td><strong></strong></td>
-                                    <th></th>
-                                </tr>
-                        </thead>                            
-                    </table>
-            </footer>
-
-            <div class="content"> 
-
-                
-            </div>
-        </body>
-        
-    </html>
+</body>
+</html>

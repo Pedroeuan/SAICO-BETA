@@ -17,7 +17,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -50px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -60px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -200,23 +200,31 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
+                            <th rowspan="4" style="width: 450%; font-size: 9pt;">
+                                INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY
+                            </th>
+                            <th rowspan="4" style="width: 90%;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width: 65px; height: 65px; display:block; margin:auto; padding:0;">
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
                                 @endif
                             </th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 90%;">FOR-PINS-18/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
+
+                            <th style="width: 70%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-18/01</th>
+                            <th rowspan="4" style="width: 90%;">
+                                <img  src="{{ $Logo }}" alt="Logo" style="width: 60%; height: auto;">  
+                            </th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY </th>
                             <th>Versión</th>
                             <th>1</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 90%;">Fecha de Emisión</th>
+                            <th>18-feb-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -224,8 +232,11 @@
                         </tr>
                     </tbody>
                 </table>
-                <div style="margin-bottom: 4px;"></div> <!-- Espacio entre la tabla y el borde inferior del header -->
-            </header>    
+
+                <div style="margin-bottom: 6px;"></div>
+
+            </header>
+
                 <footer>
                     
                     <table class="simbologia">

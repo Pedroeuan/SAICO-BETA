@@ -9,6 +9,7 @@ use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
 use App\Models\Clientes\clientes;
+use App\Models\Admin\Usuario;
 use App\Models\detallesOC\detallesOC;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Reporte\Firma_Reporte;
@@ -47,6 +48,7 @@ class FOR_PINS_24_01Controller extends Controller
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'] ?? null;
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -86,9 +88,12 @@ class FOR_PINS_24_01Controller extends Controller
         ->pluck('Certificado_Actual')
         ->toArray();
 
-        $todasLasRutas = array_values(
-            array_merge($facturas, $certificados)
-        );
+        $tecnicos = Usuario::where('id', $ID_TECNICO)
+            ->whereNotNull('cv_pdf')
+            ->pluck('cv_pdf')
+            ->toArray();
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
 
         Log::info('todasLasRutas', $todasLasRutas);
 
@@ -736,6 +741,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
@@ -745,6 +751,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
 
@@ -760,6 +767,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
             'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
@@ -779,6 +787,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
             'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
@@ -1128,6 +1137,11 @@ class FOR_PINS_24_01Controller extends Controller
         $idTrans4 = $validatedData['Datos_Equipo']['ID_TRANS4'] ?? null;
         $idEncoder1 = $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? null;
         $idEncoder2 = $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? null;
+        $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null;
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -1142,6 +1156,8 @@ class FOR_PINS_24_01Controller extends Controller
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
+            'ID_TECNICO' => $ID_TECNICO
+            
         ];
 
         if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
@@ -1166,6 +1182,11 @@ class FOR_PINS_24_01Controller extends Controller
             "idEncoder1" => $idEncoder1,
             "idEncoder2" => $idEncoder2,
             "qr_token" => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+                ?? null,
         ];
 
         $this->OS_OC($datosParaCrearOS_OC);
@@ -1345,6 +1366,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string|max:255',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string|max:255',
@@ -1354,6 +1376,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string|max:255',
             'Firmas_Reportes2.Vobo1' => 'nullable|string|max:255',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
 
@@ -1369,6 +1392,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string|max:255',
             'Firmas_Reportes3.Vobo2' => 'nullable|string|max:255',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
@@ -1388,6 +1412,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string|max:255',
             'Firmas_Reportes4.Vobo3' => 'nullable|string|max:255',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string|max:255',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string|max:255',
@@ -1502,10 +1527,12 @@ class FOR_PINS_24_01Controller extends Controller
             'idTrans4' => $idTrans4,
             'idEncoder1' => $idEncoder1,
             'idEncoder2' => $idEncoder2,
-
-            // Token del QR público
-            'qr_token' =>
-                $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null,
         ];
 
         /*
@@ -2010,7 +2037,7 @@ class FOR_PINS_24_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(143.5, -266);
+            $combinedPdf->SetXY(135.5, -266);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -2021,7 +2048,7 @@ class FOR_PINS_24_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(143.5, -265.5);
+            $combinedPdf->SetXY(135.5, -266);
             // Para que el conteo sea consecutivo
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }

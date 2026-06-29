@@ -598,8 +598,8 @@
                     </div>
 
                     <!-- Select para elegir el número de firmas -->
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
-                        <div class="col-sm-15">
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
+                        <div class="col-sm-12">
                             <div class="form-group">
                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
                                     <option value="1">1 Firma</option>
@@ -610,66 +610,113 @@
                             </div>
                         </div>
 
-                            <!-- 1 UNA FIRMA-->
-                            <div id="firmas1" class="col-12">
-                                <table class="table table-bordered table-striped dt-responsive tablas">
-                                    <thead>
-                                        <tr>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
-                                        </tr>
+                        <!-- 1 UNA FIRMA-->
+                        <div id="firmas1" class="col-12">
+                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                <thead>
+                                    <tr>
+                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
+                                    </tr>
 
-                                        <tr>
-                                            <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                                        </tr>
+                                    <tr>
+                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    </tr>
 
-                                        <tr>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
-                                        </tr>
+                                    <tr>
+                                        <td>
 
-                                        <tr>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
-                                        </tr>
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
 
-                                        <tr>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                                                    <select class="form-select inputForm" id="tecnicosSelect" name="Firmas_Reportes1[ID_TECNICO]">
+                                                        <option value="" selected disabled>SELECCIÓN DE TÉCNICOS</option>
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <!-- hidden si quieres guardar el ID explícitamente -->
+                                                    <input type="hidden" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{old('Firmas_Reportes1.NOMBRE_TECNICO')}}">
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
 
                         <!-- 2 DOS FIRMAS-->
                         <div id="firmas2" class="col-12">
                             <table class="table table-bordered table-striped dt-responsive tablas">
                                 <thead>
                                     <tr>
+
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
                                         <td style="width: 30px;"></td>
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
+
                                     </tr>
 
                                     <tr>
+
                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
                                         <td></td>
                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
                                     </tr>
 
                                     <tr>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+
+                                        <td>
+                                            
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+
+                                                    <select class="form-select inputForm" id="tecnicosSelect2" name="Firmas_Reportes2[ID_TECNICO]">
+                                                        <option value="" selected disabled>SELECCIÓN DE TÉCNICOS</option>
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <!-- hidden si quieres guardar el ID explícitamente-->
+                                                    <input type="hidden" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO2" value="{{old('Firmas_Reportes2.NOMBRE_TECNICO')}}">
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                     </tr>
-                                                                        
+
                                     <tr>
+
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
                                     </tr>
 
                                     <tr>
+
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
                                     </tr>
+                                    
                                 </thead>                            
                             </table>
                         </div>
@@ -679,7 +726,7 @@
                             <table class="table table-bordered table-striped dt-responsive tablas">
                                 <thead>
                                     <tr>
-                                        
+
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="Realizó"></th>
                                         <td style="width: 30px;"></td>
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
@@ -687,32 +734,53 @@
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="Vo.Bo."></th>
 
                                     </tr>
-                                    
+
                                     <tr>
+
                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
                                         <td></td>
                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
                                         <td></td>
                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
                                     </tr>
 
                                     <tr>
 
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                        <td>
+                                            
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+
+                                                    <select class="form-select inputForm" id="tecnicosSelect3" name="Firmas_Reportes3[ID_TECNICO]">
+                                                        <option value="" selected disabled>SELECCIÓN DE TÉCNICOS</option>
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <!-- hidden si quieres guardar el ID explícitamente-->
+                                                    <input type="hidden" name="Firmas_Reportes3[NOMBRE_TECNICO]" id="NOMBRE_TECNICO3" value="{{old('Firmas_Reportes3.NOMBRE_TECNICO')}}">
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td></td>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                         <td></td>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
 
                                     </tr>
-                                                                        
+
                                     <tr>
 
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO')}}"></td>
                                         <td></td>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO')}}"></td>
                                         <td></td>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_2DO_ENCARGADO]" placeholder="PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[PUESTO_2DO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO')}}"></td>
 
                                     </tr>
 
@@ -720,11 +788,12 @@
 
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                         <td></td>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
                                         <td></td>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
+                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
 
                                     </tr>
+                                    
                                 </thead>                            
                             </table>
                         </div>
@@ -759,13 +828,31 @@
 
                                     <tr>
 
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                        <td>
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+
+                                                    <select class="form-select inputForm" id="tecnicosSelect4" name="Firmas_Reportes4[ID_TECNICO]">
+                                                        <option value="" selected disabled>SELECCIÓN DE TÉCNICOS</option>
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <!-- hidden si quieres guardar el ID explícitamente-->
+                                                    <input type="hidden" name="Firmas_Reportes4[NOMBRE_TECNICO]" id="NOMBRE_TECNICO4" value="{{old('Firmas_Reportes4.NOMBRE_TECNICO')}}">
+                                                </div>
+                                            </div></td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO')}}"></td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO')}}"></td>
+
                                     </tr>
                                                                         
                                     <tr>
@@ -1278,7 +1365,7 @@ $(document).ready(function() {
             $('#IDInputE').val($('#equiposSelect').val() || '');
         }
         
-            const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos');
+            const selectedOptionLocalE = localStorage.getItem('FOR-PINS-18_01_Equipos');
             selectedOptionLocalE != null ?  ($('#equiposSelect').val(selectedOptionLocalE),actualizarInputsE()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -1301,7 +1388,7 @@ $(document).ready(function() {
                 $('#IDInputbyp').val($('#blockyprobetaSelect').val() || '');
             }
 
-            const selectedOptionLocalbyp = localStorage.getItem(document.querySelectorAll("form")[1].id+'_ByP');
+            const selectedOptionLocalbyp = localStorage.getItem('FOR-PINS-18_01_ByP');
             selectedOptionLocalbyp != null ?  ($('#blockyprobetaSelect').val(selectedOptionLocalbyp),actualizarInputsbyp()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -1324,7 +1411,7 @@ $(document).ready(function() {
                 $('#IDInputA').val($('#accesoriosSelect').val() || '');
             }
 
-            const selectedOptionLocalA1 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios1');
+            const selectedOptionLocalA1 = localStorage.getItem('FOR-PINS-18_01_Accesorios1');
             selectedOptionLocalA1 != null ?  ($('#accesoriosSelect').val(selectedOptionLocalA1),actualizarInputsA1()):"";
             
                 // Evento cuando se cambia la selección en el select
@@ -1347,7 +1434,7 @@ $(document).ready(function() {
                 $('#IDInputA2').val($('#accesoriosSelectA2').val() || '');
             }
 
-            const selectedOptionLocalA2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios2');
+            const selectedOptionLocalA2 = localStorage.getItem('FOR-PINS-18_01_Accesorios2');
             selectedOptionLocalA2 != null ?  ($('#accesoriosSelectA2').val(selectedOptionLocalA2),actualizarInputsA2()):"";
             
                 // Evento cuando se cambia la selección en el select
@@ -1369,7 +1456,7 @@ $(document).ready(function() {
                 $('#nsInputA3').val(ns);
             }
 
-            const selectedOptionLocalA3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios3');
+            const selectedOptionLocalA3 = localStorage.getItem('FOR-PINS-18_01_Accesorios3');
             selectedOptionLocalA3 != null ?  ($('#accesoriosSelect3').val(selectedOptionLocalA3),actualizarInputsA3()):"";
             
                 // Evento cuando se cambia la selección en el select
@@ -1391,7 +1478,7 @@ $(document).ready(function() {
                 $('#nsInputA4').val(ns);
             }
 
-            const selectedOptionLocalA4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios4');
+            const selectedOptionLocalA4 = localStorage.getItem('FOR-PINS-18_01_Accesorios4');
             selectedOptionLocalA4 != null ?  ($('#accesoriosSelect4').val(selectedOptionLocalA4),actualizarInputsA4()):"";
             
                 // Evento cuando se cambia la selección en el select
@@ -1413,7 +1500,7 @@ $(document).ready(function() {
                 $('#nsInputA5').val(ns);
             }
 
-            const selectedOptionLocalA5 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios5');
+            const selectedOptionLocalA5 = localStorage.getItem('FOR-PINS-18_01_Accesorios5');
             selectedOptionLocalA5 != null ?  ($('#accesoriosSelect5').val(selectedOptionLocalA5),actualizarInputsA5()):"";
             
                 // Evento cuando se cambia la selección en el select
@@ -1435,7 +1522,7 @@ $(document).ready(function() {
                 $('#nsInputA6').val(ns);
             }
 
-            const selectedOptionLocalA6 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios6');
+            const selectedOptionLocalA6 = localStorage.getItem('FOR-PINS-18_01_Accesorios6');
             selectedOptionLocalA6 != null ?  ($('#accesoriosSelect6').val(selectedOptionLocalA6),actualizarInputsA6()):"";
             
                 // Evento cuando se cambia la selección en el select
@@ -1457,7 +1544,7 @@ $(document).ready(function() {
                 $('#nsInputA7').val(ns);
             }
 
-            const selectedOptionLocalA7 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios7');
+            const selectedOptionLocalA7 = localStorage.getItem('FOR-PINS-18_01_Accesorios7');
             selectedOptionLocalA7 != null ?  ($('#accesoriosSelect7').val(selectedOptionLocalA7),actualizarInputsA7()):"";
             
                 // Evento cuando se cambia la selección en el select
@@ -1479,7 +1566,7 @@ $(document).ready(function() {
                 $('#nsInputA8').val(ns);
             }
 
-            const selectedOptionLocalA8 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Accesorios8');
+            const selectedOptionLocalA8 = localStorage.getItem('FOR-PINS-18_01_Accesorios8');
             selectedOptionLocalA8 != null ?  ($('#accesoriosSelect8').val(selectedOptionLocalA8),actualizarInputsA8()):"";
             
                 // Evento cuando se cambia la selección en el select
@@ -1501,7 +1588,7 @@ $(document).ready(function() {
             $('#nsInputE2').val(ns);
         }
         
-            const selectedOptionLocalE2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos2');
+            const selectedOptionLocalE2 = localStorage.getItem('FOR-PINS-18_01_Equipos2');
             selectedOptionLocalE2 != null ?  ($('#equiposSelect2').val(selectedOptionLocalE2),actualizarInputsE2()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -1523,7 +1610,7 @@ $(document).ready(function() {
             $('#nsInputE3').val(ns);
         }
         
-            const selectedOptionLocalE3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Equipos3');
+            const selectedOptionLocalE3 = localStorage.getItem('FOR-PINS-18_01_Equipos3');
             selectedOptionLocalE3 != null ?  ($('#equiposSelect3').val(selectedOptionLocalE3),actualizarInputsE3()):"";
 
             // Evento cuando se cambia la selección en el select

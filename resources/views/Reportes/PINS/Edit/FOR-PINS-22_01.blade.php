@@ -1,6 +1,6 @@
-﻿@extends('adminlte::page') 
+@extends('adminlte::page')
 
-@section('title', 'FOR-PINS-22_01')
+@section('title', 'FOR-PINS-22/01')
 
 @section('css')
 <!--datatable -->
@@ -51,10 +51,10 @@
         }
 
         .custom-btn:hover {
-            background-color: #218838 !important; /* Verde mÃ¡s oscuro */
+            background-color: #218838 !important; /* Verde más oscuro */
         }
         #my-notification .dropdown-menu {
-        max-height: 200px; /* Ajusta la altura segÃºn sea necesario */
+        max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
     </style>
@@ -64,18 +64,19 @@
 <br>
 <br>
 <br>
-<h3 align="center">REPORTE DE: {{ $Prueba}}</h3>
-<h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
-<h4 align="center">{{$formatoNombrePersonalizado}}</h4>
+<br>
+<h3 align="center">REPORTE DE: {{ $Prueba }}</h3>
+<h3 align="center">FORMATO: {{ $Nombre_Formato }}</h3>
+<h4 align="center">{{ $formatoNombrePersonalizado }}</h4>
 <br>
                 <section class="content w-100">
                     <div class="card w-100 p-3">
                         <div class="card-body w-100">
-                            <form id="FOR-PINS-22_01" action="{{route('Reportes_FOR_PINS_22_01.update',['id' => $id])}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-PINS-22_01" action="{{ route('Reportes_FOR_PINS_22_01.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
-                                        <strong>No se pudo guardar la actualizaciÃ³n.</strong>
+                                        <strong>No se pudo guardar la actualización.</strong>
                                         <ul class="mb-0 mt-2">
                                             @foreach ($errors->all() as $error)
                                                 <li>{{ $error }}</li>
@@ -86,12 +87,12 @@
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
-                                <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
-                                            <input type="date" class="form-control inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]" value="{{old('Detalles_Generales.Fecha',$Detalles_Generales['Fecha'] ?? '') }}">
+                                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Detalles_Generales.Fecha', $Detalles_Generales['Fecha'] ?? '') }}">
                                             @error('Fecha')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -113,7 +114,6 @@
                                         </div>
                                     </div>
 
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Cliente</label>
@@ -124,8 +124,7 @@
                                         </div>
                                     </div>
 
-
-                                <div class="col-sm-4">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Contrato</label>
                                             <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: 640853841" value="{{old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '')}}" readonly>
@@ -135,21 +134,20 @@
                                         </div>
                                     </div>
 
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Identificación</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Identificacion]" placeholder="Ejemplo: INGENIERÃA, PROCURA, CONSTRUCCIÃ“N DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÃ“N DE PLATAFORMAS GENÃ‰RICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÃ‰XICO ...">{{old('Detalles_Generales.Identificacion', $Detalles_Generales['Identificacion'] ?? $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Identificacion]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Identificacion', $Detalles_Generales['Identificacion'] ?? '')}}</textarea>
                                             @error('Identificacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Serie</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Serie]" placeholder="Ejemplo: OT-03 INGENIERÃA, PROCURA, CONSTRUCCIÃ“N DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Serie', $Detalles_Generales['Serie'] ?? $Detalles_Generales['Orden_Trabajo'] ?? '')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Serie]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Serie', $Detalles_Generales['Serie'] ?? '')}}</textarea>
                                             @error('Serie')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -159,7 +157,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fabricante</label>
-                                            <input type="text" class="form-control  inputForm @error('Fabricante') is-invalid @enderror" name="Detalles_Generales[Fabricante]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Fabricante', $Detalles_Generales['Fabricante'] ?? $Detalles_Generales['Folio'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Fabricante') is-invalid @enderror" name="Detalles_Generales[Fabricante]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Fabricante', $Detalles_Generales['Fabricante'] ?? '')}}">
                                             @error('Fabricante')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -169,7 +167,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número de Tubos</label>
-                                            <input type="text" class="form-control  inputForm @error('Numero_Tubos') is-invalid @enderror" name="Detalles_Generales[Numero_Tubos]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Numero_Tubos', $Detalles_Generales['Numero_Tubos'] ?? $Detalles_Generales['Partida'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Numero_Tubos') is-invalid @enderror" name="Detalles_Generales[Numero_Tubos]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Numero_Tubos', $Detalles_Generales['Numero_Tubos'] ?? '')}}">
                                             @error('Numero_Tubos')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -179,7 +177,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Lugar</label>
-                                            <input type="text" class="form-control inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Lugar', $Detalles_Generales['Lugar'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Lugar') is-invalid @enderror" name="Detalles_Generales[Lugar]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Lugar', $Detalles_Generales['Lugar'] ?? '')}}">
                                             @error('Lugar')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -188,8 +186,8 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Diámetro</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Diametro]" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Detalles_Generales.Diametro', $Detalles_Generales['Diametro'] ?? $Detalles_Generales['Isometrico_Plano'] ?? '')}}</textarea>
+                                            <label class="col-form-label" for="inputSuccess">Diametro</label>
+                                            <input type="text" class="form-control  inputForm @error('Diametro') is-invalid @enderror" name="Detalles_Generales[Diametro]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Diametro', $Detalles_Generales['Diametro'] ?? '')}}">
                                             @error('Diametro')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -199,7 +197,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Longitud</label>
-                                            <input type="text" class="form-control inputForm @error('Longitud') is-invalid @enderror" name="Detalles_Generales[Longitud]" placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Longitud', $Detalles_Generales['Longitud'] ?? '')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Longitud]" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Detalles_Generales.Longitud', $Detalles_Generales['Longitud'] ?? '')}}</textarea>
                                             @error('Longitud')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -208,8 +206,8 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Año de Fabricación</label>
-                                            <input type="text" class="form-control inputForm @error('Año_Fabricacion') is-invalid @enderror" name="Detalles_Generales[Año_Fabricacion]" placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Año_Fabricacion', $Detalles_Generales['Año_Fabricacion'] ?? '')}}">
+                                            <label class="col-form-label" for="inputSuccess">Año de fabricación</label>
+                                            <input type="text" class="form-control  inputForm @error('Año_Fabricacion') is-invalid @enderror" name="Detalles_Generales[Año_Fabricacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Año_Fabricacion', $Detalles_Generales['Año_Fabricacion'] ?? '')}}">
                                             @error('Año_Fabricacion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -251,30 +249,10 @@
                                             <label class="col-form-label" for="inputSuccess">Criterio de Evaluación</label>
                                             <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion', $Detalles_Generales['Criterio_Evaluacion'] ?? '')}}">
                                             @error('Criterio_Evaluacion')
-                                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <input type="hidden" class="form-control  inputForm " name="idPrueba_Aplica" value="{{ $idPrueba_Aplica }}" readonly>
-                                        </div>
-                                    </div>
-
-                                    <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
-                                    <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
-
-                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
-
-                                    <div style="margin-bottom: 2px;"></div>
-
                                     <div class="alert alert-info alert-dismissible">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                         <h5><i class="icon fas fa-info"></i> Importante</h5>
@@ -287,7 +265,7 @@
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Equipos:</label>
                                             <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- OpciÃ³n por defecto -->
+                                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
                                                 @foreach($idsGeneral_EyCs_Equipos as $equipo)
                                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                                             data-marca="{{ $equipo->Marca }}"
@@ -295,7 +273,7 @@
                                                             data-ns="{{ $equipo->Serie }}">
                                                         {{ $equipo->Nombre_E_P_BP }}
                                                     </option>
-                                                @endforeach 
+                                                @endforeach
                                             </select>
                                             <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
                                         </div>
@@ -304,14 +282,14 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO',$Datos_Equipo['MARCA_EQUIPO'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{ old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -326,8 +304,8 @@
 
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
-                                            <label class="col-form-label" for="inputSuccess">Bobinas:</label>
-                                            <select class="form-control inputForm" name="accesorios" id="accesoriosSelect">
+                                            <label class="col-form-label" for="inputSuccess">Bobina:</label>
+                                            <select class="form-select inputForm" name="accesorios" id="accesoriosSelect">
                                             <option value="" selected disabled>Seleccione un Accesorio</option>
                                                 @foreach($idsGeneral_EyCs_Accesorios as $accesorios)
                                                     <option value="{{ $accesorios->idGeneral_EyC }}"
@@ -338,41 +316,40 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <input type="hidden" name="Datos_Equipo[ID_BP]" id="IDInputA" value="{{ old('Datos_Equipo.ID_BP', $Datos_Equipo['ID_BP'] ?? $Datos_Equipo['ID_TR'] ?? '') }}">
+                                            <input type="hidden" name="Datos_Equipo[ID_BP]" id="IDInputA" value="{{ old('Datos_Equipo.ID_BP', $Datos_Equipo['ID_BP'] ?? '') }}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_BP]" placeholder="" value="{{old('Datos_Equipo.MARCA_BP', $Datos_Equipo['MARCA_BP'] ?? $Datos_Equipo['MARCA_TR'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputA" name="Datos_Equipo[MARCA_BP]" placeholder="" value="{{old('Datos_Equipo.MARCA_BP', $Datos_Equipo['MARCA_BP'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                                            <input type="text" class="form-control inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_BP]" placeholder="" value="{{old('Datos_Equipo.MODELO_BP', $Datos_Equipo['MODELO_BP'] ?? $Datos_Equipo['MODELO_TR'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="modeloInputA" name="Datos_Equipo[MODELO_BP]" placeholder="" value="{{old('Datos_Equipo.MODELO_BP', $Datos_Equipo['MODELO_BP'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control inputForm" id="nsInputA" name="Datos_Equipo[NS_BP]" placeholder="" value="{{old('Datos_Equipo.NS_BP', $Datos_Equipo['NS_BP'] ?? $Datos_Equipo['NS_TR'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputA" name="Datos_Equipo[NS_BP]" placeholder="" value="{{old('Datos_Equipo.NS_BP', $Datos_Equipo['NS_BP'] ?? '')}}">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">FREC:</label>
-                                            <input type="text" class="form-control inputForm" id="FrecInputA" name="Datos_Equipo[FREC_BP]" placeholder="" value="{{old('Datos_Equipo.FREC_BP', $Datos_Equipo['FREC_BP'] ?? $Datos_Equipo['FREC_TR'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[FREC_BP]" placeholder="" value="{{old('Datos_Equipo.FREC_BP', $Datos_Equipo['FREC_BP'] ?? '')}}">
                                         </div>
                                     </div>
 
                                     <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">BLOCK DE REFERENCIA</div>
 
-                                    <!-- Select para Block y Probeta -->
                                     <div class="col-sm-50 d-flex justify-content-center">
                                         <div class="form-group text-center">
                                             <label class="col-form-label" for="inputSuccess">Block de Referencia:</label>
@@ -394,7 +371,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                                            <input type="text" class="form-control inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK', $Datos_Equipo['MARCA_BLOCK'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="marcaInputbyp" name="Datos_Equipo[MARCA_BLOCK]" placeholder="" value="{{old('Datos_Equipo.MARCA_BLOCK', $Datos_Equipo['MARCA_BLOCK'] ?? '')}}">
                                         </div>
                                     </div>
 
@@ -408,40 +385,22 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">N.S:</label>
-                                            <input type="text" class="form-control inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BLOCK]" placeholder="" value="{{old('Datos_Equipo.NS_BLOCK', $Datos_Equipo['NS_BLOCK'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" id="nsInputbyp" name="Datos_Equipo[NS_BLOCK]" placeholder="" value="{{old('Datos_Equipo.NS_BLOCK', $Datos_Equipo['NS_BLOCK'] ?? '')}}">
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Certificado de Calibración del Equipo:</label>
-                                            <input type="text" class="form-control inputForm" name="Datos_Equipo[CER_CALIBRACION]" placeholder="" value="{{old('Datos_Equipo.CER_CALIBRACION', $Datos_Equipo['CER_CALIBRACION'] ?? '')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Vigencia de Calibración del Equipo:</label>
-                                            <input type="text" class="form-control inputForm" name="Datos_Equipo[VIG_CALIBRACION]" placeholder="" value="{{old('Datos_Equipo.VIG_CALIBRACION', $Datos_Equipo['VIG_CALIBRACION'] ?? '')}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">ACOPLANTE:</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">CERTIFICADO DE CALIBRACIÓN DEL EQUIPO:</div>
                                     <div>
                                         <div class="form-group">
-                                            <input type="text" class="form-control inputForm" name="Datos_Equipo[ACOPLANTE]" placeholder="" value="{{old('Datos_Equipo.ACOPLANTE', $Datos_Equipo['ACOPLANTE'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[CER_CALIBRACION]" placeholder="" value="{{old('Datos_Equipo.CER_CALIBRACION', $Datos_Equipo['CER_CALIBRACION'] ?? '')}}">
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">LONGITUD DEL CABLE</div>
+                                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">VIGENCIA DE CALIBRACIÓN DEL EQUIPO</div>
                                     <div>
                                         <div class="form-group">
-                                            <input type="text" class="form-control inputForm" name="Datos_Equipo[LONG_CABLE]" placeholder="" value="{{old('Datos_Equipo.LONG_CABLE', $Datos_Equipo['LONG_CABLE'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm" name="Datos_Equipo[VIG_CALIBRACION]" placeholder="" value="{{old('Datos_Equipo.VIG_CALIBRACION', $Datos_Equipo['VIG_CALIBRACION'] ?? '')}}">
                                         </div>
-                                    </div>
-
-                                    <div class="col-sm-12">
-                                        <hr style=" border: none; height: 3px; background-color: #6C757D;">
                                     </div>
                                     
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
@@ -452,12 +411,12 @@
                                     <div style="margin-bottom: 2px;"></div>
 
                                     <div class="table-responsive">
-                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <div class="alert alert-warning alert-dismissible">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <h5><i class="icon fas fa-info"></i> Importante</h5>
                                             <p>La primera fila es para el llenado automatico de cada una de las columnas del formato.</p>
                                         </div>
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas w-100">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -504,7 +463,6 @@
 
                                             @foreach ($Grupo_Juntas_Re as $bloque)
                                                 @foreach ($bloque as $item)
-
                                                     @php
                                                         $titleId = $item['grupo'] ?? 'sin_titulo';
                                                     @endphp
@@ -517,7 +475,7 @@
                                                                         class="form-control w-90 titulo-text"
                                                                         name="titulos_text[{{ $titleId }}]"
                                                                         value="{{ $item['texto'] }}"
-                                                                        placeholder="Ingrese tÃ­tulo...">
+                                                                        placeholder="Ingrese título...">
 
                                                                     <input type="hidden" class="titulo-id" name="titulos_ids[]" value="{{ $titleId }}">
 
@@ -534,23 +492,22 @@
                                                     @if ($item['tipo'] == 'fila')
                                                         <tr data-titulo="{{ $titleId }}">
                                                             <td>{{ $contador }} <input type="hidden" value="{{ $contador }}"></td>
-                                                            <td><input type="text" class="form-control" name="ID[{{ $titleId }}][]" value="{{ $item['data']['ID'] }}"></td>
-                                                            <td><input type="text" class="form-control" name="elemento[{{ $titleId }}][]" value="{{ $item['data']['elemento'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="referencia[{{ $titleId }}][]" value="{{ $item['data']['referencia'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="fase[{{ $titleId }}][]" value="{{ $item['data']['fase'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="ganancia[{{ $titleId }}][]" value="{{ $item['data']['ganancia'] ?? $item['data']['ganacia'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="alcanse_inspeccion[{{ $titleId }}][]" value="{{ $item['data']['alcanse_inspeccion'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="canal[{{ $titleId }}][]" value="{{ $item['data']['canal'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="inspeccion[{{ $titleId }}][]" value="{{ $item['data']['inspeccion'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="obstruccion[{{ $titleId }}][]" value="{{ $item['data']['obstruccion'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="fila[{{ $titleId }}][]" value="{{ $item['data']['fila'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="columna[{{ $titleId }}][]" value="{{ $item['data']['columna'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="tipo_alarma[{{ $titleId }}][]" value="{{ $item['data']['tipo_alarma'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="longitud_franja[{{ $titleId }}][]" value="{{ $item['data']['longitud_franja'] ?? '' }}"></td>
-                                                            <td><input type="text" class="form-control" name="observaciones[{{ $titleId }}][]" value="{{ $item['data']['observaciones'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='ID[{{ $titleId}}][]' value="{{ $item['data']['ID'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='elemento[{{ $titleId }}][]' value="{{ $item['data']['elemento'] }}"></td>
+                                                            <td><input type="text" class="form-control" name='referencia[{{ $titleId }}][]' value="{{ $item['data']['referencia'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='fase[{{ $titleId }}][]' value="{{ $item['data']['fase'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='ganancia[{{ $titleId }}][]' value="{{ $item['data']['ganancia'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='alcanse_inspeccion[{{ $titleId }}][]' value="{{ $item['data']['alcanse_inspeccion'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='canal[{{ $titleId }}][]' value="{{ $item['data']['canal'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='inspeccion[{{ $titleId }}][]' value="{{ $item['data']['inspeccion'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='obstruccion[{{ $titleId }}][]' value="{{ $item['data']['obstruccion'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='fila[{{ $titleId }}][]' value="{{ $item['data']['fila'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='columna[{{ $titleId }}][]' value="{{ $item['data']['columna'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='tipo_alarma[{{ $titleId }}][]' value="{{ $item['data']['tipo_alarma'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='longitud_franja[{{ $titleId }}][]' value="{{ $item['data']['longitud_franja'] ?? '' }}"></td>
+                                                            <td><input type="text" class="form-control" name='observaciones[{{ $titleId }}][]' value="{{ $item['data']['observaciones'] }}"></td>
                                                             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                         </tr>
-
                                                         @php $contador++; @endphp
                                                     @endif
                                                     <!-- LONGITUD (CIERRA BLOQUE) -->
@@ -583,7 +540,7 @@
                                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                         <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                             <div>
-                                                <label for="numRows">NÃºmero de Filas:</label>
+                                                <label for="numRows">Número de Filas:</label>
                                                 <select id="numRows" class="form-select">
                                                     @for ($i = 1; $i <= 500; $i++)
                                                         <option value="{{ $i }}">{{ $i }}</option>
@@ -594,7 +551,7 @@
                                             <button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>
 
                                             <button id="addTituloBtn" type="button" class="btn btn-success custom-btn">Agregar Título</button>
-                                            
+
                                             <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                                             <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -610,32 +567,29 @@
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>NPIR:</strong></td>
-                                                                <td style="text-align:left;">NO PRESENTA INDICACIONES RELEVANTES</td>
+                                                                <td>NO PRESENTA INDICACIONES RELEVANTES</td>
                                                                 <td><strong>CI:</strong></td>
-                                                                <td style="text-align:left;">CORROSIÓN INTERNA</td>
+                                                                <td>CORROSIÓN INTERNA</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>I:</strong></td>
-                                                                <td style="text-align:left;">INCLUSIÓN NO METÁLICA</td>
+                                                                <td>INCLUSIÓN NO METÁLICA</td>
                                                                 <td><strong>L:</strong></td>
-                                                                <td style="text-align:left;">LAMINACIÓN</td>
+                                                                <td>LAMINACIÓN</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>ZI:</strong></td>
-                                                                <td style="text-align:left;">ZONA DE INCLUSIONES NO METÁLICAS</td>
-                                                                <td colspan="2" rowspan="2"></td>
+                                                                <td>ZONA DE INCLUSIONES NO METALICAS</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>LE:</strong></td>
-                                                                <td style="text-align:left;">LAMINACIÓN ESCALONADA</td>
+                                                                <td>LAMINACIÓN ESCALONADA</td>
                                                             </tr>
                                                         </thead>
                                                     </table>
                                                 </td>
-    
                                                 <td>
                                                 </td>
-    
                                                 <td>
                                                     <table>
                                                         <thead>
@@ -662,7 +616,7 @@
                                                                 <td><strong>DNR</strong></td>
                                                                 <td style="text-align:left;">DISTANCIA DE NIVEL DE REFERENCIA (IN)</td>
                                                                 <td><strong>H.T.</strong></td>
-                                                                <td style="text-align:left;">HORARIO TÉCNICO</td>                                     
+                                                                <td style="text-align:left;">HORARIO TÉCNICO</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><strong>NI:</strong></td>
@@ -681,15 +635,16 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                                                <textarea class="form-control  is-waning" id="textAreaObs" name="Datos_Equipo[OBS]" placeholder="Ejemplo: LA INSPECCIÃ“N SE REALIZÃ“ DE LADO A Y B">{{old('Datos_Equipo.OBS', $Datos_Equipo['OBS'] ?? '')}}</textarea>
+                                                <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[OBS]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('OBS', $Datos_Equipo['OBS'] ?? '')}}</textarea>
                                             </div>
+                                        </div>
                                         </div>
 
                                         <!-- Select para elegir el número de firmas -->
-                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
+                                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-15">
                                             <div class="form-group">
-                                                <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                <select class="form-select text-center" id="numFirmas" name="numFirmas">.
                                                     <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
                                                     <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
                                                     <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
@@ -711,7 +666,29 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÃ‰CNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+
+                                                        <td>
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                    <div class="form-group text-center">
+                                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                                        <select class="form-select inputForm" id="tecnicosSelect">
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                                            @foreach($Tecnicos as $Tecnico)
+                                                                                <option value="{{ $Tecnico->id }}"
+                                                                                        data-name="{{ $Tecnico->name }}">
+                                                                                    {{ $Tecnico->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+
+                                                                        <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                        <input type="hidden" name="Firmas_Reportes1[ID_TECNICO]" id="IDTECNICO" value="{{old('Firmas_Reportes1.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                                        <input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{old('Firmas_Reportes1.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}" readonly>
+                                                                    </div>
+                                                            </div>
+                                                            
                                                     </tr>
 
                                                     <tr>
@@ -719,7 +696,7 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesorí­a e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                     </tr>
                                                     
                                                 </thead>                            
@@ -731,34 +708,65 @@
                                             <table class="table table-bordered table-striped dt-responsive tablas">
                                                 <thead>
                                                     <tr>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: RealizÃ³" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
+
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizo" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vobo1" value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
+                                                    
                                                     </tr>
 
                                                     <tr>
+
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
                                                         <td></td>
                                                         <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÃ‰CNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
-                                                        <td></td>
+
+                                                        <td>    
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                    <div class="form-group text-center">
+                                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                                        <select class="form-select inputForm" id="tecnicosSelect2">
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                                            @foreach($Tecnicos as $Tecnico)
+                                                                                <option value="{{ $Tecnico->id }}"
+                                                                                        data-name="{{ $Tecnico->name }}">
+                                                                                    {{ $Tecnico->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+
+                                                                        <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                        <input type="hidden" name="Firmas_Reportes2[ID_TECNICO]" id="IDTECNICO2" value="{{old('Firmas_Reportes2.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                                        <input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO2" value="{{old('Firmas_Reportes2.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}" readonly>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        <td>
+
+                                                        </td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
                                                                                         
                                                     <tr>
+
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO', $Firmas['PUESTO_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesorí­a e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
+                                                    
                                                 </thead>                            
                                             </table>
                                         </div>
@@ -788,15 +796,38 @@
                                                     </tr>
 
                                                     <tr>
+                                                        <td>
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                    <div class="form-group text-center">
+                                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                                        <select class="form-select inputForm" id="tecnicosSelect3">
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÃ‰CNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
-                                                        <td></td>
+                                                                            @foreach($Tecnicos as $Tecnico)
+                                                                                <option value="{{ $Tecnico->id }}"
+                                                                                        data-name="{{ $Tecnico->name }}">
+                                                                                    {{ $Tecnico->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+
+                                                                        <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                        <input type="hidden" name="Firmas_Reportes3[ID_TECNICO]" id="IDTECNICO3" value="{{old('Firmas_Reportes3.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                                        <input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" id="NOMBRE_TECNICO3" value="{{old('Firmas_Reportes3.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}" readonly>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        <td>
+
+                                                        </td>
+
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO', $Firmas['NOMBRE_2DO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
-                                                                                        
+
                                                     <tr>
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
@@ -809,7 +840,7 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="Asesorí­a e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
@@ -827,13 +858,13 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizo" value="{{old('Realizo', $Firmas['Realizo'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vobo1" value="{{old('Vobo1', $Firmas['Vobo1'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo2', $Firmas['Vobo2'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vobo2" value="{{old('Vobo2', $Firmas['Vobo2'] ?? '')}}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vo.Bo." value="{{old('Vobo3', $Firmas['Vobo3'] ?? '')}}"></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vobo3" value="{{old('Vobo3', $Firmas['Vobo3'] ?? '')}}"></th>
 
                                                     </tr>
 
@@ -851,43 +882,64 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        <td>
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                <div class="form-group text-center">
+                                                                <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                                    <select class="form-select inputForm" id="tecnicosSelect4">
+                                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                                        @foreach($Tecnicos as $Tecnico)
+                                                                            <option value="{{ $Tecnico->id }}"
+                                                                                    data-name="{{ $Tecnico->name }}">
+                                                                                {{ $Tecnico->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+
+                                                                    <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                    <input type="hidden" name="Firmas_Reportes4[ID_TECNICO]" id="IDTECNICO4" value="{{old('Firmas_Reportes4.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                    <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                                    <input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" id="NOMBRE_TECNICO4" value="{{old('Firmas_Reportes4.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_2DO_ENCARGADO]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO', $Firmas['NOMBRE_2DO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO', $Firmas['NOMBRE_2DO_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO', $Firmas['NOMBRE_3RO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO', $Firmas['NOMBRE_3RO_ENCARGADO'] ?? '')}}"></td>
+
                                                     </tr>
                                                                                         
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_ENCARGADO]" placeholder="PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO', $Firmas['PUESTO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL ENCARGADO" value="{{old('PUESTO_ENCARGADO', $Firmas['PUESTO_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_2DO_ENCARGADO]" placeholder="PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO', $Firmas['PUESTO_2DO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_2DO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL SEGUNDO ENCARGADO" value="{{old('PUESTO_2DO_ENCARGADO', $Firmas['PUESTO_2DO_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_3RO_ENCARGADO]" placeholder="PUESTO DEL TERCER ENCARGADO" value="{{old('PUESTO_3RO_ENCARGADO', $Firmas['PUESTO_3RO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[PUESTO_3RO_ENCARGADO]" placeholder="Ejemplo: PUESTO DEL TERCER ENCARGADO" value="{{old('PUESTO_3RO_ENCARGADO', $Firmas['PUESTO_3RO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_TECNICO]" placeholder="" value="Asesorí­a e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO', $Firmas['EMPRESA_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO', $Firmas['EMPRESA_2DO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_2DO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO', $Firmas['EMPRESA_2DO_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO', $Firmas['EMPRESA_3RO_ENCARGADO'] ?? '')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO', $Firmas['EMPRESA_3RO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
                                                     
                                                 </thead>                            
                                             </table>
                                         </div>
-
 
                                         <p>
 
@@ -921,7 +973,6 @@
                                                                 <input type="checkbox"class="form-check-input imagen-hoja-checkbox" data-index="{{ $index }}"id="imagenHoja{{ $index }}"{{ !empty($foto['una_hoja']) && $foto['una_hoja'] == 1 ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="imagenHoja{{ $index }}">Imagen en una hoja</label>
                                                             </div>
-
                                                             <input type="hidden" name="imagen_hoja[{{ $index }}]" id="imagenHojaValue{{ $index }}" value="{{ $foto['una_hoja'] ?? 0 }}">
                                                             <!-- Campo para seleccionar una nueva imagen -->
                                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
@@ -949,7 +1000,7 @@
                                         @endif
 
                                         <div id="imageFieldsContainer" class="row">
-                                            <!-- Aquí­ se agregarán dinámicamente los campos -->
+                                            <!-- Aquí se agregarán dinámicamente los campos -->
                                         </div>
 
                                         <!-- Modal para recortar la imagen -->
@@ -996,7 +1047,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
-                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan PÃ©rez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
+                                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{ old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '') }}">
                                                 @error('Nombre_Soldador')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                                 @enderror
@@ -1056,7 +1107,6 @@
                         </div>
                     </div>
                 </section>
-                <div id="tituloCountContainer" data-titulo-count="{{ $tituloIndex ?? 0 }}" style="display:none"></div>
 @stop
 
 
@@ -1075,13 +1125,13 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="{{ asset('js/session-handler.js') }}"></script>
+
 <script>
     const updateNotificationUrl = "{{ url('notificaciones/update') }}";
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/Reportes_Edit.js') }}"></script>
-
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -1090,17 +1140,16 @@
 
 <script>
     /*Juntas-Resultados */
+    /*Juntas-Resultados */
 $(document).ready(function() {
     let tituloCount = $('.titulo-row').length;
-    //let tituloCount = 0; //contador de titulos creados (se incrementa al añadir un titulo).
-    let rowCount = 0; //contador de filas por titulo (se reinicia a 0 cuando se crea un nuevo titulo).
-    let rowCountGlobal = 0; //contador global/visual de filas (se usa para numerar las filas en la tabla).
+    let rowCount = 0;
+    let rowCountGlobal = 0;
 
         $('#addTituloBtn').click(function () {
             verificarYAgregarLongitud();
             tituloCount++;
             rowCount = 0;
-            // ID unico: counter + timestamp (evita duplicados aunque el texto sea igual)
             const titleId = `titulo_${tituloCount}_${Date.now()}`;
 
             let newTitle = `
@@ -1108,7 +1157,7 @@ $(document).ready(function() {
                 <td colspan="15">
                     <div class="d-flex justify-content-between align-items-center">
                         <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}"> <!-- Campo oculto para el ID del titulo -->
+                        <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
                         <td><button type="button" class="btn btn-danger btnEliminarTitulo">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button></td>
@@ -1118,98 +1167,88 @@ $(document).ready(function() {
             `;
 
             $('#dynamicTable tbody').append(newTitle);
-        });
-
-        $('#addLongBtn').click(function () {
-            verificarYAgregarLongitud();
-            rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
-
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
-
-            let newTitle = `
-
-                <tr class="long-row" data-titulo="${lastTitle}">
-                <td colspan="14"> Longitud Inspeccionada</td>
-                <td>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
-                        <td><button type="button" class="btn btn-danger btnEliminar">
-                            <i class="fa fa-times"  aria-hidden="true"></i>
-                        </button></td>
-                    </div>
-                </td>
-            </tr>
-        `;
-
-        $('#dynamicTable tbody').append(newTitle);
-        updateTitulos(); // Actualizar lista de ti­tulos
+            updateTitulos();
         });
 
         $('#addBtn').click(function () {
             verificarYAgregarLongitud();
-            //let numFilas = parseInt($('#numRows').val());
             let numFilas = parseInt($('#numRows').val(), 10) || 0;
-            // Recontar filas existentes que NO son tÃ­tulos
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
             let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
-            rowCount++; // Incrementar el contador general de filas
-            rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
+                rowCount++;
+                rowCountGlobal++;
 
                 let newRow = `
                 <tr data-titulo="${lastTitle}">
+                    <td>${rowCountGlobal} <input type="hidden" value="${rowCountGlobal}"></td>
                     <td><input type="text" class="form-control" name="ID[${lastTitle}][]" placeholder="ID" value="${rowCountGlobal}"></td>
-                        <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Elemento"></td>
-                        <td><input type="text" class="form-control" name="referencia[${lastTitle}][]" placeholder="Referencia (mm)"></td>
-                        <td><input type="text" class="form-control" name="fase[${lastTitle}][]" placeholder="Fase"></td>
-                        <td><input type="text" class="form-control" name="ganancia[${lastTitle}][]" placeholder="Ganancia"></td>
-                        <td><input type="text" class="form-control" name="alcanse_inspeccion[${lastTitle}][]" placeholder="Alcance de Inspección"></td>
-                        <td><input type="text" class="form-control" name="canal[${lastTitle}][]" placeholder="Canal"></td>
-                        <td><input type="text" class="form-control" name="inspeccion[${lastTitle}][]" placeholder="%Insp"></td>
-                        <td><input type="text" class="form-control" name="obstruccion[${lastTitle}][]" placeholder="%Obstru"></td>
-                        <td><input type="text" class="form-control" name="fila[${lastTitle}][]" placeholder="Fila"></td>
-                        <td><input type="text" class="form-control" name="columna[${lastTitle}][]" placeholder="Columna"></td>
-                        <td><input type="text" class="form-control" name="tipo_alarma[${lastTitle}][]" placeholder="Tipo de Alarma"></td>
-                        <td><input type="text" class="form-control" name="longitud_franja[${lastTitle}][]" placeholder="Longitud de la Franja"></td>
-                        <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
-                        <td><button type="button" class="btn btn-danger btnEliminar">   <i class="fa fa-times"  aria-hidden="true"></i></button></td>
-                </tr>
-                `;
+                    <td><input type="text" class="form-control" name="elemento[${lastTitle}][]" placeholder="Elemento"></td>
+                    <td><input type="text" class="form-control" name="referencia[${lastTitle}][]" placeholder="Referencia (mm)"></td>
+                    <td><input type="text" class="form-control" name="fase[${lastTitle}][]" placeholder="Fase"></td>
+                    <td><input type="text" class="form-control" name="ganancia[${lastTitle}][]" placeholder="Ganancia"></td>
+                    <td><input type="text" class="form-control" name="alcanse_inspeccion[${lastTitle}][]" placeholder="Alcance de Inspección"></td>
+                    <td><input type="text" class="form-control" name="canal[${lastTitle}][]" placeholder="Canal"></td>
+                    <td><input type="text" class="form-control" name="inspeccion[${lastTitle}][]" placeholder="%Insp"></td>
+                    <td><input type="text" class="form-control" name="obstruccion[${lastTitle}][]" placeholder="%Obstru"></td>
+                    <td><input type="text" class="form-control" name="fila[${lastTitle}][]" placeholder="Fila"></td>
+                    <td><input type="text" class="form-control" name="columna[${lastTitle}][]" placeholder="Columna"></td>
+                    <td><input type="text" class="form-control" name="tipo_alarma[${lastTitle}][]" placeholder="Tipo de Alarma"></td>
+                    <td><input type="text" class="form-control" name="longitud_franja[${lastTitle}][]" placeholder="Longitud de la Franja"></td>
+                    <td><input type="text" class="form-control" name="observaciones[${lastTitle}][]" placeholder="Observaciones"></td>
+                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                </tr>`;
 
                 $('#dynamicTable tbody').append(newRow);
             }
+
             verificarYAgregarLongitud();
         });
 
+        $('#addLongBtn').click(function () {
+            verificarYAgregarLongitud();
+            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+            let newTitle = `
+                <tr class="long-row" data-titulo="${lastTitle}">
+                    <td colspan="14"> Longitud Inspeccionada</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <input type="text" class="form-control w-90 long-text" name="Long_Inspecc[${lastTitle}][]">
+                            <td><button type="button" class="btn btn-danger btnEliminar">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button></td>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            $('#dynamicTable tbody').append(newTitle);
+            updateTitulos();
+        });
+
         $('form').submit(function(e) {
-            // Validar que la tabla no esté vacía
             if ($('#dynamicTable tbody tr').length === 0) {
                 e.preventDefault();
                 Swal.fire({
                     icon: 'warning',
                     title: 'Advertencia',
-                    text: 'La tabla no puede estar vací­a. Por favor, agregue al menos una fila.',
+                    text: 'La tabla no puede estar vacía. Por favor, agregue al menos una fila.',
                 });
                 return;
             }
 
-            // Actualizar el campo oculto con [{id,text},...]
             updateTitulos();
-
-            // Eliminar los datos de sessionStorage
-            //sessionStorage.removeItem('dynamicTableData'); // Borra solo los datos de la tabla
-            //sessionStorage.clear(); // Alternativa: Borra todo el sessionStorage
-            // Deshabilitar el boton de submit y cambiar el texto (opcional)
             let submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', true).text('Guardando...');
-            // Opcional: Agregar un indicador de carga
             submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
         });
 
-});
+    });
 
-function verificarYAgregarLongitud() {
+    function verificarYAgregarLongitud() {
 
         const $rows = $('#dynamicTable tbody tr');
 
@@ -1219,7 +1258,6 @@ function verificarYAgregarLongitud() {
 
             const $row = $(this);
 
-            // Si ya hay longitud â†’ cerrar bloque
             if ($row.hasClass('long-row')) {
                 contadorBloque = 0;
                 return;
@@ -1227,7 +1265,6 @@ function verificarYAgregarLongitud() {
 
             contadorBloque++;
 
-            // Cuando llega a 10 -> insertar longitud
             if (contadorBloque === 10) {
 
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
@@ -1247,16 +1284,15 @@ function verificarYAgregarLongitud() {
                         </td>
                     </tr>`;
 
-                // evitar duplicado
                 if (!$row.next().hasClass('long-row')) {
                     $row.after(newLong);
                 }
 
-                //  cerrar bloque
                 contadorBloque = 0;
             }
         });
     }
+
     /*Selects */
     $(document).ready(function() {
         function actualizarInputsE() {
@@ -1307,7 +1343,7 @@ function verificarYAgregarLongitud() {
                 $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA();
                 });
-
+                
             function actualizarInputsbyp() {
                 var selectedOption = $('#blockyprobetaSelect').find('option:selected');
 
@@ -1332,7 +1368,8 @@ function verificarYAgregarLongitud() {
             $('#blockyprobetaSelect').on('change', function() {
                 actualizarInputsbyp();
             });
-    });
+        });
 
 </script>
 @endsection
+

@@ -25,6 +25,7 @@ use App\Models\EquiposyConsumibles\general_eyc;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Models\Admin\Usuario;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -113,7 +114,7 @@ class ReporteController extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }*/
 
-        return response($combinedPdf->Output('FOR_PIMP_02_B_03.PDF', 'I'), 200)
+        return response($combinedPdf->Output('FOR_PIMP_02_B_03.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
         //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_03_PDF');
     }
@@ -190,7 +191,7 @@ class ReporteController extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }*/
 
-        return response($combinedPdf->Output('FOR_PIMP_02_B_04.PDF', 'I'), 200)
+        return response($combinedPdf->Output('FOR_PIMP_02_B_04.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
         //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_04_PDF');
     }
@@ -267,12 +268,12 @@ class ReporteController extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }*/
 
-        return response($combinedPdf->Output('FOR_PIMP_07_B_01.PDF', 'I'), 200)
+        return response($combinedPdf->Output('FOR_PIMP_07_B_01.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
         //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_07_B_01_PDF');
     }
 
-            public function FOR_PIMP_03_01()
+            public function FOR_PIMP_03_B_01()
     {
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
@@ -301,10 +302,10 @@ class ReporteController extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_01_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_B_01_PDF', $data)->setPaper('letter', 'portrait');
 
         // Generar el PDF adicional en orientación vertical
-        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_07_B_01_PDF', $data)->setPaper('letter', 'portrait');
+        //$pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_03_B_01_PDF', $data)->setPaper('letter', 'portrait');
 
         // Combinar los PDFs
         $pdf1Content = $pdf1->output();
@@ -344,9 +345,17 @@ class ReporteController extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }*/
 
-        return response($combinedPdf->Output('FOR_PIMP_03_01.PDF', 'I'), 200)
+        return response($combinedPdf->Output('FOR_PIMP_03_B_01.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
-        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_01_PDF');
+        //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_B_01_PDF');
+    }
+
+        public function FOR_PIMP_05_01()
+    {
+        return $this->plantillaPimpIM(
+            'Reportes.ReportesPDFIM.Reporte_FOR_PIMP_05_01_PDF',
+            'FOR_PIMP_05_01.PDF'
+        );
     }
 
         public function FOR_PIMP_05_B_01()
@@ -421,9 +430,40 @@ class ReporteController extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }*/
 
-        return response($combinedPdf->Output('FOR_PIMP_05_B_01.PDF', 'I'), 200)
+        return response($combinedPdf->Output('FOR_PIMP_05_B_01.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
         //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_05_B_01_PDF');
+    }
+
+    private function plantillaPimpIM(string $vistaPdf, string $nombreArchivo)
+    {
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Reporte_FOR-01-INS-02.PDF',
+            'Logo' => $Logo,
+        ];
+
+        $pdf1 = PDF::loadView($vistaPdf, $data)->setPaper('letter', 'portrait');
+        $pdf1Content = $pdf1->output();
+
+        $tempPdf1 = new Fpdi();
+        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        $combinedPdf = new Fpdi();
+        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(126, -256);
+            $combinedPdf->Cell(0, 10, "$i de $pageCount1", 0, 0, 'C');
+        }
+
+        return response($combinedPdf->Output($nombreArchivo, 'S'), 200)
+            ->header('Content-Type', 'application/pdf');
     }
 
         public function FOR_PIMP_06_B_01()
@@ -498,7 +538,7 @@ class ReporteController extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }*/
 
-        return response($combinedPdf->Output('FOR_PIMP_06_B_01.PDF', 'I'), 200)
+        return response($combinedPdf->Output('FOR_PIMP_06_B_01.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
         //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_03_PDF');
     }
@@ -575,7 +615,7 @@ class ReporteController extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }*/
 
-        return response($combinedPdf->Output('FOR_PIMP_04_02.PDF', 'I'), 200)
+        return response($combinedPdf->Output('FOR_PIMP_04_02.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
         //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_04_PDF');
     }
@@ -652,7 +692,7 @@ class ReporteController extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }*/
 
-        return response($combinedPdf->Output('FOR_PIMP_04_03.PDF', 'I'), 200)
+        return response($combinedPdf->Output('FOR_PIMP_04_03.PDF', 'S'), 200)
             ->header('Content-Type', 'application/pdf');
         //return view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_02_B_04_PDF');
     }
@@ -903,11 +943,16 @@ class ReporteController extends Controller
         // Decodificar el JSON de Datos_Equipo
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el JSON de Datos_Equipo
-        $Firmas = json_decode($Firmas_Reportes->Firmas, true);
+        $Firmas = $Firmas_Reportes ? json_decode($Firmas_Reportes->Firmas, true) : [];
+        $Firmas = is_array($Firmas) ? $Firmas : [];
         // Decodificar el JSON de Datos_Equipo
-        $Fotos_Comentarios = json_decode($Fotos_Reporte->Fotos_Reportes, true);
+        $Fotos_Comentarios = $Fotos_Reporte
+            ? json_decode($Fotos_Reporte->Fotos_Reportes, true)
+            : [];
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
-        $Grupo_Juntas_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re , true);
+        $Grupo_Juntas_Re = $Grupo_Juntas_Detalles_Re
+            ? json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true)
+            : [];
         
         $imagenes = [];
         if ($Fotos_Reporte && $Fotos_Reporte->Fotos_Reportes) {
@@ -916,7 +961,7 @@ class ReporteController extends Controller
 
 
         // Obtener el numero de firmas
-        $numFirmas = $Firmas ['numFirmas'];
+        $numFirmas = $Firmas['numFirmas'] ?? 1;
         // Obtener el idSolicitud
         $idSolicitud = $Detalles_Generales['idSolicitud'];
         $Solicitud = Solicitudes::findOrFail($idSolicitud);
@@ -955,8 +1000,12 @@ class ReporteController extends Controller
         $Nombre_Formato = $Buscar_idFormato->Nombre;
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
+        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re'));
+        // Obtén todos los usuario que tengan el rol Técnico
+        $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
+
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos'));
 
     }
 
@@ -990,6 +1039,7 @@ class ReporteController extends Controller
             "FOR-PINS-24-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES y TOFD", //MISMO FORMATO QUE EL 15-01 
             "FOR-PINS-25-01" => "INSPECCIÓN VISUAL EN RSP",
             "FOR-03-PRO-INS-15" => "LISTADO DE COMPONENTES", //Mantiene su mismo formato pero con un nombre personalizado
+            "FOR-PIMP-07_B/01" => "TRATAMIENTO TÉRMICO DE PWHT (INFORME DE RELEVADO DE ESFUERZOS)"
         ];
     
         return $nombresPersonalizados[$Nombre_Formato] ?? $Nombre_Formato;
@@ -1146,7 +1196,10 @@ class ReporteController extends Controller
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes'));
+        // Obtén todos los usuario que tengan el rol Técnico
+        $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
+
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos'));
     }
 
     public function indexINS2(Request $request)
@@ -1355,6 +1408,42 @@ class ReporteController extends Controller
         elseif($Nombre_Formato == "FOR-03-PRO-INS-15")
         {
             return redirect()->route('Reporte_FOR_03_INS_15.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-02_B/03")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_02_B_03.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-02_B/04")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_02_B_04.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-03_B/01")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_03_B_01.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-04/02")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_04_02.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-04/03")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_04_03.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-05/01")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_05_01.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-05_B/01")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_05_B_01.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-06_B/01")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_06_B_01.PDF', ['id' => $id]);
+        }
+        elseif($Nombre_Formato == "FOR-PIMP-07_B/01")
+        {
+            return redirect()->route('Reporte_FOR_PIMP_07_B_01.PDF', ['id' => $id]);
         }
     }
 
