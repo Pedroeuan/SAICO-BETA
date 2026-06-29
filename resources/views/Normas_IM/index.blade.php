@@ -38,7 +38,7 @@
                         <th>Nombre</th>
                         <th>Variable</th>
                         <th>Editar</th>
-                        <th>Baja</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +123,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/Normas_IM/eliminar/' + idNorma,
+                    url: '/Normas_IM/destroy/' + idNorma,
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}'
