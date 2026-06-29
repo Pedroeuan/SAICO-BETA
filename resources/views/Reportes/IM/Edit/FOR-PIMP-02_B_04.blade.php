@@ -197,8 +197,8 @@
             <form id="FOR-PIMP-02_B_04" action="{{route('Reportes_FOR_PIMP_02_B_04.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
-                    <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
-                <div style="margin-bottom: 2px;"></div>
+                    <button id="preFormBtn" type="button" class="btn btn-warning my-2">Rellenar Campos Vacios "---"</button>
+                    <div style="margin-bottom: 2px;"></div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
                     <div class="col-sm-4">
@@ -532,9 +532,30 @@
 
                         $durezaMergeInitial = $normalizeMergeConfigView(old('Dureza_MergeConfig', isset($Reporte) ? ($Reporte->dureza_merge_config ?? '[]') : ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? '[]')));
                     @endphp
-                    <div class="table-responsive mb-3"><input type="hidden" name="Dureza_MergeConfig" id="durezaMergeConfig" value="{{ $durezaMergeInitial }}">
-                        <span id="durezaMergeSelectionInfo" class="text-primary fw-semibold ms-2"></span>
-                        <table class="table table-bordered align-middle text-center tabla-dureza" id="tablaDurezaBrinell">
+                    <div class="table-responsive mb-3">
+    <input type="hidden" name="Dureza_MergeConfig" id="durezaMergeConfig" value="{{ $durezaMergeInitial }}">
+    <div class="tabla-toolbar">
+        <div class="toolbar-left">
+            <label for="numRows" class="toolbar-label">Numero de filas:</label>
+            <select id="numRows" class="form-select toolbar-select">
+                @for ($i = 1; $i <= 500; $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
+        </div>
+        <div class="toolbar-actions">
+            <button id="addDurezaRowsBtn" type="button" class="btn btn-success">Agregar fila</button>
+            <button id="fillEmptyDurezaBtn" type="button" class="btn btn-warning">Rellenar vacios "---"</button>
+            <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary">Combinar celdas</button>
+            <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary">Separar celdas</button>
+        </div>
+    </div>
+    <div class="toolbar-help">
+        Selecciona celdas solo de Descripcion, Horario u Observaciones.
+        <span id="durezaMergeSelectionInfo" class="text-primary fw-semibold ms-2"></span>
+    </div>
+    <div class="toolbar-divider"></div>
+    <table class="table table-bordered align-middle text-center tabla-dureza" id="tablaDurezaBrinell">
                             <thead class="table-light"><tr><th style="min-width: 190px;">DESCRIPCIÓN<br><small>Description</small></th>
                                 <th style="min-width: 120px;">HORARIO<br><small>Schedule</small></th>
                                 <th style="min-width: 120px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
@@ -580,41 +601,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
 
-                    <div class="d-flex align-items-center">
-                        <label for="numRows" class="me-2 mb-0" style="white-space: nowrap;">
-                            Número de filas:
-                        </label>
-
-                        <select id="numRows" class="form-select toolbar-select">
-                            @for ($i = 1; $i <= 500; $i++)
-                                <option value="{{ $i }}">{{ $i }}</option>
-                            @endfor
-                        </select>
-                    </div>
-
-                    <div class="d-flex gap-2">
-                        <button id="addDurezaRowsBtn" type="button" class="btn btn-success custom-btn">
-                            Agregar fila
-                        </button>
-
-                        <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">
-                            Rellenar vacíos "---"
-                        </button>
-
-                        <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary custom-btn">
-                            Combinar celdas
-                        </button>
-
-                        <button id="splitSelectedCellsBtn" type="button" class="btn btn-primary custom-btn">
-                            Separar celdas
-                        </button>
-                    </div>
-
-                </div>
-                    
-                </div>
                     <div class="col-12">
                         <div class="form-group">
                         <label class="col-form-label" for="observacionesEquipo">Observaciones:</label>
@@ -1011,6 +998,8 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldas.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit-FOR-PIMP-02_B_04.js') }}"></script>
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1206,505 +1195,14 @@ function configurarMetodoYEquipo0204Edit() {
         actualizarDatosEquipo();
         localStorage.setItem(formId + '_equipos', $(this).val() || '');
     });
-}
-
-function construirFilaDureza0204Edit(index, data = {}) {
-    return `<tr>
-        <td class="mergeable-cell" data-merge-field="descripcion"><input type="text" class="form-control inputForm" name="Dureza[${index}][descripcion]" value="${data.descripcion || ''}"></td>
-        <td class="mergeable-cell" data-merge-field="horario"><input type="text" class="form-control inputForm" name="Dureza[${index}][horario]" value="${data.horario || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][metal_base_a]" value="${data.metal_base_a || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][zac_b]" value="${data.zac_b || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][soldadura_c]" value="${data.soldadura_c || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][zac_b1]" value="${data.zac_b1 || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][metal_base_a1]" value="${data.metal_base_a1 || ''}"></td>
-        <td class="mergeable-cell" data-merge-field="observaciones"><input type="text" class="form-control inputForm" name="Dureza[${index}][observaciones]" value="${data.observaciones || ''}"></td>
-        <td><button type="button" class="btn btn-danger btn-sm btnEliminarDureza"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-    </tr>`;
-}
-
-function configurarTablaDureza0204Edit() {
-    const $tbody = $('#durezaBrinellBody');
-    const $addButton = $('#addDurezaRowsBtn');
-    const $fillEmptyButton = $('#fillEmptyDurezaBtn');
-    const $numRows = $('#numRows');
-    const $mergeButton = $('#mergeSelectedCellsBtn');
-    const $splitButton = $('#splitSelectedCellsBtn');
-    let mergeSelectionAnchor = null;
-    let mergeState = [];
-
-    function renumerarFilasDureza() {
-        $tbody.find('tr').each(function(index) {
-            $(this).find('input').each(function() {
-                const currentName = $(this).attr('name') || '';
-                $(this).attr('name', currentName.replace(/Dureza\[\d+\]/, 'Dureza[' + index + ']'));
-            });
-        });
-    }
-
-    function limpiarSeleccionMerge() {
-        $tbody.find('.mergeable-cell').removeClass('selected-merge merge-preview merge-anchor');
-        $('#durezaMergeSelectionInfo').text('');
-    }
-
-    function obtenerTotalFilasDureza() {
-        return $tbody.find('tr').length;
-    }
-
-    function obtenerClaveMerge(item) {
-        return `${item.field}|${item.startRow}`;
-    }
-
-    function normalizarMergeState(state) {
-        // Depura merges inválidos, fuera de rango o traslapados antes de aplicar la vista.
-        const totalRows = obtenerTotalFilasDureza();
-        const normalized = [];
-        const occupied = {};
-
-        (Array.isArray(state) ? state : [])
-            .map(function(item) {
-                return {
-                    field: item?.field || '',
-                    startRow: Number(item?.startRow ?? item?.row),
-                    rowspan: Number(item?.rowspan)
-                };
-            })
-            .sort(function(a, b) {
-                if (a.field === b.field) {
-                    return a.startRow - b.startRow;
-                }
-
-                return a.field.localeCompare(b.field);
-            })
-            .forEach(function(item) {
-                if (!item.field || item.startRow < 0 || item.rowspan < 2) {
-                    return;
-                }
-
-                if ((item.startRow + item.rowspan) > totalRows) {
-                    return;
-                }
-
-                const mergeEnd = item.startRow + item.rowspan - 1;
-                occupied[item.field] = occupied[item.field] || [];
-
-                const overlaps = occupied[item.field].some(function(range) {
-                    return item.startRow <= range.end && mergeEnd >= range.start;
-                });
-
-                if (overlaps) {
-                    return;
-                }
-
-                occupied[item.field].push({ start: item.startRow, end: mergeEnd });
-                normalized.push({
-                    field: item.field,
-                    startRow: item.startRow,
-                    rowspan: item.rowspan
-                });
-            });
-
-        return normalized;
-    }
-
-    function normalizeMergeConfig(config) {
-        return normalizarMergeState(config).map(function(item) {
-            return {
-                row: Number(item.startRow ?? item.row ?? 0),
-                field: item.field,
-                rowspan: Number(item.rowspan)
-            };
-        });
-    }
-
-    function guardarEstadoMerges() {
-        mergeState = normalizarMergeState(mergeState);
-        $('#durezaMergeConfig').val(JSON.stringify(normalizeMergeConfig(mergeState)));
-    }
-
-    function leerEstadoMerges() {
-        const rawState = $('#durezaMergeConfig').val();
-
-        if (!rawState) {
-            mergeState = [];
-            return;
-        }
-
-        try {
-            mergeState = normalizarMergeState(JSON.parse(rawState));
-        } catch (error) {
-            mergeState = [];
-        }
-
-        guardarEstadoMerges();
-    }
-
-    function limpiarVisualMerges() {
-        $tbody.find('.mergeable-cell').each(function() {
-            $(this)
-                .show()
-                .removeAttr('rowspan')
-                .removeAttr('data-merge-hidden');
-        });
-    }
-
-    function obtenerCeldaDureza(rowIndex, field) {
-        return $tbody.find('tr').eq(rowIndex).find('.mergeable-cell[data-merge-field="' + field + '"]');
-    }
-
-    function obtenerMergePorCelda($cell) {
-        if (!$cell.length) {
-            return null;
-        }
-
-        const field = $cell.data('merge-field');
-        const rowIndex = $cell.closest('tr').index();
-
-        return mergeState.find(function(item) {
-            return item.field === field &&
-                rowIndex >= item.startRow &&
-                rowIndex < (item.startRow + item.rowspan);
-        }) || null;
-    }
-
-    function sincronizarValorEnMerge(mergeItem) {
-        if (!mergeItem) {
-            return;
-        }
-
-        const $masterCell = obtenerCeldaDureza(mergeItem.startRow, mergeItem.field);
-
-        if (!$masterCell.length) {
-            return;
-        }
-
-        const masterValue = $masterCell.find('input').val() || '';
-
-        for (let offset = 1; offset < mergeItem.rowspan; offset++) {
-            obtenerCeldaDureza(mergeItem.startRow + offset, mergeItem.field).find('input').val(masterValue);
-        }
-    }
-
-    function aplicarEstadoMerges() {
-        // Reconstruye la vista usando el estado persistido del hidden input.
-        limpiarVisualMerges();
-        mergeState = normalizarMergeState(mergeState);
-
-        mergeState.forEach(function(item) {
-            const $masterCell = obtenerCeldaDureza(item.startRow, item.field);
-
-            if (!$masterCell.length) {
-                return;
-            }
-
-            const masterValue = $masterCell.find('input').val() || '';
-            $masterCell.attr('rowspan', item.rowspan);
-
-            for (let offset = 1; offset < item.rowspan; offset++) {
-                const $childCell = obtenerCeldaDureza(item.startRow + offset, item.field);
-
-                if (!$childCell.length) {
-                    continue;
-                }
-
-                $childCell
-                    .attr('data-merge-hidden', 'true')
-                    .find('input')
-                    .val(masterValue);
-
-                $childCell.hide();
-            }
-        });
-
-        guardarEstadoMerges();
-    }
-
-    function obtenerRangoSeleccionado($startCell, $endCell) {
-        const startRow = $startCell.closest('tr').index();
-        const endRow = $endCell.closest('tr').index();
-
-        return {
-            field: $startCell.data('merge-field'),
-            startRow: Math.min(startRow, endRow),
-            endRow: Math.max(startRow, endRow)
-        };
-    }
-
-    function pintarSeleccionMerge(range) {
-        limpiarSeleccionMerge();
-
-        for (let rowIndex = range.startRow; rowIndex <= range.endRow; rowIndex++) {
-            obtenerCeldaDureza(rowIndex, range.field).addClass('selected-merge merge-preview');
-        }
-
-        $('#durezaMergeSelectionInfo').text(`Rango seleccionado: ${range.field} filas ${range.startRow + 1} a ${range.endRow + 1}`);
-    }
-
-    function mostrarAlertaMerge(message, icon = 'warning') {
-        Swal.fire({
-            icon: icon,
-            title: 'Atencion',
-            text: message,
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#3085d6',
-            background: '#ffffff',
-            width: 420
-        });
-    }
-
-    function obtenerCeldasSeleccionadas() {
-        return $tbody.find('.mergeable-cell.selected-merge:visible');
-    }
-
-    function existeConflictoEnRango(range) {
-        return mergeState.some(function(item) {
-            if (item.field !== range.field) {
-                return false;
-            }
-
-            const mergeEnd = item.startRow + item.rowspan - 1;
-            return range.startRow <= mergeEnd && range.endRow >= item.startRow;
-        });
-    }
-
-    function combinarCeldasSeleccionadas() {
-        const $selected = obtenerCeldasSeleccionadas();
-
-        if ($selected.length < 2) {
-            mostrarAlertaMerge('Selecciona al menos 2 celdas consecutivas de la misma columna para combinar.');
-            return;
-        }
-
-        const field = $selected.first().data('merge-field');
-        const rowIndexes = $selected.map(function() {
-            return $(this).closest('tr').index();
-        }).get().sort(function(a, b) {
-            return a - b;
-        });
-
-        const sameField = $selected.toArray().every(function(cell) {
-            return $(cell).data('merge-field') === field;
-        });
-
-        const consecutive = rowIndexes.every(function(rowIndex, position) {
-            return position === 0 || rowIndex === rowIndexes[position - 1] + 1;
-        });
-
-        if (!sameField || !consecutive) {
-            mostrarAlertaMerge('Solo puedes combinar celdas consecutivas de una misma columna.');
-            return;
-        }
-
-        const range = {
-            field: field,
-            startRow: rowIndexes[0],
-            endRow: rowIndexes[rowIndexes.length - 1]
-        };
-        if (existeConflictoEnRango(range)) {
-            mostrarAlertaMerge('Primero separa la combinacion actual antes de crear una nueva en ese rango.');
-            return;
-        }
-
-        if (existeConflictoEnRango(range)) {
-            alert('Primero separa la combinación actual antes de crear una nueva en ese rango.');
-            return;
-        }
-
-        mergeState.push({
-            field: field,
-            startRow: range.startRow,
-            rowspan: rowIndexes.length
-        });
-
-        aplicarEstadoMerges();
-        limpiarSeleccionMerge();
-    }
-
-    function separarCeldasSeleccionadas() {
-        const $selected = obtenerCeldasSeleccionadas();
-        if ($selected.length !== 1) {
-            mostrarAlertaMerge('Selecciona la celda principal de una combinacion para separarla.');
-            return;
-        }
-
-        if ($selected.length !== 1) {
-            alert('Selecciona la celda principal de una combinación para separarla.');
-            return;
-        }
-
-        const mergeItem = obtenerMergePorCelda($selected.first());
-        if (!mergeItem || mergeItem.startRow !== $selected.first().closest('tr').index()) {
-            mostrarAlertaMerge('Selecciona la celda principal de una combinacion para separarla.');
-            return;
-        }
-
-        if (!mergeItem || mergeItem.startRow !== $selected.first().closest('tr').index()) {
-            alert('Selecciona la celda principal de una combinación para separarla.');
-            return;
-        }
-
-        mergeState = mergeState.filter(function(item) {
-            return obtenerClaveMerge(item) !== obtenerClaveMerge(mergeItem);
-        });
-
-        aplicarEstadoMerges();
-        limpiarSeleccionMerge();
-    }
-
-    function ajustarMergesDespuesDeEliminarFila(deletedRowIndex) {
-        // Ajusta el merge afectado sin perder las combinaciones de otras columnas.
-        mergeState = mergeState.reduce(function(accumulator, item) {
-            const mergeEnd = item.startRow + item.rowspan - 1;
-
-            if (deletedRowIndex < item.startRow) {
-                accumulator.push({
-                    field: item.field,
-                    startRow: item.startRow - 1,
-                    rowspan: item.rowspan
-                });
-                return accumulator;
-            }
-
-            if (deletedRowIndex > mergeEnd) {
-                accumulator.push(item);
-                return accumulator;
-            }
-
-            if (item.rowspan - 1 >= 2) {
-                accumulator.push({
-                    field: item.field,
-                    startRow: item.startRow,
-                    rowspan: item.rowspan - 1
-                });
-            }
-
-            return accumulator;
-        }, []);
-    }
-
-    console.log('MERGE CONFIG CARGADO DESDE HIDDEN:', document.getElementById('durezaMergeConfig')?.value);
-    setTimeout(function () {
-        leerEstadoMerges();
-        console.log('APLICANDO MERGES AL INICIAR EDIT');
-        aplicarEstadoMerges();
-    }, 100);
-
-    $tbody.on('click', '.mergeable-cell', function() {
-        const $cell = $(this);
-        if (!$cell.is(':visible')) return;
-
-        if (!mergeSelectionAnchor) {
-            limpiarSeleccionMerge();
-            $cell.addClass('selected-merge merge-anchor');
-            mergeSelectionAnchor = $cell;
-            return;
-        }
-
-        const sameField = mergeSelectionAnchor.data('merge-field') === $cell.data('merge-field');
-        const sameRow = mergeSelectionAnchor.closest('tr').index() === $cell.closest('tr').index();
-        if (!sameField) {
-            limpiarSeleccionMerge();
-            mergeSelectionAnchor = null;
-            mostrarAlertaMerge('Solo puedes seleccionar celdas de la misma columna para combinar.');
-            return;
-        }
-
-        if (!sameField) {
-            limpiarSeleccionMerge();
-            mergeSelectionAnchor = null;
-            alert('Solo puedes seleccionar celdas de la misma columna para combinar.');
-            return;
-        }
-
-        if (sameRow) {
-            limpiarSeleccionMerge();
-            mergeSelectionAnchor = null;
-            return;
-        }
-
-        pintarSeleccionMerge(obtenerRangoSeleccionado(mergeSelectionAnchor, $cell));
-        mergeSelectionAnchor = null;
-    });
-
-    $tbody.on('click', '.mergeable-cell input', function(e) {
-        e.stopPropagation();
-        $(this).closest('.mergeable-cell').trigger('click');
-    });
-
-    $tbody.on('input', '.mergeable-cell input', function() {
-        const mergeItem = obtenerMergePorCelda($(this).closest('.mergeable-cell'));
-        sincronizarValorEnMerge(mergeItem);
-        guardarEstadoMerges();
-    });
-
-    $tbody.on('click', '.btnEliminarDureza', function() {
-        const $row = $(this).closest('tr');
-        const rowIndex = $row.index();
-
-        if ($tbody.find('tr').length === 1) {
-            $row.find('input').val('');
-            mergeState = [];
-            aplicarEstadoMerges();
-            guardarEstadoMerges();
-            return;
-        }
-
-        $row.remove();
-        ajustarMergesDespuesDeEliminarFila(rowIndex);
-        renumerarFilasDureza();
-        mergeSelectionAnchor = null;
-        aplicarEstadoMerges();
-        guardarEstadoMerges();
-    });
-
-    $addButton.on('click', function() {
-        const amount = parseInt($numRows.val(), 10) || 1;
-        let startIndex = $tbody.find('tr').length;
-
-        for (let i = 0; i < amount; i++) {
-            $tbody.append(construirFilaDureza0204Edit(startIndex + i));
-        }
-
-        renumerarFilasDureza();
-        mergeSelectionAnchor = null;
-        aplicarEstadoMerges();
-        guardarEstadoMerges();
-    });
-
-    $fillEmptyButton.on('click', function() {
-        $tbody.find('input[type="text"]').each(function() {
-            if (!($.trim($(this).val() || ''))) {
-                $(this).val('---');
-            }
-        });
-
-        aplicarEstadoMerges();
-        guardarEstadoMerges();
-    });
-
-    $mergeButton.on('click', function() {
-        combinarCeldasSeleccionadas();
-    });
-
-    $splitButton.on('click', function() {
-        separarCeldasSeleccionadas();
-    });
-
-    const form = document.getElementById('FOR-PIMP-02_B_04');
-    form?.addEventListener('submit', function () {
-        const mergeConfig = normalizeMergeConfig(mergeState);
-        console.log('MERGE CONFIG ANTES DE ENVIAR:', mergeConfig);
-        console.log('HIDDEN Dureza_MergeConfig:', document.getElementById('durezaMergeConfig')?.value);
-        document.getElementById('durezaMergeConfig').value = JSON.stringify(mergeConfig);
-        guardarEstadoMerges();
-    });
-}
-
+}
 document.addEventListener('DOMContentLoaded', function () {
     configurarMetodoYEquipo0204Edit();
-    configurarTablaDureza0204Edit();
 });
 </script>
 @endsection
+
+
 
 
 

@@ -701,10 +701,6 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $request->input('Dureza_MergeConfig', '[]'),
             count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
         );
-        $validatedData['dureza_merge_config'] = json_encode($this->sanitizeDurezaMergeConfig(
-            $request->input('Dureza_MergeConfig', '[]'),
-            count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
-        ));
         Log::info('Dureza_MergeConfig recibido', [
             'raw' => $request->input('Dureza_MergeConfig')
         ]);
@@ -713,15 +709,11 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
         $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
-        $Reportes->dureza_merge_config = $validatedData['dureza_merge_config'];
 
         $Reportes->Estatus = $Estatus; // Asignar el estatus
 
         // Guardar el registro en la base de datos   
         $Reportes->save();
-        Log::info('dureza_merge_config guardado', [
-            'bd' => $Reportes->dureza_merge_config
-        ]);
 
         /*
         |--------------------------------------------------------------------------
@@ -1119,10 +1111,6 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $request->input('Dureza_MergeConfig', '[]'),
             count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
         );
-        $validatedData['dureza_merge_config'] = json_encode($this->sanitizeDurezaMergeConfig(
-            $request->input('Dureza_MergeConfig', '[]'),
-            count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
-        ));
         Log::info('Dureza_MergeConfig recibido', [
             'raw' => $request->input('Dureza_MergeConfig')
         ]);
@@ -1151,10 +1139,6 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']),
-            'dureza_merge_config' => $validatedData['dureza_merge_config']
-        ]);
-        Log::info('dureza_merge_config guardado', [
-            'bd' => $Reporte->dureza_merge_config
         ]);
 
         $titulos_json = $request->input('titulos_data', '[]');
