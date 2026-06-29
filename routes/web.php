@@ -204,6 +204,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::get('/Normas_IM/Edit/{id}', [NormasIMController::class, 'edit'])->name('Normas_IM.Edit');
         /*Ruta de Actualización*/
         Route::post('/Normas_IM/update/{id}', [NormasIMController::class, 'update'])->name('Normas_IM.update');
+        /*Ruta de Eliminación*/
+        Route::delete('/Normas_IM/destroy/{id}', [NormasIMController::class, 'destroy'])->name('Normas_IM.destroy');
 
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');

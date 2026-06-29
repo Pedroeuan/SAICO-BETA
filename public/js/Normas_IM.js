@@ -43,7 +43,7 @@
             const text = $(this).find('.titulo-text').val() || '';
             titulos.push({ id: id, text: text });
         });
-        $('#titulos_hidden').val(JSON.stringify(titulos));
+        $('#Normas_IM').val(JSON.stringify(titulos));
     }
 
     function saveData(formId) {
@@ -264,7 +264,7 @@ function generarJsonTabla() {
 
         });
 
-    $('#titulos_hidden').val(JSON.stringify(datos));
+    $('#Normas_IM').val(JSON.stringify(datos));
 }
 
 $('form').on('submit', function () {
@@ -366,3 +366,16 @@ $('form').on('submit', function () {
         });
     });
     });
+
+    document.getElementById('NormasIMForm').addEventListener('submit', function() {
+
+    // Eliminar datos de la tabla dinámica
+    sessionStorage.removeItem('dynamicTableData');
+
+    // Eliminar solo los datos del formulario
+    document.querySelectorAll('#NormasIMForm input, #NormasIMForm textarea, #NormasIMForm select').forEach(function(input) {
+        localStorage.removeItem(`NormasIMForm_${input.name}`);
+        localStorage.removeItem(`NormasIMForm${input.name}`);
+    });
+
+});

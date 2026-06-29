@@ -9,6 +9,7 @@ use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
 use App\Models\Clientes\clientes;
+use App\Models\Admin\Usuario;
 use App\Models\detallesOC\detallesOC;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Reporte\Firma_Reporte;
@@ -48,6 +49,7 @@ class FOR_PINS_13_01Controller extends Controller
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -74,7 +76,12 @@ class FOR_PINS_13_01Controller extends Controller
             ->pluck('Certificado_Actual')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+        $tecnicos = Usuario::where('id', $ID_TECNICO)
+            ->whereNotNull('cv_pdf')
+            ->pluck('cv_pdf')
+            ->toArray();
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
 
         Log::info('todasLasRutas', $todasLasRutas);
 
@@ -548,6 +555,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -557,6 +565,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -572,6 +581,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -591,6 +601,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -685,6 +696,12 @@ class FOR_PINS_13_01Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null;
+
         $datosParaCrearQR = [
             'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
@@ -694,6 +711,7 @@ class FOR_PINS_13_01Controller extends Controller
             'idEncoder1' => $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? null,
             'idEncoder2' => $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $ID_TECNICO,
         ];
 
         /*
@@ -982,6 +1000,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
+            'ID_TECNICO' => $ID_TECNICO
             
         ];
 
@@ -1091,6 +1110,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -1100,6 +1120,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -1115,6 +1136,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1134,6 +1156,7 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1240,6 +1263,11 @@ class FOR_PINS_13_01Controller extends Controller
             'idEncoder1' => $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? null,
             'idEncoder2' => $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null,
         ];
 
         /*

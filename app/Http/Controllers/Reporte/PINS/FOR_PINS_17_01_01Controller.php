@@ -9,6 +9,7 @@ use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
 use App\Models\Clientes\clientes;
+use App\Models\Admin\Usuario;
 use App\Models\detallesOC\detallesOC;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Reporte\Firma_Reporte;
@@ -46,85 +47,237 @@ class FOR_PINS_17_01_01Controller extends Controller
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
         $token = $datosParaCrearQR['qr_token'] ?? null;
         $idsConsumibles = array_filter([$datosParaCrearQR['idEquipo'] ?? null]);
 
-        $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)->whereNotNull('Factura')->pluck('Factura')->toArray();
-        $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)->whereNotNull('Certificado_Actual')->pluck('Certificado_Actual')->toArray();
-        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+        $facturas = general_eyc::whereIn('idGeneral_EyC', $idsConsumibles)
+            ->whereNotNull('Factura')
+            ->pluck('Factura')
+            ->toArray();
+
+        $certificados = certificados::whereIn('idGeneral_EyC', $idsConsumibles)
+            ->whereNotNull('Certificado_Actual')
+            ->pluck('Certificado_Actual')
+            ->toArray();
+
+        $tecnicos = Usuario::where('id', $ID_TECNICO)
+            ->whereNotNull('cv_pdf')
+            ->pluck('cv_pdf')
+            ->toArray();
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
+
         Log::info('todasLasRutas', $todasLasRutas);
 
-        $rutasInvalidas = ['EN ESPERA DE DATOS', 'ESPERA DE DATO', 'N/A'];
-        $rutasValidas = array_filter($todasLasRutas, function ($ruta) use ($rutasInvalidas) {
+        $rutasInvalidas = [
+            'EN ESPERA DE DATOS', 
+            'ESPERA DE DATO', 
+            'N/A'
+        ];
+        $rutasValidas = array_filter(
+            $todasLasRutas, 
+            function ($ruta) use ($rutasInvalidas) {
             if (!$ruta) {
                 return false;
             }
-            return !in_array(trim(strtoupper($ruta)), $rutasInvalidas);
-        });
+            return !in_array(
+                trim(strtoupper($ruta)), 
+                $rutasInvalidas
+                );
+            }
+        );
 
-        $directorioTemporal = storage_path("app/temp_pdfs/FOR_PINS_17_01_01/{$Contrato}/{$No_Reporte}");
+        $directorioTemporal = storage_path(
+            "app/temp_pdfs/FOR_PINS_17_01_01/{$Contrato}/{$No_Reporte}"
+        );
+
         if (!File::exists($directorioTemporal)) {
-            File::makeDirectory($directorioTemporal, 0777, true);
+            File::makeDirectory(
+                $directorioTemporal, 
+                0777, 
+                true);
         }
 
         $pdfsTemporales = [];
+
         foreach ($rutasValidas as $rutaPdf) {
-            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
+
+            $rutaOriginal = storage_path(
+                'app/public/' . $rutaPdf
+            );
+
             if (!File::exists($rutaOriginal)) {
-                Log::warning('PDF no encontrado', ['ruta' => $rutaOriginal]);
+                Log::warning(
+                    'PDF no encontrado', ['ruta' => $rutaOriginal]
+                );
+
                 continue;
             }
             $nombreArchivo = basename($rutaOriginal);
-            $rutaTemporal = $directorioTemporal . DIRECTORY_SEPARATOR . $nombreArchivo;
-            File::copy($rutaOriginal, $rutaTemporal);
+
+            $rutaTemporal = 
+            $directorioTemporal . 
+            DIRECTORY_SEPARATOR . 
+            $nombreArchivo;
+
+            File::copy(
+                $rutaOriginal, 
+                $rutaTemporal
+            );
+
             $pdfsTemporales[] = $rutaTemporal;
         }
 
-        $rutaPublicaPdf = route('qr.reporte', ['token' => $token]);
-        $nombreQR = "QR_{$Contrato}_{$No_Reporte}.svg";
-        $directorioQR = storage_path("app/public/Reportes/FOR_PINS_17_01_01/{$Contrato}/{$No_Reporte}/QR_REPORTES");
+        $rutaPublicaPdf = route(
+            'qr.reporte', 
+            ['token' => $token]
+        );
+
+        $nombreQR = 
+                "QR_{$Contrato}_{$No_Reporte}.svg";
+
+        $directorioQR = storage_path(
+            "app/public/Reportes/FOR_PINS_17_01_01/{$Contrato}/{$No_Reporte}/QR_REPORTES"
+        );
+
         if (!File::exists($directorioQR)) {
-            File::makeDirectory($directorioQR, 0777, true);
+
+            File::makeDirectory(
+                $directorioQR, 
+                0777, 
+                true
+            );
         }
-        $rutaQrCompleta = $directorioQR . DIRECTORY_SEPARATOR . $nombreQR;
-        \QrCode::format('svg')->size(300)->margin(0)->generate($rutaPublicaPdf, $rutaQrCompleta);
-        $rutaQrPublica = "storage/Reportes/FOR_PINS_17_01_01/{$Contrato}/{$No_Reporte}/QR_REPORTES/" . $nombreQR;
+        $rutaQrCompleta = 
+        $directorioQR . 
+        DIRECTORY_SEPARATOR . 
+        $nombreQR;
+
+        \QrCode::format('svg')
+        ->size(300)->
+        margin(0)
+        ->generate(
+            $rutaPublicaPdf, 
+            $rutaQrCompleta
+        );
+
+        $rutaQrPublica = 
+            "storage/Reportes/FOR_PINS_17_01_01/{$Contrato}/{$No_Reporte}/QR_REPORTES/" 
+            . $nombreQR;
 
         if (empty($pdfsTemporales)) {
-            Log::warning('No hay PDFs válidos para unir.');
-            return ['pdf' => null, 'qr' => $rutaQrPublica];
+            Log::warning(
+                'No hay PDFs válidos para unir.'
+            );
+
+            return [
+                'pdf' => null, 
+                'qr' => $rutaQrPublica
+            ];
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | UNIR PDFs
+        |--------------------------------------------------------------------------
+        */
+
         $pdf = new Fpdi();
+
         foreach ($pdfsTemporales as $archivoPdf) {
             try {
+                /*
+                |--------------------------------------------------------------------------
+                | HACER PDF COMPATIBLE CON FPDI
+                |--------------------------------------------------------------------------
+                */
+
                 $archivoCompatible = str_replace('.pdf', '_compatible.pdf', $archivoPdf);
-                $comando = 'gswin64c -sDEVICE=pdfwrite ' . '-dCompatibilityLevel=1.4 ' . '-dNOPAUSE ' . '-dQUIET ' . '-dBATCH ' . '-sOutputFile="' . $archivoCompatible . '" "' . $archivoPdf . '"';
+
+                $comando =
+                    'gswin64c -sDEVICE=pdfwrite '
+                    . '-dCompatibilityLevel=1.4 '
+                    . '-dNOPAUSE '
+                    . '-dQUIET '
+                    . '-dBATCH '
+                    . '-sOutputFile="'
+                    . $archivoCompatible
+                    . '" "'
+                    . $archivoPdf
+                    . '"';
+
                 exec($comando);
+
+                /*
+                |--------------------------------------------------------------------------
+                | IMPORTAR PAGINAS
+                |--------------------------------------------------------------------------
+                */
+
                 $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
+
                 for ($pagina = 1; $pagina <= $cantidadPaginas; $pagina++) {
                     $template = $pdf->importPage($pagina);
                     $size = $pdf->getTemplateSize($template);
+
                     $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
                     $pdf->useTemplate($template);
                 }
             } catch (\Exception $e) {
-                Log::error('Error procesando PDF', ['archivo' => $archivoPdf, 'error' => $e->getMessage()]);
+                Log::error('Error procesando PDF', [
+                    'archivo' => $archivoPdf,
+                    'error' => $e->getMessage()
+                ]);
+
                 continue;
             }
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO FINAL
+        |--------------------------------------------------------------------------
+        */
+
         $directorioFinal = "Reportes/FOR_PINS_17_01_01/{$Contrato}/{$No_Reporte}/";
         $rutaDirectorioFinal = storage_path("app/public/" . $directorioFinal);
+
         if (!File::exists($rutaDirectorioFinal)) {
             File::makeDirectory($rutaDirectorioFinal, 0777, true);
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR PDF FINAL
+        |--------------------------------------------------------------------------
+        */
+
         $nombreArchivoFinal = "QR_FOR_PINS_17_01_01_{$Contrato}_{$No_Reporte}.pdf";
         $rutaPdfFinal = $rutaDirectorioFinal . $nombreArchivoFinal;
+
         $pdf->Output($rutaPdfFinal, 'F');
+
+        /*
+        |--------------------------------------------------------------------------
+        | RUTAS RELATIVAS
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaPdfRelativa = $directorioFinal . $nombreArchivoFinal;
+
+        /*
+        |--------------------------------------------------------------------------
+        | LIMPIAR TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
         File::deleteDirectory($directorioTemporal);
 
-        return ['pdf' => "storage/" . $directorioFinal . $nombreArchivoFinal, 'qr' => $rutaQrPublica];
+        return [
+            'pdf' => "storage/" . $rutaPdfRelativa,
+            'qr' => $rutaQrPublica
+        ];
     }
 
 
@@ -333,7 +486,6 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string',
             'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
-            'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
 
             'Datos_Equipo.FEC_CAL' => 'nullable|string',
             'Datos_Equipo.CER_POR' => 'nullable|string',
@@ -355,10 +507,6 @@ class FOR_PINS_17_01_01Controller extends Controller
 
             'Datos_Equipo.severidad' => 'nullable|string',
             'Datos_Equipo.Nota' => 'nullable|string',
-            'Datos_Equipo.Recomendaciones' => 'nullable|string',
-            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
-            'Datos_Equipo.QR_PDF' => 'nullable|string',
-            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
@@ -370,6 +518,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -379,6 +528,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -394,6 +544,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -413,6 +564,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -500,11 +652,19 @@ class FOR_PINS_17_01_01Controller extends Controller
             $validatedData['Datos_Equipo']['QR_TOKEN']
             ?? (string) Str::uuid();
 
+        $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null;
+
         $resultadoQR = $this->Datos_QR([
             'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $ID_TECNICO,
+            
         ]);
 
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'];
@@ -614,6 +774,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             //'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
+            'ID_TECNICO' => $ID_TECNICO
             
         ];
 
@@ -675,10 +836,12 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Datos_Equipo.voltaje' => 'nullable|string',
             'Datos_Equipo.CARGA_AMP' => 'nullable|string',
             'Datos_Equipo.Recomendaciones' => 'nullable|string',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             'Datos_Equipo.severidad' => 'nullable|string',
             'Datos_Equipo.Nota' => 'nullable|string',
-            'Datos_Equipo.Recomendaciones' => 'nullable|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -687,6 +850,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -696,6 +860,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -711,6 +876,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -730,6 +896,7 @@ class FOR_PINS_17_01_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -800,6 +967,11 @@ class FOR_PINS_17_01_01Controller extends Controller
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null,
         ]);
 
         $validatedData['Datos_Equipo']['QR_PDF'] =
