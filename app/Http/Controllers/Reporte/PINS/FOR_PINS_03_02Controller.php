@@ -979,7 +979,6 @@ class FOR_PINS_03_02Controller extends Controller
             'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
-            'ID_TECNICO' => $ID_TECNICO
         ];
 
         $this->OS_OC($datosParaCrearOS_OC);
