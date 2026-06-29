@@ -710,9 +710,9 @@
 
                                         <!-- Select para elegir el número de firmas -->
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-15">
                                             <div class="form-group">
-                                                <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                <select class="form-select text-center" id="numFirmas" name="numFirmas">.
                                                     <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
                                                     <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
                                                     <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
@@ -720,7 +720,7 @@
                                                 </select>
                                             </div>
                                         </div>
-
+                                        
                                         <!-- 1 DOS FIRMAS-->
                                         <div id="firmas1" class="col-12">
                                             <table class="table table-bordered table-striped dt-responsive tablas">
@@ -734,7 +734,29 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+
+                                                        <td>
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                    <div class="form-group text-center">
+                                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                                        <select class="form-select inputForm" id="tecnicosSelect">
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                                            @foreach($Tecnicos as $Tecnico)
+                                                                                <option value="{{ $Tecnico->id }}"
+                                                                                        data-name="{{ $Tecnico->name }}">
+                                                                                    {{ $Tecnico->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+
+                                                                        <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                        <input type="hidden" name="Firmas_Reportes1[ID_TECNICO]" id="IDTECNICO" value="{{old('Firmas_Reportes1.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                                        <input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{old('Firmas_Reportes1.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}" readonly>
+                                                                    </div>
+                                                            </div>
+                                                            
                                                     </tr>
 
                                                     <tr>
@@ -771,8 +793,31 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
-                                                        <td></td>
+                                                        <td>    
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                    <div class="form-group text-center">
+                                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                                        <select class="form-select inputForm" id="tecnicosSelect2">
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                                            @foreach($Tecnicos as $Tecnico)
+                                                                                <option value="{{ $Tecnico->id }}"
+                                                                                        data-name="{{ $Tecnico->name }}">
+                                                                                    {{ $Tecnico->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+
+                                                                        <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                        <input type="hidden" name="Firmas_Reportes2[ID_TECNICO]" id="IDTECNICO2" value="{{old('Firmas_Reportes2.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                                        <input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO2" value="{{old('Firmas_Reportes2.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}" readonly>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        <td>
+
+                                                        </td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                     </tr>
                                                                                         
@@ -819,15 +864,38 @@
                                                     </tr>
 
                                                     <tr>
+                                                        <td>
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                    <div class="form-group text-center">
+                                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                                        <select class="form-select inputForm" id="tecnicosSelect3">
+                                                                            <option value="" selected disabled>Seleccione un Técnico</option>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
-                                                        <td></td>
+                                                                            @foreach($Tecnicos as $Tecnico)
+                                                                                <option value="{{ $Tecnico->id }}"
+                                                                                        data-name="{{ $Tecnico->name }}">
+                                                                                    {{ $Tecnico->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+
+                                                                        <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                        <input type="hidden" name="Firmas_Reportes3[ID_TECNICO]" id="IDTECNICO3" value="{{old('Firmas_Reportes3.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                        <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                                        <input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" id="NOMBRE_TECNICO3" value="{{old('Firmas_Reportes3.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}" readonly>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        <td>
+
+                                                        </td>
+
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_2DO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_2DO_ENCARGADO', $Firmas['NOMBRE_2DO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
-                                                                                        
+
                                                     <tr>
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>
@@ -882,7 +950,28 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        <td>
+                                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                                <div class="form-group text-center">
+                                                                <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                                    <select class="form-select inputForm" id="tecnicosSelect4">
+                                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                                        @foreach($Tecnicos as $Tecnico)
+                                                                            <option value="{{ $Tecnico->id }}"
+                                                                                    data-name="{{ $Tecnico->name }}">
+                                                                                {{ $Tecnico->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+
+                                                                    <!-- hidden si quieres guardar el ID explícitamente -->
+                                                                    <input type="hidden" name="Firmas_Reportes4[ID_TECNICO]" id="IDTECNICO4" value="{{old('Firmas_Reportes4.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '')}}">
+                                                                    <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                                    <input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" id="NOMBRE_TECNICO4" value="{{old('Firmas_Reportes4.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                         <td></td>
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                                         <td></td>
@@ -891,7 +980,7 @@
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_3RO_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_3RO_ENCARGADO', $Firmas['NOMBRE_3RO_ENCARGADO'] ?? '')}}"></td>
 
                                                     </tr>
-                                                    
+                                                                                        
                                                     <tr>
 
                                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO_TECNICO]" placeholder="Ejemplo: CARGO DEL TECNICO" value="{{old('CARGO_TECNICO', $Firmas['CARGO_TECNICO'] ?? '')}}"></td>

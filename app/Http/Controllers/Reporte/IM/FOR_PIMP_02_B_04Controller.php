@@ -95,7 +95,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
         return $promedios;
     }
 
-    private function sanitizeDurezaMergeConfig($mergeConfig, int $rowCount): array
+    private function normalizarMergeConfig($mergeConfig): array
     {
         $allowedFields = ['descripcion', 'horario', 'observaciones'];
 
@@ -115,15 +115,11 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 continue;
             }
 
-            $row = isset($item['row']) ? (int) $item['row'] : -1;
+            $row = isset($item['row']) ? (int) $item['row'] : (isset($item['startRow']) ? (int) $item['startRow'] : -1);
             $rowspan = isset($item['rowspan']) ? (int) $item['rowspan'] : 1;
             $field = (string) ($item['field'] ?? '');
 
-            if ($row < 0 || $row >= $rowCount || $rowspan < 2 || !in_array($field, $allowedFields, true)) {
-                continue;
-            }
-
-            if (($row + $rowspan) > $rowCount) {
+            if ($row < 0 || $rowspan < 2 || !in_array($field, $allowedFields, true)) {
                 continue;
             }
 
@@ -132,11 +128,22 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 'row' => $row,
                 'field' => $field,
                 'rowspan' => $rowspan,
-                'value' => trim((string) ($item['value'] ?? '')),
             ];
         }
 
         return array_values($unique);
+    }
+
+    private function sanitizeDurezaMergeConfig($mergeConfig, int $rowCount): array
+    {
+        $normalized = $this->normalizarMergeConfig($mergeConfig);
+
+        return array_values(array_filter($normalized, function ($item) use ($rowCount) {
+            return isset($item['row'], $item['rowspan'])
+                && $item['row'] >= 0
+                && $item['row'] < $rowCount
+                && ($item['row'] + $item['rowspan']) <= $rowCount;
+        }));
     }
 
     public function Datos_QR($datosParaCrearQR)
@@ -694,6 +701,9 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $request->input('Dureza_MergeConfig', '[]'),
             count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
         );
+        Log::info('Dureza_MergeConfig recibido', [
+            'raw' => $request->input('Dureza_MergeConfig')
+        ]);
 
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
@@ -1101,6 +1111,9 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $request->input('Dureza_MergeConfig', '[]'),
             count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
         );
+        Log::info('Dureza_MergeConfig recibido', [
+            'raw' => $request->input('Dureza_MergeConfig')
+        ]);
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_EQUIPO1'] = $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? ($datosEquipoActuales['ID_EQUIPO1'] ?? null);
@@ -1125,7 +1138,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
-            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
+            'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']),
         ]);
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -1554,6 +1567,9 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
+        $mergeConfigRaw = $Reporte->dureza_merge_config ?? ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? '[]');
+        $mergeConfig = $this->normalizarMergeConfig($mergeConfigRaw);
+
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = $Grupo_Juntas_Detalles_Re_Model
             ? json_decode($Grupo_Juntas_Detalles_Re_Model->Juntas_Grupo_Re, true)
@@ -1623,6 +1639,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
             'Datos_Equipo' => $Datos_Equipo,
+            'durezaMergeConfig' => $mergeConfig,
             'QR_PDF' => $qrPdf,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
