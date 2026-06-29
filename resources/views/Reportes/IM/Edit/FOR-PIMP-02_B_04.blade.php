@@ -56,6 +56,128 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        .tabla-dureza th,
+        .tabla-dureza td {
+            border: 1px solid #000 !important;
+            font-size: 11px;
+            padding: 3px;
+            vertical-align: middle;
+        }
+
+        .tabla-dureza input {
+            height: 22px;
+            padding: 2px;
+            text-align: center;
+            border: none;
+        }
+
+        .mergeable-cell {
+            cursor: pointer;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .mergeable-cell:hover {
+            background-color: #eef6ff !important;
+        }
+
+        .mergeable-cell.selected-merge {
+            background-color: #ffe3e3 !important;
+            box-shadow: inset 0 0 0 2px #dc3545, 0 0 0 1px #dc3545;
+        }
+
+        .mergeable-cell.selected-merge input {
+            background-color: #ffd6d6 !important;
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.2) !important;
+        }
+
+        .mergeable-cell.merge-anchor {
+            background-color: #d9ecff !important;
+            box-shadow: inset 0 0 0 2px #0d6efd, 0 0 0 1px #0d6efd !important;
+            transform: scale(1.01);
+        }
+
+        .mergeable-cell.merge-anchor input {
+            background-color: #eef6ff !important;
+            border-color: #0d6efd !important;
+            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.18) !important;
+        }
+
+        .mergeable-cell.merge-preview {
+            background-color: #fff3cd !important;
+            box-shadow: inset 0 0 0 2px #f0ad4e, 0 0 0 1px #f0ad4e !important;
+        }
+
+        .mergeable-cell.merge-preview input {
+            background-color: #fff8db !important;
+        }
+
+        .tabla-toolbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 18px;
+            margin-bottom: 8px;
+            padding: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 130px;
+        }
+
+        .toolbar-label {
+            font-weight: 600;
+            margin-bottom: 0;
+            font-size: 13px;
+        }
+
+        .toolbar-select {
+            width: 95px;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-actions .btn {
+            white-space: nowrap;
+        }
+
+        .toolbar-help {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 2px;
+            margin-bottom: 6px;
+        }
+
+        .toolbar-divider {
+            width: 100%;
+            height: 2px;
+            background-color: #0d6efd;
+            opacity: 0.8;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .tabla-toolbar {
+                align-items: flex-start;
+            }
+
+            .toolbar-actions {
+                justify-content: flex-start;
+                gap: 8px;
+            }
+        }
     </style>
 @endsection
 
@@ -75,8 +197,8 @@
             <form id="FOR-PIMP-02_B_04" action="{{route('Reportes_FOR_PIMP_02_B_04.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
-                <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
-                <div style="margin-bottom: 2px;"></div>
+                    <button id="preFormBtn" type="button" class="btn btn-warning my-2">Rellenar Campos Vacios "---"</button>
+                    <div style="margin-bottom: 2px;"></div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
                     <div class="col-sm-4">
@@ -329,18 +451,111 @@
                     <div class="col-sm-4"><div class="form-group"><label class="col-form-label" for="inputSuccess">N.S:</label><input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO', $Datos_Equipo['NS_EQUIPO'] ?? '')}}"></div></div>
 
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">VALORES PROMEDIO DE DUREZAS</div>
-                    <table class="table table-bordered text-center align-middle"><thead><tr><th style="width:25%;">VALORES PROMEDIO DE DUREZAS:<br><small>Average Hardness Values</small></th><th>METAL BASE<br>Base Metal<br>(A)</th><th>ZAC<br>HAZ (B)</th><th>SOLDADURA<br>Welding<br>(C)</th><th>ZAC<br>HAZ (B1)</th><th>METAL BASE<br>Base Metal<br>(B)</th></tr></thead><tbody><tr><td><strong>ANTES DEL RELEVADO DE ESFUERZOS (HB):</strong><br>Before PWHT (HB)</td><td><input type="text" class="form-control" name="Dureza[ANTES_A]" value="{{ old('Dureza.ANTES_A', $durezaPromedio['ANTES_A'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[ANTES_B]" value="{{ old('Dureza.ANTES_B', $durezaPromedio['ANTES_B'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[ANTES_C]" value="{{ old('Dureza.ANTES_C', $durezaPromedio['ANTES_C'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[ANTES_B1]" value="{{ old('Dureza.ANTES_B1', $durezaPromedio['ANTES_B1'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[ANTES_BM]" value="{{ old('Dureza.ANTES_BM', $durezaPromedio['ANTES_BM'] ?? '') }}"></td></tr><tr><td><strong>POSTERIOR AL RELEVADO DE ESFUERZOS (HB):</strong><br>After PWHT (HB)</td><td><input type="text" class="form-control" name="Dureza[DESPUES_A]" value="{{ old('Dureza.DESPUES_A', $durezaPromedio['DESPUES_A'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[DESPUES_B]" value="{{ old('Dureza.DESPUES_B', $durezaPromedio['DESPUES_B'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[DESPUES_C]" value="{{ old('Dureza.DESPUES_C', $durezaPromedio['DESPUES_C'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[DESPUES_B1]" value="{{ old('Dureza.DESPUES_B1', $durezaPromedio['DESPUES_B1'] ?? '') }}"></td><td><input type="text" class="form-control" name="Dureza[DESPUES_BM]" value="{{ old('Dureza.DESPUES_BM', $durezaPromedio['DESPUES_BM'] ?? '') }}"></td></tr></tbody></table>
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 w-100 mb-3">
-                        <div class="d-flex align-items-center gap-2"><label for="numRows" class="mb-0 fw-semibold">Número de filas:</label>
-                            <select id="numRows" class="form-select" style="width: 100px;">@for ($i = 1; $i <= 20; $i++)<option value="{{ $i }}">{{ $i }}</option>@endfor</select>
-                        </div><button id="addDurezaRowsBtn" type="button" class="btn btn-success custom-btn">Agregar fila</button>
+                    <table class="table table-bordered text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width:25%;">VALORES PROMEDIO DE DUREZAS:<br><small>Average Hardness Values</small>
+                                </th>
+                                <th>METAL BASE<br>Base Metal<br>(A)</th>
+                                <th>ZAC<br>HAZ (B)</th>
+                                <th>SOLDADURA<br>Welding<br>(C)</th>
+                                <th>ZAC<br>HAZ (B1)</th>
+                                <th>METAL BASE<br>Base Metal<br>(B)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>ANTES DEL RELEVADO DE ESFUERZOS (HB):</strong><br>Before PWHT (HB)</td>
+                                    <td><input type="text" class="form-control" name="Dureza[ANTES_A]" value="{{ old('Dureza.ANTES_A', $durezaPromedio['ANTES_A'] ?? '') }}"></td>
+                                    <td><input type="text" class="form-control" name="Dureza[ANTES_B]" value="{{ old('Dureza.ANTES_B', $durezaPromedio['ANTES_B'] ?? '') }}"></td>
+                                    <td><input type="text" class="form-control" name="Dureza[ANTES_C]" value="{{ old('Dureza.ANTES_C', $durezaPromedio['ANTES_C'] ?? '') }}"></td>
+                                    <td><input type="text" class="form-control" name="Dureza[ANTES_B1]" value="{{ old('Dureza.ANTES_B1', $durezaPromedio['ANTES_B1'] ?? '') }}"></td>
+                                    <td><input type="text" class="form-control" name="Dureza[ANTES_BM]" value="{{ old('Dureza.ANTES_BM', $durezaPromedio['ANTES_BM'] ?? '') }}"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>POSTERIOR AL RELEVADO DE ESFUERZOS (HB):</strong>
+                                        <br>After PWHT (HB)</td>
+                                        <td>
+                                            <input type="text" class="form-control" name="Dureza[DESPUES_A]" value="{{ old('Dureza.DESPUES_A', $durezaPromedio['DESPUES_A'] ?? '') }}"></td>
+                                            <td>
+                                                <input type="text" class="form-control" name="Dureza[DESPUES_B]" value="{{ old('Dureza.DESPUES_B', $durezaPromedio['DESPUES_B'] ?? '') }}"></td>
+                                                <td><input type="text" class="form-control" name="Dureza[DESPUES_C]" value="{{ old('Dureza.DESPUES_C', $durezaPromedio['DESPUES_C'] ?? '') }}"></td>
+                                                <td><input type="text" class="form-control" name="Dureza[DESPUES_B1]" value="{{ old('Dureza.DESPUES_B1', $durezaPromedio['DESPUES_B1'] ?? '') }}"></td>
+                                                <td><input type="text" class="form-control" name="Dureza[DESPUES_BM]" value="{{ old('Dureza.DESPUES_BM', $durezaPromedio['DESPUES_BM'] ?? '') }}"></td>
+                                            </tr>
+                                        </tbody>
+                    </table>
+                    <div class="alert alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-info"></i> Información</h5>
+                        <p> <b>Selecciona celdas solo de Descripcion, Horario u Observaciones.</b>
+                        </p>                 
                     </div>
-                    <div class="d-flex flex-wrap align-items-center merge-tools mb-3">
-                        <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary">Combinar celdas</button>
-                        <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary">Separar celdas</button>
-                        <small class="text-muted">Selecciona celdas solo de `Descripción`, `Horario` u `Observaciones`.</small></div>
-                    <div class="table-responsive mb-3"><input type="hidden" name="Dureza_MergeConfig" id="durezaMergeConfig" value='@json(old("Dureza_MergeConfig", $Datos_Equipo["DUREZA_MERGE_CONFIG"] ?? []))'>
-                        <table class="table table-bordered align-middle text-center tabla-dureza" id="tablaDurezaBrinell">
+                    
+                    @php
+                        $normalizeMergeConfigView = function ($config) {
+                            if (is_string($config)) {
+                                $decoded = json_decode($config, true);
+                                $config = is_array($decoded) ? $decoded : [];
+                            }
+
+                            if (!is_array($config)) {
+                                return '[]';
+                            }
+
+                            $normalized = [];
+
+                            foreach ($config as $merge) {
+                                if (!is_array($merge)) {
+                                    continue;
+                                }
+
+                                $row = isset($merge['row']) ? (int) $merge['row'] : (isset($merge['startRow']) ? (int) $merge['startRow'] : -1);
+                                $rowspan = isset($merge['rowspan']) ? (int) $merge['rowspan'] : 1;
+                                $field = (string) ($merge['field'] ?? '');
+
+                                if ($row < 0 || $rowspan < 2 || $field === '') {
+                                    continue;
+                                }
+
+                                $normalized[$row . '|' . $field] = [
+                                    'row' => $row,
+                                    'field' => $field,
+                                    'rowspan' => $rowspan,
+                                ];
+                            }
+
+                            return json_encode(array_values($normalized));
+                        };
+
+                        $durezaMergeInitial = $normalizeMergeConfigView(old('Dureza_MergeConfig', isset($Reporte) ? ($Reporte->dureza_merge_config ?? '[]') : ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? '[]')));
+                    @endphp
+                    <div class="table-responsive mb-3">
+    <input type="hidden" name="Dureza_MergeConfig" id="durezaMergeConfig" value="{{ $durezaMergeInitial }}">
+    <div class="tabla-toolbar">
+        <div class="toolbar-left">
+            <label for="numRows" class="toolbar-label">Numero de filas:</label>
+            <select id="numRows" class="form-select toolbar-select">
+                @for ($i = 1; $i <= 500; $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </select>
+        </div>
+        <div class="toolbar-actions">
+            <button id="addDurezaRowsBtn" type="button" class="btn btn-success">Agregar fila</button>
+            <button id="fillEmptyDurezaBtn" type="button" class="btn btn-warning">Rellenar vacios "---"</button>
+            <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary">Combinar celdas</button>
+            <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary">Separar celdas</button>
+        </div>
+    </div>
+    <div class="toolbar-help">
+        Selecciona celdas solo de Descripcion, Horario u Observaciones.
+        <span id="durezaMergeSelectionInfo" class="text-primary fw-semibold ms-2"></span>
+    </div>
+    <div class="toolbar-divider"></div>
+    <table class="table table-bordered align-middle text-center tabla-dureza" id="tablaDurezaBrinell">
                             <thead class="table-light"><tr><th style="min-width: 190px;">DESCRIPCIÓN<br><small>Description</small></th>
                                 <th style="min-width: 120px;">HORARIO<br><small>Schedule</small></th>
                                 <th style="min-width: 120px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
@@ -386,7 +601,13 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-12"><div class="form-group"><label class="col-form-label" for="observacionesEquipo">Observaciones:</label><textarea class="form-control is-waning" id="observacionesEquipo" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones', $Datos_Equipo['Observaciones'] ?? '') }}</textarea></div></div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                        <label class="col-form-label" for="observacionesEquipo">Observaciones:</label>
+                        <textarea class="form-control is-waning" id="observacionesEquipo" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones', $Datos_Equipo['Observaciones'] ?? '') }}</textarea>
+                        </div>
+                    </div>
 <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
 
                     <!-- Select para elegir el número de firmas -->
@@ -777,6 +998,8 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldas.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit-FOR-PIMP-02_B_04.js') }}"></script>
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -972,115 +1195,15 @@ function configurarMetodoYEquipo0204Edit() {
         actualizarDatosEquipo();
         localStorage.setItem(formId + '_equipos', $(this).val() || '');
     });
-}
-
-function construirFilaDureza0204Edit(index, data = {}) {
-    return `<tr>
-        <td class="mergeable-cell" data-merge-field="descripcion"><input type="text" class="form-control inputForm" name="Dureza[${index}][descripcion]" value="${data.descripcion || ''}"></td>
-        <td class="mergeable-cell" data-merge-field="horario"><input type="text" class="form-control inputForm" name="Dureza[${index}][horario]" value="${data.horario || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][metal_base_a]" value="${data.metal_base_a || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][zac_b]" value="${data.zac_b || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][soldadura_c]" value="${data.soldadura_c || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][zac_b1]" value="${data.zac_b1 || ''}"></td>
-        <td><input type="text" class="form-control inputForm" name="Dureza[${index}][metal_base_a1]" value="${data.metal_base_a1 || ''}"></td>
-        <td class="mergeable-cell" data-merge-field="observaciones"><input type="text" class="form-control inputForm" name="Dureza[${index}][observaciones]" value="${data.observaciones || ''}"></td>
-        <td><button type="button" class="btn btn-danger btn-sm btnEliminarDureza"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-    </tr>`;
-}
-
-function configurarTablaDureza0204Edit() {
-    const $tbody = $('#durezaBrinellBody');
-    const $addButton = $('#addDurezaRowsBtn');
-    const $numRows = $('#numRows');
-    const $mergeButton = $('#mergeSelectedCellsBtn');
-    const $splitButton = $('#splitSelectedCellsBtn');
-    let mergeSelectionAnchor = null;
-
-    function renumerar() {
-        $tbody.find('tr').each(function(index) {
-            $(this).find('input').each(function() {
-                const currentName = $(this).attr('name') || '';
-                $(this).attr('name', currentName.replace(/Dureza\[\d+\]/, 'Dureza[' + index + ']'));
-            });
-        });
-    }
-
-    function limpiarSeleccion() { $tbody.find('.mergeable-cell').removeClass('selected-merge'); }
-    function guardarEstado() {
-        const mergeState = [];
-        $tbody.find('.mergeable-cell[rowspan]').each(function() {
-            const $cell = $(this);
-            mergeState.push({ row: $cell.closest('tr').index(), field: $cell.data('merge-field'), rowspan: parseInt($cell.attr('rowspan') || '1', 10), value: $cell.find('input').val() || '' });
-        });
-        $('#durezaMergeConfig').val(JSON.stringify(mergeState));
-    }
-    function restaurarEstado() {
-        let mergeState = [];
-        try { mergeState = JSON.parse($('#durezaMergeConfig').val() || '[]'); } catch (e) { mergeState = []; }
-        mergeState.forEach(function(item) {
-            const $masterRow = $tbody.find('tr').eq(Number(item.row));
-            const $masterCell = $masterRow.find('.mergeable-cell[data-merge-field="' + item.field + '"]');
-            if (!$masterCell.length || Number(item.rowspan) < 2) return;
-            $masterCell.attr('rowspan', item.rowspan).find('input').val(item.value || '');
-            for (let offset = 1; offset < Number(item.rowspan); offset++) {
-                const $cell = $tbody.find('tr').eq(Number(item.row) + offset).find('.mergeable-cell[data-merge-field="' + item.field + '"]');
-                if ($cell.length) { $cell.find('input').val(item.value || ''); $cell.hide(); }
-            }
-        });
-    }
-    function sincronizar($cell) {
-        const rowspan = parseInt($cell.attr('rowspan') || '1', 10);
-        if (rowspan <= 1) return;
-        const mergeField = $cell.data('merge-field');
-        const value = $cell.find('input').val();
-        const startIndex = $cell.closest('tr').index();
-        for (let offset = 1; offset < rowspan; offset++) {
-            $tbody.find('tr').eq(startIndex + offset).find('.mergeable-cell[data-merge-field="' + mergeField + '"] input').val(value);
-        }
-    }
-    function descombinar($cell) {
-        const rowspan = parseInt($cell.attr('rowspan') || '1', 10);
-        if (rowspan <= 1) return;
-        const mergeField = $cell.data('merge-field');
-        const startIndex = $cell.closest('tr').index();
-        $cell.removeAttr('rowspan');
-        for (let offset = 1; offset < rowspan; offset++) {
-            $tbody.find('tr').eq(startIndex + offset).find('.mergeable-cell[data-merge-field="' + mergeField + '"]').show();
-        }
-        guardarEstado();
-    }
-    function descombinarTodas() { $tbody.find('.mergeable-cell[rowspan]').each(function(){ descombinar($(this)); }); }
-
-    restaurarEstado();
-
-    $tbody.on('click', '.mergeable-cell', function() {
-        const $cell = $(this);
-        if (!$cell.is(':visible')) return;
-        if (!mergeSelectionAnchor) { limpiarSeleccion(); $cell.addClass('selected-merge'); mergeSelectionAnchor = $cell; return; }
-        if (mergeSelectionAnchor.data('merge-field') !== $cell.data('merge-field')) { limpiarSeleccion(); $cell.addClass('selected-merge'); mergeSelectionAnchor = $cell; return; }
-        const start = mergeSelectionAnchor.closest('tr').index();
-        const end = $cell.closest('tr').index();
-        const min = Math.min(start, end), max = Math.max(start, end);
-        limpiarSeleccion();
-        for (let i = min; i <= max; i++) { $tbody.find('tr').eq(i).find('.mergeable-cell[data-merge-field="' + $cell.data('merge-field') + '"]:visible').addClass('selected-merge'); }
-        mergeSelectionAnchor = null;
-    });
-    $tbody.on('click', '.mergeable-cell input', function(e){ e.stopPropagation(); $(this).closest('.mergeable-cell').trigger('click'); });
-    $tbody.on('input', '.mergeable-cell input', function(){ sincronizar($(this).closest('.mergeable-cell')); });
-    $tbody.on('click', '.btnEliminarDureza', function(){ descombinarTodas(); if($tbody.find('tr').length===1){ $(this).closest('tr').find('input').val(''); return; } $(this).closest('tr').remove(); renumerar(); guardarEstado(); });
-    $addButton.on('click', function(){ descombinarTodas(); const amount = parseInt($numRows.val(),10)||1; let startIndex=$tbody.find('tr').length; for(let i=0;i<amount;i++){ $tbody.append(construirFilaDureza0204Edit(startIndex+i)); } renumerar(); guardarEstado(); });
-    $mergeButton.on('click', function(){ const $selected=$tbody.find('.mergeable-cell.selected-merge:visible'); if($selected.length<2){ alert('Selecciona al menos 2 celdas de la misma columna para combinar.'); return; } const field=$selected.first().data('merge-field'); const rows=$selected.map(function(){ return $(this).closest('tr').index(); }).get().sort((a,b)=>a-b); if(!$selected.toArray().every(cell=>$(cell).data('merge-field')===field) || !rows.every((row,idx)=>idx===0||row===rows[idx-1]+1)){ alert('Solo puedes combinar celdas consecutivas de una misma columna.'); return; } const $master=$selected.first(); const value=$master.find('input').val(); $master.attr('rowspan',$selected.length); $selected.slice(1).each(function(){ $(this).find('input').val(value); $(this).hide(); }); limpiarSeleccion(); guardarEstado(); });
-    $splitButton.on('click', function(){ const $selected=$tbody.find('.mergeable-cell.selected-merge:visible'); if(!$selected.length){ alert('Selecciona una celda combinada para separar.'); return; } $selected.each(function(){ descombinar($(this)); }); limpiarSeleccion(); guardarEstado(); });
-
-    const form = document.getElementById('FOR-PIMP-02_B_04');
-    form?.addEventListener('submit', guardarEstado);
-}
-
+}
 document.addEventListener('DOMContentLoaded', function () {
     configurarMetodoYEquipo0204Edit();
-    configurarTablaDureza0204Edit();
 });
 </script>
 @endsection
+
+
+
+
 
 
