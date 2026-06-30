@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -55px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -58px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -202,13 +202,13 @@
                                 INFORME DE INSPECCIÓN DE TUBERIA POR CORRIENTES EDDY
                             </th>
 
-                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                            <th rowspan="4" style="width:90%; padding:0; margin:0; text-align:center; vertical-align:middle;">
                                 @if(!empty($QR_PDF))
-                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                    <div style="width:100%; text-align:center; vertical-align:middle; padding:0; margin:0;">
                                         <img
                                             src="{{ $QR_PDF }}"
                                             alt="QR"
-                                            style="width:70px; height:70px; display:block; margin:auto; padding:0;"
+                                            style="width:65px; height:65px; display:block; margin:0 auto; padding:0;"
                                         >
                                     </div>
                                 @endif
