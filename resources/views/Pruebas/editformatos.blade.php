@@ -77,6 +77,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Formato</th>
+                                                <th>Procedimiento</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
@@ -87,6 +88,36 @@
                                         <tr id="row-{{ $Formato->idFormato }}">
                                                 <td>{{ $count }}</td>
                                                 <td><input type="text" class="form-control" name="Formato[{{ $Formato->idFormato }}]" value="{{ $Formato->Nombre ?? 'N/A' }}"></td>
+                                                <td>
+                                                    @if (empty($Formato->pdf) || in_array($Formato->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                                        <div class="d-flex align-items-end gap-2">
+
+                                                            <div class="form-group flex-grow-1 mb-0">
+                                                                <label class="col-form-label">SUBIR PROCEDIMIENTO</label>
+                                                                <input type="file"
+                                                                    class="form-control inputForm @if ($errors->any()) is-invalid @endif"
+                                                                    name="Foto">
+
+                                                                @if ($errors->any())
+                                                                    <div class="invalid-feedback">
+                                                                        Por favor, vuelva a cargar el archivo de ser necesario.
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+
+                                                            <span class="btn btn-secondary mb-1"
+                                                                style="cursor:not-allowed;">
+                                                                <i class="far fa-file-pdf"></i>
+                                                            </span>
+
+                                                        </div>
+                                                        @else
+                                                            <a href="{{ asset('storage/' . $Formato->pdf) }}" 
+                                                                class="btn btn-primary" target="_blank">
+                                                                    <i class="far fa-file-pdf"></i>
+                                                            </a>
+                                                    @endif
+                                                </td>
                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                             </tr>
                                         @endforeach
