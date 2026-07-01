@@ -45,6 +45,54 @@ use Illuminate\Support\Str;
 
 class FOR_PINS_11_01Controller extends Controller
 {
+    // Limpia segmentos que se usan como nombre de carpeta o archivo.
+    private function sanitizarSegmentoRuta($valor, $respaldo = 'SIN_DATO')
+    {
+        $texto = trim((string) $valor);
+
+        if ($texto === '') {
+            return $respaldo;
+        }
+
+        $texto = preg_replace('/[\\\\\\/:*?"<>|]+/', '_', $texto);
+        $texto = preg_replace('/\\s+/', ' ', $texto);
+        $texto = trim($texto, ". \t\n\r\0\x0B");
+
+        return $texto !== '' ? $texto : $respaldo;
+    }
+
+    // Sanea la configuracion enviada desde la tabla con combinacion de celdas.
+    private function sanitizarConfiguracionCombinacionTabla($configuracionCruda)
+    {
+        $configuracion = is_string($configuracionCruda)
+            ? json_decode($configuracionCruda, true)
+            : $configuracionCruda;
+
+        if (!is_array($configuracion)) {
+            return [];
+        }
+
+        return collect($configuracion)
+            ->filter(function ($item) {
+                return is_array($item)
+                    && !empty($item['field'])
+                    && array_key_exists('startRow', $item)
+                    && array_key_exists('rowspan', $item);
+            })
+            ->map(function ($item) {
+                return [
+                    'groupId' => !empty($item['groupId']) ? (string) $item['groupId'] : 'sin_titulo',
+                    'field' => (string) $item['field'],
+                    'startRow' => max(0, (int) $item['startRow']),
+                    'rowspan' => max(2, (int) $item['rowspan']),
+                ];
+            })
+            ->unique(function ($item) {
+                return $item['groupId'] . '|' . $item['field'] . '|' . $item['startRow'];
+            })
+            ->values()
+            ->all();
+    }
     private function getPdfCandidatePaths($rutaDb)
     {
         if (empty($rutaDb)) {
@@ -170,6 +218,8 @@ class FOR_PINS_11_01Controller extends Controller
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $contratoRuta = $this->sanitizarSegmentoRuta($Contrato, 'SinContrato');
+        $reporteRuta = $this->sanitizarSegmentoRuta($No_Reporte, 'SinReporte');
         $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
@@ -226,7 +276,7 @@ class FOR_PINS_11_01Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $directorioTemporal = storage_path("app/temp_pdfs/FOR_PINS_11_01/{$Contrato}/{$No_Reporte}");
+        $directorioTemporal = storage_path("app/temp_pdfs/FOR_PINS_11_01/{$contratoRuta}/{$reporteRuta}");
 
         if (!File::exists($directorioTemporal)) {
             File::makeDirectory($directorioTemporal, 0777, true);
@@ -282,8 +332,8 @@ class FOR_PINS_11_01Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $nombreQR = "QR_{$Contrato}_{$No_Reporte}.svg";
-        $directorioQR = storage_path("app/public/Reportes/FOR_PINS_11_01/{$Contrato}/{$No_Reporte}/QR_REPORTES");
+        $nombreQR = "QR_{$contratoRuta}_{$reporteRuta}.svg";
+        $directorioQR = storage_path("app/public/Reportes/FOR_PINS_11_01/{$contratoRuta}/{$reporteRuta}/QR_REPORTES");
 
         if (!File::exists($directorioQR)) {
             File::makeDirectory($directorioQR, 0777, true);
@@ -296,7 +346,7 @@ class FOR_PINS_11_01Controller extends Controller
             ->margin(0)
             ->generate($rutaPublicaPdf, $rutaQrCompleta);
 
-        $rutaQrPublica = "storage/Reportes/FOR_PINS_11_01/{$Contrato}/{$No_Reporte}/QR_REPORTES/" . $nombreQR;
+        $rutaQrPublica = "storage/Reportes/FOR_PINS_11_01/{$contratoRuta}/{$reporteRuta}/QR_REPORTES/" . $nombreQR;
 
         /*
         |--------------------------------------------------------------------------
@@ -413,7 +463,7 @@ class FOR_PINS_11_01Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $directorioFinal = "Reportes/FOR_PINS_11_01/{$Contrato}/{$No_Reporte}/";
+        $directorioFinal = "Reportes/FOR_PINS_11_01/{$contratoRuta}/{$reporteRuta}/";
         $rutaDirectorioFinal = storage_path("app/public/" . $directorioFinal);
 
         if (!File::exists($rutaDirectorioFinal)) {
@@ -426,7 +476,7 @@ class FOR_PINS_11_01Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $nombreArchivoFinal = "QR_FOR_PINS_11_01_{$Contrato}_{$No_Reporte}.pdf";
+        $nombreArchivoFinal = "QR_FOR_PINS_11_01_{$contratoRuta}_{$reporteRuta}.pdf";
         $rutaPdfFinal = $rutaDirectorioFinal . $nombreArchivoFinal;
 
         $pdf->Output($rutaPdfFinal, 'F');
@@ -716,6 +766,7 @@ class FOR_PINS_11_01Controller extends Controller
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
+            'Tabla_CombinacionConfig' => 'nullable|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -844,6 +895,11 @@ class FOR_PINS_11_01Controller extends Controller
             }
         }
         //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -1141,14 +1197,16 @@ class FOR_PINS_11_01Controller extends Controller
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             // Definir la ruta personalizada
-            $rutaCarpeta = "public/Reportes/FOR_PINS_11_01/{$Contrato}/{$No_Reporte}/Fotos";
+            $contratoRuta = $this->sanitizarSegmentoRuta($Contrato, 'SinContrato');
+            $reporteRuta = $this->sanitizarSegmentoRuta($No_Reporte, 'SinReporte');
+            $rutaCarpeta = "public/Reportes/FOR_PINS_11_01/{$contratoRuta}/{$reporteRuta}/Fotos";
             
             // Guardar la imagen en la ruta personalizada
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_PINS_11_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'ruta' => "storage/Reportes/FOR_PINS_11_01/{$contratoRuta}/{$reporteRuta}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
                 'una_hoja' => $request->imagen_hoja[$index] ?? 0, // 👈 AQUÍ
             ];
@@ -1196,6 +1254,21 @@ class FOR_PINS_11_01Controller extends Controller
             'ID_TECNICO' => $ID_TECNICO
             
         ];
+
+        // Regenera el PDF final con la tabla, firmas y fotos ya guardadas.
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? ($validatedData['Datos_Equipo']['QR_PDF'] ?? null);
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? ($validatedData['Datos_Equipo']['PDF_UNIFICADO'] ?? null);
+
+        $Reportes->update([
+            'Datos_Equipo' => json_encode(array_merge(
+                $validatedData['Datos_Equipo'],
+                [
+                    'QR_PDF' => $validatedData['Datos_Equipo']['QR_PDF'],
+                    'PDF_UNIFICADO' => $validatedData['Datos_Equipo']['PDF_UNIFICADO'],
+                ]
+            )),
+        ]);
 
         $this->OS_OC($datosParaCrearOS_OC);
 
@@ -1296,6 +1369,7 @@ class FOR_PINS_11_01Controller extends Controller
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
+            'Tabla_CombinacionConfig' => 'nullable|string',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -1392,8 +1466,10 @@ class FOR_PINS_11_01Controller extends Controller
 
             // 2. PROCESAR NUEVO ARCHIVO
             $file = $request->file('Detalles_Generales.Reporte_Firmado');
-            $rutaBase = "public/Reportes/FOR_PINS_11_01/{$Contrato}/{$No_Reporte}/Reporte_Firmado";
-            $nombreArchivo = 'Reporte_Firmado_' . $No_Reporte . '_' . time() . '.pdf';
+            $contratoRuta = $this->sanitizarSegmentoRuta($Contrato, 'SinContrato');
+            $reporteRuta = $this->sanitizarSegmentoRuta($No_Reporte, 'SinReporte');
+            $rutaBase = "public/Reportes/FOR_PINS_11_01/{$contratoRuta}/{$reporteRuta}/Reporte_Firmado";
+            $nombreArchivo = 'Reporte_Firmado_' . $reporteRuta . '_' . time() . '.pdf';
             
             $file->storeAs($rutaBase, $nombreArchivo);
 
@@ -1476,6 +1552,11 @@ class FOR_PINS_11_01Controller extends Controller
             $resultadoQR['pdf']
             ?? $datosEquipoActuales['PDF_UNIFICADO']
             ?? null;
+
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
@@ -1708,7 +1789,9 @@ class FOR_PINS_11_01Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'] ?? ''; // Asegurar que Contrato está definido
 
         // Ruta base para guardar las imágenes
-        $rutaCarpeta = "public/Reportes/FOR_PINS_11_01/{$Contrato}/{$No_Reporte}/Fotos";
+        $contratoRuta = $this->sanitizarSegmentoRuta($Contrato, 'SinContrato');
+        $reporteRuta = $this->sanitizarSegmentoRuta($No_Reporte, 'SinReporte');
+        $rutaCarpeta = "public/Reportes/FOR_PINS_11_01/{$contratoRuta}/{$reporteRuta}/Fotos";
 
         // Obtener las imágenes existentes
         $existingImages = $request->input('existing_images', []);
@@ -1854,6 +1937,7 @@ class FOR_PINS_11_01Controller extends Controller
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
+        $tablaCombinacionConfig = json_decode($Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? '[]', true) ?: [];
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
 
@@ -1911,6 +1995,7 @@ class FOR_PINS_11_01Controller extends Controller
             'Datos_Equipo' => $Datos_Equipo,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
+            'tablaCombinacionConfig' => $tablaCombinacionConfig,
             //Total de Juntas
             /*'totalTitulos' => $totalTitulos,
             'totalFilas' => $totalFilas,*/

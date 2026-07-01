@@ -14,7 +14,7 @@
 
                 header {
                     position: fixed;
-                    top: -35px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -38px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -195,13 +195,13 @@
                                 INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA
                             </th>
 
-                            <th rowspan="4" style="width:80%; padding:0; margin:0;">
+                            <th rowspan="4" style="width:80%; padding:0; margin:0; text-align:center; vertical-align:middle;">
                                 @if(!empty($QR_PDF))
-                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                    <div style="width:100%; text-align:center; vertical-align:middle; padding:0; margin:0;">
                                         <img
                                             src="{{ $QR_PDF }}"
                                             alt="QR"
-                                            style="width:60px; height:60px; display:block; margin:auto; padding:0;"
+                                            style="width:60px; height:60px; display:block; margin:0 auto; padding:0;"
                                         >
                                     </div>
                                 @endif
@@ -523,7 +523,84 @@
                     </table>
             </footer>
 
-            @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
+        @php
+            $tablaCombinacionConfig = $tablaCombinacionConfig ?? ($Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? []);
+
+            if (is_string($tablaCombinacionConfig)) {
+                $tablaCombinacionConfig = json_decode($tablaCombinacionConfig, true);
+            }
+
+            if (!is_array($tablaCombinacionConfig)) {
+                $tablaCombinacionConfig = [];
+            }
+
+            $tablaCombinacionConfig = array_values(array_filter(array_map(function ($merge) {
+                if (!is_array($merge)) {
+                    return null;
+                }
+
+                $groupId = !empty($merge['groupId']) ? (string) $merge['groupId'] : 'sin_titulo';
+                $field = (string) ($merge['field'] ?? '');
+                $startRow = isset($merge['startRow']) ? (int) $merge['startRow'] : -1;
+                $rowspan = isset($merge['rowspan']) ? (int) $merge['rowspan'] : 1;
+
+                if ($field === '' || $startRow < 0 || $rowspan < 2) {
+                    return null;
+                }
+
+                return compact('groupId', 'field', 'startRow', 'rowspan');
+            }, $tablaCombinacionConfig)));
+
+            $obtenerCombinacionTabla = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                foreach ($mergeConfig as $merge) {
+                    if (($merge['groupId'] ?? 'sin_titulo') === $groupId && ($merge['field'] ?? '') === $field && (int) ($merge['startRow'] ?? -1) === $rowIndex && (int) ($merge['rowspan'] ?? 1) > 1) {
+                        return $merge;
+                    }
+                }
+
+                return null;
+            };
+
+            $esCeldaOcultaPorCombinacion = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                foreach ($mergeConfig as $merge) {
+                    $inicio = (int) ($merge['startRow'] ?? -1);
+                    $rowspan = (int) ($merge['rowspan'] ?? 1);
+                    $fin = $inicio + $rowspan - 1;
+
+                    if (($merge['groupId'] ?? 'sin_titulo') === $groupId && ($merge['field'] ?? '') === $field && $rowIndex > $inicio && $rowIndex <= $fin) {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            $contadorFilasPorGrupo = [];
+
+            $columnasResultadoPdf = [
+                ['field' => 'ID', 'valueKey' => 'ID'],
+                ['field' => 'elemento_tubo', 'valueKey' => 'elemento_tubo'],
+                ['field' => 'no_aceptacion', 'valueKey' => 'no_aceptacion'],
+                ['field' => 'no_serie', 'valueKey' => 'no_serie'],
+                ['field' => 'no_colada', 'valueKey' => 'no_colada'],
+                ['field' => 'tnominal', 'valueKey' => 'tnominal'],
+                ['field' => 'diametro', 'valueKey' => 'diametro'],
+                ['field' => 'no_ind', 'valueKey' => 'no_ind'],
+                ['field' => 'tipo_indicacion', 'valueKey' => 'tipo_indicacion'],
+                ['field' => 'nr', 'valueKey' => 'nr'],
+                ['field' => 'ni', 'valueKey' => 'ni'],
+                ['field' => 'ht', 'valueKey' => 'ht'],
+                ['field' => 'prof', 'valueKey' => 'prof'],
+                ['field' => 'la', 'valueKey' => 'la'],
+                ['field' => 'lc', 'valueKey' => 'lc'],
+                ['field' => 'tmax', 'valueKey' => 'tmax'],
+                ['field' => 'tmin', 'valueKey' => 'tmin'],
+                ['field' => 'metros_lineales', 'valueKey' => 'metros_lineales'],
+                ['field' => 'evaluacion', 'valueKey' => 'evaluacion'],
+                ['field' => 'observaciones', 'valueKey' => 'observaciones'],
+            ];
+        @endphp
+        @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 <table class="datosgenerales">
 
@@ -706,29 +783,27 @@
 
                                             {{-- FILA --}}
                                             @if (($item['tipo'] ?? null) == 'fila')
+                                                @php
+                                                    $grupoActual = $item['grupo'] ?? 'sin_titulo';
+                                                    $indiceFilaGrupo = $contadorFilasPorGrupo[$grupoActual] ?? 0;
+                                                @endphp
                                                 <tr class="juntas">
-
-                                                    <td>{{ $item['data']['ID'] }}</td>
-                                                    <td>{{ $item['data']['elemento_tubo'] }}</td>
-                                                    <td>{{ $item['data']['no_aceptacion'] }}</td>
-                                                    <td>{{ $item['data']['no_serie'] }}</td>
-                                                    <td>{{ $item['data']['no_colada'] }}</td>
-                                                    <td>{{ $item['data']['tnominal'] }}</td>
-                                                    <td>{{ $item['data']['diametro'] }}</td>
-                                                    <td>{{ $item['data']['no_ind'] }}</td>
-                                                    <td>{{ $item['data']['tipo_indicacion'] }}</td>
-                                                    <td>{{ $item['data']['nr'] }}</td>
-                                                    <td>{{ $item['data']['ni'] }}</td>
-                                                    <td>{{ $item['data']['ht'] }}</td>
-                                                    <td>{{ $item['data']['prof'] }}</td>
-                                                    <td>{{ $item['data']['la'] }}</td>
-                                                    <td>{{ $item['data']['lc'] }}</td>
-                                                    <td>{{ $item['data']['tmax'] }}</td>
-                                                    <td>{{ $item['data']['tmin'] }}</td>
-                                                    <td>{{ $item['data']['metros_lineales'] }}</td>
-                                                    <td>{{ $item['data']['evaluacion'] }}</td>
-                                                    <td>{{ $item['data']['observaciones'] }}</td>
+                                                    @foreach ($columnasResultadoPdf as $columnaPdf)
+                                                        @php
+                                                            $mergeColumna = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
+                                                            $estaOculta = $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
+                                                            $valorCelda = $item['data'][$columnaPdf['valueKey']] ?? '';
+                                                        @endphp
+                                                        @if ($mergeColumna)
+                                                            <td rowspan="{{ $mergeColumna['rowspan'] }}">{{ $valorCelda }}</td>
+                                                        @elseif (! $estaOculta)
+                                                            <td>{{ $valorCelda }}</td>
+                                                        @endif
+                                                    @endforeach
                                                 </tr>
+                                                @php
+                                                    $contadorFilasPorGrupo[$grupoActual] = $indiceFilaGrupo + 1;
+                                                @endphp
                                             @endif
 
                                             {{-- LONGITUD --}}

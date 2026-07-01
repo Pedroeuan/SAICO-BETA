@@ -419,6 +419,86 @@
                     </table>
             </footer>
 
+            @php
+                $tablaCombinacionConfigComponentes = $tablaCombinacionConfigComponentes ?? ($Datos_Equipo['TABLA_COMBINACION_CONFIG_COMPONENTES'] ?? []);
+
+                if (is_string($tablaCombinacionConfigComponentes)) {
+                    $tablaCombinacionConfigComponentes = json_decode($tablaCombinacionConfigComponentes, true);
+                }
+
+                if (!is_array($tablaCombinacionConfigComponentes)) {
+                    $tablaCombinacionConfigComponentes = [];
+                }
+
+                $tablaCombinacionConfigComponentes = array_values(array_filter(array_map(function ($merge) {
+                    if (!is_array($merge)) {
+                        return null;
+                    }
+
+                    $groupId = !empty($merge['groupId']) ? (string) $merge['groupId'] : 'sin_titulo';
+                    $field = (string) ($merge['field'] ?? '');
+                    $startRow = isset($merge['startRow']) ? (int) $merge['startRow'] : -1;
+                    $rowspan = isset($merge['rowspan']) ? (int) $merge['rowspan'] : 1;
+
+                    if ($field === '' || $startRow < 0 || $rowspan < 2) {
+                        return null;
+                    }
+
+                    return [
+                        'groupId' => $groupId,
+                        'field' => $field,
+                        'startRow' => $startRow,
+                        'rowspan' => $rowspan,
+                    ];
+                }, $tablaCombinacionConfigComponentes)));
+
+                $obtenerCombinacionComponentes = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                    foreach ($mergeConfig as $merge) {
+                        if (
+                            ($merge['groupId'] ?? 'sin_titulo') === $groupId &&
+                            ($merge['field'] ?? '') === $field &&
+                            (int) ($merge['startRow'] ?? -1) === $rowIndex &&
+                            (int) ($merge['rowspan'] ?? 1) > 1
+                        ) {
+                            return $merge;
+                        }
+                    }
+
+                    return null;
+                };
+
+                $esCeldaOcultaComponentes = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                    foreach ($mergeConfig as $merge) {
+                        $inicio = (int) ($merge['startRow'] ?? -1);
+                        $rowspan = (int) ($merge['rowspan'] ?? 1);
+                        $fin = $inicio + $rowspan - 1;
+
+                        if (
+                            ($merge['groupId'] ?? 'sin_titulo') === $groupId &&
+                            ($merge['field'] ?? '') === $field &&
+                            $rowIndex > $inicio &&
+                            $rowIndex <= $fin
+                        ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                };
+
+                $columnasComponentesPdf = [
+                    ['field' => 'Componentes_ID', 'valueKey' => 'ID'],
+                    ['field' => 'Componentes_Descripcion_del_Elemento', 'valueKey' => 'Descripcion_del_Elemento'],
+                    ['field' => 'Componentes_Nivel', 'valueKey' => 'Nivel'],
+                    ['field' => 'Componentes_0', 'valueKey' => '0'],
+                    ['field' => 'Componentes_Longitud_m', 'valueKey' => 'Longitud_(m)'],
+                    ['field' => 'Componentes_Clase', 'valueKey' => 'Clase'],
+                    ['field' => 'Componentes_Especificacion', 'valueKey' => 'EspecificaciÛn'],
+                    ['field' => 'Componentes_Observaciones', 'valueKey' => 'Observaciones'],
+                ];
+
+                $contadorFilasComponentesPorGrupo = [];
+            @endphp
             @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
 
             {{-- ================= DATOS GENERALES ================= --}}
@@ -502,16 +582,27 @@
 
                                             {{-- FILA --}}
                                             @if (($item['tipo'] ?? null) == 'fila')
+                                                @php
+                                                    $grupoActual = $item['grupo'] ?? 'sin_titulo';
+                                                    $indiceFilaGrupo = $contadorFilasComponentesPorGrupo[$grupoActual] ?? 0;
+                                                @endphp
                                                 <tr class="juntas">
-                                                    <td>{{ $item['data']['ID'] }}</td>
-                                                    <td>{{ $item['data']['Descripcion_del_Elemento'] }}</td>
-                                                    <td>{{ $item['data']['Nivel'] }}</td>
-                                                    <td>{{ $item['data']['0'] }}</td>
-                                                    <td>{{ $item['data']['Longitud_(m)'] }}</td>
-                                                    <td>{{ $item['data']['Clase'] }}</td>
-                                                    <td>{{ $item['data']['Especificaci√≥n'] }}</td>
-                                                    <td>{{ $item['data']['Observaciones'] }}</td>
+                                                    @foreach ($columnasComponentesPdf as $columnaPdf)
+                                                        @php
+                                                            $mergeColumna = $obtenerCombinacionComponentes($tablaCombinacionConfigComponentes, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
+                                                            $estaOculta = $esCeldaOcultaComponentes($tablaCombinacionConfigComponentes, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
+                                                            $valorCelda = $item['data'][$columnaPdf['valueKey']] ?? '';
+                                                        @endphp
+                                                        @if ($mergeColumna)
+                                                            <td rowspan="{{ $mergeColumna['rowspan'] }}">{{ $valorCelda }}</td>
+                                                        @elseif (! $estaOculta)
+                                                            <td>{{ $valorCelda }}</td>
+                                                        @endif
+                                                    @endforeach
                                                 </tr>
+                                                @php
+                                                    $contadorFilasComponentesPorGrupo[$grupoActual] = $indiceFilaGrupo + 1;
+                                                @endphp
                                             @endif
 
                                             {{-- LONGITUD 
