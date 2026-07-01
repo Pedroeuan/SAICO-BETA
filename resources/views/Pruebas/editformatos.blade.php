@@ -89,14 +89,17 @@
                                                 <td>{{ $count }}</td>
                                                 <td><input type="text" class="form-control" name="Formato[{{ $Formato->idFormato }}]" value="{{ $Formato->Nombre ?? 'N/A' }}"></td>
                                                 <td>
-                                                    @if (empty($Formato->pdf) || in_array($Formato->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                                    @php 
+                                                     //dd($Formato->PDF);    
+                                                    @endphp
+                                                    @if (empty($Formato->PDF) && !in_array($Formato->PDF, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                                         <div class="d-flex align-items-end gap-2">
 
                                                             <div class="form-group flex-grow-1 mb-0">
-                                                                <label class="col-form-label">SUBIR PROCEDIMIENTO</label>
+                                                                {{--<label class="col-form-label">SUBIR PROCEDIMIENTO</label>--}}
                                                                 <input type="file"
                                                                     class="form-control inputForm @if ($errors->any()) is-invalid @endif"
-                                                                    name="Foto">
+                                                                    name="Procedimiento">
 
                                                                 @if ($errors->any())
                                                                     <div class="invalid-feedback">
@@ -112,7 +115,22 @@
 
                                                         </div>
                                                         @else
-                                                            <a href="{{ asset('storage/' . $Formato->pdf) }}" 
+                                                            <div class="d-flex align-items-end gap-2">
+
+                                                            <div class="form-group flex-grow-1 mb-0">
+                                                                {{--<label class="col-form-label">SUBIR PROCEDIMIENTO</label>--}}
+                                                                <input type="file"
+                                                                    class="form-control inputForm @if ($errors->any()) is-invalid @endif"
+                                                                    name="Procedimiento">
+
+                                                                @if ($errors->any())
+                                                                    <div class="invalid-feedback">
+                                                                        Por favor, vuelva a cargar el archivo de ser necesario.
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+
+                                                            <a href="{{ asset('storage/' . $Formato->PDF) }}" 
                                                                 class="btn btn-primary" target="_blank">
                                                                     <i class="far fa-file-pdf"></i>
                                                             </a>

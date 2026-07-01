@@ -140,7 +140,6 @@ class PruebaController extends Controller
 
     public function UpdateCreateFormato(Request $request, $id)
     {
-        //
         $request->validate([
             'Norma_Codigo' => 'required|string',
         ]);
@@ -154,14 +153,48 @@ class PruebaController extends Controller
         
         // Crear o actualizar formatos
         if ($request->has('Formato')) {
-            foreach ($request->input('Formato') as $formatoId => $formatoNombre) {
-                if (is_numeric($formatoId)) {
+            foreach ($request->input('Formato') as $formatoId => $formatoNombre) 
+                {
+                    if (is_numeric($formatoId)) {
                     // Actualizar el formato existente
                     $formato = Formato::find($formatoId);
+                        $Nombre_Formato = $formato->Nombre;
+                            // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
+                            if ($request->hasFile('Procedimiento') && $request->file('Procedimiento')->isValid()) 
+                                {
+                                // Obtener la ruta del archivo anterior desde la base de datos
+                                $rutaAnterior = $formato->PDF;
+                                // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+                                if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                                    Storage::disk('public')->delete($rutaAnterior);
+                                }
+                                // Guardar el nuevo archivo de imagen
+                                $imagen = $request->file('Procedimiento');
+                                // Obtener el último número consecutivo
+                                $lastFile = collect(Storage::disk('public')->files('Procedimientos/'))
+                                    ->filter(function ($file) {
+                                        return preg_match('/^\d+_/', basename($file));
+                                    })
+                                    ->sort()
+                                    ->last();
+                                $lastNumber = 0;
+                                if ($lastFile) {
+                                    $lastNumber = (int)explode('_', basename($lastFile))[0];
+                                }
+                                // Incrementar el número consecutivo
+                                $newNumber = $lastNumber + 1;
+                                $newFileNameProcedimiento = $newNumber . '_' .  $imagen->getClientOriginalName();  
+                                
+                                $ProcedimientoPath = $imagen->storeAs('Procedimientos/', $newFileNameProcedimiento, 'public');
+                                }
+
                     if ($formato) {
                         $formato->update([
                             'Nombre' => $formatoNombre,
+                            'PDF' => $ProcedimientoPath,
                         ]);
+                        }
+                    }
                     }
                 } else {
                     // Crear un nuevo formato
@@ -172,13 +205,10 @@ class PruebaController extends Controller
                     ]);
                     $formato->save();
                 }
+
+                // Redirigir a una ruta específica con el parámetro $idPrueba
+                return redirect()->route('Pruebas.Normas_Aplicables.normas', ['id' => $idPrueba]);
             }
-        }
-
-        // Redirigir a una ruta específica con el parámetro $idPrueba
-        return redirect()->route('Pruebas.Normas_Aplicables.normas', ['id' => $idPrueba]);
-
-    }
 
 
     /**
