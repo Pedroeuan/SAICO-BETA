@@ -45,6 +45,39 @@ use Illuminate\Support\Str;
 
 class FOR_PINS_08_01Controller extends Controller
 {
+    // Sanea la configuracion enviada desde la tabla con combinacion de celdas.
+    private function sanitizarConfiguracionCombinacionTabla($configuracionCruda)
+    {
+        $configuracion = is_string($configuracionCruda)
+            ? json_decode($configuracionCruda, true)
+            : $configuracionCruda;
+
+        if (!is_array($configuracion)) {
+            return [];
+        }
+
+        return collect($configuracion)
+            ->filter(function ($item) {
+                return is_array($item)
+                    && !empty($item['field'])
+                    && array_key_exists('startRow', $item)
+                    && array_key_exists('rowspan', $item);
+            })
+            ->map(function ($item) {
+                return [
+                    'groupId' => !empty($item['groupId']) ? (string) $item['groupId'] : 'sin_titulo',
+                    'field' => (string) $item['field'],
+                    'startRow' => max(0, (int) $item['startRow']),
+                    'rowspan' => max(2, (int) $item['rowspan']),
+                ];
+            })
+            ->unique(function ($item) {
+                return $item['groupId'] . '|' . $item['field'] . '|' . $item['startRow'];
+            })
+            ->values()
+            ->all();
+    }
+
     private function getPdfCandidatePaths($rutaDb)
     {
         if (empty($rutaDb)) {
@@ -847,6 +880,7 @@ class FOR_PINS_08_01Controller extends Controller
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
+            'Tabla_CombinacionConfig' => 'nullable|string',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -973,6 +1007,11 @@ class FOR_PINS_08_01Controller extends Controller
         }
         //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
         $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
@@ -1322,6 +1361,21 @@ class FOR_PINS_08_01Controller extends Controller
             
         ];
 
+        // Regenera el PDF final con la tabla, firmas y fotos ya guardadas.
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? ($validatedData['Datos_Equipo']['QR_PDF'] ?? null);
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? ($validatedData['Datos_Equipo']['PDF_UNIFICADO'] ?? null);
+
+        $Reportes->update([
+            'Datos_Equipo' => json_encode(array_merge(
+                $validatedData['Datos_Equipo'],
+                [
+                    'QR_PDF' => $validatedData['Datos_Equipo']['QR_PDF'],
+                    'PDF_UNIFICADO' => $validatedData['Datos_Equipo']['PDF_UNIFICADO'],
+                ]
+            )),
+        ]);
+
         $this->OS_OC($datosParaCrearOS_OC);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
@@ -1428,6 +1482,7 @@ class FOR_PINS_08_01Controller extends Controller
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
+            'Tabla_CombinacionConfig' => 'nullable|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -1623,6 +1678,11 @@ class FOR_PINS_08_01Controller extends Controller
             ?? null;
 
         // Actualiza los detalles generales como JSON en la base de datos
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
@@ -1986,6 +2046,9 @@ class FOR_PINS_08_01Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        $tablaCombinacionConfig = $this->sanitizarConfiguracionCombinacionTabla(
+            $Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? '[]'
+        );
 
         $totalTitulos = 0;
         $totalFilas = 0;
@@ -2037,6 +2100,7 @@ class FOR_PINS_08_01Controller extends Controller
             'Logo' => $Logo,
             'FOR_PINS_08_01' => $FOR_PINS_08_01,
             'QR_PDF' => $qrPdf,
+            'tablaCombinacionConfig' => $tablaCombinacionConfig,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo

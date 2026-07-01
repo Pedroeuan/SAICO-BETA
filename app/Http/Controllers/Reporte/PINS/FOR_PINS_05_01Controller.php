@@ -168,6 +168,11 @@ class FOR_PINS_05_01Controller extends Controller
     // Sanea la configuracion enviada desde la tabla con combinacion de celdas.
     private function sanitizarConfiguracionCombinacionTabla($configuracionCruda)
     {
+        $aliasCampos = [
+            'numero_junta' => 'no_junta',
+            'angulo_inspeccion' => 'ang_inspeccion',
+        ];
+
         $configuracion = is_string($configuracionCruda)
             ? json_decode($configuracionCruda, true)
             : $configuracionCruda;
@@ -183,10 +188,12 @@ class FOR_PINS_05_01Controller extends Controller
                     && array_key_exists('startRow', $item)
                     && array_key_exists('rowspan', $item);
             })
-            ->map(function ($item) {
+            ->map(function ($item) use ($aliasCampos) {
+                $field = (string) $item['field'];
+
                 return [
                     'groupId' => !empty($item['groupId']) ? (string) $item['groupId'] : 'sin_titulo',
-                    'field' => (string) $item['field'],
+                    'field' => $aliasCampos[$field] ?? $field,
                     'startRow' => max(0, (int) $item['startRow']),
                     'rowspan' => max(2, (int) $item['rowspan']),
                 ];
@@ -313,6 +320,8 @@ class FOR_PINS_05_01Controller extends Controller
                     'rutaOriginal' => $rutaOriginal,
                     'rutasProbadas' => $this->getPdfCandidatePaths($rutaPdf),
                 ]);
+
+                continue;
             }
 
             $nombreArchivo = basename($rutaOriginal);

@@ -412,6 +412,10 @@
                     </table>
             </footer>
 
+            @php
+                // Mantiene el consecutivo real por grupo entre bloques/paginas del PDF.
+                $contadorFilasPorGrupo = [];
+            @endphp
             @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 <table class="encabezadoAzul">
@@ -609,6 +613,24 @@
                             </tr>
                         
                         </thead>
+                            @php
+                                $tablaCombinacionConfig = collect($tablaCombinacionConfig ?? [])->map(function ($item) {
+                                    return ['groupId' => $item['groupId'] ?? 'sin_titulo', 'field' => $item['field'] ?? '', 'startRow' => isset($item['startRow']) ? (int) $item['startRow'] : -1, 'rowspan' => isset($item['rowspan']) ? (int) $item['rowspan'] : 1];
+                                });
+                                $obtenerCombinacionTabla = function ($groupId, $field, $rowIndex) use ($tablaCombinacionConfig) {
+                                    return $tablaCombinacionConfig->first(function ($item) use ($groupId, $field, $rowIndex) {
+                                        return ($item['groupId'] ?? 'sin_titulo') === ($groupId ?: 'sin_titulo') && ($item['field'] ?? '') === $field && (int) ($item['startRow'] ?? -1) === $rowIndex && (int) ($item['rowspan'] ?? 1) > 1;
+                                    });
+                                };
+                                $esCeldaOcultaPorCombinacion = function ($groupId, $field, $rowIndex) use ($tablaCombinacionConfig) {
+                                    return $tablaCombinacionConfig->contains(function ($item) use ($groupId, $field, $rowIndex) {
+                                        $inicio = (int) ($item['startRow'] ?? -1);
+                                        $rowspan = (int) ($item['rowspan'] ?? 1);
+                                        return ($item['groupId'] ?? 'sin_titulo') === ($groupId ?: 'sin_titulo') && ($item['field'] ?? '') === $field && $rowspan > 1 && $rowIndex > $inicio && $rowIndex < ($inicio + $rowspan);
+                                    });
+                                };
+                                $columnasResultadoPdf = ['junta_ele', 'no_indicacion', 'angulo', 'nr', 'ni', 'la', 'lc', 'dist_zapata', 'sa', 'da', 'ht', 'evaluacion', 'fotos'];
+                            @endphp
                             <tbody>
                                 @foreach ($bloque as $item)
                                             @if (!is_array($item))
@@ -626,6 +648,25 @@
 
                                             {{-- FILA --}}
                                             @if (($item['tipo'] ?? null) == 'fila')
+                                                @php
+                                                    $groupId = $item['grupo'] ?? 'sin_titulo';
+                                                    $rowIndex = $contadorFilasPorGrupo[$groupId] ?? 0;
+                                                @endphp
+                                                <tr class="juntas">
+                                                    @foreach ($columnasResultadoPdf as $campoPdf)
+                                                        @php $combinacionCelda = $obtenerCombinacionTabla($groupId, $campoPdf, $rowIndex); @endphp
+                                                        @if ($combinacionCelda)
+                                                            <td rowspan="{{ $combinacionCelda['rowspan'] }}">{{ $item['data'][$campoPdf] ?? '' }}</td>
+                                                        @elseif (!$esCeldaOcultaPorCombinacion($groupId, $campoPdf, $rowIndex))
+                                                            <td>{{ $item['data'][$campoPdf] ?? '' }}</td>
+                                                        @endif
+                                                    @endforeach
+                                                </tr>
+                                                @php $contadorFilasPorGrupo[$groupId] = $rowIndex + 1; @endphp
+                                            @endif
+
+                                            {{-- FILA LEGACY --}}
+                                            @if (false && (($item['tipo'] ?? null) == 'fila'))
                                                 <tr class="juntas">
                                                 <td>{{ $item['data']['junta_ele'] }}</td>
                                                 <td>{{ $item['data']['no_indicacion'] }}</td>
