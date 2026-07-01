@@ -78,6 +78,7 @@
                                                 <th>#</th>
                                                 <th>Formato</th>
                                                 <th>Procedimiento</th>
+                                                <th>PDF</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
@@ -88,6 +89,7 @@
                                         <tr id="row-{{ $Formato->idFormato }}">
                                                 <td>{{ $count }}</td>
                                                 <td><input type="text" class="form-control" name="Formato[{{ $Formato->idFormato }}]" value="{{ $Formato->Nombre ?? 'N/A' }}"></td>
+                                                <td><input type="text" class="form-control" name="NameProce[{{ $Formato->idFormato }}]" value="{{ $Formato->Procedimiento ?? 'N/A' }}"></td>
                                                 <td>
                                                     @php 
                                                      //dd($Formato->PDF);    

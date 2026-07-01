@@ -140,6 +140,7 @@ class PruebaController extends Controller
 
     public function UpdateCreateFormato(Request $request, $id)
     {
+        //dd($request->all());
         $request->validate([
             'Norma_Codigo' => 'required|string',
         ]);
@@ -153,12 +154,12 @@ class PruebaController extends Controller
         
         // Crear o actualizar formatos
         if ($request->has('Formato')) {
-            foreach ($request->input('Formato') as $formatoId => $formatoNombre) 
+            foreach ($request->input('Formato') as $formatoId => $formatoNombre)
                 {
+                    //$NameProce = $request->input('NameProce');
                     if (is_numeric($formatoId)) {
                     // Actualizar el formato existente
                     $formato = Formato::find($formatoId);
-                        $Nombre_Formato = $formato->Nombre;
                             // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
                             if ($request->hasFile('Procedimiento') && $request->file('Procedimiento')->isValid()) 
                                 {
@@ -191,17 +192,48 @@ class PruebaController extends Controller
                     if ($formato) {
                         $formato->update([
                             'Nombre' => $formatoNombre,
+                            'Procedimiento' => $NameProce,
                             'PDF' => $ProcedimientoPath,
                         ]);
                         }
                     }
                     }
                 } else {
+                            // Eliminar el archivo de imagen anterior si existe y se proporciona uno nuevo
+                            if ($request->hasFile('Procedimiento') && $request->file('Procedimiento')->isValid()) 
+                                {
+                                // Obtener la ruta del archivo anterior desde la base de datos
+                                $rutaAnterior = $formato->PDF;
+                                // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+                                if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                                    Storage::disk('public')->delete($rutaAnterior);
+                                }
+                                // Guardar el nuevo archivo de imagen
+                                $imagen = $request->file('Procedimiento');
+                                // Obtener el último número consecutivo
+                                $lastFile = collect(Storage::disk('public')->files('Procedimientos/'))
+                                    ->filter(function ($file) {
+                                        return preg_match('/^\d+_/', basename($file));
+                                    })
+                                    ->sort()
+                                    ->last();
+                                $lastNumber = 0;
+                                if ($lastFile) {
+                                    $lastNumber = (int)explode('_', basename($lastFile))[0];
+                                }
+                                // Incrementar el número consecutivo
+                                $newNumber = $lastNumber + 1;
+                                $newFileNameProcedimiento = $newNumber . '_' .  $imagen->getClientOriginalName();  
+                                
+                                $ProcedimientoPath = $imagen->storeAs('Procedimientos/', $newFileNameProcedimiento, 'public');
+                                }
                     // Crear un nuevo formato
                     $formato = new Formato([
                         'idNorma_codigo' => $id,
                         'idPrueba' => $idPrueba,
                         'Nombre' => $formatoNombre,
+                        'Procedimiento' => $NameProce,
+                        'PDF' => $ProcedimientoPath,
                     ]);
                     $formato->save();
                 }

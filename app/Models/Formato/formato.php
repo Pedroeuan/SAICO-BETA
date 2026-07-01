@@ -17,6 +17,7 @@ class formato extends Model
         'idNorma_codigo',
         'idPrueba',
         'Nombre',
+        'Procedimiento',
         'PDF',
     ];
 
