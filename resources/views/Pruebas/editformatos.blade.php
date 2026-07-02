@@ -101,7 +101,7 @@
                                                                 {{--<label class="col-form-label">SUBIR PROCEDIMIENTO</label>--}}
                                                                 <input type="file"
                                                                     class="form-control inputForm @if ($errors->any()) is-invalid @endif"
-                                                                    name="Procedimiento">
+                                                                    name="Procedimiento[{{ $Formato->idFormato }}]">
 
                                                                 @if ($errors->any())
                                                                     <div class="invalid-feedback">
@@ -123,7 +123,7 @@
                                                                 {{--<label class="col-form-label">SUBIR PROCEDIMIENTO</label>--}}
                                                                 <input type="file"
                                                                     class="form-control inputForm @if ($errors->any()) is-invalid @endif"
-                                                                    name="Procedimiento">
+                                                                    name="Procedimiento[{{ $Formato->idFormato }}]">
 
                                                                 @if ($errors->any())
                                                                     <div class="invalid-feedback">
@@ -201,6 +201,8 @@
                     var newRow = `<tr>
                         <td>${rowCount}</td>
                         <td><input type="text" class="form-control" name="Formato[new_${rowCount}]" placeholder="Formato" required></td>
+                        <td><input type="text" class="form-control" name="NameProce[new_${rowCount}]" placeholder="Procedimiento"></td>
+                        <td><div class="form-group mb-0"><input type="file" class="form-control" name="Procedimiento[new_${rowCount}]"></div></td>
                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                     </tr>`;
                     $('#Formato tbody').append(newRow);
