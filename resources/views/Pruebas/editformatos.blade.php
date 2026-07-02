@@ -91,9 +91,6 @@
                                                 <td><input type="text" class="form-control" name="Formato[{{ $Formato->idFormato }}]" value="{{ $Formato->Nombre ?? 'N/A' }}"></td>
                                                 <td><input type="text" class="form-control" name="NameProce[{{ $Formato->idFormato }}]" value="{{ $Formato->Procedimiento ?? 'N/A' }}"></td>
                                                 <td>
-                                                    @php 
-                                                     //dd($Formato->PDF);    
-                                                    @endphp
                                                     @if (empty($Formato->PDF) && !in_array($Formato->PDF, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                                         <div class="d-flex align-items-end gap-2">
 

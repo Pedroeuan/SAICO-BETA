@@ -172,6 +172,7 @@ class FOR_PINS_03_02Controller extends Controller
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
         $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
+        $idsConsumibles = $datosParaCrearQR['idsConsumibles'] ?? [];
 
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
