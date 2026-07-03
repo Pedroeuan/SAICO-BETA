@@ -146,23 +146,32 @@ class PruebaController extends Controller
     {
         //dd($request->all());
         $request->validate([
-            'Formato' => 'required|string',
-            'Procedimiento' => 'nullable|numeric|exists:procedimientos,idProcedimiento',
+            'Norma_Codigo'  => 'required|string',
+            //'Formato' => 'required|string',
+            //'Procedimiento' => 'nullable|numeric|exists:procedimientos,idProcedimiento',
         ]);
 
-        $Formato = Formato::where('idFormato', $id)->first();
+        $Norma_Codigo = norma_codigo::where('idNorma_Codigo', $id)->first();
+
         $idPrueba = $Norma_Codigo->idPrueba;
 
         $Norma_Codigo->update([
-            'Nombre' => $request->input('Norma_Codigo'),
+                'Nombre' => $request->input('Norma_Codigo'),
         ]);
 
-        foreach ($request->input('Formato', []) as $formatoKey => $formatoNombre) {
-            if (empty($formatoNombre)) {
-                continue;
-            }
+        $Formato = Formato::where('idNorma_Codigo', $id)->first();
 
-        }
+        foreach ($request->input('Formato') as $formato) {
+                    if ($formato) {
+                        $Formato = new Formato();
+                        $Formato->idNorma_Codigo = $id;
+                        $Formato->idPrueba = $idPrueba;
+                        $Formato->idProcedimiento = $request->input('Procedimientos');
+                        $Formato->Nombre = $formato;
+                        $Formato->save();
+                    }
+                }
+        $idPrueba = $Norma_Codigo->idPrueba;
 
         return redirect()->route('Pruebas.Normas_Aplicables.normas', ['id' => $idPrueba]);
     }
