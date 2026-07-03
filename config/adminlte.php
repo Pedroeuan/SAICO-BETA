@@ -601,8 +601,13 @@ return [
                         'url' => '/Procedimientos/Create',
                     ],
                     [
+                        'text' => 'Lista de Procedimientos PND/IM',
+                        'icon' => 'far fa-list-alt',
+                        'url' => '/index/Procedimientos',
+                    ],
+                    [
                         'text' => 'Registro de Pruebas PND/IM',
-                        'icon' => 'fas fa-indent',
+                        'icon' => 'far fa-file-alt',
                         'url' => '/Pruebas/Create',
                     ],
                     [
@@ -613,11 +618,11 @@ return [
                     ],
                     [
                         'text' => 'Registro de Normas IM',
-                        'icon' => 'far fa-list-alt',
+                        'icon' => 'fab fa-leanpub',
                         'url' => '/Normas_IM/Create',
                     ],
                     [
-                        'text' => 'Lista deNormas IM',
+                        'text' => 'Lista de Normas IM',
                         'icon' => 'far fa-list-alt',
                         'url' => '/index/Normas_IM',
                     ],

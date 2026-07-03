@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Prueba;
 use App\Models\Prueba\prueba;
 use App\Models\Norma_Codigo\norma_codigo;
 use App\Models\Formato\formato;
+use App\Models\Procedimientos\Procedimiento;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class PruebaController extends Controller
 {
@@ -98,7 +100,9 @@ class PruebaController extends Controller
 
         $Formatos = formato::where('idNorma_codigo',$Norma_Codigo->idNorma_codigo)->get();
 
-        return view('Pruebas.editformatos', compact('id','Norma_Codigo','Formatos'));
+        $Procedimientos = Procedimiento::all();
+
+        return view('Pruebas.editformatos', compact('id','Norma_Codigo','Formatos','Procedimientos'));
     }
 
     /**
@@ -140,11 +144,13 @@ class PruebaController extends Controller
 
     public function UpdateCreateFormato(Request $request, $id)
     {
+        //dd($request->all());
         $request->validate([
-            'Norma_Codigo' => 'required|string',
+            'Formato' => 'required|string',
+            'Procedimiento' => 'nullable|numeric|exists:procedimientos,idProcedimiento',
         ]);
 
-        $Norma_Codigo = norma_codigo::findOrFail($id);
+        $Formato = Formato::where('idFormato', $id)->first();
         $idPrueba = $Norma_Codigo->idPrueba;
 
         $Norma_Codigo->update([
@@ -156,58 +162,6 @@ class PruebaController extends Controller
                 continue;
             }
 
-            $procedimientoNombre = $request->input("NameProce.{$formatoKey}");
-            $uploadedFile = $request->file("Procedimiento.{$formatoKey}");
-            $procedimientoPath = null;
-
-            if ($uploadedFile && $uploadedFile->isValid()) {
-                $formatoExistente = is_numeric($formatoKey) ? formato::find($formatoKey) : null;
-                $rutaAnterior = $formatoExistente?->PDF;
-
-                if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-                    Storage::disk('public')->delete($rutaAnterior);
-                }
-
-                $lastFile = collect(Storage::disk('public')->files('Procedimientos/'))
-                    ->filter(function ($file) {
-                        return preg_match('/^\d+_/', basename($file));
-                    })
-                    ->sort()
-                    ->last();
-
-                $lastNumber = 0;
-                if ($lastFile) {
-                    $lastNumber = (int) explode('_', basename($lastFile))[0];
-                }
-
-                $newNumber = $lastNumber + 1;
-                $newFileNameProcedimiento = $newNumber . '_' . $uploadedFile->getClientOriginalName();
-                $procedimientoPath = $uploadedFile->storeAs('Procedimientos/', $newFileNameProcedimiento, 'public');
-            } elseif (is_numeric($formatoKey)) {
-                $formatoExistente = formato::find($formatoKey);
-                $procedimientoPath = $formatoExistente?->PDF;
-            }
-
-            $datosFormato = [
-                'idNorma_codigo' => $id,
-                'idPrueba' => $idPrueba,
-                'Nombre' => $formatoNombre,
-                'Procedimiento' => $procedimientoNombre,
-            ];
-
-            if ($procedimientoPath !== null) {
-                $datosFormato['PDF'] = $procedimientoPath;
-            }
-
-            if (is_numeric($formatoKey)) {
-                $formato = formato::find($formatoKey);
-                if ($formato) {
-                    $formato->update($datosFormato);
-                }
-            } else {
-                $formato = new formato($datosFormato);
-                $formato->save();
-            }
         }
 
         return redirect()->route('Pruebas.Normas_Aplicables.normas', ['id' => $idPrueba]);

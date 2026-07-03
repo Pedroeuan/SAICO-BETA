@@ -89,47 +89,32 @@
                                         <tr id="row-{{ $Formato->idFormato }}">
                                                 <td>{{ $count }}</td>
                                                 <td><input type="text" class="form-control" name="Formato[{{ $Formato->idFormato }}]" value="{{ $Formato->Nombre ?? 'N/A' }}"></td>
-                                                <td><input type="text" class="form-control" name="NameProce[{{ $Formato->idFormato }}]" value="{{ $Formato->Procedimiento ?? 'N/A' }}"></td>
                                                 <td>
-                                                    @if (empty($Formato->PDF) && !in_array($Formato->PDF, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
-                                                        <div class="d-flex align-items-end gap-2">
-
-                                                            <div class="form-group flex-grow-1 mb-0">
-                                                                {{--<label class="col-form-label">SUBIR PROCEDIMIENTO</label>--}}
-                                                                <input type="file"
-                                                                    class="form-control inputForm @if ($errors->any()) is-invalid @endif"
-                                                                    name="Procedimiento[{{ $Formato->idFormato }}]">
-
-                                                                @if ($errors->any())
-                                                                    <div class="invalid-feedback">
-                                                                        Por favor, vuelva a cargar el archivo de ser necesario.
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-
-                                                            <span class="btn btn-secondary mb-1"
-                                                                style="cursor:not-allowed;">
+                                                    <div class="col-sm-50 d-flex justify-content-center">
+                                                        <div class="form-group text-center">
+                                                            <!--<label class="col-form-label" for="inputSuccess">PROCEDIMIENTOS:</label>-->
+                                                            <select class="form-select inputForm" name="Procedimientos" id="Procedimientos">
+                                                            <option value="" selected disabled>Seleccione un Procedimiento</option> <!-- Opción por defecto -->
+                                                                @foreach($Procedimientos as $Procedimiento)
+                                                                    <option value="{{ $Procedimiento->idProcedimiento }}">
+                                                                        {{ $Procedimiento->Nombre }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <!--<input type="text" name="Datos_Equipo[ID_PARTICULAS]" id="IDInputC1" value="{{ old('Datos_Equipo.ID_PARTICULAS') }}">-->
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        //dd($Formato->idProcedimiento);
+                                                    @endphp
+                                                    @if ($Formato->idProcedimiento == 0)
+                                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                                                 <i class="far fa-file-pdf"></i>
                                                             </span>
-
-                                                        </div>
                                                         @else
-                                                            <div class="d-flex align-items-end gap-2">
-
-                                                            <div class="form-group flex-grow-1 mb-0">
-                                                                {{--<label class="col-form-label">SUBIR PROCEDIMIENTO</label>--}}
-                                                                <input type="file"
-                                                                    class="form-control inputForm @if ($errors->any()) is-invalid @endif"
-                                                                    name="Procedimiento[{{ $Formato->idFormato }}]">
-
-                                                                @if ($errors->any())
-                                                                    <div class="invalid-feedback">
-                                                                        Por favor, vuelva a cargar el archivo de ser necesario.
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-
-                                                            <a href="{{ asset('storage/' . $Formato->PDF) }}" 
+                                                            <a href="{{ asset('storage/' . $Procedimiento->PDF) }}" 
                                                                 class="btn btn-primary" target="_blank">
                                                                     <i class="far fa-file-pdf"></i>
                                                             </a>
