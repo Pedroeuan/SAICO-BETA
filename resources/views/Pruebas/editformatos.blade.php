@@ -98,7 +98,7 @@
                                                 <td>
                                                     <div class="col-sm-50 d-flex justify-content-center">
                                                         <div class="form-group text-center">
-                                                            <select class="form-select inputForm" name="Procedimientos[{{ $Formato->idFormato }}]">
+                                                            <select class="form-select inputForm" name="Procedimientos" id="Procedimientos">
                                                             <option value="" selected disabled>Seleccione un Procedimiento</option>
                                                                 @foreach($Procedimientos as $Procedimiento)
                                                                     <option value="{{ $Procedimiento->idProcedimiento }}" {{ $Formato->idProcedimiento == $Procedimiento->idProcedimiento ? 'selected' : '' }}>
@@ -111,18 +111,15 @@
                                                 </td>
 
                                                 <td>
-                                                    @php
-                                                        $currentProcedimiento = $Procedimientos->firstWhere('idProcedimiento', $Formato->idProcedimiento);
-                                                    @endphp
-                                                    @if (!$currentProcedimiento)
-                                                        <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                            <i class="far fa-file-pdf"></i>
-                                                        </span>
-                                                    @else
-                                                        <a href="{{ asset('storage/' . $currentProcedimiento->PDF) }}" 
-                                                            class="btn btn-primary" target="_blank">
-                                                            <i class="far fa-file-pdf"></i>
-                                                        </a>
+                                                    @if ($Formato->idProcedimiento == 0)
+                                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                                <i class="far fa-file-pdf"></i>
+                                                            </span>
+                                                        @else
+                                                            <a href="{{ asset('storage/' . $Procedimiento->PDF) }}" 
+                                                                class="btn btn-primary" target="_blank">
+                                                                    <i class="far fa-file-pdf"></i>
+                                                            </a>
                                                     @endif
                                                 </td>
                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
@@ -154,10 +151,14 @@
 @section('js')
 <!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- DataTables -->
+<!--datatable -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
 <!--sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -188,7 +189,7 @@
                             <div class="col-sm-50 d-flex justify-content-center">
                                 <div class="form-group text-center">
                                 <!--<label class="col-form-label" for="inputSuccess">PROCEDIMIENTOS:</label>-->
-                                    <select class="form-select inputForm" name="Procedimientos[new_${rowCount}]">
+                                    <select class="form-select inputForm" name="Procedimientos" id="Procedimientos">
                                         <option value="" selected disabled>Seleccione un Procedimiento</option> <!-- Opción por defecto -->
                                             @foreach($Procedimientos as $Procedimiento)
                                                 <option value="{{ $Procedimiento->idProcedimiento }}">
@@ -201,9 +202,16 @@
                             </div>
                         </td>
                         <td>
-                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                <i class="far fa-file-pdf"></i>
-                            </span>
+                            @if ($Formato->idProcedimiento == 0)
+                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                    <i class="far fa-file-pdf"></i>
+                                </span>
+                            @else
+                                <a href="{{ asset('storage/' . $Procedimiento->PDF) }}" 
+                                    class="btn btn-primary" target="_blank">
+                                    <i class="far fa-file-pdf"></i>
+                                </a>
+                            @endif
                         </td>
                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                     </tr>`;
