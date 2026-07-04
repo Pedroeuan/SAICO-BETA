@@ -17,4 +17,9 @@ class Procedimiento extends Model
     public $timestamps = false;
 
     use HasFactory;
+
+    public function formatos()
+{
+    return $this->hasMany(Formato::class, 'idProcedimiento', 'idProcedimiento');
+}
 }

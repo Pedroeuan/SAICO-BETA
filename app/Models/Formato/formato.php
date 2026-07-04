@@ -42,4 +42,9 @@ class formato extends Model
     {
         return $this->hasMany(Prueba_Aplica::class, 'idFormato', 'idFormato');
     }
+
+    public function procedimiento()
+    {
+        return $this->belongsTo(Procedimiento::class, 'idProcedimiento', 'idProcedimiento');
+    }
 }

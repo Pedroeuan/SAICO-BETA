@@ -161,16 +161,15 @@ class PruebaController extends Controller
 
         $Formato = Formato::where('idNorma_Codigo', $id)->first();
 
-        foreach ($request->input('Formato') as $formato) {
-                    if ($formato) {
-                        $Formato = new Formato();
-                        $Formato->idNorma_Codigo = $id;
-                        $Formato->idPrueba = $idPrueba;
-                        $Formato->idProcedimiento = $request->input('Procedimientos');
-                        $Formato->Nombre = $formato;
-                        $Formato->save();
-                    }
-                }
+        foreach ($request->input('Formato') as $idFormato => $nombre) {
+
+            Formato::where('idFormato', $idFormato)
+                ->update([
+                    'Nombre' => $nombre,
+                    'idProcedimiento' => $request->input("Procedimientos.$idFormato"),
+                ]);
+
+        }
         $idPrueba = $Norma_Codigo->idPrueba;
 
         return redirect()->route('Pruebas.Normas_Aplicables.normas', ['id' => $idPrueba]);

@@ -98,10 +98,13 @@
                                                 <td>
                                                     <div class="col-sm-50 d-flex justify-content-center">
                                                         <div class="form-group text-center">
-                                                            <select class="form-select inputForm" name="Procedimientos" id="Procedimientos">
-                                                            <option value="" selected disabled>Seleccione un Procedimiento</option>
+                                                            <select class="form-select inputForm"
+                                                                    name="Procedimientos[{{ $Formato->idFormato }}]">
+                                                                <option value="" disabled>Seleccione un Procedimiento</option>
+
                                                                 @foreach($Procedimientos as $Procedimiento)
-                                                                    <option value="{{ $Procedimiento->idProcedimiento }}" {{ $Formato->idProcedimiento == $Procedimiento->idProcedimiento ? 'selected' : '' }}>
+                                                                    <option value="{{ $Procedimiento->idProcedimiento }}"
+                                                                        {{ $Formato->idProcedimiento == $Procedimiento->idProcedimiento ? 'selected' : '' }}>
                                                                         {{ $Procedimiento->Nombre }}
                                                                     </option>
                                                                 @endforeach
@@ -111,7 +114,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @if ($Formato->idProcedimiento == 0)
+                                                    @if ($Formato->idProcedimiento == 0 || !$Formato->Procedimiento || !$Formato->Procedimiento->PDF)
                                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                                                 <i class="far fa-file-pdf"></i>
                                                             </span>
