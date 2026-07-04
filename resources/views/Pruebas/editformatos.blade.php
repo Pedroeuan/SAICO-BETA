@@ -205,16 +205,9 @@
                             </div>
                         </td>
                         <td>
-                            @if ($Formato->idProcedimiento == 0)
                                 <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
                                     <i class="far fa-file-pdf"></i>
                                 </span>
-                            @else
-                                <a href="{{ asset('storage/' . $Procedimiento->PDF) }}" 
-                                    class="btn btn-primary" target="_blank">
-                                    <i class="far fa-file-pdf"></i>
-                                </a>
-                            @endif
                         </td>
                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                     </tr>`;

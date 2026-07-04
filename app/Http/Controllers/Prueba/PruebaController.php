@@ -101,6 +101,7 @@ class PruebaController extends Controller
         $Formatos = formato::where('idNorma_codigo',$Norma_Codigo->idNorma_codigo)->get();
 
         $Procedimientos = Procedimiento::all();
+        //dd($Formatos);
 
         return view('Pruebas.editformatos', compact('id','Norma_Codigo','Formatos','Procedimientos'));
     }
@@ -160,15 +161,31 @@ class PruebaController extends Controller
         ]);
 
         $Formato = Formato::where('idNorma_Codigo', $id)->first();
-
+        
         foreach ($request->input('Formato') as $idFormato => $nombre) {
 
-            Formato::where('idFormato', $idFormato)
-                ->update([
-                    'Nombre' => $nombre,
-                    'idProcedimiento' => $request->input("Procedimientos.$idFormato"),
+            $datos = [
+                'Nombre' => $nombre,
+                'idProcedimiento' => $request->input("Procedimientos.$idFormato"),
+            ];
+
+            // Si es un registro nuevo
+            if (str_starts_with($idFormato, 'new_')) {
+
+                Formato::create([
+                    'idNorma_Codigo'   => $id,
+                    'idPrueba'         => $idPrueba,
+                    'Nombre'           => $nombre,
+                    'idProcedimiento'  => $request->input("Procedimientos.$idFormato"),
                 ]);
 
+            } else {
+
+                // Actualizar registro existente
+                Formato::where('idFormato', $idFormato)
+                    ->update($datos);
+
+            }
         }
         $idPrueba = $Norma_Codigo->idPrueba;
 
