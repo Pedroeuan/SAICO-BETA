@@ -161,7 +161,7 @@ class PruebaController extends Controller
         ]);
 
         $Formato = Formato::where('idNorma_Codigo', $id)->first();
-        
+
         foreach ($request->input('Formato') as $idFormato => $nombre) {
 
             $datos = [
@@ -175,8 +175,8 @@ class PruebaController extends Controller
                 Formato::create([
                     'idNorma_Codigo'   => $id,
                     'idPrueba'         => $idPrueba,
-                    'Nombre'           => $nombre,
                     'idProcedimiento'  => $request->input("Procedimientos.$idFormato"),
+                    'Nombre'           => $nombre,
                 ]);
 
             } else {
