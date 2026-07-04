@@ -16,9 +16,8 @@ class formato extends Model
         'idFormato',
         'idNorma_codigo',
         'idPrueba',
+        'idProcedimiento',
         'Nombre',
-        'Procedimiento',
-        'PDF',
     ];
 
     protected $table = 'Formato';

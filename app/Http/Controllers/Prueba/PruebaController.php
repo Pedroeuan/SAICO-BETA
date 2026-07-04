@@ -145,7 +145,7 @@ class PruebaController extends Controller
 
     public function UpdateCreateFormato(Request $request, $id)
     {
-        //dd($request->all());
+        dd($request->all());
         $request->validate([
             'Norma_Codigo'  => 'required|string',
             //'Formato' => 'required|string',
