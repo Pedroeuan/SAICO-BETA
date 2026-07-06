@@ -73,7 +73,7 @@
                                             </tbody>
                                     </table>
                                     </div>
-                                    <input type="hidden" name="Normas_IM" id="titulos_hidden">
+                                    {{--<input type="hidden" name="Normas_IM" id="Normas_IM">--}}
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
@@ -167,29 +167,6 @@ $(document).ready(function() {
         rowCount = 0;
         rowCountGlobal = 0;
 
-        // Recrear títulos (manteniendo el id único guardado)
-        (data.titles || []).forEach(function(t){
-            tituloCount++;
-            const titleId = t.id || `titulo_${tituloCount}_${Date.now()}`;
-            const titleText = esc(t.text || '');
-
-            //-----------------------------------------Hacer ajuste del colspan="15" de acuerdo a la tabla
-            const newTitle = `
-            <tr class="titulo-row" data-titulo="${titleId}">
-                <td colspan="11">
-                <div class="d-flex justify-content-between align-items-center">
-                    <input type="text" class="form-control w-90 titulo-text" name="titulos_text[${titleId}]" value="${titleText}" placeholder="Ingrese título Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">
-                    <input type="hidden" class="titulo-id" name="titulos_ids[]" value="${titleId}">
-                    <td><button type="button" class="btn btn-danger btnEliminarTitulo">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                    </button></td>
-                </div>
-                </td>
-            </tr>
-            `;
-            $('#dynamicTable tbody').append(newTitle);
-        });
-
         // Recrear filas (inserción debajo del título correspondiente)
         (data.rows || []).forEach(function(r){
             const titleId = r.titleId || 'sin_titulo';
@@ -220,53 +197,6 @@ $(document).ready(function() {
                 // Título no existe (sin_titulo u otro caso) -> agregar al final
                 $('#dynamicTable tbody').append($newRow);
             }
-        });
-
-        // Recrear Longitudes guardadas (data.longs)
-        (data.longs || []).forEach(function(l){
-
-            const titleId = l.titleId || 'sin_titulo';
-            const value   = esc(l.text || '');
-            //-----------------------------------------Hacer ajuste del colspan="14" de acuerdo a la tabla
-            const newLong = `
-                <tr class="long-row" data-titulo="${titleId}">
-                    <td colspan="10">Longitud Inspeccionada</td>
-                    <td>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <input type="text"
-                                class="form-control w-90 long-text"
-                                name="Long_Inspecc[${titleId}][]"
-                                value="${value}"
-                                placeholder="Ingrese Longitud Inspeccionada...">
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminar">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </div>
-                    </td>
-                </tr>
-            `;
-            //-----------------------------------------Hacer ajuste de las filas a poner contando titulos y longitudes
-            // 🔎 Buscar filas reales del bloque
-            const $titleRow = $(`#dynamicTable tbody tr.titulo-row[data-titulo="${titleId}"]`);
-            const $rowsBlock = $titleRow.nextUntil('.titulo-row');
-
-            if ($rowsBlock.length >= 10) { // si hay al menos 11 filas en el bloque
-                const $nfila = $rowsBlock
-                    .not('.long-row')
-                    .eq(9); // fila índice 9 = fila 10 (0-based)
-
-                if ($nfila.length) { 
-                    $nfila.after(newLong);
-                } else {
-                    $rowsBlock.last().after(newLong);
-                }
-            } else {
-                // fallback: al final del bloque
-                $rowsBlock.last().after(newLong);
-            }
-
         });
 
         // Reindexar numeración visible y actualizar contadores
@@ -315,18 +245,19 @@ $(document).ready(function() {
             let numFilas = parseInt($('#numRows').val());
             // Recontar filas existentes que NO son títulos
             rowCountGlobal = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
-            let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+            //let lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
 
             for (let i = 0; i < numFilas; i++) {
             rowCount++; // Incrementar el contador general de filas
             rowCountGlobal++; // Incrementar el contador global de filas Solo es visualmente esta variable
-
+            //<tr data-titulo="${lastTitle}">
             let newRow = `
-                <tr data-titulo="${lastTitle}">
+                
+                <tr>
                     <td>${rowCountGlobal} <input type="hidden" value="${rowCount}">
-                    <td><input type="text" class="form-control" name="Elemento[${lastTitle}][]" placeholder="Elemento" value="${rowCountGlobal}"></td>
-                    <td><input type="text" class="form-control" name="Promedio[${lastTitle}][]" placeholder="Promedio"></td>
-                    <td><input type="text" class="form-control" name="Composicion[${lastTitle}][]" placeholder="Composicion"></td>
+                    <td><input type="text" class="form-control" name="Elemento[]" placeholder="Elemento" value="${rowCountGlobal}"></td>
+                    <td><input type="text" class="form-control" name="Promedio[]" placeholder="Promedio"></td>
+                    <td><input type="text" class="form-control" name="Composicion[]" placeholder="Composicion"></td>
                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>
             `;

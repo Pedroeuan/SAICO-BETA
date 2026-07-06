@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Usuarios')
+@section('title', 'Procedimientos')
 
 @section('css')
 <!--datatable -->
@@ -31,28 +31,37 @@
     <div class="box ">
             <br>
         <div class="box-body">
-        <h3 align="center">Normas Registradas</h3>
+        <h3 align="center">Procedimientos Registrados</h3>
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Variable</th>
+                        <th>PDF</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($Normas_IM as $Norma)
+                @foreach($Procedimientos as $Procedimiento)
                     <tr>
-                        <td>{{ $Norma->Nombre_Espe }}</td>
-                        <td>{{ $Norma->Variable }}</td>
-                            <td>
-                                <a href= "{{route('Normas_IM.Edit',['id'=>$Norma->idnormas_im]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                            </td>
-
-                            <td>
-                                <button type="button" class="btn btn-danger btnEliminar" idNorma="{{$Norma->idnormas_im}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                            </td>
+                        <td>{{ $Procedimiento->Nombre }}</td>
+                        <td>
+                            @if (empty($Procedimiento->PDF) || in_array($Procedimiento->PDF, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                    <i class="far fa-file-pdf"></i>
+                                </span>
+                            @else ($Procedimiento->PDF)
+                                <a href="{{ asset('storage/' . $Procedimiento->PDF) }}" target="_blank" class="btn btn-primary">
+                                    <i class="far fa-file-pdf"></i> 
+                                </a>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('Procedimientos.edit', ['id' => $Procedimiento->idProcedimiento]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btnEliminarProcedimiento" idProcedimiento="{{ $Procedimiento->idProcedimiento }}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -112,10 +121,10 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
-    $(document).on("click", ".btnEliminar", function() {
-        var idNorma = $(this).attr("idNorma");
+    $(document).on("click", ".btnEliminarProcedimiento", function() {
+        var idProcedimiento = $(this).attr("idProcedimiento");
         Swal.fire({
-            title: "¿Desea eliminar la Norma?",
+            title: "¿Se eliminará el Procedimiento?",
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: "Sí",
@@ -123,7 +132,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/Normas_IM/destroy/' + idNorma,
+                    url: '/Procedimientos/eliminar/' + idProcedimiento,
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}'
@@ -131,7 +140,7 @@ let table = new DataTable('#tablaJs', {
                     success: function(response) {
                         if (response.success) {
                             Swal.fire({
-                                title: "¡Eliminada!",
+                                title: "Eliminado!",
                                 text: response.message,
                                 icon: "success",
                                 didClose: function() {

@@ -77,16 +77,55 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Formato</th>
+                                                <th>Procedimiento</th>
+                                                <th>PDF</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php $count = 0; @endphp
+                                        @php 
+                                            $count = 0; 
+                                        @endphp
+                                        
                                         @foreach ($Formatos as $Formato)
                                         @php $count++; @endphp
                                         <tr id="row-{{ $Formato->idFormato }}">
+
                                                 <td>{{ $count }}</td>
+
                                                 <td><input type="text" class="form-control" name="Formato[{{ $Formato->idFormato }}]" value="{{ $Formato->Nombre ?? 'N/A' }}"></td>
+
+                                                <td>
+                                                    <div class="col-sm-50 d-flex justify-content-center">
+                                                        <div class="form-group text-center">
+                                                            <select class="form-select inputForm"
+                                                                    name="Procedimientos[{{ $Formato->idFormato }}]">
+                                                                <option value="" disabled>Seleccione un Procedimiento</option>
+
+                                                                @foreach($Procedimientos as $Procedimiento)
+                                                                    <option value="{{ $Procedimiento->idProcedimiento }}"
+                                                                        {{ $Formato->idProcedimiento == $Procedimiento->idProcedimiento ? 'selected' : '' }}>
+                                                                        {{ $Procedimiento->Nombre }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    @if ($Formato->procedimiento && $Formato->procedimiento->PDF)
+                                                        <a href="{{ asset('storage/' . $Formato->procedimiento->PDF) }}"
+                                                        class="btn btn-primary"
+                                                        target="_blank">
+                                                            <i class="far fa-file-pdf"></i>
+                                                        </a>
+                                                    @else
+                                                        <span class="btn btn-primary" style="background-color: gray; border-color: gray;">
+                                                            <i class="far fa-file-pdf"></i>
+                                                        </span>
+                                                    @endif
+                                                </td>
                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                             </tr>
                                         @endforeach
@@ -150,6 +189,27 @@
                     var newRow = `<tr>
                         <td>${rowCount}</td>
                         <td><input type="text" class="form-control" name="Formato[new_${rowCount}]" placeholder="Formato" required></td>
+                        <td>
+                            <div class="col-sm-50 d-flex justify-content-center">
+                                <div class="form-group text-center">
+                                <!--<label class="col-form-label" for="inputSuccess">PROCEDIMIENTOS:</label>-->
+                                    <select class="form-select inputForm" name="Procedimientos[new_${rowCount}]">
+                                        <option value="" selected disabled>Seleccione un Procedimiento</option> <!-- Opción por defecto -->
+                                            @foreach($Procedimientos as $Procedimiento)
+                                                <option value="{{ $Procedimiento->idProcedimiento }}">
+                                                    {{ $Procedimiento->Nombre }}
+                                                </option>
+                                            @endforeach
+                                    </select>
+                                    <!--<input type="text" name="Datos_Equipo[ID_PARTICULAS]" id="IDInputC1" value="{{ old('Datos_Equipo.ID_PARTICULAS') }}">-->
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                    <i class="far fa-file-pdf"></i>
+                                </span>
+                        </td>
                         <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                     </tr>`;
                     $('#Formato tbody').append(newRow);

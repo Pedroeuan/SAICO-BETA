@@ -293,6 +293,14 @@ return [
     */
 
     'menu' => [
+            /*[
+                'text' => 'TE ENCUENTRAS EN EL SERVIDOR DE PRUEBAS, SI QUIERES REGRESAR AL SERVIDOR DE PRODUCCIÓN DA CLIC AQUÍ',
+                'url' => 'https://www.s-aico.com/login',
+                'topnav' => true,
+                'topnav_right' => false,
+                'classes' => 'nav-link bg-warning text-dark font-weight-bold',
+            ],*/
+
                 [
                     'type' => 'navbar-notification', // Indica que este elemento es un ícono de notificaciones en la barra superior.
                     'id' => 'my-notification',       // ID único para identificar este componente (requerido para actualizarlo vía JS/AJAX).
@@ -447,7 +455,7 @@ return [
             ],
         ],*/
 
-            [
+            /*[
                 'text' => 'REPORTE',
                 'icon' => 'fas fa-clipboard',
                 'can' => 'administrador-access',
@@ -562,7 +570,7 @@ return [
                             'can' => 'equipos-access',
                         ],
                     ],
-            ],
+            ],*/
 
                // Sidebar Operativos:
                 [
@@ -579,34 +587,43 @@ return [
                     [
                         'text' => 'Crear Reportes',
                         'icon' => 'far fa-file',
-                        'url' => '/Menu/Servicios',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-
-                        'url' => '/index/ContratoProyecto',
+                        'url' => '/Page_In_Construction',
+                    ],
+                    [
+                        'text' => 'Registro de Procedimientos PND/IM',
+                        'icon' => 'fas fa-book-reader',
+                        'url' => '/Procedimientos/Create',
+                    ],
+                    [
+                        'text' => 'Lista de Procedimientos PND/IM',
+                        'icon' => 'far fa-list-alt',
+                        'url' => '/index/Procedimientos',
                     ],
                     [
                         'text' => 'Registro de Pruebas PND/IM',
                         'icon' => 'fas fa-indent',
-                        'url' => '/Pruebas/Create',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Pruebas PND/IM',
                         'icon' => 'fas fa-table',
-                        'url' => '/index/Pruebas',
+                        'url' => '/Page_In_Construction',
 
                     ],
                     [
                         'text' => 'Registro de Normas IM',
                         'icon' => 'far fa-list-alt',
-                        'url' => '/Normas_IM/Create',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
-                        'text' => 'Lista deNormas IM',
+                        'text' => 'Lista de Normas IM',
                         'icon' => 'far fa-list-alt',
-                        'url' => '/index/Normas_IM',
+                        'url' => '/Page_In_Construction',
                     ],
                 ],
             ],
@@ -622,12 +639,12 @@ return [
                         [
                             'text' => 'Registro OC',
                             'icon' => 'fas fa-chart-line',
-                            'url' => '/OC/createOC',
+                            'url' => '/Page_In_Construction',
                         ],
                         [
                             'text' => 'Ordenes de Compras',
                             'icon' => 'fas fa-clipboard-list',
-                            'url' => '/OC/indexOC',
+                            'url' => '/Page_In_Construction',
                         ],
                         
                     ],

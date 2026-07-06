@@ -1536,11 +1536,25 @@ class FOR_PINS_05_01Controller extends Controller
         */
 
         // Solo generarlo si no existe
-        if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
+        $validatedData['Datos_Equipo']['idEquipo'] =
+            $validatedData['Datos_Equipo']['idEquipo']
+            ?? $datosEquipoActuales['idEquipo']
+            ?? null;
 
-            $validatedData['Datos_Equipo']['QR_TOKEN'] =
-                (string) Str::uuid();
-        }
+        $validatedData['Datos_Equipo']['idTransductor'] =
+            $validatedData['Datos_Equipo']['idTransductor']
+            ?? $datosEquipoActuales['idTransductor']
+            ?? null;
+
+        $validatedData['Datos_Equipo']['idBlock'] =
+            $validatedData['Datos_Equipo']['idBlock']
+            ?? $datosEquipoActuales['idBlock']
+            ?? null;
+
+        $validatedData['Datos_Equipo']['QR_TOKEN'] =
+            $validatedData['Datos_Equipo']['QR_TOKEN']
+            ?? $datosEquipoActuales['QR_TOKEN']
+            ?? (string) Str::uuid();
         /*
         |--------------------------------------------------------------------------
         | DATOS PARA CREAR PDF + QR
