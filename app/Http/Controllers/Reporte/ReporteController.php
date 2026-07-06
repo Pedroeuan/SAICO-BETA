@@ -1192,14 +1192,15 @@ class ReporteController extends Controller
         $Prueba = prueba::where('idPrueba', $idPrueba)->first();
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
+        $Procedimiento = $formato->Procedimiento;
 
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
 
         // Obtén todos los usuario que tengan el rol Técnico
         $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
-
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos'));
+        
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento'));
     }
 
     public function indexINS2(Request $request)
@@ -1208,7 +1209,7 @@ class ReporteController extends Controller
         $Proyecto = $request->input('Proyecto');
 
         $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $contratoSeleccionado)->get();
-    // Obtener solo las rutas de los archivos firmados
+        // Obtener solo las rutas de los archivos firmados
         /*$Rerpote_Firmado = $reportesEncontrados->map(function ($reporte) {
             $detalles = json_decode($reporte->Detalles_Generales, true);
             return $detalles['Reporte_Firmado'] ?? null;
