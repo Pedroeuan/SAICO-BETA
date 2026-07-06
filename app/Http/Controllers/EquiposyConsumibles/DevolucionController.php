@@ -75,7 +75,6 @@ class DevolucionController extends Controller
 
             //preg_match('/^([A-Z]+-\d+)/', $folioBase, $matches);
             preg_match('/^(.+?\d+)([A-Z]?)\/(\d{2})$/', $folioBase, $matches);
-            //dd($folioBase, $matches);
             if (count($matches) > 0) {
                 $folioPattern = $matches[1]; // Ej: "P-001", "AB-001", "PROP-001", etc.
                 $anioPattern = substr($folioBase, -2); // Año como "24"
