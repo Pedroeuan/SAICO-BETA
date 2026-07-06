@@ -114,15 +114,16 @@
                                                 </td>
 
                                                 <td>
-                                                    @if ($Formato->idProcedimiento == 0 || !$Formato->Procedimiento || !$Formato->Procedimiento->PDF)
-                                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
-                                                                <i class="far fa-file-pdf"></i>
-                                                            </span>
-                                                        @else
-                                                            <a href="{{ asset('storage/' . $Procedimiento->PDF) }}" 
-                                                                class="btn btn-primary" target="_blank">
-                                                                    <i class="far fa-file-pdf"></i>
-                                                            </a>
+                                                    @if ($Formato->procedimiento && $Formato->procedimiento->PDF)
+                                                        <a href="{{ asset('storage/' . $Formato->procedimiento->PDF) }}"
+                                                        class="btn btn-primary"
+                                                        target="_blank">
+                                                            <i class="far fa-file-pdf"></i>
+                                                        </a>
+                                                    @else
+                                                        <span class="btn btn-primary" style="background-color: gray; border-color: gray;">
+                                                            <i class="far fa-file-pdf"></i>
+                                                        </span>
                                                     @endif
                                                 </td>
                                                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
@@ -192,7 +193,7 @@
                             <div class="col-sm-50 d-flex justify-content-center">
                                 <div class="form-group text-center">
                                 <!--<label class="col-form-label" for="inputSuccess">PROCEDIMIENTOS:</label>-->
-                                    <select class="form-select inputForm" name="Procedimientos" id="Procedimientos">
+                                    <select class="form-select inputForm" name="Procedimientos[new_${rowCount}]">
                                         <option value="" selected disabled>Seleccione un Procedimiento</option> <!-- Opción por defecto -->
                                             @foreach($Procedimientos as $Procedimiento)
                                                 <option value="{{ $Procedimiento->idProcedimiento }}">

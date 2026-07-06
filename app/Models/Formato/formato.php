@@ -5,6 +5,7 @@ namespace App\Models\Formato;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Norma_Codigo\norma_codigo;
+use App\Models\Procedimientos\Procedimiento;
 
 class formato extends Model
 {

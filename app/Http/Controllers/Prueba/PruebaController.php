@@ -145,7 +145,7 @@ class PruebaController extends Controller
 
     public function UpdateCreateFormato(Request $request, $id)
     {
-        dd($request->all());
+        //dd($request->all());
         $request->validate([
             'Norma_Codigo'  => 'required|string',
             //'Formato' => 'required|string',
@@ -173,7 +173,7 @@ class PruebaController extends Controller
             if (str_starts_with($idFormato, 'new_')) {
 
                 Formato::create([
-                    'idNorma_Codigo'   => $id,
+                    'idNorma_codigo'   => $id,
                     'idPrueba'         => $idPrueba,
                     'idProcedimiento'  => $request->input("Procedimientos.$idFormato"),
                     'Nombre'           => $nombre,
