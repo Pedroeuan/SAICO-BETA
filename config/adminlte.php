@@ -293,13 +293,13 @@ return [
     */
 
     'menu' => [
-            [
+            /*[
                 'text' => 'TE ENCUENTRAS EN EL SERVIDOR DE PRUEBAS, SI QUIERES REGRESAR AL SERVIDOR DE PRODUCCIÓN DA CLIC AQUÍ',
                 'url' => 'https://www.s-aico.com/login',
                 'topnav' => true,
                 'topnav_right' => false,
                 'classes' => 'nav-link bg-warning text-dark font-weight-bold',
-            ],
+            ],*/
 
                 [
                     'type' => 'navbar-notification', // Indica que este elemento es un ícono de notificaciones en la barra superior.
@@ -596,8 +596,18 @@ return [
                         'url' => '/index/ContratoProyecto',
                     ],
                     [
+                        'text' => 'Registro de Procedimientos PND/IM',
+                        'icon' => 'fas fa-book-reader',
+                        'url' => '/Procedimientos/Create',
+                    ],
+                    [
+                        'text' => 'Lista de Procedimientos PND/IM',
+                        'icon' => 'far fa-list-alt',
+                        'url' => '/index/Procedimientos',
+                    ],
+                    [
                         'text' => 'Registro de Pruebas PND/IM',
-                        'icon' => 'fas fa-indent',
+                        'icon' => 'far fa-file-alt',
                         'url' => '/Pruebas/Create',
                     ],
                     [
@@ -608,11 +618,11 @@ return [
                     ],
                     [
                         'text' => 'Registro de Normas IM',
-                        'icon' => 'far fa-list-alt',
+                        'icon' => 'fab fa-leanpub',
                         'url' => '/Normas_IM/Create',
                     ],
                     [
-                        'text' => 'Lista deNormas IM',
+                        'text' => 'Lista de Normas IM',
                         'icon' => 'far fa-list-alt',
                         'url' => '/index/Normas_IM',
                     ],
