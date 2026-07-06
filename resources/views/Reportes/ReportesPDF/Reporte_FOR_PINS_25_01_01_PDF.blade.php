@@ -237,8 +237,6 @@
                 </table>
 
                 <div style="margin-bottom: 4px;"></div>
-
-                <div style="margin-bottom: 4px;"></div>
             <footer>
                     <table class="datosgenerales">
                         <thead>

@@ -271,7 +271,7 @@
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 8pt;">INFORME DE ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT)</th>
+                            <th rowspan="2" style="font-size: 8pt;">INFORM DE ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT)</th>
                             <th>Versión</th>
                             <th>0</th>
                         </tr>

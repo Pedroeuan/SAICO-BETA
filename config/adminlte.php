@@ -293,6 +293,14 @@ return [
     */
 
     'menu' => [
+            /*[
+                'text' => 'TE ENCUENTRAS EN EL SERVIDOR DE PRUEBAS, SI QUIERES REGRESAR AL SERVIDOR DE PRODUCCIÓN DA CLIC AQUÍ',
+                'url' => 'https://www.s-aico.com/login',
+                'topnav' => true,
+                'topnav_right' => false,
+                'classes' => 'nav-link bg-warning text-dark font-weight-bold',
+            ],*/
+
                 [
                     'type' => 'navbar-notification', // Indica que este elemento es un ícono de notificaciones en la barra superior.
                     'id' => 'my-notification',       // ID único para identificar este componente (requerido para actualizarlo vía JS/AJAX).
@@ -585,6 +593,16 @@ return [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
                         'url' => '/Page_In_Construction',
+                    ],
+                    [
+                        'text' => 'Registro de Procedimientos PND/IM',
+                        'icon' => 'fas fa-book-reader',
+                        'url' => '/Procedimientos/Create',
+                    ],
+                    [
+                        'text' => 'Lista de Procedimientos PND/IM',
+                        'icon' => 'far fa-list-alt',
+                        'url' => '/index/Procedimientos',
                     ],
                     [
                         'text' => 'Registro de Pruebas PND/IM',

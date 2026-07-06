@@ -5,6 +5,7 @@ namespace App\Models\Formato;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Norma_Codigo\norma_codigo;
+use App\Models\Procedimientos\Procedimiento;
 
 class formato extends Model
 {
@@ -16,6 +17,7 @@ class formato extends Model
         'idFormato',
         'idNorma_codigo',
         'idPrueba',
+        'idProcedimiento',
         'Nombre',
     ];
 
@@ -39,5 +41,10 @@ class formato extends Model
     public function pruebaAplica()
     {
         return $this->hasMany(Prueba_Aplica::class, 'idFormato', 'idFormato');
+    }
+
+    public function procedimiento()
+    {
+        return $this->belongsTo(Procedimiento::class, 'idProcedimiento', 'idProcedimiento');
     }
 }

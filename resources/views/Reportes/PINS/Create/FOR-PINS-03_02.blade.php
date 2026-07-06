@@ -111,42 +111,41 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">
+                                                ¿Cliente existente?
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneCliente" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
 
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label">
-                                ¿Cliente existente?
-                                <span class="ml-3">
-                                    <label class="mr-2">
-                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="TieneCliente" value="no"> No
-                                    </label>
-                                </span>
-                            </label>
+                                            <!-- SELECT cuando es SI -->
+                                            <select id="campoClienteSelect"
+                                                    class="form-select"
+                                                    name="ClienteSelect">
+                                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                                @foreach($Clientes as $Cliente)
+                                                    <option value="{{ $Cliente->Cliente }}">
+                                                        {{ $Cliente->Cliente }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
 
-                            <!-- SELECT cuando es SI -->
-                            <select id="campoClienteSelect"
-                                    class="form-select"
-                                    name="ClienteSelect">
-                                <option value="" selected disabled>Seleccione un Cliente</option>
-                                @foreach($Clientes as $Cliente)
-                                    <option value="{{ $Cliente->Cliente }}">
-                                        {{ $Cliente->Cliente }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            <!-- INPUT cuando es NO -->
-                            <input type="text"
-                                id="campoClienteInput"
-                                class="form-control inputForm mt-2"
-                                name="ClienteInput"
-                                placeholder="Ingrese nombre del cliente"
-                                style="display:none;">
-                        </div>
-                    </div>
+                                            <!-- INPUT cuando es NO -->
+                                            <input type="text"
+                                                id="campoClienteInput"
+                                                class="form-control inputForm mt-2"
+                                                name="ClienteInput"
+                                                placeholder="Ingrese nombre del cliente"
+                                                style="display:none;">
+                                        </div>
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -256,7 +255,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
-                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{ $Procedimiento->Nombre ?? '' }}" readonly>
                                             @error('Procedimiento')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -285,6 +284,11 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $Procedimiento->idProcedimiento ?? '' }}" readonly>
+                                        </div>
+                                    </div>
                                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 

@@ -17,17 +17,17 @@
                 }
                 header {
                     position: fixed;
-                    top: -35px; /* Ajusta para que no interfiera con el margen de la pÃ¡gina */
+                    top: -55px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
-                    height: auto;
+                    height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
                     font-family: 'arial', sans-serif;
                 }
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: 30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -37,23 +37,12 @@
                 }
 
                 body {
-                    margin-top: 25px;
-                    margin-right: 0;
-                    margin-bottom: 0;
-                    margin-left: 0;
-                    padding-top: 0;
-                    padding-bottom: 0;
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin: 0;*/
+                    padding-top: 0px; /* Altura del header */
+                    padding-bottom: 0px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                 }
-
-                .content {
-                    margin-top: 0;
-                }
-
-                .content-separador {
-                    height: 6px;
-                }
-
                 .datosgenerales{
                     border: 5px !important;
                     text-align: center;
@@ -105,48 +94,15 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
                 .tablaheader th {
-                    border: 1px solid black;
-                    padding: 4px 6px;
-                    vertical-align: middle;
-                    line-height: 1.15;
+                    /*width: 70%;*/
+                    border: 1px solid black; 
                 }
 
-                /* Igualar encabezado al PDF de fotos */
-                header {
-                    top: -45px;
-                }
-
-                footer {
-                    bottom: 30px;
-                }
-
-                body {
-                    margin-top: 27px;
-                }
-
-                .datosgenerales {
-                    font-size: 9px !important;
-                    font-family: 'arial', sans-serif;
-                }
-
-                .lineaInferior {
-                    font-size: 8px;
-                }
-
-                .tablaheader {
-                    font-size: 9px;
-                }
-
-                .tablaheader th {
-                    padding: 0;
-                    vertical-align: middle;
-                    line-height: normal;
-                }
 
         .encabezadoAzul{
             text-align: center;
@@ -236,75 +192,121 @@
             </style>
         </head>
         <body>
+            @php
+                // Reconstruye la configuracion persistida para aplicar rowspan en PDF.
+                $tablaCombinacionConfig = $tablaCombinacionConfig ?? ($Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? []);
+
+                if (is_string($tablaCombinacionConfig)) {
+                    $tablaCombinacionConfig = json_decode($tablaCombinacionConfig, true);
+                }
+
+                if (!is_array($tablaCombinacionConfig)) {
+                    $tablaCombinacionConfig = [];
+                }
+
+                $tablaCombinacionConfig = array_values(array_filter(array_map(function ($merge) {
+                    if (!is_array($merge)) {
+                        return null;
+                    }
+
+                    $groupId = !empty($merge['groupId']) ? (string) $merge['groupId'] : 'sin_titulo';
+                    $field = (string) ($merge['field'] ?? '');
+                    $startRow = isset($merge['startRow']) ? (int) $merge['startRow'] : -1;
+                    $rowspan = isset($merge['rowspan']) ? (int) $merge['rowspan'] : 1;
+
+                    if ($field === '' || $startRow < 0 || $rowspan < 2) {
+                        return null;
+                    }
+
+                    return [
+                        'groupId' => $groupId,
+                        'field' => $field,
+                        'startRow' => $startRow,
+                        'rowspan' => $rowspan,
+                    ];
+                }, $tablaCombinacionConfig)));
+
+                $obtenerCombinacionTabla = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                    foreach ($mergeConfig as $merge) {
+                        if (
+                            ($merge['groupId'] ?? 'sin_titulo') === $groupId &&
+                            ($merge['field'] ?? '') === $field &&
+                            (int) ($merge['startRow'] ?? -1) === $rowIndex &&
+                            (int) ($merge['rowspan'] ?? 1) > 1
+                        ) {
+                            return $merge;
+                        }
+                    }
+
+                    return null;
+                };
+
+                $esCeldaOcultaPorCombinacion = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                    foreach ($mergeConfig as $merge) {
+                        $inicio = (int) ($merge['startRow'] ?? -1);
+                        $rowspan = (int) ($merge['rowspan'] ?? 1);
+                        $fin = $inicio + $rowspan - 1;
+
+                        if (
+                            ($merge['groupId'] ?? 'sin_titulo') === $groupId &&
+                            ($merge['field'] ?? '') === $field &&
+                            $rowIndex > $inicio &&
+                            $rowIndex <= $fin
+                        ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                };
+
+                // Mantiene el indice real por grupo para que el PDF use la misma numeracion del merge guardado.
+                $contadorFilasPorGrupo = [];
+            @endphp
 
             <header>
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
-    
-                                <div style="
-                                    width:100%;
-                                    height:7.2%;
-                                    text-align:center;
-                                    vertical-align:middle;
-                                    padding:0;
-                                    margin:0;
-                                ">
-
-                                    @if(!empty($QR_PDF))
-                                    <img
-                                        src="{{ $QR_PDF }}"
-                                        alt="QR"
-                                        style="
-                                            width:65px;
-                                            height:65px;
-                                            display:block;
-                                            margin:auto;
-                                            padding:0;
-                                        "
-                                    >
-                                    @endif
-                                </div>
-
+                            <th rowspan="4" style="width: 400%; font-size: 9pt;">
+                                INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES
                             </th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-05/01</th>
-                            <th rowspan="3" style="width: 80%;">
-    
-                                <div style="
-                                    width:100%;
-                                    height:7.2%;
-                                    text-align:center;
-                                    vertical-align:middle;
-                                    padding:0;
-                                    margin:0;
-                                ">
 
+                            <th rowspan="4" style="width:85%; padding:0; margin:0;">
+                                @if(!empty($QR_PDF))
+                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                        <img
+                                            src="{{ $QR_PDF }}"
+                                            alt="QR"
+                                            style="width:70px; height:70px; display:block; margin:auto; padding:0;"
+                                        >
+                                    </div>
+                                @endif
+                            </th>
+
+                            <th style="width: 60%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-05/01</th>
+
+                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                                <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
                                     <img
                                         src="{{ $Logo }}"
                                         alt="Logo"
-                                        style="
-                                            width:65px;
-                                            height:65px;
-                                            display:block;
-                                            margin:auto;
-                                            padding:0;
-                                        "
+                                        style="width:65px; height:65px; display:block; margin:auto; padding:0;"
                                     >
                                 </div>
-
                             </th>
-
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th rowspan="2" style="font-size: 9pt;">INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES</th>
                             <th>Versión</th>
-                            <th>3</th>
+                            <th>1</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 90%;">Fecha de elaboración</th>
+                            <th>28-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -312,8 +314,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <div style="margin-bottom: 0px;"></div>
             </header>
         
             <footer>
@@ -692,10 +692,27 @@
 
                                             {{-- FILA --}}
                                             @if (($item['tipo'] ?? null) == 'fila')
+                                                @php
+                                                    $grupoActual = $item['grupo'] ?? 'sin_titulo';
+                                                    $indiceFilaGrupo = $contadorFilasPorGrupo[$grupoActual] ?? 0;
+                                                @endphp
                                                 <tr class="juntas">
-                                                    <td>{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    @php $mergeNumeroJunta = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'numero_junta', $indiceFilaGrupo); @endphp
+                                                    @if($mergeNumeroJunta)
+                                                        <td rowspan="{{ $mergeNumeroJunta['rowspan'] }}">{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'numero_junta', $indiceFilaGrupo))
+                                                        <td>{{ $item['data']['no_junta'] ?? '' }}</td>
+                                                    @endif
+
                                                     <td>{{ $item['data']['no_indicacion'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
+
+                                                    @php $mergeAngulo = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'angulo_inspeccion', $indiceFilaGrupo); @endphp
+                                                    @if($mergeAngulo)
+                                                        <td rowspan="{{ $mergeAngulo['rowspan'] }}">{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
+                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'angulo_inspeccion', $indiceFilaGrupo))
+                                                        <td>{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
+                                                    @endif
+
                                                     <td>{{ $item['data']['dsd_cara'] ?? '' }}</td>
                                                     <td>{{ $item['data']['pierna'] ?? '' }}</td>
                                                     <td>{{ $item['data']['decibel_a'] ?? '' }}</td>
@@ -709,8 +726,17 @@
                                                     <td>{{ $item['data']['pos_y'] ?? '' }}</td>
                                                     <td>{{ $item['data']['discontinuidad'] ?? '' }}</td>
                                                     <td>{{ $item['data']['evaluacion'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['observaciones'] ?? '' }}</td>
+
+                                                    @php $mergeObservaciones = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'observaciones', $indiceFilaGrupo); @endphp
+                                                    @if($mergeObservaciones)
+                                                        <td rowspan="{{ $mergeObservaciones['rowspan'] }}">{{ $item['data']['observaciones'] ?? '' }}</td>
+                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'observaciones', $indiceFilaGrupo))
+                                                        <td>{{ $item['data']['observaciones'] ?? '' }}</td>
+                                                    @endif
                                                 </tr>
+                                                @php
+                                                    $contadorFilasPorGrupo[$grupoActual] = $indiceFilaGrupo + 1;
+                                                @endphp
                                             @endif
 
                                             {{-- LONGITUD --}}

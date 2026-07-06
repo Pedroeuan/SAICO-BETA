@@ -37,7 +37,7 @@ class NormasIMController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-        // Validar los datos del formulario
+        //Validar los datos del formulario
         $validatedData = $request->validate([
             /* Resultados Juntas */
             'Normas_IM' => 'nullable|string', // JSON con [{id,text},...]
@@ -46,16 +46,28 @@ class NormasIMController extends Controller
             'Composicion' => 'nullable|array',
         ]);
 
+        $tabla = [];
+
+        if ($request->has('Elemento')) {
+
+            foreach ($request->Elemento as $i => $elemento) {
+
+                $tabla[] = [
+                    'Elemento'     => $elemento,
+                    'Promedio'     => $request->Promedio[$i] ?? '',
+                    'Composicion'  => $request->Composicion[$i] ?? '',
+                ];
+            }
+        }
+
         $Normas_IM = new Normas_IM();
         $Normas_IM->Nombre_Espe = $request->input('NombreESP');
         $Normas_IM->Variable = $request->input('Variable');
-
-        $Normas_IM->Tabla = $request->input('Normas_IM');
-
+        $Normas_IM->Tabla = json_encode($tabla);
         $Normas_IM->Observaciones = $request->input('Observaciones');
         $Normas_IM->save();
 
-        return view('Normas_IM.create')->with('success', 'Norma registrada exitosamente.');
+        return redirect()->route('index.Normas_IM');
     }
 
     /**
@@ -73,23 +85,63 @@ class NormasIMController extends Controller
     {
         $Normas_IM = Normas_IM::where('idnormas_im', $id)->first();
 
-        
-        return view('Admin.edit', compact('Normas_IM'));
+        // Convertir JSON a arreglo PHP
+        $tabla = json_decode($Normas_IM->Tabla, true);
+
+        return view('Normas_IM.edit', compact('Normas_IM', 'tabla'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Normas_IM $normas_IM)
+    public function update(Request $request, $id)
     {
-        //
+        //dd($request->all());
+        $Normas_IM = Normas_IM::where('idnormas_im', $id)->first();
+        $validatedData = $request->validate([
+            /* Resultados Juntas */
+            'Normas_IM' => 'nullable|string', // JSON con [{id,text},...]
+            'Elemento' => 'nullable|array',
+            'Promedio' => 'nullable|array',
+            'Composicion' => 'nullable|array',
+        ]);
+
+        $tabla = [];
+
+        if ($request->has('Elemento')) {
+
+            foreach ($request->Elemento as $i => $elemento) {
+
+                $tabla[] = [
+                    'Elemento'     => $elemento,
+                    'Promedio'     => $request->Promedio[$i] ?? '',
+                    'Composicion'  => $request->Composicion[$i] ?? '',
+                ];
+            }
+        }
+
+        $Normas_IM->update([
+            'Nombre_Espe' => $request->input('NombreESP'),
+            'Variable' => $request->input('Variable'),
+            'Tabla' => json_encode($tabla),
+            'Observaciones' => $request->input('Observaciones'),
+        ]);
+
+        return redirect()->route('index.Normas_IM');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Normas_IM $normas_IM)
+    public function destroy($id)
     {
-        //
+        $Normas_IM = Normas_IM::find($id);
+    
+        if ($Normas_IM) {
+            $Normas_IM->delete();
+            return response()->json(['success' => true, 'message' => 'Norma eliminada correctamente.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No se pudo encontrar la norma.']);
+        }
     }
 }

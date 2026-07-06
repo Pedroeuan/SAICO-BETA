@@ -5,26 +5,29 @@
     <title>FORMATO FOR-PINS-05/02</title>
     <style>
         @page {
-            margin:
-            3.0cm
-            1.2cm
-            2.1cm
-            2.2cm;
-        }
-
+            margin: 
+                    /*3.0cm /* superior */
+                    /*2.1cm /* derecho */
+                    /*2.1cm /* inferior */
+                    /*2.4cm; /* izquierdo */
+                    3.0cm /* superior */
+                    1.2cm /* derecho */
+                    2.1cm /* inferior */
+                    2.2cm; /* izquierdo */
+                }
                 header {
                     position: fixed;
-                    top: -30px;
+                    top: -50px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
-                    height: auto;
+                    height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
                     font-family: 'arial', sans-serif;
                 }
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: 30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -34,17 +37,14 @@
                 }
 
                 body {
-                    margin-top: 25px;
-                    margin-right: 0;
-                    margin-bottom: 0;
-                    margin-left: 0;
-                    padding-top: 0;
-                    padding-bottom: 0;
+                    margin-top: 27px; /* Ajusta para que el contenido no se sobreponga al header */
+                    /*margin: 0;*/
+                    padding-top: 0px; /* Altura del header */
+                    padding-bottom: 0px; /* Altura del footer */
                     font-family: 'arial', sans-serif;
                 }
-
                 .datosgenerales{
-                    border: 0px !important;
+                    border: 5px !important;
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
@@ -91,51 +91,18 @@
 
                 .tablaheader {
                     border-collapse: collapse; 
-                    border-spacing: 5px;        /* Espacio entre celdas */
+                    border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
                 .tablaheader th {
-                    border: 1px solid black;
-                    padding: 4px 6px;
-                    vertical-align: middle;
-                    line-height: 1.15;
+                    /*width: 70%;*/
+                    border: 1px solid black; 
                 }
 
-                /* Igualar encabezado al PDF de fotos */
-                header {
-                    top: -40px;
-                }
-
-                footer {
-                    bottom: 30px;
-                }
-
-                body {
-                    margin-top: 27px;
-                }
-
-                .datosgenerales {
-                    font-size: 9px !important;
-                    font-family: 'arial', sans-serif;
-                }
-
-                .lineaInferior {
-                    font-size: 8px;
-                }
-
-                .tablaheader {
-                    font-size: 9px;
-                }
-
-                .tablaheader th {
-                    padding: 0;
-                    vertical-align: middle;
-                    line-height: normal;
-                }
 
         .encabezadoAzul{
             text-align: center;
@@ -171,7 +138,7 @@
             border-spacing: 0px;        /* Espacio entre celdas */
             width: 100%;
             text-align: center;
-            font-size: 9px;
+            font-size: 8px;
             table-layout: fixed;
             /*border: 1px solid black;*/
         }
@@ -206,118 +173,60 @@
             width: 100%;
             /*font-size: 10px;*/
         }
-        .rotar-texto-dividido {
-            text-align: center; /* Centra el texto horizontalmente */
-            padding: 0;
-            display: inline-block; /* Necesario para la rotación */
-            transform: rotate(270deg); /* Rota solo el texto */
-            white-space: normal;
-        }
-
-        .rotar-texto-sin-dividir {
-            text-align: center; /* Centra el texto horizontalmente */
-            padding: 0;
-            display: inline-block; /* Necesario para la rotación */
-            transform: rotate(270deg); /* Rota solo el texto */
-            white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-            max-width: 20px; /* Ajusta al ancho máximo deseado */
-        }
-
-        .observaciones-header {
-            display: inline-block;
-            text-align: center;
-            line-height: 1.1;
-            font-size: 7px;
-        }
-
-        .longitud-label {
-            border: .6px solid black !important;
-            font-weight: bold;
-            text-align: center;
-            font-size: 7px;
-            line-height: 1.1;
-            padding: 2px;
-        }
-
-        .longitud-value {
-            border: .6px solid black !important;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-            padding: 2px;
-        }
     </style>
 </head>
 <body>
     <header>
-        <table class="tablaheader">
-            <thead>
-                <tr>
-                    <th style="width: 500%;">FORMATO</th>
-                    <th rowspan="3" style="width: 80%;">
-                        <div style="
-                            width:100%;
-                            height:7.2%;
-                            text-align:center;
-                            vertical-align:middle;
-                            padding:0;
-                            margin:0;
-                        ">
-                            @if(!empty($QR_PDF))
-                            <img
-                                src="{{ $QR_PDF }}"
-                                alt="QR"
-                                style="
-                                    width:65px;
-                                    height:65px;
-                                    display:block;
-                                    margin:auto;
-                                    padding:0;
-                                "
-                            >
-                            @endif
-                        </div>
-                    </th>
-                    <th style="width: 60%;">Código:</th>
-                    <th style="width: 80%;">FOR-PINS-05/02</th>
-                    <th rowspan="3" style="width: 80%;">
-                        <div style="
-                            width:100%;
-                            height:7.2%;
-                            text-align:center;
-                            vertical-align:middle;
-                            padding:0;
-                            margin:0;
-                        ">
-                            <img
-                                src="{{ $Logo }}"
-                                alt="Logo"
-                                style="
-                                    width:65px;
-                                    height:65px;
-                                    display:block;
-                                    margin:auto;
-                                    padding:0;
-                                "
-                            >
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th rowspan="2" style="font-size: 9pt;">INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES</th>
-                    <th>Versión</th>
-                    <th>2</th>
-                </tr>
-                <tr>
-                    <th>Página</th>
-                    <th></th>
-                </tr>
-            </tbody>
-        </table>
-        <div style="margin-bottom: 2px;"></div>
-    </header>
+                <table class="tablaheader">
+                    <thead>
+                        <tr>
+                            <th rowspan="4" style="width: 400%; font-size: 9pt;">
+                                INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES
+                            </th>
+
+                            <th rowspan="4" style="width:85%; padding:0; margin:0;">
+                                @if(!empty($QR_PDF))
+                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                        <img
+                                            src="{{ $QR_PDF }}"
+                                            alt="QR"
+                                            style="width:70px; height:70px; display:block; margin:auto; padding:0;"
+                                        >
+                                    </div>
+                                @endif
+                            </th>
+
+                            <th style="width: 60%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-04/01</th>
+
+                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                                <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                    <img
+                                        src="{{ $Logo }}"
+                                        alt="Logo"
+                                        style="width:65px; height:65px; display:block; margin:auto; padding:0;"
+                                    >
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <th>Versión</th>
+                            <th>1</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 90%;">Fecha de elaboración</th>
+                            <th>28-may-26</th>
+                        </tr>
+                        <tr>
+                            <th>Página</th>
+                            <th></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </header>
 
     <footer>
         <br>

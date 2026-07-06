@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Prueba;
 use App\Models\Prueba\prueba;
 use App\Models\Norma_Codigo\norma_codigo;
 use App\Models\Formato\formato;
+use App\Models\Procedimientos\Procedimiento;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class PruebaController extends Controller
 {
@@ -98,7 +100,10 @@ class PruebaController extends Controller
 
         $Formatos = formato::where('idNorma_codigo',$Norma_Codigo->idNorma_codigo)->get();
 
-        return view('Pruebas.editformatos', compact('id','Norma_Codigo','Formatos'));
+        $Procedimientos = Procedimiento::all();
+        //dd($Formatos);
+
+        return view('Pruebas.editformatos', compact('id','Norma_Codigo','Formatos','Procedimientos'));
     }
 
     /**
@@ -140,44 +145,51 @@ class PruebaController extends Controller
 
     public function UpdateCreateFormato(Request $request, $id)
     {
-        //
+        //dd($request->all());
         $request->validate([
-            'Norma_Codigo' => 'required|string',
+            'Norma_Codigo'  => 'required|string',
+            //'Formato' => 'required|string',
+            //'Procedimiento' => 'nullable|numeric|exists:procedimientos,idProcedimiento',
         ]);
 
-        $Norma_Codigo = norma_codigo::findOrFail($id);
+        $Norma_Codigo = norma_codigo::where('idNorma_Codigo', $id)->first();
+
         $idPrueba = $Norma_Codigo->idPrueba;
-        // Actualizar los datos del equipo
-        $Norma_Codigo ->update([
-            'Nombre' => $request->input('Norma_Codigo'),
+
+        $Norma_Codigo->update([
+                'Nombre' => $request->input('Norma_Codigo'),
         ]);
-        
-        // Crear o actualizar formatos
-        if ($request->has('Formato')) {
-            foreach ($request->input('Formato') as $formatoId => $formatoNombre) {
-                if (is_numeric($formatoId)) {
-                    // Actualizar el formato existente
-                    $formato = Formato::find($formatoId);
-                    if ($formato) {
-                        $formato->update([
-                            'Nombre' => $formatoNombre,
-                        ]);
-                    }
-                } else {
-                    // Crear un nuevo formato
-                    $formato = new Formato([
-                        'idNorma_codigo' => $id,
-                        'idPrueba' => $idPrueba,
-                        'Nombre' => $formatoNombre,
-                    ]);
-                    $formato->save();
-                }
+
+        $Formato = Formato::where('idNorma_Codigo', $id)->first();
+
+        foreach ($request->input('Formato') as $idFormato => $nombre) {
+
+            $datos = [
+                'Nombre' => $nombre,
+                'idProcedimiento' => $request->input("Procedimientos.$idFormato"),
+            ];
+
+            // Si es un registro nuevo
+            if (str_starts_with($idFormato, 'new_')) {
+
+                Formato::create([
+                    'idNorma_codigo'   => $id,
+                    'idPrueba'         => $idPrueba,
+                    'idProcedimiento'  => $request->input("Procedimientos.$idFormato"),
+                    'Nombre'           => $nombre,
+                ]);
+
+            } else {
+
+                // Actualizar registro existente
+                Formato::where('idFormato', $idFormato)
+                    ->update($datos);
+
             }
         }
+        $idPrueba = $Norma_Codigo->idPrueba;
 
-        // Redirigir a una ruta específica con el parámetro $idPrueba
         return redirect()->route('Pruebas.Normas_Aplicables.normas', ['id' => $idPrueba]);
-
     }
 
 

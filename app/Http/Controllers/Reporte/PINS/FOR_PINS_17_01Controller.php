@@ -9,6 +9,7 @@ use App\Models\Prueba\prueba;
 use App\Models\Formato\formato;
 use App\Models\Reporte\reporte;
 use App\Models\Clientes\clientes;
+use App\Models\Admin\Usuario;
 use App\Models\detallesOC\detallesOC;
 use App\Models\Manifiesto\manifiesto;
 use App\Models\Reporte\Firma_Reporte;
@@ -42,10 +43,132 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PINS_17_01Controller extends Controller
 {
+    private function getPdfCandidatePaths($rutaDb)
+    {
+        if (empty($rutaDb)) {
+            return [];
+        }
+
+        $ruta = trim(str_replace('\\', '/', $rutaDb));
+        if ($ruta === '') {
+            return [];
+        }
+
+        $ruta = preg_replace('#^/?storage/#', '', $ruta);
+        $ruta = preg_replace('#^/?public/#', '', $ruta);
+        $ruta = ltrim($ruta, '/');
+
+        $candidates = [];
+
+        if (preg_match('#^([A-Za-z]:[\\/]|/)#', $rutaDb)) {
+            $candidates[] = $rutaDb;
+        }
+
+        $candidates[] = storage_path('app/public/' . $ruta);
+        $candidates[] = storage_path($ruta);
+        $candidates[] = public_path($ruta);
+        $candidates[] = public_path('storage/' . $ruta);
+        $candidates[] = public_path('public/' . $ruta);
+
+        return array_values(array_unique($candidates));
+    }
+
+    private function resolvePdfPath($rutaDb)
+    {
+        $candidates = $this->getPdfCandidatePaths($rutaDb);
+
+        foreach ($candidates as $candidate) {
+            if ($candidate && is_file($candidate)) {
+                return $candidate;
+            }
+        }
+
+        $ruta = trim(str_replace('\\', '/', $rutaDb));
+        $ruta = preg_replace('#^/?storage/#', '', $ruta);
+        $ruta = preg_replace('#^/?public/#', '', $ruta);
+        $ruta = ltrim($ruta, '/');
+
+        $storagePublicDisk = Storage::disk('public');
+        if ($storagePublicDisk->exists($ruta)) {
+            return $storagePublicDisk->path($ruta);
+        }
+
+        return null;
+    }
+
+    private function detectGhostscriptBinary()
+    {
+        $candidates = [];
+
+        foreach ([getenv('GHOSTSCRIPT_BIN'), getenv('GS_BIN'), getenv('GS_PATH')] as $envCandidate) {
+            if (!empty($envCandidate)) {
+                $candidates[] = $envCandidate;
+            }
+        }
+
+        $candidates = array_merge($candidates, [
+            'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs9.55.0\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs9.55.0\\bin\\gswin64c',
+        ]);
+
+        if (is_dir('C:\\Program Files\\gs')) {
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gswin64c*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gswin32c*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gs*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+        }
+
+        foreach (['gswin64c.exe', 'gswin64c', 'gswin32c.exe', 'gswin32c', 'gs.exe', 'gs'] as $name) {
+            $candidates[] = $name;
+        }
+
+        foreach (array_unique($candidates) as $candidate) {
+            if (empty($candidate)) {
+                continue;
+            }
+
+            if (is_string($candidate) && is_file($candidate)) {
+                return $candidate;
+            }
+
+            if (PHP_OS_FAMILY === 'Windows') {
+                $command = 'where.exe ' . escapeshellarg($candidate) . ' 2>nul';
+                exec($command, $output, $exitCode);
+
+                if ($exitCode === 0 && !empty($output[0])) {
+                    return trim($output[0]);
+                }
+            } else {
+                $command = 'command -v ' . escapeshellarg($candidate) . ' 2>/dev/null';
+                exec($command, $output, $exitCode);
+
+                if ($exitCode === 0 && !empty($output[0])) {
+                    return trim($output[0]);
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -62,7 +185,12 @@ class FOR_PINS_17_01Controller extends Controller
             ->pluck('Certificado_Actual')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+        $tecnicos = Usuario::where('id', $ID_TECNICO)
+            ->whereNotNull('cv_pdf')
+            ->pluck('cv_pdf')
+            ->toArray();
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
         Log::info('todasLasRutas', $todasLasRutas);
 
         $rutasInvalidas = ['EN ESPERA DE DATOS', 'ESPERA DE DATO', 'N/A'];
@@ -82,11 +210,23 @@ class FOR_PINS_17_01Controller extends Controller
 
         $pdfsTemporales = [];
 
-        foreach ($rutasValidas as $rutaPdf) {
-            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
+        if (!is_dir(public_path('storage')) && !is_link(public_path('storage'))) {
+            try {
+                symlink(storage_path('app/public'), public_path('storage'));
+            } catch (\Exception $e) {
+                Log::warning('No se pudo crear el enlace simbólico de storage.', ['error' => $e->getMessage()]);
+            }
+        }
 
-            if (!File::exists($rutaOriginal)) {
-                Log::warning('PDF no encontrado', ['ruta' => $rutaOriginal]);
+        foreach ($rutasValidas as $rutaPdf) {
+            $rutaOriginal = $this->resolvePdfPath($rutaPdf);
+
+            if (!$rutaOriginal || !File::exists($rutaOriginal)) {
+                Log::warning('PDF no encontrado', [
+                    'rutaDb' => $rutaPdf,
+                    'rutaOriginal' => $rutaOriginal,
+                    'rutasProbadas' => $this->getPdfCandidatePaths($rutaPdf),
+                ]);
                 continue;
             }
 
@@ -125,24 +265,47 @@ class FOR_PINS_17_01Controller extends Controller
         }
 
         $pdf = new Fpdi();
+        $paginasImportadas = 0;
 
         foreach ($pdfsTemporales as $archivoPdf) {
             try {
                 $archivoCompatible = str_replace('.pdf', '_compatible.pdf', $archivoPdf);
 
-                $comando =
-                    'gswin64c -sDEVICE=pdfwrite '
-                    . '-dCompatibilityLevel=1.4 '
-                    . '-dNOPAUSE '
-                    . '-dQUIET '
-                    . '-dBATCH '
-                    . '-sOutputFile="'
-                    . $archivoCompatible
-                    . '" "'
-                    . $archivoPdf
-                    . '"';
+                $ghostscriptBin = $this->detectGhostscriptBinary();
 
-                exec($comando);
+                if ($ghostscriptBin) {
+                    $comando = escapeshellarg($ghostscriptBin)
+                        . ' -sDEVICE=pdfwrite '
+                        . '-dCompatibilityLevel=1.4 '
+                        . '-dNOPAUSE '
+                        . '-dQUIET '
+                        . '-dBATCH '
+                        . '-sOutputFile=' . escapeshellarg($archivoCompatible)
+                        . ' ' . escapeshellarg($archivoPdf);
+
+                    exec($comando, $output, $exitCode);
+
+                    if ($exitCode !== 0 || !File::exists($archivoCompatible)) {
+                        throw new \Exception("Ghostscript falló para {$archivoPdf}. Exit code: {$exitCode}");
+                    }
+                } else {
+                    Log::warning('Ghostscript no encontrado. Se intentará reescribir el PDF con FPDI.', [
+                        'archivo' => $archivoPdf,
+                        'busqueda' => 'ruta absoluta o PATH del servicio Apache',
+                    ]);
+                    $archivoCompatible = $archivoPdf;
+                }
+
+                if (!File::exists($archivoCompatible)) {
+                    throw new \Exception("No se pudo generar el PDF compatible para {$archivoPdf}");
+                }
+
+                $pdfTest = new Fpdi();
+                $pdfTest->setSourceFile($archivoCompatible);
+                $paginasTest = $pdfTest->setSourceFile($archivoCompatible);
+                if ($paginasTest < 1) {
+                    throw new \Exception("El archivo no contiene páginas válidas para FPDI: {$archivoCompatible}");
+                }
 
                 $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
 
@@ -151,6 +314,7 @@ class FOR_PINS_17_01Controller extends Controller
                     $size = $pdf->getTemplateSize($template);
                     $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
                     $pdf->useTemplate($template);
+                    $paginasImportadas++;
                 }
             } catch (\Exception $e) {
                 Log::error('Error procesando PDF', [
@@ -159,6 +323,19 @@ class FOR_PINS_17_01Controller extends Controller
                 ]);
                 continue;
             }
+        }
+
+        if ($paginasImportadas === 0) {
+            Log::warning('No se pudieron importar páginas del PDF unificado. Se generará un PDF de fallback.', [
+                'contrato' => $Contrato,
+                'noReporte' => $No_Reporte,
+                'archivos' => $pdfsTemporales,
+            ]);
+
+            $pdf = new Fpdi();
+            $pdf->AddPage();
+            $pdf->SetFont('Helvetica', '', 12);
+            $pdf->MultiCell(0, 7, "No fue posible unir los documentos PDF anexos.\n\nCausa: los archivos anexos no pudieron ser leídos por FPDI, probablemente por compresión no soportada o porque Ghostscript no está instalado en el servidor.\n\nSe recomienda instalar Ghostscript y validar que los PDFs sean compatibles.", 0, 'L');
         }
 
         $directorioFinal = "Reportes/FOR_PINS_17_01/{$Contrato}/{$No_Reporte}/";
@@ -420,6 +597,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -429,6 +607,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -444,6 +623,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -463,6 +643,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -550,11 +731,18 @@ class FOR_PINS_17_01Controller extends Controller
             $validatedData['Datos_Equipo']['QR_TOKEN']
             ?? (string) Str::uuid();
 
+        $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null;
+
         $resultadoQR = $this->Datos_QR([
             'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $ID_TECNICO,
         ]);
 
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'];
@@ -664,6 +852,7 @@ class FOR_PINS_17_01Controller extends Controller
             //'Norma_cod_Criterio_Eva' => $Norma_cod_Criterio_Eva,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
+            'ID_TECNICO' => $ID_TECNICO
             
         ];
 
@@ -743,6 +932,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -752,6 +942,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -767,6 +958,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -786,6 +978,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -856,6 +1049,11 @@ class FOR_PINS_17_01Controller extends Controller
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
+            ?? null,
         ]);
 
         $validatedData['Datos_Equipo']['QR_PDF'] =
