@@ -64,12 +64,27 @@
     vertical-align: middle;
 }
 
-.tabla-dureza input {
-    height: 22px;
-    padding: 2px;
-    text-align: center;
-    border: none;
-}
+        .tabla-dureza input {
+            height: 22px;
+            padding: 2px;
+            text-align: center;
+            border: none;
+        }
+
+        .tabla-plantilla-dureza th,
+        .tabla-plantilla-dureza td {
+            border: 1px solid #000 !important;
+            font-size: 11px;
+            padding: 3px;
+            vertical-align: middle;
+        }
+
+        .tabla-plantilla-dureza input {
+            height: 24px;
+            padding: 2px;
+            text-align: center;
+            border: 1px solid #ced4da;
+        }
 
 .tabla-dureza textarea {
     border: none;
@@ -740,7 +755,7 @@
                     <div class="alert alert alert-info alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         <h5><i class="icon fas fa-info"></i> Información</h5>
-                        <p> <b>Selecciona celdas solo de Descripcion, Horario u Observaciones. PARA COMBINACIONES</b>
+                        <p> <b>Selecciona celdas de cualquier columna para combinar.</b>
                         </p>                 
                     </div>
                     </fieldset>
@@ -807,51 +822,50 @@
                             $durezaMergeInitial = $normalizeMergeConfigView(old('Dureza_MergeConfig', '[]'));
                         @endphp
                         <input type="hidden" name="Dureza_MergeConfig" id="durezaMergeConfig" value="{{ $durezaMergeInitial }}">
-                        <div class="tabla-toolbar">
-                            <div class="toolbar-left">
-                                <label for="numRows" class="toolbar-label">Numero de filas:</label>
-                                <select id="numRows" class="form-select toolbar-select">
-                                    @for ($i = 1; $i <= 500; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="toolbar-actions">
-                                <button id="addDurezaRowsBtn" type="button" class="btn btn-success">Agregar fila</button>
-                                <button id="fillEmptyDurezaBtn" type="button" class="btn btn-warning">Rellenar vacios "---"</button>
-                                <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary">Combinar celdas</button>
-                                <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary">Separar celdas</button>
-                            </div>
-                        </div>
+                        
                         <div class="toolbar-help">
-                            Selecciona celdas solo de Descripcion, Horario u Observaciones.
+                            Selecciona celdas de cualquier columna para combinar.
                             <span id="durezaMergeSelectionInfo" class="text-primary fw-semibold ms-2"></span>
                         </div>
                         <div class="toolbar-divider"></div>
-                        <table class="table table-bordered align-middle text-center tabla-dureza" id="tablaDurezaBrinell">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="min-width: 190px;">DESCRIPCIÓN<br><small>Description</small></th>
-                                    <th style="min-width: 120px;">HORARIO<br><small>Schedule</small></th>
-                                    <th style="min-width: 120px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
-                                    <th style="min-width: 120px;">ZAC / HAZ<br>(B)</th>
-                                    <th style="min-width: 120px;">SOLDADURA<br><small>Weld</small><br>(C)</th>
-                                    <th style="min-width: 120px;">ZAC / HAZ<br>(B1)</th>
-                                    <th style="min-width: 120px;">METAL BASE<br><small>Base Metal</small><br>(A1)</th>
-                                    <th style="min-width: 180px;">OBSERVACIONES<br><small>Remarks</small></th>
-                                    <th style="width: 80px;">Eliminar</th>
-                                </tr>
-                            </thead>
-                            <tbody id="durezaBrinellBody">
+                        <div class="table-responsive mb-2">
+                            <table class="table table-bordered align-middle text-center tabla-dureza" id="tablaDurezaBrinell">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="min-width: 210px;">DESCRIPCIÓN<br><small>Description</small></th>
+                                        <th style="min-width: 130px;">HORARIO<br><small>Schedule</small></th>
+                                        <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
+                                        <th style="min-width: 125px;">ZAC / HAZ<br>(B)</th>
+                                        <th style="min-width: 125px;">SOLDADURA<br><small>Weld</small><br>(C)</th>
+                                        <th style="min-width: 125px;">ZAC / HAZ<br>(B1)</th>
+                                        <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A1)</th>
+                                        <th style="min-width: 220px;">OBSERVACIONES<br><small>Remarks</small></th>
+                                        <th style="width: 80px;">Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="durezaAutoFillBody">
+                                    <tr>
+                                        <td><input type="text" class="form-control inputForm" data-auto-fill-field="descripcion"></td>
+                                        <td><input type="text" class="form-control inputForm" data-auto-fill-field="horario"></td>
+                                        <td><input type="text" class="form-control inputForm" data-auto-fill-field="metal_base_a"></td>
+                                        <td><input type="text" class="form-control inputForm" data-auto-fill-field="zac_b"></td>
+                                        <td><input type="text" class="form-control inputForm" data-auto-fill-field="soldadura_c"></td>
+                                        <td><input type="text" class="form-control inputForm" data-auto-fill-field="zac_b1"></td>
+                                        <td><input type="text" class="form-control inputForm" data-auto-fill-field="metal_base_a1"></td>
+                                        <td><input type="text" class="form-control inputForm" data-auto-fill-field="observaciones"></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                                <tbody id="durezaBrinellBody">
                                 @foreach($durezaRows as $index => $row)
                                     <tr>
                                         <td class="mergeable-cell" data-merge-field="descripcion"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][descripcion]" value="{{ $row['descripcion'] ?? '' }}"></td>
                                         <td class="mergeable-cell" data-merge-field="horario"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][horario]" value="{{ $row['horario'] ?? '' }}"></td>
-                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][metal_base_a]" value="{{ $row['metal_base_a'] ?? '' }}"></td>
-                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][zac_b]" value="{{ $row['zac_b'] ?? '' }}"></td>
-                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][soldadura_c]" value="{{ $row['soldadura_c'] ?? '' }}"></td>
-                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][zac_b1]" value="{{ $row['zac_b1'] ?? '' }}"></td>
-                                        <td><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][metal_base_a1]" value="{{ $row['metal_base_a1'] ?? '' }}"></td>
+                                        <td class="mergeable-cell" data-merge-field="metal_base_a"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][metal_base_a]" value="{{ $row['metal_base_a'] ?? '' }}"></td>
+                                        <td class="mergeable-cell" data-merge-field="zac_b"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][zac_b]" value="{{ $row['zac_b'] ?? '' }}"></td>
+                                        <td class="mergeable-cell" data-merge-field="soldadura_c"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][soldadura_c]" value="{{ $row['soldadura_c'] ?? '' }}"></td>
+                                        <td class="mergeable-cell" data-merge-field="zac_b1"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][zac_b1]" value="{{ $row['zac_b1'] ?? '' }}"></td>
+                                        <td class="mergeable-cell" data-merge-field="metal_base_a1"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][metal_base_a1]" value="{{ $row['metal_base_a1'] ?? '' }}"></td>
                                         <td class="mergeable-cell" data-merge-field="observaciones"><input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][observaciones]" value="{{ $row['observaciones'] ?? '' }}"></td>
                                         <td>
                                             <button type="button" class="btn btn-danger btn-sm btnEliminarDureza">
@@ -860,8 +874,26 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                            <div>
+                                <label for="numRows" class="toolbar-label">Número de filas:</label>
+                                <select id="numRows" class="form-select toolbar-select">
+                                    @for ($i = 1; $i <= 500; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="toolbar-actions">
+                                <button id="addDurezaRowsBtn" type="button" class="btn btn-success custom-btn">Agregar fila</button>
+                                <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary custom-btn">Combinar celdas</button>
+                                <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary custom-btn">Separar celdas</button>
+                                <button id="fillEmptyDurezaBtn" type="button" class="btn btn-warning custom-btn">Rellenar vacíos "---"</button>
+                                <button id="toggleCombinacionBtn" type="button" class="btn btn-success custom-btn">Activar combinación</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-12">
@@ -1532,7 +1564,7 @@
 
             contadorBloque++;
 
-            if (contadorBloque === 10 && !$row.next().hasClass('long-row')) {
+            if (contadorBloque === 20 && !$row.next().hasClass('long-row')) {
                 const lastTitle = $row.data('titulo') || 'sin_titulo';
                 $row.after(
                     '<tr class="long-row" data-titulo="' + lastTitle + '">' +
@@ -1626,7 +1658,8 @@
 
     $(document).ready(function() {
         configurarMetodoYEquipo();
-    });
+    });
+
     /*FOR-PIMP-02_B_04*/
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('FOR-PIMP-02_B_04');
