@@ -53,6 +53,8 @@ class NotificacionController extends Controller
 
     public function crearNotificacionesCertificados()
     {
+        Log::info('***********************');
+        Log::info('INICIO DE NOTIFICACIONES');
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
         $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
@@ -271,11 +273,15 @@ class NotificacionController extends Controller
                 }
             }
         }
+        Log::info('FIN DE NOTIFICACIONES');
+        Log::info('***********************');
     }
 
 
     public function crearNotificacionesCertificadosInterno()
     {
+        Log::info('***********************');
+        Log::info('INICIO DE NOTIFICACIONES INTERNO');
         // Obtener fechas límite para las consultas
         $fechaActual = Carbon::now();
         $fecha45DiasAntes = $fechaActual->copy()->addDays(45)->toDateString();
@@ -494,6 +500,8 @@ class NotificacionController extends Controller
                 }
             }
         }
+        Log::info('FIN DE NOTIFICACIONES INTERNO');
+        Log::info('***********************');
     }
 
     public function getNotificaciones()

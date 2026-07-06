@@ -455,7 +455,7 @@ return [
             ],
         ],*/
 
-            [
+            /*[
                 'text' => 'REPORTE',
                 'icon' => 'fas fa-clipboard',
                 'can' => 'administrador-access',
@@ -570,7 +570,7 @@ return [
                             'can' => 'equipos-access',
                         ],
                     ],
-            ],
+            ],*/
 
                // Sidebar Operativos:
                 [
@@ -587,13 +587,12 @@ return [
                     [
                         'text' => 'Crear Reportes',
                         'icon' => 'far fa-file',
-                        'url' => '/Menu/Servicios',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-
-                        'url' => '/index/ContratoProyecto',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Registro de Procedimientos PND/IM',
@@ -607,24 +606,24 @@ return [
                     ],
                     [
                         'text' => 'Registro de Pruebas PND/IM',
-                        'icon' => 'far fa-file-alt',
-                        'url' => '/Pruebas/Create',
+                        'icon' => 'fas fa-indent',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Pruebas PND/IM',
                         'icon' => 'fas fa-table',
-                        'url' => '/index/Pruebas',
+                        'url' => '/Page_In_Construction',
 
                     ],
                     [
                         'text' => 'Registro de Normas IM',
-                        'icon' => 'fab fa-leanpub',
-                        'url' => '/Normas_IM/Create',
+                        'icon' => 'far fa-list-alt',
+                        'url' => '/Page_In_Construction',
                     ],
                     [
                         'text' => 'Lista de Normas IM',
                         'icon' => 'far fa-list-alt',
-                        'url' => '/index/Normas_IM',
+                        'url' => '/Page_In_Construction',
                     ],
                 ],
             ],
@@ -640,12 +639,12 @@ return [
                         [
                             'text' => 'Registro OC',
                             'icon' => 'fas fa-chart-line',
-                            'url' => '/OC/createOC',
+                            'url' => '/Page_In_Construction',
                         ],
                         [
                             'text' => 'Ordenes de Compras',
                             'icon' => 'fas fa-clipboard-list',
-                            'url' => '/OC/indexOC',
+                            'url' => '/Page_In_Construction',
                         ],
                         
                     ],
