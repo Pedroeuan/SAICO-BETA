@@ -70,6 +70,7 @@ use App\Http\Controllers\Reporte\PINS\FOR_PINS_11_02Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
 use App\Http\Controllers\solicitud_AD\SolicitudADController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\Procedimientos\ProcedimientoController;
 use App\Http\Controllers\Vehiculos\panelController;
 use App\Http\Controllers\Vehiculos\VehiculoController; //controlador a vehiculos
 use App\Http\Controllers\Vehiculos\SalidaVehiculoController; //accesso a salidas de vehiculos
@@ -168,6 +169,20 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::get('/ReportesindexManifiesto', [ReporteController::class, 'ReportesindexManifiesto'])->name('ReportesindexManifiesto');
         /*Rutas de controlador para duplicar los datos y redirigir el Reporte*/
         Route::get('/Next/Reporte/{id}', [ReporteController::class, 'Next_Reporte'])->name('Next.Reporte');
+
+        /*PROCEDIMIENTOS*/
+        /*Vista Menu Procedimientos*/
+        Route::get('/index/Procedimientos', [ProcedimientoController::class, 'index'])->name('index.Procedimientos');
+        /*vista Procedimientos, Norma. Codio y Formato*/
+        Route::get('/Procedimientos/Create', [ProcedimientoController::class, 'create'])->name('Procedimientos.Create');
+        /*Ruta de Guardado*/
+        Route::post('/Procedimiento/Store', [ProcedimientoController::class, 'store'])->name('Procedimientos.store');
+        /*Rutas de Vistas Procedimientos/Norma_Codigo*/
+        Route::get('/Procedimientos/edit/{id}', [ProcedimientoController::class, 'edit'])->name('Procedimientos.edit');
+        /*Ruta de Actualización*/
+        Route::post('/Procedimientos/update/{id}', [ProcedimientoController::class, 'update'])->name('Procedimientos.update');
+        /*Ruta de Eliminación-del procedimiento index*/
+        Route::delete('/Procedimientos/eliminar/{id}', [ProcedimientoController::class, 'destroy'])->name('Procedimientos.destroy');
 
         /*PRUEBAS*/
         /*Vista Menu Pruebas*/
