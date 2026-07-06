@@ -336,6 +336,7 @@
                                     </div>
 
                                     <input type="hidden" name="componentes_titulos_data" id="componentes_titulos_hidden">
+                                    <input type="hidden" name="Tabla_CombinacionConfig_Componentes" id="tablaCombinacionConfigComponentes" value="{{ old('Tabla_CombinacionConfig_Componentes', $Datos_Equipo['TABLA_COMBINACION_CONFIG_COMPONENTES'] ?? '[]') }}">
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
                                             <label for="componentesNumRows">Número de Filas:</label>
@@ -484,6 +485,7 @@
                                     </table>
                                     </div>
                                     <input type="hidden" id="titulos_hidden" name="titulos_data">
+                                    <input type="hidden" name="Tabla_CombinacionConfig" id="tablaCombinacionConfig" value="{{ old('Tabla_CombinacionConfig', $Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? '[]') }}">
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
@@ -1051,6 +1053,31 @@
     $(document).ready(function() {
         let componentesTituloCount = $('#componentesTable tbody tr.componentes-title-row').length;
         let componentesRowCount = $('#componentesTable tbody tr.componentes-data-row').length;
+        let componentesMergeAdmin = null;
+
+        // Inicializa la combinacion independiente de la tabla de componentes.
+        function inicializarCombinacionComponentes() {
+            if (!window.ReportesCombinacionCeldasAgrupadas || !$('#componentesTable tbody').length) {
+                return;
+            }
+
+            componentesMergeAdmin = window.ReportesCombinacionCeldasAgrupadas.crearAdministrador({
+                tbodySelector: '#componentesTable tbody',
+                hiddenSelector: '#tablaCombinacionConfigComponentes',
+                modeToggleAfterSelector: '#componentesPreFillBtn',
+                dataRowSelector: 'tr.componentes-data-row',
+                inferirColumnasCombinables: true
+            });
+
+            componentesMergeAdmin.init();
+        }
+
+        // Reaplica merges al cambiar la estructura de la tabla.
+        function refrescarCombinacionComponentes() {
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.refresh();
+            }
+        }
 
         function componentesLastTitle() {
             const $lastTitle = $('#componentesTable tbody tr.componentes-title-row').last();
@@ -1096,6 +1123,7 @@
 
             $('#componentesTable tbody').append(newTitle);
             componentesUpdateTitulos();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesAddBtn').click(function() {
@@ -1122,16 +1150,29 @@
 
                 $('#componentesTable tbody').append(newRow);
             }
+
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('click', '.btnEliminarComponente', function() {
-            $(this).closest('tr').remove();
+            const $fila = $(this).closest('tr');
+
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.handleDeleteRow($fila);
+            }
+
+            $fila.remove();
             componentesUpdateRowNumbers();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('click', '.btnEliminarTituloComponente', function() {
             const $title = $(this).closest('tr.componentes-title-row');
             const titleId = $title.data('titulo');
+
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.clearGroup(titleId);
+            }
 
             $('#componentesTable tbody tr').filter(function() {
                 return $(this).data('titulo') === titleId;
@@ -1139,6 +1180,7 @@
 
             componentesUpdateTitulos();
             componentesUpdateRowNumbers();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('input', '.componentes-titulo-text', componentesUpdateTitulos);
@@ -1149,6 +1191,8 @@
                     $(this).val('----');
                 }
             });
+
+            refrescarCombinacionComponentes();
         });
 
         document.querySelectorAll('#componentesInputRow .componentes-default-input').forEach(function(input) {
@@ -1165,6 +1209,11 @@
                 });
             });
         });
+
+        inicializarCombinacionComponentes();
+        componentesUpdateTitulos();
+        componentesUpdateRowNumbers();
+        refrescarCombinacionComponentes();
 
         $('form').on('submit', componentesUpdateTitulos);
     });
@@ -1570,4 +1619,6 @@
             });
     });
 </script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas.js') }}"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas_Edit.js') }}"></script>
 @endsection
