@@ -18,6 +18,7 @@ use App\Models\Lineal_Ideal\Lineal_Ideal;
 use App\Models\Norma_Codigo\norma_codigo;
 use App\Models\OrdenServicio\Firmantes_OS;
 use App\Models\PruebaAplica\Prueba_Aplica;
+use App\Models\Procedimientos\Procedimiento;
 use App\Models\OrdenServicio\Orden_Servicio;
 use App\Models\EquiposyConsumibles\devolucion;
 use App\Models\Solicitudes\detalles_solicitud;
@@ -26,6 +27,7 @@ use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Admin\Usuario;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -998,14 +1000,15 @@ class ReporteController extends Controller
         $Buscar_idFormato = formato::where('idFormato',$Obtener_idFormato)->first();
         /*Obtener el Nombre del Formato */
         $Nombre_Formato = $Buscar_idFormato->Nombre;
+        $idProcedimiento = $Buscar_idFormato->idProcedimiento;
+        //$Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)->first();
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
-
         // Obtén todos los usuario que tengan el rol Técnico
         $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento'));
 
     }
 
@@ -1192,7 +1195,8 @@ class ReporteController extends Controller
         $Prueba = prueba::where('idPrueba', $idPrueba)->first();
         $formato = formato::where('idFormato', $idFormato)->first();
         $Nombre_Formato = $formato ? $formato->Nombre : null; // Obtener el nombre del formato como string
-        $Procedimiento = $formato->Procedimiento;
+        $idProcedimiento = $formato->idProcedimiento;
+        $Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)->first();
 
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
