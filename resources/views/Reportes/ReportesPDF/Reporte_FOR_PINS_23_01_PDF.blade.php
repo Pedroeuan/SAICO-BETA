@@ -784,7 +784,7 @@
                             <tr><th colspan="18">RESULTADOS</th></tr>
                         </thead>
 
-                            <thead><tr class="sinBordeth"><th colspan="18"></th></tr></thead> <!-- Fila vacia -->
+                            <thead><tr class="sinBorÑdeth"><th colspan="18"></th></tr></thead> <!-- Fila vacia -->
 
                                 <thead>
                                     <tr class="celdaGrisResultados">

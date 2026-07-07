@@ -27,6 +27,7 @@ use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Models\Procedimientos\Procedimiento;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -204,6 +205,8 @@ class FOR_PINS_04_01Controller extends Controller
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
         $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
+        $idsConsumibles = $datosParaCrearQR['idsConsumibles'] ?? [];
+        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? [];
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = [
@@ -239,7 +242,12 @@ class FOR_PINS_04_01Controller extends Controller
             ->pluck('cv_pdf')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
+        $Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)
+            ->whereNotNull('PDF')
+            ->pluck('PDF')
+            ->toArray();
+
+            $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos, $Procedimiento));
 
         Log::info('todasLasRutas', $todasLasRutas);
 
@@ -800,6 +808,7 @@ class FOR_PINS_04_01Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|string',
             
             /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1012,6 +1021,7 @@ class FOR_PINS_04_01Controller extends Controller
         $idPenetrante = $validatedData['Datos_Equipo']['ID_PENETRANTES'] ?? null;
         $idRemovedor = $validatedData['Datos_Equipo']['ID_REMOVEDOR'] ?? null;
         $idRevelador = $validatedData['Datos_Equipo']['ID_REVELEADOR'] ?? null;
+        $idProcedimiento = $validatedData['Detalles_Generales']['idProcedimiento'] ?? null;
         $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
             ?? $request->input('Firmas_Reportes2.ID_TECNICO')
             ?? $request->input('Firmas_Reportes3.ID_TECNICO')
@@ -1028,6 +1038,7 @@ class FOR_PINS_04_01Controller extends Controller
             'idRevelador'  => $idRevelador,
             'qr_token'     => $validatedData['Datos_Equipo']['QR_TOKEN'],
             'ID_TECNICO' => $ID_TECNICO,
+            'idProcedimiento' => $idProcedimiento,
         ];
 
         // Generar QR y PDF
@@ -1360,6 +1371,7 @@ class FOR_PINS_04_01Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|string',
             
             /*DATOS DE LA INSPECCIÓN*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1552,6 +1564,7 @@ class FOR_PINS_04_01Controller extends Controller
             'idPenetrante' => $idPenetrante,
             'idRemovedor' => $idRemovedor,
             'idRevelador' => $idRevelador,
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
 
             // Token del QR público
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
