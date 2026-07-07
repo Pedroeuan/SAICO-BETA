@@ -284,6 +284,7 @@
                                         </div>
                                     </div>
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     <div style="margin-bottom: 5px;"></div>
 
                                         <div class="table-responsive">

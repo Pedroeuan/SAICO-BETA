@@ -258,6 +258,7 @@
                                     </div>
                                     
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS</div>
                                     @php
                                         $datosPINS25 = $Grupo_Juntas_Re ?? [];
                                         $Componentes_Detalles_Re = $datosPINS25['componentes'] ?? [];
