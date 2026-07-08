@@ -957,6 +957,7 @@ class ManifiestoController extends Controller
         $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
         $Observaciones = $request->input('Observaciones_Devolucion');
         $Condiciones = $request->input('Condiciones_Retorno');
+        $Fecha_Devolucion = $request->input('Fecha_Devolucion');
         $ScanPDF = 'ESPERA DE DATO';
 
         // Obtener los ids de las solicitudes en formato array
@@ -992,15 +993,14 @@ class ManifiestoController extends Controller
             $idManifiesto = DB::table('manifiestos')
             ->where('idSolicitud', $idSolicitud)
             ->value('idManifiestos'); // Obtener solo el valor de idManifiesto
-            Log::info('idManifiesto: ', ['idManifiesto' => $idManifiesto]);
-            $Fecha = Carbon::now();
+            //Log::info('idManifiesto: ', ['idManifiesto' => $idManifiesto]);
             // Crear una nueva devolución
             $Devoluciones = new devolucion;
             $Devoluciones->idManifiestos = $idManifiesto;
             $Devoluciones->idSolicitud = $idSolicitud;
             $Devoluciones->Entrega = $EntregaDevolucion;
             $Devoluciones->Recibe = $RecibeDevolucion;
-            $Devoluciones->Fecha = $Fecha;
+            $Devoluciones->Fecha = $Fecha_Devolucion;
             $Devoluciones->Observaciones = $Observaciones;
             $Devoluciones->Condiciones = $Condiciones;
             $Devoluciones->ScanPDF = $ScanPDF;
@@ -1110,6 +1110,7 @@ class ManifiestoController extends Controller
         $RecibeDevolucion = $request->input('Recibe_Nombre_Devolucion');
         $Observaciones = $request->input('Observaciones_Devolucion');
         $Condiciones = $request->input('Condiciones_Retorno');
+        $Fecha_Devolucion = $request->input('Fecha_Devolucion');
 
         // Obtener los ids de las solicitudes en formato array
         $idsSolicitud = json_decode($request->input('idSolicitudes'), true);
@@ -1142,7 +1143,7 @@ class ManifiestoController extends Controller
                 [
                     'Entrega' => $EntregaDevolucion,
                     'Recibe' => $RecibeDevolucion,
-                    'Fecha' => $Fecha,
+                    'Fecha' => $Fecha_Devolucion,
                     'Condiciones' => $Condiciones,
                     'Observaciones' => $Observaciones,
                     //Agregar ScanPDF

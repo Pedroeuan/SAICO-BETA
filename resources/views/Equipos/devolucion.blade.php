@@ -61,7 +61,7 @@
                         Fecha Actual
                 @endif
                 </label>
-                <input type="text" class="form-control inputForm" name="Fecha_Actual_Devolucion" value="@if($devoluciones){{ $devoluciones->formatted_date }}@else {{ $FechaActual->format('d-m-Y') }} @endif" readonly>
+                <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Fecha_Devolucion"  placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Fecha_Devolucion') }}" required>
             </div>
         </div>
             
@@ -162,6 +162,7 @@
                     <th>ECO</th>
                     <th>Serie</th>
                     <th>Cantidad</th>
+                    <th>Fecha de Devolución</th>
                     <th>Devolver</th>
                 </tr>
             </thead>
@@ -175,6 +176,7 @@
                         <td>{{ $dato['Nombre'] }}</td>
                         <td>{{ $dato['Eco'] }}</td>
                         <td>{{ $dato['Serie'] }}</td>
+
                         <td>
                             <!-- Establecer valor máximo con max="{{ $dato['cantidad'] }}" -->
                             @if($dato['cantidad'] == 1)
@@ -182,6 +184,9 @@
                                     @else
                                 <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="1" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input" required>
                             @endif
+                        </td>
+                        <td>
+                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Fecha[{{ $dato['idGeneral_EyC'] }}]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Fecha.'.$dato['idGeneral_EyC']) }}">
                         </td>
                         <td>
                             <a href="#" class="btn btn-info btn-devolver" role="button" data-nombre="{{ $dato['Nombre'] }}" data-folio="{{ $dato['Folio'] }}"><i class="fas fa-undo-alt" aria-hidden="true"></i></a>
@@ -203,7 +208,7 @@
             </div>
             @if(count($datosManifiesto) > 0)
                 <div class="container d-flex justify-content-center mb-3">
-                    <button type="button" class="btn btn-warning" id="btnDevolverTodo">
+                    <button type="button" class="btn btn-warning" id="btnDevolverTodo" disabled>
                         Devolver Todo
                     </button>
                 </div>
@@ -306,6 +311,32 @@ $(document).ready(function() {
 /*Devolver Todo*/
 document.getElementById('btnDevolverTodo').addEventListener('click', function () {
 
+    var table = $('#tablaJs').DataTable();
+
+    let fechas = {};
+    let faltaFecha = false;
+
+    table.rows().nodes().to$().find('input[name^="Fecha"]').each(function () {
+
+        const id = this.name.match(/\[(.*?)\]/)[1];
+
+        fechas[id] = this.value;
+
+        if (!this.value) {
+            faltaFecha = true;
+        }
+    });
+
+        if (faltaFecha) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Fecha requerida',
+                text: 'Debe capturar la fecha de devolución para todos los equipos.'
+            });
+
+            return;
+        }
+
     Swal.fire({
         title: '¿Devolver TODO?',
         html: '<b>Esta acción es irreversible.</b><br>Se regresarán todos los elementos al almacén.',
@@ -328,6 +359,7 @@ document.getElementById('btnDevolverTodo').addEventListener('click', function ()
                 },
                 body: JSON.stringify({
                     idSolicitudes: {!! json_encode($idsSolicitud) !!},
+                    fechas: fechas,
                     devolverTodo: true
                 })
             })
@@ -375,7 +407,15 @@ $(document).ready(function() {
             const nombre = this.getAttribute('data-nombre'); // Obtener el nombre del atributo data-nombre
             const cantidad = row.find('input[name^="cantidad"]').val(); // Obtener la cantidad
             const folio = $(this).data('folio'); // Obtener el folio del atributo data-folio
-            //console.log($(this).data());
+            const fecha = row.find('input[name^="Fecha"]').val();
+            if(fecha === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Fecha requerida',
+                    text: 'Por favor, ingresa una fecha de devolución antes de continuar.',
+                });
+                return; // Salir de la función si la fecha está vacía
+            }
             // Confirmación de SweetAlert2
             Swal.fire({
                 title: '¿Estás seguro?',
@@ -394,7 +434,8 @@ $(document).ready(function() {
                             _token: '{{ csrf_token() }}', // Agregar token CSRF
                             idGeneral_EyC: idGeneral_EyC,
                             cantidad: cantidad,
-                            folio: folio
+                            folio: folio,
+                            Fecha: fecha
                         },
                         success: function(response) {
                             Swal.fire('Devuelto', response.success, 'success');
