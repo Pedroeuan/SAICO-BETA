@@ -53,15 +53,18 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label class="col-form-label" for="inputSuccess">
+                    Fecha
+                    <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Fecha_Devolucion"
                 @if($devoluciones)
                         @if($devoluciones->formatted_date) 
-                            Fecha de Devolución  
+                            value="{{ $devoluciones->Fecha }}"
                         @endif
                     @else  
-                        Fecha Actual
+                            value="{{ old('Fecha_Devolucion') ?? '' }}"
                 @endif
+                    required> 
                 </label>
-                <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Fecha_Devolucion"  placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Fecha_Devolucion') }}" required>
+                
             </div>
         </div>
             
@@ -209,7 +212,7 @@
             </div>
             @if(count($datosManifiesto) > 0)
                 <div class="container d-flex justify-content-center mb-3">
-                    <button type="button" class="btn btn-warning" id="btnDevolverTodo" disabled>
+                    <button type="button" class="btn btn-warning" id="btnDevolverTodo">
                         Devolver Todo
                     </button>
                 </div>
