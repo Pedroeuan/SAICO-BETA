@@ -108,28 +108,30 @@
                 <label><input type="checkbox" class="toggle-col" data-col="6" checked>Lote</label>
                 <label><input type="checkbox" class="toggle-col" data-col="7" checked>Stock</label>
                 <label><input type="checkbox" class="toggle-col" data-col="8" checked>Disponibilidad</label>
-                <label><input type="checkbox" class="toggle-col" data-col="9" checked>Ubicación</label>
-                <label><input type="checkbox" class="toggle-col" data-col="10" checked>Factura</label>
-                <label><input type="checkbox" class="toggle-col" data-col="11" checked>No.Certificado</label>
-                <label><input type="checkbox" class="toggle-col" data-col="12" checked>Certificado</label>
-                <label><input type="checkbox" class="toggle-col" data-col="13" checked>Prox. Fecha Calibración/Caducidad</label> <!--10 -->
-                <label><input type="checkbox" class="toggle-col" data-col="14" checked>Días Restantes Cal</label>
-                <label><input type="checkbox" class="toggle-col" data-col="15" checked>Mantenimiento Preventivo</label>
-                <label><input type="checkbox" class="toggle-col" data-col="16" checked>Intervalo de Tiempo</label>
-                <label><input type="checkbox" class="toggle-col" data-col="17" checked>Numero de Reporte</label>
-                <label><input type="checkbox" class="toggle-col" data-col="18" checked>Fecha Mantenimiento</label>
-                <label><input type="checkbox" class="toggle-col" data-col="19" checked>Prox. Fecha Mantenimiento</label>
-                <label><input type="checkbox" class="toggle-col" data-col="20" checked>Días Restantes Man</label>
-                <label><input type="checkbox" class="toggle-col" data-col="21" checked>Presentación</label>
-                <label><input type="checkbox" class="toggle-col" data-col="22" checked>Planos</label>
-                <label><input type="checkbox" class="toggle-col" data-col="23" checked>Editar</label>
-                <label><input type="checkbox" class="toggle-col" data-col="24" checked>Baja</label>
+                <label><input type="checkbox" class="toggle-col" data-col="9" checked>Estado</label>
+                <label><input type="checkbox" class="toggle-col" data-col="10" checked>Ubicación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="11" checked>Factura</label>
+                <label><input type="checkbox" class="toggle-col" data-col="12" checked>No.Certificado</label>
+                <label><input type="checkbox" class="toggle-col" data-col="13" checked>Certificado</label>
+                <label><input type="checkbox" class="toggle-col" data-col="14" checked>Prox. Fecha Calibración/Caducidad</label>
+                <label><input type="checkbox" class="toggle-col" data-col="15" checked>Días Restantes Cal</label>
+                <label><input type="checkbox" class="toggle-col" data-col="16" checked>Mantenimiento Preventivo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="17" checked>Intervalo de Tiempo</label>
+                <label><input type="checkbox" class="toggle-col" data-col="18" checked>Numero de Reporte</label>
+                <label><input type="checkbox" class="toggle-col" data-col="19" checked>Fecha Mantenimiento</label>
+                <label><input type="checkbox" class="toggle-col" data-col="20" checked>Prox. Fecha Mantenimiento</label>
+                <label><input type="checkbox" class="toggle-col" data-col="21" checked>Días Restantes Man</label>
+                <label><input type="checkbox" class="toggle-col" data-col="22" checked>Presentación</label>
+                <label><input type="checkbox" class="toggle-col" data-col="23" checked>Planos</label>
+                <label><input type="checkbox" class="toggle-col" data-col="24" checked>Editar</label>
+                <label><input type="checkbox" class="toggle-col" data-col="25" checked>Baja</label>
                 <br>
                 <label><input type="checkbox" id="checkEquipos"> Equipos</label>
                 <label style="margin-left:20px;"><input type="checkbox" id="checkBlock"> Block</label>
                 <label style="margin-left:20px;"><input type="checkbox" id="checkAccesorios"> Accesorios</label>
                 <label style="margin-left:20px;"><input type="checkbox" id="checkHerramientas"> Herramientas</label>
                 <label style="margin-left:20px;"><input type="checkbox" id="checkConsumibles"> Consumibles</label>
+                <label style="margin-left:20px;"><input type="checkbox" id="checkTics"> TICS</label>
                 <label style="margin-left:20px;"><input type="checkbox" id="checkMes"> Mes Actual</label>
 
             </div>
@@ -145,6 +147,7 @@
                         <th>Lote</th>
                         <th>Stock</th>
                         <th>Disponibilidad</th>
+                        <th>Estado</th>
                         <th>Ubicación</th>
                         <th>Factura</th>
                         <th>No.Certificado</th>
@@ -200,8 +203,10 @@
                                     @elseif($general_eyc->Disponibilidad_Estado=='ESPERA DE DATO')
                                         <td scope="row"><button type="button" class="btn btn-block btn-outline-info">Espera de Dato<i class="far fa-clock" aria-hidden="true"></i></td>
                                 @endif
-                                <!-- Ubicación --> 
+                                <!-- Estado --> 
                                 <td>{{ $general_eyc->lastHistorial->Tierra_Costafuera ?? 'FATIMA' }}</td>
+                                <!-- Ubicación --> 
+                                <td>{{ $general_eyc->Ubicacion ?? '*******' }}</td>
                                 <!-- Factura --> 
                                 <td scope="row"> 
                                     @if ($general_eyc->Factura == 'ESPERA DE DATO' || $general_eyc->Factura == 'EN ESPERA DE DATOS')
@@ -421,7 +426,7 @@ $('#tablaJs').on('draw.dt', function() {
 let table = new DataTable('#tablaJs', {
         columnDefs: [
         {
-            targets: [6, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24], // columnas que quieres ocultar por default
+            targets: [6, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25], // columnas que quieres ocultar por default
             visible: false
         }
     ],
@@ -457,7 +462,7 @@ let table = new DataTable('#tablaJs', {
             search: true
         },
         bottomStart: {
-            pageLength: true   // 👈 ESTE ES EL IMPORTANTE
+            pageLength: true
         },
         bottomEnd: {
             paging: true
@@ -501,9 +506,9 @@ $('.toggle-col').each(function () {
 
 $('#checkMes').on('change', function () {
 
-    let colCalibracion = table.column(13).visible();
-    let colFechaMant = table.column(18).visible();
-    let colProxMant = table.column(19).visible();
+    let colCalibracion = table.column(14).visible();
+    let colFechaMant = table.column(19).visible();
+    let colProxMant = table.column(20).visible();
 
     // Validar si al menos una está visible
     if (!colCalibracion && !colFechaMant && !colProxMant) {
@@ -524,7 +529,7 @@ $('#checkMes').on('change', function () {
     table.draw();
 });
 //Detectar cambios en los checkboxes
-$('#checkEquipos, #checkBlock, #checkAccesorios , #checkHerramientas , #checkConsumibles').on('change', function () {
+$('#checkEquipos, #checkBlock, #checkAccesorios , #checkHerramientas , #checkConsumibles, #checkTics').on('change', function () {
     table.draw();
 });
 // Filtro personalizado
@@ -535,6 +540,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     let mostrarAccesorios = $('#checkAccesorios').is(':checked');
     let mostrarHerramientas = $('#checkHerramientas').is(':checked');
     let mostrarConsumibles = $('#checkConsumibles').is(':checked');
+    let mostrarTics = $('#checkTics').is(':checked');
     let filtrarMes = $('#checkMes').is(':checked');
 
     let categoria = data[0];
@@ -545,11 +551,12 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         (mostrarBlock && categoria.includes('BLOCK')) ||
         (mostrarAccesorios && categoria.includes('ACCESORIOS')) ||
         (mostrarHerramientas && categoria.includes('HERRAMIENTAS')) ||
-        (mostrarConsumibles && categoria.includes('CONSUMIBLES'))
+        (mostrarConsumibles && categoria.includes('CONSUMIBLES')) ||
+        (mostrarTics && categoria.includes('TICS'))
     );
 
     // Si NO hay ningún checkbox seleccionado → mostrar todo
-    if (!mostrarEquipos && !mostrarBlock && !mostrarAccesorios && !mostrarHerramientas && !mostrarConsumibles) {
+    if (!mostrarEquipos && !mostrarBlock && !mostrarAccesorios && !mostrarHerramientas && !mostrarConsumibles && !mostrarTics) {
         pasaCategoria = true;
     }
 
@@ -561,7 +568,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 
         // Columnas de fechas
         //let columnasFecha = [10, 15, 16];
-        let columnasFecha = [13, 18, 19];
+        let columnasFecha = [14, 19, 20];
 
         // Filtrar solo las que estén visibles (opcional pero recomendado)
         columnasFecha = columnasFecha.filter(idx => table.column(idx).visible());
@@ -588,12 +595,9 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 });
 
 function validarCheckMes() {
-    /*let colCalibracion = table.column(10).visible();
-    let colFechaMant = table.column(15).visible();
-    let colProxMant = table.column(16).visible();*/
-    let colCalibracion = table.column(13).visible();
-    let colFechaMant = table.column(18).visible();
-    let colProxMant = table.column(19).visible();
+    let colCalibracion = table.column(14).visible();
+    let colFechaMant = table.column(19).visible();
+    let colProxMant = table.column(20).visible();
 
     let habilitar = colCalibracion || colFechaMant || colProxMant;
 
