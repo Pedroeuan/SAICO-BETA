@@ -212,7 +212,7 @@
             </div>
             @if(count($datosManifiesto) > 0)
                 <div class="container d-flex justify-content-center mb-3">
-                    <button type="button" class="btn btn-warning" id="btnDevolverTodo" disabled>
+                    <button type="button" class="btn btn-warning" id="btnDevolverTodo">
                         Devolver Todo
                     </button>
                 </div>

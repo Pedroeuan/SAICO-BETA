@@ -226,29 +226,17 @@ class DevolucionController extends Controller
 
     public function devolverTodo(Request $request)
     {
-        //$idsSolicitud = $request->input('idSolicitudes');
         $idsSolicitud = $request->json('idSolicitudes');
+
         $fechas = $request->json('fechas');
-        /*if (empty($fechas)) {
-            return response()->json([
-                'error' => 'Debe capturar la fecha de devolución de todos los equipos.'
-            ], 422);
-        }*/
+
         foreach ($idsSolicitud as $idSolicitud) {
             $detalles = detalles_solicitud::where('idSolicitud', $idSolicitud)->get();
             foreach ($detalles as $detalle) {
-                // reutilizamos devolverItem manualmente:
                 // Obtener el folio correcto
                 $folio = manifiesto::where('idSolicitud', $idSolicitud)->value('Folio');
                 $idGeneral_EyC = $detalle->idGeneral_EyC;
                 $Cantidad = $detalle->Cantidad;
-                /*if (!isset($fechas[$idGeneral_EyC]) || empty($fechas[$idGeneral_EyC])) {
-                    return response()->json([
-                        'error' => "No se indicó la fecha para el equipo {$idGeneral_EyC}"
-                    ],422);
-                }*/
-                $fechaDevolucion = $fechas[$idGeneral_EyC];
-
                 $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
 
                 if (!$generalEyC) {
@@ -282,13 +270,23 @@ class DevolucionController extends Controller
                 // Obtener el campo 'Destino' para asignarlo a 'Tierra_Costafuera'
                 //$tierraCostafuera = $manifiesto->Destino;
                 $tierraCostafuera = 'FATIMA';
+                $fecha = $fechas[$idGeneral_EyC] ?? null;
+
+                Log::info('***********************');
+                Log::info('fecha: ', ['fecha' => $fecha]);
+
+                if (!$fecha) {
+                    continue; // o manejar el error
+                }
+
                 // Crear un registro en la tabla Historial_Almacen
                 $historialAlmacen = new Historial_Almacen;
                 $historialAlmacen->idAlmacen = $almacen->idAlmacen;
                 $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
                 $historialAlmacen->Tipo = 'DEVOLUCIÓN';
                 $historialAlmacen->Cantidad = $Cantidad;
-                $historialAlmacen->Fecha = $fechaDevolucion; //now()->format('Y-m-d'); //Se quita la fecha automatica y se toma la fecha que el usuario ingresa en el input
+
+                $historialAlmacen->Fecha = $fecha; // Se toma la fecha que el usuario ingresa en el input
                 $historialAlmacen->Tierra_Costafuera = $tierraCostafuera; 
 
                 $historialAlmacen->Folio = $folio;
