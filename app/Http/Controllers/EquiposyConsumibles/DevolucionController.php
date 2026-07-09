@@ -160,7 +160,7 @@ class DevolucionController extends Controller
         // Validar la solicitud
         $request->validate([
             'idGeneral_EyC' => 'required|integer',
-            'cantidad' => 'required|integer|min:1',
+            'cantidad' => 'required|integer|min:0',
             'Fecha' => 'required|date',
         ]);
 

@@ -178,12 +178,13 @@
                         <td>{{ $dato['Serie'] }}</td>
 
                         <td>
+                            <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="0" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input" required>
                             <!-- Establecer valor máximo con max="{{ $dato['cantidad'] }}" -->
-                            @if($dato['cantidad'] == 1)
-                                <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="1" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input" readonly>
+                            {{--@if($dato['cantidad'] == 1)
+                                <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="0" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input" required>
                                     @else
-                                <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="1" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input" required>
-                            @endif
+                                <input type="number" name="cantidad[{{ $dato['idGeneral_EyC'] }}]" value="{{ $dato['cantidad'] }}" min="0" max="{{ $dato['cantidad'] }}" class="form-control cantidad-input" required>
+                            @endif--}}
                         </td>
                         <td>
                             <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Fecha[{{ $dato['idGeneral_EyC'] }}]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{ old('Fecha.'.$dato['idGeneral_EyC']) }}">
@@ -288,6 +289,7 @@ $(document).ready(function() {
             // Agregar un evento 'input' a cada campo de entrada de cantidad
             input.addEventListener('input', function() {
                 const max = parseInt(this.getAttribute('max')); // Obtener el valor máximo permitido
+                const min = parseInt(this.getAttribute('min')); // Obtener el valor mínimo permitido
                 const currentValue = parseInt(this.value); // Obtener el valor actual ingresado
 
                 if (currentValue > max) {
@@ -298,6 +300,16 @@ $(document).ready(function() {
                         confirmButtonText: 'Entendido'
                     });
                     this.value = max; // Ajustar el valor al máximo permitido
+                    event.preventDefault(); // Prevenir el envío del formulario
+                }
+                if (currentValue < min) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cantidad insuficiente',
+                        text: `La cantidad mínima permitida a devolver es ${min}, si no regreso nada.`,
+                        confirmButtonText: 'Entendido'
+                    });
+                    this.value = min; // Ajustar el valor al mínimo permitido
                     event.preventDefault(); // Prevenir el envío del formulario
                 }
             });
