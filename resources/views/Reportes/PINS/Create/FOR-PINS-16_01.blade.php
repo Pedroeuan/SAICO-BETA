@@ -291,6 +291,8 @@
                                         </div>
                                     </div>
 
+                                    @include('Reportes.PINS.Partials.equipos_herramientas_selector')
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>

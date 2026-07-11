@@ -261,6 +261,7 @@
                                             <input type="text" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $idProcedimiento }}" readonly>
                                         </div>
                                     </div>
+                                    @include('Reportes.PINS.Partials.equipos_herramientas_selector')
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** LISTADO DE COMPONENTES *****************************************-->
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS LISTADO DE COMPONENTES</div>

@@ -977,6 +977,8 @@ class ReporteController extends Controller
 
         //Equipos
         $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        //Herramientas
+        $idsGeneral_EyCs_Herramientas = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','HERRAMIENTAS')->get();
         //Accesorios
         $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
@@ -1008,7 +1010,7 @@ class ReporteController extends Controller
         // Obtén todos los usuario que tengan el rol Técnico
         $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento'));
 
     }
 
@@ -1159,6 +1161,8 @@ class ReporteController extends Controller
 
         //Equipos
         $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        //Herramientas
+        $idsGeneral_EyCs_Herramientas = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','HERRAMIENTAS')->get();
         //Accesorios
         $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
@@ -1204,7 +1208,7 @@ class ReporteController extends Controller
         // Obtén todos los usuario que tengan el rol Técnico
         $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
         
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento'));
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento'));
     }
 
     public function indexINS2(Request $request)
@@ -1232,6 +1236,7 @@ class ReporteController extends Controller
         $reportes = reporte::all();
 
         $datosEquipoEncontrado = null;
+        $reporteEncontrado = null;
 
         foreach ($reportes as $reporte) {
 
@@ -1247,6 +1252,7 @@ class ReporteController extends Controller
             ) {
 
                 $datosEquipoEncontrado = $datosEquipo;
+                $reporteEncontrado = $reporte;
                 break;
             }
         }
@@ -1254,6 +1260,34 @@ class ReporteController extends Controller
         // Si no existe
         if (!$datosEquipoEncontrado) {
             abort(404, 'Reporte no encontrado');
+        }
+
+        if (
+            !empty($reporteEncontrado) &&
+            (
+                empty($datosEquipoEncontrado['PDF_UNIFICADO']) ||
+                !file_exists(
+                    storage_path(
+                        'app/public/' .
+                        str_replace('storage/', '', $datosEquipoEncontrado['PDF_UNIFICADO'])
+                    )
+                )
+            )
+        ) {
+            $pruebaAplica = Prueba_Aplica::where('idPrueba_Aplica', $reporteEncontrado->idPrueba_Aplica)->first();
+            $formatoActual = $pruebaAplica
+                ? formato::where('idFormato', $pruebaAplica->idFormato)->value('Nombre')
+                : null;
+
+            if ($formatoActual === 'FOR-PINS-16-01') {
+                app(\App\Http\Controllers\Reporte\PINS\FOR_PINS_16_01Controller::class)->FOR_PINS_16_01($reporteEncontrado->idReportes);
+            }
+
+            if ($formatoActual === 'FOR-PINS-25-01') {
+                app(\App\Http\Controllers\Reporte\PINS\FOR_PINS_25_01Controller::class)->FOR_PINS_25_01($reporteEncontrado->idReportes);
+            }
+
+            $datosEquipoEncontrado = json_decode($reporteEncontrado->fresh()->Datos_Equipo, true) ?: [];
         }
 
         // Validar PDF
