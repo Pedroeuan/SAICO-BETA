@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Registra aquí los comandos personalizados
-        Commands\CrearNotificacionesCertificados::class, 
+        Commands\CrearNotificacionesCertificados::class,
+        Commands\EnviarCorreoPrueba::class,
     ];
 
     /**
@@ -30,7 +31,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('notificaciones:crear-certificados')->daily(); //cada dia
         //$schedule->command('notificaciones:crear-certificados')->dailyAt('04:00'); //ejecutar en un horario específico (por ejemplo, a las 4 am)
         //$schedule->command('notificaciones:crear-certificados')->everyMinute(); //cada minuto
-        //$schedule->command('notificaciones:crear-certificados')->dailyAt('02:00'); //ejecutar en un horario específico (por ejemplo, a las 2 am
 
         // vehiculos 
         $schedule->job(new RevisarVencimientosVehiculosJob)->daily();
