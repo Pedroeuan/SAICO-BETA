@@ -192,8 +192,13 @@ class NotificacionController extends Controller
                             $notificacion->leida = false;
                             $notificacion->save();
                             Log::info('Enviando correo a: ' . $usuario->email);
-                            //📧 Enviar correo
-                            $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            //📧 Enviar correo (capturar excepciones para diagnóstico)
+                            try {
+                                $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            } catch (\Throwable $e) {
+                                Log::error('Error enviando correo a: ' . $usuario->email . ' - ' . $e->getMessage());
+                                Log::error($e->getTraceAsString());
+                            }
                         }
                     }
                 }
@@ -230,7 +235,12 @@ class NotificacionController extends Controller
                             $notificacion->save();
                             //📧 Enviar correo
                             Log::info('Enviando correo a: ' . $usuario->email);
-                            $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            try {
+                                $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            } catch (\Throwable $e) {
+                                Log::error('Error enviando correo a: ' . $usuario->email . ' - ' . $e->getMessage());
+                                Log::error($e->getTraceAsString());
+                            }
                         }
                     }
                 }
@@ -267,7 +277,12 @@ class NotificacionController extends Controller
                             $notificacion->save();
                             //📧 Enviar correo
                             Log::info('Enviando correo a: ' . $usuario->email);
-                            $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            try {
+                                $usuario->notify(new NotificacionCertificadoMailable($mensajeCorto, $mensajeLargoemail,$url));
+                            } catch (\Throwable $e) {
+                                Log::error('Error enviando correo a: ' . $usuario->email . ' - ' . $e->getMessage());
+                                Log::error($e->getTraceAsString());
+                            }
                         }
                     }
                 }
