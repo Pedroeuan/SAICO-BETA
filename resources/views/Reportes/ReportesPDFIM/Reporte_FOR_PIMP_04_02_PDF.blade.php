@@ -192,7 +192,8 @@
             </tr>                      
         </table>
 
-        <table class="datosgenerales">
+        @include('Reportes.partials.firmas_im_pdf')
+        <table class="datosgenerales" style="display: none;">
             <thead>
                 @if( $numFirmas == 2)
                 <!-- 2 Firmas -->
