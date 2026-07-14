@@ -117,6 +117,9 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
+@php
+    $pruebas = \App\Models\Prueba\prueba::with('norma_codigo.formato')->get();
+@endphp
 
 let table = new DataTable('#tablaJs', {
     // options
@@ -189,48 +192,198 @@ $(document).on("click", ".btnEliminarReportes", function() {
     });
 });
 
-
 $(document).on("click", ".btnSiguienteReporte", function() {
     var idReporte = $(this).attr("idReporte");
-    Swal.fire({
-        title: "Siguiente Reporte",
-        text: "¿El reporte es consecutivo? o ¿Desea crear un nuevo reporte?",
-        icon: 'question',
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Consecutivo",
-        denyButtonText: "Nuevo Reporte"
-    }).then((result) => {
+        Swal.fire({
+            title: 'Siguiente Reporte',
+            html: '¿El reporte es <span style="color:#0d6efd; font-size:16px;">CONSECUTIVO</span>? o ¿desea crear un <span style="color:#198754; font-size:16px;"> NUEVO REPORTE?</span>',
+            icon: 'question',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Consecutivo',
+            denyButtonText: 'Nuevo Reporte',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                confirmButton: 'btn btn-primary me-2',
+                denyButton: 'btn btn-success me-2',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        }).then((result) => {
         if (result.isConfirmed) {
-            $.ajax({
-                url: '/Next/Reporte/' + idReporte,
-                type: 'GET',
-                data: {
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire({
-                            title: "Eliminado!",
-                            text: response.message,
-                            icon: "success"
-                        }).then(() => {
-                            // Recargar la página después de cerrar la alerta
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire("Error!", response.message, "error");
+            const nextReporteUrl = '/Next/Reporte/' + idReporte;
+            window.location.href = nextReporteUrl;
+        } else if (result.isDenied) {
+            Swal.fire({
+                title: 'Nuevo Reporte',
+                html: `
+                    <div class="text-start">
+                        <p class="mb-3">Completa la selección del servicio para crear un nuevo reporte.</p>
+                        <form id="formModalServicios" action="{{ route('Seleccion.indexManifiesto') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Prueba Seleccionada</label>
+                                    <select class="form-select" name="Prueba" id="PruebaSelectModal" required>
+                                        <option value="">Seleccione una Prueba</option>
+                                        @foreach($pruebas->sortBy('Nombre') as $prueba)
+                                            <option value="{{ $prueba->idPrueba }}" data-text="{{ $prueba->Nombre }}">{{ $prueba->Nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Norma o Código</label>
+                                    <select class="form-select" name="NormaCodigo" id="NormaCodigoSelectModal" required></select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Formato</label>
+                                    <select class="form-select" name="Formato" id="FormatoSelectModal" required></select>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <label class="form-label" id="formatoNombreModal">IMAGEN DE LA PRUEBA SELECCIONADA</label>
+                                    <svg class="rounded" width="100%" height="180" role="img" aria-label="IMAGEN DE LA PRUEBA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                                        <title>IMAGEN DE LA PRUEBA</title>
+                                        <rect id="pruebaRectModal" width="100%" height="100%" fill="#C04040"></rect>
+                                        <image id="pruebaImagenModal" href="{{ asset('images/Menu Servicios SVG/FOCO_BLANCO.svg') }}" x="10%" y="10%" width="80%" height="70%" alt="Imagen de la prueba" />
+                                        <text id="pruebaTextoModal" x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">IMAGEN DE LA PRUEBA</text>
+                                    </svg>
+                                </div>
+                                <input type="hidden" name="formatoNombrePersonalizado" id="formatoNombrePersonalizadoModal">
+                            </div>
+                            <div class="mt-3 text-end">
+                                <button type="submit" class="btn btn-success">Guardar y Continuar</button>
+                            </div>
+                        </form>
+                    </div>
+                `,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Cerrar',
+                width: '800px',
+                didOpen: () => {
+                    const pruebaSelect = document.getElementById('PruebaSelectModal');
+                    const normaSelect = document.getElementById('NormaCodigoSelectModal');
+                    const formatoSelect = document.getElementById('FormatoSelectModal');
+                    const pruebaImagen = document.getElementById('pruebaImagenModal');
+                    const pruebaTexto = document.getElementById('pruebaTextoModal');
+                    const pruebaRect = document.getElementById('pruebaRectModal');
+                    const formatoNombreLabel = document.getElementById('formatoNombreModal');
+                    const formatoNombrePersonalizadoInput = document.getElementById('formatoNombrePersonalizadoModal');
+
+                    const pruebasAzul = [
+                        'CARACTERIZACIÓN DE MATERIALES',
+                        'DUREZAS',
+                        'PMI',
+                        'METALOGRAFÍA',
+                        'ANÁLISIS QUÍMICO',
+                        'RELEVADO DE ESFUERZOS'
+                    ];
+
+                    const nombresPersonalizados = {
+                        'FOR-PINS-03-02': 'INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS',
+                        'FOR-PINS-04-01': 'INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES',
+                        'FOR-PINS-05-01': 'INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES',
+                        'FOR-PINS-05-02': 'INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES',
+                        'FOR-PINS-06-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X',
+                        'FOR-PINS-07-01': 'INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES',
+                        'FOR-PINS-08-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD',
+                        'FOR-PINS-09-01': 'INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR',
+                        'FOR-PINS-10-01': 'INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104',
+                        'FOR-PINS-11-01': 'INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE',
+                        'FOR-PINS-11-02': 'INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA',
+                        'FOR-PINS-12-01': 'REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR',
+                        'FOR-PINS-13-01': 'INFORME DE INSPECCIÓN CON CORRIENTES EDDY',
+                        'FOR-PINS-14-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1',
+                        'FOR-PINS-15-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD',
+                        'FOR-PINS-16-01': 'INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO',
+                        'FOR-PINS-17-01': 'INSPECCIÓN CON TERMOGRAFÍA INFRARROJA',
+                        'FOR-PINS-17-01_01': 'INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS',
+                        'FOR-PINS-18-01': 'INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY',
+                        'FOR-PINS-19-01': 'INFORME DE INSPECCIÓN CON ACFM',
+                        'FOR-PINS-20-01': 'INFORME DE ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT).',
+                        'FOR-PINS-21-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO API 1104',
+                        'FOR-PINS-22-01': 'INFORME DE  INSPECCIÓN DE TUBERIA POR CORREINTES EDDY.',
+                        'FOR-PINS-23-01': 'INFORME DE INSPECCIÓN CON EL MÉTODO DE ONDAS GUIADAS',
+                        'FOR-PINS-24-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES y TOFD',
+                        'FOR-PINS-25-01': 'INSPECCIÓN VISUAL EN RSP'
+                    };
+
+                    pruebaSelect.addEventListener('change', function () {
+                        const pruebaId = this.value;
+                        const selectedText = this.options[this.selectedIndex]?.text || '';
+                        normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
+                        formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+                        if (pruebaId) {
+                            fetch(`/Obtener/normas/${pruebaId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.length > 0) {
+                                        data.forEach(norma => {
+                                            const option = document.createElement('option');
+                                            option.value = norma.idNorma_codigo;
+                                            option.textContent = norma.Nombre;
+                                            normaSelect.appendChild(option);
+                                        });
+                                    } else {
+                                        normaSelect.innerHTML = '<option value="">No hay normas disponibles</option>';
+                                    }
+                                })
+                                .catch(error => console.error('Error al obtener las normas:', error));
+                        }
+
+                        if (pruebasAzul.includes(selectedText)) {
+                            pruebaRect.setAttribute('fill', '#0070C0');
+                        } else {
+                            pruebaRect.setAttribute('fill', '#C04040');
+                        }
+                    });
+
+                    normaSelect.addEventListener('change', function () {
+                        const pruebaId = this.value;
+                        formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+                        if (pruebaId) {
+                            fetch(`/Obtener/formatos/${pruebaId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.length > 0) {
+                                        data.forEach(formato => {
+                                            const option = document.createElement('option');
+                                            option.value = formato.idFormato;
+                                            option.textContent = formato.Nombre;
+                                            option.setAttribute('data-nombre-personalizado', nombresPersonalizados[formato.Nombre] || formato.Nombre);
+                                            formatoSelect.appendChild(option);
+                                        });
+                                    } else {
+                                        formatoSelect.innerHTML = '<option value="">No hay formatos disponibles</option>';
+                                    }
+                                })
+                                .catch(error => console.error('Error al obtener los formatos:', error));
+                        }
+                    });
+
+                    formatoSelect.addEventListener('change', function () {
+                        const selectedOption = formatoSelect.options[formatoSelect.selectedIndex];
+                        if (selectedOption) {
+                            const nombrePersonalizado = selectedOption.getAttribute('data-nombre-personalizado');
+                            formatoNombreLabel.textContent = nombrePersonalizado || selectedOption.textContent;
+                            formatoNombrePersonalizadoInput.value = nombrePersonalizado || selectedOption.textContent;
+                        } else {
+                            formatoNombreLabel.textContent = 'IMAGEN DE LA PRUEBA SELECCIONADA';
+                            formatoNombrePersonalizadoInput.value = '';
+                        }
+                    });
+
+                    if (pruebaSelect.value) {
+                        pruebaSelect.dispatchEvent(new Event('change'));
                     }
-                },
-                error: function() {
-                    Swal.fire("Error!", "No se pudo eliminar el reporte.", "error");
                 }
             });
-        } else if (result.isDenied) {
-            Swal.fire("Cancelado", "", "error");
         }
     });
 });
+
 /*document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.btnSiguienteReporte').forEach(function(btn) {
         btn.addEventListener('click', function(event) {
