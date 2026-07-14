@@ -204,10 +204,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
-                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
+                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}" readonly>
                                             @error('Procedimiento')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -256,6 +256,12 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $idProcedimiento }}" readonly>
+                                        </div>
+                                    </div>
+                                    @include('Reportes.PINS.Partials.equipos_herramientas_selector')
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                     <!--***************************************** LISTADO DE COMPONENTES *****************************************-->
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS LISTADO DE COMPONENTES</div>
@@ -336,6 +342,7 @@
                                     </div>
 
                                     <input type="hidden" name="componentes_titulos_data" id="componentes_titulos_hidden">
+                                    <input type="hidden" name="Tabla_CombinacionConfig_Componentes" id="tablaCombinacionConfigComponentes" value="{{ old('Tabla_CombinacionConfig_Componentes', $Datos_Equipo['TABLA_COMBINACION_CONFIG_COMPONENTES'] ?? '[]') }}">
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                                         <div>
                                             <label for="componentesNumRows">Número de Filas:</label>
@@ -465,6 +472,7 @@
                                     </div>
 
                                     <input type="hidden" id="titulos_hidden" name="titulos_data">
+                                    <input type="hidden" name="Tabla_CombinacionConfig" id="tablaCombinacionConfig" value="{{ old('Tabla_CombinacionConfig', $Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? '[]') }}">
 
                                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
@@ -1015,6 +1023,8 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas.js') }}"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas_Edit.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -1025,6 +1035,31 @@
     $(document).ready(function() {
         let componentesTituloCount = $('#componentesTable tbody tr.componentes-title-row').length;
         let componentesRowCount = $('#componentesTable tbody tr.componentes-data-row').length;
+        let componentesMergeAdmin = null;
+
+        // Inicializa la combinacion independiente de la tabla de componentes.
+        function inicializarCombinacionComponentes() {
+            if (!window.ReportesCombinacionCeldasAgrupadas || !$('#componentesTable tbody').length) {
+                return;
+            }
+
+            componentesMergeAdmin = window.ReportesCombinacionCeldasAgrupadas.crearAdministrador({
+                tbodySelector: '#componentesTable tbody',
+                hiddenSelector: '#tablaCombinacionConfigComponentes',
+                modeToggleAfterSelector: '#componentesPreFillBtn',
+                dataRowSelector: 'tr.componentes-data-row',
+                inferirColumnasCombinables: true
+            });
+
+            componentesMergeAdmin.init();
+        }
+
+        // Reaplica merges al cambiar la estructura de la tabla.
+        function refrescarCombinacionComponentes() {
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.refresh();
+            }
+        }
 
         function componentesLastTitle() {
             const $lastTitle = $('#componentesTable tbody tr.componentes-title-row').last();
@@ -1073,6 +1108,7 @@
 
             $('#componentesTable tbody').append(newTitle);
             componentesUpdateTitulos();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesAddBtn').click(function() {
@@ -1098,16 +1134,29 @@
 
                 $('#componentesTable tbody').append(newRow);
             }
+
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('click', '.btnEliminarComponente', function() {
-            $(this).closest('tr').remove();
+            const $fila = $(this).closest('tr');
+
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.handleDeleteRow($fila);
+            }
+
+            $fila.remove();
             componentesUpdateRowNumbers();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('click', '.btnEliminarTituloComponente', function() {
             const $title = $(this).closest('tr.componentes-title-row');
             const titleId = $title.data('titulo');
+
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.clearGroup(titleId);
+            }
 
             $('#componentesTable tbody tr').filter(function() {
                 return $(this).data('titulo') === titleId;
@@ -1115,6 +1164,7 @@
 
             componentesUpdateTitulos();
             componentesUpdateRowNumbers();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('input', '.componentes-titulo-text', componentesUpdateTitulos);
@@ -1125,6 +1175,8 @@
                     $(this).val('----');
                 }
             });
+
+            refrescarCombinacionComponentes();
         });
 
         document.querySelectorAll('#componentesInputRow .componentes-default-input').forEach(function(input) {
@@ -1142,8 +1194,10 @@
             });
         });
 
+        inicializarCombinacionComponentes();
         componentesUpdateRowNumbers();
         componentesUpdateTitulos();
+        refrescarCombinacionComponentes();
     });
 
 /*Juntas-Resultados */

@@ -246,7 +246,7 @@
                         </tr>
                         <tr>
                             <th style="width: 90%;">Fecha de elaboración</th>
-                            <th>18-feb-25</th>
+                            <th>18-may-25</th>
                         </tr>
                         <tr>
                             <th>Página</th>

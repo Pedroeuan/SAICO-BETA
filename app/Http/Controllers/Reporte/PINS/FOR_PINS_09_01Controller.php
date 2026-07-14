@@ -27,6 +27,7 @@ use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Models\Procedimientos\Procedimiento;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,39 @@ use Illuminate\Support\Str;
 
 class FOR_PINS_09_01Controller extends Controller
 {
+    // Sanea la configuracion enviada desde la tabla con combinacion de celdas.
+    private function sanitizarConfiguracionCombinacionTabla($configuracionCruda)
+    {
+        $configuracion = is_string($configuracionCruda)
+            ? json_decode($configuracionCruda, true)
+            : $configuracionCruda;
+
+        if (!is_array($configuracion)) {
+            return [];
+        }
+
+        return collect($configuracion)
+            ->filter(function ($item) {
+                return is_array($item)
+                    && !empty($item['field'])
+                    && array_key_exists('startRow', $item)
+                    && array_key_exists('rowspan', $item);
+            })
+            ->map(function ($item) {
+                return [
+                    'groupId' => !empty($item['groupId']) ? (string) $item['groupId'] : 'sin_titulo',
+                    'field' => (string) $item['field'],
+                    'startRow' => max(0, (int) $item['startRow']),
+                    'rowspan' => max(2, (int) $item['rowspan']),
+                ];
+            })
+            ->unique(function ($item) {
+                return $item['groupId'] . '|' . $item['field'] . '|' . $item['startRow'];
+            })
+            ->values()
+            ->all();
+    }
+
     private function getPdfCandidatePaths($rutaDb)
     {
         if (empty($rutaDb)) {
@@ -170,6 +204,8 @@ class FOR_PINS_09_01Controller extends Controller
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
         $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
+        $idsConsumibles = $datosParaCrearQR['idsConsumibles'] ?? [];
+        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? [];
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -205,7 +241,12 @@ class FOR_PINS_09_01Controller extends Controller
             ->pluck('cv_pdf')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
+        $Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)
+            ->whereNotNull('PDF')
+            ->pluck('PDF')
+            ->toArray();
+
+            $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos, $Procedimiento));
 
 
         Log::info('todasLasRutas', $todasLasRutas);
@@ -776,6 +817,7 @@ class FOR_PINS_09_01Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -839,6 +881,7 @@ class FOR_PINS_09_01Controller extends Controller
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
+            'Tabla_CombinacionConfig' => 'nullable|string',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -962,6 +1005,12 @@ class FOR_PINS_09_01Controller extends Controller
         }
         //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+
+        // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
         $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
@@ -977,18 +1026,14 @@ class FOR_PINS_09_01Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $Contrato =
-            $validatedData['Detalles_Generales']['Contrato'];
-        $No_Reporte =
-            $validatedData['Detalles_Generales']['No_Reporte'];
-        $idSolicitud =
-            $validatedData['Detalles_Generales']['idSolicitud'] ?? null;
-        $idEquipo =
-            $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null;
-        $idTransductor =
-            $validatedData['Datos_Equipo']['ID_TR'] ?? null;
-        $idBlock =
-            $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null;
+        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'] ?? null;
+        $idEquipo = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null;
+        $idTransductor = $validatedData['Datos_Equipo']['ID_TR'] ?? null;
+        $idBlock = $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null;
+        $idBlock = $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null;
+        $idProcedimiento = $validatedData['Detalles_Generales']['idProcedimiento'] ?? null;
 
         if (empty($validatedData['Datos_Equipo']['QR_TOKEN'])) {
 
@@ -1011,6 +1056,7 @@ class FOR_PINS_09_01Controller extends Controller
             'idBlock' => $idBlock,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
             'ID_TECNICO' => $ID_TECNICO,
+            'idProcedimiento' => $idProcedimiento,
         ];
 
         /*
@@ -1324,6 +1370,21 @@ class FOR_PINS_09_01Controller extends Controller
             
         ];
 
+        // Regenera el PDF final con la tabla, firmas y fotos ya guardadas.
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? ($validatedData['Datos_Equipo']['QR_PDF'] ?? null);
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? ($validatedData['Datos_Equipo']['PDF_UNIFICADO'] ?? null);
+
+        $Reportes->update([
+            'Datos_Equipo' => json_encode(array_merge(
+                $validatedData['Datos_Equipo'],
+                [
+                    'QR_PDF' => $validatedData['Datos_Equipo']['QR_PDF'],
+                    'PDF_UNIFICADO' => $validatedData['Datos_Equipo']['PDF_UNIFICADO'],
+                ]
+            )),
+        ]);
+
         $this->OS_OC($datosParaCrearOS_OC);
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
@@ -1358,6 +1419,7 @@ class FOR_PINS_09_01Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1422,6 +1484,7 @@ class FOR_PINS_09_01Controller extends Controller
             'Long_Inspecc' => 'nullable|array',
             'Long_Inspecc.*' => 'nullable|array',
             'Long_Inspecc.*.*' => 'nullable|string|max:255',
+            'Tabla_CombinacionConfig' => 'nullable|string',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -1576,6 +1639,7 @@ class FOR_PINS_09_01Controller extends Controller
             'idTransductor' => $validatedData['Datos_Equipo']['ID_TR'],
             'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'],
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
             'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
             ?? $request->input('Firmas_Reportes2.ID_TECNICO')
             ?? $request->input('Firmas_Reportes3.ID_TECNICO')
@@ -1607,6 +1671,11 @@ class FOR_PINS_09_01Controller extends Controller
             ?? null;
 
         // Actualiza los detalles generales como JSON en la base de datos
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
@@ -1984,6 +2053,9 @@ class FOR_PINS_09_01Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        $tablaCombinacionConfig = $this->sanitizarConfiguracionCombinacionTabla(
+            $Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? '[]'
+        );
 
         $totalTitulos = 0;
         $totalFilas = 0;
@@ -2033,6 +2105,7 @@ class FOR_PINS_09_01Controller extends Controller
             'title' => 'Reporte_FOR-PINS-09_01.PDF',
             'Logo' => $Logo,
             'QR_PDF' => $qrPdf,
+            'tablaCombinacionConfig' => $tablaCombinacionConfig,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo

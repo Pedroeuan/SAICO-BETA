@@ -14,7 +14,7 @@
 
             header {
                     position: fixed;
-                    top: -45px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -60px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -48,7 +48,7 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 9px !important;
+                    font-size: 8px !important;
                     font-family: 'arial', sans-serif;
                 } 
                 
@@ -200,6 +200,70 @@
             margin-top: 0px;
             font-size: 12px;
         }
+
+        .imagenes-reporte-simple {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 12px 12px;
+            table-layout: fixed;
+        }
+
+        .imagenes-reporte-simple td {
+            vertical-align: top;
+        }
+
+        .foto-celda-simple {
+            border: 1px solid black;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        .foto-imagen-simple {
+            width: 100%;
+            height: 170px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .foto-imagen-simple img {
+            width: 100%;
+            height: 170px;
+            display: block;
+        }
+
+        .comment-simple {
+            border-top: 1px solid black;
+            padding: 6px 8px;
+            text-align: center;
+            font-size: 10px;
+            word-wrap: break-word;
+        }
+
+        .foto-vacia-simple {
+            height: 170px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 22px;
+            color: #999999;
+        }
+
+        .foto-full-table-simple {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .foto-full-table-simple .foto-celda-simple {
+            width: 100%;
+        }
+
+        .foto-full-table-simple .foto-imagen-simple {
+            height: 404px;
+        }
+
+        .foto-full-table-simple .foto-imagen-simple img {
+            height: 404px;
+        }
             </style>
         </head>
         <body>
@@ -208,10 +272,20 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INSPECCIÓN VISUAL EN RSP</th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-25/01</th>
-                            <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="4" style="width: 450%; font-size: 9pt;">
+                                INSPECCIÓN VISUAL EN RSP
+                            </th>
+                            <th rowspan="4" style="width: 90%;">
+                                @if(!empty($QR_PDF))
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                @endif
+                            </th>
+
+                            <th style="width: 70%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-25/01</th>
+                            <th rowspan="4" style="width: 90%;">
+                                <img  src="{{ $Logo }}" alt="Logo" style="width: 60%; height: auto;">  
+                            </th>
                         </tr>
                     </thead>
 
@@ -513,59 +587,54 @@
                 </table>
 
                             @php
-                                $esHojaCompleta = (count($fotosGrupo) == 1 && !empty($fotosGrupo[0]['una_hoja']) && $fotosGrupo[0]['una_hoja'] == 1);
+                                $esHojaCompleta = count($fotosGrupo) === 1
+                                    && !empty($fotosGrupo[0]['una_hoja'])
+                                    && $fotosGrupo[0]['una_hoja'] == 1;
                             @endphp
-                            <table class="imagenes-reporte">
-                                <tr>
-                                    @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
-                                        <td class="foto-container">
-                                            <img src="{{ $fotosGrupo[0]['path'] }}" alt="Foto 1">
-                                            <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
-                                        </td>
-                                        <td class="foto-container">
-                                            <img src="{{ $fotosGrupo[1]['path'] }}" alt="Foto 2">
-                                            <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
-                                        </td>
-                                        </tr><tr>
-                                        <td class="foto-container" colspan="2">
-                                            <img src="{{ $fotosGrupo[2]['path'] }}" alt="Foto 3">
-                                            <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
-                                        </td>
-                                    @else
-                                        @foreach($fotosGrupo as $index => $foto)
-                                            @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
-                                                <td class="foto-container foto-full" colspan="2">
-                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                                    <p class="comment">{{ $foto['comment'] }}</p>
-                                                </td>
-                                            @else
-                                                <td class="foto-container">
-                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                                    <p class="comment">{{ $foto['comment'] }}</p>
-                                                </td>
-                                                @if(($index + 1) % 2 == 0)
-                                                    </tr><tr>
-                                                @endif
-                                            @endif
-                                        @endforeach
-                                    @endif
 
-                                    @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
-                                        @php $faltantes = 4 - count($fotosGrupo); @endphp
-                                        @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
-                                            @for($i = 0; $i < $faltantes; $i++)
-                                                <td class="foto-container empty-box">
-                                                    <div class="cross-line"></div>
-                                                    <p class="empty-comment">&nbsp;</p>
+                            @if($esHojaCompleta)
+                                <table class="foto-full-table-simple">
+                                    <tr>
+                                        <td class="foto-celda-simple">
+                                            <div class="foto-imagen-simple">
+                                                <img src="{{ $fotosGrupo[0]['path'] }}" alt="Foto 1">
+                                            </div>
+                                            <div class="comment-simple">{{ $fotosGrupo[0]['comment'] }}</div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            @else
+                                @php
+                                    if (count($fotosGrupo) === 3) {
+                                        $filasFotos = [
+                                            [$fotosGrupo[0], $fotosGrupo[1]],
+                                            [$fotosGrupo[2], null],
+                                        ];
+                                    } else {
+                                        $filasFotos = array_chunk(array_pad($fotosGrupo, 4, null), 2);
+                                    }
+                                @endphp
+
+                                <table class="imagenes-reporte-simple">
+                                    @foreach($filasFotos as $filaFotos)
+                                        <tr>
+                                            @foreach($filaFotos as $foto)
+                                                <td class="foto-celda-simple">
+                                                    @if($foto)
+                                                        <div class="foto-imagen-simple">
+                                                            <img src="{{ $foto['path'] }}" alt="Foto">
+                                                        </div>
+                                                        <div class="comment-simple">{{ $foto['comment'] }}</div>
+                                                    @else
+                                                        <div class="foto-vacia-simple">X</div>
+                                                        <div class="comment-simple">&nbsp;</div>
+                                                    @endif
                                                 </td>
-                                                @if((count($fotosGrupo) + $i + 1) % 2 == 0)
-                                                    </tr><tr>
-                                                @endif
-                                            @endfor
-                                        @endif
-                                    @endif
-                                </tr>
-                            </table>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            @endif
 
                             {{-- Salto de página cada 4 imágenes --}}
                             @if (!$loop->last)

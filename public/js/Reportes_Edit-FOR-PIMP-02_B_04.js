@@ -81,21 +81,44 @@
         renderizarFirmas();
     }
 
+    function obtenerValoresPlantillaDureza() {
+        var valores = {};
+
+        $('#durezaAutoFillBody [data-auto-fill-field]').each(function () {
+            var campo = $(this).data('auto-fill-field');
+            valores[campo] = $(this).val() || '';
+        });
+
+        return valores;
+    }
+
+    function sincronizarCampoPlantilla(campo, valor) {
+        $('#durezaBrinellBody tr').each(function () {
+            $(this).find('input[name$="[' + campo + ']"]').val(valor);
+        });
+    }
+
+    function inicializarAutoRellenoDureza() {
+        $('#durezaAutoFillBody').on('input', '[data-auto-fill-field]', function () {
+            sincronizarCampoPlantilla($(this).data('auto-fill-field'), $(this).val() || '');
+        });
+    }
+
     // Genera filas nuevas para la tabla con columnas combinables verticalmente.
     // Si otro formato necesita mas columnas combinables, agrega aqui nuevos
     // <td class="mergeable-cell" data-merge-field="nombre_campo">...</td>.
     function construirFilaTablaCombinable(index, data) {
-        var row = data || {};
+        var row = $.extend({}, obtenerValoresPlantillaDureza(), data || {});
 
         return '' +
             '<tr>' +
                 '<td class="mergeable-cell" data-merge-field="descripcion"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][descripcion]" value="' + (row.descripcion || '') + '"></td>' +
                 '<td class="mergeable-cell" data-merge-field="horario"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][horario]" value="' + (row.horario || '') + '"></td>' +
-                '<td><input type="text" class="form-control inputForm" name="Dureza[' + index + '][metal_base_a]" value="' + (row.metal_base_a || '') + '"></td>' +
-                '<td><input type="text" class="form-control inputForm" name="Dureza[' + index + '][zac_b]" value="' + (row.zac_b || '') + '"></td>' +
-                '<td><input type="text" class="form-control inputForm" name="Dureza[' + index + '][soldadura_c]" value="' + (row.soldadura_c || '') + '"></td>' +
-                '<td><input type="text" class="form-control inputForm" name="Dureza[' + index + '][zac_b1]" value="' + (row.zac_b1 || '') + '"></td>' +
-                '<td><input type="text" class="form-control inputForm" name="Dureza[' + index + '][metal_base_a1]" value="' + (row.metal_base_a1 || '') + '"></td>' +
+                '<td class="mergeable-cell" data-merge-field="metal_base_a"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][metal_base_a]" value="' + (row.metal_base_a || '') + '"></td>' +
+                '<td class="mergeable-cell" data-merge-field="zac_b"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][zac_b]" value="' + (row.zac_b || '') + '"></td>' +
+                '<td class="mergeable-cell" data-merge-field="soldadura_c"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][soldadura_c]" value="' + (row.soldadura_c || '') + '"></td>' +
+                '<td class="mergeable-cell" data-merge-field="zac_b1"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][zac_b1]" value="' + (row.zac_b1 || '') + '"></td>' +
+                '<td class="mergeable-cell" data-merge-field="metal_base_a1"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][metal_base_a1]" value="' + (row.metal_base_a1 || '') + '"></td>' +
                 '<td class="mergeable-cell" data-merge-field="observaciones"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][observaciones]" value="' + (row.observaciones || '') + '"></td>' +
                 '<td><button type="button" class="btn btn-danger btn-sm btnEliminarDureza"><i class="fa fa-times" aria-hidden="true"></i></button></td>' +
             '</tr>';
@@ -116,7 +139,8 @@
             fillButtonSelector: '#fillEmptyDurezaBtn',
             numRowsSelector: '#numRows',
             selectionInfoSelector: '#durezaMergeSelectionInfo',
-            rowBuilder: construirFilaTablaCombinable
+            rowBuilder: construirFilaTablaCombinable,
+            modeToggleAfterSelector: '#toggleCombinacionBtn'
         });
 
         window.__FOR_PIMP_02_B_04_EDIT_CELL_MERGE_MANAGER.init();
@@ -126,6 +150,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         inicializarRellenoGeneral();
         inicializarSelectorFirmas();
+        inicializarAutoRellenoDureza();
         inicializarTablaCombinable();
     });
 }(window, window.jQuery));

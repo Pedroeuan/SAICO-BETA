@@ -14,7 +14,7 @@
 
                 header {
                     position: fixed;
-                    top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -60px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -108,92 +108,67 @@
         }
         /* ************** */
         .imagenes-reporte {
-            margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
-            width: 106%;
+            width: 100%;
             border-collapse: separate;
-            /*border-spacing: 20px; /* Espacio entre celdas */
-            border-spacing: 20px 20px; /* 20px entre columnas, 0px entre filas */
-            margin-bottom: 0;
-            table-layout: fixed; /* Fija el ancho de las celdas */
+            border-spacing: 12px 12px;
+            table-layout: fixed;
         }
 
-        .foto-container {
-            padding: 0; /* Asegura que la imagen toque el borde de la celda */
-            width: 312px;  /* Fija el ancho de la celda */
-            height: 170px; /* Fija la altura de la celda */
-            border: 1px solid black; 
+        .imagenes-reporte td {
+            vertical-align: top;
+        }
+
+        .foto-celda {
+            border: 1px solid black;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        .foto-imagen {
+            width: 100%;
+            height: 170px;
+            text-align: center;
             vertical-align: middle;
         }
 
-        .foto-container img {
-            /*object-fit: contain; /* Ajusta la imagen dentro del recuadro sin recortarla */
-            object-fit: cover; /* Llenar el espacio sin distorsionar */
-            width: 332.5px;  /* Ajusta el ancho de la celda */
-            height: 170px; /* Ajusta la altura de la celda */
+        .foto-imagen img {
+            width: 100%;
+            height: 170px;
+            display: block;
+        }
+
+        .comment {
+            border-top: 1px solid black;
+            padding: 6px 8px;
+            text-align: center;
+            font-size: 10px;
+            word-wrap: break-word;
+        }
+
+        .foto-vacia {
+            height: 170px;
+            text-align: center;
             vertical-align: middle;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            font-size: 22px;
+            color: #999999;
         }
 
-        /* Estilo para los comentarios */
-        .comment { 
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 7px; /* Espaciado entre el borde y el texto */
-            margin-top: 0px; /* Espacio entre la imagen y el comentario */
-            text-align: center; /* Centrar el texto */
-            /*font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
-            max-width: 100%; /* Para que el texto no desborde */
-            word-wrap: break-word; /* Permite que el texto se ajuste */
-        }
-        /* Estilo para los "comentarios" en blanco */
-        .empty-comment {
-            margin-top: 170px;   /* Añade espacio entre las líneas cruzadas y el comentario */
-            border-top: 1px solid black; /* Borde superior de 2px en color negro */
-            padding-top: 0px; /* Espaciado entre el borde y el texto */
-        }
-        
-        .empty-box {
-            background-color:rgb(255, 255, 255); /* Color de fondo para los cuadros vacíos */
+        .foto-full-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
         }
 
-        .cross-line {
-            width: 74%;
-            height: 0px; /* Ajusta según el tamaño de las imágenes */
-            position: relative;
+        .foto-full-table .foto-celda {
+            width: 100%;
         }
 
-        .cross-line::before,
-        .cross-line::after {
-            content: "";
-            position: absolute;
-            top: 84px; /* Ajusta esta propiedad para mover la línea hacia arriba o hacia abajo */
-            left: -21px; /* Ajusta para alinear la línea */
-            width: 152.5%; /* Aumenta el ancho de la línea */
-            height: 100%;
-            border-top: 2px solid black;
-            transform: rotate(27deg); /* Ajusta el ángulo de la primera línea */
+        .foto-full-table .foto-imagen {
+            height: 404px;
         }
 
-        .cross-line::after {
-            transform: rotate(-27deg);
-        }
-
-        .foto-full {
-            width: 100% !important;
-            height: 435px !important;
-        }
-
-        .foto-full img {
-            width: 100% !important;
-            height: 404px !important;
-            object-fit: contain;
-        }
-
-        .foto-full .comment {
-            margin-top: 0px;
-            font-size: 12px;
+        .foto-full-table .foto-imagen img {
+            height: 404px;
         }
             </style>
         </head>
@@ -201,12 +176,19 @@
 
             <header>
                 <table class="tablaheader">
-                    <thead>
+                <thead>
                         <tr>
-                            <th rowspan="4" style="width: 500%; font-size: 8pt;">INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO</th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-16/01</th>
-                            <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="4" style="width: 450%; font-size: 9pt;">
+                                INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO
+                            </th>
+                            <th rowspan="4" style="width: 90%;">
+                                @if(!empty($QR_PDF))
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                @endif
+                            </th>
+                            <th style="width: 70%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-16/01</th>
+                            <th rowspan="4" style="width: 90%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 60%; height: auto;"></th>
                         </tr>
                     </thead>
 
@@ -217,7 +199,7 @@
                         </tr>
                         <tr>
                             <th style="width: 90%;">Fecha de elaboración</th>
-                            <th>18-feb-26</th>
+                            <th>18-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -478,59 +460,54 @@
                 </table>
 
                             @php
-                                $esHojaCompleta = (count($fotosGrupo) == 1 && !empty($fotosGrupo[0]['una_hoja']) && $fotosGrupo[0]['una_hoja'] == 1);
+                                $esHojaCompleta = count($fotosGrupo) === 1
+                                    && !empty($fotosGrupo[0]['una_hoja'])
+                                    && $fotosGrupo[0]['una_hoja'] == 1;
                             @endphp
-                            <table class="imagenes-reporte">
-                                <tr>
-                                    @if(count($fotosGrupo) == 3 && !$esHojaCompleta)
-                                        <td class="foto-container">
-                                            <img src="{{ $fotosGrupo[0]['path'] }}" alt="Foto 1">
-                                            <p class="comment">{{ $fotosGrupo[0]['comment'] }}</p>
-                                        </td>
-                                        <td class="foto-container">
-                                            <img src="{{ $fotosGrupo[1]['path'] }}" alt="Foto 2">
-                                            <p class="comment">{{ $fotosGrupo[1]['comment'] }}</p>
-                                        </td>
-                                        </tr><tr>
-                                        <td class="foto-container" colspan="2">
-                                            <img src="{{ $fotosGrupo[2]['path'] }}" alt="Foto 3">
-                                            <p class="comment">{{ $fotosGrupo[2]['comment'] }}</p>
-                                        </td>
-                                    @else
-                                        @foreach($fotosGrupo as $index => $foto)
-                                            @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
-                                                <td class="foto-container foto-full" colspan="2">
-                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                                    <p class="comment">{{ $foto['comment'] }}</p>
-                                                </td>
-                                            @else
-                                                <td class="foto-container">
-                                                    <img src="{{ $foto['path'] }}" alt="Foto {{ $index + 1 }}">
-                                                    <p class="comment">{{ $foto['comment'] }}</p>
-                                                </td>
-                                                @if(($index + 1) % 2 == 0)
-                                                    </tr><tr>
-                                                @endif
-                                            @endif
-                                        @endforeach
-                                    @endif
 
-                                    @if(!$esHojaCompleta && count($fotosGrupo) < 4 && count($fotosGrupo) > 0 && count($fotosGrupo) != 3)
-                                        @php $faltantes = 4 - count($fotosGrupo); @endphp
-                                        @if(count($fotosGrupo) == 1 || count($fotosGrupo) == 2)
-                                            @for($i = 0; $i < $faltantes; $i++)
-                                                <td class="foto-container empty-box">
-                                                    <div class="cross-line"></div>
-                                                    <p class="empty-comment">&nbsp;</p>
+                            @if($esHojaCompleta)
+                                <table class="foto-full-table">
+                                    <tr>
+                                        <td class="foto-celda">
+                                            <div class="foto-imagen">
+                                                <img src="{{ $fotosGrupo[0]['path'] }}" alt="Foto 1">
+                                            </div>
+                                            <div class="comment">{{ $fotosGrupo[0]['comment'] }}</div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            @else
+                                @php
+                                    if (count($fotosGrupo) === 3) {
+                                        $filasFotos = [
+                                            [$fotosGrupo[0], $fotosGrupo[1]],
+                                            [$fotosGrupo[2], null],
+                                        ];
+                                    } else {
+                                        $filasFotos = array_chunk(array_pad($fotosGrupo, 4, null), 2);
+                                    }
+                                @endphp
+
+                                <table class="imagenes-reporte">
+                                    @foreach($filasFotos as $filaFotos)
+                                        <tr>
+                                            @foreach($filaFotos as $foto)
+                                                <td class="foto-celda">
+                                                    @if($foto)
+                                                        <div class="foto-imagen">
+                                                            <img src="{{ $foto['path'] }}" alt="Foto">
+                                                        </div>
+                                                        <div class="comment">{{ $foto['comment'] }}</div>
+                                                    @else
+                                                        <div class="foto-vacia">X</div>
+                                                        <div class="comment">&nbsp;</div>
+                                                    @endif
                                                 </td>
-                                                @if((count($fotosGrupo) + $i + 1) % 2 == 0)
-                                                    </tr><tr>
-                                                @endif
-                                            @endfor
-                                        @endif
-                                    @endif
-                                </tr>
-                            </table>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            @endif
 
                             {{-- Salto de página cada 4 imágenes --}}
                             @if (!$loop->last)

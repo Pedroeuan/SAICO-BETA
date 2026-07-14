@@ -246,10 +246,10 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{ $Procedimiento->Nombre ?? '' }}" readonly>
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -278,6 +278,11 @@
                             </div>
                         </div>
 
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $Procedimiento->idProcedimiento ?? '' }}" readonly>
+                            </div>
+                        </div>
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 
@@ -607,6 +612,7 @@
 
                         <p>
                         <input type="hidden" name="titulos_data" id="titulos_hidden">
+                        <input type="hidden" name="Tabla_CombinacionConfig" id="tablaCombinacionConfig" value="{{ old('Tabla_CombinacionConfig', '[]') }}">
                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                         <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                             <div>
@@ -1462,7 +1468,7 @@ $(document).ready(function() {
                     <td><input type="text" class="form-control" name="Ele_iden[${lastTitle}][]" placeholder="Elementos idendificados"></td>
                     <td><input type="text" class="form-control" name="-X[${lastTitle}][]" placeholder="(-X)"></td>
                     <td><input type="text" class="form-control" name="+X[${lastTitle}][]" placeholder="(+X)"></td>
-                    <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No_Ind" value="${rowCountGlobal}"></td>
+                    <td><input type="text" class="form-control" name="No_Ind[${lastTitle}][]" placeholder="No_Ind"></td>
                     <td><input type="text" class="form-control" name="Dis_rela[${lastTitle}][]" placeholder="Distancia relativa al dato (m)"></td>
                     <td><input type="text" class="form-control" name="HT1[${lastTitle}][]" placeholder="Horario Tecnico"></td>
                     <td><input type="text" class="form-control" name="HT2[${lastTitle}][]" placeholder="Horario Tecnico"></td>
@@ -1850,4 +1856,6 @@ $(document).ready(function() {
     });
 
 </script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas.js') }}"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas_Create.js') }}"></script>
 @endsection
