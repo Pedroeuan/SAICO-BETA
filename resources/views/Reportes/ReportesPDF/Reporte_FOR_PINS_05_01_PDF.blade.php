@@ -262,6 +262,27 @@
 
                 // Mantiene el indice real por grupo para que el PDF use la misma numeracion del merge guardado.
                 $contadorFilasPorGrupo = [];
+
+                // Define las columnas de datos que pueden reconstruir rowspan desde la configuracion guardada.
+                $columnasResultadoPdf = [
+                    ['field' => 'no_junta', 'valueKey' => 'no_junta'],
+                    ['field' => 'no_indicacion', 'valueKey' => 'no_indicacion'],
+                    ['field' => 'ang_inspeccion', 'valueKey' => 'ang_inspeccion'],
+                    ['field' => 'dsd_cara', 'valueKey' => 'dsd_cara'],
+                    ['field' => 'pierna', 'valueKey' => 'pierna'],
+                    ['field' => 'decibel_a', 'valueKey' => 'decibel_a'],
+                    ['field' => 'decibel_b', 'valueKey' => 'decibel_b'],
+                    ['field' => 'decibel_c', 'valueKey' => 'decibel_c'],
+                    ['field' => 'decibel_d', 'valueKey' => 'decibel_d'],
+                    ['field' => 'longitud', 'valueKey' => 'longitud'],
+                    ['field' => 'dis_angular', 'valueKey' => 'dis_angular'],
+                    ['field' => 'profundidad_a', 'valueKey' => 'profundidad_a'],
+                    ['field' => 'pos_x', 'valueKey' => 'pos_x'],
+                    ['field' => 'pos_y', 'valueKey' => 'pos_y'],
+                    ['field' => 'discontinuidad', 'valueKey' => 'discontinuidad'],
+                    ['field' => 'evaluacion', 'valueKey' => 'evaluacion'],
+                    ['field' => 'observaciones', 'valueKey' => 'observaciones'],
+                ];
             @endphp
 
             <header>
@@ -697,42 +718,19 @@
                                                     $indiceFilaGrupo = $contadorFilasPorGrupo[$grupoActual] ?? 0;
                                                 @endphp
                                                 <tr class="juntas">
-                                                    @php $mergeNumeroJunta = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'numero_junta', $indiceFilaGrupo); @endphp
-                                                    @if($mergeNumeroJunta)
-                                                        <td rowspan="{{ $mergeNumeroJunta['rowspan'] }}">{{ $item['data']['no_junta'] ?? '' }}</td>
-                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'numero_junta', $indiceFilaGrupo))
-                                                        <td>{{ $item['data']['no_junta'] ?? '' }}</td>
-                                                    @endif
+                                                    @foreach ($columnasResultadoPdf as $columnaPdf)
+                                                        @php
+                                                            $mergeColumna = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
+                                                            $estaOculta = $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
+                                                            $valorCelda = $item['data'][$columnaPdf['valueKey']] ?? '';
+                                                        @endphp
 
-                                                    <td>{{ $item['data']['no_indicacion'] ?? '' }}</td>
-
-                                                    @php $mergeAngulo = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'angulo_inspeccion', $indiceFilaGrupo); @endphp
-                                                    @if($mergeAngulo)
-                                                        <td rowspan="{{ $mergeAngulo['rowspan'] }}">{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
-                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'angulo_inspeccion', $indiceFilaGrupo))
-                                                        <td>{{ $item['data']['ang_inspeccion'] ?? '' }}</td>
-                                                    @endif
-
-                                                    <td>{{ $item['data']['dsd_cara'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['pierna'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['decibel_a'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['decibel_b'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['decibel_c'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['decibel_d'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['longitud'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['dis_angular'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['profundidad_a'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['pos_x'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['pos_y'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['discontinuidad'] ?? '' }}</td>
-                                                    <td>{{ $item['data']['evaluacion'] ?? '' }}</td>
-
-                                                    @php $mergeObservaciones = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, 'observaciones', $indiceFilaGrupo); @endphp
-                                                    @if($mergeObservaciones)
-                                                        <td rowspan="{{ $mergeObservaciones['rowspan'] }}">{{ $item['data']['observaciones'] ?? '' }}</td>
-                                                    @elseif(! $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, 'observaciones', $indiceFilaGrupo))
-                                                        <td>{{ $item['data']['observaciones'] ?? '' }}</td>
-                                                    @endif
+                                                        @if($mergeColumna)
+                                                            <td rowspan="{{ $mergeColumna['rowspan'] }}">{{ $valorCelda }}</td>
+                                                        @elseif(! $estaOculta)
+                                                            <td>{{ $valorCelda }}</td>
+                                                        @endif
+                                                    @endforeach
                                                 </tr>
                                                 @php
                                                     $contadorFilasPorGrupo[$grupoActual] = $indiceFilaGrupo + 1;

@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -55px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -45px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -228,13 +228,13 @@
                                 INFORME DE MEDICION DE ESPESORES DE PARED EN LA TUBERIA Y ELEMENTOS ESTRUCTURALES
                             </th>
 
-                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                            <th rowspan="4" style="width:80%; padding:0; margin:0; text-align:center; vertical-align:middle;">
                                 @if(!empty($QR_PDF))
-                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                                    <div style="width:100%; text-align:center; vertical-align:middle; padding:0; margin:0;">
                                         <img
                                             src="{{ $QR_PDF }}"
                                             alt="QR"
-                                            style="width:70px; height:70px; display:block; margin:auto; padding:0;"
+                                            style="width:60px; height:60px; display:block; margin:0 auto; padding:0;"
                                         >
                                     </div>
                                 @endif
@@ -434,6 +434,10 @@
                     </table>
             </footer>
             
+            @php
+                // Mantiene el consecutivo real por grupo entre bloques/paginas del PDF.
+                $contadorFilasPorGrupo = [];
+            @endphp
             @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
             <div class="content">
                 <table class="datosgenerales">
@@ -634,6 +638,47 @@
                                     <th style="width: 50px;">Observaciones</th>
                                 </tr>
                             </thead>
+                            @php
+                                $tablaCombinacionConfig = collect($tablaCombinacionConfig ?? [])->map(function ($item) {
+                                    return ['groupId' => $item['groupId'] ?? 'sin_titulo', 'field' => $item['field'] ?? '', 'startRow' => isset($item['startRow']) ? (int) $item['startRow'] : -1, 'rowspan' => isset($item['rowspan']) ? (int) $item['rowspan'] : 1];
+                                });
+                                $obtenerCombinacionTabla = function ($groupId, $field, $rowIndex) use ($tablaCombinacionConfig) {
+                                    return $tablaCombinacionConfig->first(function ($item) use ($groupId, $field, $rowIndex) {
+                                        return ($item['groupId'] ?? 'sin_titulo') === ($groupId ?: 'sin_titulo') && ($item['field'] ?? '') === $field && (int) ($item['startRow'] ?? -1) === $rowIndex && (int) ($item['rowspan'] ?? 1) > 1;
+                                    });
+                                };
+                                $esCeldaOcultaPorCombinacion = function ($groupId, $field, $rowIndex) use ($tablaCombinacionConfig) {
+                                    return $tablaCombinacionConfig->contains(function ($item) use ($groupId, $field, $rowIndex) {
+                                        $inicio = (int) ($item['startRow'] ?? -1);
+                                        $rowspan = (int) ($item['rowspan'] ?? 1);
+                                        return ($item['groupId'] ?? 'sin_titulo') === ($groupId ?: 'sin_titulo') && ($item['field'] ?? '') === $field && $rowspan > 1 && $rowIndex > $inicio && $rowIndex < ($inicio + $rowspan);
+                                    });
+                                };
+                                $columnasResultadoPdf = ['ID', 'elemento', 'Ã˜nom', 'Ã˜ext', 'nivel', '12_00', '01_00', '01_30', '02_00', '03_00', '04_00', '04_30', '05_00', '06_00', '07_00', '07_30', '08_00', '09_00', '10_00', '10_30', '11_00', 'tmin', 'tmax', 'tprom', 'observaciones'];
+                                $columnasResultadoPdf = ['ID', 'elemento', 'Ønom', 'Øext', 'nivel', '12_00', '01_00', '01_30', '02_00', '03_00', '04_00', '04_30', '05_00', '06_00', '07_00', '07_30', '08_00', '09_00', '10_00', '10_30', '11_00', 'tmin', 'tmax', 'tprom', 'observaciones'];
+                                $obtenerValorCampoPdf = function ($data, $campo) {
+                                    if (!is_array($data)) {
+                                        return '';
+                                    }
+
+                                    if (array_key_exists($campo, $data)) {
+                                        return $data[$campo];
+                                    }
+
+                                    $aliases = [
+                                        'Ønom' => ['Ã˜nom', 'ÃƒËœnom'],
+                                        'Øext' => ['Ã˜ext', 'ÃƒËœext'],
+                                    ];
+
+                                    foreach ($aliases[$campo] ?? [] as $alias) {
+                                        if (array_key_exists($alias, $data)) {
+                                            return $data[$alias];
+                                        }
+                                    }
+
+                                    return '';
+                                };
+                            @endphp
                             <tbody>
                                 @foreach ($bloque as $item)
                                             @if (!is_array($item))
@@ -651,6 +696,25 @@
 
                                             {{-- FILA --}}
                                             @if (($item['tipo'] ?? null) == 'fila')
+                                                @php
+                                                    $groupId = $item['grupo'] ?? 'sin_titulo';
+                                                    $rowIndex = $contadorFilasPorGrupo[$groupId] ?? 0;
+                                                @endphp
+                                                <tr class="juntas">
+                                                    @foreach ($columnasResultadoPdf as $campoPdf)
+                                                        @php $combinacionCelda = $obtenerCombinacionTabla($groupId, $campoPdf, $rowIndex); @endphp
+                                                        @if ($combinacionCelda)
+                                                            <td rowspan="{{ $combinacionCelda['rowspan'] }}">{{ $obtenerValorCampoPdf($item['data'] ?? [], $campoPdf) }}</td>
+                                                        @elseif (!$esCeldaOcultaPorCombinacion($groupId, $campoPdf, $rowIndex))
+                                                            <td>{{ $obtenerValorCampoPdf($item['data'] ?? [], $campoPdf) }}</td>
+                                                        @endif
+                                                    @endforeach
+                                                </tr>
+                                                @php $contadorFilasPorGrupo[$groupId] = $rowIndex + 1; @endphp
+                                            @endif
+
+                                            {{-- FILA LEGACY --}}
+                                            @if (false && (($item['tipo'] ?? null) == 'fila'))
                                                 <tr class="juntas">
                                                     <td>{{ $item['data']['ID'] ?? '' }}</td>
                                                     <td>{{ $item['data']['elemento'] ?? '' }}</td>

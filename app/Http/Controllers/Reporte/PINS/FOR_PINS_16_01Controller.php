@@ -33,6 +33,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use App\Support\Reportes\PinsEquiposQrSupport;
 
 /*PDF */
 use setasign\Fpdi\Fpdi;
@@ -41,6 +43,116 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PINS_16_01Controller extends Controller
 {
+    // Sanea la configuracion enviada desde la tabla con combinacion de celdas.
+    private function sanitizarConfiguracionCombinacionTabla($configuracionCruda)
+    {
+        $configuracion = is_string($configuracionCruda)
+            ? json_decode($configuracionCruda, true)
+            : $configuracionCruda;
+
+        if (!is_array($configuracion)) {
+            return [];
+        }
+
+        return collect($configuracion)
+            ->take(500)
+            ->filter(function ($item) {
+                return is_array($item)
+                    && !empty($item['field'])
+                    && array_key_exists('startRow', $item)
+                    && array_key_exists('rowspan', $item);
+            })
+            ->map(function ($item) {
+                return [
+                    'groupId' => !empty($item['groupId']) ? (string) $item['groupId'] : 'sin_titulo',
+                    'field' => (string) $item['field'],
+                    'startRow' => max(0, (int) $item['startRow']),
+                    'rowspan' => min(1000, max(2, (int) $item['rowspan'])),
+                ];
+            })
+            ->unique(function ($item) {
+                return $item['groupId'] . '|' . $item['field'] . '|' . $item['startRow'];
+            })
+            ->values()
+            ->all();
+    }
+
+    private function prepararDatosEquipoReporte16(array $datosEquipo, $idSolicitud, array $datosEquipoActuales = [], $contrato = '', $noReporte = ''): array
+    {
+        $catalogo = PinsEquiposQrSupport::obtenerCatalogoEquiposHerramientasPorSolicitud($idSolicitud);
+        $datosEquipo = PinsEquiposQrSupport::prepararDatosEquipoSeleccionados(
+            $datosEquipo,
+            $catalogo,
+            $datosEquipo['EQUIPOS_HERRAMIENTAS_IDS'] ?? []
+        );
+
+        $datosEquipo['QR_TOKEN'] = $datosEquipo['QR_TOKEN']
+            ?? ($datosEquipoActuales['QR_TOKEN'] ?? (string) Str::uuid());
+
+        $qrAnterior = $datosEquipoActuales['QR_PDF'] ?? null;
+        $datosEquipo['QR_PDF'] = PinsEquiposQrSupport::generarQrPublico(
+            'FOR_PINS_16_01',
+            $contrato,
+            $noReporte,
+            $datosEquipo['QR_TOKEN']
+        );
+
+        if ($qrAnterior && $qrAnterior !== $datosEquipo['QR_PDF']) {
+            PinsEquiposQrSupport::eliminarArchivoPublico($qrAnterior);
+        }
+
+        $datosEquipo['PDF_UNIFICADO'] = $datosEquipoActuales['PDF_UNIFICADO'] ?? null;
+
+        return $datosEquipo;
+    }
+
+    private function invalidarPdfCacheReporte16(array &$datosEquipo): void
+    {
+        PinsEquiposQrSupport::eliminarArchivoPublico($datosEquipo['PDF_UNIFICADO'] ?? null);
+        $datosEquipo['PDF_UNIFICADO'] = null;
+    }
+
+    private function obtenerRespuestaPdfCacheadoReporte16($id)
+    {
+        $reporte = reporte::where('idReportes', $id)->first();
+
+        if (!$reporte) {
+            return null;
+        }
+
+        $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
+        $rutaPublica = $datosEquipo['PDF_UNIFICADO'] ?? null;
+
+        if (!PinsEquiposQrSupport::existeArchivoPublico($rutaPublica)) {
+            return null;
+        }
+
+        $rutaAbsoluta = PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($rutaPublica);
+
+        if (!$rutaAbsoluta || !File::exists($rutaAbsoluta)) {
+            return null;
+        }
+
+        return response(File::get($rutaAbsoluta), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_16_01.PDF"');
+    }
+
+    private function guardarPdfCacheadoReporte16($id, $pdfOutput, array $detallesGenerales, array $datosEquipo): void
+    {
+        $rutaPublica = PinsEquiposQrSupport::guardarPdfCacheado(
+            $pdfOutput,
+            'FOR_PINS_16_01',
+            $detallesGenerales['Contrato'] ?? '',
+            $detallesGenerales['No_Reporte'] ?? ''
+        );
+
+        $datosEquipo['PDF_UNIFICADO'] = $rutaPublica;
+
+        reporte::where('idReportes', $id)->update([
+            'Datos_Equipo' => json_encode($datosEquipo),
+        ]);
+    }
 
     public function OS_OC($datosParaCrearOS_OC)
     {
@@ -224,6 +336,18 @@ class FOR_PINS_16_01Controller extends Controller
         dd($request->input('titulos', []), $request->all()); // Mostrar todos los datos que están llegando
     }
 
+    private function filasPorHojaFormatoPrincipal(Request $request): int
+    {
+        $requiereEquipos = strtolower((string) $request->input('Datos_Equipo.REQUIERE_EQUIPOS', 'no'));
+        $equiposSeleccionados = $request->input('Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS', []);
+
+        return in_array($requiereEquipos, ['si', 'sí'], true)
+            && is_array($equiposSeleccionados)
+            && !empty($equiposSeleccionados)
+                ? 15
+                : 20;
+    }
+
     private function construirBloquesComponentes(Request $request)
     {
         $titulosJson = $request->input('componentes_titulos_data', '[]');
@@ -231,7 +355,7 @@ class FOR_PINS_16_01Controller extends Controller
         $bloques = [];
         $bloqueActual = [];
         $contador = 0;
-        $maxFilasPorBloque = 22;
+        $maxFilasPorBloque = 30;
 
         $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
             if (!empty($bloqueActual)) {
@@ -294,6 +418,312 @@ class FOR_PINS_16_01Controller extends Controller
         return $bloques;
     }
 
+    private function obtenerPayloadFirmas(Request $request, array &$validatedData)
+    {
+        $numFirmas = (int) $request->input('numFirmas');
+        $mapaFirmas = [
+            1 => 'Firmas_Reportes1',
+            2 => 'Firmas_Reportes2',
+            3 => 'Firmas_Reportes3',
+            4 => 'Firmas_Reportes4',
+        ];
+
+        $firmaKey = $mapaFirmas[$numFirmas] ?? 'Firmas_Reportes4';
+        $validatedData[$firmaKey]['numFirmas'] = $validatedData['numFirmas'];
+
+        return json_encode($validatedData[$firmaKey]);
+    }
+
+    private function construirRutaCarpetaFotos(array $validatedData)
+    {
+        $noReporte = $validatedData['Detalles_Generales']['No_Reporte'] ?? '';
+        $contrato = $validatedData['Detalles_Generales']['Contrato'] ?? '';
+
+        return "public/Reportes/FOR_PINS_16_01/{$contrato}/{$noReporte}/Fotos";
+    }
+
+    private function decodificarImagenBase64($base64Image)
+    {
+        if (empty($base64Image)) {
+            return null;
+        }
+
+        return base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+    }
+
+    private function crearRegistroFoto($ruta, $comentario = '', $unaHoja = 0)
+    {
+        return [
+            'ruta' => $ruta,
+            'comentario' => $comentario ?? '',
+            'una_hoja' => $unaHoja ?? 0,
+        ];
+    }
+
+    private function guardarImagenBase64($base64Image, $rutaCarpeta, $index)
+    {
+        $image = $this->decodificarImagenBase64($base64Image);
+
+        if ($image === null) {
+            return null;
+        }
+
+        $imageName = 'imagen_' . time() . '_' . $index . '.png';
+        $path = "{$rutaCarpeta}/{$imageName}";
+        Storage::put($path, $image);
+
+        return str_replace('public/', 'storage/', $path);
+    }
+
+    private function agregarFotoSinDuplicados(array &$imagenesGuardadas, array &$rutasGuardadas, $ruta, $comentario = '', $unaHoja = 0)
+    {
+        if (in_array($ruta, $rutasGuardadas, true)) {
+            return;
+        }
+
+        $imagenesGuardadas[] = $this->crearRegistroFoto($ruta, $comentario, $unaHoja);
+        $rutasGuardadas[] = $ruta;
+    }
+
+    private function construirFotosInicialesDesdeRequest(Request $request, array $validatedData)
+    {
+        $imagenesGuardadas = [];
+        $rutaCarpeta = $this->construirRutaCarpetaFotos($validatedData);
+
+        foreach ($request->input('images_base64', []) as $index => $base64Image) {
+            $rutaNueva = $this->guardarImagenBase64($base64Image, $rutaCarpeta, $index);
+
+            if ($rutaNueva === null) {
+                continue;
+            }
+
+            $imagenesGuardadas[] = $this->crearRegistroFoto(
+                $rutaNueva,
+                $request->input("comments.$index"),
+                $request->input("imagen_hoja.$index", 0)
+            );
+        }
+
+        return $imagenesGuardadas;
+    }
+
+    private function sincronizarFotosDesdeRequest(Request $request, array $validatedData)
+    {
+        $rutaCarpeta = $this->construirRutaCarpetaFotos($validatedData);
+        $existingImages = $request->input('existing_images', []);
+        $comments = $request->input('comments', []);
+        $imagesBase64 = $request->input('images_base64', []);
+        $deletedImages = $request->input('deleted_images', []);
+        $imagenHoja = $request->input('imagen_hoja', []);
+        $imagenesGuardadas = [];
+        $rutasGuardadas = [];
+
+        foreach ($deletedImages as $index) {
+            if (!isset($existingImages[$index])) {
+                continue;
+            }
+
+            $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
+            if (Storage::exists($rutaImagen)) {
+                Storage::delete($rutaImagen);
+                Log::info("Imagen eliminada: {$rutaImagen}");
+            }
+
+            unset($existingImages[$index]);
+        }
+
+        foreach ($existingImages as $index => $ruta) {
+            if ($request->hasFile("replace_images.$index")) {
+                $newImage = $request->file("replace_images.$index");
+                $rutaImagenPublic = str_replace('storage/', 'public/', $ruta);
+
+                if (Storage::exists($rutaImagenPublic)) {
+                    Storage::delete($rutaImagenPublic);
+                }
+
+                $imageName = 'imagen_' . time() . '_' . $index . '.' . $newImage->getClientOriginalExtension();
+                $path = $newImage->storeAs($rutaCarpeta, $imageName);
+                $rutaNueva = str_replace('public/', 'storage/', $path);
+
+                $this->agregarFotoSinDuplicados(
+                    $imagenesGuardadas,
+                    $rutasGuardadas,
+                    $rutaNueva,
+                    $comments[$index] ?? '',
+                    $imagenHoja[$index] ?? 0
+                );
+
+                continue;
+            }
+
+            if (!empty($imagesBase64[$index])) {
+                $rutaNueva = $this->guardarImagenBase64($imagesBase64[$index], $rutaCarpeta, $index);
+
+                if ($rutaNueva !== null) {
+                    $this->agregarFotoSinDuplicados(
+                        $imagenesGuardadas,
+                        $rutasGuardadas,
+                        $rutaNueva,
+                        $comments[$index] ?? '',
+                        $imagenHoja[$index] ?? 0
+                    );
+                }
+
+                continue;
+            }
+
+            $this->agregarFotoSinDuplicados(
+                $imagenesGuardadas,
+                $rutasGuardadas,
+                $ruta,
+                $comments[$index] ?? '',
+                $imagenHoja[$index] ?? 0
+            );
+        }
+
+        foreach ($imagesBase64 as $index => $base64Image) {
+            if (isset($existingImages[$index]) || empty($base64Image)) {
+                continue;
+            }
+
+            $rutaNueva = $this->guardarImagenBase64($base64Image, $rutaCarpeta, $index);
+
+            if ($rutaNueva !== null) {
+                $this->agregarFotoSinDuplicados(
+                    $imagenesGuardadas,
+                    $rutasGuardadas,
+                    $rutaNueva,
+                    $comments[$index] ?? '',
+                    $imagenHoja[$index] ?? 0
+                );
+            }
+        }
+
+        return array_values($imagenesGuardadas);
+    }
+
+    private function obtenerFotosParaPdf($fotosReportes)
+    {
+        if (!$fotosReportes || empty($fotosReportes->Fotos_Reportes)) {
+            return [];
+        }
+
+        $fotos = json_decode($fotosReportes->Fotos_Reportes, true) ?: [];
+
+        return array_map(function ($foto) {
+            return [
+                'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? '')),
+                'comment' => $foto['comentario'] ?? '',
+                'una_hoja' => $foto['una_hoja'] ?? 0,
+            ];
+        }, $fotos);
+    }
+
+    private function contarTitulosYFilasReporte(array $bloques)
+    {
+        $totalTitulos = 0;
+        $totalFilas = 0;
+
+        foreach ($bloques as $bloque) {
+            foreach ($bloque as $item) {
+                if (($item['tipo'] ?? '') === 'titulo') {
+                    $totalTitulos++;
+                }
+
+                if (($item['tipo'] ?? '') === 'fila') {
+                    $totalFilas++;
+                }
+            }
+        }
+
+        return $totalTitulos + $totalFilas;
+    }
+
+    private function cargarContextoReportePdf16($id)
+    {
+        $reporte = reporte::where('idReportes', $id)->first();
+        $grupoJuntas = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
+        $firmasReporte = Firma_Reporte::where('idReportes', $id)->first();
+        $fotosReporte = Fotos_Reporte::where('idReportes', $id)->first();
+
+        if (!$reporte || !$grupoJuntas || !$firmasReporte) {
+            Log::warning('No se encontraron datos completos para generar el PDF', ['id' => $id]);
+            abort(404, 'No se encontró la información del reporte.');
+        }
+
+        $detallesGenerales = json_decode($reporte->Detalles_Generales, true) ?: [];
+        $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
+        $catalogoEquiposHerramientas = PinsEquiposQrSupport::obtenerCatalogoEquiposHerramientasPorSolicitud($detallesGenerales['idSolicitud'] ?? null);
+        $datosEquipo = PinsEquiposQrSupport::normalizarDatosEquipoSeleccionadosExistentes($datosEquipo, $catalogoEquiposHerramientas);
+        $tablaCombinacionConfig = json_decode($datosEquipo['TABLA_COMBINACION_CONFIG'] ?? '[]', true) ?: [];
+        $tablaCombinacionConfigComponentes = json_decode($datosEquipo['TABLA_COMBINACION_CONFIG_COMPONENTES'] ?? '[]', true) ?: [];
+        $juntasGrupoRe = json_decode($grupoJuntas->Juntas_Grupo_Re, true) ?: [];
+        $componentesDetalles = $juntasGrupoRe['componentes'] ?? [];
+        $inspeccionDetalles = $juntasGrupoRe['inspeccion'] ?? $juntasGrupoRe;
+        $firmas = json_decode($firmasReporte->Firmas, true) ?: [];
+        $fotos = $this->obtenerFotosParaPdf($fotosReporte);
+        $qrPdf = !empty($datosEquipo['QR_PDF']) ? PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($datosEquipo['QR_PDF']) : null;
+
+        return [
+            'Detalles_Generales' => $detallesGenerales,
+            'Datos_Equipo' => $datosEquipo,
+            'QR_PDF' => $qrPdf,
+            'tablaCombinacionConfig' => $tablaCombinacionConfig,
+            'tablaCombinacionConfigComponentes' => $tablaCombinacionConfigComponentes,
+            'Componentes_Detalles_Re' => $componentesDetalles,
+            'Grupo_Juntas_Detalles_Re' => $inspeccionDetalles,
+            'Firmas_Reportes' => $firmas,
+            'numFirmas' => $firmas['numFirmas'] ?? 0,
+            'Fotos' => $fotos,
+            'totalFotos' => count($fotos),
+            'totalTitulosYFilas' => $this->contarTitulosYFilasReporte($inspeccionDetalles),
+            'Logo' => public_path('images/Logo_AICO_R.jpg'),
+        ];
+    }
+
+    private function renderizarPdfContenido($view, array $data, $paper, $orientation, $logMessage = null, $t0 = null)
+    {
+        $pdfContent = PDF::loadView($view, $data)
+            ->setPaper($paper, $orientation)
+            ->output();
+
+        if ($logMessage !== null && $t0 !== null) {
+            Log::info($logMessage, ['segundos' => round(microtime(true) - $t0, 2)]);
+        }
+
+        return $pdfContent;
+    }
+
+    private function combinarDocumentosPdf(array $documentos)
+    {
+        $combinedPdf = new Fpdi();
+        $pageCounts = array_fill(0, count($documentos), 0);
+
+        foreach ($documentos as $index => $documento) {
+            $pageCounts[$index] = $combinedPdf->setSourceFile(StreamReader::createByString($documento['content']));
+        }
+
+        $totalPageCount = array_sum($pageCounts);
+        $pageOffset = 0;
+
+        foreach ($documentos as $index => $documento) {
+            $pageCounts[$index] = $combinedPdf->setSourceFile(StreamReader::createByString($documento['content']));
+
+            for ($i = 1; $i <= $pageCounts[$index]; $i++) {
+                $tplId = $combinedPdf->importPage($i);
+                $combinedPdf->AddPage($documento['orientation']);
+                $combinedPdf->useTemplate($tplId, 0, 0, $documento['width'], $documento['height']);
+                $combinedPdf->SetFont('Arial', 'B', 8);
+                $combinedPdf->SetXY($documento['page_number_x'], $documento['page_number_y']);
+                $combinedPdf->Cell(0, 10, ($i + $pageOffset) . " de $totalPageCount", 0, 0, 'C');
+            }
+
+            $pageOffset += $pageCounts[$index];
+        }
+
+        return $combinedPdf;
+    }
+
     public function FOR_PINS_16_01_store(Request $request)
     {
         $Estatus = "CREADO";
@@ -324,10 +754,17 @@ class FOR_PINS_16_01Controller extends Controller
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.REQUIERE_EQUIPOS' => 'nullable|string|in:si,no',
+            'Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS' => 'nullable|array',
+            'Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS.*' => 'nullable|integer',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             /*Titulos Juntas */
             'titulos_data' => 'nullable|string',
             'componentes_titulos_data' => 'nullable|string',
+            'Tabla_CombinacionConfig_Componentes' => 'nullable|string',
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
@@ -356,6 +793,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Componentes_Observaciones' => 'nullable|array',
 
 
+            'Tabla_CombinacionConfig' => 'nullable|string',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -474,6 +912,23 @@ class FOR_PINS_16_01Controller extends Controller
             }
         }
         //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG_COMPONENTES'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig_Componentes', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+        $validatedData['Datos_Equipo'] = $this->prepararDatosEquipoReporte16(
+            $validatedData['Datos_Equipo'],
+            $validatedData['Detalles_Generales']['idSolicitud'] ?? null,
+            [],
+            $validatedData['Detalles_Generales']['Contrato'] ?? '',
+            $validatedData['Detalles_Generales']['No_Reporte'] ?? ''
+        );
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = null;
+
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -499,7 +954,7 @@ class FOR_PINS_16_01Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 22; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = $this->filasPorHojaFormatoPrincipal($request);
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -535,7 +990,7 @@ class FOR_PINS_16_01Controller extends Controller
         */
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
                 // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
-                $filasPorLongitud = 21;
+                $filasPorLongitud = $maxFilasPorBloque;
 
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
@@ -667,22 +1122,7 @@ class FOR_PINS_16_01Controller extends Controller
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
-        if ($numFirmas == 1) {
-            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes1']);
-        }
-        else if ($numFirmas == 2) {
-            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes2']);
-        }
-        else if ($numFirmas == 3) {
-            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes3']);
-        }
-        else{
-            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas_Reportes->Firmas = json_encode($validatedData['Firmas_Reportes4']);
-        }
+        $Firmas_Reportes->Firmas = $this->obtenerPayloadFirmas($request, $validatedData);
 
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
@@ -693,7 +1133,7 @@ class FOR_PINS_16_01Controller extends Controller
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
-        foreach ($request->images_base64 as $index => $base64Image) {
+        foreach ([] as $index => $base64Image) {
             $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
             $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
@@ -718,16 +1158,14 @@ class FOR_PINS_16_01Controller extends Controller
         }
 
         // Convertir el array de fotos a JSON
-        $Fotos = json_encode($imagenesGuardadas); 
+        $Fotos = json_encode($this->construirFotosInicialesDesdeRequest($request, $validatedData)); 
 
         // Guardar en la base de datos
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
     }else{
-        $imagenesGuardadas = [];
-        $Fotos = json_encode($imagenesGuardadas);
-        $Fotos = json_encode($imagenesGuardadas); 
+        $Fotos = json_encode([]);
         $Fotos_Reportes->idReportes = $idReportes;
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
@@ -808,6 +1246,7 @@ class FOR_PINS_16_01Controller extends Controller
             /*Titulos Juntas */
             'titulos_data' => 'nullable|string',
             'componentes_titulos_data' => 'nullable|string',
+            'Tabla_CombinacionConfig_Componentes' => 'nullable|string',
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
 
@@ -835,6 +1274,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Componentes_Especificacion' => 'nullable|array',
             'Componentes_Observaciones' => 'nullable|array',
 
+            'Tabla_CombinacionConfig' => 'nullable|string',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -912,6 +1352,7 @@ class FOR_PINS_16_01Controller extends Controller
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
+        $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
@@ -939,6 +1380,23 @@ class FOR_PINS_16_01Controller extends Controller
             $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
         }
 
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+        $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG_COMPONENTES'] = json_encode(
+            $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig_Componentes', '[]')),
+            JSON_UNESCAPED_UNICODE
+        );
+        $this->invalidarPdfCacheReporte16($datosEquipoActuales);
+        $validatedData['Datos_Equipo'] = $this->prepararDatosEquipoReporte16(
+            $validatedData['Datos_Equipo'],
+            $validatedData['Detalles_Generales']['idSolicitud'] ?? null,
+            $datosEquipoActuales,
+            $validatedData['Detalles_Generales']['Contrato'] ?? '',
+            $validatedData['Detalles_Generales']['No_Reporte'] ?? ''
+        );
+
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
@@ -956,7 +1414,7 @@ class FOR_PINS_16_01Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 22; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = $this->filasPorHojaFormatoPrincipal($request);
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -992,7 +1450,7 @@ class FOR_PINS_16_01Controller extends Controller
         */
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
                 // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
-                $filasPorLongitud = 21;
+                $filasPorLongitud = $maxFilasPorBloque;
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
                     'tipo' => 'fila',
@@ -1124,34 +1582,9 @@ class FOR_PINS_16_01Controller extends Controller
         // Guardar las firmas
         $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
         
-        if ($numFirmas == 1) {
-            $validatedData['Firmas_Reportes1']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas1 = json_encode($validatedData['Firmas_Reportes1']);
-            $Firmas->update([
-                'Firmas' => $Firmas1
-            ]);
-        }
-        else if ($numFirmas == 2) {
-            $validatedData['Firmas_Reportes2']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas2 = json_encode($validatedData['Firmas_Reportes2']);
-            $Firmas->update([
-                'Firmas' => $Firmas2
-            ]);
-        }
-        else if ($numFirmas == 3) {
-            $validatedData['Firmas_Reportes3']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas3 = json_encode($validatedData['Firmas_Reportes3']);
-            $Firmas->update([
-                'Firmas' => $Firmas3
-            ]);
-        }
-        else{
-            $validatedData['Firmas_Reportes4']['numFirmas'] = $validatedData['numFirmas'];
-            $Firmas4 = json_encode($validatedData['Firmas_Reportes4']);
-            $Firmas->update([
-                'Firmas' => $Firmas4
-            ]);
-        } 
+        $Firmas->update([
+            'Firmas' => $this->obtenerPayloadFirmas($request, $validatedData)
+        ]);
 
         /* Fotos y Comentarios */
         // Obtener los valores necesarios para la ruta personalizada
@@ -1189,10 +1622,12 @@ class FOR_PINS_16_01Controller extends Controller
         }
 
         // **Reiniciar el array antes de procesar imágenes**
-        $imagenesGuardadas = [];
+        $imagenesGuardadas = $this->sincronizarFotosDesdeRequest($request, $validatedData);
+        $existingImages = [];
+        $imagesBase64 = [];
 
         // **Evitar duplicados en las rutas ya guardadas**
-        $rutasGuardadas = [];
+        $rutasGuardadas = array_column($imagenesGuardadas, 'ruta');
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
@@ -1295,150 +1730,134 @@ class FOR_PINS_16_01Controller extends Controller
 
     public function FOR_PINS_16_01($id)
     {
-        // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
-        $Reporte = reporte::where('idReportes', $id)->first();
-        $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
-        $Firmas_Reportes = Firma_Reporte::where('idReportes', $id)->first();
-        $Fotos_Reportes = Fotos_Reporte::where('idReportes', $id)->first();
+        $t0 = microtime(true);
+        Log::info('INICIO generación PDF', ['id' => $id]);
+        $debugPdf = request()->query('debug_pdf');
 
-        // Decodificar el campo Detalles_Generales para obtener el nombre del proyecto
-        $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
-        // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
-        $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
-        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener las tablas del reporte
-        $juntasGrupoRe = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true) ?: [];
-        $Componentes_Detalles_Re = $juntasGrupoRe['componentes'] ?? [];
-        $Grupo_Juntas_Detalles_Re = $juntasGrupoRe['inspeccion'] ?? $juntasGrupoRe;
+        if (!$debugPdf) {
+            $respuestaCache = $this->obtenerRespuestaPdfCacheadoReporte16($id);
 
-        $totalTitulos = 0;
-        $totalFilas = 0;
-
-        foreach ($Grupo_Juntas_Detalles_Re as $bloque) {
-            foreach ($bloque as $item) {
-                if (($item['tipo'] ?? '') === 'titulo') {
-                    $totalTitulos++;
-                }
-
-                if (($item['tipo'] ?? '') === 'fila') {
-                    $totalFilas++;
-                }
+            if ($respuestaCache) {
+                Log::info('PDF cacheado reutilizado', ['id' => $id, 'segundos' => round(microtime(true) - $t0, 2)]);
+                return $respuestaCache;
             }
         }
 
-        $totalTitulosYFilas = $totalTitulos + $totalFilas;
-
-        $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
-        $numFirmas = $Firmas_Reportes['numFirmas'];
-
-        $Logo = public_path('images/Logo_AICO_R.jpg');
-        // Obtener las fotos con su comentario
-        if ($Fotos_Reportes) {
-            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
-            $totalFotos = count($fotos); // Contar el total de imágenes
-            $Fotos = [];
-        
-            foreach ($fotos as $foto) { // Recorrer todas las imágenes sin límite
-                $Fotos[] = [
-                    'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'])),
-                    'comment' => $foto['comentario'] ?? '',
-                    'una_hoja'  => $foto['una_hoja'] ?? 0,
-                ];
-            }
-        }
-
-        $data = [
-            'title' => 'Reporte_FOR-PINS-16-01.PDF',
-            'Logo' => $Logo,
-            //Detalles_Generales
-            'Detalles_Generales' => $Detalles_Generales,
-            //Datos_Equipo
-            'Datos_Equipo' => $Datos_Equipo,
-            //Grupo_Juntas_Detalles_Re
-            'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
-            'Componentes_Detalles_Re' => $Componentes_Detalles_Re,
-            //Total de Juntas
-            /*'totalTitulos' => $totalTitulos,
-            'totalFilas' => $totalFilas,*/
-            'totalTitulosYFilas' => $totalTitulosYFilas,
-            //Fotos_Reportes
-            'Fotos' => $Fotos,
-            //Total de Fotos
-            'totalFotos' => $totalFotos,
-            //Numero de Firmas
-            'numFirmas' => $numFirmas,
-            //Firmas
-            'Firmas_Reportes' => $Firmas_Reportes,
-        ];
+        $data = $this->cargarContextoReportePdf16($id);
+        $data['title'] = 'Reporte_FOR-PINS-16-01.PDF';
 
         $dataComponentes = $data;
-        $dataComponentes['Grupo_Juntas_Detalles_Re'] = $Componentes_Detalles_Re;
+        $dataComponentes['Grupo_Juntas_Detalles_Re'] = $data['Componentes_Detalles_Re'];
+        $dataComponentes['tablaCombinacionConfigComponentes'] = $data['tablaCombinacionConfigComponentes'];
         $dataComponentes['Codigo_Formato_Componentes'] = 'FOR-PINS-16/01';
         $dataComponentes['Titulo_Formato_Componentes'] = 'LISTADO DE COMPONENTES';
 
-        // Generar el PDF de componentes en orientación vertical
-        $pdf0 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_16_01_01_PDF', $dataComponentes)->setPaper('letter', 'portrait');
+        Log::info('Datos preparados para render', ['segundos' => round(microtime(true) - $t0, 2)]);
 
-        // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_16_01_PDF', $data)->setPaper('letter', 'landscape');
+        if ($debugPdf === 'pdf0') {
+            $pdf0Content = $this->renderizarPdfContenido(
+                'Reportes.ReportesPDF.Reporte_FOR_PINS_16_01_01_PDF',
+                $dataComponentes,
+                'letter',
+                'portrait',
+                'pdf0 (componentes) renderizado',
+                $t0
+            );
 
-        // Generar el PDF adicional en orientación vertical
-        $pdf2 = PDF::loadView('Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_16_01_PDF', $data)->setPaper('letter', 'portrait');
-
-        // Combinar los PDFs
-        $pdf0Content = $pdf0->output();
-        $pdf1Content = $pdf1->output();
-        $pdf2Content = $pdf2->output();
-
-       // Crear objetos FPDI independientes para contar páginas
-        $tempPdf0 = new Fpdi();
-        $pageCount0 = $tempPdf0->setSourceFile(StreamReader::createByString($pdf0Content));
-
-        $tempPdf1 = new Fpdi();
-        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
-
-        $tempPdf2 = new Fpdi();
-        $pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
-
-        // Ahora sí combinamos
-        $combinedPdf = new Fpdi();
-        $totalPageCount = $pageCount0 + $pageCount1 + $pageCount2;
-
-        // Añadir páginas del PDF de componentes
-        $combinedPdf->setSourceFile(StreamReader::createByString($pdf0Content));
-        for ($i = 1; $i <= $pageCount0; $i++) {
-            $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(124.5, -262.5);
-            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            return response($pdf0Content, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_16_01_componentes.PDF"');
         }
 
-        // Añadir páginas del PDF de inspección
-        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
-        for ($i = 1; $i <= $pageCount1; $i++) {
-            $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('L');
-            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
-            $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(183.5, -182.5);
-            $combinedPdf->Cell(0, 10, ($i + $pageCount0) . " de $totalPageCount", 0, 0, 'C');
+        if ($debugPdf === 'pdf1') {
+            $pdf1Content = $this->renderizarPdfContenido(
+                'Reportes.ReportesPDF.Reporte_FOR_PINS_16_01_PDF',
+                $data,
+                'letter',
+                'landscape',
+                'pdf1 (principal) renderizado',
+                $t0
+            );
+
+            return response($pdf1Content, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_16_01_principal.PDF"');
         }
 
-        // Añadir páginas del PDF de fotos
-        $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
-        for ($i = 1; $i <= $pageCount2; $i++) {
-            $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(141.5, -265);
-            // Para que el conteo sea consecutivo
-            $combinedPdf->Cell(0, 10, ($i + $pageCount0 + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        if ($debugPdf === 'pdf2') {
+            $pdf2Content = $this->renderizarPdfContenido(
+                'Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_16_01_PDF',
+                $data,
+                'letter',
+                'portrait',
+                'pdf2 (fotos) renderizado',
+                $t0
+            );
+
+            return response($pdf2Content, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_16_01_fotos.PDF"');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_PINS_16_01.PDF', 'I'), 200)
-            ->header('Content-Type', 'application/pdf');
+        $pdf0Content = $this->renderizarPdfContenido(
+            'Reportes.ReportesPDF.Reporte_FOR_PINS_16_01_01_PDF',
+            $dataComponentes,
+            'letter',
+            'portrait',
+            'pdf0 (componentes) renderizado',
+            $t0
+        );
+        $pdf1Content = $this->renderizarPdfContenido(
+            'Reportes.ReportesPDF.Reporte_FOR_PINS_16_01_PDF',
+            $data,
+            'letter',
+            'landscape',
+            'pdf1 (principal) renderizado',
+            $t0
+        );
+        $pdf2Content = $this->renderizarPdfContenido(
+            'Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_16_01_PDF',
+            $data,
+            'letter',
+            'portrait',
+            'pdf2 (fotos) renderizado',
+            $t0
+        );
+
+        $combinedPdf = $this->combinarDocumentosPdf([
+            [
+                'content' => $pdf0Content,
+                'orientation' => 'P',
+                'width' => 210,
+                'height' => 297,
+                'page_number_x' => 118.5,
+                'page_number_y' => -266.5,
+            ],
+            [
+                'content' => $pdf1Content,
+                'orientation' => 'L',
+                'width' => 297,
+                'height' => 210,
+                'page_number_x' => 178.5,
+                'page_number_y' => -182.5,
+            ],
+            [
+                'content' => $pdf2Content,
+                'orientation' => 'P',
+                'width' => 210,
+                'height' => 297,
+                'page_number_x' => 137,
+                'page_number_y' => -266,
+            ],
+        ]);
+
+        $pdfOutput = $combinedPdf->Output('Reporte_FOR_PINS_16_01.PDF', 'S');
+        $this->guardarPdfCacheadoReporte16($id, $pdfOutput, $data['Detalles_Generales'], $data['Datos_Equipo']);
+        Log::info('PDF combinado y listo para enviar', ['segundos' => round(microtime(true) - $t0, 2)]);
+
+        return response($pdfOutput, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_16_01.PDF"');
     }
 
     /**

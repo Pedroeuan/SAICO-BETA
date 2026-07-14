@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-02_B/03</title>
 
-    <style>
+       <style>
         @page {
             margin: 
             3cm
@@ -99,6 +99,8 @@
             border-collapse: collapse;
             table-layout: fixed;
             margin-bottom: 4px;
+            position: relative;
+            top: -12px;
         }
 
         .observacionesBox td {
@@ -136,6 +138,28 @@
             font-size: 8px;
         }
 
+        .firmasTres {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .firmasTres td {
+            width: 33.333%;
+            text-align: center;
+            vertical-align: top;
+            padding: 0 12px;
+            font-size: 8px;
+        }
+
+        .firmasTres .espacioFirma {
+            padding: 0;
+        }
+
+        .firmasTres .firmasLaterales td {
+            padding-top: 10px;
+        }
+
         .bloqueFirma {
             width: 100%;
         }
@@ -143,18 +167,22 @@
         .tituloFirma {
             font-weight: bold;
             line-height: 11px;
-            min-height: 18px;
+            min-height: 8px;
         }
 
         .lineaFirma {
             border-bottom: 1px solid black;
             height: 10px;
-            margin-top: 2px;
+            margin-top: 0px;
+            font-weight: bold;
+            line-height: 10px;
+            padding-top: 10px;
+            box-sizing: border-box;
         }
 
-        .nombreFirma,
         .cargoFirma,
-        .empresaFirma {
+        .empresaFirma,
+        .fichaFirma {
             margin-top: 2px;
             font-weight: bold;
             line-height: 10px;
@@ -282,19 +310,19 @@
 
         .fotoDurezaBox img {
             width: 100%;
-            height: 205px;
+            height: 220px;
             object-fit: contain;
             display: block;
         }
 
         .fotoDurezaComentario {
             border-top: 1px solid black;
-            height: 45px;
+            height: 20px;
             margin: 0;
             padding: 5px 3px 0 3px;
             text-align: center;
             font-size: 8px;
-            line-height: 10px;
+            line-height: 5px;
             word-wrap: break-word;
         }
     </style>
@@ -366,16 +394,9 @@
 
                     <tr>
                         <th></th>
-                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                        <td style="width: 200px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
                         <td></td>
-                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                    </tr>
-
-                    <tr>
-                        <th></th>
-                        <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
-                        <td></td>
-                        <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
+                        <td style="width: 200px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
                     </tr>
                                                         
                     <tr>
@@ -394,49 +415,42 @@
                 @elseif( $numFirmas == 3)
                 <!-- 3 Firmas -->
                     <tr>
-                        <td style="width: 20px;"></td>
-                        <th>{{ $Firmas_Reportes['Realizo'] }}</th>
-                        <td style="width: 20px;"></td>
-                        <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
-                        <td style="width: 20px;"></td>
-                        <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
-                        <td style="width: 20px;"></td>
-                    </tr>
-
-                    <tr>
-                        <th></th>
-                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
-                        <td></td>
-                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
-                        <td></td>
-                        <td style="width: 200px; height:20px" class="lineaInferior"></td>
-                    </tr>
-
-                    <tr>
-                        <th></th>
-                        <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</strong></td>
-                        <td></td>
-                        <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</strong></td>
-                        <td></td>
-                        <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</strong></td>
-                    </tr>
-
-                    <tr>
-                        <th></th>
-                        <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] }}</strong></td>
-                        <td></td>
-                        <td><strong>{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</strong></td>
-                        <td></td>
-                        <td><strong>{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</strong></td>
-                    </tr>
-
-                    <tr>
-                        <th></th>
-                        <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
-                        <td></td>
-                        <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
-                        <td></td>
-                        <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
+                        <td colspan="9" style="padding: 0;">
+                            <table class="firmasTres">
+                                <tr>
+                                    <td class="espacioFirma"></td>
+                                    <td>
+                                        <div class="bloqueFirma">
+                                            <div class="tituloFirma">{{ $Firmas_Reportes['Vobo1'] }}</div>
+                                            <div class="lineaFirma">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</div>
+                                            <div class="cargoFirma">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</div>
+                                            <div class="empresaFirma">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</div>
+                                        </div>
+                                    </td>
+                                    <td class="espacioFirma"></td>
+                                </tr>
+                                <tr class="firmasLaterales">
+                                    <td>
+                                        <div class="bloqueFirma">
+                                            <div class="tituloFirma">{{ $Firmas_Reportes['Realizo'] }}</div>
+                                            <div class="lineaFirma">{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</div>
+                                            <div class="cargoFirma">{{ $Firmas_Reportes['CARGO_TECNICO'] }}</div>
+                                            <div class="empresaFirma">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
+                                        </div>
+                                    </td>
+                                    <td class="espacioFirma"></td>
+                                    <td>
+                                        <div class="bloqueFirma">
+                                            <div class="tituloFirma">{{ $Firmas_Reportes['Vobo2'] }}</div>
+                                            <div class="lineaFirma">{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</div>
+                                            <div class="cargoFirma">{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</div>
+                                            <div class="empresaFirma">{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</div>
+                                            <div class="fichaFirma">{{ $Firmas_Reportes['NUMERO_FICHA'] ?? '' }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 @elseif( $numFirmas == 4)
                 <!-- 4 Firmas -->
@@ -447,8 +461,7 @@
                                     <td>
                                         <div class="bloqueFirma">
                                             <div class="tituloFirma">{{ $Firmas_Reportes['Realizo'] }}</div>
-                                            <div class="lineaFirma"></div>
-                                            <div class="nombreFirma">{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</div>
+                                            <div class="lineaFirma">{{ $Firmas_Reportes['NOMBRE_TECNICO'] }}</div>
                                             <div class="cargoFirma">{{ $Firmas_Reportes['CARGO_TECNICO'] }}</div>
                                             <div class="empresaFirma">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
                                         </div>
@@ -456,8 +469,7 @@
                                     <td>
                                         <div class="bloqueFirma">
                                             <div class="tituloFirma">{{ $Firmas_Reportes['Vobo1'] }}</div>
-                                            <div class="lineaFirma"></div>
-                                            <div class="nombreFirma">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</div>
+                                            <div class="lineaFirma">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] }}</div>
                                             <div class="cargoFirma">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] }}</div>
                                             <div class="empresaFirma">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</div>
                                         </div>
@@ -467,8 +479,7 @@
                                     <td style="padding-top: 16px;">
                                         <div class="bloqueFirma">
                                             <div class="tituloFirma">{{ $Firmas_Reportes['Vobo2'] }}</div>
-                                            <div class="lineaFirma"></div>
-                                            <div class="nombreFirma">{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</div>
+                                            <div class="lineaFirma">{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] }}</div>
                                             <div class="cargoFirma">{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] }}</div>
                                             <div class="empresaFirma">{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</div>
                                         </div>
@@ -476,10 +487,10 @@
                                     <td style="padding-top: 16px;">
                                         <div class="bloqueFirma">
                                             <div class="tituloFirma">{{ $Firmas_Reportes['Vobo3'] }}</div>
-                                            <div class="lineaFirma"></div>
-                                            <div class="nombreFirma">{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</div>
+                                            <div class="lineaFirma">{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] }}</div>
                                             <div class="cargoFirma">{{ $Firmas_Reportes['PUESTO_3RO_ENCARGADO'] }}</div>
                                             <div class="empresaFirma">{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] }}</div>
+                                            <div class="fichaFirma">{{ $Firmas_Reportes['NUMERO_FICHA'] ?? '' }}</div>
                                         </div>
                                     </td>
                                 </tr>
@@ -610,6 +621,7 @@
     </tbody>
 </table>
 <div style="margin-bottom: 3px;"></div>
+{{-- ================= DATOS DEL EQUIPO ================= --}}
 <table class="datosinspeccion">
     <thead class="encabezadoAzul">
         <tr>
@@ -648,6 +660,7 @@
     </tbody>
 </table>
 <div style="margin-bottom: 12px;"></div>
+{{-- ================= DATOS DE DUREZA ================= --}}
 <table class="tablaDureza">
     <thead class="encabezadoAzul">
         <tr>

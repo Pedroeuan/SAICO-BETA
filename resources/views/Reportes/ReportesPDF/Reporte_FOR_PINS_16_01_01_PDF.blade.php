@@ -13,10 +13,10 @@
                 }
                 header {
                     position: fixed;
-                    top: -40px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -65px; /* Ajusta para que no interfiera con el margen de la pÃ¡gina */
                     left: 0;
                     right: 0;
-                    height: auto; /* Permite que el header crezca dinámicamente */
+                    height: auto; /* Permite que el header crezca dinÃ¡micamente */
                     text-align: center;
                     /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
@@ -24,7 +24,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: -30px; /* Ajusta la posiciÃ³n */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -192,7 +192,7 @@
         .rotar-texto-dividido {
             text-align: center; /* Centra el texto horizontalmente */
             padding: 0;
-            display: inline-block; /* Necesario para la rotación */
+            display: inline-block; /* Necesario para la rotaciÃ³n */
             transform: rotate(270deg); /* Rota solo el texto */
             white-space: normal;
         }
@@ -200,10 +200,10 @@
         .rotar-texto-sin-dividir {
             text-align: center; /* Centra el texto horizontalmente */
             padding: 0;
-            display: inline-block; /* Necesario para la rotación */
+            display: inline-block; /* Necesario para la rotaciÃ³n */
             transform: rotate(270deg); /* Rota solo el texto */
-            white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-            max-width: 20px; /* Ajusta al ancho máximo deseado */
+            white-space: nowrap; /* Evita que el texto se divida en varias lÃ­neas */
+            max-width: 20px; /* Ajusta al ancho mÃ¡ximo deseado */
         }
             </style>
         </head>
@@ -213,24 +213,31 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO</th>
-                            <th style="width: 60%;">Código:</th>
+                            <th rowspan="4" style="width: 400%; font-size: 9pt;">
+                                INFORME DE INSPECCIÃ“N VISUAL A ELEMENTOS DE TUBERÃAS DE PROCESO
+                            </th>
+                            <th rowspan="4" style="width: 80%;">
+                                @if(!empty($QR_PDF))
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                @endif
+                            </th>
+                            <th style="width: 90%;">CÃ³digo:</th>
                             <th style="width: 100%;">FOR-PINS-16/01</th>
-                            <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="4" style="width: 90%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 60%; height: auto;"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
-                            <th>Versión</th>
+                            <th>VersiÃ³n</th>
                             <th>0</th>
                         </tr>
                         <tr>
-                            <th style="width: 90%;">Fecha de elaboración</th>
-                            <th>18-feb-26</th>
+                            <th style="width: 90%;">Fecha de elaboraciÃ³n</th>
+                            <th>18-may-26</th>
                         </tr>
                         <tr>
-                            <th>Página</th>
+                            <th>PÃ¡gina</th>
                             <th></th>
                         </tr>
                     </tbody>
@@ -239,6 +246,8 @@
                 <div style="margin-bottom: 4px;"></div>
 
                 <div style="margin-bottom: 4px;"></div>
+            </header>
+
             <footer>
                     <table class="datosgenerales">
                         <thead>
@@ -267,7 +276,7 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td><strong>AsesorÃ­a e InspecciÃ³n en ConstrucciÃ³n Costa Fuera, S.C.</strong></td>
                                 </tr>
                             @elseif( $numFirmas == 2)
                             <!-- 2 Firmas -->
@@ -302,7 +311,7 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td><strong>AsesorÃ­a e InspecciÃ³n en ConstrucciÃ³n Costa Fuera, S.C.</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
                                 </tr>
@@ -347,7 +356,7 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td><strong>AsesorÃ­a e InspecciÃ³n en ConstrucciÃ³n Costa Fuera, S.C.</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
                                     <td></td>
@@ -405,7 +414,7 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td><strong>AsesorÃ­a e InspecciÃ³n en ConstrucciÃ³n Costa Fuera, S.C.</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
                                     <td></td>
@@ -419,7 +428,81 @@
                     </table>
             </footer>
 
+            @php
+                $tablaCombinacionConfigComponentes = $tablaCombinacionConfigComponentes ?? ($Datos_Equipo['TABLA_COMBINACION_CONFIG_COMPONENTES'] ?? []);
+
+                if (is_string($tablaCombinacionConfigComponentes)) {
+                    $tablaCombinacionConfigComponentes = json_decode($tablaCombinacionConfigComponentes, true);
+                }
+
+                if (!is_array($tablaCombinacionConfigComponentes)) {
+                    $tablaCombinacionConfigComponentes = [];
+                }
+
+                $tablaCombinacionConfigComponentes = array_values(array_filter(array_map(function ($merge) {
+                    if (!is_array($merge)) {
+                        return null;
+                    }
+
+                    $groupId = !empty($merge['groupId']) ? (string) $merge['groupId'] : 'sin_titulo';
+                    $field = (string) ($merge['field'] ?? '');
+                    $startRow = isset($merge['startRow']) ? (int) $merge['startRow'] : -1;
+                    $rowspan = isset($merge['rowspan']) ? (int) $merge['rowspan'] : 1;
+
+                    if ($field === '' || $startRow < 0 || $rowspan < 2) {
+                        return null;
+                    }
+
+                    return [
+                        'groupId' => $groupId,
+                        'field' => $field,
+                        'startRow' => $startRow,
+                        'rowspan' => $rowspan,
+                    ];
+                }, $tablaCombinacionConfigComponentes)));
+
+                $resolverCombinacionComponentes = function (array $config, string $grupo, string $campo, int $fila, int $inicioBloque, int $finBloque) {
+                    foreach ($config as $merge) {
+                        if (!is_array($merge)) continue;
+                        $inicio = (int) ($merge['startRow'] ?? -1);
+                        $fin = $inicio + (int) ($merge['rowspan'] ?? 1) - 1;
+                        if (($merge['groupId'] ?? 'sin_titulo') === $grupo && ($merge['field'] ?? '') === $campo && $fila >= $inicio && $fila <= $fin) {
+                            $inicioSegmento = max($inicio, $inicioBloque);
+                            $finSegmento = min($fin, $finBloque);
+                            return [
+                                'mostrar' => $fila === $inicioSegmento,
+                                'ocultar' => $fila > $inicioSegmento,
+                                'rowspan' => max(1, $finSegmento - $inicioSegmento + 1),
+                            ];
+                        }
+                    }
+                    return null;
+                };
+
+                $columnasComponentesPdf = [
+                    ['field' => 'Componentes_ID', 'valueKey' => 'ID'],
+                    ['field' => 'Componentes_Descripcion_del_Elemento', 'valueKey' => 'Descripcion_del_Elemento'],
+                    ['field' => 'Componentes_Nivel', 'valueKey' => 'Nivel'],
+                    ['field' => 'Componentes_0', 'valueKey' => '0'],
+                    ['field' => 'Componentes_Longitud_m', 'valueKey' => 'Longitud_(m)'],
+                    ['field' => 'Componentes_Clase', 'valueKey' => 'Clase'],
+                    ['field' => 'Componentes_Especificacion', 'valueKey' => 'EspecificaciÃ³n'],
+                    ['field' => 'Componentes_Observaciones', 'valueKey' => 'Observaciones'],
+                ];
+
+                $contadorFilasComponentesPorGrupo = [];
+            @endphp
             @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
+            @php
+                $inicioGrupoComponentesEnBloque = $contadorFilasComponentesPorGrupo;
+                $cantidadGrupoComponentesEnBloque = [];
+                foreach ($bloque as $elementoBloque) {
+                    if (is_array($elementoBloque) && ($elementoBloque['tipo'] ?? null) === 'fila') {
+                        $grupoBloque = $elementoBloque['grupo'] ?? 'sin_titulo';
+                        $cantidadGrupoComponentesEnBloque[$grupoBloque] = ($cantidadGrupoComponentesEnBloque[$grupoBloque] ?? 0) + 1;
+                    }
+                }
+            @endphp
 
             {{-- ================= DATOS GENERALES ================= --}}
         <div class="content">
@@ -463,6 +546,8 @@
 
             <div style="margin-bottom: 5px;"></div>
 
+            @include('Reportes.ReportesPDF.partials.equipos_herramientas_pdf')
+
             {{-- ================= ENCABEZADO RESULTADOS ================= --}}
                     <table class="datosresultados">
                     
@@ -475,12 +560,12 @@
                         <thead>
                             <tr class="celdaGris">
                                 <th style="width: 30px;">ID</th>
-                                <th style="width: 50px;">DESCRIPCIÓN DEL ELEMENTO</th>
+                                <th style="width: 50px;">DESCRIPCIÃ“N DEL ELEMENTO</th>
                                 <th style="width: 30px;">NIVEL</th>
-                                <th style="width: 30px;">Ø</th>
+                                <th style="width: 30px;">Ã˜</th>
                                 <th style="width: 30px;">LONGITUD (m)</th>
                                 <th style="width: 30px;">CLASE</th>
-                                <th style="width: 50px;">ESPECIFICACIÓN</th>
+                                <th style="width: 50px;">ESPECIFICACIÃ“N</th>
                                 <th style="width: 100px;">OBSERVACIONES</th>
                             </tr>
                         </thead>
@@ -502,16 +587,28 @@
 
                                             {{-- FILA --}}
                                             @if (($item['tipo'] ?? null) == 'fila')
+                                                @php
+                                                    $grupoActual = $item['grupo'] ?? 'sin_titulo';
+                                                    $indiceFilaGrupo = $contadorFilasComponentesPorGrupo[$grupoActual] ?? 0;
+                                                @endphp
                                                 <tr class="juntas">
-                                                    <td>{{ $item['data']['ID'] }}</td>
-                                                    <td>{{ $item['data']['Descripcion_del_Elemento'] }}</td>
-                                                    <td>{{ $item['data']['Nivel'] }}</td>
-                                                    <td>{{ $item['data']['0'] }}</td>
-                                                    <td>{{ $item['data']['Longitud_(m)'] }}</td>
-                                                    <td>{{ $item['data']['Clase'] }}</td>
-                                                    <td>{{ $item['data']['Especificación'] }}</td>
-                                                    <td>{{ $item['data']['Observaciones'] }}</td>
+                                                    @foreach ($columnasComponentesPdf as $columnaPdf)
+                                                        @php
+                                                            $inicioBloqueGrupo = $inicioGrupoComponentesEnBloque[$grupoActual] ?? 0;
+                                                            $finBloqueGrupo = $inicioBloqueGrupo + ($cantidadGrupoComponentesEnBloque[$grupoActual] ?? 1) - 1;
+                                                            $mergeColumna = $resolverCombinacionComponentes($tablaCombinacionConfigComponentes, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo, $inicioBloqueGrupo, $finBloqueGrupo);
+                                                            $valorCelda = $item['data'][$columnaPdf['valueKey']] ?? '';
+                                                        @endphp
+                                                        @if ($mergeColumna && $mergeColumna['mostrar'])
+                                                            <td rowspan="{{ $mergeColumna['rowspan'] }}">{{ $valorCelda }}</td>
+                                                        @elseif (! $mergeColumna || ! $mergeColumna['ocultar'])
+                                                            <td>{{ $valorCelda }}</td>
+                                                        @endif
+                                                    @endforeach
                                                 </tr>
+                                                @php
+                                                    $contadorFilasComponentesPorGrupo[$grupoActual] = $indiceFilaGrupo + 1;
+                                                @endphp
                                             @endif
 
                                             {{-- LONGITUD 

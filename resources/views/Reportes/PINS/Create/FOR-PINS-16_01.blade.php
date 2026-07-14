@@ -100,42 +100,41 @@
                                         </div>
                                     </div>
 
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label class="col-form-label">
-                                                    ¿Cliente existente?
-                                                    <span class="ml-3">
-                                                        <label class="mr-2">
-                                                            <input type="radio" name="TieneCliente" value="si" checked> Sí
-                                                        </label>
-                                                        <label>
-                                                            <input type="radio" name="TieneCliente" value="no"> No
-                                                        </label>
-                                                    </span>
-                                                </label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">
+                                                ¿Cliente existente?
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneCliente" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
 
-                                                <!-- SELECT cuando es SI -->
-                                                <select id="campoClienteSelect"
-                                                        class="form-select"
-                                                        name="ClienteSelect">
-                                                    <option value="" selected disabled>Seleccione un Cliente</option>
-                                                    @foreach($Clientes as $Cliente)
-                                                        <option value="{{ $Cliente->Cliente }}">
-                                                            {{ $Cliente->Cliente }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                            <!-- SELECT cuando es SI -->
+                                            <select id="campoClienteSelect"
+                                                    class="form-select"
+                                                    name="ClienteSelect">
+                                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                                @foreach($Clientes as $Cliente)
+                                                    <option value="{{ $Cliente->Cliente }}">
+                                                        {{ $Cliente->Cliente }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
 
-                                                <!-- INPUT cuando es NO -->
-                                                <input type="text"
-                                                    id="campoClienteInput"
-                                                    class="form-control inputForm mt-2"
-                                                    name="ClienteInput"
-                                                    placeholder="Ingrese nombre del cliente"
-                                                    style="display:none;">
-                                            </div>
+                                            <!-- INPUT cuando es NO -->
+                                            <input type="text"
+                                                id="campoClienteInput"
+                                                class="form-control inputForm mt-2"
+                                                name="ClienteInput"
+                                                placeholder="Ingrese nombre del cliente"
+                                                style="display:none;">
                                         </div>
-
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -242,10 +241,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
-                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{ $Procedimiento->Nombre ?? '' }}" readonly>
                                             @error('Procedimiento')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -292,6 +291,8 @@
                                         </div>
                                     </div>
 
+                                    @include('Reportes.PINS.Partials.equipos_herramientas_selector')
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idSolicitud]" value="{{ $idSolicitud }}" readonly>
@@ -304,6 +305,11 @@
                                         </div>
                                     </div>
                                     
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $Procedimiento->idProcedimiento ?? '' }}" readonly>
+                                        </div>
+                                    </div>
                                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                                      <!--*****************************************LISTADO DE COMPONENTES *****************************************-->
                                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">RESULTADOS LISTADO DE COMPONENTES</div>
@@ -351,6 +357,7 @@
                     </div>
 
                     <input type="hidden" name="componentes_titulos_data" id="componentes_titulos_hidden"> <!---------------------------------------Agregar -->
+                    <input type="hidden" name="Tabla_CombinacionConfig_Componentes" id="tablaCombinacionConfigComponentes" value="{{ old('Tabla_CombinacionConfig_Componentes', '[]') }}">
                     <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                     <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                         <div>
@@ -430,6 +437,7 @@
                         </div>
 
                         <input type="hidden" name="titulos_data" id="titulos_hidden">
+                        <input type="hidden" name="Tabla_CombinacionConfig" id="tablaCombinacionConfig" value="{{ old('Tabla_CombinacionConfig', '[]') }}">
                         <!--<button id="addBtn" type="button" class="btn btn-success custom-btn">Agregar Fila</button>-->
                         <div class="d-flex justify-content-between align-items-center w-100 mb-3">
                             <div>
@@ -886,6 +894,8 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/Reportes_Create.js') }}"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas.js') }}"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas_Create.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -897,6 +907,31 @@
     $(document).ready(function() {
         let componentesTituloCount = 0;
         let componentesRowCount = 0;
+        let componentesMergeAdmin = null;
+
+        // Inicializa la combinacion independiente de la tabla de componentes.
+        function inicializarCombinacionComponentes() {
+            if (!window.ReportesCombinacionCeldasAgrupadas || !$('#componentesTable tbody').length) {
+                return;
+            }
+
+            componentesMergeAdmin = window.ReportesCombinacionCeldasAgrupadas.crearAdministrador({
+                tbodySelector: '#componentesTable tbody',
+                hiddenSelector: '#tablaCombinacionConfigComponentes',
+                modeToggleAfterSelector: '#componentesPreFillBtn',
+                dataRowSelector: 'tr.componentes-data-row',
+                inferirColumnasCombinables: true
+            });
+
+            componentesMergeAdmin.init();
+        }
+
+        // Reaplica merges al cambiar la estructura de la tabla.
+        function refrescarCombinacionComponentes() {
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.refresh();
+            }
+        }
 
         function componentesLastTitle() {
             const $lastTitle = $('#componentesTable tbody tr.componentes-title-row').last();
@@ -945,6 +980,7 @@
 
             $('#componentesTable tbody').append(newTitle);
             componentesUpdateTitulos();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesAddBtn').click(function() {
@@ -970,16 +1006,29 @@
 
                 $('#componentesTable tbody').append(newRow);
             }
+
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('click', '.btnEliminarComponente', function() {
-            $(this).closest('tr').remove();
+            const $fila = $(this).closest('tr');
+
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.handleDeleteRow($fila);
+            }
+
+            $fila.remove();
             componentesUpdateRowNumbers();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('click', '.btnEliminarTituloComponente', function() {
             const $title = $(this).closest('tr.componentes-title-row');
             const titleId = $title.data('titulo');
+
+            if (componentesMergeAdmin) {
+                componentesMergeAdmin.clearGroup(titleId);
+            }
 
             $('#componentesTable tbody tr').filter(function() {
                 return $(this).data('titulo') === titleId;
@@ -987,6 +1036,7 @@
 
             componentesUpdateTitulos();
             componentesUpdateRowNumbers();
+            refrescarCombinacionComponentes();
         });
 
         $('#componentesTable').on('input', '.componentes-titulo-text', componentesUpdateTitulos);
@@ -997,6 +1047,8 @@
                     $(this).val('----');
                 }
             });
+
+            refrescarCombinacionComponentes();
         });
 
         document.querySelectorAll('#componentesInputRow .componentes-default-input').forEach(function(input) {
@@ -1013,6 +1065,11 @@
                 });
             });
         });
+
+        inicializarCombinacionComponentes();
+        componentesUpdateTitulos();
+        componentesUpdateRowNumbers();
+        refrescarCombinacionComponentes();
     });
 
 /*Juntas-Resultados CAMBIAR JUNTAS CHECAR*/

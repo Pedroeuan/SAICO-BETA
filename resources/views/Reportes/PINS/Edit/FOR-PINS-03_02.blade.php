@@ -6,6 +6,7 @@
 <!--datatable -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <style>
         table {
@@ -67,6 +68,112 @@
             text-align: center; /* Centra el texto dentro del input */
             margin: auto; /* Centra el input dentro de la celda */
             display: block; /* Asegura que el input se comporte como un bloque */
+        }
+
+        .mergeable-cell {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .mergeable-cell:hover {
+            background-color: #e7f1ff;
+        }
+
+        .mergeable-cell.selected-merge,
+        .mergeable-cell.merge-preview {
+            background-color: #cfe2ff !important;
+        }
+
+        .mergeable-cell.merge-anchor {
+            background-color: #9ec5fe !important;
+            box-shadow: inset 0 0 0 2px #0d6efd;
+        }
+
+        .merge-help-box {
+            position: relative;
+            display: grid;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 16px 18px 16px 22px;
+            border: 1px solid #f3d07a;
+            border-radius: 16px;
+            background:
+                radial-gradient(circle at top right, rgba(255, 193, 7, 0.16), transparent 28%),
+                linear-gradient(135deg, #fffaf0 0%, #fff3cd 52%, #fff8e6 100%);
+            box-shadow: 0 10px 24px rgba(180, 129, 0, 0.12);
+            overflow: hidden;
+        }
+
+        .merge-help-box::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            bottom: 12px;
+            left: 0;
+            width: 5px;
+            border-radius: 0 10px 10px 0;
+            background: linear-gradient(180deg, #d39e00 0%, #ffcd39 100%);
+        }
+
+        .merge-help-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #8a5a00;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .merge-help-icon {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #d39e00 0%, #ffcd39 100%);
+            color: #5f4300;
+            box-shadow: 0 8px 18px rgba(211, 158, 0, 0.22);
+            font-size: 16px;
+        }
+
+        .merge-help-text {
+            color: #7a5a17;
+            font-size: 13px;
+            line-height: 1.55;
+            max-width: 900px;
+        }
+
+        .merge-selection-info {
+            min-height: 48px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: rgba(255, 253, 245, 0.92);
+            border: 1px dashed #e3c16a;
+        }
+
+        .merge-selection-info:empty::before {
+            content: 'Selecciona una celda inicial y otra final para previsualizar el rango de combinacion.';
+            color: #9a7933;
+            font-size: 12px;
+        }
+
+        .merge-selection-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #fff0b8 0%, #ffe08a 100%);
+            color: #7a5200;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #e1bc53;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
     </style>
 @endsection
@@ -611,6 +718,7 @@
                                         </table>
                                         </div>
                                         <input type="hidden" id="titulos_hidden" name="titulos_data">
+                                        <input type="hidden" name="Tabla_CombinacionConfig" id="tablaCombinacionConfig" value="{{ old('Tabla_CombinacionConfig', $Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? '[]') }}">
                                         <p>
 
 
@@ -632,6 +740,16 @@
                                         <button id="addLongBtn" type="button" class="btn btn-success custom-btn">Agregar Longitud Inspeccionada</button>
 
                                         <button id="preFillBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
+                                    </div>
+                                    <div class="merge-help-box">
+                                        <div class="merge-help-header">
+                                            <span class="merge-help-icon"><i class="bi bi-columns-gap"></i></span>
+                                            <span>Combinacion de Celdas</span>
+                                        </div>
+                                        <div class="merge-help-text">
+                                            Puedes combinar cualquier columna de captura dentro del mismo bloque. No incluye numeracion, eliminar ni filas de longitud.
+                                        </div>
+                                        <div id="tablaMergeSelectionInfo" class="merge-selection-info"></div>
                                     </div>
                                     </div>
                                     <p>
@@ -1409,4 +1527,6 @@ $(document).ready(function() {
     });
 
 </script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas.js') }}"></script>
+<script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas_Edit.js') }}"></script>
 @endsection
