@@ -79,7 +79,8 @@
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             <td>
-                                <a href="{{ route('Next.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a>
+                                {{-- <a href=" route('Next.Reporte', ['id' => $reporte->idReportes])  }}"  class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a> --}}
+                                <button type="button" class="btn btn-success btnSiguienteReporte" idReporte="{{$reporte->idReportes}}"><i class="fas ffas fa-file-export" aria-hidden="true"></i></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminarReportes" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -188,7 +189,49 @@ $(document).on("click", ".btnEliminarReportes", function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+
+$(document).on("click", ".btnSiguienteReporte", function() {
+    var idReporte = $(this).attr("idReporte");
+    Swal.fire({
+        title: "Siguiente Reporte",
+        text: "¿El reporte es consecutivo? o ¿Desea crear un nuevo reporte?",
+        icon: 'question',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Consecutivo",
+        denyButtonText: "Nuevo Reporte"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Next/Reporte/' + idReporte,
+                type: 'GET',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Eliminado!",
+                            text: response.message,
+                            icon: "success"
+                        }).then(() => {
+                            // Recargar la página después de cerrar la alerta
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire("Error!", response.message, "error");
+                    }
+                },
+                error: function() {
+                    Swal.fire("Error!", "No se pudo eliminar el reporte.", "error");
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Cancelado", "", "error");
+        }
+    });
+});
+/*document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.btnSiguienteReporte').forEach(function(btn) {
         btn.addEventListener('click', function(event) {
             event.preventDefault(); // Evita la navegación inmediata
@@ -203,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = url;
         });
     });
-});
+});*/
 </script>
 
 @endsection
