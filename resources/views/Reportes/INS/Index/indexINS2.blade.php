@@ -80,7 +80,7 @@
                             </td>
                             <td>
                                 {{-- <a href=" route('Next.Reporte', ['id' => $reporte->idReportes])  }}"  class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a> --}}
-                                <button type="button" class="btn btn-success btnSiguienteReporte" idReporte="{{$reporte->idReportes}}"><i class="fas ffas fa-file-export" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-success btnSiguienteReporte" idReporte="{{$reporte->idReportes}}" idSolicitud="{{$reporte->Detalles_Generales['idSolicitud']}}"><i class="fas ffas fa-file-export" aria-hidden="true"></i></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminarReportes" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -218,7 +218,12 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                 title: 'Nuevo Reporte',
                 html: `
                     <div class="text-start">
-                        <p class="mb-3">Completa la selección del servicio para crear un nuevo reporte.</p>
+                        <div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h5><i class="icon fas fa-info"></i> Importante</h5>
+                            <p>Los datos generales del reporte serán llenados automáticamente.</p>
+                            <p class="mb-3">Completa la selección del servicio para crear un nuevo reporte.</p>
+                        </div>
                         <form id="formModalServicios" action="{{ route('Seleccion.indexManifiesto') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-3">
@@ -279,6 +284,27 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                         'RELEVADO DE ESFUERZOS'
                     ];
 
+                    const imagenesPrueba = {
+                        'PARTÍCULAS MAGNÉTICAS': '{{ asset('images/Menu Servicios SVG/PARTICULAS_MAGNETICAS.svg') }}',
+                        'LÍQUIDOS PENETRANTES': '{{ asset('images/Menu Servicios SVG/LIQUIDOS_PENETRANTES.svg') }}',
+                        'CORRIENTES EDDY': '{{ asset('images/Menu Servicios SVG/CORRIENTES_EDDY.svg') }}',
+                        'TERMOGRAFÍA': '{{ asset('images/Menu Servicios SVG/TERMOGRAFIA.svg') }}',
+                        'ULTRASONIDO': '{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}',
+                        'RADIOGRAFIA': '{{ asset('images/Menu Servicios SVG/RADIOGRAFIA.svg') }}',
+                        'PMI': '{{ asset('images/Menu Servicios SVG/PMI.svg') }}',
+                        'PRECALENTAMIENTO': '{{ asset('images/Menu Servicios SVG/PRECALENTAMIENTO.svg') }}',
+                        'ARREGLO DE FASES': '{{ asset('images/Menu Servicios SVG/ARREGLO_FASES.svg') }}',
+                        'CARACTERIZACIÓN DE MATERIALES': '{{ asset('images/Menu Servicios SVG/CARACTERIZACION_MATERIALES.svg') }}',
+                        'DUREZAS': '{{ asset('images/Menu Servicios SVG/DUREZAS.svg') }}',
+                        'METALOGRAFÍA': '{{ asset('images/Menu Servicios SVG/METALOGRAFIA.svg') }}',
+                        'ANÁLISIS QUÍMICO': '{{ asset('images/Menu Servicios SVG/ANALISIS_QUIMICO.svg') }}',
+                        'TOFD': '{{ asset('images/Menu Servicios SVG/TOFD.svg') }}',
+                        'ACFM': '{{ asset('images/Menu Servicios SVG/ACFM.svg') }}',
+                        'ONDAS GUIADAS': '{{ asset('images/Menu Servicios SVG/ONDAS_GUIADAS.svg') }}',
+                        'VISUAL': '{{ asset('images/Menu Servicios SVG/Inspección_Visual.svg') }}',
+                        'RELEVADO DE ESFUERZOS': '{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}'
+                    };
+
                     const nombresPersonalizados = {
                         'FOR-PINS-03-02': 'INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS',
                         'FOR-PINS-04-01': 'INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES',
@@ -331,6 +357,10 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                                 })
                                 .catch(error => console.error('Error al obtener las normas:', error));
                         }
+
+                        const imagenSeleccionada = imagenesPrueba[selectedText] || '{{ asset('images/Menu Servicios SVG/FOCO_BLANCO.svg') }}';
+                        pruebaImagen.setAttribute('href', imagenSeleccionada);
+                        pruebaTexto.textContent = selectedText || 'IMAGEN DE LA PRUEBA';
 
                         if (pruebasAzul.includes(selectedText)) {
                             pruebaRect.setAttribute('fill', '#0070C0');
