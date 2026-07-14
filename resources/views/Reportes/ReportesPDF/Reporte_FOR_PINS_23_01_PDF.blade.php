@@ -114,6 +114,7 @@
         .datosresultados{
             border-collapse: separate;  /*separate No colapsar bordes */
             border-spacing: 0px;        /* Espacio entre celdas */
+            table-layout: fixed;
             width: 100%;
             text-align: center;
             
@@ -122,6 +123,7 @@
         .datosresultados td, .datosresultados th {
             border: .6px solid black; 
             font-size: 8px !important;
+            word-wrap: break-word;
         }
         .celdaGris{
             background-color: #DBDBDB;
@@ -607,24 +609,24 @@
             $contadorFilasPorGrupo = [];
 
             $columnasResultadoPdf = [
-                ['field' => 'ID', 'valueKey' => 'ID'],
-                ['field' => 'Elemento', 'valueKey' => 'Elemento'],
-                ['field' => 'nom_pulg', 'valueKey' => 'nom_pulg'],
-                ['field' => 'ext_pulg', 'valueKey' => 'ext_pulg'],
-                ['field' => 'Long_m', 'valueKey' => 'Long_m'],
-                ['field' => 'Ele_iden', 'valueKey' => 'Ele_iden'],
-                ['field' => '-X', 'valueKey' => '-X'],
-                ['field' => '+X', 'valueKey' => '+X'],
-                ['field' => 'No_Ind', 'valueKey' => 'No_Ind'],
-                ['field' => 'Dis_rela', 'valueKey' => 'Dis_rela'],
-                ['field' => 'HT1', 'valueKey' => 'HT1'],
-                ['field' => 'HT2', 'valueKey' => 'HT2'],
-                ['field' => 'Cate', 'valueKey' => 'Cate'],
-                ['field' => 'Direc', 'valueKey' => 'Direc'],
-                ['field' => 'Clas', 'valueKey' => 'Clas'],
-                ['field' => 'Porc_Refl', 'valueKey' => 'Porc_Refl'],
-                ['field' => 'Fotos', 'valueKey' => 'Fotos'],
-                ['field' => 'Observaciones', 'valueKey' => 'Observaciones'],
+                ['field' => 'ID', 'valueKey' => 'ID', 'width' => '3%'],
+                ['field' => 'Elemento', 'valueKey' => 'Elemento', 'width' => '6%'],
+                ['field' => 'nom_pulg', 'valueKey' => 'nom_pulg', 'width' => '5%'],
+                ['field' => 'ext_pulg', 'valueKey' => 'ext_pulg', 'width' => '5%'],
+                ['field' => 'Long_m', 'valueKey' => 'Long_m', 'width' => '5%'],
+                ['field' => 'Ele_iden', 'valueKey' => 'Ele_iden', 'width' => '8%'],
+                ['field' => '-X', 'valueKey' => '-X', 'width' => '4%'],
+                ['field' => '+X', 'valueKey' => '+X', 'width' => '4%'],
+                ['field' => 'No_Ind', 'valueKey' => 'No_Ind', 'width' => '4%'],
+                ['field' => 'Dis_rela', 'valueKey' => 'Dis_rela', 'width' => '8%'],
+                ['field' => 'HT1', 'valueKey' => 'HT1', 'width' => '4%'],
+                ['field' => 'HT2', 'valueKey' => 'HT2', 'width' => '4%'],
+                ['field' => 'Cate', 'valueKey' => 'Cate', 'width' => '5%'],
+                ['field' => 'Direc', 'valueKey' => 'Direc', 'width' => '8%'],
+                ['field' => 'Clas', 'valueKey' => 'Clas', 'width' => '7%'],
+                ['field' => 'Porc_Refl', 'valueKey' => 'Porc_Refl', 'width' => '6%'],
+                ['field' => 'Fotos', 'valueKey' => 'Fotos', 'width' => '4%'],
+                ['field' => 'Observaciones', 'valueKey' => 'Observaciones', 'width' => '13%'],
             ];
         @endphp
         @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
@@ -779,6 +781,11 @@
                 <div style="margin-bottom: 4px;"></div>
 
                     <table class="datosresultados">
+                        <colgroup>
+                            @foreach ($columnasResultadoPdf as $columnaPdf)
+                                <col style="width: {{ $columnaPdf['width'] }};">
+                            @endforeach
+                        </colgroup>
 
                         <thead class="encabezadoAzul">
                             <tr><th colspan="18">RESULTADOS</th></tr>
@@ -801,14 +808,14 @@
                                         <th colspan="3" style="border: 1px solid black; border-top: 2px solid black;">Clasificación de la indicación o anomalía</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">porcentaje de reflexión (%)</th>
                                         <th rowspan="2" style="border: 1px solid black; border-top: 2px solid black;">Fotos No.</th>
-                                        <th rowspan="2" style="width: 10px; border: 1px solid black; border-right: 2px solid black; border-top: 1px solid black; border-bottom: 1px solid black;">Observaciones</th>
+                                        <th rowspan="2" style="border: 1px solid black; border-right: 2px solid black; border-top: 1px solid black; border-bottom: 1px solid black;">Observaciones</th>
                                     </tr>
                                     <tr class="celdaGrisResultados">
-                                        <th style="width: 25px; border: 1px solid black;">(-X)</th>
-                                        <th style="width: 25px; border: 1px solid black;">(+X)</th>
-                                        <th style="width: 20px; border: 1px solid black;">Categoría</th>
-                                        <th style="width: 20px; border: 1px solid black;"> Direccionalidad</th>
-                                        <th style="width: 15px; border: 1px solid black;">Clasificación</th>
+                                        <th style="border: 1px solid black;">(-X)</th>
+                                        <th style="border: 1px solid black;">(+X)</th>
+                                        <th style="border: 1px solid black;">Categoría</th>
+                                        <th style="border: 1px solid black;"> Direccionalidad</th>
+                                        <th style="border: 1px solid black;">Clasificación</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -838,11 +845,12 @@
                         $mergeColumna = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
                         $estaOculta = $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
                         $valorCelda = $item['data'][$columnaPdf['valueKey']] ?? '';
+                        $estiloCeldaResultado = 'width: ' . ($columnaPdf['width'] ?? 'auto') . ';';
                     @endphp
                     @if ($mergeColumna)
-                        <td rowspan="{{ $mergeColumna['rowspan'] }}">{{ $valorCelda }}</td>
+                        <td rowspan="{{ $mergeColumna['rowspan'] }}" style="{{ $estiloCeldaResultado }}">{{ $valorCelda }}</td>
                     @elseif (! $estaOculta)
-                        <td>{{ $valorCelda }}</td>
+                        <td style="{{ $estiloCeldaResultado }}">{{ $valorCelda }}</td>
                     @endif
                 @endforeach
             </tr>

@@ -227,17 +227,15 @@
         </tr>
     </table>
 
-    <table class="datosgenerales">
+    @include('Reportes.partials.firmas_im_pdf')
+    <table class="datosgenerales" style="display: none;">
         <thead>
             @if($numFirmas == 1)
                 <tr>
                     <th>{{ $Firmas_Reportes['Realizo'] ?? '' }}</th>
                 </tr>
                 <tr>
-                    <td style="width: 260px; height:40px" class="lineaInferior"></td>
-                </tr>
-                <tr>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</strong></td>
+                    <td style="width: 260px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</strong></td>
                 </tr>
                 <tr>
                     <td><strong>{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</strong></td>
@@ -255,15 +253,9 @@
                 </tr>
                 <tr>
                     <th></th>
-                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                    <td style="width: 200px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</strong></td>
                     <td></td>
-                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</strong></td>
-                    <td></td>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</strong></td>
+                    <td style="width: 200px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</strong></td>
                 </tr>
                 <tr>
                     <th></th>
@@ -289,19 +281,11 @@
                 </tr>
                 <tr>
                     <th></th>
-                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                    <td style="width: 200px; height:20px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</strong></td>
                     <td></td>
-                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                    <td style="width: 200px; height:20px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</strong></td>
                     <td></td>
-                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</strong></td>
-                    <td></td>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</strong></td>
-                    <td></td>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] ?? '' }}</strong></td>
+                    <td style="width: 200px; height:20px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] ?? '' }}</strong></td>
                 </tr>
                 <tr>
                     <th></th>
@@ -333,24 +317,13 @@
                 </tr>
                 <tr>
                     <th></th>
-                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                    <td style="width: 150px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</strong></td>
                     <td></td>
-                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                    <td style="width: 150px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</strong></td>
                     <td></td>
-                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                    <td style="width: 150px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] ?? '' }}</strong></td>
                     <td></td>
-                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</strong></td>
-                    <td></td>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</strong></td>
-                    <td></td>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] ?? '' }}</strong></td>
-                    <td></td>
-                    <td><strong>{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] ?? '' }}</strong></td>
+                    <td style="width: 150px; height:40px; vertical-align: bottom;" class="lineaInferior"><strong>{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] ?? '' }}</strong></td>
                     <th></th>
                 </tr>
                 <tr>

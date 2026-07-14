@@ -136,30 +136,30 @@
                         </div>
                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">
-                                                ¿Contrato existente?
-                                                <span class="ml-3">
-                                                    <label class="mr-2">
-                                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" name="TieneContrato" value="no"> No
-                                                    </label>
-                                                </span>
-                                            </label>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">
+                                ¿Contrato existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneContrato" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
 
-                                            <!-- Input visible solo si es "SI" -->
-                                            <input type="text"
-                                                id="campoContrato"
-                                                class="form-control inputForm"
-                                                name="Detalles_Generales[Contrato]"
-                                                placeholder="Ejemplo: 640853841"
-                                                value="{{ old('Detalles_Generales.Contrato') }}"
-                                                required>
-                                        </div>
-                                    </div>
+                            <!-- Input visible solo si es "SI" -->
+                            <input type="text"
+                                id="campoContrato"
+                                class="form-control inputForm"
+                                name="Detalles_Generales[Contrato]"
+                                placeholder="Ejemplo: 640853841"
+                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                required>
+                        </div>
+                    </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
@@ -244,7 +244,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{ $Procedimiento->Nombre ?? '' }}" readonly>
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -273,6 +273,13 @@
                         </div>
                     </div>
 
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $Procedimiento->idProcedimiento ?? '' }}" readonly>
+                        </div>
+                    </div>
+                    <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
+                    <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL SISTEMA DE INSPECCIÓN</div>
 
                     <div style="margin-bottom: 2px;"></div>

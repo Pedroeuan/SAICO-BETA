@@ -27,6 +27,7 @@ use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Models\Procedimientos\Procedimiento;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -204,6 +205,8 @@ class FOR_PINS_21_01Controller extends Controller
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
         $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
+        $idsConsumibles = $datosParaCrearQR['idsConsumibles'] ?? [];
+        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? [];
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -248,7 +251,12 @@ class FOR_PINS_21_01Controller extends Controller
             ->pluck('cv_pdf')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos));
+        $Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)
+            ->whereNotNull('PDF')
+            ->pluck('PDF')
+            ->toArray();
+
+            $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos, $Procedimiento));;
 
         Log::info('todasLasRutas', $todasLasRutas);
 
@@ -749,6 +757,7 @@ class FOR_PINS_21_01Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1283,6 +1292,7 @@ class FOR_PINS_21_01Controller extends Controller
         $idTrans4 = $validatedData['Datos_Equipo']['ID_TRANS4'] ?? null;
         $idEncoder1 = $validatedData['Datos_Equipo']['ID_ENCODER1'] ?? null;
         $idEncoder2 = $validatedData['Datos_Equipo']['ID_ENCODER2'] ?? null;
+        $idProcedimiento = $validatedData['Detalles_Generales']['idProcedimiento'] ?? null;
         $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
             ?? $request->input('Firmas_Reportes2.ID_TECNICO')
             ?? $request->input('Firmas_Reportes3.ID_TECNICO')
@@ -1329,6 +1339,7 @@ class FOR_PINS_21_01Controller extends Controller
             'idEncoder2' => $idEncoder2,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
             'ID_TECNICO' => $ID_TECNICO,
+            'idProcedimiento' => $idProcedimiento,
         ];
 
         $osOcError = false;
@@ -1395,6 +1406,7 @@ class FOR_PINS_21_01Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string|max:255',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1696,6 +1708,7 @@ class FOR_PINS_21_01Controller extends Controller
             'idEncoder1' => $idEncoder1,
             'idEncoder2' => $idEncoder2,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
             'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
             ?? $request->input('Firmas_Reportes2.ID_TECNICO')
             ?? $request->input('Firmas_Reportes3.ID_TECNICO')
