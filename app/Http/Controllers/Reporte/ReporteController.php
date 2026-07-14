@@ -1554,15 +1554,17 @@ class ReporteController extends Controller
 
     public function Next_Reporte($id)
     {
+        $nuevoId = null;
+
         DB::transaction(function () use ($id, &$nuevoId) {
 
-            // 1ï¸ Obtener reporte original
+            // Obtener reporte original
             $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
 
-            // 2ï¸ Clonar reporte
+            // Clonar reporte
             $NuevoReporte = $ReporteOriginal->replicate();
 
-            // 3ï¸ Decodificar JSON
+            // Decodificar JSON
             $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true);
 
             $numeroActual = $Detalles_Generales['No_Reporte'];
@@ -1576,28 +1578,43 @@ class ReporteController extends Controller
                 $nuevoNoReporte = $numeroActual . '-001';
             }
 
-            // 4ï¸ Reemplazar valores
+            // Reemplazar valores
             $Detalles_Generales['No_Reporte'] = $nuevoNoReporte;
             $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
 
             $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
             $NuevoReporte->Estatus = 'CREADO';
 
-            // 5ï¸ Guardar nuevo reporte
+            // Guardar nuevo reporte
             $NuevoReporte->save();
 
             $nuevoId = $NuevoReporte->idReportes;
 
             // =====================================
-            // ðŸ”¹ CLONAR FIRMAS
+            // BUSCAR RELACIÓN EN LINEAL_IDEAL
+            // =====================================
+
+            $linealIdealOriginal = Lineal_Ideal::where('idReportes', $id)->first();
+
+            if ($linealIdealOriginal) {
+                Lineal_Ideal::create([
+                    'idOC' => $linealIdealOriginal->idOC,
+                    'idOrden_Servicio' => $linealIdealOriginal->idOrden_Servicio,
+                    'idSolicitud' => $linealIdealOriginal->idSolicitud,
+                    'idReportes' => $nuevoId,
+                    'Estatus' => 'CREADO',
+                ]);
+            }
+
+            // =====================================
+            // CLONAR FIRMAS
             // =====================================
 
             $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
 
             if ($FirmaOriginal) {
-
                 $NuevaFirma = $FirmaOriginal->replicate();
-                $NuevaFirma->idReportes = $nuevoId; // ðŸ‘ˆ AQUÍ está la clave
+                $NuevaFirma->idReportes = $nuevoId;
                 $NuevaFirma->save();
             }
 
@@ -1622,8 +1639,6 @@ class ReporteController extends Controller
 
         return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
     }
-
-
 
     /**
      * Display the specified resource.

@@ -54,6 +54,7 @@
                             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
                             $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
                             $ProyectoReporte = $detalles['Proyecto'] ?? $detalles['Identificacion'] ?? '';
+                            $idSolicitud = $detalles['idSolicitud'] ?? '';
                         @endphp
                         <tr>
                             <td>{{ $detalles['Contrato'] ?? '' }}</td>
@@ -80,7 +81,7 @@
                             </td>
                             <td>
                                 {{-- <a href=" route('Next.Reporte', ['id' => $reporte->idReportes])  }}"  class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a> --}}
-                                <button type="button" class="btn btn-success btnSiguienteReporte" idReporte="{{$reporte->idReportes}}" ><i class="fas ffas fa-file-export" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-success btnSiguienteReporte" idReporte="{{$reporte->idReportes}}" idSolicitud="{{ $idSolicitud }}"><i class="fas ffas fa-file-export" aria-hidden="true"></i></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminarReportes" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -198,7 +199,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
             title: 'Siguiente Reporte',
             html: '¿El reporte es <span style="color:#0d6efd; font-size:16px;">CONSECUTIVO</span>? o ¿desea crear un <span style="color:#198754; font-size:16px;"> NUEVO REPORTE?</span>',
             icon: 'question',
-            showDenyButton: false,
+            showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: 'Consecutivo',
             denyButtonText: 'Nuevo Reporte',
