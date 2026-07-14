@@ -263,7 +263,7 @@
             </tr>
             <tr>
                 <th rowspan="2">Informe de Ensayo de Durezas en Soldaduras<br>Test Report on Welding Hardness</th>
-                <th>VERSIÃ“N<br>VERSION</th>
+                <th>VERSIÓN<br>VERSION</th>
                 <th>2</th>
             </tr>
             <tr>

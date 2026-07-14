@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -43px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -65px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -46,7 +46,7 @@
                     text-align: center;
                     border-collapse: collapse;
                     width: 100%;
-                    font-size: 6px !important;
+                    font-size: 8px !important;
                 } 
                 
                 /*muestra solo la linea inferior de la celda*/
@@ -61,7 +61,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 5px;
+                    font-size: 7px;
                 }
 
                 .simbologia td, .simbologia th {
@@ -213,10 +213,20 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INSPECCIÓN VISUAL EN RSP</th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-25/01</th>
-                            <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="4" style="width: 450%; font-size: 9pt;">
+                                INSPECCIÓN VISUAL EN RSP
+                            </th>
+                            <th rowspan="4" style="width: 90%;">
+                                @if(!empty($QR_PDF))
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                @endif
+                            </th>
+
+                            <th style="width: 70%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-25/01</th>
+                            <th rowspan="4" style="width: 90%;">
+                                <img  src="{{ $Logo }}" alt="Logo" style="width: 60%; height: auto;">  
+                            </th>
                         </tr>
                     </thead>
 
@@ -262,7 +272,6 @@
                                     </tr>
                                 </thead>
                             </table>
-
                     <table class="datosgenerales">                               
                         <tr>                                     
                             <th>OBSERVACIONES:</th>                                         
@@ -482,38 +491,32 @@
                     ];
                 }, $tablaCombinacionConfig)));
 
-                $obtenerCombinacionTabla = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
+                $resolverCombinacionTabla = function (array $mergeConfig, string $groupId, string $field, int $rowIndex, int $inicioBloque, int $finBloque) {
                     foreach ($mergeConfig as $merge) {
+                        $inicio = (int) ($merge['startRow'] ?? -1);
+                        $fin = $inicio + (int) ($merge['rowspan'] ?? 1) - 1;
+
                         if (
                             ($merge['groupId'] ?? 'sin_titulo') === $groupId &&
                             ($merge['field'] ?? '') === $field &&
-                            (int) ($merge['startRow'] ?? -1) === $rowIndex &&
-                            (int) ($merge['rowspan'] ?? 1) > 1
+                            $rowIndex >= $inicio &&
+                            $rowIndex <= $fin
                         ) {
-                            return $merge;
+                            // Un rowspan nunca debe cruzar de una hoja a otra: DomPDF
+                            // deforma la tabla cuando eso ocurre. Se crea un segmento
+                            // independiente de la combinacion dentro de cada bloque.
+                            $inicioSegmento = max($inicio, $inicioBloque);
+                            $finSegmento = min($fin, $finBloque);
+
+                            return [
+                                'mostrar' => $rowIndex === $inicioSegmento,
+                                'ocultar' => $rowIndex > $inicioSegmento,
+                                'rowspan' => max(1, $finSegmento - $inicioSegmento + 1),
+                            ];
                         }
                     }
 
                     return null;
-                };
-
-                $esCeldaOcultaPorCombinacion = function (array $mergeConfig, string $groupId, string $field, int $rowIndex) {
-                    foreach ($mergeConfig as $merge) {
-                        $inicio = (int) ($merge['startRow'] ?? -1);
-                        $rowspan = (int) ($merge['rowspan'] ?? 1);
-                        $fin = $inicio + $rowspan - 1;
-
-                        if (
-                            ($merge['groupId'] ?? 'sin_titulo') === $groupId &&
-                            ($merge['field'] ?? '') === $field &&
-                            $rowIndex > $inicio &&
-                            $rowIndex <= $fin
-                        ) {
-                            return true;
-                        }
-                    }
-
-                    return false;
                 };
 
                 $contadorFilasPorGrupo = [];
@@ -536,6 +539,16 @@
                 ];
             @endphp
             @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
+            @php
+                $inicioGrupoEnBloque = $contadorFilasPorGrupo;
+                $cantidadGrupoEnBloque = [];
+                foreach ($bloque as $elementoBloque) {
+                    if (is_array($elementoBloque) && ($elementoBloque['tipo'] ?? null) === 'fila') {
+                        $grupoBloque = $elementoBloque['grupo'] ?? 'sin_titulo';
+                        $cantidadGrupoEnBloque[$grupoBloque] = ($cantidadGrupoEnBloque[$grupoBloque] ?? 0) + 1;
+                    }
+                }
+            @endphp
             <div class="content">
                 <table class="datosgenerales">
 
@@ -603,6 +616,8 @@
                 </table>
                 <div style="margin-bottom: 5px;"></div>
 
+                @include('Reportes.ReportesPDF.partials.equipos_herramientas_pdf')
+
                     <table class="datosresultados">
                     
                         <thead class="encabezadoAzul">
@@ -653,13 +668,14 @@
                                                 <tr class="juntas">
                                                     @foreach ($columnasResultadoPdf as $columnaPdf)
                                                         @php
-                                                            $mergeColumna = $obtenerCombinacionTabla($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
-                                                            $estaOculta = $esCeldaOcultaPorCombinacion($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo);
+                                                            $inicioBloqueGrupo = $inicioGrupoEnBloque[$grupoActual] ?? 0;
+                                                            $finBloqueGrupo = $inicioBloqueGrupo + ($cantidadGrupoEnBloque[$grupoActual] ?? 1) - 1;
+                                                            $mergeColumna = $resolverCombinacionTabla($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo, $inicioBloqueGrupo, $finBloqueGrupo);
                                                             $valorCelda = $item['data'][$columnaPdf['valueKey']] ?? '';
                                                         @endphp
-                                                        @if ($mergeColumna)
+                                                        @if ($mergeColumna && $mergeColumna['mostrar'])
                                                             <td rowspan="{{ $mergeColumna['rowspan'] }}">{{ $valorCelda }}</td>
-                                                        @elseif (! $estaOculta)
+                                                        @elseif (! $mergeColumna || ! $mergeColumna['ocultar'])
                                                             <td>{{ $valorCelda }}</td>
                                                         @endif
                                                     @endforeach

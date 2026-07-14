@@ -50,6 +50,9 @@
         var $infoSeleccion = $(configuracion.selectionInfoSelector);
         var celdaAnclaSeleccion = null;
         var estadoCombinaciones = [];
+        var combinacionActiva = !configuracion.modeToggleAfterSelector;
+        var $contenedorControlModo = $();
+        var $botonModoCombinacion = $();
 
         // Obtiene la cantidad actual de filas dentro del tbody configurado.
         function obtenerTotalFilas() {
@@ -163,6 +166,86 @@
         function limpiarSeleccionVisual() {
             $tbody.find(configuracion.mergeableCellSelector).removeClass('selected-merge merge-preview merge-anchor');
             $infoSeleccion.text('');
+        }
+
+        function obtenerClaveModoCombinacion() {
+            var idFormulario = $tbody.closest('form').attr('id') || 'formulario_sin_id';
+            return 'modo_combinacion_celdas_' + idFormulario + '_' + String(configuracion.hiddenSelector || configuracion.tbodySelector || 'tabla').replace(/[^a-z0-9_-]/gi, '_');
+        }
+
+        function leerEstadoModoCombinacion() {
+            if (!configuracion.modeToggleAfterSelector) {
+                combinacionActiva = true;
+                return;
+            }
+
+            try {
+                combinacionActiva = sessionStorage.getItem(obtenerClaveModoCombinacion()) === '1';
+            } catch (error) {
+                combinacionActiva = false;
+            }
+        }
+
+        function guardarEstadoModoCombinacion() {
+            if (!configuracion.modeToggleAfterSelector) {
+                return;
+            }
+
+            try {
+                sessionStorage.setItem(obtenerClaveModoCombinacion(), combinacionActiva ? '1' : '0');
+            } catch (error) {
+                // Ignora bloqueos del navegador en sessionStorage.
+            }
+        }
+
+        function actualizarIndicadorModoCombinacion() {
+            if (!$botonModoCombinacion.length) {
+                return;
+            }
+
+            if (combinacionActiva) {
+                $botonModoCombinacion.removeClass('btn-success').addClass('btn-secondary').text('Desactivar combinación');
+                return;
+            }
+
+            $botonModoCombinacion.removeClass('btn-secondary').addClass('btn-success').text('Activar combinación');
+        }
+
+        function crearControlModoCombinacion() {
+            var $anclaModo;
+
+            if (!configuracion.modeToggleAfterSelector || $botonModoCombinacion.length) {
+                return;
+            }
+
+            $botonModoCombinacion = $(configuracion.modeToggleAfterSelector).first();
+
+            if ($botonModoCombinacion.length) {
+                $botonModoCombinacion.addClass('merge-mode-toggle');
+            } else {
+                $anclaModo = $(configuracion.modeToggleAfterSelector).first();
+                $contenedorControlModo = $('<span class="merge-mode-toolbar" style="display:inline-flex;align-items:center;gap:10px;margin-left:10px;"></span>');
+                $botonModoCombinacion = $('<button type="button" class="btn btn-success custom-btn merge-mode-toggle"></button>');
+                $contenedorControlModo.append($botonModoCombinacion);
+
+                if ($anclaModo.length) {
+                    $anclaModo.after($contenedorControlModo);
+                }
+            }
+
+            $botonModoCombinacion.on('click.combinacionCeldasModo', function () {
+                combinacionActiva = !combinacionActiva;
+                guardarEstadoModoCombinacion();
+
+                if (!combinacionActiva) {
+                    celdaAnclaSeleccion = null;
+                    limpiarSeleccionVisual();
+                }
+
+                actualizarIndicadorModoCombinacion();
+            });
+
+            actualizarIndicadorModoCombinacion();
         }
 
         // Restaura la vista base antes de reaplicar las combinaciones persistidas.
@@ -345,6 +428,10 @@
                 return;
             }
 
+            if (!combinacionActiva) {
+                return;
+            }
+
             if (!celdaAnclaSeleccion) {
                 limpiarSeleccionVisual();
                 $celda.addClass('selected-merge merge-anchor');
@@ -385,6 +472,11 @@
             var mismoCampo;
             var consecutivas;
             var rango;
+
+            if (!combinacionActiva) {
+                mostrarAlerta('Activa el modo de combinacion para unir celdas.', 'info');
+                return;
+            }
 
             if ($seleccionadas.length < 2) {
                 mostrarAlerta('Selecciona al menos 2 celdas consecutivas de la misma columna para combinar.');
@@ -436,6 +528,11 @@
         function separarCeldasSeleccionadas() {
             var $seleccionadas = obtenerCeldasSeleccionadas();
             var itemCombinacion;
+
+            if (!combinacionActiva) {
+                mostrarAlerta('Activa el modo de combinacion para separar celdas.', 'info');
+                return;
+            }
 
             if ($seleccionadas.length !== 1) {
                 mostrarAlerta('Selecciona la celda principal de una combinacion para separarla.');
@@ -552,8 +649,10 @@
                 return;
             }
 
+            leerEstadoModoCombinacion();
             leerEstadoCombinaciones();
             aplicarEstadoCombinaciones();
+            crearControlModoCombinacion();
             enlazarEventos();
         }
 

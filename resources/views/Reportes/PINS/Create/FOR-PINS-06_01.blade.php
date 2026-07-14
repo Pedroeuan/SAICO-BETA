@@ -136,36 +136,36 @@
                         </div>
                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">
-                                                ¿Contrato existente?
-                                                <span class="ml-3">
-                                                    <label class="mr-2">
-                                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" name="TieneContrato" value="no"> No
-                                                    </label>
-                                                </span>
-                                            </label>
-
-                                            <!-- Input visible solo si es "SI" -->
-                                            <input type="text"
-                                                id="campoContrato"
-                                                class="form-control inputForm"
-                                                name="Detalles_Generales[Contrato]"
-                                                placeholder="Ejemplo: 640853841"
-                                                value="{{ old('Detalles_Generales.Contrato') }}"
-                                                required>
-                                        </div>
-                                    </div>
-
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
-                            @error('Proyecto')
+                            <label class="col-form-label">
+                                ¿Contrato existente?
+                                <span class="ml-3">
+                                    <label class="mr-2">
+                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="TieneContrato" value="no"> No
+                                    </label>
+                                </span>
+                            </label>
+
+                            <!-- Input visible solo si es "SI" -->
+                            <input type="text"
+                                id="campoContrato"
+                                class="form-control inputForm"
+                                name="Detalles_Generales[Contrato]"
+                                placeholder="Ejemplo: 640853841"
+                                value="{{ old('Detalles_Generales.Contrato') }}"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Procedimiento</label>
+                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{ $Procedimiento->Nombre ?? '' }}" readonly>
+                            @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -273,6 +273,11 @@
                         </div>
                     </div>
 
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $Procedimiento->idProcedimiento ?? '' }}" readonly>
+                        </div>
+                    </div>
                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
 

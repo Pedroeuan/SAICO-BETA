@@ -13,7 +13,7 @@
                 }
                 header {
                     position: fixed;
-                    top: -43px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -65px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -180,10 +180,17 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th rowspan="4" style="width: 500%; font-size: 9pt;">INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO</th>
-                            <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-16/01</th>
-                            <th rowspan="4" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="4" style="width: 450%; font-size: 9pt;">
+                                INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO
+                            </th>
+                            <th rowspan="4" style="width: 90%;">
+                                @if(!empty($QR_PDF))
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                @endif
+                            </th>
+                            <th style="width: 70%;">Código:</th>
+                            <th style="width: 100%;">FOR-PINS-16/01</th>
+                            <th rowspan="4" style="width: 90%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 60%; height: auto;"></th>
                         </tr>
                     </thead>
 
@@ -194,7 +201,7 @@
                         </tr>
                         <tr>
                             <th style="width: 90%;">Fecha de elaboración</th>
-                            <th>18-feb-26</th>
+                            <th>18-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>
@@ -394,7 +401,53 @@
                     </table>
             </footer>
 
-        @foreach ($Grupo_Juntas_Detalles_Re as $bloque) 
+        @php
+            $tablaCombinacionConfig = $tablaCombinacionConfig ?? ($Datos_Equipo['TABLA_COMBINACION_CONFIG'] ?? []);
+            if (is_string($tablaCombinacionConfig)) {
+                $tablaCombinacionConfig = json_decode($tablaCombinacionConfig, true);
+            }
+            $tablaCombinacionConfig = is_array($tablaCombinacionConfig) ? $tablaCombinacionConfig : [];
+
+            $resolverCombinacionTabla = function (array $config, string $grupo, string $campo, int $fila, int $inicioBloque, int $finBloque) {
+                foreach ($config as $merge) {
+                    if (!is_array($merge)) continue;
+                    $inicio = (int) ($merge['startRow'] ?? -1);
+                    $fin = $inicio + (int) ($merge['rowspan'] ?? 1) - 1;
+                    if (($merge['groupId'] ?? 'sin_titulo') === $grupo && ($merge['field'] ?? '') === $campo && $fila >= $inicio && $fila <= $fin) {
+                        $inicioSegmento = max($inicio, $inicioBloque);
+                        $finSegmento = min($fin, $finBloque);
+                        return [
+                            'mostrar' => $fila === $inicioSegmento,
+                            'ocultar' => $fila > $inicioSegmento,
+                            'rowspan' => max(1, $finSegmento - $inicioSegmento + 1),
+                        ];
+                    }
+                }
+                return null;
+            };
+
+            $columnasResultadoPdf = [
+                ['field'=>'ID','valueKey'=>'ID'], ['field'=>'Elemento','valueKey'=>'Elemento'],
+                ['field'=>'No_Indicacion','valueKey'=>'No_Indicacion'], ['field'=>'Tipo_Indicacion','valueKey'=>'Tipo_Indicacion'],
+                ['field'=>'Referencia','valueKey'=>'Referencia'], ['field'=>'DNR','valueKey'=>'DNR'],
+                ['field'=>'HT','valueKey'=>'HT'], ['field'=>'Long_Axial','valueKey'=>'Long_Axial'],
+                ['field'=>'Long_Circ','valueKey'=>'Long_Circ'], ['field'=>'d','valueKey'=>'d'],
+                ['field'=>'ta','valueKey'=>'ta'], ['field'=>'Perdida','valueKey'=>'Perdida'],
+                ['field'=>'Espesor_remanente','valueKey'=>'Espesor_remanente'], ['field'=>'Observaciones','valueKey'=>'Observaciones'],
+            ];
+            $contadorFilasPorGrupo = [];
+        @endphp
+        @foreach ($Grupo_Juntas_Detalles_Re as $bloque)
+            @php
+                $inicioGrupoEnBloque = $contadorFilasPorGrupo;
+                $cantidadGrupoEnBloque = [];
+                foreach ($bloque as $elementoBloque) {
+                    if (is_array($elementoBloque) && ($elementoBloque['tipo'] ?? null) === 'fila') {
+                        $grupoBloque = $elementoBloque['grupo'] ?? 'sin_titulo';
+                        $cantidadGrupoEnBloque[$grupoBloque] = ($cantidadGrupoEnBloque[$grupoBloque] ?? 0) + 1;
+                    }
+                }
+            @endphp
             <div class="content">
 
                 <table class="datosgenerales">
@@ -455,14 +508,16 @@
                         </tr>
                         <tr>
                             <th>TIPO E INTENSIDAD DE ILUMINACIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Iluminacion'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Iluminacion'] ?? '' }}</td>
                             <th style="width: 160px;">TIPO DE INSPECCIÓN:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_Inspeccion'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Tipo_Inspeccion'] ?? '' }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 5px;"></div>
+
+                @include('Reportes.ReportesPDF.partials.equipos_herramientas_pdf')
 
                     <table class="datosresultados">
                     
@@ -508,23 +563,26 @@
 
                                             {{-- FILA --}}
                                             @if (($item['tipo'] ?? null) == 'fila')
+                                                @php
+                                                    $grupoActual = $item['grupo'] ?? 'sin_titulo';
+                                                    $indiceFilaGrupo = $contadorFilasPorGrupo[$grupoActual] ?? 0;
+                                                    $inicioBloqueGrupo = $inicioGrupoEnBloque[$grupoActual] ?? 0;
+                                                    $finBloqueGrupo = $inicioBloqueGrupo + ($cantidadGrupoEnBloque[$grupoActual] ?? 1) - 1;
+                                                @endphp
                                                 <tr class="juntas">
-                                                    <td>{{ $item['data']['ID'] }}</td>
-                                                    <td>{{ $item['data']['Elemento'] }}</td>
-                                                    <td>{{ $item['data']['No_Indicacion'] }}</td>
-                                                    <td>{{ $item['data']['Tipo_Indicacion'] }}</td>
-                                                    <td>{{ $item['data']['Referencia'] }}</td>
-                                                    <td>{{ $item['data']['DNR'] }}</td>
-                                                    <td>{{ $item['data']['HT'] }}</td>
-                                                    <td>{{ $item['data']['Long_Axial'] }}</td>
-                                                    <td>{{ $item['data']['Long_Circ'] }}</td>
-                                                    <td>{{ $item['data']['d'] }}</td>
-                                                    <td>{{ $item['data']['ta'] }}</td>
-                                                    <td>{{ $item['data']['Perdida'] }}</td>
-                                                    <td>{{ $item['data']['Espesor_remanente'] }}</td>
-                                                    <td>{{ $item['data']['Observaciones'] }}</td>
-                                                                                                        
+                                                    @foreach ($columnasResultadoPdf as $columnaPdf)
+                                                        @php
+                                                            $merge = $resolverCombinacionTabla($tablaCombinacionConfig, $grupoActual, $columnaPdf['field'], $indiceFilaGrupo, $inicioBloqueGrupo, $finBloqueGrupo);
+                                                            $valor = $item['data'][$columnaPdf['valueKey']] ?? '';
+                                                        @endphp
+                                                        @if ($merge && $merge['mostrar'])
+                                                            <td rowspan="{{ $merge['rowspan'] }}">{{ $valor }}</td>
+                                                        @elseif (!$merge || !$merge['ocultar'])
+                                                            <td>{{ $valor }}</td>
+                                                        @endif
+                                                    @endforeach
                                                 </tr>
+                                                @php $contadorFilasPorGrupo[$grupoActual] = $indiceFilaGrupo + 1; @endphp
                                             @endif
 
                                 @endforeach

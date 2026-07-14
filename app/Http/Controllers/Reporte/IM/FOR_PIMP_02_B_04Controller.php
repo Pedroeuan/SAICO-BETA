@@ -97,7 +97,16 @@ class FOR_PIMP_02_B_04Controller extends Controller
 
     private function normalizarMergeConfig($mergeConfig): array
     {
-        $allowedFields = ['descripcion', 'horario', 'observaciones'];
+        $allowedFields = [
+            'descripcion',
+            'horario',
+            'metal_base_a',
+            'zac_b',
+            'soldadura_c',
+            'zac_b1',
+            'metal_base_a1',
+            'observaciones',
+        ];
 
         if (is_string($mergeConfig)) {
             $decoded = json_decode($mergeConfig, true);
@@ -144,6 +153,107 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 && $item['row'] < $rowCount
                 && ($item['row'] + $item['rowspan']) <= $rowCount;
         }));
+    }
+
+    private function resolveMergeCell(array $mergeConfig, string $field, int $rowIndex, $value): array
+    {
+        $cellValue = trim((string) $value);
+
+        foreach ($mergeConfig as $merge) {
+            $startRow = (int) ($merge['row'] ?? $merge['startRow'] ?? -1);
+            $rowspan = (int) ($merge['rowspan'] ?? 1);
+            $mergeField = (string) ($merge['field'] ?? '');
+
+            if ($mergeField === $field && $startRow === $rowIndex && $rowspan > 1) {
+                return [
+                    'show' => true,
+                    'rowspan' => $rowspan,
+                    'value' => $cellValue,
+                ];
+            }
+        }
+
+        foreach ($mergeConfig as $merge) {
+            $startRow = (int) ($merge['row'] ?? $merge['startRow'] ?? -1);
+            $rowspan = (int) ($merge['rowspan'] ?? 1);
+            $endRow = $startRow + $rowspan - 1;
+            $mergeField = (string) ($merge['field'] ?? '');
+
+            if ($mergeField === $field && $rowIndex > $startRow && $rowIndex <= $endRow) {
+                return [
+                    'show' => false,
+                    'rowspan' => 1,
+                    'value' => $cellValue,
+                ];
+            }
+        }
+
+        return [
+            'show' => true,
+            'rowspan' => 1,
+            'value' => $cellValue,
+        ];
+    }
+
+    private function normalizeMergeConfigForPage(array $mergeConfig, int $inicio, int $fin): array
+    {
+        $normalizado = [];
+
+        foreach ($mergeConfig as $merge) {
+            $startRow = (int) ($merge['row'] ?? $merge['startRow'] ?? -1);
+            $rowspan = (int) ($merge['rowspan'] ?? 1);
+            $field = (string) ($merge['field'] ?? '');
+            $endRow = $startRow + $rowspan - 1;
+
+            if ($field === '' || $startRow < $inicio || $startRow > $fin) {
+                continue;
+            }
+
+            if ($endRow > $fin) {
+                continue;
+            }
+
+            $normalizado[] = [
+                'row' => $startRow - $inicio,
+                'field' => $field,
+                'rowspan' => $rowspan,
+            ];
+        }
+
+        return $normalizado;
+    }
+
+    private function buildDurezaPages(array $rows, array $mergeConfig, int $rowsPerPage = 20): array
+    {
+        $rows = $this->sanitizeDurezaRows($rows);
+        $mergeConfig = $this->sanitizeDurezaMergeConfig($mergeConfig, count($rows));
+        $pages = [];
+
+        foreach (array_chunk($rows, $rowsPerPage) as $pageIndex => $pageRows) {
+            $inicioPagina = $pageIndex * $rowsPerPage;
+            $finPagina = $inicioPagina + count($pageRows) - 1;
+            $mergePagina = $this->normalizeMergeConfigForPage($mergeConfig, $inicioPagina, $finPagina);
+            $rowsRender = [];
+
+            foreach ($pageRows as $rowIndex => $row) {
+                $rowsRender[] = [
+                    'descripcion' => $this->resolveMergeCell($mergePagina, 'descripcion', $rowIndex, $row['descripcion'] ?? ''),
+                    'horario' => $this->resolveMergeCell($mergePagina, 'horario', $rowIndex, $row['horario'] ?? ''),
+                    'metal_base_a' => $this->resolveMergeCell($mergePagina, 'metal_base_a', $rowIndex, $row['metal_base_a'] ?? ''),
+                    'zac_b' => $this->resolveMergeCell($mergePagina, 'zac_b', $rowIndex, $row['zac_b'] ?? ''),
+                    'soldadura_c' => $this->resolveMergeCell($mergePagina, 'soldadura_c', $rowIndex, $row['soldadura_c'] ?? ''),
+                    'zac_b1' => $this->resolveMergeCell($mergePagina, 'zac_b1', $rowIndex, $row['zac_b1'] ?? ''),
+                    'metal_base_a1' => $this->resolveMergeCell($mergePagina, 'metal_base_a1', $rowIndex, $row['metal_base_a1'] ?? ''),
+                    'observaciones' => $this->resolveMergeCell($mergePagina, 'observaciones', $rowIndex, $row['observaciones'] ?? ''),
+                ];
+            }
+
+            $pages[] = [
+                'rows' => $rowsRender,
+            ];
+        }
+
+        return $pages;
     }
 
     public function Datos_QR($datosParaCrearQR)
@@ -767,7 +877,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = 20; // Mantener 20 filas por bloque/hoja
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -1153,7 +1263,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = 20; // Mantener 20 filas por bloque/hoja
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -1569,6 +1679,10 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         $mergeConfigRaw = $Reporte->dureza_merge_config ?? ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? '[]');
         $mergeConfig = $this->normalizarMergeConfig($mergeConfigRaw);
+        $durezaPromedio = $this->sanitizeDurezaPromedio($Datos_Equipo['DUREZA_PROMEDIO'] ?? []);
+        $durezaPages = $this->buildDurezaPages($Datos_Equipo['DUREZA_ROWS'] ?? [], $mergeConfig, 20);
+                $croquisPath = public_path('img/reportes/for-pimp-02-b-04-croquis.png');
+        $croquisExiste = file_exists($croquisPath);
 
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = $Grupo_Juntas_Detalles_Re_Model
@@ -1639,7 +1753,10 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
             'Datos_Equipo' => $Datos_Equipo,
-            'durezaMergeConfig' => $mergeConfig,
+            'durezaPromedio' => $durezaPromedio,
+            'durezaPages' => $durezaPages,
+            'croquisPath' => $croquisPath,
+            'croquisExiste' => $croquisExiste,
             'QR_PDF' => $qrPdf,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,

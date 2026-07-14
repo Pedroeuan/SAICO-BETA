@@ -33,6 +33,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use App\Support\Reportes\PinsEquiposQrSupport;
 
 /*PDF */
 use setasign\Fpdi\Fpdi;
@@ -53,6 +55,7 @@ class FOR_PINS_25_01Controller extends Controller
         }
 
         return collect($configuracion)
+            ->take(500)
             ->filter(function ($item) {
                 return is_array($item)
                     && !empty($item['field'])
@@ -64,7 +67,8 @@ class FOR_PINS_25_01Controller extends Controller
                     'groupId' => !empty($item['groupId']) ? (string) $item['groupId'] : 'sin_titulo',
                     'field' => (string) $item['field'],
                     'startRow' => max(0, (int) $item['startRow']),
-                    'rowspan' => max(2, (int) $item['rowspan']),
+                    // Evita valores manipulados capaces de generar rowspans desmedidos.
+                    'rowspan' => min(1000, max(2, (int) $item['rowspan'])),
                 ];
             })
             ->unique(function ($item) {
@@ -72,6 +76,83 @@ class FOR_PINS_25_01Controller extends Controller
             })
             ->values()
             ->all();
+    }
+
+    private function prepararDatosEquipoReporte25(array $datosEquipo, $idSolicitud, array $datosEquipoActuales = [], $contrato = '', $noReporte = ''): array
+    {
+        $catalogo = PinsEquiposQrSupport::obtenerCatalogoEquiposHerramientasPorSolicitud($idSolicitud);
+        $datosEquipo = PinsEquiposQrSupport::prepararDatosEquipoSeleccionados(
+            $datosEquipo,
+            $catalogo,
+            $datosEquipo['EQUIPOS_HERRAMIENTAS_IDS'] ?? []
+        );
+
+        $datosEquipo['QR_TOKEN'] = $datosEquipo['QR_TOKEN']
+            ?? ($datosEquipoActuales['QR_TOKEN'] ?? (string) Str::uuid());
+
+        $qrAnterior = $datosEquipoActuales['QR_PDF'] ?? null;
+        $datosEquipo['QR_PDF'] = PinsEquiposQrSupport::generarQrPublico(
+            'FOR_PINS_25_01',
+            $contrato,
+            $noReporte,
+            $datosEquipo['QR_TOKEN']
+        );
+
+        if ($qrAnterior && $qrAnterior !== $datosEquipo['QR_PDF']) {
+            PinsEquiposQrSupport::eliminarArchivoPublico($qrAnterior);
+        }
+
+        $datosEquipo['PDF_UNIFICADO'] = $datosEquipoActuales['PDF_UNIFICADO'] ?? null;
+
+        return $datosEquipo;
+    }
+
+    private function invalidarPdfCacheReporte25(array &$datosEquipo): void
+    {
+        PinsEquiposQrSupport::eliminarArchivoPublico($datosEquipo['PDF_UNIFICADO'] ?? null);
+        $datosEquipo['PDF_UNIFICADO'] = null;
+    }
+
+    private function obtenerRespuestaPdfCacheadoReporte25($id)
+    {
+        $reporte = reporte::where('idReportes', $id)->first();
+
+        if (!$reporte) {
+            return null;
+        }
+
+        $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
+        $rutaPublica = $datosEquipo['PDF_UNIFICADO'] ?? null;
+
+        if (!PinsEquiposQrSupport::existeArchivoPublico($rutaPublica)) {
+            return null;
+        }
+
+        $rutaAbsoluta = PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($rutaPublica);
+
+        if (!$rutaAbsoluta || !File::exists($rutaAbsoluta)) {
+            return null;
+        }
+
+        return response(File::get($rutaAbsoluta), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_25_01.PDF"');
+    }
+
+    private function guardarPdfCacheadoReporte25($id, $pdfOutput, array $detallesGenerales, array $datosEquipo): void
+    {
+        $rutaPublica = PinsEquiposQrSupport::guardarPdfCacheado(
+            $pdfOutput,
+            'FOR_PINS_25_01',
+            $detallesGenerales['Contrato'] ?? '',
+            $detallesGenerales['No_Reporte'] ?? ''
+        );
+
+        $datosEquipo['PDF_UNIFICADO'] = $rutaPublica;
+
+        reporte::where('idReportes', $id)->update([
+            'Datos_Equipo' => json_encode($datosEquipo),
+        ]);
     }
 
 
@@ -244,6 +325,18 @@ class FOR_PINS_25_01Controller extends Controller
         }
 
     }
+    private function filasPorHojaFormatoPrincipal(Request $request): int
+    {
+        $requiereEquipos = strtolower((string) $request->input('Datos_Equipo.REQUIERE_EQUIPOS', 'no'));
+        $equiposSeleccionados = $request->input('Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS', []);
+
+        return in_array($requiereEquipos, ['si', 'sí'], true)
+            && is_array($equiposSeleccionados)
+            && !empty($equiposSeleccionados)
+                ? 15
+                : 20;
+    }
+
     private function procesarBloques(Request $request)
     {
         $titulosJson = $request->input('componentes_titulos_data', '[]');
@@ -251,7 +344,9 @@ class FOR_PINS_25_01Controller extends Controller
         $bloques = [];
         $bloqueActual = [];
         $contador = 0;
-        $maxFilasPorBloque = 22;
+        // El formato complementario 25_01_01 siempre muestra 30 filas por hoja,
+        // independientemente de que el reporte tenga equipos seleccionados.
+        $maxFilasPorBloque = 30;
 
         $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
             if (!empty($bloqueActual)) {
@@ -315,6 +410,144 @@ class FOR_PINS_25_01Controller extends Controller
         return $bloques;
     }
 
+    private function contarTitulosYFilasReporte(array $bloques)
+    {
+        $totalTitulos = 0;
+        $totalFilas = 0;
+
+        foreach ($bloques as $bloque) {
+            foreach ($bloque as $item) {
+                if (($item['tipo'] ?? '') === 'titulo') {
+                    $totalTitulos++;
+                }
+
+                if (($item['tipo'] ?? '') === 'fila') {
+                    $totalFilas++;
+                }
+            }
+        }
+
+        return $totalTitulos + $totalFilas;
+    }
+
+    private function obtenerFotosParaPdf($fotosReporte)
+    {
+        if (!$fotosReporte) {
+            return [];
+        }
+
+        $fotos = json_decode($fotosReporte->Fotos_Reportes, true) ?: [];
+
+        return collect($fotos)->map(function ($foto) {
+            return [
+                'path' => storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? '')),
+                'comment' => $foto['comentario'] ?? '',
+                'una_hoja' => $foto['una_hoja'] ?? 0,
+            ];
+        })->all();
+    }
+
+    private function cargarContextoReportePdf25($id)
+    {
+        $reporte = reporte::where('idReportes', $id)->first();
+        $grupoJuntas = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
+        $firmasReporte = Firma_Reporte::where('idReportes', $id)->first();
+        $fotosReporte = Fotos_Reporte::where('idReportes', $id)->first();
+
+        if (!$reporte || !$grupoJuntas || !$firmasReporte) {
+            Log::warning('No se encontraron datos completos para generar el PDF', ['id' => $id]);
+            abort(404, 'No se encontrÃ³ la informaciÃ³n del reporte.');
+        }
+
+        $detallesGenerales = json_decode($reporte->Detalles_Generales, true) ?: [];
+        $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
+        $catalogoEquiposHerramientas = PinsEquiposQrSupport::obtenerCatalogoEquiposHerramientasPorSolicitud($detallesGenerales['idSolicitud'] ?? null);
+        $datosEquipo = PinsEquiposQrSupport::normalizarDatosEquipoSeleccionadosExistentes($datosEquipo, $catalogoEquiposHerramientas);
+        $tablaCombinacionConfig = json_decode($datosEquipo['TABLA_COMBINACION_CONFIG'] ?? '[]', true) ?: [];
+        $tablaCombinacionConfigComponentes = json_decode($datosEquipo['TABLA_COMBINACION_CONFIG_COMPONENTES'] ?? '[]', true) ?: [];
+        $juntasGrupoRe = json_decode($grupoJuntas->Juntas_Grupo_Re, true) ?: [];
+        $componentesDetalles = $juntasGrupoRe['componentes'] ?? [];
+        $inspeccionDetalles = $juntasGrupoRe['inspeccion'] ?? $juntasGrupoRe;
+        $firmas = json_decode($firmasReporte->Firmas, true) ?: [];
+        $fotos = $this->obtenerFotosParaPdf($fotosReporte);
+        $qrPdf = !empty($datosEquipo['QR_PDF']) ? PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($datosEquipo['QR_PDF']) : null;
+
+        return [
+            'Detalles_Generales' => $detallesGenerales,
+            'Datos_Equipo' => $datosEquipo,
+            'QR_PDF' => $qrPdf,
+            'tablaCombinacionConfig' => $tablaCombinacionConfig,
+            'tablaCombinacionConfigComponentes' => $tablaCombinacionConfigComponentes,
+            'Componentes_Detalles_Re' => $componentesDetalles,
+            'Grupo_Juntas_Detalles_Re' => $inspeccionDetalles,
+            'Firmas_Reportes' => $firmas,
+            'numFirmas' => $firmas['numFirmas'] ?? 0,
+            'Fotos' => $fotos,
+            'totalFotos' => count($fotos),
+            'totalTitulosYFilas' => $this->contarTitulosYFilasReporte($inspeccionDetalles),
+            'Logo' => public_path('images/Logo_AICO_R.jpg'),
+        ];
+    }
+
+    private function renderizarPdfContenido($view, array $data, $paper, $orientation, $logMessage = null, $t0 = null)
+    {
+        $pdfContent = PDF::loadView($view, $data)
+            ->setPaper($paper, $orientation)
+            ->output();
+
+        if ($logMessage !== null && $t0 !== null) {
+            Log::info($logMessage, ['segundos' => round(microtime(true) - $t0, 2)]);
+        }
+
+        return $pdfContent;
+    }
+
+    private function combinarDocumentosPdf25($pdf0Content, $pdf1Content, $pdf2Content)
+    {
+        $combinedPdf = new Fpdi();
+
+        $pageCount0 = 0;
+        $pageCount1 = 0;
+        $pageCount2 = 0;
+
+        $pageCount0 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf0Content));
+        $pageCount1 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        $pageCount2 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        $totalPageCount = $pageCount0 + $pageCount1 + $pageCount2;
+
+        $pageCount0 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf0Content));
+        for ($i = 1; $i <= $pageCount0; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(119, -266.5);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        $pageCount1 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        for ($i = 1; $i <= $pageCount1; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('L');
+            $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(180, -182.5);
+            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+        }
+
+        $pageCount2 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
+        for ($i = 1; $i <= $pageCount2; $i++) {
+            $tplId = $combinedPdf->importPage($i);
+            $combinedPdf->AddPage('P');
+            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
+            $combinedPdf->SetFont('Arial', 'B', 8);
+            $combinedPdf->SetXY(138.5, -266.5);
+            $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
+        }
+
+        return $combinedPdf;
+    }
+
     /*public function FOR_PINS_25_01_store1(Request $request)
     {
         // Verificar los datos recibidos antes de procesarlos
@@ -350,6 +583,12 @@ class FOR_PINS_25_01Controller extends Controller
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.REQUIERE_EQUIPOS' => 'nullable|string|in:si,no',
+            'Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS' => 'nullable|array',
+            'Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS.*' => 'nullable|integer',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -515,6 +754,14 @@ class FOR_PINS_25_01Controller extends Controller
             $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig_Componentes', '[]')),
             JSON_UNESCAPED_UNICODE
         );
+        $validatedData['Datos_Equipo'] = $this->prepararDatosEquipoReporte25(
+            $validatedData['Datos_Equipo'],
+            $validatedData['Detalles_Generales']['idSolicitud'] ?? null,
+            [],
+            $validatedData['Detalles_Generales']['Contrato'] ?? '',
+            $validatedData['Detalles_Generales']['No_Reporte'] ?? ''
+        );
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = null;
 
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
@@ -541,7 +788,7 @@ class FOR_PINS_25_01Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 22; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = $this->filasPorHojaFormatoPrincipal($request);
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -577,7 +824,7 @@ class FOR_PINS_25_01Controller extends Controller
         */
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
                 // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
-                $filasPorLongitud = 21;
+                $filasPorLongitud = $maxFilasPorBloque;
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
                     'tipo' => 'fila',
@@ -846,6 +1093,12 @@ class FOR_PINS_25_01Controller extends Controller
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.REQUIERE_EQUIPOS' => 'nullable|string|in:si,no',
+            'Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS' => 'nullable|array',
+            'Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS.*' => 'nullable|integer',
+            'Datos_Equipo.QR_TOKEN' => 'nullable|string',
+            'Datos_Equipo.QR_PDF' => 'nullable|string',
+            'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
@@ -962,6 +1215,7 @@ class FOR_PINS_25_01Controller extends Controller
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
+        $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
@@ -997,6 +1251,14 @@ class FOR_PINS_25_01Controller extends Controller
             $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig_Componentes', '[]')),
             JSON_UNESCAPED_UNICODE
         );
+        $this->invalidarPdfCacheReporte25($datosEquipoActuales);
+        $validatedData['Datos_Equipo'] = $this->prepararDatosEquipoReporte25(
+            $validatedData['Datos_Equipo'],
+            $validatedData['Detalles_Generales']['idSolicitud'] ?? null,
+            $datosEquipoActuales,
+            $validatedData['Detalles_Generales']['Contrato'] ?? '',
+            $validatedData['Detalles_Generales']['No_Reporte'] ?? ''
+        );
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
@@ -1015,7 +1277,7 @@ class FOR_PINS_25_01Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 22; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = $this->filasPorHojaFormatoPrincipal($request);
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -1051,7 +1313,7 @@ class FOR_PINS_25_01Controller extends Controller
         */
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
                 // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
-                $filasPorLongitud = 21;
+                $filasPorLongitud = $maxFilasPorBloque;
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
                     'tipo' => 'fila',
@@ -1353,6 +1615,110 @@ class FOR_PINS_25_01Controller extends Controller
 
     public function FOR_PINS_25_01($id)
     {
+        $t0 = microtime(true);
+        $debugPdf = request()->query('debug_pdf');
+
+        if (!$debugPdf) {
+            $respuestaCache = $this->obtenerRespuestaPdfCacheadoReporte25($id);
+
+            if ($respuestaCache) {
+                Log::info('PDF cacheado reutilizado', ['id' => $id, 'segundos' => round(microtime(true) - $t0, 2)]);
+                return $respuestaCache;
+            }
+        }
+        Log::info('INICIO generación PDF', ['id' => $id]);
+
+        $data = $this->cargarContextoReportePdf25($id);
+        $data['title'] = 'Reporte_FOR-PINS-25/01.PDF';
+
+        $dataComponentes = $data;
+        $dataComponentes['Grupo_Juntas_Detalles_Re'] = $data['Componentes_Detalles_Re'];
+        $dataComponentes['tablaCombinacionConfigComponentes'] = $data['tablaCombinacionConfigComponentes'];
+        $dataComponentes['Codigo_Formato_Componentes'] = 'FOR-PINS-25/01';
+        $dataComponentes['Titulo_Formato_Componentes'] = 'LISTADO DE COMPONENTES';
+
+        Log::info('Datos preparados para render', ['segundos' => round(microtime(true) - $t0, 2)]);
+
+        if ($debugPdf === 'pdf0') {
+            $pdf0Content = $this->renderizarPdfContenido(
+                'Reportes.ReportesPDF.Reporte_FOR_PINS_25_01_01_PDF',
+                $dataComponentes,
+                'letter',
+                'portrait',
+                'pdf0 (componentes) renderizado',
+                $t0
+            );
+
+            return response($pdf0Content, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_25_01_componentes.PDF"');
+        }
+
+        if ($debugPdf === 'pdf1') {
+            $pdf1Content = $this->renderizarPdfContenido(
+                'Reportes.ReportesPDF.Reporte_FOR_PINS_25_01_PDF',
+                $data,
+                'letter',
+                'landscape',
+                'pdf1 (principal) renderizado',
+                $t0
+            );
+
+            return response($pdf1Content, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_25_01_principal.PDF"');
+        }
+
+        if ($debugPdf === 'pdf2') {
+            $pdf2Content = $this->renderizarPdfContenido(
+                'Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_25_01_PDF',
+                $data,
+                'letter',
+                'portrait',
+                'pdf2 (fotos) renderizado',
+                $t0
+            );
+
+            return response($pdf2Content, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_25_01_fotos.PDF"');
+        }
+
+        $pdf0Content = $this->renderizarPdfContenido(
+            'Reportes.ReportesPDF.Reporte_FOR_PINS_25_01_01_PDF',
+            $dataComponentes,
+            'letter',
+            'portrait',
+            'pdf0 (componentes) renderizado',
+            $t0
+        );
+        $pdf1Content = $this->renderizarPdfContenido(
+            'Reportes.ReportesPDF.Reporte_FOR_PINS_25_01_PDF',
+            $data,
+            'letter',
+            'landscape',
+            'pdf1 (principal) renderizado',
+            $t0
+        );
+        $pdf2Content = $this->renderizarPdfContenido(
+            'Reportes.ReportesFotosPDF.Reporte_FOTOS_FOR_PINS_25_01_PDF',
+            $data,
+            'letter',
+            'portrait',
+            'pdf2 (fotos) renderizado',
+            $t0
+        );
+
+        $combinedPdf = $this->combinarDocumentosPdf25($pdf0Content, $pdf1Content, $pdf2Content);
+
+        $pdfOutput = $combinedPdf->Output('Reporte_FOR_PINS_25_01.PDF', 'S');
+        $this->guardarPdfCacheadoReporte25($id, $pdfOutput, $data['Detalles_Generales'], $data['Datos_Equipo']);
+        Log::info('PDF combinado y listo para enviar', ['segundos' => round(microtime(true) - $t0, 2)]);
+
+        return response($pdfOutput, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_25_01.PDF"');
+
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
         $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
@@ -1435,6 +1801,7 @@ class FOR_PINS_25_01Controller extends Controller
         $dataComponentes['tablaCombinacionConfigComponentes'] = $tablaCombinacionConfigComponentes;
         $dataComponentes['Codigo_Formato_Componentes'] = 'FOR-PINS-25/01';
         $dataComponentes['Titulo_Formato_Componentes'] = 'LISTADO DE COMPONENTES';
+        Log::info('Datos preparados para render', ['segundos' => round(microtime(true) - $t0, 2)]);
         // Generar el PDF de componentes en orientación vertical
         $pdf0 = PDF::loadView('Reportes.ReportesPDF.Reporte_FOR_PINS_25_01_01_PDF', $dataComponentes)->setPaper('letter', 'portrait');
 
@@ -1446,21 +1813,21 @@ class FOR_PINS_25_01Controller extends Controller
 
         // Combinar los PDFs
         $pdf0Content = $pdf0->output();
+        Log::info('pdf0 (componentes) renderizado', ['segundos' => round(microtime(true) - $t0, 2)]);
         $pdf1Content = $pdf1->output();
+        Log::info('pdf1 (principal) renderizado', ['segundos' => round(microtime(true) - $t0, 2)]);
         $pdf2Content = $pdf2->output();
+        Log::info('pdf2 (fotos) renderizado', ['segundos' => round(microtime(true) - $t0, 2)]);
 
        // Crear objetos FPDI independientes para contar páginas
-        $tempPdf0 = new Fpdi();
-        $pageCount0 = $tempPdf0->setSourceFile(StreamReader::createByString($pdf0Content));
 
-        $tempPdf1 = new Fpdi();
-        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
 
-        $tempPdf2 = new Fpdi();
-        $pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
 
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
+        $pageCount0 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf0Content));
+        $pageCount1 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
+        $pageCount2 = $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
         $totalPageCount = $pageCount0 + $pageCount1 + $pageCount2;
 
         // Añadir páginas del PDF de componentes
@@ -1470,7 +1837,7 @@ class FOR_PINS_25_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(124.5, -262.5);
+            $combinedPdf->SetXY(122.5, -266.5);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 
@@ -1497,8 +1864,12 @@ class FOR_PINS_25_01Controller extends Controller
             $combinedPdf->Cell(0, 10, ($i + $pageCount1) . " de $totalPageCount", 0, 0, 'C');
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_PINS_25_01.PDF', 'I'), 200)
-            ->header('Content-Type', 'application/pdf');
+        $pdfOutput = $combinedPdf->Output('Reporte_FOR_PINS_25_01.PDF', 'S');
+        Log::info('PDF combinado y listo para enviar', ['segundos' => round(microtime(true) - $t0, 2)]);
+
+        return response($pdfOutput, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_25_01.PDF"');
     }
 
     /**
