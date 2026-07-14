@@ -219,7 +219,7 @@
                             </th>
 
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 100%;">FOR-PINS-04/01</th>
+                            <th style="width: 100%;">FOR-PINS-05/02</th>
 
                             <th rowspan="4" style="width:90%; padding:0; margin:0;">
                                 <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">

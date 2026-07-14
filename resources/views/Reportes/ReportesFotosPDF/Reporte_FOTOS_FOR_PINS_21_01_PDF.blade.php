@@ -232,7 +232,7 @@
                         </tr>
                         <tr>
                             <th style="width: 90%;">Fecha de elaboración</th>
-                            <th>18-feb-26</th>
+                            <th>18-may-26</th>
                         </tr>
                         <tr>
                             <th>Página</th>

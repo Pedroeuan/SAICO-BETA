@@ -506,6 +506,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.NUMERO_FICHA' => 'nullable|string',
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
@@ -528,6 +529,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
 
         /*Detalles Generales y Datos del Equipo */
@@ -906,6 +908,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.NUMERO_FICHA' => 'nullable|string',
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
@@ -928,6 +931,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
 
         $detallesRequest = $request->input('Detalles_Generales', []);
