@@ -54,6 +54,7 @@
                             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
                             $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
                             $ProyectoReporte = $detalles['Proyecto'] ?? $detalles['Identificacion'] ?? '';
+                            $idSolicitud = $detalles['idSolicitud'] ?? '';
                         @endphp
                         <tr>
                             <td>{{ $detalles['Contrato'] ?? '' }}</td>
@@ -79,7 +80,8 @@
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             <td>
-                                <a href="{{ route('Next.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a>
+                                {{-- <a href=" route('Next.Reporte', ['id' => $reporte->idReportes])  }}"  class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a> --}}
+                                <button type="button" class="btn btn-success btnSiguienteReporte" idReporte="{{$reporte->idReportes}}" idSolicitud="{{ $idSolicitud }}"><i class="fas ffas fa-file-export" aria-hidden="true"></i></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminarReportes" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -116,6 +118,9 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
+@php
+    $pruebas = \App\Models\Prueba\prueba::with('norma_codigo.formato')->get();
+@endphp
 
 let table = new DataTable('#tablaJs', {
     // options
@@ -188,7 +193,236 @@ $(document).on("click", ".btnEliminarReportes", function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+$(document).on("click", ".btnSiguienteReporte", function() {
+    var idReporte = $(this).attr("idReporte");
+    let idReporteSeleccionado = idReporte;
+        Swal.fire({
+            title: 'Siguiente Reporte',
+            html: '¿El reporte es <span style="color:#0d6efd; font-size:16px;">CONSECUTIVO</span>? o ¿desea crear un <span style="color:#198754; font-size:16px;"> NUEVO REPORTE?</span>',
+            icon: 'question',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Consecutivo',
+            denyButtonText: 'Nuevo Reporte',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                confirmButton: 'btn btn-primary me-2',
+                denyButton: 'btn btn-success me-2',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+        if (result.isConfirmed) {
+            const nextReporteUrl = '/Next/Reporte/' + idReporte;
+            window.location.href = nextReporteUrl;
+        } else if (result.isDenied) {
+            Swal.fire({
+                title: 'Nuevo Reporte',
+                html: `
+                    <div class="text-start">
+                        <div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h5><i class="icon fas fa-info"></i> Importante</h5>
+                            <p>Los datos generales del reporte serán llenados automáticamente.</p>
+                            <p class="mb-3">Completa la selección del servicio para crear un nuevo reporte.</p>
+                        </div>
+                        <form id="formModalServicios" action="{{ route('Nuevo.Reporte.DesdeModal', ['id' => 0]) }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Prueba Seleccionada</label>
+                                    <select class="form-select" name="Prueba" id="PruebaSelectModal" required>
+                                        <option value="">Seleccione una Prueba</option>
+                                        @foreach($pruebas->sortBy('Nombre') as $prueba)
+                                            <option value="{{ $prueba->idPrueba }}" data-text="{{ $prueba->Nombre }}">{{ $prueba->Nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Norma o Código</label>
+                                    <select class="form-select" name="NormaCodigo" id="NormaCodigoSelectModal" required></select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Formato</label>
+                                    <select class="form-select" name="Formato" id="FormatoSelectModal" required></select>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <label class="form-label" id="formatoNombreModal">IMAGEN DE LA PRUEBA SELECCIONADA</label>
+                                    <svg class="rounded" width="100%" height="180" role="img" aria-label="IMAGEN DE LA PRUEBA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                                        <title>IMAGEN DE LA PRUEBA</title>
+                                        <rect id="pruebaRectModal" width="100%" height="100%" fill="#C04040"></rect>
+                                        <image id="pruebaImagenModal" href="{{ asset('images/Menu Servicios SVG/FOCO_BLANCO.svg') }}" x="10%" y="10%" width="80%" height="70%" alt="Imagen de la prueba" />
+                                        <text id="pruebaTextoModal" x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">IMAGEN DE LA PRUEBA</text>
+                                    </svg>
+                                </div>
+                                <input type="hidden" name="formatoNombrePersonalizado" id="formatoNombrePersonalizadoModal">
+                                <input type="hidden" name="idReporteOriginal" id="idReporteOriginalModal">
+                            </div>
+                            <div class="mt-3 text-end">
+                                <button type="submit" class="btn btn-success">Guardar y Continuar</button>
+                            </div>
+                        </form>
+                    </div>
+                `,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Cerrar',
+                width: '800px',
+                didOpen: () => {
+                    const pruebaSelect = document.getElementById('PruebaSelectModal');
+                    const normaSelect = document.getElementById('NormaCodigoSelectModal');
+                    const formatoSelect = document.getElementById('FormatoSelectModal');
+                    const pruebaImagen = document.getElementById('pruebaImagenModal');
+                    const pruebaTexto = document.getElementById('pruebaTextoModal');
+                    const pruebaRect = document.getElementById('pruebaRectModal');
+                    const formatoNombreLabel = document.getElementById('formatoNombreModal');
+                    const formatoNombrePersonalizadoInput = document.getElementById('formatoNombrePersonalizadoModal');
+                    const idReporteOriginalInput = document.getElementById('idReporteOriginalModal');
+                    const modalForm = document.getElementById('formModalServicios');
+
+                    const pruebasAzul = [
+                        'CARACTERIZACIÓN DE MATERIALES',
+                        'DUREZAS',
+                        'PMI',
+                        'METALOGRAFÍA',
+                        'ANÁLISIS QUÍMICO',
+                        'RELEVADO DE ESFUERZOS'
+                    ];
+
+                    const imagenesPrueba = {
+                        'PARTÍCULAS MAGNÉTICAS': '{{ asset('images/Menu Servicios SVG/PARTICULAS_MAGNETICAS.svg') }}',
+                        'LÍQUIDOS PENETRANTES': '{{ asset('images/Menu Servicios SVG/LIQUIDOS_PENETRANTES.svg') }}',
+                        'CORRIENTES EDDY': '{{ asset('images/Menu Servicios SVG/CORRIENTES_EDDY.svg') }}',
+                        'TERMOGRAFÍA': '{{ asset('images/Menu Servicios SVG/TERMOGRAFIA.svg') }}',
+                        'ULTRASONIDO': '{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}',
+                        'RADIOGRAFIA': '{{ asset('images/Menu Servicios SVG/RADIOGRAFIA.svg') }}',
+                        'PMI': '{{ asset('images/Menu Servicios SVG/PMI.svg') }}',
+                        'PRECALENTAMIENTO': '{{ asset('images/Menu Servicios SVG/PRECALENTAMIENTO.svg') }}',
+                        'ARREGLO DE FASES': '{{ asset('images/Menu Servicios SVG/ARREGLO_FASES.svg') }}',
+                        'CARACTERIZACIÓN DE MATERIALES': '{{ asset('images/Menu Servicios SVG/CARACTERIZACION_MATERIALES.svg') }}',
+                        'DUREZAS': '{{ asset('images/Menu Servicios SVG/DUREZAS.svg') }}',
+                        'METALOGRAFÍA': '{{ asset('images/Menu Servicios SVG/METALOGRAFIA.svg') }}',
+                        'ANÁLISIS QUÍMICO': '{{ asset('images/Menu Servicios SVG/ANALISIS_QUIMICO.svg') }}',
+                        'TOFD': '{{ asset('images/Menu Servicios SVG/TOFD.svg') }}',
+                        'ACFM': '{{ asset('images/Menu Servicios SVG/ACFM.svg') }}',
+                        'ONDAS GUIADAS': '{{ asset('images/Menu Servicios SVG/ONDAS_GUIADAS.svg') }}',
+                        'VISUAL': '{{ asset('images/Menu Servicios SVG/Inspección_Visual.svg') }}',
+                        'RELEVADO DE ESFUERZOS': '{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}'
+                    };
+
+                    const nombresPersonalizados = {
+                        'FOR-PINS-03-02': 'INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS',
+                        'FOR-PINS-04-01': 'INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES',
+                        'FOR-PINS-05-01': 'INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES',
+                        'FOR-PINS-05-02': 'INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES TUBULARES',
+                        'FOR-PINS-06-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO DE ACUERDO CON API RP 2X',
+                        'FOR-PINS-07-01': 'INFORME DE MEDICIÓN DE ESPESORES DE PARED EN LA TUBERÍA Y ELEMENTOS ESTRUCTURALES',
+                        'FOR-PINS-08-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD',
+                        'FOR-PINS-09-01': 'INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR',
+                        'FOR-PINS-10-01': 'INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO, DE ACUERDO CON API 1104',
+                        'FOR-PINS-11-01': 'INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE',
+                        'FOR-PINS-11-02': 'INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ RECTO EN BOCA DE TUBERIA',
+                        'FOR-PINS-12-01': 'REGISTRO DE EXAMINACIÓN AGUDEZA VISUAL Y DIFERENCIACIÓN DEL CONTRASTE DE COLOR',
+                        'FOR-PINS-13-01': 'INFORME DE INSPECCIÓN CON CORRIENTES EDDY',
+                        'FOR-PINS-14-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO AWS D1.1',
+                        'FOR-PINS-15-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES Y TOFD',
+                        'FOR-PINS-16-01': 'INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO',
+                        'FOR-PINS-17-01': 'INSPECCIÓN CON TERMOGRAFÍA INFRARROJA',
+                        'FOR-PINS-17-01_01': 'INSPECCIÓN CON TERMOGRAFÍA INFRARROJA A TABLEROS',
+                        'FOR-PINS-18-01': 'INFORME DE DETECCIÓN DE DISCONTINUIDADES CON CORRIENTES DE EDDY',
+                        'FOR-PINS-19-01': 'INFORME DE INSPECCIÓN CON ACFM',
+                        'FOR-PINS-20-01': 'INFORME DE ANÁLISIS MEDIANTE CORRIENTE EDDY PULSADA (PECT).',
+                        'FOR-PINS-21-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES CON EL CODIGO API 1104',
+                        'FOR-PINS-22-01': 'INFORME DE  INSPECCIÓN DE TUBERIA POR CORREINTES EDDY.',
+                        'FOR-PINS-23-01': 'INFORME DE INSPECCIÓN CON EL MÉTODO DE ONDAS GUIADAS',
+                        'FOR-PINS-24-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES y TOFD',
+                        'FOR-PINS-25-01': 'INSPECCIÓN VISUAL EN RSP'
+                    };
+
+                    idReporteOriginalInput.value = idReporteSeleccionado;
+                    modalForm.action = '/Nuevo/Reporte/DesdeModal/' + idReporteSeleccionado;
+
+                    pruebaSelect.addEventListener('change', function () {
+                        const pruebaId = this.value;
+                        const selectedText = this.options[this.selectedIndex]?.text || '';
+                        normaSelect.innerHTML = '<option value="">Seleccione una Norma</option>';
+                        formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+                        if (pruebaId) {
+                            fetch(`/Obtener/normas/${pruebaId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.length > 0) {
+                                        data.forEach(norma => {
+                                            const option = document.createElement('option');
+                                            option.value = norma.idNorma_codigo;
+                                            option.textContent = norma.Nombre;
+                                            normaSelect.appendChild(option);
+                                        });
+                                    } else {
+                                        normaSelect.innerHTML = '<option value="">No hay normas disponibles</option>';
+                                    }
+                                })
+                                .catch(error => console.error('Error al obtener las normas:', error));
+                        }
+
+                        const imagenSeleccionada = imagenesPrueba[selectedText] || '{{ asset('images/Menu Servicios SVG/FOCO_BLANCO.svg') }}';
+                        pruebaImagen.setAttribute('href', imagenSeleccionada);
+                        pruebaTexto.textContent = selectedText || 'IMAGEN DE LA PRUEBA';
+
+                        if (pruebasAzul.includes(selectedText)) {
+                            pruebaRect.setAttribute('fill', '#0070C0');
+                        } else {
+                            pruebaRect.setAttribute('fill', '#C04040');
+                        }
+                    });
+
+                    normaSelect.addEventListener('change', function () {
+                        const pruebaId = this.value;
+                        formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
+
+                        if (pruebaId) {
+                            fetch(`/Obtener/formatos/${pruebaId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.length > 0) {
+                                        data.forEach(formato => {
+                                            const option = document.createElement('option');
+                                            option.value = formato.idFormato;
+                                            option.textContent = formato.Nombre;
+                                            option.setAttribute('data-nombre-personalizado', nombresPersonalizados[formato.Nombre] || formato.Nombre);
+                                            formatoSelect.appendChild(option);
+                                        });
+                                    } else {
+                                        formatoSelect.innerHTML = '<option value="">No hay formatos disponibles</option>';
+                                    }
+                                })
+                                .catch(error => console.error('Error al obtener los formatos:', error));
+                        }
+                    });
+
+                    formatoSelect.addEventListener('change', function () {
+                        const selectedOption = formatoSelect.options[formatoSelect.selectedIndex];
+                        if (selectedOption) {
+                            const nombrePersonalizado = selectedOption.getAttribute('data-nombre-personalizado');
+                            formatoNombreLabel.textContent = nombrePersonalizado || selectedOption.textContent;
+                            formatoNombrePersonalizadoInput.value = nombrePersonalizado || selectedOption.textContent;
+                        } else {
+                            formatoNombreLabel.textContent = 'IMAGEN DE LA PRUEBA SELECCIONADA';
+                            formatoNombrePersonalizadoInput.value = '';
+                        }
+                    });
+
+                    if (pruebaSelect.value) {
+                        pruebaSelect.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+        }
+    });
+});
+
+/*document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.btnSiguienteReporte').forEach(function(btn) {
         btn.addEventListener('click', function(event) {
             event.preventDefault(); // Evita la navegación inmediata
@@ -203,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = url;
         });
     });
-});
+});*/
 </script>
 
 @endsection

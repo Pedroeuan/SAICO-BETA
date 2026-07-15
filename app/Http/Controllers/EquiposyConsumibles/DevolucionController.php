@@ -155,18 +155,19 @@ class DevolucionController extends Controller
         return view('Equipos.devolucion', compact('datosManifiesto', 'id', 'idsSolicitud','FechaActual','Nombre','EstadoSolicitud','devoluciones'));
     }
 
-
     public function devolverItem(Request $request)
     {
         // Validar la solicitud
         $request->validate([
             'idGeneral_EyC' => 'required|integer',
-            'cantidad' => 'required|integer|min:1',
+            'cantidad' => 'required|integer|min:0',
+            'Fecha' => 'required|date',
         ]);
 
         $idGeneral_EyC = $request->input('idGeneral_EyC');
         $cantidad = $request->input('cantidad');
         $folio = $request->input('folio'); // Obtener el Folio de la solicitud
+        $fechaDevolucion = $request->input('Fecha');
         // Buscar el registro en General_EyC
         //$generalEyC = general_eyc::where('idGeneral_EyC', $idGeneral_EyC)->first();
         $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
@@ -212,7 +213,7 @@ class DevolucionController extends Controller
         $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
         $historialAlmacen->Tipo = 'DEVOLUCIÓN';
         $historialAlmacen->Cantidad = $cantidad;
-        $historialAlmacen->Fecha = now()->format('Y-m-d');
+        $historialAlmacen->Fecha =  $fechaDevolucion; //now()->format('Y-m-d'); //Se quita la fecha automatica y se toma la fecha que el usuario ingresa en el input
         $historialAlmacen->Tierra_Costafuera = $tierraCostafuera; 
 
         $historialAlmacen->Folio = $folio;
@@ -225,17 +226,17 @@ class DevolucionController extends Controller
 
     public function devolverTodo(Request $request)
     {
-        //$idsSolicitud = $request->input('idSolicitudes');
         $idsSolicitud = $request->json('idSolicitudes');
+
+        $fechas = $request->json('fechas');
+
         foreach ($idsSolicitud as $idSolicitud) {
             $detalles = detalles_solicitud::where('idSolicitud', $idSolicitud)->get();
             foreach ($detalles as $detalle) {
-                // reutilizamos devolverItem manualmente:
                 // Obtener el folio correcto
                 $folio = manifiesto::where('idSolicitud', $idSolicitud)->value('Folio');
                 $idGeneral_EyC = $detalle->idGeneral_EyC;
                 $Cantidad = $detalle->Cantidad;
-
                 $generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
 
                 if (!$generalEyC) {
@@ -269,13 +270,23 @@ class DevolucionController extends Controller
                 // Obtener el campo 'Destino' para asignarlo a 'Tierra_Costafuera'
                 //$tierraCostafuera = $manifiesto->Destino;
                 $tierraCostafuera = 'FATIMA';
+                $fecha = $fechas[$idGeneral_EyC] ?? null;
+
+                Log::info('***********************');
+                Log::info('fecha: ', ['fecha' => $fecha]);
+
+                if (!$fecha) {
+                    continue; // o manejar el error
+                }
+
                 // Crear un registro en la tabla Historial_Almacen
                 $historialAlmacen = new Historial_Almacen;
                 $historialAlmacen->idAlmacen = $almacen->idAlmacen;
                 $historialAlmacen->idGeneral_EyC = $idGeneral_EyC;
                 $historialAlmacen->Tipo = 'DEVOLUCIÓN';
                 $historialAlmacen->Cantidad = $Cantidad;
-                $historialAlmacen->Fecha = now()->format('Y-m-d');
+
+                $historialAlmacen->Fecha = $fecha; // Se toma la fecha que el usuario ingresa en el input
                 $historialAlmacen->Tierra_Costafuera = $tierraCostafuera; 
 
                 $historialAlmacen->Folio = $folio;
