@@ -6,7 +6,8 @@
 
     <style>
         @page {
-            margin: 3cm 1.2cm 2.1cm 2.2cm;
+            /* El margen inferior reserva espacio para tres renglones de conclusion y las firmas. */
+            margin: 3cm 1.2cm 3cm 2.2cm;
         }
 
         body {
@@ -27,9 +28,10 @@
 
         footer {
             position: fixed;
-            bottom: -30px;
+            /* Un valor mas negativo baja juntos la conclusion y el bloque de firmas. */
+            bottom: -85px;
             left: 0;
-            right: 10;
+            right: 0;
             height: auto;
             text-align: center;
         }
@@ -68,6 +70,63 @@
             border-collapse: collapse;
             width: 100%;
             font-size: 8px;
+        }
+
+        /* Conclusion del reporte: el valor procede del campo Observaciones. */
+        .tablaConclusion {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 8px;
+        }
+
+        .tablaConclusion th {
+            width: 12%;
+            padding: 0 4px 0 0;
+            text-align: left;
+            vertical-align: top;
+            line-height: 10px;
+        }
+
+        .tablaConclusion td.conclusionContenido {
+            position: relative;
+            height: 33px;
+            padding: 0 3px;
+            border: 0;
+            text-align: left;
+            vertical-align: top;
+            line-height: 10px;
+            overflow: hidden;
+        }
+
+        /* El texto usa el alto completo y se distribuye automaticamente en los tres renglones. */
+        .conclusionTexto {
+            position: absolute;
+            top: 0;
+            left: 3px;
+            right: 3px;
+            z-index: 2;
+            line-height: 11px;
+            text-align: left;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* Lineas visuales colocadas debajo del texto de conclusion. */
+        .conclusionRenglon {
+            height: 10px;
+            border-bottom: 1px solid #000;
+        }
+
+        /* Evita que la ultima linea de conclusion quede pegada al bloque de firmas. */
+        .separacionConclusionFirmas {
+            height: 12px;
+        }
+
+        /* Baja solamente las firmas para que no choquen con la conclusion ni con la tabla. */
+        .contenedorFirmas {
+            position: relative;
+            top: 8px;
         }
 
         .tablaResumenDureza {
@@ -310,15 +369,24 @@
     </table>
 </header>
 <footer>
-        <table class="datosgenerales">
+        <table class="tablaConclusion">
             <tr>
-                <th>OBSERVACIONES<br>
-                REMARKS:</th>
-                <td class="lineaInferior" style="width: 600px;">{{ $Datos_Equipo['Observaciones'] }}</td>
+                <th>CONCLUSIÓN<br>Conclusion:</th>
+                <td class="conclusionContenido">
+                    <div class="conclusionTexto">{{ $Datos_Equipo['Observaciones'] ?? '' }}</div>
+                    <div class="conclusionRenglon"></div>
+                    <div class="conclusionRenglon"></div>
+                    <div class="conclusionRenglon"></div>
+                </td>
             </tr>
         </table>
 
-        <table class="datosgenerales">
+        <div class="separacionConclusionFirmas"></div>
+
+        <div class="contenedorFirmas">
+            @include('Reportes.partials.firmas_im_pdf')
+        </div>
+        <table class="datosgenerales" style="display: none;">
             <thead>
                 @if( $numFirmas == 2)
                 <!-- 2 Firmas -->
@@ -487,13 +555,13 @@
             <tr>
                 <th class="etiquetaGeneral">FECHA:<br>Date</th>
                 <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
-                <th class="etiquetaGeneral">No. REPORTE:<br>No. Report:</th>
+                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">No. REPORTE:</span>No. Report:</th>
                 <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
             </tr>
             <tr>
                 <th class="etiquetaGeneral">CLIENTE:<br>Client:</th>
                 <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
-                <th class="etiquetaGeneral">No. CONTRATO:<br>No. Contract:</th>
+                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">No. CONTRATO:</span>No. Contract:</th>
                 <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
             </tr>
             <tr>
@@ -514,28 +582,28 @@
             </tr>
             <tr>
                 <th class="etiquetaGeneral">INSTALACIÓN:<br>Location:</th>
-                <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
+                <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
                 <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">NUMERO DE ISOMÉTRICO:</span>No. Isometric:</th>
-                <td class="valorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
+                <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
             </tr>
             <tr>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">NOMBRE DE LAS PIEZAS:</span>Name of the Pieces:</th>
+                <th class="etiquetaGeneral" style="white-space: nowrap;">NOMBRE DE LAS PIEZAS:<br>Name of the Pieces:</th>
                 <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Nom_Pieza'] ?? '' }}</td>
-                <th class="etiquetaGeneral">MATERIAL:<br>Material:</th>
+                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">MATERIAL:</span>Material: </th>
                 <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
             </tr>
             <tr>
-                <th class="etiquetaGeneral">PROCEDIMIENTO:<br>Procedure</th>
+                <th class="etiquetaGeneral">PROCEDIMIENTO:<br>Procedure:</th>
                 <td class="valorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
                 <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">CRITERIO DE EVALUACIÓN:</span>Evaluation Criteria:</th>
                 <td class="valorGeneral">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</td>
-                <th class="etiquetaGeneral">TRAZABILIDAD:<br>Traceability:</th>
+                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">TRAZABILIDAD:</span>Traceability:</th>
                 <td class="valorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
             </tr>
             <tr>
                 <th class="etiquetaGeneral">No JUNTA:<br>No. Joint:</th>
                 <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">TEMPERATURA DE LA PIEZA:</span>Piece Temperature</th>
+                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">TEMPERATURA DE LA PIEZA:</span>Piece Temperature:</th>
                 <td class="valorGeneral">{{ $Detalles_Generales['Temperatura_pieza'] ?? '' }}</td>
                 <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">ESPESOR/CÉDULA:</span>Thickness / Schedule:</th>
                 <td class="valorGeneral">{{ $Detalles_Generales['Espesor_cedula'] ?? '' }}</td>
@@ -560,7 +628,7 @@
                     <td colspan="6" rowspan="2" class="croquisSoldadura">
                         <div class="croquisWrapper">
                             @if($croquisExiste)
-                                <img src="{{ $croquisPath }}" alt="Croquis de soldadura" style="width:40%; height:40px; display:block; margin:0 auto; object-fit:contain;">
+                                <img src="{{ $croquisPath }}" alt="Croquis de soldadura" style="width:30%; height:35px; display:block; margin:0 auto; object-fit:contain;">
                             @endif
                         </div>
                     </td>

@@ -64,11 +64,41 @@
             vertical-align: middle;
         }
 
+        /* Encabezado blanco y compacto como las tablas de captura del sistema. */
+        .tabla-dureza thead th {
+            background-color: #fff !important;
+            color: #111 !important;
+            font-weight: 600;
+            padding: 8px 6px;
+            vertical-align: middle;
+        }
+
         .tabla-dureza input {
-            height: 22px;
-            padding: 2px;
+            height: 30px;
+            padding: 4px 6px;
             text-align: center;
-            border: none;
+            border: 1px solid #adb5bd;
+            border-radius: 4px;
+        }
+
+        /*
+         * El alternado se limita a las mediciones. Descripcion, horario y
+         * observaciones permanecen blancos porque pueden abarcar varias filas.
+         */
+        #durezaBrinellBody > tr:nth-child(even) > td[data-merge-field="metal_base_a"]:not(.selected-merge):not(.merge-anchor):not(.merge-preview),
+        #durezaBrinellBody > tr:nth-child(even) > td[data-merge-field="zac_b"]:not(.selected-merge):not(.merge-anchor):not(.merge-preview),
+        #durezaBrinellBody > tr:nth-child(even) > td[data-merge-field="soldadura_c"]:not(.selected-merge):not(.merge-anchor):not(.merge-preview),
+        #durezaBrinellBody > tr:nth-child(even) > td[data-merge-field="zac_b1"]:not(.selected-merge):not(.merge-anchor):not(.merge-preview),
+        #durezaBrinellBody > tr:nth-child(even) > td[data-merge-field="metal_base_a1"]:not(.selected-merge):not(.merge-anchor):not(.merge-preview),
+        #durezaBrinellBody > tr:nth-child(even) > td.numero-fila,
+        #durezaBrinellBody > tr:nth-child(even) > td:last-child {
+            --bs-table-bg: #e2e6ea;
+            --bs-table-accent-bg: #e2e6ea;
+            background-color: #e2e6ea !important;
+        }
+
+        #durezaBrinellBody > tr > td:not(.selected-merge):not(.merge-anchor):not(.merge-preview) input {
+            background-color: #ffffff !important;
         }
 
         .tabla-plantilla-dureza th,
@@ -435,8 +465,29 @@
                         if ($metodosEquipo->isEmpty() && collect($idsGeneral_EyCs_Equipos ?? [])->isNotEmpty()) { $metodosEquipo = collect(['LEEB', 'UCI']); }
                         $durezaPromedio = old('Dureza', $Datos_Equipo['DUREZA_PROMEDIO'] ?? []);
                         $durezaRows = collect(old('Dureza', $Datos_Equipo['DUREZA_ROWS'] ?? []))->filter(function ($row, $key) { return is_numeric($key) && is_array($row); })->values()->all();
-                        if (empty($durezaRows)) {
-                            $durezaRows = [[ 'descripcion' => '', 'horario' => '', 'metal_base_a' => '', 'zac_b' => '', 'soldadura_c' => '', 'zac_b1' => '', 'metal_base_a1' => '', 'observaciones' => '' ]];
+                        $usarPlantillaDureza = empty($durezaRows);
+                        $filaDurezaVacia = [
+                            'descripcion' => '',
+                            'horario' => '',
+                            'metal_base_a' => '',
+                            'zac_b' => '',
+                            'soldadura_c' => '',
+                            'zac_b1' => '',
+                            'metal_base_a1' => '',
+                            'observaciones' => '',
+                        ];
+                        $durezaMergePredeterminada = [
+                            ['startRow' => 0, 'field' => 'descripcion', 'rowspan' => 20],
+                            ['startRow' => 0, 'field' => 'horario', 'rowspan' => 5],
+                            ['startRow' => 5, 'field' => 'horario', 'rowspan' => 5],
+                            ['startRow' => 10, 'field' => 'horario', 'rowspan' => 5],
+                            ['startRow' => 15, 'field' => 'horario', 'rowspan' => 5],
+                            ['startRow' => 0, 'field' => 'observaciones', 'rowspan' => 20],
+                        ];
+
+                        if ($usarPlantillaDureza) {
+                            // Solo los reportes sin filas guardadas reciben la plantilla inicial.
+                            $durezaRows = array_fill(0, 20, $filaDurezaVacia);
                         }
                     @endphp
 
@@ -475,7 +526,7 @@
                                 <th>ZAC<br>HAZ (B)</th>
                                 <th>SOLDADURA<br>Welding<br>(C)</th>
                                 <th>ZAC<br>HAZ (B1)</th>
-                                <th>METAL BASE<br>Base Metal<br>(B)</th>
+                                <th>METAL BASE<br>Base Metal<br>(A1)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -502,10 +553,11 @@
                                             </tr>
                                         </tbody>
                     </table>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">ANTES O DESPUÉS DEL RELEVADO DE ESFUERZOS</div>
                     <div class="alert alert alert-info alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         <h5><i class="icon fas fa-info"></i> Información</h5>
-                        <p> <b>Selecciona celdas de cualquier columna para combinar.</b>
+                        <p> <b>Activa la combinación, selecciona la primera y la última celda del rango. Para separar, selecciona la celda combinada.</b>
                         </p>                 
                     </div>
                     
@@ -545,29 +597,47 @@
                             return json_encode(array_values($normalized));
                         };
 
-                        $durezaMergeInitial = $normalizeMergeConfigView(old('Dureza_MergeConfig', isset($Reporte) ? ($Reporte->dureza_merge_config ?? '[]') : ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? '[]')));
+                        $mergeConfigGuardada = isset($Reporte)
+                            ? ($Reporte->dureza_merge_config ?? ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? '[]'))
+                            : ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? '[]');
+                        $mergeConfigRecibida = old('Dureza_MergeConfig', $mergeConfigGuardada);
+
+                        if ($usarPlantillaDureza && ($mergeConfigRecibida === null || $mergeConfigRecibida === '' || $mergeConfigRecibida === '[]')) {
+                            $mergeConfigRecibida = $durezaMergePredeterminada;
+                        }
+
+                        $durezaMergeInitial = $normalizeMergeConfigView($mergeConfigRecibida);
                     @endphp
                     <div class="table-responsive mb-3">
     <input type="hidden" name="Dureza_MergeConfig" id="durezaMergeConfig" value="{{ $durezaMergeInitial }}">
     <div class="toolbar-help">
-        Selecciona celdas de cualquier columna para combinar.
+        Activa la combinación, selecciona la primera y la última celda del rango. Para separar, selecciona la celda combinada.
         <span id="durezaMergeSelectionInfo" class="text-primary fw-semibold ms-2"></span>
     </div>
     <div class="toolbar-divider"></div>
     <div class="table-responsive mb-2">
         <table class="table table-bordered align-middle text-center tabla-dureza" id="tablaDurezaBrinell">
-                            <thead class="table-light"><tr><th style="min-width: 210px;">DESCRIPCIÓN<br><small>Description</small></th>
-                                <th style="min-width: 130px;">HORARIO<br><small>Schedule</small></th>
-                                <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
-                                <th style="min-width: 125px;">ZAC / HAZ<br>(B)</th>
-                                <th style="min-width: 125px;">SOLDADURA<br><small>Weld</small><br>(C)</th>
-                                <th style="min-width: 125px;">ZAC / HAZ<br>(B1)</th>
-                                <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A1)</th>
-                                <th style="min-width: 220px;">OBSERVACIONES<br><small>Remarks</small></th>
-                                <th style="width: 80px;">ACCIONES</th></tr>
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="width: 60px;">No.</th>
+                                    <th colspan="2">DATOS DE LA JUNTA</th>
+                                    <th colspan="5">VALORES DE DUREZA (ESCALA BRINELL)</th>
+                                    <th rowspan="2" style="min-width: 220px;">OBSERVACIONES</th>
+                                    <th rowspan="2" style="width: 80px;">Eliminar</th>
+                                </tr>
+                                <tr>
+                                    <th style="min-width: 210px;">DESCRIPCIÓN<br></th>
+                                    <th style="min-width: 130px;">HORARIOS TÉCNICOS</th>
+                                    <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
+                                    <th style="min-width: 125px;">ZAC<br><small>HAZ</small><br>(B)</th>
+                                    <th style="min-width: 125px;">SOLDADURA<br><small>Weld</small><br>(C)</th>
+                                    <th style="min-width: 125px;">ZAC<br><small>HAZ</small><br>(B1)</th>
+                                    <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A1)</th>
+                                </tr>
                             </thead>
                             <tbody id="durezaAutoFillBody">
                                 <tr>
+                                    <td></td>
                                     <td><input type="text" class="form-control inputForm" data-auto-fill-field="descripcion"></td>
                                     <td><input type="text" class="form-control inputForm" data-auto-fill-field="horario"></td>
                                     <td><input type="text" class="form-control inputForm" data-auto-fill-field="metal_base_a"></td>
@@ -581,6 +651,7 @@
                             </tbody>
                             <tbody id="durezaBrinellBody">@foreach($durezaRows as $index => $row)
                                 <tr>
+                                    <td class="numero-fila">{{ $index + 1 }}</td>
                                     <td class="mergeable-cell" data-merge-field="descripcion">
                                         <input type="text" class="form-control inputForm" name="Dureza[{{ $index }}][descripcion]" value="{{ $row['descripcion'] ?? '' }}">
                                     </td>
@@ -626,8 +697,6 @@
         </div>
         <div class="toolbar-actions">
             <button id="addDurezaRowsBtn" type="button" class="btn btn-success custom-btn">Agregar fila</button>
-            <button id="mergeSelectedCellsBtn" type="button" class="btn btn-primary custom-btn">Combinar celdas</button>
-            <button id="splitSelectedCellsBtn" type="button" class="btn btn-outline-secondary custom-btn">Separar celdas</button>
             <button id="fillEmptyDurezaBtn" type="button" class="btn btn-warning custom-btn">Rellenar vacíos "---"</button>
             <button id="toggleCombinacionBtn" type="button" class="btn btn-success custom-btn">Activar combinación</button>
         </div>
@@ -635,7 +704,7 @@
 
                     <div class="col-12">
                         <div class="form-group">
-                        <label class="col-form-label" for="observacionesEquipo">Observaciones:</label>
+                        <label class="col-form-label" for="observacionesEquipo">Conclusión:</label>
                         <textarea class="form-control is-waning" id="observacionesEquipo" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones', $Datos_Equipo['Observaciones'] ?? '') }}</textarea>
                         </div>
                     </div>
@@ -659,7 +728,7 @@
                                 <table class="table table-bordered table-striped dt-responsive tablas">
                                     <thead>
                                         <tr>
-                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="{{ old('Realizo', $Firmas['Realizo'] ?? 'Realiz�') }}"></th>
+                                            <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="{{ old('Realizo', $Firmas['Realizo'] ?? 'Realizó') }}"></th>
                                         </tr>
 
                                         <tr>
@@ -686,7 +755,7 @@
                             <table class="table table-bordered table-striped dt-responsive tablas">
                                 <thead>
                                     <tr>
-                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="{{ old('Realizo', $Firmas['Realizo'] ?? 'Realiz�') }}"></th>
+                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="{{ old('Realizo', $Firmas['Realizo'] ?? 'Realizó') }}"></th>
                                         <td style="width: 30px;"></td>
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ old('Vobo1', $Firmas['Vobo1'] ?? 'Vo.Bo.') }}"></th>
                                     </tr>
@@ -724,7 +793,7 @@
                                 <thead>
                                     <tr>
 
-                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="{{ old('Realizo', $Firmas['Realizo'] ?? 'Realiz�') }}"></th>
+                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="{{ old('Realizo', $Firmas['Realizo'] ?? 'Realizó') }}"></th>
                                         <td style="width: 30px;"></td>
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ old('Vobo1', $Firmas['Vobo1'] ?? 'Vo.Bo.') }}"></th>
                                         <td style="width: 30px;"></td>
@@ -769,6 +838,10 @@
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO', $Firmas['EMPRESA_2DO_ENCARGADO'] ?? '')}}"></td>
 
                                     </tr>
+                                    <tr>
+                                        <td></td><td></td><td></td><td></td>
+                                        <td><input type="text" class="form-control inputForm" name="Firmas_Reportes3[NUMERO_FICHA]" placeholder="NÚMERO DE FICHA" value="{{ old('Firmas_Reportes3.NUMERO_FICHA', $Firmas['NUMERO_FICHA'] ?? '') }}"></td>
+                                    </tr>
                                 </thead>                            
                             </table>
                         </div>
@@ -779,7 +852,7 @@
                                 <thead>
                                     <tr>
 
-                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="{{ old('Realizo', $Firmas['Realizo'] ?? 'Realiz�') }}"></th>
+                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="{{ old('Realizo', $Firmas['Realizo'] ?? 'Realizó') }}"></th>
                                         <td style="width: 30px;"></td>
                                         <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ old('Vobo1', $Firmas['Vobo1'] ?? 'Vo.Bo.') }}"></th>
                                         <td style="width: 30px;"></td>
@@ -835,6 +908,10 @@
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO', $Firmas['EMPRESA_3RO_ENCARGADO'] ?? '')}}"></td>
 
                                     </tr>
+                                    <tr>
+                                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                                        <td><input type="text" class="form-control inputForm" name="Firmas_Reportes4[NUMERO_FICHA]" placeholder="NÚMERO DE FICHA" value="{{ old('Firmas_Reportes4.NUMERO_FICHA', $Firmas['NUMERO_FICHA'] ?? '') }}"></td>
+                                    </tr>
                                     
                                 </thead>                            
                             </table>
@@ -855,10 +932,19 @@
                             </select>
                         </div>
 
+                        <div class="alert alert-info py-2">
+                            Asigna a cada fotografía el número de hoja y su posición. Una hoja admite hasta cuatro posiciones o una fotografía de página completa.
+                        </div>
+
+                        <div data-layout-fotos-manual="1">
                         @if(!empty($Fotos_Comentarios))
                             <div class="row">
                                 @foreach($Fotos_Comentarios as $index => $foto)
-                                    <div class="col-sm-6" id="image-container-{{ $index }}">
+                                    <div class="col-sm-6"
+                                        id="image-container-{{ $index }}"
+                                        data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
+                                        data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
+                                        data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}">
                                         <div class="form-group">
                                             <label for="replace_image_{{ $index }}">Imagen subida {{ $index + 1 }}:</label>
 
@@ -894,6 +980,7 @@
 
                         <div id="imageFieldsContainer" class="row">
                             <!-- Aquí se agregarán dinámicamente los campos -->
+                        </div>
                         </div>
 
                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -1029,8 +1116,10 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}"></script>
+<script src="{{ asset('js/Reportes_Dureza_Promedio_02_B_04.js') }}"></script>
 <script src="{{ asset('js/Reportes_CombinacionCeldas.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit-FOR-PIMP-02_B_04.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit-FOR-PIMP-02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Edit-FOR-PIMP-02_B_04.js')) }}"></script>
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -43,6 +43,32 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_02_B_04Controller extends Controller
 {
+    /* 0 genera promedios enteros; cambiar a 2 para conservar dos decimales. */
+    private const DUREZA_PROMEDIO_DECIMALES = 0;
+
+    private function normalizeFotoLayout($pagina, $posicion, $index): array
+    {
+        $posicionesPermitidas = [
+            'arriba_izquierda',
+            'arriba_derecha',
+            'abajo_izquierda',
+            'abajo_derecha',
+            'pagina_completa',
+        ];
+        $posicionesPredeterminadas = array_slice($posicionesPermitidas, 0, 4);
+        $indice = max(0, (int) $index);
+        $paginaNormalizada = max(1, (int) ($pagina ?: (intdiv($indice, 4) + 1)));
+        $posicionNormalizada = in_array($posicion, $posicionesPermitidas, true)
+            ? $posicion
+            : $posicionesPredeterminadas[$indice % 4];
+
+        return [
+            'pagina' => $paginaNormalizada,
+            'posicion' => $posicionNormalizada,
+            'una_hoja' => $posicionNormalizada === 'pagina_completa' ? 1 : 0,
+        ];
+    }
+
     private function sanitizeDurezaRows($rows): array
     {
         if (!is_array($rows)) {
@@ -90,6 +116,60 @@ class FOR_PIMP_02_B_04Controller extends Controller
 
         foreach ($allowedFields as $field) {
             $promedios[$field] = trim((string) ($rows[$field] ?? ''));
+        }
+
+        return $promedios;
+    }
+
+    /**
+     * Calcula los promedios de dureza anteriores al relevado de esfuerzos.
+     * Las celdas vacias o con texto se ignoran y cada columna se divide entre
+     * la cantidad real de valores numericos capturados en esa misma columna.
+     */
+    private function calculateDurezaPromedio(array $rows): array
+    {
+        $promedios = $this->sanitizeDurezaPromedio($rows);
+        $columnas = [
+            'metal_base_a' => 'ANTES_A',
+            'zac_b' => 'ANTES_B',
+            'soldadura_c' => 'ANTES_C',
+            'zac_b1' => 'ANTES_B1',
+            'metal_base_a1' => 'ANTES_BM',
+        ];
+
+        foreach ($columnas as $columna => $campoPromedio) {
+            $valores = [];
+
+            foreach ($rows as $indice => $row) {
+                if (!is_numeric($indice) || !is_array($row)) {
+                    continue;
+                }
+
+                $valor = trim((string) ($row[$columna] ?? ''));
+                $valorNormalizado = str_replace(',', '.', $valor);
+
+                if ($valorNormalizado === '' || !preg_match('/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/', $valorNormalizado)) {
+                    continue;
+                }
+
+                $valores[] = (float) $valorNormalizado;
+            }
+
+            if (empty($valores)) {
+                $promedios[$campoPromedio] = '';
+                continue;
+            }
+
+            $decimales = self::DUREZA_PROMEDIO_DECIMALES;
+            $promedio = round(
+                array_sum($valores) / count($valores),
+                $decimales,
+                PHP_ROUND_HALF_UP
+            );
+            $resultado = number_format($promedio, $decimales, '.', '');
+            $promedios[$campoPromedio] = $decimales > 0
+                ? rtrim(rtrim($resultado, '0'), '.')
+                : $resultado;
         }
 
         return $promedios;
@@ -728,6 +808,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.NUMERO_FICHA' => 'nullable|string',
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
@@ -750,6 +831,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
 
         /*Detalles Generales y Datos del Equipo */
@@ -805,7 +887,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             }
         }
 
-        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->sanitizeDurezaPromedio($request->input('Dureza', []));
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->calculateDurezaPromedio($request->input('Dureza', []));
         $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
         $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(
             $request->input('Dureza_MergeConfig', '[]'),
@@ -933,6 +1015,8 @@ class FOR_PIMP_02_B_04Controller extends Controller
 
         /* Fotos y Comentarios */
         $imagesBase64 = $request->input('images_base64', []);
+        $fotoPaginas = $request->input('foto_pagina', []);
+        $fotoPosiciones = $request->input('foto_posicion', []);
         $hayImagenes = !empty(array_filter($imagesBase64));
         if($hayImagenes)
         {
@@ -957,9 +1041,11 @@ class FOR_PIMP_02_B_04Controller extends Controller
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
             // ✔ Imagen en hoja
-            $imagenHoja = isset($request->imagen_hoja[$index]) 
-                            ? (bool)$request->imagen_hoja[$index] 
-                            : false;
+            $distribucionFoto = $this->normalizeFotoLayout(
+                $fotoPaginas[$index] ?? null,
+                $fotoPosiciones[$index] ?? null,
+                $index
+            );
 
             // ✔ Detalles Junta activado
             $detallesJunta = isset($request->detalles_junta_check[$index]) 
@@ -986,7 +1072,9 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_PIMP_02_B_04/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null,
-                'una_hoja' => $imagenHoja,
+                'una_hoja' => $distribucionFoto['una_hoja'],
+                'pagina' => $distribucionFoto['pagina'],
+                'posicion' => $distribucionFoto['posicion'],
                 'detalles_junta' => $detallesJunta,
                 'datos_junta' => $datosJunta
             ];
@@ -1148,6 +1236,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Firmas_Reportes3.EMPRESA_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes3.NUMERO_FICHA' => 'nullable|string',
 
             /*4 FIRMAS */
             'Firmas_Reportes4' => 'required|array',  // Asegura que es un array
@@ -1170,6 +1259,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Firmas_Reportes4.EMPRESA_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
+            'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
@@ -1215,7 +1305,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
 
-        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->sanitizeDurezaPromedio($request->input('Dureza', []));
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->calculateDurezaPromedio($request->input('Dureza', []));
         $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
         $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(
             $request->input('Dureza_MergeConfig', '[]'),
@@ -1468,7 +1558,8 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
-        $imagenHoja = $request->input('imagen_hoja', []);
+        $fotoPaginas = $request->input('foto_pagina', []);
+        $fotoPosiciones = $request->input('foto_posicion', []);
         //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
         $detallesJuntaCheck = $request->input('detalles_junta_check', []);
 
@@ -1519,6 +1610,14 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 ]
             ];
         };
+
+        $getDistribucionFoto = function ($index) use ($fotoPaginas, $fotoPosiciones) {
+            return $this->normalizeFotoLayout(
+                $fotoPaginas[$index] ?? null,
+                $fotoPosiciones[$index] ?? null,
+                $index
+            );
+        };
         // **1️⃣ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
             if (isset($existingImages[$index])) {
@@ -1563,11 +1662,14 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 // Verificar si ya existe en el array
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1586,11 +1688,14 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 // Verificar si ya existe en el array
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1600,11 +1705,14 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 // **Mantener la imagen existente**
                 if (!in_array($ruta, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1630,11 +1738,14 @@ class FOR_PIMP_02_B_04Controller extends Controller
 
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1724,7 +1835,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
             $totalFotos = count($fotos); // Contar el total de imágenes
         
-            foreach ($fotos as $foto) {
+            foreach ($fotos as $indiceFoto => $foto) {
                 $rutaFoto = storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
 
                 if (!File::exists($rutaFoto)) {
@@ -1733,11 +1844,18 @@ class FOR_PIMP_02_B_04Controller extends Controller
 
                 $detallesActivo = $foto['detalles_junta'] ?? 0;
                 $datosJunta = $foto['datos_junta'] ?? null;
+                $distribucionFoto = $this->normalizeFotoLayout(
+                    $foto['pagina'] ?? null,
+                    $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : null),
+                    $indiceFoto
+                );
 
                 $Fotos[] = [
                     'path' => $rutaFoto,
                     'comment' => $foto['comentario'] ?? '',
-                    'una_hoja'  => $foto['una_hoja'] ?? 0,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
 
                     // 🔥 NUEVO
                     'detalles_junta' => $detallesActivo,
@@ -1810,8 +1928,8 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(151.5, 32);
-            $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount" . "\n" . "$i OF $totalPageCount", 0, 'C');
+            $combinedPdf->SetXY(151.5, 34);
+            $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount", 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -1824,8 +1942,8 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY(151.5, 32);
-                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount" . "\n" . "$paginaActual OF $totalPageCount", 0, 'C');
+                $combinedPdf->SetXY(151.5, 34);
+                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 'C');
             }
         }
 
