@@ -245,7 +245,7 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-02_B_04" action="{{route('Reportes_FOR_PIMP_02_B_04.store')}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-02_B_04" data-dureza-etapa="ANTES" action="{{route('Reportes_FOR_PIMP_02_B_04.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <button id="preFormBtn" type="button" class="btn btn-warning my-2">Rellenar Campos Vacios "---"</button>
@@ -1285,7 +1285,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}"></script>
-<script src="{{ asset('js/Reportes_Dureza_Promedio_02_B_04.js') }}"></script>
+<script src="{{ asset('js/Reportes_Dureza_Promedio_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Dureza_Promedio_02_B_04.js')) }}"></script>
 <script src="{{ asset('js/Reportes_CombinacionCeldas.js') }}"></script>
 <script src="{{ asset('js/Reportes_Create-FOR-PIMP-02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Create-FOR-PIMP-02_B_04.js')) }}"></script>
 <script>

@@ -122,19 +122,20 @@ class FOR_PIMP_02_B_04Controller extends Controller
     }
 
     /**
-     * Calcula los promedios de dureza anteriores al relevado de esfuerzos.
+     * Calcula los promedios de dureza de la etapa indicada.
      * Las celdas vacias o con texto se ignoran y cada columna se divide entre
      * la cantidad real de valores numericos capturados en esa misma columna.
      */
-    private function calculateDurezaPromedio(array $rows): array
+    private function calculateDurezaPromedio(array $rows, string $etapa = 'ANTES'): array
     {
         $promedios = $this->sanitizeDurezaPromedio($rows);
+        $prefijo = strtoupper($etapa) === 'DESPUES' ? 'DESPUES' : 'ANTES';
         $columnas = [
-            'metal_base_a' => 'ANTES_A',
-            'zac_b' => 'ANTES_B',
-            'soldadura_c' => 'ANTES_C',
-            'zac_b1' => 'ANTES_B1',
-            'metal_base_a1' => 'ANTES_BM',
+            'metal_base_a' => $prefijo . '_A',
+            'zac_b' => $prefijo . '_B',
+            'soldadura_c' => $prefijo . '_C',
+            'zac_b1' => $prefijo . '_B1',
+            'metal_base_a1' => $prefijo . '_BM',
         ];
 
         foreach ($columnas as $columna => $campoPromedio) {
@@ -1305,7 +1306,13 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
 
-        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->calculateDurezaPromedio($request->input('Dureza', []));
+        $etapaDureza = ($datosEquipoActuales['DUREZA_ETAPA'] ?? 'ANTES') === 'DESPUES'
+            ? 'DESPUES'
+            : 'ANTES';
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->calculateDurezaPromedio(
+            $request->input('Dureza', []),
+            $etapaDureza
+        );
         $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
         $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(
             $request->input('Dureza_MergeConfig', '[]'),
