@@ -195,6 +195,7 @@ $(document).on("click", ".btnEliminarReportes", function() {
 
 $(document).on("click", ".btnSiguienteReporte", function() {
     var idReporte = $(this).attr("idReporte");
+    let idReporteSeleccionado = idReporte;
         Swal.fire({
             title: 'Siguiente Reporte',
             html: '¿El reporte es <span style="color:#0d6efd; font-size:16px;">CONSECUTIVO</span>? o ¿desea crear un <span style="color:#198754; font-size:16px;"> NUEVO REPORTE?</span>',
@@ -225,7 +226,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                             <p>Los datos generales del reporte serán llenados automáticamente.</p>
                             <p class="mb-3">Completa la selección del servicio para crear un nuevo reporte.</p>
                         </div>
-                        <form id="formModalServicios" action="{{ route('Seleccion.indexManifiesto') }}" method="post" enctype="multipart/form-data">
+                        <form id="formModalServicios" action="{{ route('Nuevo.Reporte.DesdeModal', ['id' => 0]) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-3">
                                 <div class="col-12">
@@ -255,6 +256,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                                     </svg>
                                 </div>
                                 <input type="hidden" name="formatoNombrePersonalizado" id="formatoNombrePersonalizadoModal">
+                                <input type="hidden" name="idReporteOriginal" id="idReporteOriginalModal">
                             </div>
                             <div class="mt-3 text-end">
                                 <button type="submit" class="btn btn-success">Guardar y Continuar</button>
@@ -275,6 +277,8 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                     const pruebaRect = document.getElementById('pruebaRectModal');
                     const formatoNombreLabel = document.getElementById('formatoNombreModal');
                     const formatoNombrePersonalizadoInput = document.getElementById('formatoNombrePersonalizadoModal');
+                    const idReporteOriginalInput = document.getElementById('idReporteOriginalModal');
+                    const modalForm = document.getElementById('formModalServicios');
 
                     const pruebasAzul = [
                         'CARACTERIZACIÓN DE MATERIALES',
@@ -334,6 +338,9 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                         'FOR-PINS-24-01': 'INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES y TOFD',
                         'FOR-PINS-25-01': 'INSPECCIÓN VISUAL EN RSP'
                     };
+
+                    idReporteOriginalInput.value = idReporteSeleccionado;
+                    modalForm.action = '/Nuevo/Reporte/DesdeModal/' + idReporteSeleccionado;
 
                     pruebaSelect.addEventListener('change', function () {
                         const pruebaId = this.value;

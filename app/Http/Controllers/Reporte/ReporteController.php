@@ -1552,6 +1552,93 @@ class ReporteController extends Controller
 
     }
 
+    protected function generarNuevoNoReporte($numeroActual)
+    {
+        if (empty($numeroActual)) {
+            return '001';
+        }
+
+        preg_match('/^(\d{3})-(.*)$/', $numeroActual, $matches);
+
+        if ($matches) {
+            $nuevoNumero = str_pad(((int)$matches[1]) + 1, 3, '0', STR_PAD_LEFT);
+            return $nuevoNumero . '-' . $matches[2];
+        }
+
+        return '001-' . trim($numeroActual);
+    }
+
+    public function CrearNuevoReporteDesdeModal(Request $request, $id)
+    {
+        $request->validate([
+            'Prueba' => 'required|integer',
+            'NormaCodigo' => 'required|integer',
+            'Formato' => 'required|integer',
+        ]);
+
+        $nuevoId = null;
+
+        DB::transaction(function () use ($request, $id, &$nuevoId) {
+            $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
+            $NuevoReporte = $ReporteOriginal->replicate();
+
+            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true) ?? [];
+            $Detalles_Generales['No_Reporte'] = $this->generarNuevoNoReporte($Detalles_Generales['No_Reporte'] ?? '');
+            $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
+
+            $idPrueba = (int)$request->input('Prueba');
+            $idNorma = (int)$request->input('NormaCodigo');
+            $idFormato = (int)$request->input('Formato');
+
+            $Prueba_Aplica = Prueba_Aplica::firstOrCreate([
+                'idPrueba' => $idPrueba,
+                'idNorma_Codigo' => $idNorma,
+                'idFormato' => $idFormato,
+            ], [
+                'idPrueba' => $idPrueba,
+                'idNorma_Codigo' => $idNorma,
+                'idFormato' => $idFormato,
+            ]);
+
+            $NuevoReporte->idPrueba_Aplica = $Prueba_Aplica->idPrueba_Aplica;
+            $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
+            $NuevoReporte->Estatus = 'CREADO';
+            $NuevoReporte->save();
+
+            $nuevoId = $NuevoReporte->idReportes;
+
+            $linealIdealOriginal = Lineal_Ideal::where('idReportes', $id)->first();
+            if ($linealIdealOriginal) {
+                Lineal_Ideal::create([
+                    'idOC' => $linealIdealOriginal->idOC,
+                    'idOrden_Servicio' => $linealIdealOriginal->idOrden_Servicio,
+                    'idSolicitud' => $linealIdealOriginal->idSolicitud,
+                    'idReportes' => $nuevoId,
+                    'Estatus' => 'CREADO',
+                ]);
+            }
+
+            $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
+            if ($FirmaOriginal) {
+                $NuevaFirma = $FirmaOriginal->replicate();
+                $NuevaFirma->idReportes = $nuevoId;
+                $NuevaFirma->save();
+            }
+
+            Fotos_Reporte::create([
+                'idReportes' => $nuevoId,
+                'Fotos_Reportes' => json_encode([]),
+            ]);
+
+            Grupo_Juntas_Detalles_Re::create([
+                'idReportes' => $nuevoId,
+                'Juntas_Grupo_Re' => json_encode([]),
+            ]);
+        });
+
+        return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
+    }
+
     public function Next_Reporte($id)
     {
         $nuevoId = null;
@@ -1565,18 +1652,9 @@ class ReporteController extends Controller
             $NuevoReporte = $ReporteOriginal->replicate();
 
             // Decodificar JSON
-            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true);
+            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true) ?? [];
 
-            $numeroActual = $Detalles_Generales['No_Reporte'];
-
-            preg_match('/^(\d{3})-(.*)$/', $numeroActual, $matches);
-
-            if ($matches) {
-                $nuevoNumero = str_pad(((int)$matches[1]) + 1, 3, '0', STR_PAD_LEFT);
-                $nuevoNoReporte = $nuevoNumero . '-' . $matches[2];
-            } else {
-                $nuevoNoReporte = $numeroActual . '-001';
-            }
+            $nuevoNoReporte = $this->generarNuevoNoReporte($Detalles_Generales['No_Reporte'] ?? '');
 
             // Reemplazar valores
             $Detalles_Generales['No_Reporte'] = $nuevoNoReporte;

@@ -232,6 +232,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::post('/Seleccion/indexManifiesto', [ReporteController::class, 'indexManifiesto'])->name('Seleccion.indexManifiesto');
         /*Ruta Para pasar las variables al reporte*/
         Route::post('/Create/Reporte', [ReporteController::class, 'CreateReporte'])->name('Create.Reporte');
+        /*Ruta para crear un nuevo reporte desde el modal del listado*/
+        Route::post('/Nuevo/Reporte/DesdeModal/{id}', [ReporteController::class, 'CrearNuevoReporteDesdeModal'])->name('Nuevo.Reporte.DesdeModal');
         /*Ruta Para pasar las variables al reporte*/
         Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
         /*Ruta del botón del eliminar del index de indexINS2 */

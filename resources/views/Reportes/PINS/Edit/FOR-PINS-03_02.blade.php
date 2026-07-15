@@ -351,7 +351,7 @@
                                     
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <input type="text" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $idProcedimiento }}" readonly>
+                                            <input type="hidden" class="form-control  inputForm " name="Detalles_Generales[idProcedimiento]" value="{{ $idProcedimiento }}" readonly>
                                         </div>
                                     </div>
                                     <!--***************************************** FIN DE DATOS GENERALES *****************************************-->
