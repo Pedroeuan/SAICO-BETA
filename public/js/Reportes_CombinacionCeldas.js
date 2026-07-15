@@ -23,6 +23,36 @@
         window.alert(mensaje);
     }
 
+    // Solicita confirmacion antes de combinar o separar, igual que FOR-PINS-03_02.
+    function mostrarConfirmacion(opciones) {
+        var configuracionDialogo = $.extend({
+            icon: 'question',
+            title: 'Confirmar accion',
+            text: '',
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#6c757d'
+        }, opciones || {});
+
+        if (window.Swal && typeof window.Swal.fire === 'function') {
+            return window.Swal.fire({
+                icon: configuracionDialogo.icon,
+                title: configuracionDialogo.title,
+                text: configuracionDialogo.text,
+                showCancelButton: true,
+                confirmButtonText: configuracionDialogo.confirmButtonText,
+                cancelButtonText: configuracionDialogo.cancelButtonText,
+                confirmButtonColor: configuracionDialogo.confirmButtonColor,
+                cancelButtonColor: configuracionDialogo.cancelButtonColor
+            }).then(function (resultado) {
+                return !!resultado.isConfirmed;
+            });
+        }
+
+        return Promise.resolve(window.confirm(configuracionDialogo.text || 'Deseas continuar?'));
+    }
+
     // Crea un administrador reutilizable para combinaciones verticales por columna.
     function crearAdministrador(opciones) {
         var configuracion = $.extend(true, {
@@ -37,7 +67,8 @@
             selectionInfoSelector: '#durezaMergeSelectionInfo',
             deleteButtonSelector: '.btnEliminarDureza',
             mergeableCellSelector: '.mergeable-cell',
-            inputNamePrefix: 'Dureza'
+            inputNamePrefix: 'Dureza',
+            automaticSelectionActions: false
         }, opciones || {});
 
         var $tbody = $(configuracion.tbodySelector);
@@ -378,6 +409,40 @@
             });
         }
 
+        // Muestra el nombre del campo de forma legible en las confirmaciones.
+        function obtenerEtiquetaCampo(campo) {
+            return String(campo || '')
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, function (letra) {
+                    return letra.toUpperCase();
+                });
+        }
+
+        function confirmarCombinacion(rango) {
+            return mostrarConfirmacion({
+                icon: 'question',
+                title: 'Combinar celdas',
+                text: 'Campo: ' + obtenerEtiquetaCampo(rango.field) +
+                    '. Filas: ' + (rango.startRow + 1) + ' a ' + (rango.endRow + 1) +
+                    '. Deseas combinar este rango?',
+                confirmButtonText: 'Combinar',
+                confirmButtonColor: '#0d6efd'
+            });
+        }
+
+        function confirmarSeparacion(itemCombinacion) {
+            return mostrarConfirmacion({
+                icon: 'warning',
+                title: 'Separar celdas',
+                text: 'Campo: ' + obtenerEtiquetaCampo(itemCombinacion.field) +
+                    '. Filas: ' + (itemCombinacion.startRow + 1) + ' a ' +
+                    (itemCombinacion.startRow + itemCombinacion.rowspan) +
+                    '. Deseas separar esta combinacion?',
+                confirmButtonText: 'Separar',
+                confirmButtonColor: '#6c757d'
+            });
+        }
+
         // Renumera los names tipo Prefijo[index] luego de agregar o eliminar filas.
         function renumerarFilas() {
             $tbody.find('tr').each(function (indice) {
@@ -423,12 +488,37 @@
         function manejarSeleccionDeCelda($celda) {
             var mismoCampo;
             var mismaFila;
+            var itemCombinacion;
+            var indiceFilaActual;
+            var rango;
 
             if (!$celda.length || !$celda.is(':visible')) {
                 return;
             }
 
             if (!combinacionActiva) {
+                return;
+            }
+
+            itemCombinacion = obtenerCombinacionDeCelda($celda);
+            indiceFilaActual = $celda.closest('tr').index();
+
+            // Al seleccionar la celda principal combinada, solicita separarla.
+            if (configuracion.automaticSelectionActions &&
+                    !celdaAnclaSeleccion &&
+                    itemCombinacion &&
+                    itemCombinacion.startRow === indiceFilaActual) {
+                limpiarSeleccionVisual();
+                $celda.addClass('selected-merge merge-preview');
+
+                confirmarSeparacion(itemCombinacion).then(function (confirmado) {
+                    if (confirmado) {
+                        separarCeldasSeleccionadas();
+                        return;
+                    }
+
+                    limpiarSeleccionVisual();
+                });
                 return;
             }
 
@@ -455,8 +545,27 @@
                 return;
             }
 
-            pintarSeleccion(obtenerRangoSeleccion(celdaAnclaSeleccion, $celda));
+            rango = obtenerRangoSeleccion(celdaAnclaSeleccion, $celda);
+            pintarSeleccion(rango);
             celdaAnclaSeleccion = null;
+
+            // La segunda celda abre directamente la confirmacion de combinacion.
+            if (configuracion.automaticSelectionActions) {
+                if (existeConflictoEnRango(rango)) {
+                    limpiarSeleccionVisual();
+                    mostrarAlerta('Primero separa la combinacion actual antes de crear una nueva en ese rango.');
+                    return;
+                }
+
+                confirmarCombinacion(rango).then(function (confirmado) {
+                    if (confirmado) {
+                        combinarCeldasSeleccionadas();
+                        return;
+                    }
+
+                    limpiarSeleccionVisual();
+                });
+            }
         }
 
         // Obtiene solo las celdas visibles incluidas en la seleccion actual.
