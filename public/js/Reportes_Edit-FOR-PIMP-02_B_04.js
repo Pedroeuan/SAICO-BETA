@@ -112,6 +112,7 @@
 
         return '' +
             '<tr>' +
+                '<td class="numero-fila"></td>' +
                 '<td class="mergeable-cell" data-merge-field="descripcion"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][descripcion]" value="' + (row.descripcion || '') + '"></td>' +
                 '<td class="mergeable-cell" data-merge-field="horario"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][horario]" value="' + (row.horario || '') + '"></td>' +
                 '<td class="mergeable-cell" data-merge-field="metal_base_a"><input type="text" class="form-control inputForm" name="Dureza[' + index + '][metal_base_a]" value="' + (row.metal_base_a || '') + '"></td>' +
@@ -134,16 +135,67 @@
             tbodySelector: '#durezaBrinellBody',
             hiddenSelector: '#durezaMergeConfig',
             addButtonSelector: '#addDurezaRowsBtn',
-            mergeButtonSelector: '#mergeSelectedCellsBtn',
-            splitButtonSelector: '#splitSelectedCellsBtn',
             fillButtonSelector: '#fillEmptyDurezaBtn',
             numRowsSelector: '#numRows',
             selectionInfoSelector: '#durezaMergeSelectionInfo',
             rowBuilder: construirFilaTablaCombinable,
-            modeToggleAfterSelector: '#toggleCombinacionBtn'
+            modeToggleAfterSelector: '#toggleCombinacionBtn',
+            automaticSelectionActions: true
         });
 
         window.__FOR_PIMP_02_B_04_EDIT_CELL_MERGE_MANAGER.init();
+    }
+
+    // Mantiene consecutiva la numeracion visual al agregar o eliminar filas.
+    function actualizarContadorDureza() {
+        var camposMedicion = ['metal_base_a', 'zac_b', 'soldadura_c', 'zac_b1', 'metal_base_a1'];
+
+        $('#durezaBrinellBody > tr').each(function (indice) {
+            var fila = this;
+            var esFilaGris = indice % 2 !== 0;
+
+            $(this).find('.numero-fila').text(indice + 1);
+
+            $(this).find('td').each(function () {
+                var campo = this.getAttribute('data-merge-field');
+                var esCeldaMedicion = camposMedicion.indexOf(campo) !== -1;
+                var esNumeroFila = this.classList.contains('numero-fila');
+                var esEliminar = this === fila.lastElementChild;
+                var colorCelda = esFilaGris && (esCeldaMedicion || esNumeroFila || esEliminar)
+                    ? '#e2e6ea'
+                    : '#ffffff';
+
+                this.style.setProperty('--bs-table-bg', colorCelda);
+                this.style.setProperty('--bs-table-accent-bg', colorCelda);
+                this.style.setProperty('--bs-table-bg-state', colorCelda);
+                this.style.setProperty('--bs-table-bg-type', colorCelda);
+                this.style.backgroundColor = colorCelda;
+            });
+
+            $(this).find('input').each(function () {
+                // El input permanece blanco para que su contorno siempre sea visible.
+                this.style.backgroundColor = '#ffffff';
+            });
+        });
+    }
+
+    function inicializarContadorDureza() {
+        var cuerpo = document.getElementById('durezaBrinellBody');
+        var observador;
+
+        if (!cuerpo) {
+            return;
+        }
+
+        observador = new MutationObserver(function () {
+            actualizarContadorDureza();
+        });
+
+        observador.observe(cuerpo, {
+            childList: true
+        });
+
+        actualizarContadorDureza();
     }
 
     // Conecta los comportamientos del formulario edit del formato.
@@ -152,5 +204,6 @@
         inicializarSelectorFirmas();
         inicializarAutoRellenoDureza();
         inicializarTablaCombinable();
+        inicializarContadorDureza();
     });
 }(window, window.jQuery));
