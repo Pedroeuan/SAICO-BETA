@@ -1552,52 +1552,147 @@ class ReporteController extends Controller
 
     }
 
-    public function Next_Reporte($id)
+    protected function generarNuevoNoReporte($numeroActual)
     {
-        DB::transaction(function () use ($id, &$nuevoId) {
+        if (empty($numeroActual)) {
+            return '001';
+        }
 
-            // 1ï¸ Obtener reporte original
+        preg_match('/^(\d{3})-(.*)$/', $numeroActual, $matches);
+
+        if ($matches) {
+            $nuevoNumero = str_pad(((int)$matches[1]) + 1, 3, '0', STR_PAD_LEFT);
+            return $nuevoNumero . '-' . $matches[2];
+        }
+
+        return '001-' . trim($numeroActual);
+    }
+
+    public function CrearNuevoReporteDesdeModal(Request $request, $id)
+    {
+        $request->validate([
+            'Prueba' => 'required|integer',
+            'NormaCodigo' => 'required|integer',
+            'Formato' => 'required|integer',
+        ]);
+
+        $nuevoId = null;
+
+        DB::transaction(function () use ($request, $id, &$nuevoId) {
             $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
-
-            // 2ï¸ Clonar reporte
             $NuevoReporte = $ReporteOriginal->replicate();
 
-            // 3ï¸ Decodificar JSON
-            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true);
+            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true) ?? [];
+            $Detalles_Generales['No_Reporte'] = $this->generarNuevoNoReporte($Detalles_Generales['No_Reporte'] ?? '');
+            $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
 
-            $numeroActual = $Detalles_Generales['No_Reporte'];
+            $idPrueba = (int)$request->input('Prueba');
+            $idNorma = (int)$request->input('NormaCodigo');
+            $idFormato = (int)$request->input('Formato');
 
-            preg_match('/^(\d{3})-(.*)$/', $numeroActual, $matches);
+            $Prueba_Aplica = Prueba_Aplica::firstOrCreate([
+                'idPrueba' => $idPrueba,
+                'idNorma_Codigo' => $idNorma,
+                'idFormato' => $idFormato,
+            ], [
+                'idPrueba' => $idPrueba,
+                'idNorma_Codigo' => $idNorma,
+                'idFormato' => $idFormato,
+            ]);
 
-            if ($matches) {
-                $nuevoNumero = str_pad(((int)$matches[1]) + 1, 3, '0', STR_PAD_LEFT);
-                $nuevoNoReporte = $nuevoNumero . '-' . $matches[2];
-            } else {
-                $nuevoNoReporte = $numeroActual . '-001';
+            $NuevoReporte->idPrueba_Aplica = $Prueba_Aplica->idPrueba_Aplica;
+            $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
+            $NuevoReporte->Estatus = 'CREADO';
+            $NuevoReporte->save();
+
+            $nuevoId = $NuevoReporte->idReportes;
+
+            $linealIdealOriginal = Lineal_Ideal::where('idReportes', $id)->first();
+            if ($linealIdealOriginal) {
+                Lineal_Ideal::create([
+                    'idOC' => $linealIdealOriginal->idOC,
+                    'idOrden_Servicio' => $linealIdealOriginal->idOrden_Servicio,
+                    'idSolicitud' => $linealIdealOriginal->idSolicitud,
+                    'idReportes' => $nuevoId,
+                    'Estatus' => 'CREADO',
+                ]);
             }
 
-            // 4ï¸ Reemplazar valores
+            $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
+            if ($FirmaOriginal) {
+                $NuevaFirma = $FirmaOriginal->replicate();
+                $NuevaFirma->idReportes = $nuevoId;
+                $NuevaFirma->save();
+            }
+
+            Fotos_Reporte::create([
+                'idReportes' => $nuevoId,
+                'Fotos_Reportes' => json_encode([]),
+            ]);
+
+            Grupo_Juntas_Detalles_Re::create([
+                'idReportes' => $nuevoId,
+                'Juntas_Grupo_Re' => json_encode([]),
+            ]);
+        });
+
+        return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
+    }
+
+    public function Next_Reporte($id)
+    {
+        $nuevoId = null;
+
+        DB::transaction(function () use ($id, &$nuevoId) {
+
+            // Obtener reporte original
+            $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
+
+            // Clonar reporte
+            $NuevoReporte = $ReporteOriginal->replicate();
+
+            // Decodificar JSON
+            $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true) ?? [];
+
+            $nuevoNoReporte = $this->generarNuevoNoReporte($Detalles_Generales['No_Reporte'] ?? '');
+
+            // Reemplazar valores
             $Detalles_Generales['No_Reporte'] = $nuevoNoReporte;
             $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
 
             $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
             $NuevoReporte->Estatus = 'CREADO';
 
-            // 5ï¸ Guardar nuevo reporte
+            // Guardar nuevo reporte
             $NuevoReporte->save();
 
             $nuevoId = $NuevoReporte->idReportes;
 
             // =====================================
-            // ðŸ”¹ CLONAR FIRMAS
+            // BUSCAR RELACIÓN EN LINEAL_IDEAL
+            // =====================================
+
+            $linealIdealOriginal = Lineal_Ideal::where('idReportes', $id)->first();
+
+            if ($linealIdealOriginal) {
+                Lineal_Ideal::create([
+                    'idOC' => $linealIdealOriginal->idOC,
+                    'idOrden_Servicio' => $linealIdealOriginal->idOrden_Servicio,
+                    'idSolicitud' => $linealIdealOriginal->idSolicitud,
+                    'idReportes' => $nuevoId,
+                    'Estatus' => 'CREADO',
+                ]);
+            }
+
+            // =====================================
+            // CLONAR FIRMAS
             // =====================================
 
             $FirmaOriginal = Firma_Reporte::where('idReportes', $id)->first();
 
             if ($FirmaOriginal) {
-
                 $NuevaFirma = $FirmaOriginal->replicate();
-                $NuevaFirma->idReportes = $nuevoId; // ðŸ‘ˆ AQUÍ está la clave
+                $NuevaFirma->idReportes = $nuevoId;
                 $NuevaFirma->save();
             }
 
@@ -1622,8 +1717,6 @@ class ReporteController extends Controller
 
         return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
     }
-
-
 
     /**
      * Display the specified resource.
