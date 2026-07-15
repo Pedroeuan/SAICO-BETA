@@ -58,7 +58,7 @@
 
         .datosgenerales th,
         .datosgenerales td {
-            padding: 3px;
+            padding: 1px;
             text-align: center;
             vertical-align: bottom;
         }
@@ -91,7 +91,6 @@
         }
 
         .celdaGris {
-            background-color: #DBDBDB;
             font-weight: bold;
             text-align: left !important;
         }
@@ -192,6 +191,33 @@
             text-align: center;
             vertical-align: middle;
         }
+        .observacionesBox {
+            width: 100%;
+            border: 1px solid black;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-bottom: 4px;
+            position: relative;
+            top: -10px;
+        }
+
+        .observacionesBox td {
+            padding: 1px 1px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 8px;
+        }
+        .alinearIzquierda {
+            text-align: left !important;
+            padding-left: 4px !important;
+        }
+
+        .alinearCentro {
+            text-align: center !important;
+        }
+        .textoNegrita {
+            font-weight: bold !important;
+        }
     </style>
 </head>
 <body>
@@ -220,12 +246,14 @@
 </header>
 
 <footer>
-    <table class="datosgenerales">
-        <tr>
-            <th>OBSERVACIONES<br>REMARKS:</th>
-            <td class="lineaInferior" style="width: 600px;">{{ $Datos_Equipo['Observaciones'] ?? '' }}</td>
-        </tr>
-    </table>
+    <table class="observacionesBox">
+            <tr>
+                <td>
+                    <div class="observacionesTitulo textoNegrita">OBSERVATIONS/OBSERVACIONES:</div>
+                    <div class="observacionesLineas">{{ $Datos_Equipo['Observaciones'] ?? '' }}</div>
+                </td>
+            </tr>
+        </table>
 
     @include('Reportes.partials.firmas_im_pdf')
     <table class="datosgenerales" style="display: none;">
@@ -422,48 +450,48 @@
                 <tr><th colspan="6">DATOS GENERALES<br>GENERAL DATA</th></tr>
             </thead>
             <tbody>
-                <tr>
-            <th class="etiquetaGeneral">FECHA<br>DATE:</th>
+        <tr>
+            <th class="etiquetaGeneral alinearIzquierda">FECHA<br>DATE:</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
             <th class="etiquetaGeneral">No. REPORTE<br>No. REPORT:</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">CLIENTE<br>CLIENT:</th>
+            <th class="etiquetaGeneral alinearIzquierda">CLIENTE<br>CLIENT:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
             <th class="etiquetaGeneral">No. CONTRATO<br>No. CONTRACT:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">PROYECTO<br>PROJECT:</th>
+            <th class="etiquetaGeneral alinearIzquierda">PROYECTO<br>PROJECT:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO<br>WORK ORDER:</th>
+            <th class="etiquetaGeneral alinearIzquierda" style="white-space: nowrap;">ORDEN DE TRABAJO<br>WORK ORDER:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">FOLIO<br>FOLIO:</th>
+            <th class="etiquetaGeneral alinearIzquierda">FOLIO<br>FOLIO:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">PARTIDA<br>LOT:</th>
+            <th class="etiquetaGeneral alinearIzquierda">PARTIDA<br>LOT:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">INSTALACION<br>LOCATION:</th>
+            <th class="etiquetaGeneral alinearIzquierda">INSTALACION<br>LOCATION:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
             <th class="etiquetaGeneral">No. ISOMETRICO<br>No. ISOMETRIC:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">ELEMENTOS SOLDADOS<br>WELDINGS:</th>
+            <th class="etiquetaGeneral alinearIzquierda" style="white-space: nowrap;">ELEMENTOS SOLDADOS<br>WELDINGS:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Elementos_Soldados'] ?? '' }}</td>
             <th class="etiquetaGeneral">MATERIAL<br>MATERIAL:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">No. JUNTA<br>No. JOINT:</th>
+            <th class="etiquetaGeneral alinearIzquierda">No. JUNTA<br>No. JOINT:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
             <th class="etiquetaGeneral">TRAZABILIDAD<br>TRACEABILITY:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
@@ -471,7 +499,7 @@
             <td class="valorGeneral">{{ $Detalles_Generales['Espesores'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">PROCEDIMIENTO<br>PROCEDURE:</th>
+            <th class="etiquetaGeneral alinearIzquierda">PROCEDIMIENTO<br>PROCEDURE:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
             <th class="etiquetaGeneral">CODIGO DE DISENO<br>DESIGN CODE:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Codigo_Diseno'] ?? '' }}</td>
