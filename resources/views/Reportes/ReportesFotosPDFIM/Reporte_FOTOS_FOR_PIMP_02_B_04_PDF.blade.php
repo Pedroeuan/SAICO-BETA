@@ -150,33 +150,42 @@
          * Cada fotografia conserva la posicion elegida por el usuario.
          */
         .imagenes-reporte {
-            width: 106%;
-            margin-left: -15px;
+            width: 687.5px;
+            margin: 0px 0px;
+            /*height: 100%;
+            margin-left: auto;
+            margin-right: auto;*/
             border-collapse: separate;
             /* Separacion horizontal y vertical entre fotografias. */
-            border-spacing: 20px 14px;
+            border-spacing: 85px 10px;
             table-layout: fixed;
+            background: #920404;
         }
 
         /* Medidas de cada uno de los cuatro espacios disponibles por pagina. */
         .foto-container {
-            width: 312px;
-            height: 170px;
             padding: 0;
             border: 1px solid #000;
             text-align: center;
             vertical-align: middle;
+            overflow: hidden;
+            width: 240px;
+            height: auto;
+            line-height: 0;
         }
 
         /*
-         * cover llena completamente el recuadro y puede recortar los bordes.
-         * Cambiar a contain si se necesita mostrar la fotografia completa.
+         * contain muestra la imagen completa sin deformarla y ajusta el contenedor
+         * a su proporción real.
          */
         .foto-container img {
             display: block;
-            width: 312px;
-            height: 145px;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 165px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
         }
 
         /*
@@ -190,12 +199,16 @@
 
         /* Texto descriptivo que se presenta debajo de cada fotografia. */
         .comment {
-            margin-top: 0;
-            padding-top: 5px;
+            margin: 0;
+            padding: 6px 4px 4px;
             border-top: 1px solid #000;
             font-size: 8px;
+            line-height: 1.2;
             text-align: center;
             word-wrap: break-word;
+            overflow-wrap: anywhere;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         /*
