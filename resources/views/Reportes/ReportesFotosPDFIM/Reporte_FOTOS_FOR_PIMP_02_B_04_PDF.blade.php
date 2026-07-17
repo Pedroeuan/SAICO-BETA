@@ -152,9 +152,6 @@
         .imagenes-reporte {
             width: 687.5px;
             margin: 0px 0px;
-            /*height: 100%;
-            margin-left: auto;
-            margin-right: auto;*/
             border-collapse: separate;
             /* Separacion horizontal y vertical entre fotografias. */
             border-spacing: 85px 10px;
@@ -169,7 +166,7 @@
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
-            width: 240px;
+            width: 220px;
             height: auto;
             line-height: 0;
         }
@@ -180,10 +177,8 @@
          */
         .foto-container img {
             display: block;
-            max-width: 100%;
-            max-height: 165px;
-            width: auto;
-            height: auto;
+            max-width: 220px;
+            max-height: auto;
             object-fit: contain;
             margin: 0 auto;
         }
@@ -203,11 +198,8 @@
             padding: 6px 4px 4px;
             border-top: 1px solid #000;
             font-size: 8px;
-            line-height: 1.2;
+            line-height: 1;
             text-align: center;
-            word-wrap: break-word;
-            overflow-wrap: anywhere;
-            width: 100%;
             box-sizing: border-box;
         }
 
