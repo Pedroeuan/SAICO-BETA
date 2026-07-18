@@ -153,12 +153,12 @@
             width: 687.5px;
             margin: 0px 0px;
             border-collapse: separate;
-            /* Separacion horizontal y vertical entre fotografias. */
+            /* Separacion horizontal y vertical entre fotografias. 
             border-spacing: 85px 10px;
+            background: #920404;*/
             table-layout: fixed;
-            background: #920404;
+            
         }
-
         /* Medidas de cada uno de los cuatro espacios disponibles por pagina. */
         .foto-container {
             padding: 0;
@@ -553,10 +553,24 @@
                 <tr>
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
+                            @if($posicion === 'arriba_derecha')
+                            <td>
+                                <div>
+                                    &nbsp;
+                                </div>
+                            </td>
+                            @endif
                             <td class="foto-container">
                                 <img src="{{ $espacios[$posicion]['path'] }}">
                                 <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
                             </td>
+                            @if($posicion === 'arriba_izquierda')
+                            <td>
+                                <div>
+                                    &nbsp;
+                                </div>
+                            </td>
+                            @endif
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
                         @endif
@@ -565,10 +579,24 @@
                 <tr>
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
-                            <td class="foto-container">
-                                <img src="{{ $espacios[$posicion]['path'] }}">
-                                <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                            </td>
+                            @if($posicion === 'abajo_derecha')
+                                <td>
+                                    <div>
+                                        &nbsp;
+                                    </div>
+                                </td>
+                            @endif
+                                <td class="foto-container">
+                                    <img src="{{ $espacios[$posicion]['path'] }}">
+                                    <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                                </td>
+                                @if($posicion === 'abajo_izquierda')
+                                <td>
+                                    <div>
+                                        &nbsp;
+                                    </div>
+                                </td>
+                            @endif
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
                         @endif
