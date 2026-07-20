@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-07_B_01');
+    const form = ['FOR-PIMP-02_B_03', 'FOR-PIMP-07_B_01', 'FOR-PIMP-03_B_01']
+        .map(function (id) {
+            return document.getElementById(id);
+        })
+        .find(function (element) {
+            return !!element;
+        });
+
     if (!form) return;
 
     const formId = form.id;

@@ -553,7 +553,7 @@
                             </div>
 
                         <!-- 2 DOS FIRMAS-->
-                        <div id="firmas2" class="col-12">
+                        <div id="firmas2" class="col-12" style="display: none;">
                             <table class="table table-bordered table-striped dt-responsive tablas">
                                 <thead>
                                     <tr>
@@ -590,7 +590,7 @@
                         </div>
 
                         <!-- 3 TRES FIRMAS-->
-                        <div id="firmas3" class="col-12">
+                        <div id="firmas3" class="col-12" style="display: none;">
                             <table class="table table-bordered table-striped dt-responsive tablas">
                                 <thead>
                                     <tr>
