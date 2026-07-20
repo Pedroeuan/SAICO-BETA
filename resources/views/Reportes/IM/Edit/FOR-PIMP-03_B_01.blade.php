@@ -23,6 +23,59 @@
             box-sizing: border-box; /* Garantiza que los inputs respeten los bordes */
         }
 
+        .tabla-metalografica {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            border: 1px solid #ced4da !important;
+            margin-bottom: 16px;
+            font-size: 12px;
+        }
+
+        .tabla-metalografica th,
+        .tabla-metalografica td {
+            border: 1px solid #ced4da !important;
+            padding: 6px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .tabla-metalografica tr {
+            border-color: #ced4da !important;
+        }
+
+        .tabla-metalografica th {
+            font-weight: 700;
+        }
+
+        .tabla-metalografica input {
+            width: 100%;
+            min-height: 42px;
+            border: 1px solid #d8dee4 !important;
+            border-radius: 7px;
+            outline: 0;
+            padding: 6px 10px;
+            background-color: #fff;
+        }
+
+        .tabla-metalografica input:focus {
+            border-color: #80bdff !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+        }
+
+        .titulo-metalografico {
+            min-height: 18px;
+            background-color: transparent;
+            color: #212529;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        #FOR-PIMP-03_B_01 .imagen-hoja-checkbox,
+        #FOR-PIMP-03_B_01 .imagen-hoja-checkbox + label {
+            display: none !important;
+        }
+
         .image-preview {
             width: 100%;
             max-width: 200px;
@@ -100,34 +153,51 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Cliente:</label>
-                            <input type="text" class="form-control inputForm @error('Cliente') is-invalid @enderror" name="Detalles_Generales[Cliente]" placeholder="Ejemplo: PERMADUCTO S.A DE C.V." value="{{ old('Detalles_Generales.Cliente', $Detalles_Generales['Cliente'] ?? '') }}" readonly>
-                            @error('Cliente')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
+                            @php
+                                $clienteActual = old('ClienteSelect', $Detalles_Generales['Cliente'] ?? '');
+                                $clienteExiste = $Clientes->contains(fn ($cliente) => $cliente->Cliente === $clienteActual);
+                            @endphp
+                            <label class="col-form-label">
+                                ¿Cliente existente?
+                                <span class="ml-3">
+                                    <label class="mr-2"><input type="radio" name="TieneCliente" value="si" {{ $clienteExiste ? 'checked' : '' }}> Sí</label>
+                                    <label><input type="radio" name="TieneCliente" value="no" {{ !$clienteExiste ? 'checked' : '' }}> No</label>
+                                </span>
+                            </label>
+                            <select id="campoClienteSelect" class="form-select" name="ClienteSelect" style="{{ $clienteExiste ? '' : 'display:none;' }}">
+                                <option value="" disabled>Seleccione un Cliente</option>
+                                @foreach($Clientes as $Cliente)
+                                    <option value="{{ $Cliente->Cliente }}" @selected(old('ClienteSelect', $Detalles_Generales['Cliente'] ?? '') === $Cliente->Cliente)>
+                                        {{ $Cliente->Cliente }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <input type="text" id="campoClienteInput" class="form-control inputForm mt-2" name="ClienteInput"
+                                value="{{ old('ClienteInput', $Detalles_Generales['Cliente'] ?? '') }}"
+                                placeholder="Ingrese nombre del cliente" style="{{ $clienteExiste ? 'display:none;' : '' }}">
                         </div>
                     </div>
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Contrato:</label>
+                            @php
+                                $contratoActual = old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '');
+                                $contratoExistente = !str_starts_with($contratoActual, 'AICO-INT-');
+                            @endphp
+                            <label class="col-form-label">
+                                ¿Contrato existente?
+                                <span class="ml-3">
+                                    <label class="mr-2"><input type="radio" name="TieneContrato" value="si" {{ $contratoExistente ? 'checked' : '' }}> Sí</label>
+                                    <label><input type="radio" name="TieneContrato" value="no" {{ !$contratoExistente ? 'checked' : '' }}> No</label>
+                                </span>
+                            </label>
                             <input type="text"
                                 id="campoContrato"
                                 class="form-control inputForm"
                                 name="Detalles_Generales[Contrato]"
                                 placeholder="Ejemplo: 640853841"
-                                value="{{ old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '') }}"
-                                readonly>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Proyecto:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto', $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
-                            @error('Proyecto')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
+                                value="{{ $contratoActual }}"
+                                {{ $contratoExistente ? 'required' : 'readonly' }}>
                         </div>
                     </div>
 
@@ -183,9 +253,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Elementos Soldados:</label>
-                            <input type="text" class="form-control  inputForm @error('Elementos_Soldados') is-invalid @enderror" name="Detalles_Generales[Elementos_Soldados]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Elementos_Soldados', $Detalles_Generales['Elementos_Soldados'] ?? '')}}">
-                            @error('Elementos_Soldados')
+                            <label class="col-form-label" for="inputSuccess">Nombre de la Pieza:</label>
+                            <input type="text" class="form-control inputForm @error('Nom_pieza') is-invalid @enderror" name="Detalles_Generales[Nom_pieza]" placeholder="Ejemplo:  " value="{{ old('Detalles_Generales.Nom_pieza', $Detalles_Generales['Nom_pieza'] ?? '') }}">
+                            @error('Nom_pieza')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -203,16 +273,6 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Junta:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta', $Detalles_Generales['No_Junta'] ?? '')}}">
-                            @error('No_Junta')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
                             <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad', $Detalles_Generales['Trazabilidad'] ?? '')}}">
                             @error('Trazabilidad')
@@ -223,9 +283,29 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Espesores:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Espesores]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Espesores', $Detalles_Generales['Espesores'] ?? '')}}">
-                            @error('Espesores')
+                            <label class="col-form-label" for="inputSuccess">Accesorio:</label>
+                            <input type="text" class="form-control is-waning" name="Detalles_Generales[Accesorio]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Accesorio', $Detalles_Generales['Accesorio'] ?? '') }}">
+                            @error('Accesorio')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Tubería:</label>
+                            <input type="text" class="form-control is-waning" name="Detalles_Generales[Tuberia]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Tuberia', $Detalles_Generales['Tuberia'] ?? '') }}">
+                            @error('Tuberia')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="inputSuccess">Estructural:</label>
+                            <input type="text" class="form-control is-waning" name="Detalles_Generales[Estructural]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Estructural', $Detalles_Generales['Estructural'] ?? '') }}">
+                            @error('Estructural')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -243,39 +323,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Codigo de Diseño:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Codigo_Diseno]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Codigo_Diseno', $Detalles_Generales['Codigo_Diseno'] ?? '')}}">
-                            @error('Codigo_Diseno')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Diám. Nominal:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Diam_Nominal]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Diam_Nominal', $Detalles_Generales['Diam_Nominal'] ?? '')}}">
-                            @error('Diam_Nominal')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Antes del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Antes_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Antes_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Antes_Relevado', $Detalles_Generales['Reporte_Antes_Relevado'] ?? '')}}">
-                            @error('Reporte_Antes_Relevado')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Después del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Despues_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Despues_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Despues_Relevado', $Detalles_Generales['Reporte_Despues_Relevado'] ?? '')}}">
-                            @error('Reporte_Despues_Relevado')
+                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
+                            <input type="text" class="form-control is-waning" name="Detalles_Generales[Observaciones]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Observaciones', $Detalles_Generales['Observaciones'] ?? '') }}">
+                            @error('Observaciones')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -293,180 +343,49 @@
                         </div>
                     </div>
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
-
-                    <div style="margin-bottom: 2px;"></div>
-
-                    <div class="alert alert-info alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <h5><i class="icon fas fa-info"></i> Importante</h5>
-                        <p>Puedes Seleccionar un equipo del menu o escribir directamente</p>
-                    </div>
-
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
-
-                    <div class="col-sm-50 d-flex justify-content-center">
-                        <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos" id="equiposSelect">
-                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO]" id="IDInputE" value="{{ old('Datos_Equipo.ID_EQUIPO', $Datos_Equipo['ID_EQUIPO'] ?? '') }}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE" name="Datos_Equipo[MARCA_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO', $Datos_Equipo['MARCA_EQUIPO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO', $Datos_Equipo['NS_EQUIPO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
-
-                    <div class="col-sm-50 d-flex justify-content-center">
-                        <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos1" id="equiposSelect1">
-                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO1]" id="IDInputE1" value="{{ old('Datos_Equipo.ID_EQUIPO1', $Datos_Equipo['ID_EQUIPO1'] ?? '') }}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE1" name="Datos_Equipo[MARCA_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO1', $Datos_Equipo['MARCA_EQUIPO1'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE1" name="Datos_Equipo[MODELO_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO1', $Datos_Equipo['MODELO_EQUIPO1'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE1" name="Datos_Equipo[NS_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO1', $Datos_Equipo['NS_EQUIPO1'] ?? '')}}">
-                        </div>
-                    </div>
-                    
-                    <!--***************************************** INICIO DATOS DE PRUEBA *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DE PRUEBA</div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temperatura Inicial:</label>
-                            <input type="text" class="form-control  inputForm" id="tempInputP" name="Datos_Equipo[TEMPERATURA_INICIAL]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_INICIAL', $Datos_Equipo['TEMPERATURA_INICIAL'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaInputP" name="Datos_Equipo[HORA_INICIO]" placeholder="" value="{{old('Datos_Equipo.HORA_INICIO', $Datos_Equipo['HORA_INICIO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. de Calentamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="mrInputP" name="Datos_Equipo[VELOCIDAD_CALENTAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VELOCIDAD_CALENTAMIENTO', $Datos_Equipo['VELOCIDAD_CALENTAMIENTO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Final de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaFinalInputP" name="Datos_Equipo[HORA_FINAL]" placeholder="" value="{{old('Datos_Equipo.HORA_FINAL', $Datos_Equipo['HORA_FINAL'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temp. Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tempSostenimientoInputP" name="Datos_Equipo[TEMPERATURA_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_SOSTENIMIENTO', $Datos_Equipo['TEMPERATURA_SOSTENIMIENTO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaInicioInputP" name="Datos_Equipo[DIA_INICIO]" placeholder="" value="{{old('Datos_Equipo.DIA_INICIO', $Datos_Equipo['DIA_INICIO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Tiempo de Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tiempoSostenimientoInputP" name="Datos_Equipo[TIEMPO_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TIEMPO_SOSTENIMIENTO', $Datos_Equipo['TIEMPO_SOSTENIMIENTO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de Finalización de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaFinalInputP" name="Datos_Equipo[DIA_FINAL]" placeholder="" value="{{old('Datos_Equipo.DIA_FINAL', $Datos_Equipo['DIA_FINAL'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Enfriamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="velEnfriamientoInputP" name="Datos_Equipo[VEL_ENFRIAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VEL_ENFRIAMIENTO', $Datos_Equipo['VEL_ENFRIAMIENTO'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Gráfica:</label>
-                            <input type="text" class="form-control  inputForm" id="noGraficaInputP" name="Datos_Equipo[NO_GRAFICA]" placeholder="" value="{{old('Datos_Equipo.NO_GRAFICA', $Datos_Equipo['NO_GRAFICA'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Graficador:</label>
-                            <input type="text" class="form-control  inputForm" id="velGraficadorInputP" name="Datos_Equipo[VEL_GRAFICADOR]" placeholder="" value="{{old('Datos_Equipo.VEL_GRAFICADOR', $Datos_Equipo['VEL_GRAFICADOR'] ?? '')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones', $Datos_Equipo['Observaciones'] ?? '') }}</textarea>
+                    <div class="col-12 px-0">
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">ANÁLISIS METALOGRÁFICO</div>
+                        <div class="table-responsive">
+                            <table class="tabla-metalografica table-bordered" style="--bs-border-color: #ced4da;" cellspacing="0">
+                                <colgroup>
+                                    <col style="width: 14%;">
+                                    <col style="width: 8%;">
+                                    <col style="width: 14%;">
+                                    <col style="width: 9%;">
+                                    <col style="width: 9%;">
+                                    <col style="width: 11%;">
+                                    <col style="width: 12%;">
+                                    <col style="width: 10%;">
+                                    <col style="width: 13%;">
+                                </colgroup>
+                                <tr>
+                                    <th colspan="3">NÚMERO DE LIJA PARA EL DESBASTE</th>
+                                    <th colspan="2">MATERIAL PARA EL PULIDO</th>
+                                    <th colspan="2">DATOS DE ATAQUE QUÍMICO</th>
+                                    <th>FASES PRESENTES</th>
+                                    <th rowspan="2">ESPECIFICACIÓN APROXIMADA DEL MATERIAL</th>
+                                </tr>
+                                <tr>
+                                    <td>240</td>
+                                    <td>320</td>
+                                    <td>400</td>
+                                    <th>PAÑO</th>
+                                    <td><input type="text" class="form-control inputForm" name="Datos_Equipo[MATERIAL_PANO]" value="{{ old('Datos_Equipo.MATERIAL_PANO', $Datos_Equipo['MATERIAL_PANO'] ?? '') }}"></td>
+                                    <th>REACTIVO</th>
+                                    <td><input type="text" class="form-control inputForm" name="Datos_Equipo[REACTIVO]" value="{{ old('Datos_Equipo.REACTIVO', $Datos_Equipo['REACTIVO'] ?? '') }}"></td>
+                                    <td rowspan="2"><input type="text" class="form-control inputForm" name="Datos_Equipo[FASES_PRESENTES]" value="{{ old('Datos_Equipo.FASES_PRESENTES', $Datos_Equipo['FASES_PRESENTES'] ?? '') }}"></td>
+                                </tr>
+                                <tr>
+                                    <td>500</td>
+                                    <td>1000</td>
+                                    <td>1500</td>
+                                    <th>ABRASIVO</th>
+                                    <td><input type="text" class="form-control inputForm" name="Datos_Equipo[MATERIAL_ABRASIVO]" value="{{ old('Datos_Equipo.MATERIAL_ABRASIVO', $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '') }}"></td>
+                                    <th>TIEMPO</th>
+                                    <td><input type="text" class="form-control inputForm" name="Datos_Equipo[TIEMPO_ATAQUE]" value="{{ old('Datos_Equipo.TIEMPO_ATAQUE', $Datos_Equipo['TIEMPO_ATAQUE'] ?? '') }}"></td>
+                                    <td><input type="text" class="form-control inputForm" name="Datos_Equipo[ESPECIFICACION_MATERIAL]" value="{{ old('Datos_Equipo.ESPECIFICACION_MATERIAL', $Datos_Equipo['ESPECIFICACION_MATERIAL'] ?? '') }}"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
 
@@ -477,10 +396,10 @@
                         <div class="col-sm-15">
                             <div class="form-group">
                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                    <option value="1" @selected(($Firmas['numFirmas'] ?? 1) == 1)>1 Firma</option>
-                                    <option value="2" @selected(($Firmas['numFirmas'] ?? 1) == 2)>2 Firmas</option>
-                                    <option value="3" @selected(($Firmas['numFirmas'] ?? 1) == 3)>3 Firmas</option>
-                                    <option value="4" @selected(($Firmas['numFirmas'] ?? 1) == 4)>4 Firmas</option>
+                                    <option value="1" @selected(old('numFirmas', $Firmas['numFirmas'] ?? 1) == 1)>1 Firma</option>
+                                    <option value="2" @selected(old('numFirmas', $Firmas['numFirmas'] ?? 1) == 2)>2 Firmas</option>
+                                    <option value="3" @selected(old('numFirmas', $Firmas['numFirmas'] ?? 1) == 3)>3 Firmas</option>
+                                    <option value="4" @selected(old('numFirmas', $Firmas['numFirmas'] ?? 1) == 4)>4 Firmas</option>
                                 </select>
                             </div>
                         </div>
@@ -694,10 +613,20 @@
                             </select>
                         </div>
 
+
+                        <div class="alert alert-info py-2">
+                            Asigna a cada fotografía el número de hoja y su posición. Una hoja admite hasta cuatro posiciones o una fotografía de página completa.
+                        </div>
+
+                        <div data-layout-fotos-manual="1">
                         @if(!empty($Fotos_Comentarios))
                             <div class="row">
                                 @foreach($Fotos_Comentarios as $index => $foto)
-                                    <div class="col-sm-6" id="image-container-{{ $index }}">
+                                    <div class="col-sm-6"
+                                        id="image-container-{{ $index }}"
+                                        data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
+                                        data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
+                                        data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}">
                                         <div class="form-group">
                                             <label for="replace_image_{{ $index }}">Imagen subida {{ $index + 1 }}:</label>
 
@@ -733,6 +662,7 @@
 
                         <div id="imageFieldsContainer" class="row">
                             <!-- Aquí se agregarán dinámicamente los campos -->
+                        </div>
                         </div>
 
                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -864,6 +794,7 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -873,6 +804,70 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('FOR-PIMP-03_B_01');
     if (!form) return;
+
+    const clienteSelect = form.querySelector('#campoClienteSelect');
+    const clienteInput = form.querySelector('#campoClienteInput');
+    const contratoInput = form.querySelector('#campoContrato');
+
+    function actualizarCliente(valor) {
+        if (!clienteSelect || !clienteInput) return;
+        clienteSelect.style.display = valor === 'si' ? 'block' : 'none';
+        clienteInput.style.display = valor === 'no' ? 'block' : 'none';
+        clienteSelect.required = valor === 'si';
+        clienteInput.required = valor === 'no';
+    }
+
+    form.querySelectorAll('input[name="TieneCliente"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            actualizarCliente(this.value);
+        });
+    });
+
+    const clienteInicial = form.querySelector('input[name="TieneCliente"]:checked');
+    if (clienteInicial) actualizarCliente(clienteInicial.value);
+
+    async function actualizarContrato(valor, generar) {
+        if (!contratoInput) return;
+        contratoInput.readOnly = valor === 'no';
+        contratoInput.required = valor === 'si';
+
+        if (valor === 'no' && generar) {
+            try {
+                const respuesta = await fetch('/api/siguiente-contrato-interno');
+                const datos = await respuesta.json();
+                contratoInput.value = datos.siguiente || contratoInput.value;
+            } catch (error) {
+                console.error('No se pudo generar el contrato interno', error);
+            }
+        }
+    }
+
+    form.querySelectorAll('input[name="TieneContrato"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            actualizarContrato(this.value, true);
+        });
+    });
+
+    const contratoInicial = form.querySelector('input[name="TieneContrato"]:checked');
+    if (contratoInicial) actualizarContrato(contratoInicial.value, false);
+
+    const numFirmasSelect = form.querySelector('#numFirmas');
+
+    function mostrarBloqueDeFirmas() {
+        if (!numFirmasSelect) return;
+
+        ['1', '2', '3', '4'].forEach(function (numero) {
+            const bloque = form.querySelector('#firmas' + numero);
+            if (bloque) {
+                bloque.style.display = numFirmasSelect.value === numero ? 'block' : 'none';
+            }
+        });
+    }
+
+    if (numFirmasSelect) {
+        numFirmasSelect.addEventListener('change', mostrarBloqueDeFirmas);
+        mostrarBloqueDeFirmas();
+    }
 
     const detallesGenerales = @json($Detalles_Generales ?? []);
     const datosEquipo = @json($Datos_Equipo ?? []);

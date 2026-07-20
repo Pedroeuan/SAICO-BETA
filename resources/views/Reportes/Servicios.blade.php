@@ -241,13 +241,13 @@
         //"FOR-03-PRO-INS-15": "LISTADO DE COMPONENTES", //Integrado en RSP
         // FORMATOS DE INTEGRIDAD MECÁNICA
         "FOR-PIMP-02_B/03": "INFORME DE ENSAYO DE DUREZAS EN METALES BASE HARDNESS TEST REPORT ON BASE METALS",
-        "FOR-PIMP-02_B/04": "Informe de Ensayo de Durezas en Soldaduras Test Report on Welding Hardness",
-        "FOR-PIMP-03_B/01": "Informe de Análisis Metalográfico Metallographic Analysis Report",
-        "FOR-PIMP-04/02": "Informe de Caracterización de Materiales Mediante la Técnica de Espectrometría de Emisión Óptica (OES)",
-        "FOR-PIMP-04/03": "Informe de Caracterización de Materiales Mediante la Técnica de Fluorescencia de Rx (XRF)",
-        "FOR-PIMP-05/01": "Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)",
-        "FOR-PIMP-05_B/01": "Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)/Chemical Analysis Report Using the Optical Emission Spectrometry Technique (OES",
-        "FOR-PIMP-06_B/01": "Informe de Análisis químico mediante la Técnica de Fluorescencia de Rayos X (XRF)/Chemicals Analysis Report Using the X-Ray Fluorescense Technique (XRF",
+        "FOR-PIMP-02_B/04": "INFORME DE ENSAYO DE DUREZAS EN SOLDADURAS TEST REPORT ON WELDING HARDNESS",
+        "FOR-PIMP-03_B/01": "INFORME DE ANÁLISIS METALÓGRFICO METALLOGRAPHIC ANALYSIS REPORT",
+        "FOR-PIMP-04/02": "INFORME DE CARACTERIZACIÓN DE MATERIALES MEDIANTE LA TÉCNICA DE ESPECTROMETRÍA DE EMISIÓN ÓPTICA (OES)",
+        "FOR-PIMP-04/03": "INFORME DE CARACTERIZACIÓN DE MATERIALES MEDIANTE LA TÉCNICA DE FLUORESCENCIA DE RX (XRF)",
+        "FOR-PIMP-05/01": "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE ESPECTROMETRÍA DE EMISIÓN ÓPTICA (OES)",
+        "FOR-PIMP-05_B/01": "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE ESPECTROMETRÍA DE EMISIÓN ÓPTICA (OES)/CHEMICAL ANALYSIS REPORT USING THE OPTICAL EMISSION SPECTROMETRY TECHNIQUE (OES)",
+        "FOR-PIMP-06_B/01": "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE FLUORESCENCIA DE RAYOS X (XRF)/CHEMICALS ANALYSIS REPORT USING THE X-RAY FLUORESCENSE TECHNIQUE (XRF)",
         "FOR-PIMP-07_B/01": "INFORME DE RELEVADO DE ESFUERZOS RELIEVED OF STRESS INFORM"
             };
 

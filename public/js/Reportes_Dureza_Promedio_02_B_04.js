@@ -2,16 +2,15 @@
     'use strict';
 
     /*
-     * Relaciona el nombre de cada columna de mediciones con el campo resumen
-     * donde debe guardarse su promedio. Por ejemplo, metal_base_a alimenta
-     * el campo Dureza[ANTES_A].
+     * Relaciona cada columna de mediciones con el sufijo de su campo resumen.
+     * La etapa del formulario determina si alimenta ANTES o DESPUES.
      */
     var columnas = {
-        metal_base_a: 'ANTES_A',
-        zac_b: 'ANTES_B',
-        soldadura_c: 'ANTES_C',
-        zac_b1: 'ANTES_B1',
-        metal_base_a1: 'ANTES_BM'
+        metal_base_a: 'A',
+        zac_b: 'B',
+        soldadura_c: 'C',
+        zac_b1: 'B1',
+        metal_base_a1: 'BM'
     };
 
     /*
@@ -49,6 +48,9 @@
     /* Calcula y escribe el promedio de cada columna de dureza. */
     function calcularPromedios(formulario) {
         var cuerpo = formulario.querySelector('#durezaBrinellBody');
+        var etapa = formulario.getAttribute('data-dureza-etapa') === 'DESPUES'
+            ? 'DESPUES'
+            : 'ANTES';
 
         // Sin la tabla de mediciones no hay valores que procesar.
         if (!cuerpo) {
@@ -57,7 +59,7 @@
 
         Object.keys(columnas).forEach(function (columna) {
             var valores = [];
-            var salida = formulario.querySelector('input[name="Dureza[' + columnas[columna] + ']"]');
+            var salida = formulario.querySelector('input[name="Dureza[' + etapa + '_' + columnas[columna] + ']"]');
 
             // Reune unicamente los valores numericos validos de la columna actual.
             cuerpo.querySelectorAll('input[name$="[' + columna + ']"]').forEach(function (input) {
@@ -82,6 +84,14 @@
                 }, 0) / valores.length)
                 : '';
         });
+
+        // En el consecutivo, los promedios ANTES pertenecen al reporte
+        // original y nunca deben ser modificados por las mediciones nuevas.
+        if (etapa === 'DESPUES') {
+            formulario.querySelectorAll('input[name^="Dureza[ANTES_"]').forEach(function (entradaAnterior) {
+                entradaAnterior.readOnly = true;
+            });
+        }
     }
 
     /* Inicializa el calculo cuando el formulario ya esta disponible en el DOM. */
