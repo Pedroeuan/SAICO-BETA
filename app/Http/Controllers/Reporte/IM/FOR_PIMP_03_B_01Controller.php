@@ -43,6 +43,28 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_03_B_01Controller extends Controller
 {
+    private function normalizeFotoLayout($pagina, $posicion, $index): array
+    {
+        $posicionesPermitidas = [
+            'arriba_izquierda',
+            'arriba_derecha',
+            'abajo_izquierda',
+            'abajo_derecha',
+            'pagina_completa',
+        ];
+        $posicionesPredeterminadas = array_slice($posicionesPermitidas, 0, 4);
+        $indice = max(0, (int) $index);
+        $posicionNormalizada = in_array($posicion, $posicionesPermitidas, true)
+            ? $posicion
+            : $posicionesPredeterminadas[$indice % 4];
+
+        return [
+            'pagina' => max(1, (int) ($pagina ?: (intdiv($indice, 4) + 1))),
+            'posicion' => $posicionNormalizada,
+            'una_hoja' => $posicionNormalizada === 'pagina_completa' ? 1 : 0,
+        ];
+    }
+
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
@@ -422,6 +444,11 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Instalacion' => 'nullable|string',
             'Detalles_Generales.No_Isometrico' => 'nullable|string',
+            'Detalles_Generales.Nom_pieza' => 'nullable|string',
+            'Detalles_Generales.Accesorio' => 'nullable|string',
+            'Detalles_Generales.Tuberia' => 'nullable|string',
+            'Detalles_Generales.Estructural' => 'nullable|string',
+            'Detalles_Generales.Observaciones' => 'nullable|string',
             'Detalles_Generales.Elementos_Soldados' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.No_Junta' => 'nullable|string',
@@ -460,6 +487,12 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.MATERIAL_PANO' => 'nullable|string',
+            'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string',
+            'Datos_Equipo.REACTIVO' => 'nullable|string',
+            'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string',
+            'Datos_Equipo.FASES_PRESENTES' => 'nullable|string',
+            'Datos_Equipo.ESPECIFICACION_MATERIAL' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
@@ -702,6 +735,8 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
         /* Fotos y Comentarios */
         $imagesBase64 = $request->input('images_base64', []);
+        $fotoPaginas = $request->input('foto_pagina', []);
+        $fotoPosiciones = $request->input('foto_posicion', []);
         $hayImagenes = !empty(array_filter($imagesBase64));
         if($hayImagenes)
         {
@@ -725,10 +760,11 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
-            // ✔ Imagen en hoja
-            $imagenHoja = isset($request->imagen_hoja[$index]) 
-                            ? (bool)$request->imagen_hoja[$index] 
-                            : false;
+            $distribucionFoto = $this->normalizeFotoLayout(
+                $fotoPaginas[$index] ?? null,
+                $fotoPosiciones[$index] ?? null,
+                $index
+            );
 
             // ✔ Detalles Junta activado
             $detallesJunta = isset($request->detalles_junta_check[$index]) 
@@ -755,7 +791,9 @@ class FOR_PIMP_03_B_01Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_PIMP_03_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
                 'comentario' => $request->comments[$index] ?? null,
-                'una_hoja' => $imagenHoja,
+                'una_hoja' => $distribucionFoto['una_hoja'],
+                'pagina' => $distribucionFoto['pagina'],
+                'posicion' => $distribucionFoto['posicion'],
                 'detalles_junta' => $detallesJunta,
                 'datos_junta' => $datosJunta
             ];
@@ -780,7 +818,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Instalacion = $validatedData['Detalles_Generales']['Instalacion'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'] ?? '';
         $Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
         $No_Isometrico = $validatedData['Detalles_Generales']['No_Isometrico'];
@@ -825,6 +863,11 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Instalacion' => 'nullable|string',
             'Detalles_Generales.No_Isometrico' => 'nullable|string',
+            'Detalles_Generales.Nom_pieza' => 'nullable|string',
+            'Detalles_Generales.Accesorio' => 'nullable|string',
+            'Detalles_Generales.Tuberia' => 'nullable|string',
+            'Detalles_Generales.Estructural' => 'nullable|string',
+            'Detalles_Generales.Observaciones' => 'nullable|string',
             'Detalles_Generales.Elementos_Soldados' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.No_Junta' => 'nullable|string',
@@ -863,6 +906,12 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.MATERIAL_PANO' => 'nullable|string',
+            'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string',
+            'Datos_Equipo.REACTIVO' => 'nullable|string',
+            'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string',
+            'Datos_Equipo.FASES_PRESENTES' => 'nullable|string',
+            'Datos_Equipo.ESPECIFICACION_MATERIAL' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
@@ -943,6 +992,31 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
         $Firmas = Firma_Reporte::firstOrNew(['idReportes' => $id]);
         $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+
+        if ($request->TieneCliente === 'si') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteSelect;
+        } elseif ($request->TieneCliente === 'no') {
+            $validatedData['Detalles_Generales']['Cliente'] = $request->ClienteInput;
+        }
+
+        if ($request->TieneContrato === 'no') {
+            $contratoInterno = $validatedData['Detalles_Generales']['Contrato'] ?? null;
+
+            if (!$contratoInterno || !preg_match('/^AICO-INT-\d{4}$/', $contratoInterno)) {
+                $ultimoNumero = 0;
+
+                foreach (reporte::orderBy('idReportes', 'DESC')->get() as $reporteExistente) {
+                    $detalles = json_decode($reporteExistente->Detalles_Generales, true);
+
+                    if (!empty($detalles['Contrato']) && str_starts_with($detalles['Contrato'], 'AICO-INT-')) {
+                        $ultimoNumero = max($ultimoNumero, (int) str_replace('AICO-INT-', '', $detalles['Contrato']));
+                    }
+                }
+
+                $validatedData['Detalles_Generales']['Contrato'] = 'AICO-INT-'
+                    . str_pad($ultimoNumero + 1, 4, '0', STR_PAD_LEFT);
+            }
+        }
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
@@ -1224,7 +1298,8 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
         $deletedImages = $request->input('deleted_images', []);
-        $imagenHoja = $request->input('imagen_hoja', []);
+        $fotoPaginas = $request->input('foto_pagina', []);
+        $fotoPosiciones = $request->input('foto_posicion', []);
         //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
         $detallesJuntaCheck = $request->input('detalles_junta_check', []);
 
@@ -1275,6 +1350,14 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 ]
             ];
         };
+
+        $getDistribucionFoto = function ($index) use ($fotoPaginas, $fotoPosiciones) {
+            return $this->normalizeFotoLayout(
+                $fotoPaginas[$index] ?? null,
+                $fotoPosiciones[$index] ?? null,
+                $index
+            );
+        };
         // **1️⃣ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
             if (isset($existingImages[$index])) {
@@ -1323,7 +1406,9 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
+                    'pagina' => $getDistribucionFoto($index)['pagina'],
+                    'posicion' => $getDistribucionFoto($index)['posicion'],
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1346,7 +1431,9 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
+                    'pagina' => $getDistribucionFoto($index)['pagina'],
+                    'posicion' => $getDistribucionFoto($index)['posicion'],
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1360,7 +1447,9 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
+                    'pagina' => $getDistribucionFoto($index)['pagina'],
+                    'posicion' => $getDistribucionFoto($index)['posicion'],
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1390,7 +1479,9 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
+                    'pagina' => $getDistribucionFoto($index)['pagina'],
+                    'posicion' => $getDistribucionFoto($index)['posicion'],
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1415,7 +1506,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
-        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+        $Proyecto = $validatedData['Detalles_Generales']['Proyecto'] ?? '';
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
@@ -1487,6 +1578,9 @@ class FOR_PIMP_03_B_01Controller extends Controller
                     'path' => $rutaFoto,
                     'comment' => $foto['comentario'] ?? '',
                     'una_hoja'  => $foto['una_hoja'] ?? 0,
+                    'pagina' => max(1, (int) ($foto['pagina'] ?? (intdiv(count($Fotos), 4) + 1))),
+                    'posicion' => $foto['posicion']
+                        ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : null),
 
                     // 🔥 NUEVO
                     'detalles_junta' => $detallesActivo,
@@ -1519,62 +1613,11 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Firmas_Reportes' => $Firmas_Reportes,
         ];
 
-        // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_B_01_PDF', $data)->setPaper('letter', 'portrait');
-        $pdf2Content = null;
-        $pageCount2 = 0;
+        // El reporte y sus fotografías pertenecen a una sola hoja.
+        $pdf = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_B_01_PDF', $data)
+            ->setPaper('letter', 'portrait');
 
-        if (!empty($Fotos)) {
-            $pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_03_B_01_PDF', $data)->setPaper('letter', 'portrait');
-            $pdf2Content = $pdf2->output();
-        }
-
-        // Generar el PDF adicional en orientación vertical
-
-        // Combinar los PDFs
-        $pdf1Content = $pdf1->output();
-
-       // Crear objetos FPDI independientes para contar páginas
-        $tempPdf1 = new Fpdi();
-        $pageCount1 = $tempPdf1->setSourceFile(StreamReader::createByString($pdf1Content));
-
-        if ($pdf2Content) {
-            $tempPdf2 = new Fpdi();
-            $pageCount2 = $tempPdf2->setSourceFile(StreamReader::createByString($pdf2Content));
-        }
-
-
-        // Ahora sí combinamos
-        $combinedPdf = new Fpdi();
-        $totalPageCount = $pageCount1 + $pageCount2;
-
-        // Añadir páginas del primer PDF
-        $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
-        for ($i = 1; $i <= $pageCount1; $i++) {
-            $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(151.5, 32);
-            $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount" . "\n" . "$i OF $totalPageCount", 0, 'C');
-        }
-
-        // Añadir páginas del segundo PDF
-
-        if ($pdf2Content) {
-            $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
-            for ($i = 1; $i <= $pageCount2; $i++) {
-                $tplId = $combinedPdf->importPage($i);
-                $combinedPdf->AddPage('P');
-                $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-                $combinedPdf->SetFont('Arial', 'B', 8);
-                $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY(151.5, 32);
-                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount" . "\n" . "$paginaActual OF $totalPageCount", 0, 'C');
-            }
-        }
-
-        return response($combinedPdf->Output('Reporte_FOR_PIMP_03_B_01.PDF', 'S'), 200)
+        return response($pdf->output(), 200)
             ->header('Content-Type', 'application/pdf');
     }
 
