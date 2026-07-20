@@ -41,7 +41,7 @@
 
         footer {
             position: fixed;
-            bottom: -30px;
+            bottom: -50px;
             left: 0;
             right: 0;
             text-align: center;
@@ -166,7 +166,7 @@
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
-            width: 220px;
+            width: 270px;
             height: auto;
             line-height: 0;
         }
@@ -177,7 +177,7 @@
          */
         .foto-container img {
             display: block;
-            max-width: 220px;
+            max-width: 270px;
             max-height: auto;
             object-fit: contain;
             margin: 0 auto;
@@ -542,7 +542,7 @@
         </table>
 
 
-        <table class="imagenes-reporte" style="width:100%" border="2">
+        <table class="imagenes-reporte" style="width:100%" border="0">
             @if($esHojaCompleta)
                 <tr>
                     <td class="foto-container foto-full" colspan="2">
