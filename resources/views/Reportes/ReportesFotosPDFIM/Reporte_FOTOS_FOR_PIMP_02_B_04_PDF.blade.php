@@ -41,7 +41,7 @@
 
         footer {
             position: fixed;
-            bottom: -30px;
+            bottom: -50px;
             left: 0;
             right: 0;
             text-align: center;
@@ -150,33 +150,37 @@
          * Cada fotografia conserva la posicion elegida por el usuario.
          */
         .imagenes-reporte {
-            width: 106%;
-            margin-left: -15px;
+            width: 687.5px;
+            margin: 0px 0px;
             border-collapse: separate;
-            /* Separacion horizontal y vertical entre fotografias. */
-            border-spacing: 20px 14px;
+            /* Separacion horizontal y vertical entre fotografias. 
+            border-spacing: 85px 10px;
+            background: #920404;*/
             table-layout: fixed;
+            
         }
-
         /* Medidas de cada uno de los cuatro espacios disponibles por pagina. */
         .foto-container {
-            width: 312px;
-            height: 170px;
             padding: 0;
             border: 1px solid #000;
             text-align: center;
             vertical-align: middle;
+            overflow: hidden;
+            width: 270px;
+            height: auto;
+            line-height: 0;
         }
 
         /*
-         * cover llena completamente el recuadro y puede recortar los bordes.
-         * Cambiar a contain si se necesita mostrar la fotografia completa.
+         * contain muestra la imagen completa sin deformarla y ajusta el contenedor
+         * a su proporción real.
          */
         .foto-container img {
             display: block;
-            width: 312px;
-            height: 145px;
-            object-fit: cover;
+            max-width: 270px;
+            max-height: auto;
+            object-fit: contain;
+            margin: 0 auto;
         }
 
         /*
@@ -190,12 +194,13 @@
 
         /* Texto descriptivo que se presenta debajo de cada fotografia. */
         .comment {
-            margin-top: 0;
-            padding-top: 5px;
+            margin: 0;
+            padding: 6px 4px 4px;
             border-top: 1px solid #000;
             font-size: 8px;
+            line-height: 1;
             text-align: center;
-            word-wrap: break-word;
+            box-sizing: border-box;
         }
 
         /*
@@ -536,7 +541,8 @@
             </thead>
         </table>
 
-        <table class="imagenes-reporte">
+
+        <table class="imagenes-reporte" style="width:100%" border="0">
             @if($esHojaCompleta)
                 <tr>
                     <td class="foto-container foto-full" colspan="2">
@@ -548,10 +554,24 @@
                 <tr>
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
-                            <td class="foto-container">
+                            @if($posicion === 'arriba_derecha')
+                            <th style="width:20%">
+                                <div>
+                                    &nbsp;
+                                </div>
+                            </th>
+                            @endif
+                            <th class="foto-container">
                                 <img src="{{ $espacios[$posicion]['path'] }}">
                                 <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                            </td>
+                            </th>
+                            @if($posicion === 'arriba_izquierda')
+                            <th style="width:20%">
+                                <div>
+                                    &nbsp;
+                                </div>
+                            </th>
+                            @endif
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
                         @endif
@@ -560,10 +580,24 @@
                 <tr>
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
-                            <td class="foto-container">
-                                <img src="{{ $espacios[$posicion]['path'] }}">
-                                <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                            </td>
+                            @if($posicion === 'abajo_derecha')
+                                <th style="width:20%">
+                                    <div>
+                                        &nbsp;
+                                    </div>
+                                </th>
+                            @endif
+                                <th class="foto-container">
+                                    <img src="{{ $espacios[$posicion]['path'] }}">
+                                    <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                                </th>
+                                @if($posicion === 'abajo_izquierda')
+                                <th style="width:20%">
+                                    <div>
+                                        &nbsp;
+                                    </div>
+                                </th>
+                            @endif
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
                         @endif

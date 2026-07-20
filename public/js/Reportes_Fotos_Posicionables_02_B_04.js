@@ -277,7 +277,8 @@
 
     /* Inicializa el modulo cuando el formulario ya existe en el DOM. */
     document.addEventListener('DOMContentLoaded', function () {
-        var formulario = document.getElementById('FOR-PIMP-02_B_04');
+        var formulario = document.getElementById('FOR-PIMP-02_B_04')
+            || document.getElementById('FOR-PIMP-03_B_01');
         var raiz;
         var observador;
 

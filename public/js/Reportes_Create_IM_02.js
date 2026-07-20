@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-07_B_01');
+    const form = document.getElementById('FOR-PIMP-02_B_03')
+        || document.getElementById('FOR-PIMP-03_B_01')
+        || document.getElementById('FOR-PIMP-07_B_01');
     if (!form) return;
 
     const formId = form.id;

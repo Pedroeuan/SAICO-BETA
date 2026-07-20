@@ -1044,7 +1044,15 @@ class ReporteController extends Controller
             "FOR-PINS-24-01" => "INFORME DE INSPECCIÓN CON ULTRASONIDO POR ARREGLO DE FASES y TOFD", //MISMO FORMATO QUE EL 15-01 
             "FOR-PINS-25-01" => "INSPECCIÓN VISUAL EN RSP",
             "FOR-03-PRO-INS-15" => "LISTADO DE COMPONENTES", //Mantiene su mismo formato pero con un nombre personalizado
-            "FOR-PIMP-07_B/01" => "TRATAMIENTO TÉRMICO DE PWHT (INFORME DE RELEVADO DE ESFUERZOS)"
+            "FOR-PIMP-07_B/01" => "TRATAMIENTO TÉRMICO DE PWHT (INFORME DE RELEVADO DE ESFUERZOS)",
+            "FOR-PIMP-02_B/03"=> "INFORME DE ENSAYO DE DUREZAS EN METALES BASE HARDNESS TEST REPORT ON BASE METALS",
+            "FOR-PIMP-02_B/04"=> "INFORME DE ENSAYO DE DUREZAS EN SOLDADURAS TEST REPORT ON WELDING HARDNESS",
+            "FOR-PIMP-03_B/01"=> "INFORME DE ANÁLISIS METALÓGRFICO METALLOGRAPHIC ANALYSIS REPORT",
+            "FOR-PIMP-04/02"=> "INFORME DE CARACTERIZACIÓN DE MATERIALES MEDIANTE LA TÉCNICA DE ESPECTROMETRÍA DE EMISIÓN ÓPTICA (OES)",
+            "FOR-PIMP-04/03"=> "INFORME DE CARACTERIZACIÓN DE MATERIALES MEDIANTE LA TÉCNICA DE FLUORESCENCIA DE RX (XRF)",
+            "FOR-PIMP-05/01"=> "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE ESPECTROMETRÍA DE EMISIÓN ÓPTICA (OES)",
+            "FOR-PIMP-05_B/01"=> "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE ESPECTROMETRÍA DE EMISIÓN ÓPTICA (OES)/CHEMICAL ANALYSIS REPORT USING THE OPTICAL EMISSION SPECTROMETRY TECHNIQUE (OES)",
+            "FOR-PIMP-06_B/01"=> "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE FLUORESCENCIA DE RAYOS X (XRF)/CHEMICALS ANALYSIS REPORT USING THE X-RAY FLUORESCENSE TECHNIQUE (XRF",
         ];
     
         return $nombresPersonalizados[$Nombre_Formato] ?? $Nombre_Formato;
@@ -1661,6 +1669,31 @@ class ReporteController extends Controller
             $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
 
             $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
+
+            // En el consecutivo de durezas se conservan los promedios previos,
+            // pero las mediciones posteriores deben iniciar en blanco.
+            $pruebaAplicaOriginal = Prueba_Aplica::find($ReporteOriginal->idPrueba_Aplica);
+            $nombreFormato = $pruebaAplicaOriginal
+                ? formato::where('idFormato', $pruebaAplicaOriginal->idFormato)->value('Nombre')
+                : null;
+
+            if ($nombreFormato === 'FOR-PIMP-02_B/04') {
+                $datosEquipo = json_decode($ReporteOriginal->Datos_Equipo, true) ?? [];
+                $promedios = is_array($datosEquipo['DUREZA_PROMEDIO'] ?? null)
+                    ? $datosEquipo['DUREZA_PROMEDIO']
+                    : [];
+
+                foreach (['DESPUES_A', 'DESPUES_B', 'DESPUES_C', 'DESPUES_B1', 'DESPUES_BM'] as $campo) {
+                    $promedios[$campo] = '';
+                }
+
+                $datosEquipo['DUREZA_PROMEDIO'] = $promedios;
+                $datosEquipo['DUREZA_ROWS'] = [];
+                $datosEquipo['DUREZA_MERGE_CONFIG'] = [];
+                $datosEquipo['DUREZA_ETAPA'] = 'DESPUES';
+                $NuevoReporte->Datos_Equipo = json_encode($datosEquipo);
+            }
+
             $NuevoReporte->Estatus = 'CREADO';
 
             // Guardar nuevo reporte
