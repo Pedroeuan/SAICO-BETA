@@ -541,7 +541,8 @@
             </thead>
         </table>
 
-        <table class="imagenes-reporte">
+
+        <table class="imagenes-reporte" style="width:100%" border="2">
             @if($esHojaCompleta)
                 <tr>
                     <td class="foto-container foto-full" colspan="2">
@@ -554,22 +555,22 @@
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             @if($posicion === 'arriba_derecha')
-                            <td>
+                            <th style="width:20%">
                                 <div>
                                     &nbsp;
                                 </div>
-                            </td>
+                            </th>
                             @endif
-                            <td class="foto-container">
+                            <th class="foto-container">
                                 <img src="{{ $espacios[$posicion]['path'] }}">
                                 <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                            </td>
+                            </th>
                             @if($posicion === 'arriba_izquierda')
-                            <td>
+                            <th style="width:20%">
                                 <div>
                                     &nbsp;
                                 </div>
-                            </td>
+                            </th>
                             @endif
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
@@ -580,22 +581,22 @@
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             @if($posicion === 'abajo_derecha')
-                                <td>
+                                <th style="width:20%">
                                     <div>
                                         &nbsp;
                                     </div>
-                                </td>
+                                </th>
                             @endif
-                                <td class="foto-container">
+                                <th class="foto-container">
                                     <img src="{{ $espacios[$posicion]['path'] }}">
                                     <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                                </td>
+                                </th>
                                 @if($posicion === 'abajo_izquierda')
-                                <td>
+                                <th style="width:20%">
                                     <div>
                                         &nbsp;
                                     </div>
-                                </td>
+                                </th>
                             @endif
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
