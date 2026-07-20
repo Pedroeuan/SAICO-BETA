@@ -41,7 +41,7 @@
 
         footer {
             position: fixed;
-            bottom: -30px;
+            bottom: -50px;
             left: 0;
             right: 0;
             text-align: center;
@@ -166,7 +166,7 @@
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
-            width: 220px;
+            width: 270px;
             height: auto;
             line-height: 0;
         }
@@ -177,7 +177,7 @@
          */
         .foto-container img {
             display: block;
-            max-width: 220px;
+            max-width: 270px;
             max-height: auto;
             object-fit: contain;
             margin: 0 auto;
@@ -541,7 +541,8 @@
             </thead>
         </table>
 
-        <table class="imagenes-reporte">
+
+        <table class="imagenes-reporte" style="width:100%" border="0">
             @if($esHojaCompleta)
                 <tr>
                     <td class="foto-container foto-full" colspan="2">
@@ -554,22 +555,22 @@
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             @if($posicion === 'arriba_derecha')
-                            <td>
+                            <th style="width:20%">
                                 <div>
                                     &nbsp;
                                 </div>
-                            </td>
+                            </th>
                             @endif
-                            <td class="foto-container">
+                            <th class="foto-container">
                                 <img src="{{ $espacios[$posicion]['path'] }}">
                                 <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                            </td>
+                            </th>
                             @if($posicion === 'arriba_izquierda')
-                            <td>
+                            <th style="width:20%">
                                 <div>
                                     &nbsp;
                                 </div>
-                            </td>
+                            </th>
                             @endif
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
@@ -580,22 +581,22 @@
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             @if($posicion === 'abajo_derecha')
-                                <td>
+                                <th style="width:20%">
                                     <div>
                                         &nbsp;
                                     </div>
-                                </td>
+                                </th>
                             @endif
-                                <td class="foto-container">
+                                <th class="foto-container">
                                     <img src="{{ $espacios[$posicion]['path'] }}">
                                     <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                                </td>
+                                </th>
                                 @if($posicion === 'abajo_izquierda')
-                                <td>
+                                <th style="width:20%">
                                     <div>
                                         &nbsp;
                                     </div>
-                                </td>
+                                </th>
                             @endif
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
