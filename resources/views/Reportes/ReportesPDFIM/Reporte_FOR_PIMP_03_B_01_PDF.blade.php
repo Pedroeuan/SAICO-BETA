@@ -105,7 +105,29 @@
             text-align: center;
             vertical-align: top;
         }
+        /* Medidas de cada uno de los cuatro espacios disponibles por pagina. */
+        .foto-container {
+            padding: 0;
+            border: 1px solid #000;
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            width: 270px;
+            height: auto;
+            line-height: 0;
+        }
 
+        /*
+         * contain muestra la imagen completa sin deformarla y ajusta el contenedor
+         * a su proporción real.
+         */
+        .foto-container img {
+            display: block;
+            max-width: 270px;
+            max-height: auto;
+            object-fit: contain;
+            margin: 0 auto;
+        }
         .foto-marco {
             height: 185px;
             border: 1px solid #000;
@@ -301,7 +323,7 @@
     @if(!$loop->first)
         <div style="page-break-before: always;"></div>
     @endif
-    <table class="tabla-fotos">
+    <table class="tabla-fotos" style="width:100%">
         @if($configuracionFotos['completa'])
             <tr>
                 <td class="foto-completa" colspan="2">
@@ -313,20 +335,32 @@
             @foreach([
                 ['arriba_izquierda', 'arriba_derecha'],
                 ['abajo_izquierda', 'abajo_derecha'],
-            ] as $fila)
+                ] as $fila)
                 <tr>
                 @foreach($fila as $posicion)
                     @php $foto = $configuracionFotos['posiciones'][$posicion] ?? null; @endphp
-                    <td>
-                        <div class="foto-marco">
-                            @if($foto)
-                                <img src="{{ $foto['path'] }}" alt="Fotografía">
-                            @else
+                    @if($posicion === 'arriba_derecha' || $posicion === 'abajo_derecha')
+                        <th style="width:5%">
+                            <div>
                                 &nbsp;
+                            </div>
+                        </th>
+                    @endif
+                    <th class="foto-container">
+                        <div>
+                            @if($foto) 
+                                <img src="{{ $foto['path'] }}" alt="Fotografía">
                             @endif
                         </div>
                         <div class="comentario-foto">{{ $foto['comment'] ?? '' }}</div>
-                    </td>
+                    </th>
+                    @if($posicion === 'arriba_izquierda' || $posicion === 'abajo_izquierda')
+                    <th style="width:5%">
+                        <div>
+                            &nbsp;
+                        </div>
+                    </th>
+                    @endif
                 @endforeach
                 </tr>
             @endforeach
