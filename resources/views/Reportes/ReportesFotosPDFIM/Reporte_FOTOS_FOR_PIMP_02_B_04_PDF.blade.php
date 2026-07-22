@@ -169,6 +169,23 @@
             width: 270px;
             height: auto;
             line-height: 0;
+            display: block;
+        }
+
+        .foto-container.arriba_izquierda {
+            text-align: left;
+        }
+
+        .foto-container.arriba_derecha {
+            text-align: right;
+        }
+
+        .foto-container.abajo_izquierda {
+            text-align: left;
+        }
+
+        .foto-container.abajo_derecha {
+            text-align: right;
         }
 
         /*
@@ -181,6 +198,18 @@
             max-height: auto;
             object-fit: contain;
             margin: 0 auto;
+        }
+
+        .foto-container.arriba_izquierda img,
+        .foto-container.abajo_izquierda img {
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        .foto-container.arriba_derecha img,
+        .foto-container.abajo_derecha img {
+            margin-left: auto;
+            margin-right: 0;
         }
 
         /*
@@ -201,6 +230,17 @@
             line-height: 1;
             text-align: center;
             box-sizing: border-box;
+            width: 100%;
+        }
+
+        .foto-container.arriba_izquierda .comment,
+        .foto-container.abajo_izquierda .comment {
+            text-align: left;
+        }
+
+        .foto-container.arriba_derecha .comment,
+        .foto-container.abajo_derecha .comment {
+            text-align: right;
         }
 
         /*
@@ -561,7 +601,7 @@
                                 </div>
                             </th>
                             @endif
-                            <th class="foto-container">
+                            <th class="foto-container {{ $posicion }}">
                                 <img src="{{ $espacios[$posicion]['path'] }}">
                                 <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
                             </th>
@@ -587,7 +627,7 @@
                                     </div>
                                 </th>
                             @endif
-                                <th class="foto-container">
+                                <th class="foto-container {{ $posicion }}">
                                     <img src="{{ $espacios[$posicion]['path'] }}">
                                     <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
                                 </th>

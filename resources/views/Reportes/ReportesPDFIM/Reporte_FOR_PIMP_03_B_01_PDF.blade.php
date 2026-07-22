@@ -115,12 +115,34 @@
             width: 260px;
             height: auto;
             line-height: 0;
+            position: relative;
+            display: block;
+        }
+
+        .foto-container.arriba_izquierda {
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .foto-container.arriba_derecha {
+            text-align: right;
+            vertical-align: top;
+        }
+
+        .foto-container.abajo_izquierda {
+            text-align: left;
+            vertical-align: bottom;
+        }
+
+        .foto-container.abajo_derecha {
+            text-align: right;
+            vertical-align: bottom;
         }
 
         .foto-container > div {
             width: 100%;
             max-width: 248px;
-            margin: 0 auto;
+            margin: 0;
             box-sizing: border-box;
         }
 
@@ -133,12 +155,12 @@
             max-width: 248px;
             max-height: auto;
             object-fit: contain;
-            margin: 0 auto;
+            margin: 0;
         }
 
         /* Texto descriptivo que se presenta debajo de cada fotografia. */
         .comment {
-            margin: 0 auto;
+            margin: 0;
             padding: 3px 2px 2px;
             border-top: 1px solid #000;
             font-size: 5.3px;
@@ -368,7 +390,7 @@
                             </div>
                         </th>
                     @endif
-                    <th class="foto-container">
+                    <th class="foto-container {{ $posicion }}">
                         <div>
                             @if($foto) 
                                 <img src="{{ $foto['path'] }}" alt="Fotografía">
