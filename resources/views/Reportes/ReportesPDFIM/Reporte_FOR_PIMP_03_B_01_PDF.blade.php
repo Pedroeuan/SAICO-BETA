@@ -112,9 +112,16 @@
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
-            width: 270px;
+            width: 260px;
             height: auto;
             line-height: 0;
+        }
+
+        .foto-container > div {
+            width: 100%;
+            max-width: 248px;
+            margin: 0 auto;
+            box-sizing: border-box;
         }
 
         /*
@@ -123,10 +130,25 @@
          */
         .foto-container img {
             display: block;
-            max-width: 270px;
+            max-width: 248px;
             max-height: auto;
             object-fit: contain;
             margin: 0 auto;
+        }
+
+        /* Texto descriptivo que se presenta debajo de cada fotografia. */
+        .comment {
+            margin: 0 auto;
+            padding: 3px 2px 2px;
+            border-top: 1px solid #000;
+            font-size: 5.3px;
+            line-height: 1.05;
+            text-align: center;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 248px;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .foto-marco {
             height: 185px;
@@ -352,7 +374,7 @@
                                 <img src="{{ $foto['path'] }}" alt="Fotografía">
                             @endif
                         </div>
-                        <div class="comentario-foto">{{ $foto['comment'] ?? '' }}</div>
+                        <div class="comment">{{ $foto['comment'] ?? '' }}</div>
                     </th>
                     @if($posicion === 'arriba_izquierda' || $posicion === 'abajo_izquierda')
                     <th style="width:5%">
