@@ -11,7 +11,7 @@
         { value: 'arriba_derecha', label: 'Arriba derecha' },
         { value: 'abajo_izquierda', label: 'Abajo izquierda' },
         { value: 'abajo_derecha', label: 'Abajo derecha' },
-        { value: 'pagina_completa', label: 'Pagina completa' }
+        { value: 'pagina_completa', label: 'Página completa' }
     ];
     var reindexarPorOrden = false;
 
@@ -90,6 +90,7 @@
         var bloque;
         var radios;
         var checkboxAnterior;
+        var checkboxDisparo;
 
         // Evita duplicarlos cuando MutationObserver vuelve a recorrer el DOM.
         if (contenedor.querySelector('.foto-layout-manual')) {
@@ -125,12 +126,12 @@
         bloque.innerHTML =
             '<div class="row align-items-center">' +
                 '<div class="col-md-3 mb-2">' +
-                    '<label class="font-weight-bold mb-1">Numero de hoja</label>' +
+                    '<label class="font-weight-bold mb-1">Número de hoja</label>' +
                     '<input type="number" min="1" class="form-control form-control-sm foto-pagina" ' +
                         'name="' + escapar(nombreCampo('foto_pagina', indice)) + '" value="' + valores.pagina + '">' +
                 '</div>' +
                 '<div class="col-md-9">' +
-                    '<div class="font-weight-bold mb-1">Posicion en la hoja</div>' + radios +
+                    '<div class="font-weight-bold mb-1">Posición en la hoja</div>' + radios +
                 '</div>' +
             '</div>';
 
@@ -163,6 +164,21 @@
 
         // También sincroniza el valor inicial al crear los controles.
         sincronizarHojaCompleta(contenedor);
+
+        /*
+         * En FOR-PIMP-06_B/01 los disparos tienen una distribución fija dentro
+         * del reporte principal. La distribución manual aplica únicamente a las
+         * fotografías adicionales.
+         */
+        checkboxDisparo = contenedor.querySelector('.foto-disparo-checkbox');
+        if (checkboxDisparo) {
+            var actualizarVisibilidadLayout = function () {
+                bloque.style.display = checkboxDisparo.checked ? 'none' : '';
+            };
+
+            checkboxDisparo.addEventListener('change', actualizarVisibilidadLayout);
+            actualizarVisibilidadLayout();
+        }
     }
 
     /*
@@ -230,11 +246,13 @@
         formulario.querySelectorAll('[id^="image-container-"]').forEach(function (tarjeta) {
             var paginaInput = tarjeta.querySelector('.foto-pagina');
             var posicionInput = tarjeta.querySelector('input[data-foto-posicion]:checked');
+            var checkboxDisparo = tarjeta.querySelector('.foto-disparo-checkbox');
             var pagina;
             var posicion;
 
             // Ignora tarjetas eliminadas/ocultas y detiene nuevas comprobaciones al fallar.
-            if (error || !paginaInput || !posicionInput || tarjeta.style.display === 'none') {
+            if (error || !paginaInput || !posicionInput || tarjeta.style.display === 'none'
+                || (checkboxDisparo && checkboxDisparo.checked)) {
                 return;
             }
 
@@ -278,7 +296,8 @@
     /* Inicializa el modulo cuando el formulario ya existe en el DOM. */
     document.addEventListener('DOMContentLoaded', function () {
         var formulario = document.getElementById('FOR-PIMP-02_B_04')
-            || document.getElementById('FOR-PIMP-03_B_01');
+            || document.getElementById('FOR-PIMP-03_B_01')
+            || document.getElementById('FOR-PIMP-06_B_01');
         var raiz;
         var observador;
 
@@ -288,7 +307,8 @@
         }
 
         raiz = formulario.querySelector('[data-layout-fotos-manual="1"]');
-        reindexarPorOrden = raiz.id === 'imageFieldsContainer';
+        reindexarPorOrden = raiz.id === 'imageFieldsContainer'
+            && formulario.id !== 'FOR-PIMP-06_B_01';
         actualizarControles(raiz);
 
         /*

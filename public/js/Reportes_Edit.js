@@ -189,6 +189,29 @@
         });
     }
 
+    function bindFotosDisparo() {
+        document.querySelectorAll('.foto-disparo-checkbox').forEach(cb => {
+            const index = cb.dataset.index;
+            const hidden = document.getElementById(`esDisparoValue${index}`);
+            const select = document.getElementById(`numeroDisparo${index}`);
+            const container = document.getElementById(`numeroDisparoContainer${index}`);
+
+            if (!hidden || !select || !container) return;
+
+            const actualizar = function () {
+                hidden.value = cb.checked ? 1 : 0;
+                container.classList.toggle('d-none', !cb.checked);
+                if (!cb.checked) select.value = '';
+            };
+
+            actualizar();
+            if (cb.dataset.disparoBound !== '1') {
+                cb.dataset.disparoBound = '1';
+                cb.addEventListener('change', actualizar);
+            }
+        });
+    }
+
 
     // Generar campos de imágenes
     document.addEventListener("DOMContentLoaded", function () {
@@ -197,6 +220,70 @@
         const cropperImage = document.getElementById('cropperImage');
 
         bindImagenHojaCheckboxes();
+        bindFotosDisparo();
+
+        const formularioDisparos = document.getElementById('FOR-PIMP-06_B_01');
+        if (formularioDisparos && formularioDisparos.dataset.validacionDisparosBound !== '1') {
+            formularioDisparos.dataset.validacionDisparosBound = '1';
+            formularioDisparos.addEventListener('submit', function (event) {
+                const conteoDisparos = { 1: 0, 2: 0, 3: 0 };
+                let mensajeError = '';
+
+                formularioDisparos.querySelectorAll('.foto-disparo-checkbox').forEach(function (checkbox) {
+                    const index = checkbox.dataset.index;
+                    const contenedor = document.getElementById(`image-container-${index}`);
+                    const eliminado = document.getElementById(`deleted_image_${index}`);
+
+                    if (!contenedor || contenedor.style.display === 'none' || (eliminado && eliminado.value !== '')) {
+                        return;
+                    }
+
+                    if (!checkbox.checked) {
+                        return;
+                    }
+
+                    const imagenExistente = formularioDisparos.querySelector(`input[name="existing_images[${index}]"]`);
+                    const imagenBase64 = formularioDisparos.querySelector(`input[name="images_base64[${index}]"]`);
+                    if (!imagenExistente && (!imagenBase64 || !imagenBase64.value)) {
+                        mensajeError = `La imagen ${Number(index) + 1} todavía no se ha guardado desde el recortador.`;
+                        return;
+                    }
+
+                    const selector = document.getElementById(`numeroDisparo${index}`);
+                    const numero = selector ? selector.value : '';
+                    if (!Object.prototype.hasOwnProperty.call(conteoDisparos, numero)) {
+                        mensajeError = `Selecciona el disparo de la imagen ${Number(index) + 1}.`;
+                        return;
+                    }
+
+                    conteoDisparos[numero]++;
+                });
+
+                if (!mensajeError) {
+                    Object.keys(conteoDisparos).some(function (numero) {
+                        const cantidad = conteoDisparos[numero];
+                        if (cantidad !== 0 && cantidad !== 2) {
+                            mensajeError = `El ${numero}° disparo tiene ${cantidad} fotografía${cantidad === 1 ? '' : 's'}; debe tener exactamente dos.`;
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+
+                if (mensajeError) {
+                    event.preventDefault();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Revisa los disparos',
+                            text: mensajeError,
+                        });
+                    } else {
+                        alert(mensajeError);
+                    }
+                }
+            });
+        }
 
         if (!imageCountSelect || !container) {
             return;
@@ -211,6 +298,7 @@
 
             function generateImageFields(count) {
             container.innerHTML = '';
+            const permiteDisparos = document.getElementById('FOR-PIMP-06_B_01') !== null;
 
             // Calcular desde qué índice empezar (considerando imágenes del servidor)
             const existingCount = document.querySelectorAll('[id^="image-container-"]').length;
@@ -232,6 +320,22 @@
                             </label>
                         </div>
                         <input type="hidden" name="imagen_hoja[${index}]" id="imagenHojaValue${index}" value="0">
+                        ${permiteDisparos ? `
+                        <div class="form-check mt-2">
+                            <input type="hidden" name="es_disparo[${index}]" id="esDisparoValue${index}" value="0">
+                            <input type="checkbox" class="form-check-input foto-disparo-checkbox" data-index="${index}" id="esDisparo${index}">
+                            <label class="form-check-label" for="esDisparo${index}">Esta imagen pertenece a un disparo</label>
+                        </div>
+                        <div class="mt-2 d-none numero-disparo-container" id="numeroDisparoContainer${index}">
+                            <label for="numeroDisparo${index}">Asignar al disparo:</label>
+                            <select class="form-control" name="numero_disparo[${index}]" id="numeroDisparo${index}">
+                                <option value="">Selecciona un disparo</option>
+                                <option value="1">1er. disparo</option>
+                                <option value="2">2do. disparo</option>
+                                <option value="3">3er. disparo</option>
+                            </select>
+                            <small class="text-muted">Cada disparo se completa con dos fotografías.</small>
+                        </div>` : ''}
                         <div class="image-preview mt-2" id="image${index}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[${index}]" id="comment${index}" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[${index}]" id="image${index}-base64">
@@ -329,6 +433,7 @@
             });
 
             bindImagenHojaCheckboxes();
+            bindFotosDisparo();
         }
 
         // Limpiar localStorage al enviar el formulario
