@@ -108,7 +108,7 @@
         /* Medidas de cada uno de los cuatro espacios disponibles por pagina. */
         .foto-container {
             padding: 0;
-            border: 1px solid #000;
+            /*border: 1px solid #000;*/
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
@@ -162,7 +162,7 @@
         .comment {
             margin: 0;
             padding: 3px 2px 2px;
-            border-top: 1px solid #000;
+            /*border-top: 1px solid #000;*/
             font-size: 5.3px;
             line-height: 1.05;
             text-align: center;
@@ -376,15 +376,12 @@
                 </td>
             </tr>
         @else
-            @foreach([
-                ['arriba_izquierda', 'arriba_derecha'],
-                ['abajo_izquierda', 'abajo_derecha'],
-                ] as $fila)
+            @foreach([['arriba_izquierda', 'arriba_derecha'],['abajo_izquierda', 'abajo_derecha'],] as $fila)
                 <tr>
                 @foreach($fila as $posicion)
                     @php $foto = $configuracionFotos['posiciones'][$posicion] ?? null; @endphp
                     @if($posicion === 'arriba_derecha' || $posicion === 'abajo_derecha')
-                        <th style="width:5%">
+                        <th style="width:15.8%">
                             <div>
                                 &nbsp;
                             </div>
@@ -399,7 +396,7 @@
                         <div class="comment">{{ $foto['comment'] ?? '' }}</div>
                     </th>
                     @if($posicion === 'arriba_izquierda' || $posicion === 'abajo_izquierda')
-                    <th style="width:5%">
+                    <th style="width:15.8%">
                         <div>
                             &nbsp;
                         </div>
