@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-03_B/01</title>
     <style>
-        @page { margin: 3.0cm 1.2cm 2.2cm 1.2cm; }
+        @page { margin: 3.0cm 1.5cm 2.2cm 1.5cm; }
 
         body {
             margin: 0;
@@ -88,7 +88,7 @@
         }
         .etiqueta-centrada { text-align: center !important; }
 
-        .tabla-analisis { margin-top: 3px; font-size: 7px; text-align: center; }
+        .tabla-analisis { margin-top: 3px; font-size: 6px; text-align: center; }
         .tabla-analisis th,
         .tabla-analisis td {
             border: 1px solid #9ea7b3;
@@ -141,7 +141,7 @@
 
         .foto-container > div {
             width: 100%;
-            max-width: 248px;
+            max-width: 290px;
             margin: 0;
             box-sizing: border-box;
         }
@@ -152,7 +152,7 @@
          */
         .foto-container img {
             display: block;
-            max-width: 248px;
+            max-width: 290px;
             max-height: auto;
             object-fit: contain;
             margin: 0;
@@ -168,9 +168,24 @@
             text-align: center;
             box-sizing: border-box;
             width: 100%;
-            max-width: 248px;
+            max-width: 260px;
             overflow-wrap: anywhere;
             word-break: break-word;
+        }
+        /*
+         * REGISTRO FOTOGRAFICO
+         * La tabla usa una cuadricula fija de dos columnas y dos filas.
+         * Cada fotografia conserva la posicion elegida por el usuario.
+         */
+        .imagenes-reporte {
+            width: 687.5px;
+            margin: 0px 0px;
+            border-collapse: separate;
+            /* Separacion horizontal y vertical entre fotografias. 
+            border-spacing: 85px 10px;
+            background: #920404;*/
+            table-layout: fixed;
+            
         }
         .foto-marco {
             height: 185px;
@@ -334,12 +349,7 @@
 </table>
 
 @php
-    $posiciones = [
-        'arriba_izquierda',
-        'arriba_derecha',
-        'abajo_izquierda',
-        'abajo_derecha',
-    ];
+    $posiciones = ['arriba_izquierda','arriba_derecha','abajo_izquierda','abajo_derecha',];
     $paginasFotos = [1 => ['completa' => null, 'posiciones' => []]];
 
     foreach (($Fotos ?? []) as $indice => $foto) {
@@ -367,7 +377,7 @@
     @if(!$loop->first)
         <div style="page-break-before: always;"></div>
     @endif
-    <table class="tabla-fotos" style="width:100%">
+    <table class="imagenes-reporte" style="width:100%" border="0">
         @if($configuracionFotos['completa'])
             <tr>
                 <td class="foto-completa" colspan="2">
@@ -381,7 +391,7 @@
                 @foreach($fila as $posicion)
                     @php $foto = $configuracionFotos['posiciones'][$posicion] ?? null; @endphp
                     @if($posicion === 'arriba_derecha' || $posicion === 'abajo_derecha')
-                        <th style="width:15.8%">
+                        <th style="width:1%">
                             <div>
                                 &nbsp;
                             </div>
@@ -396,7 +406,7 @@
                         <div class="comment">{{ $foto['comment'] ?? '' }}</div>
                     </th>
                     @if($posicion === 'arriba_izquierda' || $posicion === 'abajo_izquierda')
-                    <th style="width:15.8%">
+                    <th style="width:1%">
                         <div>
                             &nbsp;
                         </div>
