@@ -1,4 +1,8 @@
 (function (window, document) {
+    /*
+     * Módulo compartido de presentación fotográfica. Cada regla específica
+     * se activa mediante el id del formulario, sin consultar otra plantilla.
+     */
     'use strict';
 
     /*
@@ -91,6 +95,11 @@
         var radios;
         var checkboxAnterior;
         var checkboxDisparo;
+        var campoDisparo;
+        var formulario = contenedor.closest('form');
+        // El cuadro de texto del tamaño de una foto pertenece únicamente al 04_03.
+        var permiteCuadroTexto = formulario && formulario.id === 'FOR-PIMP-04_03';
+        var esCuadroTexto = contenedor.getAttribute('data-foto-es-texto') === '1';
 
         // Evita duplicarlos cuando MutationObserver vuelve a recorrer el DOM.
         if (contenedor.querySelector('.foto-layout-manual')) {
@@ -133,7 +142,17 @@
                 '<div class="col-md-9">' +
                     '<div class="font-weight-bold mb-1">Posición en la hoja</div>' + radios +
                 '</div>' +
-            '</div>';
+            '</div>' +
+            (permiteCuadroTexto ?
+                '<div class="form-check mt-2">' +
+                    '<input class="form-check-input foto-texto-checkbox" type="checkbox" ' +
+                        'name="' + escapar(nombreCampo('foto_es_texto', indice)) + '" ' +
+                        'id="fotoEsTexto_' + indice + '" value="1" ' + (esCuadroTexto ? 'checked' : '') + '>' +
+                    '<label class="form-check-label font-weight-bold" for="fotoEsTexto_' + indice + '">' +
+                        'Usar este espacio como cuadro de texto' +
+                    '</label>' +
+                    '<small class="form-text text-muted">El texto ocupará el mismo espacio que una fotografía.</small>' +
+                '</div>' : '');
 
         /*
          * La interfaz anterior usaba un checkbox para "imagen de hoja completa".
@@ -165,6 +184,34 @@
         // También sincroniza el valor inicial al crear los controles.
         sincronizarHojaCompleta(contenedor);
 
+        // En modo texto se oculta la carga de archivo y el comentario ocupa el espacio completo.
+        if (permiteCuadroTexto) {
+            var checkboxTexto = bloque.querySelector('.foto-texto-checkbox');
+            var archivo = contenedor.querySelector('input[type="file"]');
+            var vistaPrevia = contenedor.querySelector('.image-preview');
+            var comentario = contenedor.querySelector('textarea[name^="comments"]');
+            var etiquetaArchivo = archivo ? contenedor.querySelector('label[for="' + archivo.id + '"]') : null;
+
+            var actualizarModoTexto = function () {
+                var activo = checkboxTexto.checked;
+                if (archivo) {
+                    archivo.disabled = activo;
+                    archivo.style.display = activo ? 'none' : '';
+                }
+                if (etiquetaArchivo) etiquetaArchivo.style.display = activo ? 'none' : '';
+                if (vistaPrevia) vistaPrevia.style.display = activo ? 'none' : '';
+                if (comentario) {
+                    comentario.rows = activo ? 8 : 3;
+                    comentario.placeholder = activo
+                        ? 'Escriba el contenido que aparecerá dentro del cuadro de texto'
+                        : 'Comentario de la fotografía';
+                }
+            };
+
+            checkboxTexto.addEventListener('change', actualizarModoTexto);
+            actualizarModoTexto();
+        }
+
         /*
          * En FOR-PIMP-06_B/01 los disparos tienen una distribución fija dentro
          * del reporte principal. La distribución manual aplica únicamente a las
@@ -173,11 +220,29 @@
         checkboxDisparo = contenedor.querySelector('.foto-disparo-checkbox');
         if (checkboxDisparo) {
             var actualizarVisibilidadLayout = function () {
+                if (checkboxDisparo.checked && checkboxTexto && checkboxTexto.checked) {
+                    checkboxTexto.checked = false;
+                    checkboxTexto.dispatchEvent(new Event('change'));
+                }
                 bloque.style.display = checkboxDisparo.checked ? 'none' : '';
             };
 
             checkboxDisparo.addEventListener('change', actualizarVisibilidadLayout);
             actualizarVisibilidadLayout();
+
+            if (checkboxTexto) {
+                checkboxTexto.addEventListener('change', function () {
+                    if (checkboxTexto.checked && checkboxDisparo.checked) {
+                        checkboxDisparo.checked = false;
+                        checkboxDisparo.dispatchEvent(new Event('change'));
+                    }
+                });
+            }
+        }
+
+        campoDisparo = contenedor.querySelector('input[name^="es_disparo"]');
+        if (campoDisparo && campoDisparo.value === '1') {
+            bloque.style.display = 'none';
         }
     }
 
@@ -203,6 +268,10 @@
 
         bloque.querySelectorAll('.foto-pagina').forEach(function (pagina) {
             pagina.name = nombreCampo('foto_pagina', orden);
+        });
+
+        bloque.querySelectorAll('.foto-texto-checkbox').forEach(function (checkbox) {
+            checkbox.name = nombreCampo('foto_es_texto', orden);
         });
     }
 
@@ -293,10 +362,91 @@
         return true;
     }
 
+    /* Valida en navegador la misma regla de pares que el controlador vuelve a comprobar. */
+    function validarDisparosManuales(formulario) {
+        if (formulario.id !== 'FOR-PIMP-04_03') {
+            return true;
+        }
+
+        var conteo = { 1: 0, 2: 0, 3: 0 };
+        var error = '';
+
+        formulario.querySelectorAll('.foto-disparo-checkbox:checked').forEach(function (checkbox) {
+            var tarjeta = checkbox.closest('[id^="image-container-"]');
+            var eliminado = tarjeta ? tarjeta.querySelector('input[name="deleted_images[]"]') : null;
+            var base64 = tarjeta ? tarjeta.querySelector('input[name^="images_base64"]') : null;
+            var existente = tarjeta ? tarjeta.querySelector('input[name^="existing_images"]') : null;
+            var selector = tarjeta ? tarjeta.querySelector('select[name^="numero_disparo"]') : null;
+            var numero = selector ? selector.value : '';
+
+            if (error || !tarjeta || tarjeta.style.display === 'none' || (eliminado && eliminado.value !== '')) {
+                return;
+            }
+
+            if ((!base64 || !base64.value) && (!existente || !existente.value)) {
+                error = 'Guarde o recorte la imagen antes de asignarla a un disparo.';
+                return;
+            }
+
+            if (!Object.prototype.hasOwnProperty.call(conteo, numero)) {
+                error = 'Seleccione si la imagen corresponde al disparo 1, 2 o 3.';
+                return;
+            }
+
+            conteo[numero]++;
+        });
+
+        if (!error) {
+            Object.keys(conteo).some(function (numero) {
+                if (conteo[numero] !== 0 && conteo[numero] !== 2) {
+                    error = 'El disparo ' + numero + ' debe contener exactamente dos imágenes.';
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        if (error) {
+            mostrarError(error);
+            return false;
+        }
+
+        return true;
+    }
+
+    /* Calcula el promedio cuando el formato contiene la tabla de dureza. */
+    function inicializarPromedioDureza(formulario) {
+        var valores = Array.prototype.slice.call(formulario.querySelectorAll('.valor-dureza-medida'));
+        var promedio = formulario.querySelector('#promedioDureza');
+
+        if (!valores.length || !promedio || promedio.dataset.promedioInicializado === '1') {
+            return;
+        }
+
+        function calcular() {
+            var numeros = valores
+                .map(function (input) { return input.value.trim().replace(',', '.'); })
+                .filter(function (valor) { return valor !== '' && /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(valor); })
+                .map(Number)
+                .filter(Number.isFinite);
+
+            promedio.value = numeros.length
+                ? (numeros.reduce(function (total, valor) { return total + valor; }, 0) / numeros.length).toFixed(2)
+                : '';
+        }
+
+        promedio.dataset.promedioInicializado = '1';
+        valores.forEach(function (input) {
+            input.addEventListener('input', calcular);
+        });
+        calcular();
+    }
+
     /* Inicializa el modulo cuando el formulario ya existe en el DOM. */
     document.addEventListener('DOMContentLoaded', function () {
         var formulario = document.getElementById('FOR-PIMP-02_B_04')
             || document.getElementById('FOR-PIMP-03_B_01')
+            || document.getElementById('FOR-PIMP-04_03')
             || document.getElementById('FOR-PIMP-06_B_01');
         var raiz;
         var observador;
@@ -306,6 +456,7 @@
             return;
         }
 
+        inicializarPromedioDureza(formulario);
         raiz = formulario.querySelector('[data-layout-fotos-manual="1"]');
         reindexarPorOrden = raiz.id === 'imageFieldsContainer'
             && formulario.id !== 'FOR-PIMP-06_B_01';
@@ -322,7 +473,7 @@
 
         // Cancela el envio si la distribucion contiene posiciones incompatibles.
         formulario.addEventListener('submit', function (evento) {
-            if (!validarDistribucion(formulario)) {
+            if (!validarDistribucion(formulario) || !validarDisparosManuales(formulario)) {
                 evento.preventDefault();
                 evento.stopImmediatePropagation();
             }

@@ -27,6 +27,8 @@ use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Services\ServicioAnalisisPdfXrf;
+use App\Services\ServicioImagenesPdfXrf;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +46,128 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_06_B_01Controller extends Controller
 {
+    /** Procesa los PDF seleccionados para mostrar promedios y recortes antes de guardar. */
+    public function extraerAnalisisPdf(
+        Request $request,
+        ServicioAnalisisPdfXrf $service,
+        ServicioImagenesPdfXrf $imageService
+    )
+    {
+        $validated = $request->validate([
+            'idnormas_im' => 'required|integer|exists:Normas_IM,idnormas_im',
+            'Analisis_PDF' => 'required|array|min:1|max:10',
+            'Analisis_PDF.*' => 'required|file|mimes:pdf|max:10240',
+        ]);
+
+        $norma = Normas_IM::findOrFail($validated['idnormas_im']);
+        $filas = json_decode($norma->Tabla, true);
+        $filas = is_array($filas) ? $filas : [];
+        $elementos = array_values(array_filter(array_map(
+            static fn ($fila) => is_array($fila) ? ($fila['Elemento'] ?? null) : null,
+            $filas
+        )));
+
+        $analisis = $this->analizarPdfsXrf($request->file('Analisis_PDF', []), $service);
+        $this->validarCompatibilidadXrf(
+            $analisis,
+            (string) $norma->Nombre_Espe,
+            (string) $norma->Variable,
+            $service
+        );
+        // Cada uno de los tres primeros PDF corresponde a un disparo y genera dos recortes.
+        $recortesDisparos = [];
+
+        foreach (array_slice($request->file('Analisis_PDF', []), 0, 3) as $index => $archivo) {
+            try {
+                $recortes = $imageService->generateCrops($archivo);
+                $recortesDisparos[] = [
+                    'disparo' => $index + 1,
+                    'archivo' => $archivo->getClientOriginalName(),
+                    'daily_id' => $analisis[$index]['metadatos']['daily_id'] ?? null,
+                    'tabla_elementos' => $recortes['tabla_elementos'],
+                    'grafica_espectro' => $recortes['grafica_espectro'],
+                ];
+            } catch (\Throwable $exception) {
+                Log::warning('No se pudieron generar los recortes del PDF XRF.', [
+                    'archivo' => $archivo->getClientOriginalName(),
+                    'error' => $exception->getMessage(),
+                ]);
+
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    "Analisis_PDF.{$index}" => "No se pudieron generar las imágenes de {$archivo->getClientOriginalName()}: {$exception->getMessage()}",
+                ]);
+            }
+        }
+
+        return response()->json([
+            'analisis' => $analisis,
+            'promedios' => $service->averageForElements($analisis, $elementos),
+            'recortes_disparos' => $recortesDisparos,
+        ]);
+    }
+
+    /** Traduce los fallos del lector PDF en errores vinculados al archivo correspondiente. */
+    private function analizarPdfsXrf(array $archivos, ServicioAnalisisPdfXrf $service): array
+    {
+        $analisis = [];
+
+        foreach ($archivos as $index => $archivo) {
+            try {
+                $analisis[] = $service->parseUploadedFile($archivo);
+            } catch (\Throwable $exception) {
+                Log::warning('No se pudo extraer el PDF XRF.', [
+                    'archivo' => $archivo->getClientOriginalName(),
+                    'error' => $exception->getMessage(),
+                ]);
+
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    "Analisis_PDF.{$index}" => "No se pudo leer {$archivo->getClientOriginalName()}: {$exception->getMessage()}",
+                ]);
+            }
+        }
+
+        return $analisis;
+    }
+
+    /** Conserva los PDF originales y registra la ruta dentro del análisis histórico. */
+    private function guardarPdfsXrf(array $archivos, array &$analisis, string $contrato, string $numeroReporte): void
+    {
+        $contratoSeguro = Str::slug($contrato ?: 'sin-contrato');
+        $reporteSeguro = Str::slug($numeroReporte ?: 'sin-reporte');
+        $directorio = "public/Reportes/FOR_PIMP_06_B_01/{$contratoSeguro}/{$reporteSeguro}/Analisis_XRF";
+
+        foreach ($archivos as $index => $archivo) {
+            $base = Str::slug(pathinfo($archivo->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'analisis-xrf';
+            $nombre = $base . '-' . Str::lower(Str::random(8)) . '.pdf';
+            $archivo->storeAs($directorio, $nombre);
+
+            if (isset($analisis[$index])) {
+                $analisis[$index]['ruta'] = str_replace('public/', 'storage/', $directorio) . '/' . $nombre;
+            }
+        }
+    }
+
+    /** Rechaza grados detectados que no correspondan con la norma elegida. */
+    private function validarCompatibilidadXrf(
+        array $analisis,
+        string $nombreEspecificacion,
+        string $variable,
+        ServicioAnalisisPdfXrf $service
+    ): void {
+        try {
+            $service->assertCompatibleWithNorm(
+                $analisis,
+                $nombreEspecificacion,
+                $variable
+            );
+        } catch (\RuntimeException $exception) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'Norma_IM.idnormas_im' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /** Asegura páginas y cuadrantes válidos para las fotos normales del reporte. */
     private function normalizeFotoLayout($pagina, $posicion, $index): array
     {
         $posicionesPermitidas = [
@@ -67,6 +191,28 @@ class FOR_PIMP_06_B_01Controller extends Controller
         ];
     }
 
+    /** Separa el acomodo fijo de disparos del acomodo manual de fotografías generales. */
+    private function normalizeStoredPhotoLayout(
+        $pagina,
+        $posicion,
+        $index,
+        bool $esDisparo,
+        $numeroDisparo
+    ): array {
+        if (!$esDisparo) {
+            return $this->normalizeFotoLayout($pagina, $posicion, $index);
+        }
+
+        $numero = max(1, min(3, (int) $numeroDisparo));
+
+        return [
+            'pagina' => $numero,
+            'posicion' => ((int) $index % 2 === 0) ? 'arriba_izquierda' : 'arriba_derecha',
+            'una_hoja' => 0,
+        ];
+    }
+
+    /** Exige exactamente dos fotografías para cada disparo utilizado. */
     private function validarFotosDeDisparos(array $imagenes): void
     {
         $conteo = [1 => 0, 2 => 0, 3 => 0];
@@ -94,6 +240,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
         }
     }
 
+    /** Genera una copia histórica de la norma para que el reporte no cambie si cambia el catálogo. */
     private function construirNormaIM(Request $request, ?array $normaHistorica = null): ?array
     {
         $idNorma = (int) $request->input('Norma_IM.idnormas_im', 0);
@@ -126,6 +273,43 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
         $filasCatalogo = is_array($filasCatalogo) ? $filasCatalogo : [];
         $promedios = $request->input('Norma_IM.Promedio', []);
+        $analisisPdf = [];
+
+        if ($request->hasFile('Analisis_PDF')) {
+            $service = app(ServicioAnalisisPdfXrf::class);
+            $analisisPdf = $this->analizarPdfsXrf($request->file('Analisis_PDF', []), $service);
+            $this->validarCompatibilidadXrf(
+                $analisisPdf,
+                (string) $nombreEspecificacion,
+                (string) $variable,
+                $service
+            );
+            $elementos = array_map(
+                static fn ($fila) => is_array($fila) ? (string) ($fila['Elemento'] ?? '') : '',
+                $filasCatalogo
+            );
+            $promediosExtraidos = $service->averageForElements($analisisPdf, $elementos);
+
+            foreach ($filasCatalogo as $indice => $filaCatalogo) {
+                if (!is_array($filaCatalogo)) {
+                    continue;
+                }
+
+                $elemento = $service->canonicalElement((string) ($filaCatalogo['Elemento'] ?? ''));
+                $resultado = $promediosExtraidos[$elemento] ?? null;
+                if ($resultado && $resultado['cantidad'] === $resultado['esperados'] && $resultado['promedio'] !== null) {
+                    $promedios[$indice] = number_format($resultado['promedio'], 4, '.', '');
+                } else {
+                    $promedios[$indice] = '';
+                }
+            }
+        } elseif (is_array($normaHistorica)
+            && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma) {
+            $analisisPdf = is_array($normaHistorica['Analisis_PDF'] ?? null)
+                ? $normaHistorica['Analisis_PDF']
+                : [];
+        }
+
         $filas = [];
 
         foreach ($filasCatalogo as $indice => $filaCatalogo) {
@@ -146,6 +330,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Variable' => $variable,
             'Observaciones' => $observaciones,
             'Tabla' => $filas,
+            'Analisis_PDF' => $analisisPdf,
         ];
     }
 
@@ -550,9 +735,11 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             'Norma_IM' => 'nullable|array',
-            'Norma_IM.idnormas_im' => 'nullable|integer|exists:Normas_IM,idnormas_im',
+            'Norma_IM.idnormas_im' => 'nullable|required_with:Analisis_PDF|integer|exists:Normas_IM,idnormas_im',
             'Norma_IM.Promedio' => 'nullable|array',
             'Norma_IM.Promedio.*' => 'nullable|string|max:255',
+            'Analisis_PDF' => 'nullable|array|max:10',
+            'Analisis_PDF.*' => 'file|mimes:pdf|max:10240',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -686,8 +873,17 @@ class FOR_PIMP_06_B_01Controller extends Controller
             }
         }
 
+        // Guarda una copia estable de la norma y, si existen, las rutas de sus PDF XRF.
         $normaIM = $this->construirNormaIM($request);
         if ($normaIM !== null) {
+            if ($request->hasFile('Analisis_PDF')) {
+                $this->guardarPdfsXrf(
+                    $request->file('Analisis_PDF', []),
+                    $normaIM['Analisis_PDF'],
+                    (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+                    (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
+                );
+            }
             $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
 
@@ -808,6 +1004,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
         /* Fotos y Comentarios */
         $imagesBase64 = $request->input('images_base64', []);
+        // La distribución de disparos se persiste junto con cada fotografía para reconstruir el PDF.
         $esDisparo = $request->input('es_disparo', []);
         $numeroDisparo = $request->input('numero_disparo', []);
         $fotoPaginas = $request->input('foto_pagina', []);
@@ -835,10 +1032,13 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
 
-            $distribucionFoto = $this->normalizeFotoLayout(
+            // Los disparos usan un acomodo fijo de dos imágenes; las demás fotos usan el diseño manual.
+            $distribucionFoto = $this->normalizeStoredPhotoLayout(
                 $fotoPaginas[$index] ?? null,
                 $fotoPosiciones[$index] ?? null,
-                $index
+                $index,
+                !empty($esDisparo[$index]),
+                $numeroDisparo[$index] ?? null
             );
 
             // ✔ Detalles Junta activado
@@ -963,9 +1163,11 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
             'Norma_IM' => 'nullable|array',
-            'Norma_IM.idnormas_im' => 'nullable|integer',
+            'Norma_IM.idnormas_im' => 'nullable|required_with:Analisis_PDF|integer',
             'Norma_IM.Promedio' => 'nullable|array',
             'Norma_IM.Promedio.*' => 'nullable|string|max:255',
+            'Analisis_PDF' => 'nullable|array|max:10',
+            'Analisis_PDF.*' => 'file|mimes:pdf|max:10240',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -1074,6 +1276,14 @@ class FOR_PIMP_06_B_01Controller extends Controller
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
+        // Las rutas anteriores se conservan hasta confirmar el reemplazo por los PDF nuevos.
+        $rutasPdfsXrfAnteriores = [];
+
+        foreach (($detallesActuales['Norma_IM']['Analisis_PDF'] ?? []) as $analisisAnterior) {
+            if (is_array($analisisAnterior) && !empty($analisisAnterior['ruta'])) {
+                $rutasPdfsXrfAnteriores[] = (string) $analisisAnterior['ruta'];
+            }
+        }
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
@@ -1105,8 +1315,17 @@ class FOR_PIMP_06_B_01Controller extends Controller
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
 
+        // Mezcla la selección actual con la copia histórica cuando no se cargan PDF nuevos.
         $normaIM = $this->construirNormaIM($request, $detallesActuales['Norma_IM'] ?? null);
         if ($normaIM !== null) {
+            if ($request->hasFile('Analisis_PDF')) {
+                $this->guardarPdfsXrf(
+                    $request->file('Analisis_PDF', []),
+                    $normaIM['Analisis_PDF'],
+                    (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+                    (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
+                );
+            }
             $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
         
@@ -1408,11 +1627,14 @@ class FOR_PIMP_06_B_01Controller extends Controller
             ];
         };
 
-        $getDistribucionFoto = function ($index) use ($fotoPaginas, $fotoPosiciones) {
-            return $this->normalizeFotoLayout(
+        // Centraliza la regla de distribución para reemplazos, imágenes existentes y altas nuevas.
+        $getDistribucionFoto = function ($index) use ($fotoPaginas, $fotoPosiciones, $esDisparo, $numeroDisparo) {
+            return $this->normalizeStoredPhotoLayout(
                 $fotoPaginas[$index] ?? null,
                 $fotoPosiciones[$index] ?? null,
-                $index
+                $index,
+                !empty($esDisparo[$index]),
+                $numeroDisparo[$index] ?? null
             );
         };
         // **1️⃣ Eliminar imágenes marcadas para borrar**
@@ -1576,6 +1798,15 @@ class FOR_PIMP_06_B_01Controller extends Controller
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'] ?? 'ESPERA DE DATOS';
+
+        if ($request->hasFile('Analisis_PDF')) {
+            foreach (array_unique($rutasPdfsXrfAnteriores) as $rutaAnterior) {
+                $rutaDisco = str_replace('storage/', 'public/', $rutaAnterior);
+                if (Storage::exists($rutaDisco)) {
+                    Storage::delete($rutaDisco);
+                }
+            }
+        }
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
