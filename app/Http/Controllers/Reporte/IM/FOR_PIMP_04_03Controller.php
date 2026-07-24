@@ -26,6 +26,9 @@ use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Models\Normas_IM\Normas_IM;
+use App\Services\ServicioAnalisisPdfXrf;
+use App\Services\ServicioImagenesPdfXrf;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +46,332 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_04_03Controller extends Controller
 {
+    /** Normaliza la página y el cuadrante de una foto para que el PDF reciba una distribución válida. */
+    private function normalizeFotoLayout($pagina, $posicion, $index): array
+    {
+        $posicionesPermitidas = [
+            'arriba_izquierda',
+            'arriba_derecha',
+            'abajo_izquierda',
+            'abajo_derecha',
+            'pagina_completa',
+        ];
+        $posicionesPredeterminadas = array_slice($posicionesPermitidas, 0, 4);
+        $indice = max(0, (int) $index);
+        $paginaNormalizada = max(1, (int) ($pagina ?: (intdiv($indice, 4) + 1)));
+        $posicionNormalizada = in_array($posicion, $posicionesPermitidas, true)
+            ? $posicion
+            : $posicionesPredeterminadas[$indice % 4];
+
+        return [
+            'pagina' => $paginaNormalizada,
+            'posicion' => $posicionNormalizada,
+            'una_hoja' => $posicionNormalizada === 'pagina_completa' ? 1 : 0,
+        ];
+    }
+
+    /** Procesa los PDF seleccionados para la vista previa sin guardar todavía el reporte. */
+    public function extraerAnalisisPdf(
+        Request $request,
+        ServicioAnalisisPdfXrf $service,
+        ServicioImagenesPdfXrf $imageService
+    ) {
+        $validated = $request->validate([
+            'idnormas_im' => 'required|integer|exists:Normas_IM,idnormas_im',
+            'Analisis_PDF' => 'required|array|min:1|max:10',
+            'Analisis_PDF.*' => 'required|file|mimes:pdf|max:10240',
+        ]);
+
+        $norma = Normas_IM::findOrFail($validated['idnormas_im']);
+        $filas = json_decode($norma->Tabla, true);
+        $filas = is_array($filas) ? $filas : [];
+        $elementos = array_values(array_filter(array_map(
+            static fn ($fila) => is_array($fila) ? ($fila['Elemento'] ?? null) : null,
+            $filas
+        )));
+
+        $analisis = $this->analizarPdfsXrf($request->file('Analisis_PDF', []), $service);
+        $this->validarCompatibilidadXrf(
+            $analisis,
+            (string) $norma->Nombre_Espe,
+            (string) $norma->Variable,
+            $service
+        );
+
+        // Los tres primeros PDF producen las dos imágenes de los disparos 1, 2 y 3.
+        $recortesDisparos = [];
+        foreach (array_slice($request->file('Analisis_PDF', []), 0, 3) as $index => $archivo) {
+            try {
+                $recortes = $imageService->generateCrops($archivo);
+                $recortesDisparos[] = [
+                    'disparo' => $index + 1,
+                    'archivo' => $archivo->getClientOriginalName(),
+                    'daily_id' => $analisis[$index]['metadatos']['daily_id'] ?? null,
+                    'tabla_elementos' => $recortes['tabla_elementos'],
+                    'grafica_espectro' => $recortes['grafica_espectro'],
+                ];
+            } catch (\Throwable $exception) {
+                Log::warning('No se pudieron generar los recortes del PDF XRF.', [
+                    'archivo' => $archivo->getClientOriginalName(),
+                    'error' => $exception->getMessage(),
+                ]);
+
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    "Analisis_PDF.{$index}" => "No se pudieron generar las imágenes de {$archivo->getClientOriginalName()}: {$exception->getMessage()}",
+                ]);
+            }
+        }
+
+        return response()->json([
+            'analisis' => $analisis,
+            'promedios' => $service->averageForElements($analisis, $elementos),
+            'recortes_disparos' => $recortesDisparos,
+        ]);
+    }
+
+    /** Traduce los errores técnicos de lectura en errores de validación asociados al archivo correcto. */
+    private function analizarPdfsXrf(array $archivos, ServicioAnalisisPdfXrf $service): array
+    {
+        $analisis = [];
+        foreach ($archivos as $index => $archivo) {
+            try {
+                $analisis[] = $service->parseUploadedFile($archivo);
+            } catch (\Throwable $exception) {
+                Log::warning('No se pudo extraer el PDF XRF.', [
+                    'archivo' => $archivo->getClientOriginalName(),
+                    'error' => $exception->getMessage(),
+                ]);
+
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    "Analisis_PDF.{$index}" => "No se pudo leer {$archivo->getClientOriginalName()}: {$exception->getMessage()}",
+                ]);
+            }
+        }
+
+        return $analisis;
+    }
+
+    /** Convierte una incompatibilidad de grado/norma en un mensaje visible junto al selector. */
+    private function validarCompatibilidadXrf(
+        array $analisis,
+        string $nombreEspecificacion,
+        string $variable,
+        ServicioAnalisisPdfXrf $service
+    ): void {
+        try {
+            $service->assertCompatibleWithNorm($analisis, $nombreEspecificacion, $variable);
+        } catch (\RuntimeException $exception) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'Norma_IM.idnormas_im' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    /** Guarda los PDF originales y agrega su ruta pública a la copia histórica del análisis. */
+    private function guardarPdfsXrf(
+        array $archivos,
+        array &$analisis,
+        string $contrato,
+        string $numeroReporte
+    ): void {
+        $contratoSeguro = Str::slug($contrato ?: 'sin-contrato');
+        $reporteSeguro = Str::slug($numeroReporte ?: 'sin-reporte');
+        $directorio = "public/Reportes/FOR_PIMP_04_03/{$contratoSeguro}/{$reporteSeguro}/Analisis_XRF";
+
+        foreach ($archivos as $index => $archivo) {
+            $base = Str::slug(pathinfo($archivo->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'analisis-xrf';
+            $nombre = $base . '-' . Str::lower(Str::random(8)) . '.pdf';
+            $archivo->storeAs($directorio, $nombre);
+
+            if (isset($analisis[$index])) {
+                $analisis[$index]['ruta'] = str_replace('public/', 'storage/', $directorio) . '/' . $nombre;
+            }
+        }
+    }
+
+    /** Verifica la regla de dos imágenes por cada disparo marcado manualmente. */
+    private function validarFotosDeDisparos(array $imagenes): void
+    {
+        $conteo = [1 => 0, 2 => 0, 3 => 0];
+        foreach ($imagenes as $imagen) {
+            if (empty($imagen['es_disparo'])) {
+                continue;
+            }
+
+            $numero = (int) ($imagen['numero_disparo'] ?? 0);
+            if (!isset($conteo[$numero])) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'numero_disparo' => 'Selecciona a qué disparo pertenece cada imagen.',
+                ]);
+            }
+            $conteo[$numero]++;
+        }
+
+        foreach ($conteo as $numero => $cantidad) {
+            if ($cantidad !== 0 && $cantidad !== 2) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'numero_disparo' => "El {$numero}° disparo debe tener exactamente dos imágenes.",
+                ]);
+            }
+        }
+    }
+
+    /** Combina imágenes nuevas y existentes antes de validar disparos durante Create y Edit. */
+    private function validarDisparosDelRequest(Request $request): void
+    {
+        $imagesBase64 = $request->input('images_base64', []);
+        $existingImages = $request->input('existing_images', []);
+        $deletedImages = array_filter($request->input('deleted_images', []), static fn ($index) => $index !== '');
+        $esDisparo = $request->input('es_disparo', []);
+        $numeroDisparo = $request->input('numero_disparo', []);
+        $imagenes = [];
+
+        $indices = array_unique(array_merge(array_keys($imagesBase64), array_keys($existingImages)));
+        foreach ($indices as $index) {
+            if (in_array((string) $index, array_map('strval', $deletedImages), true)) {
+                continue;
+            }
+
+            if (empty($imagesBase64[$index]) && empty($existingImages[$index])) {
+                continue;
+            }
+
+            $imagenes[] = [
+                'es_disparo' => !empty($esDisparo[$index]),
+                'numero_disparo' => $numeroDisparo[$index] ?? null,
+            ];
+        }
+
+        $this->validarFotosDeDisparos($imagenes);
+    }
+
+    /** Construye la copia histórica de norma, composición, promedios y PDF que conserva el reporte. */
+    private function construirNormaIM(Request $request, ?array $normaHistorica = null): ?array
+    {
+        $idNorma = (int) $request->input('Norma_IM.idnormas_im', 0);
+        if ($idNorma <= 0) {
+            return null;
+        }
+
+        $norma = Normas_IM::find($idNorma);
+        if ($norma) {
+            $nombreEspecificacion = $norma->Nombre_Espe;
+            $variable = $norma->Variable;
+            $observaciones = $norma->Observaciones;
+            $filasCatalogo = json_decode($norma->Tabla, true);
+        } elseif (is_array($normaHistorica)
+            && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma) {
+            $nombreEspecificacion = $normaHistorica['Nombre_Espe'] ?? '';
+            $variable = $normaHistorica['Variable'] ?? '';
+            $observaciones = $normaHistorica['Observaciones'] ?? '';
+            $filasCatalogo = $normaHistorica['Tabla'] ?? [];
+        } else {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'Norma_IM.idnormas_im' => 'La norma seleccionada ya no está disponible.',
+            ]);
+        }
+
+        $filasCatalogo = is_array($filasCatalogo) ? $filasCatalogo : [];
+        $promedios = $request->input('Norma_IM.Promedio', []);
+        $analisisPdf = [];
+
+        if ($request->hasFile('Analisis_PDF')) {
+            $service = app(ServicioAnalisisPdfXrf::class);
+            $analisisPdf = $this->analizarPdfsXrf($request->file('Analisis_PDF', []), $service);
+            $this->validarCompatibilidadXrf(
+                $analisisPdf,
+                (string) $nombreEspecificacion,
+                (string) $variable,
+                $service
+            );
+            $elementos = array_map(
+                static fn ($fila) => is_array($fila) ? (string) ($fila['Elemento'] ?? '') : '',
+                $filasCatalogo
+            );
+            $promediosExtraidos = $service->averageForElements($analisisPdf, $elementos);
+
+            // El promedio se acepta solo cuando todos los PDF aportaron una lectura numérica.
+            foreach ($filasCatalogo as $indice => $filaCatalogo) {
+                if (!is_array($filaCatalogo)) {
+                    continue;
+                }
+                $elemento = $service->canonicalElement((string) ($filaCatalogo['Elemento'] ?? ''));
+                $resultado = $promediosExtraidos[$elemento] ?? null;
+                $promedios[$indice] = $resultado
+                    && $resultado['cantidad'] === $resultado['esperados']
+                    && $resultado['promedio'] !== null
+                        ? number_format($resultado['promedio'], 4, '.', '')
+                        : '';
+            }
+        } elseif (is_array($normaHistorica)
+            && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma) {
+            $analisisPdf = is_array($normaHistorica['Analisis_PDF'] ?? null)
+                ? $normaHistorica['Analisis_PDF']
+                : [];
+        }
+
+        $filas = [];
+        foreach ($filasCatalogo as $indice => $filaCatalogo) {
+            if (!is_array($filaCatalogo)) {
+                continue;
+            }
+            $filas[] = [
+                'Elemento' => (string) ($filaCatalogo['Elemento'] ?? ''),
+                'Promedio' => trim((string) ($promedios[$indice] ?? ($filaCatalogo['Promedio'] ?? ''))),
+                'Composicion' => (string) ($filaCatalogo['Composicion'] ?? ''),
+            ];
+        }
+
+        return [
+            'idnormas_im' => $idNorma,
+            'Nombre_Espe' => $nombreEspecificacion,
+            'Variable' => $variable,
+            'Observaciones' => $observaciones,
+            'Tabla' => $filas,
+            'Analisis_PDF' => $analisisPdf,
+        ];
+    }
+
+    /** Valida hasta diez lecturas y recalcula el promedio en servidor para no confiar en JavaScript. */
+    private function guardarPromedioDureza(Request $request, array &$datosEquipo): void
+    {
+        $valoresRecibidos = $request->input('Datos_Equipo.VALORES_DUREZA', []);
+        $valoresRecibidos = is_array($valoresRecibidos)
+            ? array_slice(array_values($valoresRecibidos), 0, 10)
+            : [];
+        $valoresGuardados = [];
+        $valoresNumericos = [];
+
+        for ($index = 0; $index < 10; $index++) {
+            $valor = trim((string) ($valoresRecibidos[$index] ?? ''));
+            $valoresGuardados[] = $valor;
+
+            // Vacío o de uno a tres guiones significa que la medición no fue realizada.
+            if ($valor === '' || preg_match('/^-{1,3}$/', $valor)) {
+                continue;
+            }
+
+            $valorNormalizado = str_replace(',', '.', $valor);
+            if (!preg_match('/^(?:\d+(?:\.\d*)?|\.\d+)$/', $valorNormalizado)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    "Datos_Equipo.VALORES_DUREZA.{$index}" => 'Capture un valor numérico mayor o igual a cero, deje el campo vacío o utilice hasta tres guiones.',
+                ]);
+            }
+
+            $valoresNumericos[] = (float) $valorNormalizado;
+        }
+
+        $datosEquipo['VALORES_DUREZA'] = $valoresGuardados;
+        $datosEquipo['PROMEDIO_DUREZA'] = empty($valoresNumericos)
+            ? ''
+            : number_format(
+                round(array_sum($valoresNumericos) / count($valoresNumericos), 2, PHP_ROUND_HALF_UP),
+                2,
+                '.',
+                ''
+            );
+    }
+
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
@@ -422,6 +751,13 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Instalacion' => 'nullable|string',
             'Detalles_Generales.No_Isometrico' => 'nullable|string',
+            'Detalles_Generales.Nombre_Pieza' => 'nullable|string',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Accesorio' => 'nullable|string',
+            'Detalles_Generales.Tuberia' => 'nullable|string',
+            'Detalles_Generales.Estructural' => 'nullable|string',
+            'Detalles_Generales.No_Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.Observaciones_Notas' => 'nullable|string',
             'Detalles_Generales.Elementos_Soldados' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.No_Junta' => 'nullable|string',
@@ -435,6 +771,11 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
+            'TieneCliente' => 'required|in:si,no',
+            'ClienteSelect' => 'nullable|required_if:TieneCliente,si|string|max:255',
+            'ClienteInput' => 'nullable|required_if:TieneCliente,no|string|max:255',
+            'TieneContrato' => 'required|in:si,no',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -460,12 +801,51 @@ class FOR_PIMP_04_03Controller extends Controller
             'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.ESCALA_DUREZA' => 'nullable|string|max:50',
+            'Datos_Equipo.VALORES_DUREZA' => 'nullable|array|max:10',
+            'Datos_Equipo.VALORES_DUREZA.*' => 'nullable|string|max:30',
+            'Datos_Equipo.PROMEDIO_DUREZA' => 'nullable|string|max:30',
+            'Datos_Equipo.DESCRIPCION_MATERIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.DUREZA_BRINELL' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_TENSION' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_CEDENCIA' => 'nullable|string|max:100',
+            'Datos_Equipo.TAMANO_GRANO' => 'nullable|string|max:100',
+            'Datos_Equipo.NORMA_REFERENCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.DUREZA_BRINELL_MAX' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_TENSION_MIN' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_CEDENCIA_ESPECIFICADA' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_TENSION_MAX' => 'nullable|string|max:100',
+            'Datos_Equipo.MATERIAL_PANO' => 'nullable|string|max:255',
+            'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string|max:255',
+            'Datos_Equipo.REACTIVO' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string|max:100',
+            'Datos_Equipo.FASES_PRESENTES' => 'nullable|string|max:1000',
+            'Datos_Equipo.ESPECIFICACION_MATERIAL' => 'nullable|string|max:1000',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
+            'Norma_IM' => 'nullable|array',
+            'Norma_IM.idnormas_im' => 'nullable|required_with:Analisis_PDF|integer|exists:Normas_IM,idnormas_im',
+            'Norma_IM.Promedio' => 'nullable|array',
+            'Norma_IM.Promedio.*' => 'nullable|string|max:255',
+            'Analisis_PDF' => 'nullable|array|max:10',
+            'Analisis_PDF.*' => 'file|mimes:pdf|max:10240',
+
             //Validar el campo NumFirmas
-            'numFirmas' => 'nullable|integer|in:1,2,3,4',
+            'comments' => 'nullable|array',
+            'comments.*' => 'nullable|string|max:5000',
+            'foto_es_texto' => 'nullable|array',
+            'foto_es_texto.*' => 'nullable|boolean',
+            'foto_pagina' => 'nullable|array',
+            'foto_pagina.*' => 'nullable|integer|min:1',
+            'foto_posicion' => 'nullable|array',
+            'foto_posicion.*' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
+            'es_disparo' => 'nullable|array',
+            'es_disparo.*' => 'nullable|boolean',
+            'numero_disparo' => 'nullable|array',
+            'numero_disparo.*' => 'nullable|in:1,2,3',
+            'numFirmas' => 'required|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
@@ -532,6 +912,9 @@ class FOR_PIMP_04_03Controller extends Controller
             'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
 
+        // La validación considera juntas las imágenes nuevas y las que permanecen en Edit.
+        $this->validarDisparosDelRequest($request);
+
         /*Detalles Generales y Datos del Equipo */
         $Reportes = new reporte();  // Modelo de la tabla donde guardas los datos
         $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();  // Modelo de la tabla donde guardas los datos
@@ -584,6 +967,23 @@ class FOR_PIMP_04_03Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
+
+        // El servidor recalcula dureza y congela la norma/XRF dentro del JSON del reporte.
+        $this->guardarPromedioDureza($request, $validatedData['Datos_Equipo']);
+
+        $normaIM = $this->construirNormaIM($request);
+        if ($normaIM !== null) {
+            if ($request->hasFile('Analisis_PDF')) {
+                $this->guardarPdfsXrf(
+                    $request->file('Analisis_PDF', []),
+                    $normaIM['Analisis_PDF'],
+                    (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+                    (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
+                );
+            }
+            $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
+        }
+
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -700,15 +1100,22 @@ class FOR_PIMP_04_03Controller extends Controller
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
 
-        /* Fotos y Comentarios */
+        /* Fotos, cuadros de texto, distribución manual y pares de imágenes de disparos. */
         $imagesBase64 = $request->input('images_base64', []);
-        $hayImagenes = !empty(array_filter($imagesBase64));
-        if($hayImagenes)
+        $esDisparo = $request->input('es_disparo', []);
+        $numeroDisparo = $request->input('numero_disparo', []);
+        $fotoPaginas = $request->input('foto_pagina', []);
+        $fotoPosiciones = $request->input('foto_posicion', []);
+        $fotoEsTexto = $request->input('foto_es_texto', []);
+        $comentariosFoto = $request->input('comments', []);
+        $hayElementosFoto = !empty(array_filter($imagesBase64)) || !empty(array_filter($fotoEsTexto));
+        if($hayElementosFoto)
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
         foreach ($imagesBase64 as $index => $base64Image) {
-            if (empty($base64Image)) {
+            $esCuadroTexto = !empty($fotoEsTexto[$index]);
+            if (empty($base64Image) && !$esCuadroTexto) {
                 continue;
             }
 
@@ -716,6 +1123,8 @@ class FOR_PIMP_04_03Controller extends Controller
             $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
             // Decodificar Base64
+            $rutaPublicaFoto = null;
+            if (!$esCuadroTexto) {
             $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
 
             // Nombre único
@@ -724,11 +1133,15 @@ class FOR_PIMP_04_03Controller extends Controller
             $rutaCarpeta = "public/Reportes/FOR_PIMP_04_03/{$Contrato}/{$No_Reporte}/Fotos";
 
             Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+            $rutaPublicaFoto = "storage/Reportes/FOR_PIMP_04_03/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}";
+            }
 
-            // ✔ Imagen en hoja
-            $imagenHoja = isset($request->imagen_hoja[$index]) 
-                            ? (bool)$request->imagen_hoja[$index] 
-                            : false;
+            // Los disparos ignoran página completa; las fotos normales respetan el cuadrante elegido.
+            $distribucionFoto = $this->normalizeFotoLayout(
+                $fotoPaginas[$index] ?? null,
+                $fotoPosiciones[$index] ?? null,
+                $index
+            );
 
             // ✔ Detalles Junta activado
             $detallesJunta = isset($request->detalles_junta_check[$index]) 
@@ -753,9 +1166,14 @@ class FOR_PIMP_04_03Controller extends Controller
             }
 
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_PIMP_04_03/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                'comentario' => $request->comments[$index] ?? null,
-                'una_hoja' => $imagenHoja,
+                'ruta' => $rutaPublicaFoto,
+                'comentario' => $comentariosFoto[$index] ?? null,
+                'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
+                'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
+                'pagina' => $distribucionFoto['pagina'],
+                'posicion' => $distribucionFoto['posicion'],
+                'es_disparo' => !empty($esDisparo[$index]) ? 1 : 0,
+                'numero_disparo' => !empty($esDisparo[$index]) ? ($numeroDisparo[$index] ?? null) : null,
                 'detalles_junta' => $detallesJunta,
                 'datos_junta' => $datosJunta
             ];
@@ -783,7 +1201,8 @@ class FOR_PIMP_04_03Controller extends Controller
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
         $Material = $validatedData['Detalles_Generales']['Material'];
         $idSolicitud = $validatedData['Detalles_Generales']['idSolicitud'];
-        $No_Isometrico = $validatedData['Detalles_Generales']['No_Isometrico'];
+        $No_Isometrico = ($validatedData['Detalles_Generales']['No_Isometrico_Plano'] ?? '')
+            ?: ($validatedData['Detalles_Generales']['No_Isometrico'] ?? '');
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -825,6 +1244,13 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Instalacion' => 'nullable|string',
             'Detalles_Generales.No_Isometrico' => 'nullable|string',
+            'Detalles_Generales.Nombre_Pieza' => 'nullable|string',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Accesorio' => 'nullable|string',
+            'Detalles_Generales.Tuberia' => 'nullable|string',
+            'Detalles_Generales.Estructural' => 'nullable|string',
+            'Detalles_Generales.No_Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.Observaciones_Notas' => 'nullable|string',
             'Detalles_Generales.Elementos_Soldados' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.No_Junta' => 'nullable|string',
@@ -838,6 +1264,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -863,11 +1290,50 @@ class FOR_PIMP_04_03Controller extends Controller
             'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.ESCALA_DUREZA' => 'nullable|string|max:50',
+            'Datos_Equipo.VALORES_DUREZA' => 'nullable|array|max:10',
+            'Datos_Equipo.VALORES_DUREZA.*' => 'nullable|string|max:30',
+            'Datos_Equipo.PROMEDIO_DUREZA' => 'nullable|string|max:30',
+            'Datos_Equipo.DESCRIPCION_MATERIAL' => 'nullable|string|max:255',
+            'Datos_Equipo.DUREZA_BRINELL' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_TENSION' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_CEDENCIA' => 'nullable|string|max:100',
+            'Datos_Equipo.TAMANO_GRANO' => 'nullable|string|max:100',
+            'Datos_Equipo.NORMA_REFERENCIA' => 'nullable|string|max:255',
+            'Datos_Equipo.DUREZA_BRINELL_MAX' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_TENSION_MIN' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_CEDENCIA_ESPECIFICADA' => 'nullable|string|max:100',
+            'Datos_Equipo.RESISTENCIA_TENSION_MAX' => 'nullable|string|max:100',
+            'Datos_Equipo.MATERIAL_PANO' => 'nullable|string|max:255',
+            'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string|max:255',
+            'Datos_Equipo.REACTIVO' => 'nullable|string|max:255',
+            'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string|max:100',
+            'Datos_Equipo.FASES_PRESENTES' => 'nullable|string|max:1000',
+            'Datos_Equipo.ESPECIFICACION_MATERIAL' => 'nullable|string|max:1000',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+
+            'Norma_IM' => 'nullable|array',
+            'Norma_IM.idnormas_im' => 'nullable|required_with:Analisis_PDF|integer',
+            'Norma_IM.Promedio' => 'nullable|array',
+            'Norma_IM.Promedio.*' => 'nullable|string|max:255',
+            'Analisis_PDF' => 'nullable|array|max:10',
+            'Analisis_PDF.*' => 'file|mimes:pdf|max:10240',
             //Validar el campo NumFirmas
-            'numFirmas' => 'nullable|integer|in:1,2,3,4',
+            'comments' => 'nullable|array',
+            'comments.*' => 'nullable|string|max:5000',
+            'foto_es_texto' => 'nullable|array',
+            'foto_es_texto.*' => 'nullable|boolean',
+            'foto_pagina' => 'nullable|array',
+            'foto_pagina.*' => 'nullable|integer|min:1',
+            'foto_posicion' => 'nullable|array',
+            'foto_posicion.*' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
+            'es_disparo' => 'nullable|array',
+            'es_disparo.*' => 'nullable|boolean',
+            'numero_disparo' => 'nullable|array',
+            'numero_disparo.*' => 'nullable|in:1,2,3',
+            'numFirmas' => 'required|integer|in:1,2,3,4',
 
             /*1 FIRMAS */
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
@@ -934,6 +1400,9 @@ class FOR_PIMP_04_03Controller extends Controller
             'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
 
+        // Valida el resultado final antes de eliminar o reemplazar archivos existentes.
+        $this->validarDisparosDelRequest($request);
+
         $detallesRequest = $request->input('Detalles_Generales', []);
         $validatedData['Detalles_Generales']['Codigo_Diseno'] = $validatedData['Detalles_Generales']['Codigo_Diseno']
             ?? $detallesRequest['Codigo_Diseno']
@@ -950,6 +1419,13 @@ class FOR_PIMP_04_03Controller extends Controller
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
+        // Se conservan las rutas para retirar los PDF anteriores solo después de guardar los nuevos.
+        $rutasPdfsXrfAnteriores = [];
+        foreach (($detallesActuales['Norma_IM']['Analisis_PDF'] ?? []) as $analisisAnterior) {
+            if (is_array($analisisAnterior) && !empty($analisisAnterior['ruta'])) {
+                $rutasPdfsXrfAnteriores[] = (string) $analisisAnterior['ruta'];
+            }
+        }
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
@@ -980,6 +1456,22 @@ class FOR_PIMP_04_03Controller extends Controller
         // Conservar cualquier informacion previa que no venga en el formulario de edicion.
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
+
+        // Recalcula valores derivados y actualiza la copia histórica seleccionada por el usuario.
+        $this->guardarPromedioDureza($request, $validatedData['Datos_Equipo']);
+
+        $normaIM = $this->construirNormaIM($request, $detallesActuales['Norma_IM'] ?? null);
+        if ($normaIM !== null) {
+            if ($request->hasFile('Analisis_PDF')) {
+                $this->guardarPdfsXrf(
+                    $request->file('Analisis_PDF', []),
+                    $normaIM['Analisis_PDF'],
+                    (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+                    (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
+                );
+            }
+            $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
+        }
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_EQUIPO1'] = $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? ($datosEquipoActuales['ID_EQUIPO1'] ?? null);
@@ -1219,12 +1711,16 @@ class FOR_PIMP_04_03Controller extends Controller
         // Ruta base para guardar las imágenes
         $rutaCarpeta = "public/Reportes/FOR_PIMP_04_03/{$Contrato}/{$No_Reporte}/Fotos";
 
-        // Obtener las imágenes existentes
+        // Reúne estado existente, altas, bajas y opciones de presentación en los mismos índices.
         $existingImages = $request->input('existing_images', []);
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
+        $fotoEsTexto = $request->input('foto_es_texto', []);
         $deletedImages = $request->input('deleted_images', []);
-        $imagenHoja = $request->input('imagen_hoja', []);
+        $esDisparo = $request->input('es_disparo', []);
+        $numeroDisparo = $request->input('numero_disparo', []);
+        $fotoPaginas = $request->input('foto_pagina', []);
+        $fotoPosiciones = $request->input('foto_posicion', []);
         //Log::info('Imágenes eliminadas recibidas:', ['deletedImages' => $deletedImages]);
         $detallesJuntaCheck = $request->input('detalles_junta_check', []);
 
@@ -1239,6 +1735,7 @@ class FOR_PIMP_04_03Controller extends Controller
         $recubrimiento = $request->input('recubrimiento', []);
         
 
+        // Centraliza la forma JSON de los detalles para fotos existentes y nuevas.
         $getDetallesJunta = function ($index) use (
             $detallesJuntaCheck,
             $junta,
@@ -1275,6 +1772,41 @@ class FOR_PIMP_04_03Controller extends Controller
                 ]
             ];
         };
+
+        // Evita que cada rama de actualización interprete de forma distinta página y posición.
+        $getDistribucionFoto = function ($index) use ($fotoPaginas, $fotoPosiciones) {
+            return $this->normalizeFotoLayout(
+                $fotoPaginas[$index] ?? null,
+                $fotoPosiciones[$index] ?? null,
+                $index
+            );
+        };
+        // Construye el registro completo tanto para una imagen como para un cuadro de texto sin archivo.
+        $crearRegistroFoto = function ($index, $ruta) use (
+            $comments,
+            $esDisparo,
+            $numeroDisparo,
+            $fotoEsTexto,
+            $getDetallesJunta,
+            $getDistribucionFoto,
+        ) {
+            $detalles = $getDetallesJunta($index);
+            $distribucionFoto = $getDistribucionFoto($index);
+            $esCuadroTexto = !empty($fotoEsTexto[$index]);
+
+            return [
+                'ruta' => $ruta ?: null,
+                'comentario' => $comments[$index] ?? '',
+                'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
+                'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
+                'pagina' => $distribucionFoto['pagina'],
+                'posicion' => $distribucionFoto['posicion'],
+                'es_disparo' => !empty($esDisparo[$index]) ? 1 : 0,
+                'numero_disparo' => !empty($esDisparo[$index]) ? ($numeroDisparo[$index] ?? null) : null,
+                'detalles_junta' => $detalles['detalles_junta'],
+                'datos_junta' => $detalles['datos_junta'],
+            ];
+        };
         // **1️⃣ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
             if (isset($existingImages[$index])) {
@@ -1290,6 +1822,7 @@ class FOR_PIMP_04_03Controller extends Controller
 
                 // Eliminar de `existingImages` para que no se guarde en la BD
                 unset($existingImages[$index]);
+                unset($fotoEsTexto[$index], $imagesBase64[$index], $comments[$index]);
             }
         }
 
@@ -1301,6 +1834,14 @@ class FOR_PIMP_04_03Controller extends Controller
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
+            if (!empty($fotoEsTexto[$index])) {
+                $imagenesGuardadas[] = $crearRegistroFoto($index, $ruta);
+                if (!empty($ruta)) {
+                    $rutasGuardadas[] = $ruta;
+                }
+                continue;
+            }
+
             if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
@@ -1319,11 +1860,16 @@ class FOR_PIMP_04_03Controller extends Controller
                 // Verificar si ya existe en el array
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
 
                 $imagenesGuardadas[] = [
-                    'ruta' => $rutaNueva ?? $ruta,
+                    'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
+                    'es_disparo' => !empty($esDisparo[$index]) ? 1 : 0,
+                    'numero_disparo' => !empty($esDisparo[$index]) ? ($numeroDisparo[$index] ?? null) : null,
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1342,11 +1888,16 @@ class FOR_PIMP_04_03Controller extends Controller
                 // Verificar si ya existe en el array
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
 
                 $imagenesGuardadas[] = [
-                    'ruta' => $rutaNueva ?? $ruta,
+                    'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
+                    'es_disparo' => !empty($esDisparo[$index]) ? 1 : 0,
+                    'numero_disparo' => !empty($esDisparo[$index]) ? ($numeroDisparo[$index] ?? null) : null,
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1354,13 +1905,18 @@ class FOR_PIMP_04_03Controller extends Controller
                 }
             } else {
                 // **Mantener la imagen existente**
-                if (!in_array($ruta, $rutasGuardadas)) {
+                if (!empty($ruta) && !in_array($ruta, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
 
                 $imagenesGuardadas[] = [
-                    'ruta' => $rutaNueva ?? $ruta,
+                    'ruta' => $ruta,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
+                    'es_disparo' => !empty($esDisparo[$index]) ? 1 : 0,
+                    'numero_disparo' => !empty($esDisparo[$index]) ? ($numeroDisparo[$index] ?? null) : null,
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1375,6 +1931,11 @@ class FOR_PIMP_04_03Controller extends Controller
                 continue; // ⛔ ya fue procesada arriba
             }
 
+            if (!empty($fotoEsTexto[$index])) {
+                $imagenesGuardadas[] = $crearRegistroFoto($index, null);
+                continue;
+            }
+
             if (!empty($base64Image)) {
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';
@@ -1386,11 +1947,16 @@ class FOR_PIMP_04_03Controller extends Controller
 
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
 
                 $imagenesGuardadas[] = [
-                    'ruta' => $rutaNueva ?? $ruta,
+                    'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
-                    'una_hoja' => $imagenHoja[$index] ?? 0,
+                    'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
+                    'es_disparo' => !empty($esDisparo[$index]) ? 1 : 0,
+                    'numero_disparo' => !empty($esDisparo[$index]) ? ($numeroDisparo[$index] ?? null) : null,
                     'detalles_junta' => $detalles['detalles_junta'],
                     'datos_junta' => $detalles['datos_junta'],
                 ];
@@ -1417,6 +1983,15 @@ class FOR_PIMP_04_03Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
 
+        if ($request->hasFile('Analisis_PDF')) {
+            foreach (array_unique($rutasPdfsXrfAnteriores) as $rutaAnterior) {
+                $rutaDisco = str_replace('storage/', 'public/', $rutaAnterior);
+                if (Storage::exists($rutaDisco)) {
+                    Storage::delete($rutaDisco);
+                }
+            }
+        }
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1433,6 +2008,8 @@ class FOR_PIMP_04_03Controller extends Controller
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
+        $NormaIM = $Detalles_Generales['Norma_IM'] ?? [];
+        $NormaIM = is_array($NormaIM) ? $NormaIM : [];
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
         $Grupo_Juntas_Detalles_Re = $Grupo_Juntas_Detalles_Re_Model
             ? json_decode($Grupo_Juntas_Detalles_Re_Model->Juntas_Grupo_Re, true)
@@ -1467,32 +2044,53 @@ class FOR_PIMP_04_03Controller extends Controller
         $Logo = public_path('images/Logo_AICO_R.jpg');
         $qrPdf = !empty($Datos_Equipo['QR_PDF']) ? public_path(str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])) : null;
         $Fotos = [];
+        $Disparos = [];
         $totalFotos = 0;
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
-            $totalFotos = count($fotos); // Contar el total de imágenes
-        
-            foreach ($fotos as $foto) {
-                $rutaFoto = storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
 
-                if (!File::exists($rutaFoto)) {
+            foreach ($fotos as $indiceFoto => $foto) {
+                $esCuadroTexto = !empty($foto['es_cuadro_texto']);
+                $rutaFoto = null;
+                if (!$esCuadroTexto) {
+                    $rutaFoto = storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
+
+                    if (!File::exists($rutaFoto)) {
+                        continue;
+                    }
+                }
+
+                if (!empty($foto['es_disparo'])) {
+                    $numeroDisparo = (int) ($foto['numero_disparo'] ?? 0);
+                    if ($numeroDisparo >= 1 && $numeroDisparo <= 3) {
+                        $Disparos[$numeroDisparo][] = $rutaFoto;
+                    }
                     continue;
                 }
 
                 $detallesActivo = $foto['detalles_junta'] ?? 0;
                 $datosJunta = $foto['datos_junta'] ?? null;
+                $distribucionFoto = $this->normalizeFotoLayout(
+                    $foto['pagina'] ?? null,
+                    $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : null),
+                    $indiceFoto
+                );
 
                 $Fotos[] = [
                     'path' => $rutaFoto,
                     'comment' => $foto['comentario'] ?? '',
-                    'una_hoja'  => $foto['una_hoja'] ?? 0,
+                    'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
 
                     // 🔥 NUEVO
                     'detalles_junta' => $detallesActivo,
                     'datos_junta' => $datosJunta,
                 ];
             }
+            $totalFotos = count($Fotos);
         }
 
         $data = [
@@ -1502,6 +2100,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales' => $Detalles_Generales,
             //Datos_Equipo
             'Datos_Equipo' => $Datos_Equipo,
+            'NormaIM' => $NormaIM,
             'QR_PDF' => $qrPdf,
             //Grupo_Juntas_Detalles_Re
             'Grupo_Juntas_Detalles_Re' => $Grupo_Juntas_Detalles_Re,
@@ -1511,6 +2110,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'totalTitulosYFilas' => $totalTitulosYFilas,
             //Fotos_Reportes
             'Fotos' => $Fotos,
+            'Disparos' => $Disparos,
             //Total de Fotos
             'totalFotos' => $totalFotos,
             //Numero de Firmas
@@ -1555,8 +2155,8 @@ class FOR_PIMP_04_03Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(151.5, 32);
-            $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount" . "\n" . "$i OF $totalPageCount", 0, 'C');
+            $combinedPdf->SetXY(151.5, 25);
+            $combinedPdf->Cell(24, 3.5, "$i DE $totalPageCount", 0, 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -1569,8 +2169,8 @@ class FOR_PIMP_04_03Controller extends Controller
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY(151.5, 32);
-                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount" . "\n" . "$paginaActual OF $totalPageCount", 0, 'C');
+                $combinedPdf->SetXY(151.5, 25);
+                $combinedPdf->Cell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 0, 'C');
             }
         }
 

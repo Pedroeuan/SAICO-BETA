@@ -369,6 +369,30 @@
                             @enderror
                         </div>
                     </div>
+                    {{-- Carga XRF del 06_B_01: la selección de norma permanece en este formulario. --}}
+                    <div class="col-12">
+                        <div class="form-group border rounded p-3 bg-light">
+                            <label for="analisisPdfXrf"><strong>PDF del equipo XRF (1 hoja por archivo)</strong></label>
+                            <input type="file" class="form-control-file @error('Analisis_PDF.*') is-invalid @enderror"
+                                id="analisisPdfXrf" name="Analisis_PDF[]" accept="application/pdf,.pdf" multiple>
+                            <small class="form-text text-muted">Seleccione los PDF en orden. Los primeros tres se asignan a los disparos 1, 2 y 3; cada uno genera la tabla y la gráfica. El promedio usa todos los PDF seleccionados.</small>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-outline-primary" id="extraerAnalisisPdfBtn">Extraer datos y calcular promedio</button>
+                                <span class="ml-2 text-muted d-none" id="estadoAnalisisPdf"></span>
+                            </div>
+                            @error('Analisis_PDF.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                    <div class="col-12 d-none" id="vistaAnalisisPdf">
+                        <div class="alert alert-warning d-none" id="alertasAnalisisPdf"></div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered" id="tablaAnalisisPdf">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div id="recortesXrfDisparos" class="mt-3"></div>
+                    </div>
                     <div class="col-12 d-none" id="normaIMResultadosContainer">
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped w-100" id="tablaNormaIM">
@@ -908,7 +932,6 @@
     }
 
 </script>
-+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const catalogo = @json($NormasIM ?? []);
@@ -963,6 +986,7 @@ document.addEventListener('DOMContentLoaded', function () {
             input.type = 'text';
             input.className = 'form-control text-center';
             input.name = 'Norma_IM[Promedio][' + index + ']';
+            input.dataset.elemento = fila.Elemento || '';
             input.value = promedios[index] ?? fila.Promedio ?? '';
             input.placeholder = 'Capture el promedio';
             promedio.appendChild(input);
@@ -1018,5 +1042,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+
+{{-- Comparte solamente el comportamiento JS; la ruta y los campos pertenecen al 06_B_01. --}}
+@include('Reportes.IM.partials.script-compartido-pdf-xrf')
 
 @endsection

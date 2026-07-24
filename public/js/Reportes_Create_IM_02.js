@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // El módulo es compartido, pero solo se activa cuando encuentra uno de estos formularios IM.
     const form = document.getElementById('FOR-PIMP-02_B_03')
         || document.getElementById('FOR-PIMP-03_B_01')
+        || document.getElementById('FOR-PIMP-04_03')
         || document.getElementById('FOR-PIMP-07_B_01');
     if (!form) return;
 
@@ -140,10 +142,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (rellenarBtn) {
         rellenarBtn.addEventListener('click', function () {
             fields.forEach(function (field) {
-                if (field.type === 'hidden' || field.tagName === 'SELECT') return;
+                // Autorrelleno no debe modificar archivos, identificadores, cálculos ni lecturas numéricas.
+                if (field.type === 'hidden' || field.type === 'file' || field.type === 'number'
+                    || field.readOnly || field.tagName === 'SELECT'
+                    || field.getAttribute('inputmode') === 'decimal') return;
 
                 if (field.value.trim() === '') {
-                    field.value = '---';
+                    field.value = field.type === 'date'
+                        ? new Date().toISOString().split('T')[0]
+                        : '---';
                     localStorage.setItem(storageKey(field), field.value);
                 }
             });
@@ -259,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <label for="image${i}">Imagen por subir ${i}:</label>
                     <input type="file" class="form-control image-input" id="image${i}" accept="image/*">
 
-                    <div class="form-check mt-2">
+                    ${formId !== 'FOR-PIMP-04_03' ? `<div class="form-check mt-2">
                         <input type="checkbox"
                             class="form-check-input imagen-hoja-checkbox"
                             data-index="${i}"
@@ -268,8 +275,24 @@ document.addEventListener('DOMContentLoaded', function () {
                             Imagen en una hoja
                         </label>
                     </div>
-
-                    <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">
+                    <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">` : ''}
+                    ${formId === 'FOR-PIMP-04_03' ? `
+                    <!-- Alternativa manual: dos imágenes forman cada disparo cuando no existe PDF XRF. -->
+                    <div class="form-check mt-2">
+                        <input type="hidden" name="es_disparo[]" id="esDisparoValue${i}" value="0">
+                        <input type="checkbox" class="form-check-input foto-disparo-checkbox" data-index="${i}" id="esDisparo${i}">
+                        <label class="form-check-label" for="esDisparo${i}">Asignar esta imagen a un disparo</label>
+                    </div>
+                    <div class="mt-2 d-none numero-disparo-container" id="numeroDisparoContainer${i}">
+                        <label for="numeroDisparo${i}">Disparo:</label>
+                        <select class="form-control" name="numero_disparo[]" id="numeroDisparo${i}">
+                            <option value="">Seleccione un disparo</option>
+                            <option value="1">1er. disparo</option>
+                            <option value="2">2do. disparo</option>
+                            <option value="3">3er. disparo</option>
+                        </select>
+                        <small class="text-muted">Alternativa cuando no se cuenta con PDF XRF. Cada disparo requiere dos imágenes.</small>
+                    </div>` : ''}
                     <div class="image-preview mt-2" id="image${i}-preview"></div>
                     <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
                     <input type="hidden" name="images_base64[]" id="image${i}-base64">
@@ -287,6 +310,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     hidden.value = this.checked ? '1' : '0';
                 }
             });
+        });
+
+        // Sincroniza el checkbox visible con los valores que recibe el controlador.
+        imageFieldsContainer.querySelectorAll('.foto-disparo-checkbox').forEach(function (checkbox) {
+            const index = checkbox.dataset.index;
+            const hidden = document.getElementById('esDisparoValue' + index);
+            const selectorContainer = document.getElementById('numeroDisparoContainer' + index);
+            const selector = document.getElementById('numeroDisparo' + index);
+            const actualizar = function () {
+                if (hidden) hidden.value = checkbox.checked ? '1' : '0';
+                if (selectorContainer) selectorContainer.classList.toggle('d-none', !checkbox.checked);
+                if (!checkbox.checked && selector) selector.value = '';
+            };
+            checkbox.addEventListener('change', actualizar);
+            actualizar();
         });
 
         imageFieldsContainer.querySelectorAll('.remove-image').forEach(function (button) {

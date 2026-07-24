@@ -222,7 +222,9 @@
         bindImagenHojaCheckboxes();
         bindFotosDisparo();
 
-        const formularioDisparos = document.getElementById('FOR-PIMP-06_B_01');
+        // Ambos formatos aplican la misma regla: un disparo activo contiene exactamente dos imágenes.
+        const formularioDisparos = document.getElementById('FOR-PIMP-06_B_01')
+            || document.getElementById('FOR-PIMP-04_03');
         if (formularioDisparos && formularioDisparos.dataset.validacionDisparosBound !== '1') {
             formularioDisparos.dataset.validacionDisparosBound = '1';
             formularioDisparos.addEventListener('submit', function (event) {
@@ -298,7 +300,10 @@
 
             function generateImageFields(count) {
             container.innerHTML = '';
-            const permiteDisparos = document.getElementById('FOR-PIMP-06_B_01') !== null;
+            // Las capacidades se detectan por formulario para no acoplar una vista con otra.
+            const permiteDisparos = document.getElementById('FOR-PIMP-06_B_01') !== null
+                || document.getElementById('FOR-PIMP-04_03') !== null;
+            const usaLayoutManual = document.getElementById('FOR-PIMP-04_03') !== null;
 
             // Calcular desde qué índice empezar (considerando imágenes del servidor)
             const existingCount = document.querySelectorAll('[id^="image-container-"]').length;
@@ -313,13 +318,13 @@
                         <label for="image${index}">Imagen por Subir ${displayIndex}:</label>
                         <input type="file" class="form-control image-input" id="image${index}" accept="image/*">
 
-                        <div class="form-check mt-2">
+                        ${!usaLayoutManual ? `<div class="form-check mt-2">
                             <input type="checkbox" class="form-check-input imagen-hoja-checkbox" data-index="${index}" id="imagenHoja${index}">
                             <label class="form-check-label" for="imagenHoja${index}">
                                 Imagen en una hoja
                             </label>
                         </div>
-                        <input type="hidden" name="imagen_hoja[${index}]" id="imagenHojaValue${index}" value="0">
+                        <input type="hidden" name="imagen_hoja[${index}]" id="imagenHojaValue${index}" value="0">` : ''}
                         ${permiteDisparos ? `
                         <div class="form-check mt-2">
                             <input type="hidden" name="es_disparo[${index}]" id="esDisparoValue${index}" value="0">
@@ -579,7 +584,7 @@
     const formularios = ["FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01",
         "FOR-PINS-12_01", "FOR-PINS-13_01", "FOR-PINS-14_01", "FOR-PINS-15_01", "FOR-PINS-16_01", "FOR-PINS-17_01", "FOR-PINS-18_01", "FOR-PINS-19_01", "FOR-PINS-20_01",
         "FOR-PINS-21_01", "FOR-PINS-22_01", "FOR-PINS-22_01", "FOR-PINS-23_01", "FOR-PINS-24_01", "FOR-PINS-25_01", "FOR-PINS-03_02", "FOR-PINS-05_02", "FOR-PINS-11_02",
-        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02"
+        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02", "FOR-PIMP-04_03"
     ];
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
@@ -590,8 +595,11 @@
 
         // Restaurar valores desde localStorage
         inputs.forEach(input => {
+            // Nunca se intenta restaurar un input file por seguridad del navegador.
+            if (input.type === "file") return;
+
             const stored = localStorage.getItem(`${formId}_${input.name}`);
-            if (stored !== null) input.value = stored;
+            if (stored !== null && input.value.trim() === "") input.value = stored;
 
             input.addEventListener("input", () => {
                 localStorage.setItem(`${formId}_${input.name}`, input.value);
@@ -604,7 +612,7 @@
             if ((textarea.name === "comments[]" || textarea.name.startsWith("comments[")) && textarea.id) {
                 // Guardar usando id como clave
                 const stored = localStorage.getItem(`${formId}_${textarea.id}`);
-                if (stored !== null) textarea.value = stored;
+                if (stored !== null && textarea.value.trim() === "") textarea.value = stored;
 
                 textarea.addEventListener("input", () => {
                     localStorage.setItem(`${formId}_${textarea.id}`, textarea.value);
@@ -612,7 +620,7 @@
             } else {
                 // Para otros textareas (que no son comentarios), usar name
                 const stored = localStorage.getItem(`${formId}_${textarea.name}`);
-                if (stored !== null) textarea.value = stored;
+                if (stored !== null && textarea.value.trim() === "") textarea.value = stored;
 
                 textarea.addEventListener("input", () => {
                     localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
@@ -625,11 +633,16 @@
         if (rellenarBtn) {
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
+                    // Conserva campos técnicos, de cálculo y valores ya capturados al usar autorrelleno.
+                    if (input.type === "hidden" || input.type === "file" || input.type === "number"
+                        || input.readOnly || input.tagName === "SELECT"
+                        || input.getAttribute("inputmode") === "decimal") return;
+
                     if (input.value.trim() === "") {
                         if (input.type === "date") {
                             // poner fecha actual
                             input.value = new Date().toISOString().split('T')[0];
-                        } else if (input.type !== "file") {
+                        } else {
                             input.value = "---";
                         }
                         localStorage.setItem(`${formId}_${input.name}`, input.value);
@@ -711,7 +724,10 @@
             $('#NOMBRE_TECNICO').val(name);
         }
 
-            const selectedOptionLocalT = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos');
+            // Toma el formulario real del reporte; la página AdminLTE puede contener formularios auxiliares.
+            const reporteForm = document.getElementById('FOR-PIMP-04_03') || document.querySelector('form[id]');
+            const reporteFormId = reporteForm ? reporteForm.id : '';
+            const selectedOptionLocalT = reporteFormId ? localStorage.getItem(reporteFormId+'_Tecnicos') : null;
             selectedOptionLocalT != null ?  ($('#tecnicosSelect').val(selectedOptionLocalT),actualizarTecnicos()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -732,7 +748,7 @@
             $('#NOMBRE_TECNICO2').val(name);
         }
 
-            const selectedOptionLocalT2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos2');
+            const selectedOptionLocalT2 = reporteFormId ? localStorage.getItem(reporteFormId+'_Tecnicos2') : null;
             selectedOptionLocalT2 != null ?  ($('#tecnicosSelect2').val(selectedOptionLocalT2),actualizarTecnicos2()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -753,7 +769,7 @@
             $('#NOMBRE_TECNICO3').val(name);
         }
 
-            const selectedOptionLocalT3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos3');
+            const selectedOptionLocalT3 = reporteFormId ? localStorage.getItem(reporteFormId+'_Tecnicos3') : null;
             selectedOptionLocalT3 != null ?  ($('#tecnicosSelect3').val(selectedOptionLocalT3),actualizarTecnicos3()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -774,7 +790,7 @@
             $('#NOMBRE_TECNICO4').val(name);
         }
 
-            const selectedOptionLocalT4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos4');
+            const selectedOptionLocalT4 = reporteFormId ? localStorage.getItem(reporteFormId+'_Tecnicos4') : null;
             selectedOptionLocalT4 != null ?  ($('#tecnicosSelect4').val(selectedOptionLocalT4),actualizarTecnicos4()):"";
 
             // Evento cuando se cambia la selección en el select
