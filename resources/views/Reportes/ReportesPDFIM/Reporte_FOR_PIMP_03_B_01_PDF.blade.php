@@ -108,7 +108,8 @@
         /* Medidas de cada uno de los cuatro espacios disponibles por pagina. */
         .foto-container {
             padding: 0;
-            /*border: 1px solid #000;*/
+            /*border: 1px solid #000;
+            display: block;*/
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
@@ -116,7 +117,6 @@
             height: auto;
             line-height: 0;
             position: relative;
-            display: block;
         }
 
         .foto-container.arriba_izquierda {
@@ -141,7 +141,7 @@
 
         .foto-container > div {
             width: 100%;
-            max-width: 290px;
+            max-width: 270px;
             margin: 0;
             box-sizing: border-box;
         }
@@ -152,7 +152,7 @@
          */
         .foto-container img {
             display: block;
-            max-width: 290px;
+            max-width: 270px;
             max-height: auto;
             object-fit: contain;
             margin: 0;
@@ -168,7 +168,7 @@
             text-align: center;
             box-sizing: border-box;
             width: 100%;
-            max-width: 260px;
+            max-width: 270px;
             overflow-wrap: anywhere;
             word-break: break-word;
         }
@@ -377,7 +377,7 @@
     @if(!$loop->first)
         <div style="page-break-before: always;"></div>
     @endif
-    <table class="imagenes-reporte" style="width:100%" border="0">
+    <table class="imagenes-reporte" style="width:100%" border="1">
         @if($configuracionFotos['completa'])
             <tr>
                 <td class="foto-completa" colspan="2">
@@ -391,7 +391,7 @@
                 @foreach($fila as $posicion)
                     @php $foto = $configuracionFotos['posiciones'][$posicion] ?? null; @endphp
                     @if($posicion === 'arriba_derecha' || $posicion === 'abajo_derecha')
-                        <th style="width:1%">
+                        <th style="width:5%">
                             <div>
                                 &nbsp;
                             </div>
@@ -406,7 +406,7 @@
                         <div class="comment">{{ $foto['comment'] ?? '' }}</div>
                     </th>
                     @if($posicion === 'arriba_izquierda' || $posicion === 'abajo_izquierda')
-                    <th style="width:1%">
+                    <th style="width:5%">
                         <div>
                             &nbsp;
                         </div>
