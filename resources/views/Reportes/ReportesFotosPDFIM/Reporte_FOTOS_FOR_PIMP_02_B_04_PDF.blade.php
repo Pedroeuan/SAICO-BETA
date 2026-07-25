@@ -582,7 +582,7 @@
         </table>
 
 
-        <table class="imagenes-reporte" style="width:100%" border="0">
+        <table class="imagenes-reporte" style="width:100%" border="1">
             @if($esHojaCompleta)
                 <tr>
                     <td class="foto-container foto-full" colspan="2">
@@ -595,7 +595,7 @@
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             @if($posicion === 'arriba_derecha')
-                            <th style="width:20%">
+                            <th style="width:0%">
                                 <div>
                                     &nbsp;
                                 </div>
@@ -606,7 +606,7 @@
                                 <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
                             </th>
                             @if($posicion === 'arriba_izquierda')
-                            <th style="width:20%">
+                            <th style="width:0%">
                                 <div>
                                     &nbsp;
                                 </div>
@@ -621,7 +621,7 @@
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             @if($posicion === 'abajo_derecha')
-                                <th style="width:20%">
+                                <th style="width:0%">
                                     <div>
                                         &nbsp;
                                     </div>
@@ -632,7 +632,7 @@
                                     <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
                                 </th>
                                 @if($posicion === 'abajo_izquierda')
-                                <th style="width:20%">
+                                <th style="width:0%">
                                     <div>
                                         &nbsp;
                                     </div>
