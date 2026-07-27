@@ -162,14 +162,15 @@
         /* Medidas de cada uno de los cuatro espacios disponibles por pagina. */
         .foto-container {
             padding: 0;
-            border: 1px solid #000;
+            /*border: 1px solid #000;
+            display: block;*/
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
             width: 310px;
             height: auto;
             /*line-height: 0;*/
-            display: block;
+            position: relative;
         }
 
         .foto-container.arriba_izquierda {
@@ -225,12 +226,15 @@
         .comment {
             margin: 0;
             padding: 6px 4px 4px;
-            border-top: 1px solid #000;
+            /*border-top: 1px solid #000;*/
             font-size: 8px;
             line-height: 1;
             text-align: center;
             box-sizing: border-box;
             width: 100%;
+            max-width: 310px;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         /*.foto-container.arriba_izquierda .comment,
@@ -597,6 +601,7 @@
                 @foreach($fila as $posicion)
                     @php 
                     //$foto = $configuracionFotos['posiciones'][$posicion] ?? null; 
+                    //dump($posicion);
                     $foto = $espacios[$posicion] ?? null;
                     @endphp
                     @if($posicion === 'arriba_derecha')
@@ -612,7 +617,7 @@
                                 <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
                             @endif
                         </div>
-                        <div class="comment">{{ $espacios[$posicion]['comment'] }}</div>
+                        <div class="comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                     </th>
                     @if($posicion === 'abajo_izquierda')
                     <th style="width:5%">
