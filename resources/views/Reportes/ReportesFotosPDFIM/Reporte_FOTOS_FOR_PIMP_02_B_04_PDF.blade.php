@@ -95,12 +95,12 @@
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            font-size: 8px;
+            font-size: 7px;
         }
 
         .tablaGenerales th,
         .tablaGenerales td {
-            padding: 1.5px;
+            /*padding: 1.5px;*/
             vertical-align: middle;
         }
 
@@ -109,7 +109,7 @@
             width: 15%;
             padding-left: 2px;
             font-weight: bold;
-            line-height: 10px;
+            /*line-height: 10px;*/
             text-align: left;
             vertical-align: middle;
             white-space: nowrap;
@@ -130,7 +130,7 @@
 
         /* Valores capturados; el borde inferior funciona como renglon visual. */
         .valorGeneral {
-            height: 13px;
+            /*height: 13px;*/
             border-bottom: 1px solid #000;
             text-align: center;
             vertical-align: middle;
@@ -139,7 +139,7 @@
         /* Titulo principal de la seccion DATOS GENERALES. */
         .tituloGeneralPdf {
             font-weight: bold;
-            line-height: 11px;
+            /*line-height: 11px;*/
             text-align: center !important;
             white-space: nowrap;
         }
@@ -166,9 +166,9 @@
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
-            width: 270px;
+            width: 310px;
             height: auto;
-            line-height: 0;
+            /*line-height: 0;*/
             display: block;
         }
 
@@ -194,7 +194,7 @@
          */
         .foto-container img {
             display: block;
-            max-width: 270px;
+            max-width: 310px;
             max-height: auto;
             object-fit: contain;
             margin: 0 auto;
@@ -233,7 +233,7 @@
             width: 100%;
         }
 
-        .foto-container.arriba_izquierda .comment,
+        /*.foto-container.arriba_izquierda .comment,
         .foto-container.abajo_izquierda .comment {
             text-align: left;
         }
@@ -241,7 +241,7 @@
         .foto-container.arriba_derecha .comment,
         .foto-container.abajo_derecha .comment {
             text-align: right;
-        }
+        }*/
 
         /*
          * FOTOGRAFIA DE HOJA COMPLETA
@@ -582,7 +582,7 @@
         </table>
 
 
-        <table class="imagenes-reporte" style="width:100%" border="1">
+        <table class="imagenes-reporte" style="width:100%" border="0">
             @if($esHojaCompleta)
                 <tr>
                     <td class="foto-container foto-full" colspan="2">
@@ -591,58 +591,39 @@
                     </td>
                 </tr>
             @else
-                <tr>
-                    @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
-                        @if(isset($espacios[$posicion]))
-                            @if($posicion === 'arriba_derecha')
-                            <th style="width:0%">
-                                <div>
-                                    &nbsp;
-                                </div>
-                            </th>
+                
+                    @foreach([['arriba_izquierda', 'arriba_derecha'],['abajo_izquierda', 'abajo_derecha'],] as $fila)
+                        <tr>
+                @foreach($fila as $posicion)
+                    @php 
+                    //$foto = $configuracionFotos['posiciones'][$posicion] ?? null; 
+                    $foto = $espacios[$posicion] ?? null;
+                    @endphp
+                    @if($posicion === 'arriba_derecha')
+                        <th style="width:5%">
+                            <div>
+                                &nbsp;
+                            </div>
+                        </th>
+                    @endif
+                    <th class="foto-container {{ $posicion }}">
+                        <div>
+                            @if($foto) 
+                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
                             @endif
-                            <th class="foto-container {{ $posicion }}">
-                                <img src="{{ $espacios[$posicion]['path'] }}">
-                                <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                            </th>
-                            @if($posicion === 'arriba_izquierda')
-                            <th style="width:0%">
-                                <div>
-                                    &nbsp;
-                                </div>
-                            </th>
-                            @endif
-                        @else
-                            <td class="foto-container foto-vacia">&nbsp;</td>
-                        @endif
-                    @endforeach
+                        </div>
+                        <div class="comment">{{ $espacios[$posicion]['comment'] }}</div>
+                    </th>
+                    @if($posicion === 'abajo_izquierda')
+                    <th style="width:5%">
+                        <div>
+                            &nbsp;
+                        </div>
+                    </th>
+                    @endif
+                @endforeach
                 </tr>
-                <tr>
-                    @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
-                        @if(isset($espacios[$posicion]))
-                            @if($posicion === 'abajo_derecha')
-                                <th style="width:0%">
-                                    <div>
-                                        &nbsp;
-                                    </div>
-                                </th>
-                            @endif
-                                <th class="foto-container {{ $posicion }}">
-                                    <img src="{{ $espacios[$posicion]['path'] }}">
-                                    <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
-                                </th>
-                                @if($posicion === 'abajo_izquierda')
-                                <th style="width:0%">
-                                    <div>
-                                        &nbsp;
-                                    </div>
-                                </th>
-                            @endif
-                        @else
-                            <td class="foto-container foto-vacia">&nbsp;</td>
-                        @endif
                     @endforeach
-                </tr>
             @endif
         </table>
     </div>

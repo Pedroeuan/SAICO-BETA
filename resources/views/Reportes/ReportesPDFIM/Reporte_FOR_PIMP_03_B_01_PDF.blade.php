@@ -169,7 +169,7 @@
             text-align: center;
             box-sizing: border-box;
             width: 100%;
-            max-width: 320px;
+            max-width: 328px;
             overflow-wrap: anywhere;
             word-break: break-word;
         }
