@@ -9,7 +9,7 @@ class Normas_IM extends Model
 {
     protected $fillable = [
         'idnormas_im',
-        'Nombre-Espe',
+        'Nombre_Espe',
         'Variable',
         'Tabla',
         'Observaciones',

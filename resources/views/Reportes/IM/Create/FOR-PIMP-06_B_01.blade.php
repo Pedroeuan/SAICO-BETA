@@ -162,14 +162,13 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Proyecto:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
-                            @error('Proyecto')
+                            <label class="col-form-label" for="inputSuccess">Contrato:</label>
+                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Contrato')}}">
+                            @error('Contrato')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
                     </div>
-
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Orden de Trabajo:</label>
@@ -213,7 +212,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">No. Isométrico:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico')}}">
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.No_Isometrico') }}">
                             @error('No_Isometrico')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -222,9 +221,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Elementos Soldados:</label>
-                            <input type="text" class="form-control  inputForm @error('Elementos_Soldados') is-invalid @enderror" name="Detalles_Generales[Elementos_Soldados]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Elementos_Soldados')}}">
-                            @error('Elementos_Soldados')
+                            <label class="col-form-label" for="inputSuccess">Nombre de la Pieza:</label>
+                            <input type="text" class="form-control  inputForm @error('Nom_Pieza') is-invalid @enderror" name="Detalles_Generales[Nom_Pieza]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Nom_Pieza')}}">
+                            @error('Nom_Pieza')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -242,36 +241,6 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Junta:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta')}}">
-                            @error('No_Junta')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad')}}">
-                            @error('Trazabilidad')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Espesores:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Espesores]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Espesores')}}">
-                            @error('Espesores')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
                             <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
                             @error('Procedimiento')
@@ -282,9 +251,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Codigo de Diseño:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Codigo_Diseno]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Codigo_Diseno')}}">
-                            @error('Codigo_Diseno')
+                            <label class="col-form-label" for="inputSuccess">Criterio de Evaluación:</label>
+                            <input type="text" class="form-control  inputForm @error('Criterio_Evaluacion') is-invalid @enderror" name="Detalles_Generales[Criterio_Evaluacion]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
+                            @error('Criterio_Evaluacion')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -292,29 +261,19 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Diám. Nominal:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Diam_Nominal]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Diam_Nominal')}}">
-                            @error('Diam_Nominal')
+                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Trazabilidad') }}">
+                            @error('Trazabilidad')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Antes del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Antes_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Antes_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Antes_Relevado')}}">
-                            @error('Reporte_Antes_Relevado')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Después del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Despues_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Despues_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Despues_Relevado')}}">
-                            @error('Reporte_Despues_Relevado')
+                            <label class="col-form-label" for="inputSuccess">No. Junta</label>
+                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.No_Junta') }}">
+                            @error('No_Junta')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -332,18 +291,15 @@
                         </div>
                     </div>
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO (EQUIPMENT DATA)</div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
 
-                                    <div style="margin-bottom: 5px;"></div>
+                    <div style="margin-bottom: 2px;"></div>
 
-                                    <div class="alert alert-warning alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                        <p>Puedes Seleccionar un equipo, menu o escribir directamente</p>
-                                    </div>
-
-                    
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">MAQUINA DE RELEVADO (STRESS RELIEF MACHINE)</div>
+                    <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                        <p>Puedes Seleccionar un equipo del menu o escribir directamente</p>
+                    </div>
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
@@ -353,7 +309,8 @@
                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
+                                            data-ns="{{ $equipo->Serie }}"
+                                            data-metodo="{{ data_get($equipo, 'Metodo_Medicion', '') }}">
                                         {{ $equipo->Nombre_E_P_BP }}
                                     </option>
                                 @endforeach
@@ -382,135 +339,76 @@
                             <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO')}}">
                         </div>
                     </div>
+                    <!--***************************************** FIN DATOS *****************************************-->
 
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">GRAFICADOR (GRAPHIER)</div>
-
-                    <div class="col-sm-50 d-flex justify-content-center">
-                        <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos1" id="equiposSelect1">
-                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
+                    @php
+                        $nombresNormasIM = collect($NormasIM ?? [])->pluck('Nombre_Espe')->filter()->unique()->sort()->values();
+                    @endphp
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">
+                        NORMA Y RESULTADOS DEL ANALISIS QUIMICO
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="normaIMNombre">Norma/Especificacion:</label>
+                            <select class="form-control" id="normaIMNombre">
+                                <option value="">Seleccione una norma</option>
+                                @foreach($nombresNormasIM as $nombreNorma)
+                                    <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
                                 @endforeach
                             </select>
-                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO1]" id="IDInputE1" value="{{ old('Datos_Equipo.ID_EQUIPO1') }}">
                         </div>
                     </div>
-
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE1" name="Datos_Equipo[MARCA_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO1')}}">
+                            <label for="normaIMRegistro">Tabla/Variable/Subtitulo:</label>
+                            <select class="form-control @error('Norma_IM.idnormas_im') is-invalid @enderror" id="normaIMRegistro" name="Norma_IM[idnormas_im]" disabled>
+                                <option value="">Primero seleccione una norma</option>
+                            </select>
+                            @error('Norma_IM.idnormas_im')
+                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
                         </div>
                     </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE1" name="Datos_Equipo[MODELO_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO1')}}">
+                    {{-- Carga XRF del 06_B_01: la selección de norma permanece en este formulario. --}}
+                    <div class="col-12">
+                        <div class="form-group border rounded p-3 bg-light">
+                            <label for="analisisPdfXrf"><strong>PDF del equipo XRF (1 hoja por archivo)</strong></label>
+                            <input type="file" class="form-control-file @error('Analisis_PDF.*') is-invalid @enderror"
+                                id="analisisPdfXrf" name="Analisis_PDF[]" accept="application/pdf,.pdf" multiple>
+                            <small class="form-text text-muted">Seleccione los PDF en orden. Los primeros tres se asignan a los disparos 1, 2 y 3; cada uno genera la tabla y la gráfica. El promedio usa todos los PDF seleccionados.</small>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-outline-primary" id="extraerAnalisisPdfBtn">Extraer datos y calcular promedio</button>
+                                <span class="ml-2 text-muted d-none" id="estadoAnalisisPdf"></span>
+                            </div>
+                            @error('Analisis_PDF.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                         </div>
                     </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE1" name="Datos_Equipo[NS_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO1')}}">
+                    <div class="col-12 d-none" id="vistaAnalisisPdf">
+                        <div class="alert alert-warning d-none" id="alertasAnalisisPdf"></div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered" id="tablaAnalisisPdf">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div id="recortesXrfDisparos" class="mt-3"></div>
+                    </div>
+                    <div class="col-12 d-none" id="normaIMResultadosContainer">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped w-100" id="tablaNormaIM">
+                                <thead><tr>
+                                    <th>Elemento Quimico / Chemical Element</th>
+                                    <th>Promedio de la Pieza Analizada / Average</th>
+                                    <th>Composicion Quimica Teorica / Theoretical Composition</th>
+                                </tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="alert alert-light border d-none" id="normaIMObservacionesContainer">
+                            <strong>Observaciones de la norma:</strong>
+                            <div id="normaIMObservaciones" style="white-space: pre-line;"></div>
                         </div>
                     </div>
-                    
-                    <!--***************************************** INICIO DATOS DE PRUEBA *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DE PRUEBA</div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temperatura Inicial:</label>
-                            <input type="text" class="form-control  inputForm" id="tempInputP" name="Datos_Equipo[TEMPERATURA_INICIAL]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_INICIAL')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaInputP" name="Datos_Equipo[HORA_INICIO]" placeholder="" value="{{old('Datos_Equipo.HORA_INICIO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. de Calentamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="mrInputP" name="Datos_Equipo[VELOCIDAD_CALENTAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VELOCIDAD_CALENTAMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Final de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaFinalInputP" name="Datos_Equipo[HORA_FINAL]" placeholder="" value="{{old('Datos_Equipo.HORA_FINAL')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temp. Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tempSostenimientoInputP" name="Datos_Equipo[TEMPERATURA_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_SOSTENIMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaInicioInputP" name="Datos_Equipo[DIA_INICIO]" placeholder="" value="{{old('Datos_Equipo.DIA_INICIO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Tiempo de Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tiempoSostenimientoInputP" name="Datos_Equipo[TIEMPO_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TIEMPO_SOSTENIMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de Finalización de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaFinalInputP" name="Datos_Equipo[DIA_FINAL]" placeholder="" value="{{old('Datos_Equipo.DIA_FINAL')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Enfriamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="velEnfriamientoInputP" name="Datos_Equipo[VEL_ENFRIAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VEL_ENFRIAMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Gráfica:</label>
-                            <input type="text" class="form-control  inputForm" id="noGraficaInputP" name="Datos_Equipo[NO_GRAFICA]" placeholder="" value="{{old('Datos_Equipo.NO_GRAFICA')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Graficador:</label>
-                            <input type="text" class="form-control  inputForm" id="velGraficadorInputP" name="Datos_Equipo[VEL_GRAFICADOR]" placeholder="" value="{{old('Datos_Equipo.VEL_GRAFICADOR')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones')}}</textarea>
-                        </div>
-                    </div>
-
-                    <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
 
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -641,7 +539,10 @@
 
                                     </tr>
                                     <tr>
-                                        <td></td><td></td><td></td><td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td><input type="text" class="form-control inputForm" name="Firmas_Reportes3[NUMERO_FICHA]" placeholder="NÚMERO DE FICHA" value="{{ old('Firmas_Reportes3.NUMERO_FICHA') }}"></td>
                                     </tr>
                                 </thead>                            
@@ -711,19 +612,29 @@
 
                                     </tr>
                                     <tr>
-                                        <td></td><td></td><td></td><td></td><td></td><td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td><input type="text" class="form-control inputForm" name="Firmas_Reportes4[NUMERO_FICHA]" placeholder="NÚMERO DE FICHA" value="{{ old('Firmas_Reportes4.NUMERO_FICHA') }}"></td>
                                     </tr>
                                     
                                 </thead>                            
                             </table>
                         </div>
-                        
-
                         <p>
 
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS</div>
-                        
+                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">FOTOS Y DISPAROS</div>
+
+                        <div class="alert alert-info mt-2 mb-2">
+                            Las fotos adicionales permiten elegir número de hoja y posición. Si una imagen pertenece a un disparo, márcala y selecciona cuál; cada disparo debe tener exactamente dos imágenes.
+                        </div>
+                        @error('numero_disparo')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+
                         <p>
 
                         <!--IMAGENES CON COMENTARIOS-->
@@ -737,7 +648,7 @@
                             </select>
                         </div>
 
-                        <div id="imageFieldsContainer" class="row">
+                        <div id="imageFieldsContainer" class="row" data-layout-fotos-manual="1">
                             <!-- Aquí se agregarán dinámicamente los campos -->
                         </div>
 
@@ -831,32 +742,64 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create_IM_02.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create-For-02-06-IM.js') }}?v={{ filemtime(public_path('js/Reportes_Create-For-02-06-IM.js')) }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 <script>
 
- /*Selects */
-    /* Selects de equipos */
-$(document).ready(function() {
+    function verificarYAgregarLongitud() {
+        let contadorBloque = 0;
 
-    function configurarSelectEquipo(selectId, marcaId, modeloId, nsId, idEquipoId, localStorageName) {
+        $('#dynamicTable tbody tr').each(function () {
+            const $row = $(this);
+
+            if ($row.hasClass('long-row')) {
+                contadorBloque = 0;
+                return;
+            }
+
+            if ($row.hasClass('titulo-row')) {
+                contadorBloque = 0;
+                return;
+            }
+
+            contadorBloque++;
+
+            if (contadorBloque === 10 && !$row.next().hasClass('long-row')) {
+                const lastTitle = $row.data('titulo') || 'sin_titulo';
+                $row.after(
+                    '<tr class="long-row" data-titulo="' + lastTitle + '">' +
+                    '<td colspan="6"><div class="d-flex align-items-center">' +
+                    '<span class="mr-2">Longitud Inspeccionada</span>' +
+                    '<input type="text" class="form-control long-text" name="Long_Inspecc[' + lastTitle + '][]">' +
+                    '</div></td>' +
+                    '<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times"></i></button></td>' +
+                    '</tr>'
+                );
+                contadorBloque = 0;
+            }
+        });
+    }
+
+    function configurarSelectEquipo(selectId, marcaId, modeloId, nsId, idEquipoId, localStorageName, metodoId = null) {
         function actualizarInputs() {
-            var selectedOption = $('#' + selectId).find('option:selected');
+            const selectedOption = $('#' + selectId).find('option:selected');
 
-            var marca = selectedOption.data('marca') || '';
-            var modelo = selectedOption.data('modelo') || '';
-            var ns = selectedOption.data('ns') || '';
-
-            $('#' + marcaId).val(marca);
-            $('#' + modeloId).val(modelo);
-            $('#' + nsId).val(ns);
+            $('#' + marcaId).val(selectedOption.data('marca') || '');
+            $('#' + modeloId).val(selectedOption.data('modelo') || '');
+            $('#' + nsId).val(selectedOption.data('ns') || '');
             $('#' + idEquipoId).val($('#' + selectId).val() || '');
+
+            if (metodoId) {
+                $('#' + metodoId).val(selectedOption.data('metodo') || '');
+            }
         }
 
-        const formId = document.querySelector("form").id;
+        const form = document.querySelector('form');
+        const formId = form ? form.id : 'FOR-PIMP-02_B_03';
         const selectedOptionLocal = localStorage.getItem(formId + '_' + localStorageName);
 
         if (selectedOptionLocal != null) {
@@ -866,47 +809,37 @@ $(document).ready(function() {
 
         $('#' + selectId).on('change', function() {
             actualizarInputs();
-
-            const formId = document.querySelector("form").id;
             localStorage.setItem(formId + '_' + localStorageName, $(this).val());
         });
     }
 
-    configurarSelectEquipo(
-        'equiposSelect',
-        'marcaInputE',
-        'modeloInputE',
-        'nsInputE',
-        'IDInputE',
-        'equipos'
-    );
+    $(document).ready(function() {
+        configurarSelectEquipo('equiposSelect', 'marcaInputE', 'modeloInputE', 'nsInputE', 'IDInputE', 'equipos', 'metodoInputE');
+    });
 
-    configurarSelectEquipo(
-        'equiposSelect1',
-        'marcaInputE1',
-        'modeloInputE1',
-        'nsInputE1',
-        'IDInputE1',
-        'equipos1'
-    );
-});
-
-    /*FOR-PIMP-06_B_01*/
+    /*FOR-PIMP-02_B_03*/
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-PIMP-06_B_01');
+        const form = document.getElementById('FOR-PIMP-02_B_03');
         if (!form) return;
+
+        // Guardar en localStorage al escribir
+        //form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+          //  el.addEventListener('input', function () {
+            //    localStorage.setItem('FOR-PIMP-02_B_03_Form_' + el.name, el.value);
+            //});
+        //});
 
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-PIMP-06_B_01_Form_' + el.name, el.value);
+                localStorage.setItem('FOR-PIMP-02_B_03_Form_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             if (!el.value) {
-                const value = localStorage.getItem('FOR-PIMP-06_B_01_Form_' + el.name);
+                const value = localStorage.getItem('FOR-PIMP-02_B_03_Form_' + el.name);
                 if (value !== null) el.value = value;
             }
         });
@@ -914,11 +847,203 @@ $(document).ready(function() {
         // Limpiar localStorage al enviar el formulario
         form.addEventListener('submit', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-PIMP-06_B_01_Form_' + el.name);
+                localStorage.removeItem('FOR-PIMP-02_B_03_Form_' + el.name);
                 //localStorage.clear();
             });
         });
     });
 
+    function guardarTablaIM0203() {
+        if (typeof saveDataIM0203 === 'function') saveDataIM0203();
+    }
+
+    function renumerarTablaIM0203() {
+        let index = 0;
+        $('#dynamicTable tbody tr').not('.titulo-row, .long-row').each(function() {
+            index++;
+            $(this).find('td:first').html(index + ' <input type="hidden" value="' + index + '">');
+        });
+    }
+
+    function agregarFilaIM0203() {
+        const amount = parseInt($('#numRows').val(), 10) || 1;
+        const lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+        const fields = [
+            ['valor_dureza1', 'Valor Dureza 1'],
+            ['valor_dureza2', 'Valor Dureza 2'],
+            ['valor_dureza3', 'Valor Dureza 3'],
+            ['valor_dureza4', 'Valor Dureza 4'],
+            ['valor_dureza5', 'Valor Dureza 5']
+        ];
+        let currentRows = $('#dynamicTable tbody tr').not('.titulo-row, .long-row').length;
+
+        for (let i = 0; i < amount; i++) {
+            currentRows++;
+            const inputsHtml = fields.map(function(field) {
+                return '<td><input type="text" class="form-control" name="' + field[0] + '[' + lastTitle + '][]" placeholder="' + field[1] + '"></td>';
+            }).join('');
+
+            $('#dynamicTable tbody').append(
+                '<tr data-titulo="' + lastTitle + '">' +
+                '<td>' + currentRows + ' <input type="hidden" value="' + currentRows + '"></td>' +
+                inputsHtml +
+                '<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>' +
+                '</tr>'
+            );
+        }
+
+        if (typeof verificarYAgregarLongitud === 'function') verificarYAgregarLongitud();
+        renumerarTablaIM0203();
+        guardarTablaIM0203();
+    }
+
+    function agregarTituloIM0203() {
+        if (typeof verificarYAgregarLongitud === 'function') verificarYAgregarLongitud();
+        const titleId = 'titulo_' + ($('.titulo-row').length + 1) + '_' + Date.now();
+
+        $('#dynamicTable tbody').append(
+            '<tr class="titulo-row" data-titulo="' + titleId + '">' +
+            '<td colspan="6"><div class="d-flex align-items-center">' +
+            '<input type="text" class="form-control w-90 titulo-text" name="titulos_text[' + titleId + ']" placeholder="Ingrese titulo Ejemplo: SKID I PIEZA NO-3 (DETALLE DE OREJA DE IZAJE 1/4)">' +
+            '<input type="hidden" class="titulo-id" name="titulos_ids[]" value="' + titleId + '">' +
+            '</div></td>' +
+            '<td><button type="button" class="btn btn-danger btnEliminarTitulo"><i class="fa fa-times" aria-hidden="true"></i></button></td>' +
+            '</tr>'
+        );
+
+        guardarTablaIM0203();
+    }
+
+    function agregarLongitudIM0203() {
+        if (typeof verificarYAgregarLongitud === 'function') verificarYAgregarLongitud();
+        const lastTitle = $('.titulo-row').length > 0 ? $('.titulo-row').last().data('titulo') : 'sin_titulo';
+
+        $('#dynamicTable tbody').append(
+            '<tr class="long-row" data-titulo="' + lastTitle + '">' +
+            '<td colspan="6"><div class="d-flex align-items-center">' +
+            '<span class="mr-2">Longitud Inspeccionada</span>' +
+            '<input type="text" class="form-control w-90 long-text" name="Long_Inspecc[' + lastTitle + '][]" placeholder="Ingrese Longitud Inspeccionada...">' +
+            '</div></td>' +
+            '<td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>' +
+            '</tr>'
+        );
+
+        guardarTablaIM0203();
+    }
+
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const catalogo = @json($NormasIM ?? []);
+    const nombreSelect = document.getElementById('normaIMNombre');
+    const registroSelect = document.getElementById('normaIMRegistro');
+    const contenedor = document.getElementById('normaIMResultadosContainer');
+    const tbody = document.querySelector('#tablaNormaIM tbody');
+    const observacionesBox = document.getElementById('normaIMObservacionesContainer');
+    const observaciones = document.getElementById('normaIMObservaciones');
+    const idInicial = @json(old('Norma_IM.idnormas_im'));
+    const promediosIniciales = @json(old('Norma_IM.Promedio', []));
+    let nombreActual = '';
+    let registroActual = '';
+
+    if (!nombreSelect || !registroSelect || !tbody) return;
+
+    function tienePromedios() {
+        return Array.from(tbody.querySelectorAll('input')).some(input => input.value.trim() !== '');
+    }
+
+    function limpiarResultados() {
+        tbody.innerHTML = '';
+        contenedor.classList.add('d-none');
+        observaciones.textContent = '';
+        observacionesBox.classList.add('d-none');
+    }
+
+    function cargarTablas(nombre) {
+        registroSelect.innerHTML = '<option value="">Seleccione una tabla o variable</option>';
+        const opciones = catalogo.filter(item => item.Nombre_Espe === nombre);
+        opciones.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.idnormas_im;
+            option.textContent = item.Variable || 'Sin variable/subtitulo';
+            registroSelect.appendChild(option);
+        });
+        registroSelect.disabled = opciones.length === 0;
+        return opciones;
+    }
+
+    function mostrarNorma(norma, promedios) {
+        tbody.innerHTML = '';
+        (norma.Tabla || []).forEach((fila, index) => {
+            const tr = document.createElement('tr');
+            const elemento = document.createElement('td');
+            const promedio = document.createElement('td');
+            const composicion = document.createElement('td');
+            const input = document.createElement('input');
+
+            elemento.textContent = fila.Elemento || '';
+            composicion.textContent = fila.Composicion || '';
+            input.type = 'text';
+            input.className = 'form-control text-center';
+            input.name = 'Norma_IM[Promedio][' + index + ']';
+            input.dataset.elemento = fila.Elemento || '';
+            input.value = promedios[index] ?? fila.Promedio ?? '';
+            input.placeholder = 'Capture el promedio';
+            promedio.appendChild(input);
+            tr.append(elemento, promedio, composicion);
+            tbody.appendChild(tr);
+        });
+
+        observaciones.textContent = norma.Observaciones || '';
+        observacionesBox.classList.toggle('d-none', !norma.Observaciones);
+        contenedor.classList.remove('d-none');
+    }
+
+    nombreSelect.addEventListener('change', function () {
+        if (nombreActual && this.value !== nombreActual && tienePromedios()
+            && !window.confirm('Al cambiar la norma se eliminaran los promedios capturados. Desea continuar?')) {
+            this.value = nombreActual;
+            return;
+        }
+
+        nombreActual = this.value;
+        registroActual = '';
+        limpiarResultados();
+        const opciones = cargarTablas(this.value);
+        if (opciones.length === 1) {
+            registroSelect.value = opciones[0].idnormas_im;
+            registroActual = String(opciones[0].idnormas_im);
+            mostrarNorma(opciones[0], []);
+        }
+    });
+
+    registroSelect.addEventListener('change', function () {
+        if (registroActual && this.value !== registroActual && tienePromedios()
+            && !window.confirm('Al cambiar la tabla se eliminaran los promedios capturados. Desea continuar?')) {
+            this.value = registroActual;
+            return;
+        }
+
+        registroActual = this.value;
+        const norma = catalogo.find(item => String(item.idnormas_im) === String(this.value));
+        norma ? mostrarNorma(norma, []) : limpiarResultados();
+    });
+
+    if (idInicial) {
+        const norma = catalogo.find(item => String(item.idnormas_im) === String(idInicial));
+        if (norma) {
+            nombreSelect.value = norma.Nombre_Espe;
+            nombreActual = norma.Nombre_Espe;
+            cargarTablas(norma.Nombre_Espe);
+            registroSelect.value = norma.idnormas_im;
+            registroActual = String(norma.idnormas_im);
+            mostrarNorma(norma, promediosIniciales || []);
+        }
+    }
+});
+</script>
+
+{{-- Comparte solamente el comportamiento JS; la ruta y los campos pertenecen al 06_B_01. --}}
+@include('Reportes.IM.partials.script-compartido-pdf-xrf')
+
 @endsection
