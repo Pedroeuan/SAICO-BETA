@@ -189,6 +189,29 @@
         });
     }
 
+    function bindFotosDisparo() {
+        document.querySelectorAll('.foto-disparo-checkbox').forEach(cb => {
+            const index = cb.dataset.index;
+            const hidden = document.getElementById(`esDisparoValue${index}`);
+            const select = document.getElementById(`numeroDisparo${index}`);
+            const container = document.getElementById(`numeroDisparoContainer${index}`);
+
+            if (!hidden || !select || !container) return;
+
+            const actualizar = function () {
+                hidden.value = cb.checked ? 1 : 0;
+                container.classList.toggle('d-none', !cb.checked);
+                if (!cb.checked) select.value = '';
+            };
+
+            actualizar();
+            if (cb.dataset.disparoBound !== '1') {
+                cb.dataset.disparoBound = '1';
+                cb.addEventListener('change', actualizar);
+            }
+        });
+    }
+
 
     // Generar campos de imágenes
     document.addEventListener("DOMContentLoaded", function () {
@@ -197,6 +220,72 @@
         const cropperImage = document.getElementById('cropperImage');
 
         bindImagenHojaCheckboxes();
+        bindFotosDisparo();
+
+        // Ambos formatos aplican la misma regla: un disparo activo contiene exactamente dos imágenes.
+        const formularioDisparos = document.getElementById('FOR-PIMP-06_B_01')
+            || document.getElementById('FOR-PIMP-04_03');
+        if (formularioDisparos && formularioDisparos.dataset.validacionDisparosBound !== '1') {
+            formularioDisparos.dataset.validacionDisparosBound = '1';
+            formularioDisparos.addEventListener('submit', function (event) {
+                const conteoDisparos = { 1: 0, 2: 0, 3: 0 };
+                let mensajeError = '';
+
+                formularioDisparos.querySelectorAll('.foto-disparo-checkbox').forEach(function (checkbox) {
+                    const index = checkbox.dataset.index;
+                    const contenedor = document.getElementById(`image-container-${index}`);
+                    const eliminado = document.getElementById(`deleted_image_${index}`);
+
+                    if (!contenedor || contenedor.style.display === 'none' || (eliminado && eliminado.value !== '')) {
+                        return;
+                    }
+
+                    if (!checkbox.checked) {
+                        return;
+                    }
+
+                    const imagenExistente = formularioDisparos.querySelector(`input[name="existing_images[${index}]"]`);
+                    const imagenBase64 = formularioDisparos.querySelector(`input[name="images_base64[${index}]"]`);
+                    if (!imagenExistente && (!imagenBase64 || !imagenBase64.value)) {
+                        mensajeError = `La imagen ${Number(index) + 1} todavía no se ha guardado desde el recortador.`;
+                        return;
+                    }
+
+                    const selector = document.getElementById(`numeroDisparo${index}`);
+                    const numero = selector ? selector.value : '';
+                    if (!Object.prototype.hasOwnProperty.call(conteoDisparos, numero)) {
+                        mensajeError = `Selecciona el disparo de la imagen ${Number(index) + 1}.`;
+                        return;
+                    }
+
+                    conteoDisparos[numero]++;
+                });
+
+                if (!mensajeError) {
+                    Object.keys(conteoDisparos).some(function (numero) {
+                        const cantidad = conteoDisparos[numero];
+                        if (cantidad !== 0 && cantidad !== 2) {
+                            mensajeError = `El ${numero}° disparo tiene ${cantidad} fotografía${cantidad === 1 ? '' : 's'}; debe tener exactamente dos.`;
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+
+                if (mensajeError) {
+                    event.preventDefault();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Revisa los disparos',
+                            text: mensajeError,
+                        });
+                    } else {
+                        alert(mensajeError);
+                    }
+                }
+            });
+        }
 
         if (!imageCountSelect || !container) {
             return;
@@ -211,6 +300,10 @@
 
             function generateImageFields(count) {
             container.innerHTML = '';
+            // Las capacidades se detectan por formulario para no acoplar una vista con otra.
+            const permiteDisparos = document.getElementById('FOR-PIMP-06_B_01') !== null
+                || document.getElementById('FOR-PIMP-04_03') !== null;
+            const usaLayoutManual = document.getElementById('FOR-PIMP-04_03') !== null;
 
             // Calcular desde qué índice empezar (considerando imágenes del servidor)
             const existingCount = document.querySelectorAll('[id^="image-container-"]').length;
@@ -225,13 +318,29 @@
                         <label for="image${index}">Imagen por Subir ${displayIndex}:</label>
                         <input type="file" class="form-control image-input" id="image${index}" accept="image/*">
 
-                        <div class="form-check mt-2">
+                        ${!usaLayoutManual ? `<div class="form-check mt-2">
                             <input type="checkbox" class="form-check-input imagen-hoja-checkbox" data-index="${index}" id="imagenHoja${index}">
                             <label class="form-check-label" for="imagenHoja${index}">
                                 Imagen en una hoja
                             </label>
                         </div>
-                        <input type="hidden" name="imagen_hoja[${index}]" id="imagenHojaValue${index}" value="0">
+                        <input type="hidden" name="imagen_hoja[${index}]" id="imagenHojaValue${index}" value="0">` : ''}
+                        ${permiteDisparos ? `
+                        <div class="form-check mt-2">
+                            <input type="hidden" name="es_disparo[${index}]" id="esDisparoValue${index}" value="0">
+                            <input type="checkbox" class="form-check-input foto-disparo-checkbox" data-index="${index}" id="esDisparo${index}">
+                            <label class="form-check-label" for="esDisparo${index}">Esta imagen pertenece a un disparo</label>
+                        </div>
+                        <div class="mt-2 d-none numero-disparo-container" id="numeroDisparoContainer${index}">
+                            <label for="numeroDisparo${index}">Asignar al disparo:</label>
+                            <select class="form-control" name="numero_disparo[${index}]" id="numeroDisparo${index}">
+                                <option value="">Selecciona un disparo</option>
+                                <option value="1">1er. disparo</option>
+                                <option value="2">2do. disparo</option>
+                                <option value="3">3er. disparo</option>
+                            </select>
+                            <small class="text-muted">Cada disparo se completa con dos fotografías.</small>
+                        </div>` : ''}
                         <div class="image-preview mt-2" id="image${index}-preview"></div>
                         <textarea class="form-control mt-2" name="comments[${index}]" id="comment${index}" placeholder="Comentario"></textarea>
                         <input type="hidden" name="images_base64[${index}]" id="image${index}-base64">
@@ -329,6 +438,7 @@
             });
 
             bindImagenHojaCheckboxes();
+            bindFotosDisparo();
         }
 
         // Limpiar localStorage al enviar el formulario
@@ -474,7 +584,7 @@
     const formularios = ["FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01",
         "FOR-PINS-12_01", "FOR-PINS-13_01", "FOR-PINS-14_01", "FOR-PINS-15_01", "FOR-PINS-16_01", "FOR-PINS-17_01", "FOR-PINS-18_01", "FOR-PINS-19_01", "FOR-PINS-20_01",
         "FOR-PINS-21_01", "FOR-PINS-22_01", "FOR-PINS-22_01", "FOR-PINS-23_01", "FOR-PINS-24_01", "FOR-PINS-25_01", "FOR-PINS-03_02", "FOR-PINS-05_02", "FOR-PINS-11_02",
-        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02"
+        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02", "FOR-PIMP-04_03", "FOR-PIMP-03_B_01"
     ];
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
@@ -485,8 +595,11 @@
 
         // Restaurar valores desde localStorage
         inputs.forEach(input => {
+            // Nunca se intenta restaurar un input file por seguridad del navegador.
+            if (input.type === "file") return;
+
             const stored = localStorage.getItem(`${formId}_${input.name}`);
-            if (stored !== null) input.value = stored;
+            if (stored !== null && input.value.trim() === "") input.value = stored;
 
             input.addEventListener("input", () => {
                 localStorage.setItem(`${formId}_${input.name}`, input.value);
@@ -499,7 +612,7 @@
             if ((textarea.name === "comments[]" || textarea.name.startsWith("comments[")) && textarea.id) {
                 // Guardar usando id como clave
                 const stored = localStorage.getItem(`${formId}_${textarea.id}`);
-                if (stored !== null) textarea.value = stored;
+                if (stored !== null && textarea.value.trim() === "") textarea.value = stored;
 
                 textarea.addEventListener("input", () => {
                     localStorage.setItem(`${formId}_${textarea.id}`, textarea.value);
@@ -507,7 +620,7 @@
             } else {
                 // Para otros textareas (que no son comentarios), usar name
                 const stored = localStorage.getItem(`${formId}_${textarea.name}`);
-                if (stored !== null) textarea.value = stored;
+                if (stored !== null && textarea.value.trim() === "") textarea.value = stored;
 
                 textarea.addEventListener("input", () => {
                     localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
@@ -520,11 +633,16 @@
         if (rellenarBtn) {
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
+                    // Conserva campos técnicos, de cálculo y valores ya capturados al usar autorrelleno.
+                    if (input.type === "hidden" || input.type === "file" || input.type === "number"
+                        || input.readOnly || input.tagName === "SELECT"
+                        || input.getAttribute("inputmode") === "decimal") return;
+
                     if (input.value.trim() === "") {
                         if (input.type === "date") {
                             // poner fecha actual
                             input.value = new Date().toISOString().split('T')[0];
-                        } else if (input.type !== "file") {
+                        } else {
                             input.value = "---";
                         }
                         localStorage.setItem(`${formId}_${input.name}`, input.value);
@@ -606,7 +724,10 @@
             $('#NOMBRE_TECNICO').val(name);
         }
 
-            const selectedOptionLocalT = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos');
+            // Toma el formulario real del reporte; la página AdminLTE puede contener formularios auxiliares.
+            const reporteForm = document.getElementById('FOR-PIMP-04_03') || document.querySelector('form[id]');
+            const reporteFormId = reporteForm ? reporteForm.id : '';
+            const selectedOptionLocalT = reporteFormId ? localStorage.getItem(reporteFormId+'_Tecnicos') : null;
             selectedOptionLocalT != null ?  ($('#tecnicosSelect').val(selectedOptionLocalT),actualizarTecnicos()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -627,7 +748,7 @@
             $('#NOMBRE_TECNICO2').val(name);
         }
 
-            const selectedOptionLocalT2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos2');
+            const selectedOptionLocalT2 = reporteFormId ? localStorage.getItem(reporteFormId+'_Tecnicos2') : null;
             selectedOptionLocalT2 != null ?  ($('#tecnicosSelect2').val(selectedOptionLocalT2),actualizarTecnicos2()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -648,7 +769,7 @@
             $('#NOMBRE_TECNICO3').val(name);
         }
 
-            const selectedOptionLocalT3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos3');
+            const selectedOptionLocalT3 = reporteFormId ? localStorage.getItem(reporteFormId+'_Tecnicos3') : null;
             selectedOptionLocalT3 != null ?  ($('#tecnicosSelect3').val(selectedOptionLocalT3),actualizarTecnicos3()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -669,7 +790,7 @@
             $('#NOMBRE_TECNICO4').val(name);
         }
 
-            const selectedOptionLocalT4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos4');
+            const selectedOptionLocalT4 = reporteFormId ? localStorage.getItem(reporteFormId+'_Tecnicos4') : null;
             selectedOptionLocalT4 != null ?  ($('#tecnicosSelect4').val(selectedOptionLocalT4),actualizarTecnicos4()):"";
 
             // Evento cuando se cambia la selección en el select
