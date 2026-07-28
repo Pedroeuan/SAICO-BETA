@@ -283,7 +283,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
                             <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
@@ -333,10 +333,10 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-8">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Observaciones]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Observaciones')}}">
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Observaciones]" placeholder="Ejemplo: SE DETECTA . . . .">{{old('Detalles_Generales.Observaciones')}}</textarea>
                             @error('Observaciones')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror

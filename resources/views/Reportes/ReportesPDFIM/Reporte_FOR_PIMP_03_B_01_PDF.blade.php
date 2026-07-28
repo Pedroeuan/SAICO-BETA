@@ -14,12 +14,12 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-03_B/01</title>
     <style>
-        @page { margin: 3.0cm 1.2cm 2.2cm 1.2cm; }
+        @page { margin: 3.0cm 1.5cm 2.2cm 1.5cm; }
 
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            font-size: 7px;
+            font-size: 6px;
             color: #000;
         }
 
@@ -32,25 +32,25 @@
 
         footer {
             position: fixed;
-            bottom: -58px;
+            bottom: -68px;
             left: 0;
             right: 0;
         }
 
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 
-        .tabla-header { font-size: 8px; text-align: center; }
+        .tabla-header { font-size: 7px; text-align: center; }
         .tabla-header th,
         .tabla-header td {
             border: 1px solid #000;
             padding: 1px 3px;
             height: 16px;
-            line-height: 9px;
+            /*line-height: 9px;*/
             vertical-align: middle;
         }
         .tabla-header .nombre-formato {
-            font-size: 10px;
-            line-height: 13px;
+            font-size: 9px;
+            /*line-height: 13px;*/
             font-weight: normal;
         }
         .tabla-header img { width: auto; height: 52px; }
@@ -60,42 +60,43 @@
             color: #fff;
             font-weight: bold;
             text-align: center;
+            font-size: 6px;
         }
 
-        .tabla-datos { margin-top: 1px; font-size: 7px; }
+        .tabla-datos { /*margin-top: 1px;*/ font-size: 6px; }
         .tabla-datos th,
         .tabla-datos td {
-            border: 0;
+            /*border: 0;
             padding: 1px 3px;
             height: 15px;
-            vertical-align: middle;
+            vertical-align: middle;*/
         }
         .tabla-datos th {
             font-weight: bold;
             text-align: left;
-            line-height: 8px;
+            /*line-height: 8px;*/
         }
         .tabla-datos td.valor-general {
             border-bottom: 1px solid #000;
             text-align: center;
         }
         .tabla-datos .titulo-seccion {
-            border: 1px solid #000;
+            /*border: 1px solid #000;
             padding: 1px;
             height: 17px;
-            line-height: 8px;
+            line-height: 8px;*/
             text-align: center;
         }
         .etiqueta-centrada { text-align: center !important; }
 
-        .tabla-analisis { margin-top: 3px; font-size: 7px; text-align: center; }
+        .tabla-analisis { /*margin-top: 3px;*/ font-size: 5px; text-align: center; }
         .tabla-analisis th,
         .tabla-analisis td {
             border: 1px solid #9ea7b3;
-            padding: 3px 2px;
+            /*padding: 3px 2px;*/
             vertical-align: middle;
         }
-        .tabla-analisis th { font-weight: bold; line-height: 8px; }
+        .tabla-analisis th { font-weight: bold; /*line-height: 6px;*/ }
 
         .tabla-fotos { margin-top: 3px; table-layout: fixed; }
         .tabla-fotos td {
@@ -105,7 +106,88 @@
             text-align: center;
             vertical-align: top;
         }
+        /* Medidas de cada uno de los cuatro espacios disponibles por pagina. */
+        .foto-container {
+            padding: 0;
+            /*border: 1px solid #000;
+            display: block;*/
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            width: 330px;
+            height: auto;
+            /*line-height: 0;*/
+            position: relative;
+        }
 
+        .foto-container.arriba_izquierda {
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .foto-container.arriba_derecha {
+            text-align: right;
+            vertical-align: top;
+        }
+
+        .foto-container.abajo_izquierda {
+            text-align: left;
+            vertical-align: bottom;
+        }
+
+        .foto-container.abajo_derecha {
+            text-align: right;
+            vertical-align: bottom;
+        }
+
+        .foto-container > div {
+            width: 100%;
+            max-width: 330px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        /*
+         * contain muestra la imagen completa sin deformarla y ajusta el contenedor
+         * a su proporción real.
+         */
+        .foto-container img {
+            display: block;
+            max-width: 330px;
+            max-height: auto;
+            object-fit: contain;
+            margin: 0;
+        }
+
+        /* Texto descriptivo que se presenta debajo de cada fotografia. */
+        .comment {
+            margin: 0;
+            padding: 3px 2px 2px;
+            /*border-top: 1px solid #000;*/
+            font-size: 5.3px;
+            line-height: 1.05;
+            text-align: center;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 328px;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        /*
+         * REGISTRO FOTOGRAFICO
+         * La tabla usa una cuadricula fija de dos columnas y dos filas.
+         * Cada fotografia conserva la posicion elegida por el usuario.
+         */
+        .imagenes-reporte {
+            width: 687.5px;
+            margin: 0px 0px;
+            border-collapse: separate;
+            /* Separacion horizontal y vertical entre fotografias. 
+            border-spacing: 85px 10px;
+            background: #920404;*/
+            table-layout: fixed;
+            
+        }
         .foto-marco {
             height: 185px;
             border: 1px solid #000;
@@ -127,7 +209,7 @@
         .comentario-foto {
             height: 16px;
             padding-top: 2px;
-            line-height: 8px;
+            /*line-height: 8px;*/
             overflow: hidden;
             text-align: center;
         }
@@ -174,9 +256,9 @@
 @endphp
 <table class="tabla-datos">
     <colgroup>
-        <col style="width: 14%;"><col style="width: 25%;">
+        {{--<col style="width: 14%;"><col style="width: 25%;">
         <col style="width: 12%;"><col style="width: 17%;">
-        <col style="width: 13%;"><col style="width: 19%;">
+        <col style="width: 13%;"><col style="width: 19%;">--}}
     </colgroup>
     <tr><th colspan="6" class="titulo-seccion">DATOS GENERALES<br>General Data</th></tr>
     <tr>
@@ -238,12 +320,12 @@
         <td colspan="5" class="valor-general">{{ $Detalles_Generales['Observaciones'] ?? ($Datos_Equipo['Observaciones'] ?? '') }}</td>
     </tr>
 </table>
-
+<br>
 <table class="tabla-analisis">
     <colgroup>
-        <col style="width: 14%;"><col style="width: 8%;"><col style="width: 14%;">
+        {{--<col style="width: 14%;"><col style="width: 8%;"><col style="width: 14%;">
         <col style="width: 9%;"><col style="width: 9%;"><col style="width: 11%;">
-        <col style="width: 12%;"><col style="width: 10%;"><col style="width: 13%;">
+        <col style="width: 12%;"><col style="width: 10%;"><col style="width: 13%;"> --}}
     </colgroup>
     <tr><th colspan="9" class="titulo-seccion">ANÁLISIS METALOGRÁFICO<br>Metallographic Analysis</th></tr>
     <tr>
@@ -268,12 +350,7 @@
 </table>
 
 @php
-    $posiciones = [
-        'arriba_izquierda',
-        'arriba_derecha',
-        'abajo_izquierda',
-        'abajo_derecha',
-    ];
+    $posiciones = ['arriba_izquierda','arriba_derecha','abajo_izquierda','abajo_derecha',];
     $paginasFotos = [1 => ['completa' => null, 'posiciones' => []]];
 
     foreach (($Fotos ?? []) as $indice => $foto) {
@@ -301,7 +378,7 @@
     @if(!$loop->first)
         <div style="page-break-before: always;"></div>
     @endif
-    <table class="tabla-fotos">
+    <table class="imagenes-reporte" style="width:100%" border="0">
         @if($configuracionFotos['completa'])
             <tr>
                 <td class="foto-completa" colspan="2">
@@ -310,23 +387,32 @@
                 </td>
             </tr>
         @else
-            @foreach([
-                ['arriba_izquierda', 'arriba_derecha'],
-                ['abajo_izquierda', 'abajo_derecha'],
-            ] as $fila)
+            @foreach([['arriba_izquierda', 'arriba_derecha'],['abajo_izquierda', 'abajo_derecha'],] as $fila)
                 <tr>
                 @foreach($fila as $posicion)
                     @php $foto = $configuracionFotos['posiciones'][$posicion] ?? null; @endphp
-                    <td>
-                        <div class="foto-marco">
-                            @if($foto)
-                                <img src="{{ $foto['path'] }}" alt="Fotografía">
-                            @else
+                    @if($posicion === 'arriba_derecha')
+                        <th style="width:6%">
+                            <div>
                                 &nbsp;
+                            </div>
+                        </th>
+                    @endif
+                    <th class="foto-container {{ $posicion }}">
+                        <div>
+                            @if($foto) 
+                                <img src="{{ $foto['path'] }}" alt="Fotografía">
                             @endif
                         </div>
-                        <div class="comentario-foto">{{ $foto['comment'] ?? '' }}</div>
-                    </td>
+                        <div class="comment">{{ $foto['comment'] ?? '' }}</div>
+                    </th>
+                    @if($posicion === 'abajo_izquierda')
+                    <th style="width:6%">
+                        <div>
+                            &nbsp;
+                        </div>
+                    </th>
+                    @endif
                 @endforeach
                 </tr>
             @endforeach
