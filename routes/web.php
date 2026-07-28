@@ -463,6 +463,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
         /*Ruta de Guardado Reportes/IM FOR_PIMP_04_03*/
         Route::post('/Reportes_FOR_PIMP_04_03/store', [FOR_PIMP_04_03Controller::class, 'FOR_PIMP_04_03_store'])->name('Reportes_FOR_PIMP_04_03.store');
+        /*Vista previa: valida norma, extrae lecturas y devuelve recortes sin guardar el reporte.*/
+        Route::post('/Reportes_FOR_PIMP_04_03/extraer-analisis', [FOR_PIMP_04_03Controller::class, 'extraerAnalisisPdf'])->name('Reportes_FOR_PIMP_04_03.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_04_03*/
         Route::post('/Reportes_FOR_PIMP_04_03/update/{id}', [FOR_PIMP_04_03Controller::class, 'FOR_PIMP_04_03_update'])->name('Reportes_FOR_PIMP_04_03.update');
         /*Ruta del PDF de Reportes/IM FOR_PIMP_04_03*/
@@ -484,6 +486,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
         /*Ruta de Guardado Reportes/IM FOR_PIMP_06_B_01*/
         Route::post('/Reportes_FOR_PIMP_06_B_01/store', [FOR_PIMP_06_B_01Controller::class, 'FOR_PIMP_06_B_01_store'])->name('Reportes_FOR_PIMP_06_B_01.store');
+        /*Vista previa XRF independiente para el formato 06_B_01.*/
+        Route::post('/Reportes_FOR_PIMP_06_B_01/extraer-analisis', [FOR_PIMP_06_B_01Controller::class, 'extraerAnalisisPdf'])->name('Reportes_FOR_PIMP_06_B_01.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_06_B_01*/
         Route::post('/Reportes_FOR_PIMP_06_B_01/update/{id}', [FOR_PIMP_06_B_01Controller::class, 'FOR_PIMP_06_B_01_update'])->name('Reportes_FOR_PIMP_06_B_01.update');
         /*Ruta del PDF de Reportes/IM FOR_PIMP_06_B_01*/

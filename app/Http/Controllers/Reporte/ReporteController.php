@@ -16,6 +16,7 @@ use App\Models\Reporte\Fotos_Reporte;
 use App\Models\Solicitudes\Solicitudes;
 use App\Models\Lineal_Ideal\Lineal_Ideal;
 use App\Models\Norma_Codigo\norma_codigo;
+use App\Models\Normas_IM\Normas_IM;
 use App\Models\OrdenServicio\Firmantes_OS;
 use App\Models\PruebaAplica\Prueba_Aplica;
 use App\Models\Procedimientos\Procedimiento;
@@ -1010,7 +1011,17 @@ class ReporteController extends Controller
         // Obtén todos los usuario que tengan el rol Técnico
         $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento'));
+        $NormasIM = Normas_IM::orderBy('Nombre_Espe')->orderBy('Variable')->get()->map(function ($norma) {
+            return [
+                'idnormas_im' => $norma->idnormas_im,
+                'Nombre_Espe' => $norma->Nombre_Espe,
+                'Variable' => $norma->Variable,
+                'Tabla' => json_decode($norma->Tabla, true) ?: [],
+                'Observaciones' => $norma->Observaciones,
+            ];
+        })->values();
+
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM'));
 
     }
 
@@ -1216,7 +1227,17 @@ class ReporteController extends Controller
         // Obtén todos los usuario que tengan el rol Técnico
         $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
         
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento'));
+        $NormasIM = Normas_IM::orderBy('Nombre_Espe')->orderBy('Variable')->get()->map(function ($norma) {
+            return [
+                'idnormas_im' => $norma->idnormas_im,
+                'Nombre_Espe' => $norma->Nombre_Espe,
+                'Variable' => $norma->Variable,
+                'Tabla' => json_decode($norma->Tabla, true) ?: [],
+                'Observaciones' => $norma->Observaciones,
+            ];
+        })->values();
+
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM'));
     }
 
     public function indexINS2(Request $request)

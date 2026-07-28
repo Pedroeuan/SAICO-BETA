@@ -223,7 +223,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function generateImageFields(count) {
             container.innerHTML = '';
+            const permiteDisparos = document.getElementById('FOR-PIMP-06_B_01') !== null;
             for (let i = 1; i <= count; i++) {
+                const indiceEnvio = i - 1;
+                const sufijoCampo = permiteDisparos ? `[${indiceEnvio}]` : '[]';
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
                 col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
@@ -242,11 +245,28 @@ document.addEventListener("DOMContentLoaded", function () {
                                 Imagen en una hoja
                             </label>
                         </div>
-                        <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">
+                        <input type="hidden" name="imagen_hoja${sufijoCampo}" id="imagenHojaValue${i}" value="0">
+
+                        ${permiteDisparos ? `
+                        <div class="form-check mt-2">
+                            <input type="hidden" name="es_disparo${sufijoCampo}" id="esDisparoValue${i}" value="0">
+                            <input type="checkbox" class="form-check-input foto-disparo-checkbox" data-index="${i}" id="esDisparo${i}">
+                            <label class="form-check-label" for="esDisparo${i}">Esta imagen pertenece a un disparo</label>
+                        </div>
+                        <div class="mt-2 d-none numero-disparo-container" id="numeroDisparoContainer${i}">
+                            <label for="numeroDisparo${i}">Asignar al disparo:</label>
+                            <select class="form-control" name="numero_disparo${sufijoCampo}" id="numeroDisparo${i}">
+                                <option value="">Selecciona un disparo</option>
+                                <option value="1">1er. disparo</option>
+                                <option value="2">2do. disparo</option>
+                                <option value="3">3er. disparo</option>
+                            </select>
+                            <small class="text-muted">Cada disparo se completa con dos fotografías.</small>
+                        </div>` : ''}
 
                         <!-- Comentario -->
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <textarea class="form-control mt-2" name="comments${sufijoCampo}" placeholder="Comentario"></textarea>
 
                         <!-- NUEVO CHECK DETALLES JUNTA -->
                         <div class="form-check mt-2">
@@ -258,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 Detalles Junta
                             </label>
                         </div>
-                        <input type="hidden" name="detalles_junta_check[]" id="detallesJuntaValue${i}" value="0">
+                        <input type="hidden" name="detalles_junta_check${sufijoCampo}" id="detallesJuntaValue${i}" value="0">
 
                         <!-- CAMPOS OCULTOS DETALLES JUNTA -->
                         <div class="detalles-junta-container mt-3 d-none" id="detallesContainer${i}">
@@ -281,7 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             Recubrimiento
                             <input type="text" class="form-control mt-1" name="recubrimiento[]" placeholder="Recubrimiento">
                         </div>
-                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                        <input type="hidden" name="images_base64${sufijoCampo}" id="image${i}-base64">
                         <br>
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                     </div>
@@ -376,6 +396,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 cb.addEventListener('change', function () {
                     const index = this.dataset.index;
                     document.getElementById(`imagenHojaValue${index}`).value = this.checked ? 1 : 0;
+                });
+            });
+
+            document.querySelectorAll('.foto-disparo-checkbox').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const index = this.dataset.index;
+                    const hidden = document.getElementById(`esDisparoValue${index}`);
+                    const select = document.getElementById(`numeroDisparo${index}`);
+                    const selectContainer = document.getElementById(`numeroDisparoContainer${index}`);
+
+                    hidden.value = this.checked ? 1 : 0;
+                    selectContainer.classList.toggle('d-none', !this.checked);
+                    if (!this.checked) select.value = '';
                 });
             });
 
@@ -710,6 +743,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (input.closest('#dynamicTable') || input.readOnly || input.disabled || !input.name) return;
                 localStorage.removeItem(`${formId}_${input.name}`);
             });
+
             textareas.forEach(textarea => localStorage.removeItem(`${formId}_${textarea.name}`));
             
             checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
@@ -832,15 +866,62 @@ $(document).ready(function () {
             return;
         }
 
+        // Mantener juntas la imagen y su asignación de disparo.
+        if ($(this).attr('id') === 'FOR-PIMP-06_B_01') {
+            const conteoDisparos = { 1: 0, 2: 0, 3: 0 };
+            let errorDisparo = '';
+
+            $(this).find('.foto-disparo-checkbox:checked').each(function () {
+                const indiceVisual = this.dataset.index;
+                const numero = $(`#numeroDisparo${indiceVisual}`).val();
+                const imagen = $(`#image${indiceVisual}-base64`).val();
+
+                if (!numero) {
+                    errorDisparo = `Selecciona el disparo de la imagen ${indiceVisual}.`;
+                    return false;
+                }
+                if (!imagen) {
+                    errorDisparo = `La imagen ${indiceVisual} no se terminó de guardar o recortar.`;
+                    return false;
+                }
+                conteoDisparos[numero]++;
+            });
+
+            if (!errorDisparo) {
+                Object.keys(conteoDisparos).some(function (numero) {
+                    const cantidad = conteoDisparos[numero];
+                    if (cantidad !== 0 && cantidad !== 2) {
+                        errorDisparo = `El ${numero}° disparo debe tener exactamente dos fotografías.`;
+                        return true;
+                    }
+                    return false;
+                });
+            }
+
+            if (errorDisparo) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Revisa los disparos',
+                    text: errorDisparo,
+                });
+                return;
+            }
+        }
+
         // ============================
         // VALIDAR QUE LA TABLA NO ESTE VACIA
         // ============================
         const esFormato0204 = $(this).attr('id') === 'FOR-PIMP-02_B_04';
+        const tablaResultados = esFormato0204
+            ? $(this).find('#durezaBrinellBody')
+            : $(this).find('#dynamicTable');
+        const requiereFilas = tablaResultados.length > 0;
         const totalFilasTabla = esFormato0204
-            ? $('#durezaBrinellBody tr').length
-            : $('#dynamicTable tbody tr').length;
+            ? tablaResultados.find('tr').length
+            : tablaResultados.find('tbody tr').length;
 
-        if (totalFilasTabla === 0) {
+        if (requiereFilas && totalFilasTabla === 0) {
             e.preventDefault();
 
             Swal.fire({

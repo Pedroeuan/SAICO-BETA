@@ -5,7 +5,7 @@
     <title>FOTOS FOR-PIMP-06_B/01</title>
     <style>
         @page {
-            margin: 3cm 1.2cm 2.1cm 2.2cm;
+            margin: 2cm 1.2cm 1.1cm 2.2cm;
         }
 
         body {
@@ -58,9 +58,8 @@
 
         .datosgenerales th,
         .datosgenerales td {
-            padding: 3px;
-            text-align: center;
-            vertical-align: bottom;
+            padding: 1.5px 1.5px;
+            vertical-align: middle;
         }
 
         .datosinspeccion th,
@@ -83,7 +82,26 @@
 
         .valorGeneral {
             border-bottom: 1px solid black;
-            height: 13px;
+            text-align: center !important;
+            vertical-align: middle !important;
+            height: 10px;
+        }
+
+        .valorGeneralAlto {
+            height: 15px;
+        }
+
+        .valorGeneralConLinea {
+            border-bottom: none !important;
+            padding-bottom: 0 !important;
+        }
+
+        .lineaValorGeneral {
+            width: 100%;
+            min-height: 10px;
+            border-bottom: 1px solid black;
+            box-sizing: border-box;
+            text-align: center;
         }
 
         .tablaEquipos {
@@ -118,6 +136,11 @@
             height: 170px;
             object-fit: cover;
             display: block;
+        }
+
+        .foto-vacia {
+            border: none !important;
+            background-color: #fff;
         }
 
         .comment {
@@ -192,6 +215,26 @@
             text-align: center;
             vertical-align: middle;
         }
+        .etiquetaGeneral {
+            width: 15%;
+            font-weight: bold;
+            white-space: nowrap !important;
+            line-height: 10px;
+            text-align: left;
+            padding-left: 2px;
+            vertical-align: middle;
+        }
+
+        .etiquetaGeneralCentrada {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+
+        .etiquetaGeneralCentrada .titulo-es-nowrap {
+            display: block;
+            white-space: nowrap;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -199,8 +242,8 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>FORMAT</th>
-                <th style="width: 70%;">CÓDIGO<br>CODE</th>
+                <th style="width: 400%;">FORMATO<br>Format</th>
+                <th style="width: 70%;">CÓDIGO<br>Code</th>
                 <th style="width: 100%;">FOR-PIMP-06_B/01</th>
                 <th rowspan="3" style="width: 80%;">
                     <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
@@ -209,11 +252,11 @@
             <tr>
                 <th rowspan="2">Informe de Análisis químico mediante la Técnica de Fluorescencia de Rayos X (XRF)<br>
                     Chemicals Analysis Report Using the X-Ray Fluorescense Technique (XRF)</th>
-                <th>VERSIÓN<br>VERSION</th>
+                <th>VERSIÓN<br>Version</th>
                 <th>3</th>
             </tr>
             <tr>
-                <th>PÁGINA<br>PAGE</th>
+                <th>PÁGINA<br>Page</th>
                 <th></th>
             </tr>
         </thead>
@@ -221,13 +264,6 @@
 </header>
 
 <footer>
-    <table class="datosgenerales">
-        <tr>
-            <th>OBSERVACIONES<br>REMARKS:</th>
-            <td class="lineaInferior" style="width: 600px;">{{ $Datos_Equipo['Observaciones'] ?? '' }}</td>
-        </tr>
-    </table>
-
     @include('Reportes.partials.firmas_im_pdf')
     <table class="datosgenerales" style="display: none;">
         <thead>
@@ -383,175 +419,144 @@
 </footer>
 
 @php
-    $chunks = [];
-    $grupoActual = [];
+    $posicionesFoto = [
+        'arriba_izquierda',
+        'arriba_derecha',
+        'abajo_izquierda',
+        'abajo_derecha',
+    ];
+    $paginasFotos = [];
 
-    foreach ($Fotos as $foto) {
-        if (!empty($foto['una_hoja']) && $foto['una_hoja'] == 1) {
-            if (!empty($grupoActual)) {
-                $chunks[] = $grupoActual;
-                $grupoActual = [];
-            }
-            $chunks[] = [$foto];
-            continue;
+    foreach ($Fotos as $indiceFoto => $foto) {
+        $pagina = max(1, (int) ($foto['pagina'] ?? (intdiv($indiceFoto, 4) + 1)));
+        $posicion = $foto['posicion']
+            ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : $posicionesFoto[$indiceFoto % 4]);
+
+        if (!isset($paginasFotos[$pagina])) {
+            $paginasFotos[$pagina] = ['completa' => null, 'espacios' => []];
         }
 
-        $grupoActual[] = $foto;
-
-        if (count($grupoActual) == 2) {
-            $chunks[] = $grupoActual;
-            $grupoActual = [];
+        if ($posicion === 'pagina_completa') {
+            $paginasFotos[$pagina]['completa'] = $foto;
+        } elseif (in_array($posicion, $posicionesFoto, true)) {
+            $paginasFotos[$pagina]['espacios'][$posicion] = $foto;
         }
     }
 
-    if (!empty($grupoActual)) {
-        $chunks[] = $grupoActual;
-    }
+    ksort($paginasFotos);
 @endphp
 
-@foreach($chunks as $fotosGrupo)
+@foreach($paginasFotos as $numeroPaginaFotos => $configuracionPagina)
     @php
-        $esHojaCompleta = (
-            count($fotosGrupo) == 1 &&
-            !empty($fotosGrupo[0]['una_hoja']) &&
-            $fotosGrupo[0]['una_hoja'] == 1
-        );
+        $fotoCompleta = $configuracionPagina['completa'];
+        $esHojaCompleta = !empty($fotoCompleta);
+        $espacios = $configuracionPagina['espacios'];
     @endphp
     <div class="content photo-page">
         <table class="datosgenerales">
             <thead class="encabezadoAzul">
-                <tr><th colspan="6">DATOS GENERALES<br>GENERAL DATA</th></tr>
+                <tr><th colspan="6">DATOS GENERALES<br>General Data</th></tr>
             </thead>
             <tbody>
-                <tr>
-            <th class="etiquetaGeneral">FECHA<br>DATE:</th>
+        <tr>
+            <th class="etiquetaGeneral">FECHA<br>Date:</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. REPORTE<br>No. REPORT:</th>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">No. REPORTE<br>No. Report:</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">CLIENTE<br>CLIENT:</th>
+            <th class="etiquetaGeneral">CLIENTE<br>Client:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. CONTRATO<br>No. CONTRACT:</th>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">No. CONTRATO<br>No. Contract:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">PROYECTO<br>PROJECT:</th>
+            <th class="etiquetaGeneral" style="white-space: nowrap;">CONTRATO<br>Contract:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO<br>WORK ORDER:</th>
+            <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO<br>Work Order:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">FOLIO<br>FOLIO:</th>
+            <th class="etiquetaGeneral">FOLIO<br>Folio:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">PARTIDA<br>LOT:</th>
+            <th class="etiquetaGeneral">PARTIDA<br>Lot:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">INSTALACION<br>LOCATION:</th>
+            <th class="etiquetaGeneral">INSTALACION<br>Location:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. ISOMETRICO<br>No. ISOMETRIC:</th>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada" style="white-space: nowrap;">NUMERO DE ISOMETRICO<br>No. Isometric:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">ELEMENTOS SOLDADOS<br>WELDINGS:</th>
-            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Elementos_Soldados'] ?? '' }}</td>
-            <th class="etiquetaGeneral">MATERIAL<br>MATERIAL:</th>
+            <th class="etiquetaGeneral" style="white-space: nowrap;">NOMBRE DE LA PIEZA<br>Name of the Piece:</th>
+            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Nom_Pieza'] ?? '' }}</td>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">MATERIAL<br>Material:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral">No. JUNTA<br>No. JOINT:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
-            <th class="etiquetaGeneral">TRAZABILIDAD<br>TRACEABILITY:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
-            <th class="etiquetaGeneral">ESPESORES<br>THICKNESSES:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Espesores'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral">PROCEDIMIENTO<br>PROCEDURE:</th>
+            <th class="etiquetaGeneral">PROCEDIMIENTO<br>Procedure:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
-            <th class="etiquetaGeneral">CODIGO DE DISENO<br>DESIGN CODE:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Codigo_Diseno'] ?? '' }}</td>
-            <th class="etiquetaGeneral">DIAM. NOMINAL<br>NOMINAL DIAMETER:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Diam_Nominal'] ?? '' }}</td>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada" style="white-space: nowrap;">CRITERIO DE EVALUACION<br>Evaluation Criteria:</th>
+            <td class="valorGeneral valorGeneralConLinea"><div class="lineaValorGeneral">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div></td>
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">TRAZABILIDAD<br>Traceability:</th>
+            <td class="valorGeneral valorGeneralConLinea"><div class="lineaValorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div></td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA ANTES<br>DEL RELEVADO<br>HARDNESS REPORT BEFORE THE<br>RELIEVED OF STRESS:</th>
-                    <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Antes_Relevado'] ?? '' }}</td>
-                    <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA<br>DESPUES DEL RELEVADO<br>HARDNESS REPORT AFTER THE<br>RELIEVED OF STRESS:</th>
-                    <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Despues_Relevado'] ?? '' }}</td>
+            <th class="etiquetaGeneral">No. JUNTA<br>No. Joint:</th>
+            <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
         </tr>
             </tbody>
         </table>
 
         @if(!$esHojaCompleta)
         <div style="margin-bottom: 6px;"></div>
-
-        <table class="datosinspeccion tablaEquipos">
-            <colgroup>
-                <col style="width: 40%;">
-                <col style="width: 20%;">
-                <col style="width: 20%;">
-                <col style="width: 20%;">
-            </colgroup>
-            <thead>
-                <tr class="encabezadoAzul"><th colspan="4">DATOS DEL EQUIPO<br>EQUIPMENT DATA</th></tr>
-                <tr>
-                    <th>EQUIPO<br>EQUIPMENT</th>
-                    <th>MARCA<br>BRAND</th>
-                    <th>MODELO<br>MODEL</th>
-                    <th>No. SERIE<br>SERIAL NUMBER</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="celdaGris">MAQUINA DE RELEVADO<br>STRESS RELIEF MACHINE:</td>
-                    <td>{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td>
-                    <td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td>
-                    <td>{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td class="celdaGris">GRAFICADOR<br>GRAPHIER:</td>
-                    <td>{{ $Datos_Equipo['MARCA_EQUIPO1'] ?? '' }}</td>
-                    <td>{{ $Datos_Equipo['MODELO_EQUIPO1'] ?? '' }}</td>
-                    <td>{{ $Datos_Equipo['NS_EQUIPO1'] ?? '' }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div style="margin-bottom: 6px;"></div>
         @endif
 
         <table class="datosgenerales">
             <thead class="encabezadoAzul">
-                <tr><th>REGISTRO FOTOGRAFICO<br>PHOTOGRAPHIC RECORD</th></tr>
+                <tr><th>EVIDENCIA FOTOGRÁFICA<br>Photographic  Evidence</th></tr>
             </thead>
         </table>
 
         <table class="imagenes-reporte">
-            <tr>
-                @foreach($fotosGrupo as $index => $foto)
-                    @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
-                        <td class="foto-container foto-full" colspan="2">
-                            <img src="{{ $foto['path'] }}">
-                            <p class="comment">{{ $foto['comment'] }}</p>
-                        </td>
-                    @else
-                        <td class="foto-container">
-                            <img src="{{ $foto['path'] }}">
-                            <p class="comment">{{ $foto['comment'] }}</p>
-                        </td>
-                        @if(($index + 1) % 2 == 0)
-                            </tr><tr>
+            @if($esHojaCompleta)
+                <tr>
+                    <td class="foto-container foto-full" colspan="2">
+                        <img src="{{ $fotoCompleta['path'] }}">
+                        <p class="comment">{{ $fotoCompleta['comment'] }}</p>
+                    </td>
+                </tr>
+            @else
+                <tr>
+                    @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
+                        @if(isset($espacios[$posicion]))
+                            <td class="foto-container">
+                                <img src="{{ $espacios[$posicion]['path'] }}">
+                                <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                            </td>
+                        @else
+                            <td class="foto-container foto-vacia">&nbsp;</td>
                         @endif
-                    @endif
-                @endforeach
-
-            </tr>
+                    @endforeach
+                </tr>
+                <tr>
+                    @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
+                        @if(isset($espacios[$posicion]))
+                            <td class="foto-container">
+                                <img src="{{ $espacios[$posicion]['path'] }}">
+                                <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                            </td>
+                        @else
+                            <td class="foto-container foto-vacia">&nbsp;</td>
+                        @endif
+                    @endforeach
+                </tr>
+            @endif
         </table>
     </div>
 
