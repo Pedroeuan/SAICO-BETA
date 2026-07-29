@@ -239,7 +239,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                                     </select>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Norma o Código</label>
+                                    <label class="form-label" id="lblNormaCodigo">Norma o Código</label>
                                     <select class="form-select" name="NormaCodigo" id="NormaCodigoSelectModal" required></select>
                                 </div>
                                 <div class="col-12">
@@ -279,6 +279,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                     const formatoNombrePersonalizadoInput = document.getElementById('formatoNombrePersonalizadoModal');
                     const idReporteOriginalInput = document.getElementById('idReporteOriginalModal');
                     const modalForm = document.getElementById('formModalServicios');
+                    const lblNormaCodigo = document.getElementById('lblNormaCodigo');
 
                     const pruebasAzul = [
                         'CARACTERIZACIÓN DE MATERIALES',
@@ -372,8 +373,10 @@ $(document).on("click", ".btnSiguienteReporte", function() {
 
                         if (pruebasAzul.includes(selectedText)) {
                             pruebaRect.setAttribute('fill', '#0070C0');
+                            lblNormaCodigo.textContent = "Procedimiento";
                         } else {
                             pruebaRect.setAttribute('fill', '#C04040');
+                            lblNormaCodigo.textContent = "Norma o Código";
                         }
                     });
 
