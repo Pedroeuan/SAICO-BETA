@@ -1614,8 +1614,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
         ];
 
         // El reporte y sus fotografías pertenecen a una sola hoja.
-        $pdf = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_B_01_PDF', $data)
-            ->setPaper('letter', 'portrait');
+        $pdf = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_B_01_PDF', $data)->setPaper('letter', 'portrait');
 
         return response($pdf->output(), 200)
             ->header('Content-Type', 'application/pdf');

@@ -213,13 +213,13 @@
             white-space: nowrap !important;
             text-align: center;
             line-height: 0.95;
-            font-size: 7.5px;
+            font-size: 7px;
             padding: 1px 2px;
         }
 
         .valorEquipoLateral {
-            font-size: 8px;
-            line-height: 1;
+            font-size: 7px;
+            /*line-height: 1;*/
             text-align: center;
             vertical-align: middle;
             padding: 4px 1px;
@@ -272,13 +272,13 @@
         .tablaGenerales {
             border-collapse: collapse;
             width: 100%;
-            font-size: 8px;
+            font-size: 7px;
             table-layout: fixed;
         }
 
         .tablaGenerales th,
         .tablaGenerales td {
-            padding: 1.5px 1.5px;
+            /*padding: 1.5px 1.5px;*/
             vertical-align: middle;
         }
 
@@ -306,7 +306,7 @@
             width: 15%;
             font-weight: bold;
             white-space: nowrap !important;
-            line-height: 10px;
+            /*line-height: 10px;*/
             text-align: left;
             padding-left: 2px;
             vertical-align: middle;
@@ -327,7 +327,7 @@
             border-bottom: 1px solid black;
             text-align: center !important;
             vertical-align: middle !important;
-            height: 13px;
+            /*height: 13px;*/
         }
 
         .valorGeneralAlto {
@@ -336,7 +336,7 @@
 
         .tituloGeneralPdf {
             text-align: center !important;
-            line-height: 11px;
+            /*line-height: 11px;*/
             font-weight: bold;
             white-space: nowrap !important;
         }
