@@ -29,6 +29,7 @@ use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Normas_IM\Normas_IM;
 use App\Services\ServicioAnalisisPdfXrf;
 use App\Services\ServicioImagenesPdfXrf;
+use App\Services\ServicioRegistrosFotos;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -1179,6 +1180,8 @@ class FOR_PIMP_04_03Controller extends Controller
             ];
         }
 
+        $imagenesGuardadas = ServicioRegistrosFotos::deduplicar($imagenesGuardadas);
+
         // Convertir el array de fotos a JSON
         $Fotos = json_encode($imagenesGuardadas); 
 
@@ -1965,6 +1968,8 @@ class FOR_PIMP_04_03Controller extends Controller
             }
         }
 
+        $imagenesGuardadas = ServicioRegistrosFotos::deduplicar($imagenesGuardadas);
+
         // **4️⃣ Guardar las imágenes actualizadas en la BD**
         if ($Fotos_Reportes) {
             $Fotos_Reportes->update([
@@ -2048,7 +2053,9 @@ class FOR_PIMP_04_03Controller extends Controller
         $totalFotos = 0;
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
-            $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? [];
+            $fotos = ServicioRegistrosFotos::deduplicar(
+                json_decode($Fotos_Reportes->Fotos_Reportes, true) ?? []
+            );
 
             foreach ($fotos as $indiceFoto => $foto) {
                 $esCuadroTexto = !empty($foto['es_cuadro_texto']);

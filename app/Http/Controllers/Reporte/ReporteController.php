@@ -28,6 +28,7 @@ use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Admin\Usuario;
+use App\Services\ServicioRegistrosFotos;
 
 
 use Illuminate\Http\Request;
@@ -952,6 +953,9 @@ class ReporteController extends Controller
         $Fotos_Comentarios = $Fotos_Reporte
             ? json_decode($Fotos_Reporte->Fotos_Reportes, true)
             : [];
+        $Fotos_Comentarios = ServicioRegistrosFotos::deduplicar(
+            is_array($Fotos_Comentarios) ? $Fotos_Comentarios : []
+        );
         // Decodificar el JSON de Grupo_Juntas_Detalles_Re
         $Grupo_Juntas_Re = $Grupo_Juntas_Detalles_Re
             ? json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true)
