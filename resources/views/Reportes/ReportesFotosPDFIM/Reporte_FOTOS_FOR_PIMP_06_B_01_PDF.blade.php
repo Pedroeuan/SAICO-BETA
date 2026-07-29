@@ -128,19 +128,24 @@
         }
 
         .foto-container {
-            width: 312px;
-            height: 170px;
-            border: 1px solid black;
             padding: 0;
-            vertical-align: middle;
+            border: 1px solid #000;
+            /*display: block;*/
             text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            width: 335px;
+            height: auto;
+            line-height: 0;
+            position: relative;
         }
 
         .foto-container img {
-            width: 312px;
-            height: 170px;
-            object-fit: cover;
             display: block;
+            max-width: 335px;
+            max-height: auto;
+            object-fit: contain;
+            margin: 0 auto;
         }
 
         .foto-vacia {
@@ -149,6 +154,7 @@
         }
 
         .comment {
+            line-height: 1;
             border-top: 1px solid black;
             padding-top: 5px;
             margin-top: 0;

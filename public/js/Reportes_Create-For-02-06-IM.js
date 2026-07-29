@@ -1,3 +1,100 @@
+    /*Pre-Rellenado del formulario */
+    document.addEventListener("DOMContentLoaded", function () {
+    const formularios = ["FOR-PIMP-06_B_01"
+    ];
+    formularios.forEach(formId => {
+        const form = document.getElementById(formId);
+        if (!form) return; // Saltar si no existe
+
+        const inputs = form.querySelectorAll(".inputForm");
+        const textareas = form.querySelectorAll("textarea");
+
+        // Restaurar valores desde localStorage
+        inputs.forEach(input => {
+            const stored = localStorage.getItem(`${formId}_${input.name}`);
+            if (stored !== null) input.value = stored;
+
+            input.addEventListener("input", () => {
+                localStorage.setItem(`${formId}_${input.name}`, input.value);
+            });
+        });
+
+
+        textareas.forEach(textarea => {
+            // Verificar si es textarea de comentarios (tiene name="comments[]" y id)
+            if (textarea.name === "comments[]" && textarea.id) {
+                // Guardar usando id como clave
+                const stored = localStorage.getItem(`${formId}_${textarea.id}`);
+                if (stored !== null) textarea.value = stored;
+
+                textarea.addEventListener("input", () => {
+                    localStorage.setItem(`${formId}_${textarea.id}`, textarea.value);
+                });
+            } else {
+                // Para otros textareas (que no son comentarios), usar name
+                const stored = localStorage.getItem(`${formId}_${textarea.name}`);
+                if (stored !== null) textarea.value = stored;
+
+                textarea.addEventListener("input", () => {
+                    localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+                });
+            }
+        });
+
+
+        // Botón rellenar campos vacíos
+        const rellenarBtn = form.querySelector("#preFormBtn");
+        if (rellenarBtn) {
+            rellenarBtn.addEventListener("click", function () {
+                inputs.forEach(input => {
+                    if (input.value.trim() === "") {
+                        if (input.type === "date") {
+                            // poner fecha actual
+                            input.value = new Date().toISOString().split('T')[0];
+                        } else if (input.type !== "file") {
+                            input.value = "---";
+                        }
+                        localStorage.setItem(`${formId}_${input.name}`, input.value);
+                    }
+                });
+                textareas.forEach(textarea => {
+                    if (textarea.value.trim() === "") {
+                        textarea.value = "---";
+                        localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+                    }
+                });
+            });
+        }
+
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+            const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
+
+            const stored = localStorage.getItem(key);
+            if (stored !== null) {
+                checkbox.checked = stored === "true";
+            }
+
+            checkbox.addEventListener("change", () => {
+                localStorage.setItem(key, checkbox.checked);
+            });
+        }) : null;
+
+        // Limpiar localStorage al enviar el formulario
+        form.addEventListener("submit", function () {
+            inputs.forEach(input => localStorage.removeItem(`${formId}_${input.name}`));
+            textareas.forEach(textarea => localStorage.removeItem(`${formId}_${textarea.name}`));
+            
+            checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+                const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
+                localStorage.removeItem(key);
+            }) : null;
+
+        });
+    });
+});
+
 function getMainFormIdIM0206() {
     const forms = document.querySelectorAll("form");
     return (forms[1] || forms[0] || {}).id || "FOR-PIMP-02_B_03";
