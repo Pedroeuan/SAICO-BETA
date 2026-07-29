@@ -68,7 +68,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
         )));
 
         $analisis = $this->analizarPdfsXrf($request->file('Analisis_PDF', []), $service);
-        $this->validarCompatibilidadXrf(
+        $advertenciaNorma = $this->validarCompatibilidadXrf(
             $analisis,
             (string) $norma->Nombre_Espe,
             (string) $norma->Variable,
@@ -103,6 +103,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'analisis' => $analisis,
             'promedios' => $service->averageForElements($analisis, $elementos),
             'recortes_disparos' => $recortesDisparos,
+            'advertencias' => array_values(array_filter([$advertenciaNorma])),
         ]);
     }
 
@@ -147,20 +148,30 @@ class FOR_PIMP_06_B_01Controller extends Controller
         }
     }
 
-    /** Rechaza grados detectados que no correspondan con la norma elegida. */
+    /**
+     * Evita mezclar grados entre archivos. Una diferencia contra la norma elegida
+     * se informa, pero no bloquea el calculo porque la seleccion del usuario manda.
+     */
     private function validarCompatibilidadXrf(
         array $analisis,
         string $nombreEspecificacion,
         string $variable,
         ServicioAnalisisPdfXrf $service
-    ): void {
+    ): ?string {
         try {
             $service->assertCompatibleWithNorm(
                 $analisis,
                 $nombreEspecificacion,
                 $variable
             );
+
+            return null;
         } catch (\RuntimeException $exception) {
+            if (!str_starts_with($exception->getMessage(), 'Los PDF no corresponden al mismo grado:')) {
+                return $exception->getMessage()
+                    . ' Se calcularon los resultados con la norma seleccionada por el usuario.';
+            }
+
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'Norma_IM.idnormas_im' => $exception->getMessage(),
             ]);
