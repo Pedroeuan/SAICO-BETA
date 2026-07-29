@@ -386,7 +386,9 @@
 
 <table class="tablaGenerales">
     <thead class="encabezadoAzul">
-        <tr><th colspan="6">DATOS GENERALES<br>GENERAL DATA</th></tr>
+        <tr>
+            <th colspan="6">DATOS GENERALES<br>GENERAL DATA</th>
+        </tr>
     </thead>
     <tbody>
         <tr>

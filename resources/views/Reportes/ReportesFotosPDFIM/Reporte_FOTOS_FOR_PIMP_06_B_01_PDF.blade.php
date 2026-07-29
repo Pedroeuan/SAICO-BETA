@@ -460,7 +460,9 @@
     <div class="content photo-page">
         <table class="datosgenerales">
             <thead class="encabezadoAzul">
-                <tr><th colspan="6">DATOS GENERALES<br>General Data</th></tr>
+                <tr>
+                    <th colspan="6">DATOS GENERALES<br>General Data</th>
+                </tr>
             </thead>
             <tbody>
         <tr>
@@ -524,7 +526,9 @@
 
         <table class="datosgenerales">
             <thead class="encabezadoAzul">
-                <tr><th>EVIDENCIA FOTOGRÁFICA<br>Photographic  Evidence</th></tr>
+                <tr>
+                    <th>EVIDENCIA FOTOGRÁFICA<br>Photographic  Evidence</th>
+                </tr>
             </thead>
         </table>
 

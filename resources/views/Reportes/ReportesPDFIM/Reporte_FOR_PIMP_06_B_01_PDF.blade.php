@@ -529,7 +529,9 @@
 
 <table class="tablaGenerales">
     <thead class="encabezadoAzul">
-        <tr><th colspan="6">DATOS GENERALES<br>General Data</th></tr>
+        <tr>
+            <th colspan="6">DATOS GENERALES<br>General Data</th>
+        </tr>
     </thead>
     <tbody>
         <tr>
@@ -613,7 +615,9 @@
         </tr>
     </tbody>
     <thead class="encabezadoAzul">
-        <tr><th colspan="6">RESULTADOS DEL ANÁLISIS QUÍMICO DEL ELEMENTO<br>Results of the Chemical Analysis of the Element</th></tr>
+        <tr>
+            <th colspan="6">RESULTADOS DEL ANÁLISIS QUÍMICO DEL ELEMENTO<br>Results of the Chemical Analysis of the Element</th>
+        </tr>
     </thead>
 </table>
 <div style="margin-bottom: 2px;"></div>

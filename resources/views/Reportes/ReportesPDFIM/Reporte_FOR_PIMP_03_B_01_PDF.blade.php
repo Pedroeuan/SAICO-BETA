@@ -37,7 +37,11 @@
             right: 0;
         }
 
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            table-layout: fixed; 
+        }
 
         .tabla-header { font-size: 7px; text-align: center; }
         .tabla-header th,
@@ -76,7 +80,8 @@
             text-align: left;
             /*line-height: 8px;*/
         }
-        .tabla-datos td.valor-general {
+        .tabla-datos td
+        .valor-general {
             border-bottom: 1px solid #000;
             text-align: center;
         }
@@ -87,18 +92,30 @@
             line-height: 8px;*/
             text-align: center;
         }
-        .etiqueta-centrada { text-align: center !important; }
+        .etiqueta-centrada { 
+            text-align: center !important; 
+        }
 
-        .tabla-analisis { /*margin-top: 3px;*/ font-size: 5px; text-align: center; }
+        .tabla-analisis { 
+            /*margin-top: 3px;*/ 
+            font-size: 5px; 
+            text-align: center; 
+        }
         .tabla-analisis th,
         .tabla-analisis td {
             border: 1px solid #9ea7b3;
             /*padding: 3px 2px;*/
             vertical-align: middle;
         }
-        .tabla-analisis th { font-weight: bold; /*line-height: 6px;*/ }
+        .tabla-analisis th { 
+            font-weight: bold; 
+            /*line-height: 6px;*/ 
+        }
 
-        .tabla-fotos { margin-top: 3px; table-layout: fixed; }
+        .tabla-fotos { 
+            margin-top: 3px; 
+            table-layout: fixed; 
+        }
         .tabla-fotos td {
             width: 50%;
             border: 0;
@@ -203,8 +220,16 @@
             margin: 0 auto;
         }
 
-        .tabla-fotos .foto-completa .foto-marco { height: 390px; }
-        .tabla-fotos .foto-completa .foto-marco img { max-height: 386px; }
+        .tabla-fotos 
+        .foto-completa 
+        .foto-marco { 
+            height: 390px; 
+        }
+        .tabla-fotos 
+        .foto-completa 
+        .foto-marco img { 
+            max-height: 386px; 
+        }
 
         .comentario-foto {
             height: 16px;
@@ -214,10 +239,20 @@
             text-align: center;
         }
 
-        .tabla-observaciones { margin-bottom: 2px; font-size: 7px; }
-        .tabla-observaciones th { width: 17%; text-align: left; }
-        .tabla-observaciones td { border-bottom: 1px solid #000; }
-        .numero-pagina-actual::before { content: counter(page); }
+        .tabla-observaciones { 
+            margin-bottom: 2px; 
+            font-size: 7px; 
+        }
+        .tabla-observaciones th { 
+            width: 17%; 
+            text-align: left; 
+        }
+        .tabla-observaciones td { 
+            border-bottom: 1px solid #000; 
+        }
+        .numero-pagina-actual::before { 
+            content: counter(page); 
+        }
     </style>
 </head>
 <body>
@@ -260,7 +295,9 @@
         <col style="width: 12%;"><col style="width: 17%;">
         <col style="width: 13%;"><col style="width: 19%;">--}}
     </colgroup>
-    <tr><th colspan="6" class="titulo-seccion">DATOS GENERALES<br>General Data</th></tr>
+    <tr>
+        <th colspan="6" class="titulo-seccion">DATOS GENERALES<br>General Data</th>
+    </tr>
     <tr>
         <th>FECHA:<br>Date:</th>
         <td colspan="2" class="valor-general">{{ $fechaPdf }}</td>
@@ -327,7 +364,9 @@
         <col style="width: 9%;"><col style="width: 9%;"><col style="width: 11%;">
         <col style="width: 12%;"><col style="width: 10%;"><col style="width: 13%;"> --}}
     </colgroup>
-    <tr><th colspan="9" class="titulo-seccion">ANÁLISIS METALOGRÁFICO<br>Metallographic Analysis</th></tr>
+    <tr>
+        <th colspan="9" class="titulo-seccion">ANÁLISIS METALOGRÁFICO<br>Metallographic Analysis</th>
+    </tr>
     <tr>
         <th colspan="3">NÚMERO DE LIJA PARA EL DESBASTE<br>Number of Sanding Paper for Grinding</th>
         <th colspan="2">MATERIAL PARA EL PULIDO<br>Polishing Material</th>
@@ -336,21 +375,34 @@
         <th rowspan="2">ESPECIFICACIÓN APROXIMADA DEL MATERIAL<br>Approximate Material Specification</th>
     </tr>
     <tr>
-        <td>240</td><td>320</td><td>400</td>
-        <th>PAÑO<br>Cloth</th><td>{{ $Datos_Equipo['MATERIAL_PANO'] ?? '' }}</td>
-        <th>REACTIVO<br>Reagent</th><td>{{ $Datos_Equipo['REACTIVO'] ?? '' }}</td>
+        <td>240</td>
+        <td>320</td>
+        <td>400</td>
+        <th>PAÑO<br>Cloth</th>
+        <td>{{ $Datos_Equipo['MATERIAL_PANO'] ?? '' }}</td>
+        <th>REACTIVO<br>Reagent</th>
+        <td>{{ $Datos_Equipo['REACTIVO'] ?? '' }}</td>
         <td rowspan="2">{{ $Datos_Equipo['FASES_PRESENTES'] ?? '' }}</td>
     </tr>
     <tr>
-        <td>500</td><td>1000</td><td>1500</td>
-        <th>ABRASIVO<br>Abrasive</th><td>{{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}</td>
-        <th>TIEMPO<br>Time</th><td>{{ $Datos_Equipo['TIEMPO_ATAQUE'] ?? '' }}</td>
+        <td>500</td>
+        <td>1000</td>
+        <td>1500</td>
+        <th>ABRASIVO<br>Abrasive</th>
+        <td>{{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}</td>
+        <th>TIEMPO<br>Time</th>
+        <td>{{ $Datos_Equipo['TIEMPO_ATAQUE'] ?? '' }}</td>
         <td>{{ $Datos_Equipo['ESPECIFICACION_MATERIAL'] ?? '' }}</td>
     </tr>
 </table>
 
 @php
-    $posiciones = ['arriba_izquierda','arriba_derecha','abajo_izquierda','abajo_derecha',];
+    $posiciones = [
+        'arriba_izquierda',
+        'arriba_derecha',
+        'abajo_izquierda',
+        'abajo_derecha',
+        ];
     $paginasFotos = [1 => ['completa' => null, 'posiciones' => []]];
 
     foreach (($Fotos ?? []) as $indice => $foto) {
