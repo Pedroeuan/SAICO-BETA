@@ -215,6 +215,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::get('/Normas_IM/Create', [NormasIMController::class, 'create'])->name('Normas_IM.Create');
         /*Ruta de Guardado*/
         Route::post('/Normas_IM/store', [NormasIMController::class, 'store'])->name('Normas_IM.store');
+        /*Alta rápida desde los formularios Create/Edit de reportes IM*/
+        Route::post('/Normas_IM/store-rapida', [NormasIMController::class, 'storeRapida'])->name('Normas_IM.storeRapida');
         /*vista Edición Normas IM*/
         Route::get('/Normas_IM/Edit/{id}', [NormasIMController::class, 'edit'])->name('Normas_IM.Edit');
         /*Ruta de Actualización*/
@@ -456,6 +458,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         
         /*Ruta de Guardado Reportes/IM FOR_PIMP_04_02*/
         Route::post('/Reportes_FOR_PIMP_04_02/store', [FOR_PIMP_04_02Controller::class, 'FOR_PIMP_04_02_store'])->name('Reportes_FOR_PIMP_04_02.store');
+        /*Vista previa: valida norma, extrae lecturas y devuelve recortes sin guardar el reporte.*/
+        Route::post('/Reportes_FOR_PIMP_04_02/extraer-analisis', [FOR_PIMP_04_02Controller::class, 'extraerAnalisisPdf'])->name('Reportes_FOR_PIMP_04_02.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_04_02*/
         Route::post('/Reportes_FOR_PIMP_04_02/update/{id}', [FOR_PIMP_04_02Controller::class, 'FOR_PIMP_04_02_update'])->name('Reportes_FOR_PIMP_04_02.update');
         /*Ruta del PDF de Reportes/IM FOR_PIMP_04_02*/
@@ -479,6 +483,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
         /*Ruta de Guardado Reportes/IM FOR_PIMP_05_B_01*/
         Route::post('/Reportes_FOR_PIMP_05_B_01/store', [FOR_PIMP_05_B_01Controller::class, 'FOR_PIMP_05_B_01_store'])->name('Reportes_FOR_PIMP_05_B_01.store');
+        /*Vista previa XRF: extrae las tres columnas seleccionadas sin guardar el reporte.*/
+        Route::post('/Reportes_FOR_PIMP_05_B_01/extraer-analisis', [FOR_PIMP_05_B_01Controller::class, 'extraerAnalisisPdf'])->name('Reportes_FOR_PIMP_05_B_01.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_05_B_01*/
         Route::post('/Reportes_FOR_PIMP_05_B_01/update/{id}', [FOR_PIMP_05_B_01Controller::class, 'FOR_PIMP_05_B_01_update'])->name('Reportes_FOR_PIMP_05_B_01.update');
         /*Ruta del PDF de Reportes/IM FOR_PIMP_05_B_01*/

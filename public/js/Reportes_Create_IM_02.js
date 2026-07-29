@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // El módulo es compartido, pero solo se activa cuando encuentra uno de estos formularios IM.
     const form = document.getElementById('FOR-PIMP-02_B_03')
         || document.getElementById('FOR-PIMP-03_B_01')
+        || document.getElementById('FOR-PIMP-04_02')
         || document.getElementById('FOR-PIMP-04_03')
+        || document.getElementById('FOR-PIMP-05_B_01')
         || document.getElementById('FOR-PIMP-07_B_01');
     if (!form) return;
 
@@ -235,7 +237,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function saveImageFromCanvas(canvas, label) {
         if (!canvas || !currentInput) return;
 
-        const base64data = canvas.toDataURL('image/jpeg', 0.9);
+        const formularioActual = currentInput.closest('form');
+        const conservarCalidadOriginal = formularioActual && formularioActual.id === 'FOR-PIMP-05_B_01';
+        const base64data = conservarCalidadOriginal
+            ? canvas.toDataURL('image/png')
+            : canvas.toDataURL('image/jpeg', 0.9);
         const previewDiv = document.getElementById(currentInput.id + '-preview');
         const base64Input = document.getElementById(currentInput.id + '-base64');
 
