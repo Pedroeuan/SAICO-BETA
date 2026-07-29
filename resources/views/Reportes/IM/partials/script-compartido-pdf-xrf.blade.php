@@ -96,6 +96,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 norma ? mostrarResultadosNorma(norma, []) : limpiarResultadosNorma();
             });
 
+            document.addEventListener('norma-im:creada', function (event) {
+                const norma = event.detail;
+                if (!norma?.idnormas_im) return;
+
+                if (!catalogoNormas.some(item => String(item.idnormas_im) === String(norma.idnormas_im))) {
+                    catalogoNormas.push(norma);
+                }
+                if (!Array.from(nombreNormaSelect.options)
+                    .some(option => option.value === norma.Nombre_Espe)) {
+                    nombreNormaSelect.add(new Option(norma.Nombre_Espe, norma.Nombre_Espe));
+                }
+
+                nombreNormaSelect.value = norma.Nombre_Espe;
+                nombreNormaActual = norma.Nombre_Espe;
+                cargarRegistrosNorma(norma.Nombre_Espe);
+                registroNormaSelect.value = norma.idnormas_im;
+                registroNormaActual = String(norma.idnormas_im);
+                mostrarResultadosNorma(norma, []);
+            });
+
             const idNormaInicial = idNormaAnterior || normaHistorica?.idnormas_im;
             if (idNormaInicial) {
                 const normaCatalogo = catalogoNormas.find(
@@ -339,3 +359,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+<script>
+window.normasIMAltaRapidaUrl = @json(route('Normas_IM.storeRapida'));
+</script>
+<script src="{{ asset('js/Normas_IM_Alta_Rapida.js') }}?v={{ filemtime(public_path('js/Normas_IM_Alta_Rapida.js')) }}"></script>

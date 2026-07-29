@@ -87,6 +87,11 @@
             height: 10px;
         }
 
+        /* Solo el glifo ⌀ usa una fuente Unicode; el resto conserva las métricas de Arial. */
+        .simboloDiametro {
+            font-family: "DejaVu Sans", sans-serif;
+        }
+
         .valorGeneralAlto {
             height: 15px;
         }
@@ -494,7 +499,7 @@
         </tr>
         <tr>
             <th class="etiquetaGeneral" style="white-space: nowrap;">NOMBRE DE LA PIEZA<br>Name of the Piece:</th>
-            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Nom_Pieza'] ?? '' }}</td>
+            <td class="valorGeneral" colspan="3">{!! str_replace('⌀', '<span class="simboloDiametro">⌀</span>', e($Detalles_Generales['Nom_Pieza'] ?? '')) !!}</td>
             <th class="etiquetaGeneral etiquetaGeneralCentrada">MATERIAL<br>Material:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
         </tr>

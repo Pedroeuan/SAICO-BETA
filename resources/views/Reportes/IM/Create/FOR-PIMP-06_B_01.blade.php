@@ -163,7 +163,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Contrato:</label>
-                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Contrato')}}">
+                            <input type="text" class="form-control  inputForm @error('Contrato') is-invalid @enderror" name="Detalles_Generales[Contrato]"  placeholder="Ejemplo: Mexicali" value="{{old('Detalles_Generales.Contrato')}}">
                             @error('Contrato')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -1027,6 +1027,25 @@ document.addEventListener('DOMContentLoaded', function () {
         registroActual = this.value;
         const norma = catalogo.find(item => String(item.idnormas_im) === String(this.value));
         norma ? mostrarNorma(norma, []) : limpiarResultados();
+    });
+
+    document.addEventListener('norma-im:creada', function (event) {
+        const norma = event.detail;
+        if (!norma?.idnormas_im) return;
+
+        if (!catalogo.some(item => String(item.idnormas_im) === String(norma.idnormas_im))) {
+            catalogo.push(norma);
+        }
+        if (!Array.from(nombreSelect.options).some(option => option.value === norma.Nombre_Espe)) {
+            nombreSelect.add(new Option(norma.Nombre_Espe, norma.Nombre_Espe));
+        }
+
+        nombreSelect.value = norma.Nombre_Espe;
+        nombreActual = norma.Nombre_Espe;
+        cargarTablas(norma.Nombre_Espe);
+        registroSelect.value = norma.idnormas_im;
+        registroActual = String(norma.idnormas_im);
+        mostrarNorma(norma, []);
     });
 
     if (idInicial) {

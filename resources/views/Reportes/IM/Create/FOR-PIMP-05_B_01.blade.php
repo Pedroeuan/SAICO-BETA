@@ -222,9 +222,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Elementos Soldados:</label>
-                            <input type="text" class="form-control  inputForm @error('Elementos_Soldados') is-invalid @enderror" name="Detalles_Generales[Elementos_Soldados]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Elementos_Soldados')}}">
-                            @error('Elementos_Soldados')
+                            <label class="col-form-label" for="inputSuccess">Nombre de la Pieza:</label>
+                            <input type="text" class="form-control  inputForm @error('Nombre_Pieza') is-invalid @enderror" name="Detalles_Generales[Nombre_Pieza]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Nombre_Pieza')}}">
+                            @error('Nombre_Pieza')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -242,29 +242,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Junta:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta')}}">
-                            @error('No_Junta')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
                             <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad')}}">
                             @error('Trazabilidad')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Espesores:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Espesores]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Espesores')}}">
-                            @error('Espesores')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -282,9 +262,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Codigo de Diseño:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Codigo_Diseno]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Codigo_Diseno')}}">
-                            @error('Codigo_Diseno')
+                            <label class="col-form-label" for="inputSuccess">Criterio de Evaluación:</label>
+                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Criterio_Evaluacion]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
+                            @error('Criterio_Evaluacion')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -292,29 +272,29 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Diám. Nominal:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Diam_Nominal]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Diam_Nominal')}}">
-                            @error('Diam_Nominal')
+                            <label class="col-form-label" for="inputSuccess">Accesorio:</label>
+                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Accesorio]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Accesorio')}}">
+                            @error('Accesorio')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Antes del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Antes_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Antes_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Antes_Relevado')}}">
-                            @error('Reporte_Antes_Relevado')
+                            <label class="col-form-label" for="inputSuccess">Tubería:</label>
+                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Tuberia]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Tuberia')}}">
+                            @error('Tuberia')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Reporte de Dureza Después del Relevado:</label>
-                            <input type="text" class="form-control  inputForm @error('Reporte_Despues_Relevado') is-invalid @enderror" name="Detalles_Generales[Reporte_Despues_Relevado]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Reporte_Despues_Relevado')}}">
-                            @error('Reporte_Despues_Relevado')
+                            <label class="col-form-label" for="inputSuccess">Estructural:</label>
+                            <input type="text" class="form-control  inputForm @error('Estructural') is-invalid @enderror" name="Detalles_Generales[Estructural]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Estructural')}}">
+                            @error('Estructural')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -332,18 +312,15 @@
                         </div>
                     </div>
                     <!--***************************************** INICIO DATOS DEL EQUIPO *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO (EQUIPMENT DATA)</div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DEL EQUIPO</div>
 
-                                    <div style="margin-bottom: 5px;"></div>
+                    <div style="margin-bottom: 5px;"></div>
 
-                                    <div class="alert alert-warning alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                        <h5><i class="icon fas fa-info"></i> Importante</h5>
-                                        <p>Puedes Seleccionar un equipo, menu o escribir directamente</p>
-                                    </div>
-
-                    
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">MAQUINA DE RELEVADO (STRESS RELIEF MACHINE)</div>
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-info"></i> Importante</h5>
+                        <p>Puedes Seleccionar un equipo, menu o escribir directamente</p>
+                    </div>
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
@@ -382,136 +359,96 @@
                             <input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO')}}">
                         </div>
                     </div>
+                    
+                    <!--***************************************** INICIO DATOS DE PRUEBA *****************************************-->
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">COMPOSICIÓN QUÍMICA  DE LA PIEZA</div>
 
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">GRAFICADOR (GRAPHIER)</div>
-
-                    <div class="col-sm-50 d-flex justify-content-center">
-                        <div class="form-group text-center">
-                            <select class="form-select inputForm" name="equipos1" id="equiposSelect1">
-                            <option value="" selected disabled>Seleccione un Equipo</option> <!-- Opción por defecto -->
-                                @foreach($idsGeneral_EyCs_Equipos as $equipo)
-                                    <option value="{{ $equipo->idGeneral_EyC }}"
-                                            data-marca="{{ $equipo->Marca }}"
-                                            data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
-                                        {{ $equipo->Nombre_E_P_BP }}
-                                    </option>
+                    {{-- Formulario de norma y análisis XRF propio del Create 04_03. --}}
+                    @php
+                        $nombresNormasIM = collect($NormasIM ?? [])->pluck('Nombre_Espe')->filter()->unique()->sort()->values();
+                    @endphp
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">
+                        NORMA Y RESULTADOS DEL ANÁLISIS QUÍMICO
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="normaIMNombre">Norma/Especificación:</label>
+                            <select class="form-control" id="normaIMNombre">
+                                <option value="">Seleccione una norma</option>
+                                @foreach($nombresNormasIM as $nombreNorma)
+                                    <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
                                 @endforeach
                             </select>
-                            <input type="hidden" name="Datos_Equipo[ID_EQUIPO1]" id="IDInputE1" value="{{ old('Datos_Equipo.ID_EQUIPO1') }}">
                         </div>
                     </div>
-
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MARCA:</label>
-                            <input type="text" class="form-control  inputForm" id="marcaInputE1" name="Datos_Equipo[MARCA_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MARCA_EQUIPO1')}}">
+                            <label for="normaIMRegistro">Tabla/Variable/Subtítulo:</label>
+                            <select class="form-control @error('Norma_IM.idnormas_im') is-invalid @enderror"
+                                id="normaIMRegistro" name="Norma_IM[idnormas_im]" disabled>
+                                <option value="">Primero seleccione una norma</option>
+                            </select>
+                            @error('Norma_IM.idnormas_im')
+                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
                         </div>
                     </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MODELO:</label>
-                            <input type="text" class="form-control  inputForm" id="modeloInputE1" name="Datos_Equipo[MODELO_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO1')}}">
+                    <div class="col-12">
+                        <div class="form-group border rounded p-3 bg-light">
+                            <label for="analisisPdfXrf"><strong>PDF del equipo XRF</strong></label>
+                            <input type="file" class="form-control-file @error('Analisis_PDF') is-invalid @enderror"
+                                id="analisisPdfXrf" name="Analisis_PDF" accept="application/pdf,.pdf">
+                            <small class="form-text text-muted">
+                                Suba un PDF y seleccione exactamente tres columnas para calcular un único disparo.
+                            </small>
+                            <div class="d-flex flex-wrap mt-2">
+                                @foreach(range(1, 7) as $columnaXrf)
+                                    <label class="form-check mr-4"><input class="form-check-input columna-xrf" type="checkbox"
+                                        name="XRF_Columnas[]" value="{{ $columnaXrf }}" @checked(in_array($columnaXrf, old('XRF_Columnas', [1,2,3])))> {{ $columnaXrf }}</label>
+                                @endforeach
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-outline-primary" id="extraerAnalisisPdfBtn">Extraer datos y calcular promedio</button>
+                                <span class="ml-2 text-muted d-none" id="estadoAnalisisPdf"></span>
+                            </div>
+                            @error('Analisis_PDF.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                         </div>
                     </div>
+                    <div class="col-12 d-none" id="vistaAnalisisPdf">
+                        <div class="alert alert-warning d-none" id="alertasAnalisisPdf"></div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered" id="tablaAnalisisPdf">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div id="capturaXrfUnica" class="mt-3"></div>
+                    </div>
+                    <div class="col-12 d-none" id="normaIMResultadosContainer">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped w-100" id="tablaNormaIM">
+                                <thead><tr>
+                                    <th>Elemento químico / Chemical element</th>
+                                    <th>Promedio de la pieza analizada / Average</th>
+                                    <th>Composición química teórica / Theoretical composition</th>
+                                </tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="alert alert-light border d-none" id="normaIMObservacionesContainer">
+                            <strong>Observaciones de la norma:</strong>
+                            <div id="normaIMObservaciones" style="white-space: pre-line;"></div>
+                        </div>
+                    </div>
+                    <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
 
-                    <div class="col-sm-4">
+                    <div class="col-12">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">N.S:</label>
-                            <input type="text" class="form-control  inputForm" id="nsInputE1" name="Datos_Equipo[NS_EQUIPO1]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO1')}}">
+                            <label class="col-form-label" for="observacionesEquipo">Conclusión:</label>
+                            <textarea class="form-control is-waning" id="observacionesEquipo" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{ old('Datos_Equipo.Observaciones') }}</textarea>
                         </div>
                     </div>
                     
-                    <!--***************************************** INICIO DATOS DE PRUEBA *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS DE PRUEBA</div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temperatura Inicial:</label>
-                            <input type="text" class="form-control  inputForm" id="tempInputP" name="Datos_Equipo[TEMPERATURA_INICIAL]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_INICIAL')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaInputP" name="Datos_Equipo[HORA_INICIO]" placeholder="" value="{{old('Datos_Equipo.HORA_INICIO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. de Calentamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="mrInputP" name="Datos_Equipo[VELOCIDAD_CALENTAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VELOCIDAD_CALENTAMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Hora Final de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaFinalInputP" name="Datos_Equipo[HORA_FINAL]" placeholder="" value="{{old('Datos_Equipo.HORA_FINAL')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Temp. Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tempSostenimientoInputP" name="Datos_Equipo[TEMPERATURA_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TEMPERATURA_SOSTENIMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaInicioInputP" name="Datos_Equipo[DIA_INICIO]" placeholder="" value="{{old('Datos_Equipo.DIA_INICIO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Tiempo de Sostenimiento:</label>
-                            <input type="text" class="form-control  inputForm" id="tiempoSostenimientoInputP" name="Datos_Equipo[TIEMPO_SOSTENIMIENTO]" placeholder="" value="{{old('Datos_Equipo.TIEMPO_SOSTENIMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Día de Finalización de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaFinalInputP" name="Datos_Equipo[DIA_FINAL]" placeholder="" value="{{old('Datos_Equipo.DIA_FINAL')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Enfriamiento:</label>
-                            <input type="text" class="form-control  inputForm" id="velEnfriamientoInputP" name="Datos_Equipo[VEL_ENFRIAMIENTO]" placeholder="" value="{{old('Datos_Equipo.VEL_ENFRIAMIENTO')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Gráfica:</label>
-                            <input type="text" class="form-control  inputForm" id="noGraficaInputP" name="Datos_Equipo[NO_GRAFICA]" placeholder="" value="{{old('Datos_Equipo.NO_GRAFICA')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Vel. del Graficador:</label>
-                            <input type="text" class="form-control  inputForm" id="velGraficadorInputP" name="Datos_Equipo[VEL_GRAFICADOR]" placeholder="" value="{{old('Datos_Equipo.VEL_GRAFICADOR')}}">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Observaciones:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Datos_Equipo[Observaciones]" placeholder="Ejemplo: LA INSPECCIÓN SE REALIZÓ DE LADO A Y B">{{old('Observaciones')}}</textarea>
-                        </div>
-                    </div>
-
-                    <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
-
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                         <div class="col-sm-15">
@@ -737,7 +674,13 @@
                             </select>
                         </div>
 
-                        <div id="imageFieldsContainer" class="row">
+                        <div class="alert alert-info py-2">
+                            Asigna a cada fotografía el número de hoja y su posición. Una hoja admite hasta cuatro posiciones o una fotografía de página completa.
+                            Si no cuenta con PDF XRF, marque <strong>Asignar esta imagen a un disparo</strong>; cada disparo requiere dos imágenes.
+                        </div>
+
+                        {{-- El JS compartido agrega posición, cuadro de texto y asignación manual de disparo. --}}
+                        <div id="imageFieldsContainer" class="row" data-layout-fotos-manual="1">
                             <!-- Aquí se agregarán dinámicamente los campos -->
                         </div>
 
@@ -831,11 +774,12 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create_IM_02.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create_IM_02.js') }}?v={{ filemtime(public_path('js/Reportes_Create_IM_02.js')) }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 <script>
 
  /*Selects */
@@ -921,4 +865,7 @@ $(document).ready(function() {
     });
 
 </script>
+{{-- Ruta propia del formato; el comportamiento de extracción sí se comparte mediante JavaScript. --}}
+@php($xrfExtractionRoute = route('Reportes_FOR_PIMP_05_B_01.extraer_analisis'))
+@include('Reportes.IM.partials.script-columnas-pdf-xrf-05-b-01')
 @endsection
