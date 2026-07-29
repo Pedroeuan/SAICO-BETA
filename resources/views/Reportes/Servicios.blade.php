@@ -98,7 +98,7 @@
 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label class="col-form-label" for="inputSuccess">Norma o Código</label>
+                                        <label class="col-form-label" for="inputSuccess" id="lblNormaCodigo">Norma o Código</label>
                                         <select class="form-select" name="NormaCodigo" id="NormaCodigoSelect" required>
                                         </select>
                                         @error('NormaCodigo')
@@ -199,6 +199,7 @@
     const pruebaRect = document.querySelector("rect");
     const formatoNombreLabel = document.getElementById('formatoNombre');
     const formatoNombrePersonalizadoInput = document.getElementById('formatoNombrePersonalizado');
+    const lblNormaCodigo = document.getElementById('lblNormaCodigo');
 
     // Lista de pruebas que necesitan el color azul
     const pruebasAzul = [
@@ -257,11 +258,13 @@
         const textContent = selectedOption.getAttribute('data-text');
         const pruebaNombre = selectedOption.dataset.text;
 
-        // Cambia el color según la prueba seleccionada
+        // Cambia el color según la prueba seleccionada y Nombre o codigo/Procedimiento
         if (pruebasAzul.includes(pruebaNombre)) {
             pruebaRect.setAttribute("fill", "#0070C0"); // Azul
+            lblNormaCodigo.textContent = "Procedimiento";
         } else {
             pruebaRect.setAttribute("fill", "#C04040"); // Color original
+            lblNormaCodigo.textContent = "Norma o Código";
         }
 
         // Actualiza la imagen dentro del SVG

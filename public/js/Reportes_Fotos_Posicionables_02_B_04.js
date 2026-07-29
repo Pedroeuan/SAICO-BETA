@@ -97,8 +97,12 @@
         var checkboxDisparo;
         var campoDisparo;
         var formulario = contenedor.closest('form');
-        // El cuadro de texto del tamaño de una foto pertenece únicamente al 04_03.
-        var permiteCuadroTexto = formulario && formulario.id === 'FOR-PIMP-04_03';
+        // Estos formatos permiten usar el espacio de una foto como cuadro de texto.
+        var permiteCuadroTexto = formulario && [
+            'FOR-PIMP-04_02',
+            'FOR-PIMP-04_03',
+            'FOR-PIMP-05_B_01'
+        ].indexOf(formulario.id) !== -1;
         var esCuadroTexto = contenedor.getAttribute('data-foto-es-texto') === '1';
 
         // Evita duplicarlos cuando MutationObserver vuelve a recorrer el DOM.
@@ -364,7 +368,7 @@
 
     /* Valida en navegador la misma regla de pares que el controlador vuelve a comprobar. */
     function validarDisparosManuales(formulario) {
-        if (formulario.id !== 'FOR-PIMP-04_03') {
+        if (['FOR-PIMP-04_03', 'FOR-PIMP-05_B_01'].indexOf(formulario.id) === -1) {
             return true;
         }
 
@@ -446,7 +450,9 @@
     document.addEventListener('DOMContentLoaded', function () {
         var formulario = document.getElementById('FOR-PIMP-02_B_04')
             || document.getElementById('FOR-PIMP-03_B_01')
+            || document.getElementById('FOR-PIMP-04_02')
             || document.getElementById('FOR-PIMP-04_03')
+            || document.getElementById('FOR-PIMP-05_B_01')
             || document.getElementById('FOR-PIMP-06_B_01');
         var raiz;
         var observador;

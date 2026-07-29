@@ -110,7 +110,7 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Contrato:</label>
+                            <label class="col-form-label" for="inputSuccess">No. Contrato:</label>
                             <input type="text"
                                 id="campoContrato"
                                 class="form-control inputForm"
@@ -122,8 +122,8 @@
                     </div>
                         <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Proyecto:</label>
-                            <input type="text" class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Proyecto', $Detalles_Generales['Proyecto'] ?? '')}}">
+                            <label class="col-form-label" for="inputSuccess">Contrato:</label>
+                            <input type="text" class="form-control  inputForm @error('Proyecto') is-invalid @enderror" name="Detalles_Generales[Proyecto]"  placeholder="Ejemplo: Mexicali" value="{{old('Detalles_Generales.Proyecto', $Detalles_Generales['Proyecto'] ?? '')}}">
                             @error('Proyecto')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -1035,6 +1035,25 @@ document.addEventListener('DOMContentLoaded', function () {
         registroActual = this.value;
         const norma = catalogo.find(item => String(item.idnormas_im) === String(this.value));
         norma ? mostrarNorma(norma, []) : limpiarResultados();
+    });
+
+    document.addEventListener('norma-im:creada', function (event) {
+        const norma = event.detail;
+        if (!norma?.idnormas_im) return;
+
+        if (!catalogo.some(item => String(item.idnormas_im) === String(norma.idnormas_im))) {
+            catalogo.push(norma);
+        }
+        if (!Array.from(nombreSelect.options).some(option => option.value === norma.Nombre_Espe)) {
+            nombreSelect.add(new Option(norma.Nombre_Espe, norma.Nombre_Espe));
+        }
+
+        nombreSelect.value = norma.Nombre_Espe;
+        nombreActual = norma.Nombre_Espe;
+        cargarTablas(norma.Nombre_Espe);
+        registroSelect.value = norma.idnormas_im;
+        registroActual = String(norma.idnormas_im);
+        mostrarNorma(norma, []);
     });
 
     const idInicial = idAnterior || (historica ? historica.idnormas_im : null);
