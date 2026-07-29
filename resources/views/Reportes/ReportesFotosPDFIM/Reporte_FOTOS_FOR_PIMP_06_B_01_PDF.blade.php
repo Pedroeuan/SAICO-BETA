@@ -87,6 +87,11 @@
             height: 10px;
         }
 
+        /* Solo el glifo ⌀ usa una fuente Unicode; el resto conserva las métricas de Arial. */
+        .simboloDiametro {
+            font-family: "DejaVu Sans", sans-serif;
+        }
+
         .valorGeneralAlto {
             height: 15px;
         }
@@ -123,19 +128,24 @@
         }
 
         .foto-container {
-            width: 312px;
-            height: 170px;
-            border: 1px solid black;
             padding: 0;
-            vertical-align: middle;
+            border: 1px solid #000;
+            /*display: block;*/
             text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            width: 335px;
+            height: auto;
+            line-height: 0;
+            position: relative;
         }
 
         .foto-container img {
-            width: 312px;
-            height: 170px;
-            object-fit: cover;
             display: block;
+            max-width: 335px;
+            max-height: auto;
+            object-fit: contain;
+            margin: 0 auto;
         }
 
         .foto-vacia {
@@ -144,6 +154,7 @@
         }
 
         .comment {
+            line-height: 1;
             border-top: 1px solid black;
             padding-top: 5px;
             margin-top: 0;
@@ -494,7 +505,7 @@
         </tr>
         <tr>
             <th class="etiquetaGeneral" style="white-space: nowrap;">NOMBRE DE LA PIEZA<br>Name of the Piece:</th>
-            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Nom_Pieza'] ?? '' }}</td>
+            <td class="valorGeneral" colspan="3">{!! str_replace('⌀', '<span class="simboloDiametro">⌀</span>', e($Detalles_Generales['Nom_Pieza'] ?? '')) !!}</td>
             <th class="etiquetaGeneral etiquetaGeneralCentrada">MATERIAL<br>Material:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
         </tr>
