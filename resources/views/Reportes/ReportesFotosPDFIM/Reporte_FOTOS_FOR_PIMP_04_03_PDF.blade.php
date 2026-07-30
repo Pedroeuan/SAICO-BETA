@@ -143,18 +143,25 @@
             border-spacing: 8px 5px; 
         }
         .photo-slot { 
-            width: 50%; 
-            height: 6.1cm; 
-            border: .7px solid #000; 
-            padding: 0; 
-            vertical-align: top; 
-            text-align: center; 
+            padding: 0;
+            border: 1px solid #000;
+            /*display: block;*/
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            width: 330px;
+            height: auto;
+            /*line-height: 0;*/
+            position: relative;
         }
         .photo-slot img { 
-            display: block; 
-            width: 100%; 
-            height: 5.55cm; 
-            object-fit: contain; 
+            display: block;
+            max-width: 330px;
+            max-height: auto;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
         }
         .photo-comment { 
             height: .42cm; 
