@@ -306,9 +306,14 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MÉTODO:</label>
-                            <input type="text" class="form-control inputForm is-waning" id="metodoInputE" name="Detalles_Generales[Metodo]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Metodo') }}" readonly>
-                            @error('Metodo')
+                            {{-- El método se limita a las dos técnicas autorizadas para evitar texto libre inconsistente. --}}
+                            <label class="col-form-label" for="metodoSelect">MÉTODO:</label>
+                            <select class="form-select inputForm @error('Detalles_Generales.Metodo') is-invalid @enderror" id="metodoSelect" name="Detalles_Generales[Metodo]" required>
+                                <option value="" disabled {{ old('Detalles_Generales.Metodo') ? '' : 'selected' }}>Seleccione un método</option>
+                                <option value="LEEB" {{ old('Detalles_Generales.Metodo') === 'LEEB' ? 'selected' : '' }}>LEEB</option>
+                                <option value="UCI" {{ old('Detalles_Generales.Metodo') === 'UCI' ? 'selected' : '' }}>UCI</option>
+                            </select>
+                            @error('Detalles_Generales.Metodo')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -352,8 +357,7 @@
                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}"
-                                            data-metodo="{{ data_get($equipo, 'Metodo_Medicion', '') }}">
+                                            data-ns="{{ $equipo->Serie }}">
                                         {{ $equipo->Nombre_E_P_BP }}
                                     </option>
                                 @endforeach
@@ -825,7 +829,8 @@
         });
     }
 
-    function configurarSelectEquipo(selectId, marcaId, modeloId, nsId, idEquipoId, localStorageName, metodoId = null) {
+    // El método ya no se copia desde el equipo: el usuario debe elegir explícitamente LEEB o UCI.
+    function configurarSelectEquipo(selectId, marcaId, modeloId, nsId, idEquipoId, localStorageName) {
         function actualizarInputs() {
             const selectedOption = $('#' + selectId).find('option:selected');
 
@@ -834,9 +839,6 @@
             $('#' + nsId).val(selectedOption.data('ns') || '');
             $('#' + idEquipoId).val($('#' + selectId).val() || '');
 
-            if (metodoId) {
-                $('#' + metodoId).val(selectedOption.data('metodo') || '');
-            }
         }
 
         const form = document.querySelector('form');
@@ -855,7 +857,7 @@
     }
 
     $(document).ready(function() {
-        configurarSelectEquipo('equiposSelect', 'marcaInputE', 'modeloInputE', 'nsInputE', 'IDInputE', 'equipos', 'metodoInputE');
+        configurarSelectEquipo('equiposSelect', 'marcaInputE', 'modeloInputE', 'nsInputE', 'IDInputE', 'equipos');
     });
 
     /*FOR-PIMP-02_B_03*/

@@ -215,6 +215,20 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
+                            {{-- Este contrato descriptivo se guarda en Proyecto; el número de contrato permanece separado. --}}
+                            <label class="col-form-label" for="proyectoContrato">Contrato:</label>
+                            <textarea id="proyectoContrato"
+                                class="form-control inputForm @error('Detalles_Generales.Proyecto') is-invalid @enderror"
+                                name="Detalles_Generales[Proyecto]"
+                                placeholder="Ingrese el contrato o descripción del proyecto">{{ old('Detalles_Generales.Proyecto') }}</textarea>
+                            @error('Detalles_Generales.Proyecto')
+                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Orden de Trabajo:</label>
                             <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
                             @error('Orden_Trabajo')

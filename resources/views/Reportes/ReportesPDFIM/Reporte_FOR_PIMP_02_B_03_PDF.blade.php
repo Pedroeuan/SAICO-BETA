@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-02_B/03</title>
 
-       <style>
+    <style>
         @page {
             margin: 
             3cm
@@ -73,6 +73,7 @@
             border-collapse: collapse;
             width: 100%;
             font-size: 8px;
+            text-align: center;
         }
 
         .datosinspeccion th,
@@ -507,7 +508,9 @@
 
 <table class="tablaGenerales">
     <thead class="encabezadoAzul">
-        <tr><th>DATOS GENERALES<br>General Data</th></tr>
+        <tr>
+            <th>DATOS GENERALES<br>General Data</th>
+        </tr>
     </thead>
 </table>
 <table class="filaGeneral">
@@ -607,7 +610,9 @@
 <div style="margin-bottom: 3px;"></div>
 <table class="datosinspeccion">
     <thead class="encabezadoAzul">
-        <tr><th colspan="6">DATOS DE LA PRUEBA<br>Test Data</th></tr>
+        <tr>
+            <th colspan="6">DATOS DE LA PRUEBA<br>Test Data</th>
+        </tr>
     </thead>
     <tbody>
         <tr>

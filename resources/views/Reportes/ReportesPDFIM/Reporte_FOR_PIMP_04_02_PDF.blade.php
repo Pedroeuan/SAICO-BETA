@@ -252,7 +252,10 @@
                 <th>VERSIÓN</th>
                 <th>2</th>
             </tr>
-            <tr><th>PÁGINA</th><th></th></tr>
+            <tr>
+                <th>PÁGINA</th>
+                <th></th>
+            </tr>
         </thead>
     </table>
 </header>
@@ -347,7 +350,11 @@
 {{-- Datos generales conservan líneas independientes para evitar que las etiquetas se superpongan. --}}
 <div style="margin-bottom:2px"></div>
 <table class="tablaGenerales">
-    <thead class="encabezadoAzul"><tr><th colspan="6">DATOS GENERALES</th></tr></thead>
+    <thead class="encabezadoAzul">
+        <tr>
+            <th colspan="6">DATOS GENERALES</th>
+        </tr>
+    </thead>
     <tbody>
         <tr>
             <th>FECHA:</th>
