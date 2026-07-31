@@ -391,10 +391,12 @@
     <div class="content photo-page">
         <table class="datosgenerales">
             <thead class="encabezadoAzul">
-                <tr><th colspan="6">DATOS GENERALES<br>GENERAL DATA</th></tr>
+                <tr>
+                    <th colspan="6">DATOS GENERALES<br>GENERAL DATA</th>
+                </tr>
             </thead>
             <tbody>
-                <tr>
+        <tr>
             <th class="etiquetaGeneral">FECHA<br>DATE:</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
             <th class="etiquetaGeneral">No. REPORTE<br>No. REPORT:</th>
@@ -452,9 +454,9 @@
         </tr>
         <tr>
             <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA ANTES<br>DEL RELEVADO<br>HARDNESS REPORT BEFORE THE<br>RELIEVED OF STRESS:</th>
-                    <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Antes_Relevado'] ?? '' }}</td>
-                    <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA<br>DESPUES DEL RELEVADO<br>HARDNESS REPORT AFTER THE<br>RELIEVED OF STRESS:</th>
-                    <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Despues_Relevado'] ?? '' }}</td>
+            <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Antes_Relevado'] ?? '' }}</td>
+            <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA<br>DESPUES DEL RELEVADO<br>HARDNESS REPORT AFTER THE<br>RELIEVED OF STRESS:</th>
+            <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Despues_Relevado'] ?? '' }}</td>
         </tr>
             </tbody>
         </table>
@@ -470,7 +472,9 @@
                 <col style="width: 20%;">
             </colgroup>
             <thead>
-                <tr class="encabezadoAzul"><th colspan="4">DATOS DEL EQUIPO<br>EQUIPMENT DATA</th></tr>
+                <tr class="encabezadoAzul">
+                    <th colspan="4">DATOS DEL EQUIPO<br>EQUIPMENT DATA</th>
+                </tr>
                 <tr>
                     <th>EQUIPO<br>EQUIPMENT</th>
                     <th>MARCA<br>BRAND</th>
@@ -499,7 +503,9 @@
 
         <table class="datosgenerales">
             <thead class="encabezadoAzul">
-                <tr><th>REGISTRO FOTOGRAFICO<br>PHOTOGRAPHIC RECORD</th></tr>
+                <tr>
+                    <th>REGISTRO FOTOGRAFICO<br>PHOTOGRAPHIC RECORD</th>
+                </tr>
             </thead>
         </table>
 

@@ -143,18 +143,25 @@
             border-spacing: 8px 5px; 
         }
         .photo-slot { 
-            width: 50%; 
-            height: 6.1cm; 
-            border: .7px solid #000; 
-            padding: 0; 
-            vertical-align: top; 
-            text-align: center; 
+            padding: 0;
+            border: 1px solid #000;
+            /*display: block;*/
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            width: 330px;
+            height: auto;
+            /*line-height: 0;*/
+            position: relative;
         }
         .photo-slot img { 
-            display: block; 
-            width: 100%; 
-            height: 5.55cm; 
-            object-fit: contain; 
+            display: block;
+            max-width: 330px;
+            max-height: auto;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
         }
         .photo-comment { 
             height: .42cm; 
@@ -247,7 +254,10 @@
                 <th>VERSIÓN</th>
                 <th>0</th>
             </tr>
-            <tr><th>PÁGINA</th><th></th></tr>
+            <tr>
+                <th>PÁGINA</th>
+                <th></th>
+            </tr>
         </thead>
     </table>
 </header>
@@ -366,46 +376,84 @@
     <div class="photo-page">
         <div style="margin-bottom:2px"></div>
         <table class="tablaGenerales">
-            <thead class="encabezadoAzul"><tr><th colspan="6">DATOS GENERALES</th></tr></thead>
+            <thead class="encabezadoAzul">
+                <tr>
+                    <th colspan="6">DATOS GENERALES</th>
+                </tr>
+            </thead>
             <tbody>
                 <tr>
-                    <th>FECHA:</th><td class="line" colspan="2"><div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div></td>
-                    <th>No. REPORTE:</th><td class="line" colspan="2"><div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div></td>
+                    <th>FECHA:</th><td class="line" colspan="2">
+                        <div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div>
+                    </td>
+                    <th>No. REPORTE:</th><td class="line" colspan="2">
+                        <div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>CLIENTE:</th><td class="line" colspan="3"><div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div></td>
-                    <th>CONTRATO:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div></td>
+                    <th>CLIENTE:</th><td class="line" colspan="3">
+                        <div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div>
+                    </td>
+                    <th>CONTRATO:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>PROYECTO:</th><td class="line" colspan="5"><div class="linea-general">{{ $Detalles_Generales['Proyecto'] ?? '' }}</div></td>
+                    <th>PROYECTO:</th><td class="line" colspan="5">
+                        <div class="linea-general">{{ $Detalles_Generales['Proyecto'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>ORDEN DE TRABAJO:</th><td class="line" colspan="5"><div class="linea-general">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</div></td>
+                    <th>ORDEN DE TRABAJO:</th><td class="line" colspan="5">
+                        <div class="linea-general">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>FOLIO:</th><td class="line" colspan="5"><div class="linea-general">{{ $Detalles_Generales['Folio'] ?? '' }}</div></td>
+                    <th>FOLIO:</th><td class="line" colspan="5">
+                        <div class="linea-general">{{ $Detalles_Generales['Folio'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>PARTIDA:</th><td class="line" colspan="5"><div class="linea-general">{{ $Detalles_Generales['Partida'] ?? '' }}</div></td>
+                    <th>PARTIDA:</th><td class="line" colspan="5">
+                        <div class="linea-general">{{ $Detalles_Generales['Partida'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>INSTALACIÓN:</th><td class="line" colspan="3"><div class="linea-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</div></td>
-                    <th class="etiqueta-larga">No. DE ISOMÉTRICO:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</div></td>
+                    <th>INSTALACIÓN:</th><td class="line" colspan="3">
+                        <div class="linea-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</div>
+                    </td>
+                    <th class="etiqueta-larga">No. DE ISOMÉTRICO:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th class="etiqueta-larga">NOMBRE DE LA PIEZA:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div></td>
-                    <th>MATERIAL:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div></td>
-                    <th>TRAZABILIDAD:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div></td>
+                    <th class="etiqueta-larga">NOMBRE DE LA PIEZA:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div>
+                    </td>
+                    <th>MATERIAL:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div>
+                    </td>
+                    <th>TRAZABILIDAD:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>PROCEDIMIENTO:</th><td class="line" colspan="2"><div class="linea-general">{{ $Detalles_Generales['Procedimiento'] ?? 'PRO-PIMP-04' }}</div></td>
-                    <th class="etiqueta-larga">CRITERIO DE EVALUACIÓN:</th><td class="line" colspan="2"><div class="linea-general">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div></td>
+                    <th>PROCEDIMIENTO:</th><td class="line" colspan="2">
+                        <div class="linea-general">{{ $Detalles_Generales['Procedimiento'] ?? 'PRO-PIMP-04' }}</div>
+                    </td>
+                    <th class="etiqueta-larga">CRITERIO DE EVALUACIÓN:</th><td class="line" colspan="2">
+                        <div class="linea-general">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>No. DE ISOMÉTRICO Y/O PLANO:</th><td class="line" colspan="5"><div class="linea-general linea-desplazada">{{ $Detalles_Generales['No_Isometrico_Plano'] ?? '' }}</div></td>
+                    <th>No. DE ISOMÉTRICO Y/O PLANO:</th><td class="line" colspan="5">
+                        <div class="linea-general linea-desplazada">{{ $Detalles_Generales['No_Isometrico_Plano'] ?? '' }}</div>
+                    </td>
                 </tr>
                 <tr>
-                    <th>OBSERVACIONES Y NOTAS:</th><td class="line" colspan="5"><div class="linea-general linea-desplazada">{{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}</div></td>
+                    <th>OBSERVACIONES Y NOTAS:</th><td class="line" colspan="5">
+                        <div class="linea-general linea-desplazada">{{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}</div>
+                    </td>
                 </tr>
         </table>
         <div class="spacer"></div>
@@ -413,12 +461,20 @@
         @if($loop->first)
             <table class="metallographic">
                 <colgroup>
-                    <col style="width:12%"><col style="width:10%"><col style="width:12%">
-                    <col style="width:10%"><col style="width:12%"><col style="width:10%">
-                    <col style="width:12%"><col style="width:11%"><col style="width:11%">
+                    <col style="width:12%">
+                    <col style="width:10%">
+                    <col style="width:12%">
+                    <col style="width:10%">
+                    <col style="width:12%">
+                    <col style="width:10%">
+                    <col style="width:12%">
+                    <col style="width:11%">
+                    <col style="width:11%">
                 </colgroup>
                 <thead>
-                    <tr class="subhead"><th colspan="9">ANÁLISIS METALOGRÁFICO</th></tr>
+                    <tr class="subhead">
+                        <th colspan="9">ANÁLISIS METALOGRÁFICO</th>
+                    </tr>
                     <tr>
                         <th colspan="3">NÚMERO DE LIJA PARA EL DESBASTE</th>
                         <th colspan="2">MATERIAL PARA EL PULIDO</th>
@@ -429,36 +485,81 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>240</td><td>320</td><td>400</td>
-                        <th class="label">PAÑO</th><td>{{ $Datos_Equipo['MATERIAL_PANO'] ?? '' }}</td>
-                        <th class="label">REACTIVO</th><td>{{ $Datos_Equipo['REACTIVO'] ?? '' }}</td>
+                        <td>240</td>
+                        <td>320</td>
+                        <td>400</td>
+                        <th class="label">PAÑO</th>
+                        <td>{{ $Datos_Equipo['MATERIAL_PANO'] ?? '' }}</td>
+                        <th class="label">REACTIVO</th>
+                        <td>{{ $Datos_Equipo['REACTIVO'] ?? '' }}</td>
                         <td rowspan="2">{{ $Datos_Equipo['FASES_PRESENTES'] ?? '' }}</td>
                         <td rowspan="2">{{ $Datos_Equipo['ESPECIFICACION_MATERIAL'] ?? '' }}</td>
                     </tr>
                     <tr>
-                        <td>500</td><td>1000</td><td>1500</td>
-                        <th class="label">ABRASIVO</th><td>{{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}</td>
-                        <th class="label">TIEMPO</th><td>{{ $Datos_Equipo['TIEMPO_ATAQUE'] ?? '' }}</td>
+                        <td>500</td>
+                        <td>1000</td>
+                        <td>1500</td>
+                        <th class="label">ABRASIVO</th>
+                        <td>{{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}</td>
+                        <th class="label">TIEMPO</th>
+                        <td>{{ $Datos_Equipo['TIEMPO_ATAQUE'] ?? '' }}</td>
                     </tr>
                 </tbody>
             </table>
             <div class="spacer"></div>
         @endif
-        <table><thead class="section-title"><tr><th>REGISTRO FOTOGRÁFICO</th></tr></thead></table>
+        <table>
+            <thead class="section-title">
+                <tr>
+                    <th>REGISTRO FOTOGRÁFICO</th>
+                </tr>
+            </thead>
+        </table>
 
         {{-- Una posición puede contener una imagen o un cuadro de texto del mismo tamaño. --}}
         <table class="photo-grid">
             @if($fotoCompleta)
-                <tr><td class="photo-slot photo-full" colspan="2">@if(!empty($fotoCompleta['es_cuadro_texto']))<div class="photo-text-box">{{ $fotoCompleta['comment'] ?? '' }}</div>@else<img src="{{ $fotoCompleta['path'] }}" alt="Fotografía"><div class="photo-comment">{{ $fotoCompleta['comment'] ?? '' }}</div>@endif</td></tr>
+                <tr>
+                    <td class="photo-slot photo-full" colspan="2">
+                        @if(!empty($fotoCompleta['es_cuadro_texto']))
+                        <div class="photo-text-box">{{ $fotoCompleta['comment'] ?? '' }}
+                            </div>
+                            @else
+                            <img src="{{ $fotoCompleta['path'] }}" alt="Fotografía">
+                            <div class="photo-comment">{{ $fotoCompleta['comment'] ?? '' }}</div>
+                            @endif
+                    </td>
+                </tr>
             @else
                 <tr>
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
-                        @if(isset($espacios[$posicion]))<td class="photo-slot">@if(!empty($espacios[$posicion]['es_cuadro_texto']))<div class="photo-text-box">{{ $espacios[$posicion]['comment'] ?? '' }}</div>@else<img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía"><div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>@endif</td>@else<td class="photo-slot photo-empty">&nbsp;</td>@endif
+                        @if(isset($espacios[$posicion]))
+                        <td class="photo-slot">
+                            @if(!empty($espacios[$posicion]['es_cuadro_texto']))
+                            <div class="photo-text-box">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                            @else
+                            <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                            <div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                            @endif
+                        </td>
+                        @else
+                        <td class="photo-slot photo-empty">&nbsp;</td>
+                        @endif
                     @endforeach
                 </tr>
                 <tr>
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
-                        @if(isset($espacios[$posicion]))<td class="photo-slot">@if(!empty($espacios[$posicion]['es_cuadro_texto']))<div class="photo-text-box">{{ $espacios[$posicion]['comment'] ?? '' }}</div>@else<img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía"><div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>@endif</td>@else<td class="photo-slot photo-empty">&nbsp;</td>@endif
+                        @if(isset($espacios[$posicion]))
+                        <td class="photo-slot">
+                            @if(!empty($espacios[$posicion]['es_cuadro_texto']))
+                            <div class="photo-text-box">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                            @else<img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                            <div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                            @endif
+                        </td>
+                        @else
+                        <td class="photo-slot photo-empty">&nbsp;</td>
+                        @endif
                     @endforeach
                 </tr>
             @endif

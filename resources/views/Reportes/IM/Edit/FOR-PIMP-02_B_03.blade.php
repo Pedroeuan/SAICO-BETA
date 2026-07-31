@@ -256,9 +256,15 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">MÉTODO:</label>
-                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Metodo]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Metodo', $Detalles_Generales['Metodo'] ?? '')}}">
-                            @error('Metodo')
+                            {{-- Conserva el método histórico y permite cambiarlo únicamente entre LEEB y UCI. --}}
+                            <label class="col-form-label" for="metodoSelect">MÉTODO:</label>
+                            <select class="form-select inputForm @error('Detalles_Generales.Metodo') is-invalid @enderror" id="metodoSelect" name="Detalles_Generales[Metodo]" required>
+                                @php($metodoSeleccionado = old('Detalles_Generales.Metodo', $Detalles_Generales['Metodo'] ?? ''))
+                                <option value="" disabled {{ $metodoSeleccionado ? '' : 'selected' }}>Seleccione un método</option>
+                                <option value="LEEB" {{ $metodoSeleccionado === 'LEEB' ? 'selected' : '' }}>LEEB</option>
+                                <option value="UCI" {{ $metodoSeleccionado === 'UCI' ? 'selected' : '' }}>UCI</option>
+                            </select>
+                            @error('Detalles_Generales.Metodo')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>

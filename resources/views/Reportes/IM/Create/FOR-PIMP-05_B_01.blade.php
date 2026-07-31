@@ -399,12 +399,12 @@
                             <input type="file" class="form-control-file @error('Analisis_PDF') is-invalid @enderror"
                                 id="analisisPdfXrf" name="Analisis_PDF" accept="application/pdf,.pdf">
                             <small class="form-text text-muted">
-                                Suba un PDF y seleccione exactamente tres columnas para calcular un único disparo.
+                                Suba un PDF; se detectarán sus disparos y podrá seleccionar hasta tres para generar la captura.
                             </small>
                             <div class="d-flex flex-wrap mt-2">
-                                @foreach(range(1, 7) as $columnaXrf)
-                                    <label class="form-check mr-4"><input class="form-check-input columna-xrf" type="checkbox"
-                                        name="XRF_Columnas[]" value="{{ $columnaXrf }}" @checked(in_array($columnaXrf, old('XRF_Columnas', [1,2,3])))> {{ $columnaXrf }}</label>
+                                @foreach(range(1, 20) as $columnaXrf)
+                                    <label class="form-check mr-4 d-none"><input class="form-check-input columna-xrf" type="checkbox"
+                                        name="XRF_Columnas[]" value="{{ $columnaXrf }}" @checked(in_array($columnaXrf, old('XRF_Columnas', [])))> {{ $columnaXrf }}</label>
                                 @endforeach
                             </div>
                             <div class="mt-2">
@@ -867,5 +867,6 @@ $(document).ready(function() {
 </script>
 {{-- Ruta propia del formato; el comportamiento de extracción sí se comparte mediante JavaScript. --}}
 @php($xrfExtractionRoute = route('Reportes_FOR_PIMP_05_B_01.extraer_analisis'))
+@php($xrfDetectColumnsOnFileChange = true)
 @include('Reportes.IM.partials.script-columnas-pdf-xrf-05-b-01')
 @endsection

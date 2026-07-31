@@ -30,8 +30,13 @@
         });
     });
 
+    // El 05_B_01 usa un editor propio; esta bandera evita que ambos módulos manipulen la misma imagen.
+    const usaEditorImagenes05B01 = document.getElementById('FOR-PIMP-05_B_01') !== null;
+
     /*Modal para las imagenes que ya estan subidos */
     document.addEventListener('change', function (e) {
+        // El editor especializado escucha este evento de forma delegada cuando el formato activo es 05_B_01.
+        if (usaEditorImagenes05B01) return;
         if (e.target && e.target.classList.contains('image-input')) {
             const file = e.target.files[0];
             if (file) {
@@ -65,23 +70,28 @@
     let cropper;
     let currentInput;
 
+    // Los controles siguientes quedan reservados al editor general cuando no está activo el módulo 05_B_01.
     // Botón: Rotar -90° (Antihorario)
     document.getElementById('rotateLeftBtn').addEventListener('click', function () {
+        if (usaEditorImagenes05B01) return;
         if (cropper) cropper.rotate(-90);
     });
 
     // Botón: Rotar +90° (Horario)
     document.getElementById('rotateRightBtn').addEventListener('click', function () {
+        if (usaEditorImagenes05B01) return;
         if (cropper) cropper.rotate(90);
     });
 
     // Botón: Cancelar
     document.getElementById('cancelBtn').addEventListener('click', function () {
+        if (usaEditorImagenes05B01) return;
         $('#cropperModal').modal('hide');
     });
 
     // Botón: Recortar y Guardar
     document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (usaEditorImagenes05B01) return;
         if (cropper && currentInput) {
             const croppedCanvas = cropper.getCroppedCanvas();
             if (croppedCanvas) {
@@ -108,6 +118,7 @@
 
     // Botón: Guardar Sin Recortar
     document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        if (usaEditorImagenes05B01) return;
         if (cropper && currentInput) {
             try {
                 // Obtener los datos de la imagen original (incluyendo rotación)
@@ -163,6 +174,7 @@
 
     // Destruir Cropper al cerrar el modal
     $('#cropperModal').on('hidden.bs.modal', function () {
+        if (usaEditorImagenes05B01) return;
         if (cropper) cropper.destroy();
     });
 
@@ -581,14 +593,11 @@
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
+    // Ambos formatos IM participan en la limpieza del almacenamiento local después de guardar correctamente.
     const formularios = ["FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01",
         "FOR-PINS-12_01", "FOR-PINS-13_01", "FOR-PINS-14_01", "FOR-PINS-15_01", "FOR-PINS-16_01", "FOR-PINS-17_01", "FOR-PINS-18_01", "FOR-PINS-19_01", "FOR-PINS-20_01",
         "FOR-PINS-21_01", "FOR-PINS-22_01", "FOR-PINS-22_01", "FOR-PINS-23_01", "FOR-PINS-24_01", "FOR-PINS-25_01", "FOR-PINS-03_02", "FOR-PINS-05_02", "FOR-PINS-11_02",
-<<<<<<< Updated upstream
-        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02", "FOR-PIMP-04_03", "FOR-PIMP-03_B_01"
-=======
-        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02", "FOR-PIMP-04_03", "FOR-PIMP-05_B_01"
->>>>>>> Stashed changes
+        "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02", "FOR-PIMP-04_03", "FOR-PIMP-03_B_01", "FOR-PIMP-05_B_01"
     ];
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
