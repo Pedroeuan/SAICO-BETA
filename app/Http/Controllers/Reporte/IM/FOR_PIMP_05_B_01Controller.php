@@ -74,6 +74,20 @@ class FOR_PIMP_05_B_01Controller extends Controller
         ];
     }
 
+    /** Conserva únicamente disparos existentes y permite trabajar con uno, dos o tres. */
+    private function normalizarColumnasXrf(array $analysis, array $requestedColumns): array
+    {
+        $available = array_values(array_unique(array_map('intval', $analysis['columnas'] ?? [])));
+        $requested = array_values(array_unique(array_map('intval', $requestedColumns)));
+        $selected = array_values(array_intersect($requested, $available));
+
+        if ($selected === []) {
+            $selected = array_slice($available, 0, 3);
+        }
+
+        return array_slice($selected, 0, 3);
+    }
+
     /** Procesa un PDF de columnas y genera el disparo único de 05_B_01. */
     public function extraerAnalisisPdf(
         Request $request,
@@ -83,14 +97,23 @@ class FOR_PIMP_05_B_01Controller extends Controller
         $validated = $request->validate([
             'idnormas_im' => 'required|integer|exists:Normas_IM,idnormas_im',
             'Analisis_PDF' => 'required|file|mimes:pdf|max:10240',
-            'XRF_Columnas' => 'required|array|size:3',
-            'XRF_Columnas.*' => 'required|integer|distinct|between:1,7',
+            'XRF_Columnas' => 'nullable|array|min:1|max:3',
+            'XRF_Columnas.*' => 'required_with:XRF_Columnas|integer|distinct|between:1,20',
         ]);
         $file = $request->file('Analisis_PDF');
         try {
             $analysis = $service->parseUploadedFile($file);
-            $results = $service->calculateForColumns($analysis, $validated['XRF_Columnas']);
-            $capture = $captureService->generate($file, $validated['XRF_Columnas']);
+            if (empty($validated['XRF_Columnas'])) {
+                return response()->json([
+                    'archivo' => $file->getClientOriginalName(),
+                    'paginas' => $analysis['paginas'] ?? null,
+                    'columnas_disponibles' => $analysis['columnas'] ?? [],
+                    'solo_deteccion' => true,
+                ]);
+            }
+            $columnasSeleccionadas = $this->normalizarColumnasXrf($analysis, $validated['XRF_Columnas']);
+            $results = $service->calculateForColumns($analysis, $columnasSeleccionadas);
+            $capture = $captureService->generate($file, $columnasSeleccionadas, true);
         } catch (\Throwable $exception) {
             throw \Illuminate\Validation\ValidationException::withMessages(['Analisis_PDF' => $exception->getMessage()]);
         }
@@ -98,7 +121,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
             'archivo' => $file->getClientOriginalName(),
             'paginas' => $analysis['paginas'] ?? null,
             'columnas_disponibles' => $analysis['columnas'] ?? [],
-            'columnas_seleccionadas' => array_values(array_map('intval', $validated['XRF_Columnas'])),
+            'columnas_seleccionadas' => $columnasSeleccionadas,
             'resultados' => $results,
             'captura' => $capture,
         ]);
@@ -285,15 +308,16 @@ class FOR_PIMP_05_B_01Controller extends Controller
         $serviceColumnas = app(ServicioAnalisisColumnasPdfXrf::class);
 
         if ($nuevoPdf) {
-            $columnasSeleccionadas = array_values(array_unique(array_map('intval', $request->input('XRF_Columnas', []))));
-            if (count($columnasSeleccionadas) !== 3) {
-                throw \Illuminate\Validation\ValidationException::withMessages(['XRF_Columnas' => 'Seleccione exactamente tres columnas diferentes.']);
+            $columnasSolicitadas = array_values(array_unique(array_map('intval', $request->input('XRF_Columnas', []))));
+            if (count($columnasSolicitadas) < 1 || count($columnasSolicitadas) > 3) {
+                throw \Illuminate\Validation\ValidationException::withMessages(['XRF_Columnas' => 'Seleccione entre uno y tres disparos diferentes.']);
             }
             try {
                 $archivo = $request->file('Analisis_PDF');
                 $analisis = $serviceColumnas->parseUploadedFile($archivo);
+                $columnasSeleccionadas = $this->normalizarColumnasXrf($analisis, $columnasSolicitadas);
                 $resultadosExtraidos = $serviceColumnas->calculateForColumns($analisis, $columnasSeleccionadas);
-                $capturaXrf = app(ServicioCapturaColumnasPdfXrf::class)->generate($archivo, $columnasSeleccionadas);
+                $capturaXrf = app(ServicioCapturaColumnasPdfXrf::class)->generate($archivo, $columnasSeleccionadas, true);
                 $analisisPdf = [$analisis];
             } catch (\Throwable $exception) {
                 throw \Illuminate\Validation\ValidationException::withMessages(['Analisis_PDF' => $exception->getMessage()]);
@@ -792,8 +816,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
             'Norma_IM.Promedio' => 'nullable|array',
             'Norma_IM.Promedio.*' => 'nullable|string|max:255',
             'Analisis_PDF' => 'nullable|file|mimes:pdf|max:10240',
-            'XRF_Columnas' => 'nullable|required_with:Analisis_PDF|array|size:3',
-            'XRF_Columnas.*' => 'integer|distinct|between:1,7',
+            'XRF_Columnas' => 'nullable|required_with:Analisis_PDF|array|min:1|max:3',
+            'XRF_Columnas.*' => 'integer|distinct|between:1,20',
 
             //Validar el campo NumFirmas
             'comments' => 'nullable|array',
@@ -1239,8 +1263,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
             'Norma_IM.Promedio' => 'nullable|array',
             'Norma_IM.Promedio.*' => 'nullable|string|max:255',
             'Analisis_PDF' => 'nullable|file|mimes:pdf|max:10240',
-            'XRF_Columnas' => 'nullable|required_with:Analisis_PDF|array|size:3',
-            'XRF_Columnas.*' => 'integer|distinct|between:1,7',
+            'XRF_Columnas' => 'nullable|required_with:Analisis_PDF|array|min:1|max:3',
+            'XRF_Columnas.*' => 'integer|distinct|between:1,20',
             //Validar el campo NumFirmas
             'comments' => 'nullable|array',
             'comments.*' => 'nullable|string|max:5000',

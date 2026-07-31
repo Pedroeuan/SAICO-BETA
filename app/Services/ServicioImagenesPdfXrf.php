@@ -12,7 +12,8 @@ class ServicioImagenesPdfXrf
 {
     /** Áreas relativas de la tabla química y de la gráfica dentro de la hoja XRF. */
     private const DEFAULT_CROPS = [
-        'tabla_elementos' => ['x' => 0.054, 'y' => 0.225, 'width' => 0.410, 'height' => 0.360],
+        // La altura incluye la última fila química sin alcanzar la sección inferior de notas.
+        'tabla_elementos' => ['x' => 0.054, 'y' => 0.225, 'width' => 0.410, 'height' => 0.400],
         'grafica_espectro' => ['x' => 0.575, 'y' => 0.105, 'width' => 0.395, 'height' => 0.305],
     ];
 
