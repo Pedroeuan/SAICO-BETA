@@ -517,7 +517,7 @@
                     @php
                         $normaHistoricaXrf = $Detalles_Generales['Norma_IM'] ?? null;
                         $nombresNormasIM = collect($NormasIM ?? [])->pluck('Nombre_Espe')->filter()->unique()->sort()->values();
-                        $columnasXrfSeleccionadas = old('XRF_Columnas', $normaHistoricaXrf['Columnas_Seleccionadas'] ?? [1, 2, 3]);
+                        $columnasXrfSeleccionadas = old('XRF_Columnas', $normaHistoricaXrf['Columnas_Seleccionadas'] ?? []);
                     @endphp
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">
                         <div class="text-center">
@@ -554,11 +554,11 @@
                             <input type="file" class="form-control-file @error('Analisis_PDF') is-invalid @enderror"
                                 id="analisisPdfXrf" name="Analisis_PDF" accept="application/pdf,.pdf">
                             <small class="form-text text-muted">
-                                Suba un solo PDF y seleccione exactamente tres columnas. Al cargar uno nuevo se reemplaza el análisis XRF anterior.
+                                Suba un solo PDF y seleccione hasta tres disparos. Al cargar uno nuevo se reemplaza el análisis XRF anterior.
                             </small>
                             <div class="d-flex flex-wrap mt-2">
-                                @foreach(range(1, 7) as $columnaXrf)
-                                    <label class="form-check mr-4">
+                                @foreach(range(1, 20) as $columnaXrf)
+                                    <label class="form-check mr-4 {{ in_array($columnaXrf, array_map('intval', $columnasXrfSeleccionadas)) ? '' : 'd-none' }}">
                                         <input class="form-check-input columna-xrf" type="checkbox" name="XRF_Columnas[]"
                                             value="{{ $columnaXrf }}" @checked(in_array($columnaXrf, $columnasXrfSeleccionadas))>
                                         {{ $columnaXrf }}
@@ -1169,5 +1169,6 @@ $(document).ready(function() {
 @php($xrfExtractionRoute = \Illuminate\Support\Facades\Route::has('Reportes_FOR_PIMP_04_02.extraer_analisis') ? route('Reportes_FOR_PIMP_04_02.extraer_analisis') : url('/Reportes_FOR_PIMP_04_02/extraer-analisis'))
 @php($xrfFormId = 'FOR-PIMP-04_02')
 @php($xrfRequirePreviewBeforeSubmit = false)
+@php($xrfDetectColumnsOnFileChange = true)
 @include('Reportes.IM.partials.script-columnas-pdf-xrf-05-b-01')
 @endsection

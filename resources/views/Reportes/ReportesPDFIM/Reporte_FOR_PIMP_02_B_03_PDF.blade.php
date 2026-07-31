@@ -73,6 +73,7 @@
             border-collapse: collapse;
             width: 100%;
             font-size: 8px;
+            text-align: center;
         }
 
         .datosinspeccion th,

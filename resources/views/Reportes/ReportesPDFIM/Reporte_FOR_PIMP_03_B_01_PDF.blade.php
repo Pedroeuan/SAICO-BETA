@@ -80,8 +80,7 @@
             text-align: left;
             /*line-height: 8px;*/
         }
-        .tabla-datos td
-        .valor-general {
+        .tabla-datos td.valor-general {
             border-bottom: 1px solid #000;
             text-align: center;
         }
@@ -291,9 +290,9 @@
 @endphp
 <table class="tabla-datos">
     <colgroup>
-        {{--<col style="width: 14%;"><col style="width: 25%;">
+        <col style="width: 14%;"><col style="width: 25%;">
         <col style="width: 12%;"><col style="width: 17%;">
-        <col style="width: 13%;"><col style="width: 19%;">--}}
+        <col style="width: 13%;"><col style="width: 19%;">
     </colgroup>
     <tr>
         <th colspan="6" class="titulo-seccion">DATOS GENERALES<br>General Data</th>
@@ -301,8 +300,8 @@
     <tr>
         <th>FECHA:<br>Date:</th>
         <td colspan="2" class="valor-general">{{ $fechaPdf }}</td>
-        <th colspan="2" class="etiqueta-centrada">No. REPORTE:<br>No. Report:</th>
-        <td class="valor-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
+        <th class="etiqueta-centrada">No. REPORTE:<br>No. Report:</th>
+        <td colspan="2" class="valor-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
     </tr>
     <tr>
         <th>CLIENTE:<br>Client:</th>
@@ -312,7 +311,7 @@
     </tr>
     <tr>
         <th>CONTRATO:<br>Contract:</th>
-        <td colspan="5" class="valor-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
+        <td colspan="5" class="valor-general">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
     </tr>
     <tr>
         <th>ORDEN DE TRABAJO:<br>Work Order:</th>
@@ -329,20 +328,20 @@
     <tr>
         <th>INSTALACIÓN:<br>Location:</th>
         <td colspan="2" class="valor-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
-        <th colspan="2" class="etiqueta-centrada">No. ISOMÉTRICO:<br>No. Isometric:</th>
-        <td class="valor-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
+        <th class="etiqueta-centrada">No. ISOMÉTRICO:<br>No. Isometric:</th>
+        <td colspan="2" class="valor-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
     </tr>
     <tr>
         <th>NOMBRE DE LA PIEZA:<br>Name of the Piece:</th>
         <td colspan="2" class="valor-general">{{ $Detalles_Generales['Nom_pieza'] ?? '' }}</td>
-        <th colspan="2" class="etiqueta-centrada">MATERIAL:<br>Material:</th>
-        <td class="valor-general">{{ $Detalles_Generales['Material'] ?? '' }}</td>
+        <th class="etiqueta-centrada">MATERIAL:<br>Material:</th>
+        <td colspan="2" class="valor-general">{{ $Detalles_Generales['Material'] ?? '' }}</td>
     </tr>
     <tr>
         <th>PROCEDIMIENTO:<br>Procedure:</th>
         <td colspan="2" class="valor-general">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
-        <th colspan="2" class="etiqueta-centrada">TRAZABILIDAD:<br>Traceability:</th>
-        <td class="valor-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
+        <th class="etiqueta-centrada">TRAZABILIDAD:<br>Traceability:</th>
+        <td colspan="2" class="valor-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
     </tr>
     <tr>
         <th>ACCESORIO:<br>Fitting:</th>
