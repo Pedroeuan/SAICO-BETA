@@ -149,7 +149,7 @@
         .photo-slot img { 
             display: block; 
             width: 100%; 
-            height: 5.48cm; 
+            height: auto;/*5.48cm; */
             object-fit: contain; 
         }
         .photo-comment { 
