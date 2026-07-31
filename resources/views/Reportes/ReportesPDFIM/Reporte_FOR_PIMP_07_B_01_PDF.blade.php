@@ -16,6 +16,11 @@
             padding-bottom: 0;
         }
 
+        /* DejaVu Sans incorpora los glifos Ø y ⌀ que la fuente PDF Arial no garantiza. */
+        .valor-diametro {
+            font-family: "DejaVu Sans", sans-serif;
+        }
+
         header {
             position: fixed;
             top: -56px;
@@ -386,7 +391,9 @@
 
 <table class="tablaGenerales">
     <thead class="encabezadoAzul">
-        <tr><th colspan="6">DATOS GENERALES<br>GENERAL DATA</th></tr>
+        <tr>
+            <th colspan="6">DATOS GENERALES<br>GENERAL DATA</th>
+        </tr>
     </thead>
     <tbody>
         <tr>
@@ -443,7 +450,7 @@
             <th class="etiquetaGeneral">CODIGO DE DISENO<br>DESIGN CODE:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Codigo_Diseno'] ?? '' }}</td>
             <th class="etiquetaGeneral">DIAM. NOMINAL<br>NOMINAL DIAMETER:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Diam_Nominal'] ?? '' }}</td>
+            <td class="valorGeneral valor-diametro">{{ $Detalles_Generales['Diam_Nominal'] ?? '' }}</td>
         </tr>
         <tr>
             <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA ANTES<br>DEL RELEVADO<br>HARDNESS REPORT BEFORE THE<br>RELIEVED OF STRESS:</th>
