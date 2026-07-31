@@ -244,7 +244,10 @@
                 <th>VERSIÓN</th>
                 <th>0</th>
             </tr>
-            <tr><th>PÁGINA</th><th></th></tr>
+            <tr>
+                <th>PÁGINA</th>
+                <th></th>
+            </tr>
         </thead>
     </table>
 </header>
@@ -339,29 +342,131 @@
 {{-- Datos generales conservan líneas independientes para evitar que las etiquetas se superpongan. --}}
 <div style="margin-bottom:2px"></div>
 <table class="tablaGenerales">
-    <thead class="encabezadoAzul"><tr><th colspan="6">DATOS GENERALES</th></tr></thead>
+    <thead class="encabezadoAzul">
+        <tr>
+            <th colspan="6">DATOS GENERALES</th>
+        </tr>
+    </thead>
     <tbody>
-        <tr><th>FECHA:</th><td class="line" colspan="2"><div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div></td><th>No. REPORTE:</th><td class="line" colspan="2"><div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div></td></tr>
-        <tr><th>CLIENTE:</th><td class="line" colspan="3"><div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div></td><th>CONTRATO:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div></td></tr>
-        <tr><th>PROYECTO:</th><td class="line" colspan="5"><div class="linea-general">{{ $Detalles_Generales['Proyecto'] ?? '' }}</div></td></tr>
-        <tr><th>ORDEN DE TRABAJO:</th><td class="line" colspan="5"><div class="linea-general">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</div></td></tr>
-        <tr><th>FOLIO:</th><td class="line" colspan="5"><div class="linea-general">{{ $Detalles_Generales['Folio'] ?? '' }}</div></td></tr>
-        <tr><th>PARTIDA:</th><td class="line" colspan="5"><div class="linea-general">{{ $Detalles_Generales['Partida'] ?? '' }}</div></td></tr>
-        <tr><th>INSTALACIÓN:</th><td class="line" colspan="3"><div class="linea-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</div></td><th class="etiqueta-larga">No. DE ISOMÉTRICO:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</div></td></tr>
-        <tr><th class="etiqueta-larga">NOMBRE DE LA PIEZA:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div></td><th>MATERIAL:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div></td><th>TRAZABILIDAD:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div></td></tr>
-        <tr><th>PROCEDIMIENTO:</th><td class="line" colspan="2"><div class="linea-general">{{ $Detalles_Generales['Procedimiento'] ?? 'PRO-PIMP-04' }}</div></td><th class="etiqueta-larga">CRITERIO DE EVALUACIÓN:</th><td class="line" colspan="2"><div class="linea-general">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div></td></tr>
-        <tr><th>ACCESORIO:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Accesorio'] ?? '' }}</div></td><th>TUBERÍA:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Tuberia'] ?? '' }}</div></td><th>ESTRUCTURAL:</th><td class="line"><div class="linea-general">{{ $Detalles_Generales['Estructural'] ?? '' }}</div></td></tr>
-        <tr><th>No. DE ISOMÉTRICO Y/O PLANO:</th><td class="line" colspan="5"><div class="linea-general linea-desplazada">{{ $Detalles_Generales['No_Isometrico_Plano'] ?? '' }}</div></td></tr>
-        <tr><th>OBSERVACIONES Y NOTAS:</th><td class="line" colspan="5"><div class="linea-general linea-desplazada">{{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}</div></td></tr>
+        <tr>
+            <th>FECHA:</th>
+            <td class="line" colspan="2">
+                <div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div>
+            </td>
+            <th>No. REPORTE:</th>
+            <td class="line" colspan="2">
+                <div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr>
+            <th>CLIENTE:</th>
+            <td class="line" colspan="3">
+                <div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div>
+            </td>
+            <th>CONTRATO:</th>
+            <td class="line">
+                <div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr><th>PROYECTO:</th>
+            <td class="line" colspan="5">
+                <div class="linea-general">{{ $Detalles_Generales['Proyecto'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr><th>ORDEN DE TRABAJO:</th>
+            <td class="line" colspan="5">
+                <div class="linea-general">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr><th>FOLIO:</th>
+            <td class="line" colspan="5">
+                <div class="linea-general">{{ $Detalles_Generales['Folio'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr>
+            <th>PARTIDA:</th>
+            <td class="line" colspan="5">
+                <div class="linea-general">{{ $Detalles_Generales['Partida'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr>
+            <th>INSTALACIÓN:</th>
+            <td class="line" colspan="3">
+                <div class="linea-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</div>
+            </td>
+            <th class="etiqueta-larga">No. DE ISOMÉTRICO:</th>
+            <td class="line">
+                <div class="linea-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr>
+            <th class="etiqueta-larga">NOMBRE DE LA PIEZA:</th>
+            <td class="line">
+                <div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div>
+            </td>
+            <th>MATERIAL:</th>
+            <td class="line">
+                <div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div>
+            </td>
+            <th>TRAZABILIDAD:</th>
+            <td class="line">
+                <div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr>
+            <th>PROCEDIMIENTO:</th>
+            <td class="line" colspan="2">
+                <div class="linea-general">{{ $Detalles_Generales['Procedimiento'] ?? 'PRO-PIMP-04' }}</div>
+            </td>
+            <th class="etiqueta-larga">CRITERIO DE EVALUACIÓN:</th>
+            <td class="line" colspan="2">
+                <div class="linea-general">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr>
+            <th>ACCESORIO:</th>
+            <td class="line"><div class="linea-general">{{ $Detalles_Generales['Accesorio'] ?? '' }}</div>
+            </td>
+            <th>TUBERÍA:</th>
+            <td class="line">
+                <div class="linea-general">{{ $Detalles_Generales['Tuberia'] ?? '' }}</div>
+            </td>
+            <th>ESTRUCTURAL:</th>
+            <td class="line">
+                <div class="linea-general">{{ $Detalles_Generales['Estructural'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr>
+            <th>No. DE ISOMÉTRICO Y/O PLANO:</th>
+            <td class="line" colspan="5">
+                <div class="linea-general linea-desplazada">{{ $Detalles_Generales['No_Isometrico_Plano'] ?? '' }}</div>
+            </td>
+        </tr>
+        <tr><th>OBSERVACIONES Y NOTAS:</th>
+            <td class="line" colspan="5">
+                <div class="linea-general linea-desplazada">{{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}</div>
+            </td>
+        </tr>
     </tbody>
 </table>
 
 <div class="spacer"></div>
 <table class="grid">
     <thead>
-        <tr class="section-title"><th colspan="6">ENSAYO DE DUREZA</th></tr>
-        <tr><th colspan="6">DATOS DEL EQUIPO</th></tr>
-        <tr><th class="label">MARCA</th><td>{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td><th class="label">MODELO</th><td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td><th class="label">No. DE SERIE</th><td>{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td></tr>
+        <tr class="section-title">
+            <th colspan="6">ENSAYO DE DUREZA</th>
+        </tr>
+        <tr>
+            <th colspan="6">DATOS DEL EQUIPO</th>
+        </tr>
+        <tr>
+            <th class="label">MARCA</th>
+            <td>{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td>
+            <th class="label">MODELO</th>
+            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td>
+            <th class="label">No. DE SERIE</th>
+            <td>{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td>
+        </tr>
     </thead>
 </table>
 
@@ -370,36 +475,102 @@
     $valoresDurezaPdf = array_values(array_pad(array_slice($Datos_Equipo['VALORES_DUREZA'] ?? [], 0, 10), 10, ''));
 @endphp
 <table class="grid hardness-values">
-    <colgroup><col style="width:10.5%"><col style="width:10.5%"><col style="width:10.5%"><col style="width:10.5%"><col style="width:10.5%"><col style="width:27.5%"><col style="width:20%"></colgroup>
-    <thead><tr class="section-title"><th colspan="7">VALORES DE DUREZA MEDIDOS (ESCALA {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }})</th></tr></thead>
+    <colgroup>
+        <col style="width:10.5%">
+        <col style="width:10.5%">
+        <col style="width:10.5%">
+        <col style="width:10.5%">
+        <col style="width:10.5%">
+        <col style="width:27.5%">
+        <col style="width:20%">
+    </colgroup>
+    <thead>
+        <tr class="section-title">
+            <th colspan="7">VALORES DE DUREZA MEDIDOS (ESCALA {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }})</th>
+        </tr>
+    </thead>
     <tbody>
         <tr>
-            @foreach(array_slice($valoresDurezaPdf, 0, 5) as $valor)<td>{{ $valor }}</td>@endforeach
-            <th class="label" rowspan="2">PROMEDIO</th><td rowspan="2">{{ $Datos_Equipo['PROMEDIO_DUREZA'] ?? '' }}</td>
+            @foreach(array_slice($valoresDurezaPdf, 0, 5) as $valor)
+            <td>{{ $valor }}</td>
+            @endforeach
+            <th class="label" rowspan="2">PROMEDIO</th>
+            <td rowspan="2">{{ $Datos_Equipo['PROMEDIO_DUREZA'] ?? '' }}</td>
         </tr>
-        <tr>@foreach(array_slice($valoresDurezaPdf, 5, 5) as $valor)<td>{{ $valor }}</td>@endforeach</tr>
+        <tr>
+            @foreach(array_slice($valoresDurezaPdf, 5, 5) as $valor)
+            <td>{{ $valor }}</td>
+            @endforeach
+        </tr>
     </tbody>
 </table>
 
 <table class="grid">
-    <thead><tr class="section-title"><th colspan="5">DATOS OBTENIDOS DEL MATERIAL</th></tr></thead>
+    <thead>
+        <tr class="section-title">
+            <th colspan="5">DATOS OBTENIDOS DEL MATERIAL</th>
+        </tr>
+    </thead>
     <tbody>
-        <tr><th class="label">DESCRIPCIÓN DEL MATERIAL</th><th class="label">DUREZA BRINELL</th><th class="label">RESISTENCIA A LA TENSIÓN (KSI)</th><th class="label">RESISTENCIA A LA CEDENCIA (KSI)</th><th class="label">TAMAÑO DE GRANO</th></tr>
-        <tr><td>{{ $Datos_Equipo['DESCRIPCION_MATERIAL'] ?? '' }}</td><td>{{ $Datos_Equipo['DUREZA_BRINELL'] ?? '' }}</td><td>{{ $Datos_Equipo['RESISTENCIA_TENSION'] ?? '' }}</td><td>{{ $Datos_Equipo['RESISTENCIA_CEDENCIA'] ?? '' }}</td><td>{{ $Datos_Equipo['TAMANO_GRANO'] ?? '' }}</td></tr>
+        <tr>
+            <th class="label">DESCRIPCIÓN DEL MATERIAL</th>
+            <th class="label">DUREZA BRINELL</th>
+            <th class="label">RESISTENCIA A LA TENSIÓN (KSI)</th>
+            <th class="label">RESISTENCIA A LA CEDENCIA (KSI)</th>
+            <th class="label">TAMAÑO DE GRANO</th>
+        </tr>
+        <tr>
+            <td>{{ $Datos_Equipo['DESCRIPCION_MATERIAL'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['DUREZA_BRINELL'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['RESISTENCIA_TENSION'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['RESISTENCIA_CEDENCIA'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['TAMANO_GRANO'] ?? '' }}</td>
+        </tr>
     </tbody>
 </table>
 
 <table class="grid">
-    <thead><tr class="section-title"><th colspan="5">DATOS DE LA NORMA DE REFERENCIA</th></tr></thead>
+    <thead>
+        <tr class="section-title">
+            <th colspan="5">DATOS DE LA NORMA DE REFERENCIA</th>
+        </tr>
+    </thead>
     <tbody>
-        <tr><th class="label">NORMA DE REFERENCIA</th><th class="label">DUREZA BRINELL, MAX.</th><th class="label">TENSIÓN MÍNIMA (KSI)</th><th class="label">CEDENCIA ESPECIFICADA (KSI)</th><th class="label">TENSIÓN MÁXIMA (KSI)</th></tr>
-        <tr><td>{{ $Datos_Equipo['NORMA_REFERENCIA'] ?? '' }}</td><td>{{ $Datos_Equipo['DUREZA_BRINELL_MAX'] ?? '' }}</td><td>{{ $Datos_Equipo['RESISTENCIA_TENSION_MIN'] ?? '' }}</td><td>{{ $Datos_Equipo['RESISTENCIA_CEDENCIA_ESPECIFICADA'] ?? '' }}</td><td>{{ $Datos_Equipo['RESISTENCIA_TENSION_MAX'] ?? '' }}</td></tr>
+        <tr>
+            <th class="label">NORMA DE REFERENCIA</th>
+            <th class="label">DUREZA BRINELL, MAX.</th>
+            <th class="label">TENSIÓN MÍNIMA (KSI)</th>
+            <th class="label">CEDENCIA ESPECIFICADA (KSI)</th>
+            <th class="label">TENSIÓN MÁXIMA (KSI)</th>
+        </tr>
+        <tr>
+            <td>{{ $Datos_Equipo['NORMA_REFERENCIA'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['DUREZA_BRINELL_MAX'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['RESISTENCIA_TENSION_MIN'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['RESISTENCIA_CEDENCIA_ESPECIFICADA'] ?? '' }}</td>
+            <td>{{ $Datos_Equipo['RESISTENCIA_TENSION_MAX'] ?? '' }}</td>
+        </tr>
     </tbody>
 </table>
 
 <div class="spacer"></div>
 <table class="grid">
-    <thead><tr class="section-title"><th colspan="6">ANÁLISIS QUÍMICO</th></tr><tr><th colspan="6">DATOS DEL EQUIPO</th></tr><tr><th class="label">MARCA</th><td>{{ $Datos_Equipo['MARCA_EQUIPO1'] ?? '' }}</td><th class="label">MODELO</th><td>{{ $Datos_Equipo['MODELO_EQUIPO1'] ?? '' }}</td><th class="label">No. DE SERIE</th><td>{{ $Datos_Equipo['NS_EQUIPO1'] ?? '' }}</td></tr></thead>
+    <thead>
+        <tr class="section-title">
+            <th colspan="6">ANÁLISIS QUÍMICO</th>
+        </tr>
+        <tr>
+            <th colspan="6">DATOS DEL EQUIPO</th>
+        </tr>
+        <tr>
+            <th class="label">MARCA</th>
+            <td>{{ $Datos_Equipo['MARCA_EQUIPO1'] ?? '' }}</td>
+            <th class="label">MODELO</th>
+            <td>{{ $Datos_Equipo['MODELO_EQUIPO1'] ?? '' }}</td>
+            <th class="label">No. DE SERIE</th>
+            <td>{{ $Datos_Equipo['NS_EQUIPO1'] ?? '' }}</td>
+        </tr>
+    </thead>
 </table>
 
 {{-- Distribución fija: disparos 1 y 2 arriba; disparo 3 y composición química abajo. --}}
@@ -415,13 +586,32 @@
                 <td class="shot-cell">
                     @if($celdaDisparo === 'tabla_quimica')
                         <table class="chemical">
-                            <colgroup><col style="width:25%"><col style="width:34%"><col style="width:41%"></colgroup>
-                            <thead><tr><th colspan="3">COMPOSICIÓN QUÍMICA TEÓRICA<br>VS<br>PROMEDIO DE VALORES EN LA PIEZA ANALIZADA</th></tr><tr><th>ELEMENTO</th><th>PROMEDIOS DE LA PIEZA ANALIZADA</th><th>COMPOSICIÓN QUÍMICA TEÓRICA</th></tr></thead>
+                            <colgroup>
+                                <col style="width:25%">
+                                <col style="width:34%">
+                                <col style="width:41%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th colspan="3">COMPOSICIÓN QUÍMICA TEÓRICA<br>VS<br>PROMEDIO DE VALORES EN LA PIEZA ANALIZADA</th>
+                                </tr>
+                                <tr>
+                                    <th>ELEMENTO</th>
+                                    <th>PROMEDIOS DE LA PIEZA ANALIZADA</th>
+                                    <th>COMPOSICIÓN QUÍMICA TEÓRICA</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 @forelse(($NormaIM['Tabla'] ?? []) as $filaNorma)
-                                    <tr><th>{{ $filaNorma['Elemento'] ?? '' }}</th><td>{{ $filaNorma['Promedio'] ?? '' }}</td><td>{{ $filaNorma['Composicion'] ?? '' }}</td></tr>
+                                    <tr>
+                                        <th>{{ $filaNorma['Elemento'] ?? '' }}</th>
+                                        <td>{{ $filaNorma['Promedio'] ?? '' }}</td>
+                                        <td>{{ $filaNorma['Composicion'] ?? '' }}</td>
+                                    </tr>
                                 @empty
-                                    <tr><td colspan="3">SIN DATOS / NO DATA</td></tr>
+                                    <tr>
+                                        <td colspan="3">SIN DATOS / NO DATA</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -431,9 +621,11 @@
                             @for($indiceImagen = 0; $indiceImagen < 2; $indiceImagen++)
                                 <td><div class="shot-image">
                                     @if(!empty($Disparos[$celdaDisparo][$indiceImagen]))<img src="{{ $Disparos[$celdaDisparo][$indiceImagen] }}" alt="Disparo {{ $celdaDisparo }}">@endif
-                                </div></td>
+                                </div>
+                            </td>
                             @endfor
-                        </tr></table>
+                        </tr>
+                    </table>
                     @endif
                 </td>
             @endforeach

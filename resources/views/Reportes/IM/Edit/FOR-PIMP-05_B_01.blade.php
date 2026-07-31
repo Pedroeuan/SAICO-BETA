@@ -362,12 +362,12 @@
                             <input type="file" class="form-control-file @error('Analisis_PDF') is-invalid @enderror"
                                 id="analisisPdfXrf" name="Analisis_PDF" accept="application/pdf,.pdf">
                             <small class="form-text text-muted">
-                                Suba un PDF y seleccione exactamente tres columnas. Un PDF nuevo reemplaza el análisis anterior.
+                                Suba un PDF; se detectarán sus disparos y podrá seleccionar hasta tres. Un PDF nuevo reemplaza el análisis anterior.
                             </small>
-                            @php($columnasXrfGuardadas = old('XRF_Columnas', $normaHistoricaXrf['Columnas_Seleccionadas'] ?? [1,2,3]))
+                            @php($columnasXrfGuardadas = old('XRF_Columnas', $normaHistoricaXrf['Columnas_Seleccionadas'] ?? []))
                             <div class="d-flex flex-wrap mt-2">
-                                @foreach(range(1, 7) as $columnaXrf)
-                                    <label class="form-check mr-4"><input class="form-check-input columna-xrf" type="checkbox"
+                                @foreach(range(1, 20) as $columnaXrf)
+                                    <label class="form-check mr-4 {{ in_array($columnaXrf, array_map('intval', $columnasXrfGuardadas)) ? '' : 'd-none' }}"><input class="form-check-input columna-xrf" type="checkbox"
                                         name="XRF_Columnas[]" value="{{ $columnaXrf }}" @checked(in_array($columnaXrf, array_map('intval', $columnasXrfGuardadas)))> {{ $columnaXrf }}</label>
                                 @endforeach
                             </div>
@@ -837,6 +837,7 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/Reportes_Editor_Imagenes_05_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Editor_Imagenes_05_B_01.js')) }}"></script>
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 <script>
 
@@ -953,12 +954,14 @@ $(document).ready(function() {
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                if (el.id === 'imageCount') return;
                 localStorage.setItem('FOR-PIMP-05_B_01_Form_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (el.id === 'imageCount') return;
             if (!el.value) {
                 const value = localStorage.getItem('FOR-PIMP-05_B_01_Form_' + el.name);
                 if (value !== null) el.value = value;
@@ -977,5 +980,6 @@ $(document).ready(function() {
 </script>
 {{-- Ruta propia del formato; únicamente la lógica de navegador se reutiliza. --}}
 @php($xrfExtractionRoute = route('Reportes_FOR_PIMP_05_B_01.extraer_analisis'))
+@php($xrfDetectColumnsOnFileChange = true)
 @include('Reportes.IM.partials.script-columnas-pdf-xrf-05-b-01')
 @endsection
