@@ -283,20 +283,49 @@ let tableInventario = new DataTable('#tablaInventario', {
 });
 
 $(document).on('input', 'input[name="cantidad[]"]', function() {
-    var max = $(this).attr('max');
-    var value = $(this).val();
 
-    if (parseInt(value) > parseInt(max)) {
+    var max = parseInt($(this).attr('max'));
+    var min = parseInt($(this).attr('min'));
+    var value = parseInt($(this).val());
+
+    // Si está vacío no hacer nada
+    if ($(this).val() === '') return;
+
+    // Evitar negativos o menores al mínimo
+    if (value < min) {
+        $(this).val(min);
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cantidad inválida',
+            text: `La cantidad mínima permitida es ${min}.`,
+            confirmButtonText: 'Entendido'
+        });
+
+        return;
+    }
+
+    // Evitar exceder el máximo
+    if (value > max) {
         $(this).val(max);
 
-        // Mostrar mensaje de advertencia
         Swal.fire({
             icon: 'warning',
             title: 'Cantidad excedida',
             text: `La cantidad máxima permitida es ${max}.`,
             confirmButtonText: 'Entendido'
-        }); 
+        });
     }
+    guardarSolicitudLocal();
+});
+
+$(document).on('keydown', 'input[name="cantidad[]"]', function(e) {
+
+    // Bloquear -, +, e y E
+    if (['-', '+', 'e', 'E'].includes(e.key)) {
+        e.preventDefault();
+    }
+
 });
 
 $(document).ready(function() {
@@ -345,7 +374,10 @@ function consultarCantidadAlmacen(id, callback) {
                 text: 'Por favor, completa el campo de Fecha de Servicio antes de enviar la solicitud.'
             });
         }
+            localStorage.removeItem("solicitudEquipos");
+        localStorage.removeItem("fechaServicio");
     });
+    
 });
 
 $(document).ready(function() {
@@ -398,9 +430,9 @@ $(document).ready(function() {
 
             var cantidadInput;
             if (Cantidad === 1) {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" max="1" readonly>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" min="1" max="1" readonly>`;
             } else {
-                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" max="${Cantidad}" required>`;
+                cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="1" min="1" max="${Cantidad}" required>`;
             }
 
             var newRow = `
@@ -419,6 +451,7 @@ $(document).ready(function() {
             `;
 
             $('#tablaAgregados tbody').append(newRow);
+            guardarSolicitudLocal();
             // Mostrar la alerta
             alertBox.style.display = 'block';
             // Mostrar mensaje de confirmación
@@ -484,9 +517,9 @@ $(document).ready(function() {
 
                                     var cantidadInput;
                                     if (cantidad === 1) {
-                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" readonly>`;
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" min="1" max="1" readonly>`;
                                     } else {
-                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" max="${cantidad}"  required>`;
+                                        cantidadInput = `<input type="number" class="form-control" name="cantidad[]" value="${detalle.Cantidad}" min="1" max="${cantidad}"  required>`;
                                     }
 
                                     var newRow = `
@@ -520,6 +553,7 @@ $(document).ready(function() {
                                 $('#tablaAgregados tbody').append(row);
                             }
                         });
+                        guardarSolicitudLocal();
                         // Mostrar la alerta
                         alertBox.style.display = 'block';
                         // Mostrar mensaje de confirmación
@@ -567,8 +601,21 @@ $(document).ready(function() {
                 button.prop('disabled', false);
             }
         });
+        
     });
+    
+    /*guardas cuando cambia la Unidad*/
+    $(document).on('input','input[name="unidad[]"]',function(){
 
+        guardarSolicitudLocal();
+
+    });
+    /*guardas cuando cambia la Fecha*/
+    $('#Fecha_Servicio').on('change',function(){
+
+    guardarSolicitudLocal();
+
+});
     // Eliminar elemento
     $(document).on('click', '.btnQuitarElemento', function() {
         var row = $(this).closest('tr');
@@ -584,6 +631,7 @@ $(document).ready(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 row.remove();
+                guardarSolicitudLocal(); // Actualizar localStorage después de eliminar
                 Swal.fire({
                     icon: 'success',
                     title: 'Elemento Eliminado',
@@ -600,7 +648,140 @@ $(document).ready(function() {
     });
 });
 
+/*localstorage*/
+function guardarSolicitudLocal() {
 
+    let datos = [];
+
+    $('#tablaAgregados tbody tr').each(function(){
+
+        datos.push({
+
+            nombre: $(this).find('td:eq(0)').text(),
+            economico: $(this).find('td:eq(1)').text(),
+            marca: $(this).find('td:eq(2)').text(),
+            calibracion: $(this).find('td:eq(3)').text(),
+            cantidad: $(this).find('input[name="cantidad[]"]').val(),
+            unidad: $(this).find('input[name="unidad[]"]').val(),
+            id: $(this).find('input[name="general_eyc_id[]"]').val(),
+            max: $(this).find('input[name="cantidad[]"]').attr('max')
+
+        });
+
+    });
+
+    localStorage.setItem("solicitudEquipos", JSON.stringify(datos));
+
+    localStorage.setItem("fechaServicio", $('#Fecha_Servicio').val());
+
+}
+
+function restaurarSolicitud(){
+
+    let datos = JSON.parse(localStorage.getItem("solicitudEquipos"));
+
+    if(!datos)
+        return;
+
+    datos.forEach(function(item){
+
+        let fila = `
+        <tr>
+
+            <td>${item.nombre}</td>
+
+            <td>${item.economico}</td>
+
+            <td>${item.marca}</td>
+
+            <td>${item.calibracion}</td>
+
+            <td>
+
+                <input
+                    type="number"
+                    class="form-control"
+                    name="cantidad[]"
+                    value="${item.cantidad}"
+                    min="1"
+                    max="${item.max}"
+                    required>
+
+            </td>
+
+            <td>
+
+                <input
+                    class="form-control"
+                    name="unidad[]"
+                    value="${item.unidad}">
+
+            </td>
+
+            <td>
+
+                <input type="hidden" name="general_eyc_id[]" value="${item.id}">
+
+                <button
+                    type="button"
+                    class="btn btn-danger btnQuitarElemento">
+
+                    <i class="fas fa-minus-circle"></i>
+
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+
+        $('#tablaAgregados tbody').append(fila);
+        $(`.btnAgregarInventario[data-id="${item.id}"]`)
+            .prop('disabled', true);
+    });
+
+    let fecha = localStorage.getItem("fechaServicio");
+
+    if(fecha)
+        $('#Fecha_Servicio').val(fecha);
+
+    if(datos.length>0)
+        $('#alertBox').show();
+
+}
+
+if(localStorage.getItem("solicitudEquipos")){
+
+    Swal.fire({
+
+        title:"Solicitud encontrada",
+
+        text:"¿Deseas continuar la solicitud anterior?",
+
+        icon:"question",
+
+        showCancelButton:true,
+
+        confirmButtonText:"Sí",
+
+        cancelButtonText:"No"
+
+    }).then((result)=>{
+
+        if(result.isConfirmed){
+
+            restaurarSolicitud();
+
+        }else{
+
+            localStorage.removeItem("solicitudEquipos");
+            localStorage.removeItem("fechaServicio");
+
+        }
+
+    });
+
+}
 </script>
 
 @endsection
