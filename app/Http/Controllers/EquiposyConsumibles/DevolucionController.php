@@ -96,16 +96,15 @@ class DevolucionController extends Controller
                 ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(Cantidad) as cantidad'))
                 ->groupBy('idGeneral_EyC', 'idSolicitud')
                 ->get();
-            //Log::info('detallesSolicitud: ', ['detallesSolicitud' => $detallesSolicitud]);
+            Log::info('detallesSolicitud: ', ['detallesSolicitud' => $detallesSolicitud]);
             // Obtener los idGeneral_EyC de los resultados obtenidos
             $idsGeneralEyC = $detallesSolicitud->pluck('idGeneral_EyC')->toArray(); // Convertir a array
             //Log::info('idsGeneralEyC: ', ['idsGeneralEyC' => $idsGeneralEyC]);
 
             // Buscar los idGeneral_EyC en la tabla General_EyC para obtener el Nombre
-            /*$generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
-                ->get(['idGeneral_EyC', 'Nombre_E_P_BP', 'Disponibilidad_Estado', 'Tipo','No_economico','Serie']);*/
-                $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
-                ->whereIn('Disponibilidad_Estado', ['NO DISPONIBLE', 'En Servicio'])
+            $idsGeneralEyC = $detallesSolicitud->pluck('idGeneral_EyC')->toArray();
+
+            $generalesEyC = general_eyc::whereIn('idGeneral_EyC', $idsGeneralEyC)
                 ->get([
                     'idGeneral_EyC',
                     'Nombre_E_P_BP',
@@ -130,6 +129,13 @@ class DevolucionController extends Controller
                     ->where('Tipo', 'DEVOLUCIÓN')
                     ->exists(); // Si existe el registro con "DEVOLUCIÓN"
                 //Log::info('historialAlmacenExistente: ', ['historialAlmacenExistente' => $historialAlmacenExistente]);
+                Log::info([
+                    'idGeneral_EyC' => $detalle->idGeneral_EyC,
+                    'general_encontrado' => $general ? true : false,
+                    'estado' => $general->Disponibilidad_Estado ?? 'NO EXISTE',
+                    'historial' => $historialAlmacenExistente,
+                    'folio' => $folio
+                ]);
                 // Solo incluir en $datosManifiesto si no está en Historial_Almacen
                 if (!$historialAlmacenExistente && $general) {
                     $datosManifiesto[] = [

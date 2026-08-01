@@ -270,9 +270,9 @@
 
         .cuadriculaFotos {
             width: 106%;
-            margin-left: -15.6px;
+            /*margin-left: -15.6px;
             border-collapse: separate;
-            border-spacing: 20px 20px;
+            border-spacing: 20px 20px;*/
             table-layout: fixed;
         }
 
@@ -285,6 +285,7 @@
         }
 
         .fotoCuadrante {
+            width: 300px;
             height: auto;
             border: 1px solid #000;
             overflow: hidden;
@@ -292,8 +293,8 @@
 
         .fotoCuadrante img {
             display: block;
-            width: 100%;
-            height: 170px;
+            width: 300px;
+            height: auto;
             object-fit: cover;
         }
 
@@ -632,10 +633,7 @@
             </table>
         @else
             <table class="cuadriculaFotos">
-                @foreach([
-                    ['arriba_izquierda', 'arriba_derecha'],
-                    ['abajo_izquierda', 'abajo_derecha']
-                ] as $filaPosiciones)
+                @foreach([['arriba_izquierda', 'arriba_derecha'], ['abajo_izquierda', 'abajo_derecha']] as $filaPosiciones)
                     <tr>
                         @foreach($filaPosiciones as $posicion)
                             @php($foto = $fotosPorPosicion[$posicion] ?? null)
