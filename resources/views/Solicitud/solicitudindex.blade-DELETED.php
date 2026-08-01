@@ -14,7 +14,6 @@
     #tablaJs th {
         text-align: center; /* Centra el texto del encabezado horizontalmente */
     }
-
     #my-notification .dropdown-menu {
     max-height: 200px; /* Ajusta la altura según sea necesario */
     overflow-y: auto;
@@ -62,7 +61,9 @@
                         <tr>
                             <td scope="row">{{$solicitud->tecnico}}</td>
                             <td scope="row">{{$solicitud->folio}}</td>
-                            <td scope="row">{{$solicitud->formatted_date}}</td>
+                            <td data-order="{{ $solicitud->fecha_servicio }}">
+                                {{ $solicitud->formatted_date }}
+                            </td>
                             <td scope="row">{{$solicitud->Estatus}}</td>
                             @if($rol == 'Equipos' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                 @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
@@ -117,7 +118,7 @@
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                         </td>
-                                    <!--PDF DE SALIDA-->
+                                        <!--PDF DE SALIDA-->
                                         <td>
                                             @if (empty($solicitud->pdf) || in_array($solicitud->pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
                                             <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
@@ -132,14 +133,14 @@
                                         </td>
                                     <!--PDF DE RESGUARDO-->
                                         <td>
-                                            @if ($solicitud->devolucion_pdf)
+                                            @if (empty($solicitud->devolucion_pdf) || in_array($solicitud->devolucion_pdf, ['ESPERA DE DATO', 'ESPERA DE DATOS']))
+                                            <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                <i class="far fa-file-pdf"></i>
+                                            </span>
+                                            @else ($solicitud->devolucion_pdf)
                                                 <a href="{{ asset('storage/' . $solicitud->devolucion_pdf) }}" target="_blank" class="btn btn-primary">
                                                     <i class="far fa-file-pdf"></i> 
                                                 </a>
-                                            @else
-                                                <span class="btn btn-secondary" style="cursor: not-allowed; background-color: gray; border-color: gray;">
-                                                    <i class="far fa-file-pdf"></i> 
-                                                </span>
                                             @endif
                                         </td>
 
@@ -188,8 +189,8 @@
                                         </td>
 
                                         @if(!$solicitud->hidePlus)
-                                            <td>
-                                                <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success" role="button"><i class="fas fa-plus-square" aria-hidden="true"></i></a>
+                                            <td><!--BOTÓN PLUS (COMPLEMENTAR)-->
+                                                <a href="{{ route('solicitudplus.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-success btn-plus" role="button" data-id="{{ $solicitud->idSolicitud }}"><i class="fas fa-plus-square"></i></a>
                                             </td>
 
                                             <td>
@@ -257,6 +258,7 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script>
     let table = new DataTable('#tablaJs', {
+        order: [[2, 'desc']], // 👈 ORDENAR POR FECHA
         // options
         language: {
                         "decimal": "",
@@ -283,11 +285,12 @@
                         }
                     }
     });
+
     $(document).on("click", ".btnEliminarSolicitud", function() {
     //valor del id a eliminar
     var idSolicitud = $(this).attr("id-Solicitud");
     Swal.fire({
-        title: "Seguro de eliminar este elemento?",
+        title: "Seguro de eliminar esta Solicitud?",
         showDenyButton: true,
         showCancelButton: false,
         confirmButtonText: "Sí",
@@ -333,8 +336,26 @@
             Swal.fire("Cancelado", "", "error");
         }
     });
-
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-plus').forEach(function(btn) {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault(); // Evita la navegación inmediata
+            let url = this.href; // Guarda la URL del enlace
+
+            // Deshabilitar el botón inmediatamente
+            this.setAttribute('disabled', 'true');
+            this.style.pointerEvents = 'none'; // Evita más clics en el botón
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; // Muestra el spinner de carga
+
+            // Redirigir de inmediato
+            window.location.href = url;
+        });
+    });
+});
+
 </script>
 
 @endsection
