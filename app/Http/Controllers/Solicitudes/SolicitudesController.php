@@ -565,7 +565,12 @@ class SolicitudesController extends Controller
     
         // Obtener los detalles relacionados con la solicitud
         $detallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-    
+            Log::info([
+            'idGeneral_EyC' => $idGeneral_EyC,
+            'fechaSalida' => $fechaSalida,
+            'historial_encontrado' => $Historial_Almacen->count(),
+            'historial' => $Historial_Almacen
+        ]);
         foreach ($detallesSolicitud as $detalle) {
             $idGeneral_EyC = $detalle->idGeneral_EyC;
     
