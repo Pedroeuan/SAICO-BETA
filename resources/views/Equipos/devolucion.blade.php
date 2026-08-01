@@ -296,6 +296,11 @@ $(document).ready(function() {
                 const currentValue = parseInt(this.value); // Obtener el valor actual ingresado
 
                 if (currentValue > max) {
+                    this.value = max;
+                    localStorage.setItem(
+                        'devolverForm_' + this.name,
+                        max
+                    );
                     Swal.fire({
                         icon: 'warning',
                         title: 'Cantidad excedida',
@@ -306,6 +311,11 @@ $(document).ready(function() {
                     event.preventDefault(); // Prevenir el envío del formulario
                 }
                 if (currentValue < min) {
+                    this.value = min;
+                    localStorage.setItem(
+                        'devolverForm_' + this.name,
+                        min
+                    );
                     Swal.fire({
                         icon: 'warning',
                         title: 'Cantidad insuficiente',
