@@ -32,6 +32,7 @@ use App\Services\ServicioImagenesPdfXrf;
 use App\Services\ServicioAnalisisColumnasPdfXrf;
 use App\Services\ServicioCapturaColumnasPdfXrf;
 use App\Services\ServicioRegistrosFotos;
+use App\Services\ServicioAnalisisImagenImageJ;
 use Illuminate\Http\UploadedFile;
 
 use Illuminate\Http\Request;
@@ -50,6 +51,187 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_04_02Controller extends Controller
 {
+    /**
+     * Normaliza el conteo lineal enviado por el lienzo del navegador.
+     *
+     * Regla acordada con el técnico:
+     * - Cada grano completo entre cruces vale 1.
+     * - El grano de cada extremo vale 0.5 (1.0 entre ambos extremos).
+     * - El servidor vuelve a calcular conteos, suma y promedio; no confía en totales del cliente.
+     */
+    private function normalizarConteoGranos(?string $json): ?array
+    {
+        if ($json === null || trim($json) === '') {
+            return null;
+        }
+
+        $datos = json_decode($json, true);
+        if (!is_array($datos) || !isset($datos['lineas']) || !is_array($datos['lineas'])) {
+            return null;
+        }
+
+        // Se limita el volumen de información para evitar cargas desproporcionadas en el JSON del reporte.
+        $lineas = [];
+        foreach (array_slice($datos['lineas'], 0, 50) as $indice => $linea) {
+            if (!is_array($linea)) {
+                continue;
+            }
+            $coordenadas = [];
+            foreach (['x1', 'y1', 'x2', 'y2'] as $campo) {
+                if (!isset($linea[$campo]) || !is_numeric($linea[$campo])) {
+                    continue 2;
+                }
+                $coordenadas[$campo] = max(0, min(1, (float) $linea[$campo]));
+            }
+            if (hypot($coordenadas['x2'] - $coordenadas['x1'], $coordenadas['y2'] - $coordenadas['y1']) < 0.001) {
+                continue;
+            }
+
+            // Cada marcador es una posición normalizada (0-1) sobre la trayectoria de la línea.
+            $marcadores = array_values(array_unique(array_map(
+                static fn ($valor) => round((float) $valor, 6),
+                array_filter(
+                    array_slice(is_array($linea['marcadores'] ?? null) ? $linea['marcadores'] : [], 0, 500),
+                    static fn ($valor) => is_numeric($valor) && (float) $valor > 0.02 && (float) $valor < 0.98
+                )
+            )));
+            sort($marcadores, SORT_NUMERIC);
+            // Con N cruces existen N-1 granos completos entre límites, más los dos medios extremos.
+            $cruces = count($marcadores);
+            $completos = max(0, $cruces - 1);
+
+            $lineas[] = array_merge([
+                'id' => (int) ($linea['id'] ?? ($indice + 1)),
+            ], $coordenadas, [
+                'marcadores' => $marcadores,
+                'cruces' => $cruces,
+                'granos_completos' => $completos,
+                'extremos_parciales' => 1.0,
+                'conteo' => $completos + 1.0,
+            ]);
+        }
+
+        // El resumen se deriva nuevamente de las líneas normalizadas.
+        $suma = array_sum(array_column($lineas, 'conteo'));
+
+        return [
+            'version' => 1,
+            'regla' => 'extremos_0.5_completos_1',
+            'lineas' => $lineas,
+            'resumen' => [
+                'numero_lineas' => count($lineas),
+                'suma' => round($suma, 3),
+                'promedio' => count($lineas) > 0 ? round($suma / count($lineas), 3) : 0.0,
+            ],
+        ];
+    }
+
+    /**
+     * Construye el texto compacto que ocupará el segundo espacio del anexo fotográfico.
+     *
+     * Se usa como respaldo para reportes antiguos que todavía no contienen una descripción
+     * revisada desde Create/Edit; los reportes nuevos conservan el texto aprobado por el técnico.
+     */
+    private function construirTextoResultadosMetalograficos(array $analisis, array $conteo): string
+    {
+        $fase = ($analisis['fase_seleccionada'] ?? 'perlita') === 'ferrita'
+            ? 'Ferrita / fase clara'
+            : 'Perlita / fase oscura';
+
+        $lineas = [
+            'RESULTADOS DEL ANÁLISIS METALOGRÁFICO',
+            'Archivo: ' . ($analisis['archivo_original'] ?? 'Sin nombre'),
+            'Conversión: 8 bits',
+            'Umbral: ' . ($analisis['umbral_minimo'] ?? 0) . '–' . ($analisis['umbral_maximo'] ?? 0),
+            'Fase revisada: ' . $fase,
+            'Perlita / fase oscura: ' . number_format((float) ($analisis['porcentaje_perlita'] ?? 0), 3) . ' %',
+            'Ferrita / fase clara: ' . number_format((float) ($analisis['porcentaje_ferrita'] ?? 0), 3) . ' %',
+            'Total verificado: 100.000 %',
+            'Método: ' . ($analisis['metodo_medicion'] ?? 'ImageJ Area Fraction / Measure'),
+        ];
+
+        $lineasConteo = is_array($conteo['lineas'] ?? null) ? $conteo['lineas'] : [];
+        if ($lineasConteo !== []) {
+            $lineas[] = '';
+            $lineas[] = 'CONTEO LINEAL DE GRANOS';
+            $lineas[] = 'Regla: cada grano completo = 1; cada extremo = 0.5.';
+
+            // Cada renglón conserva los datos auditables que el técnico confirmó en el contador.
+            foreach ($lineasConteo as $indice => $linea) {
+                $numero = (int) ($linea['id'] ?? ($indice + 1));
+                $lineas[] = sprintf(
+                    'L%d: cruces %d; completos %d; extremos 0.5 + 0.5; conteo %.1f.',
+                    $numero,
+                    (int) ($linea['cruces'] ?? 0),
+                    (int) ($linea['granos_completos'] ?? 0),
+                    (float) ($linea['conteo'] ?? 0)
+                );
+            }
+
+            $resumen = is_array($conteo['resumen'] ?? null) ? $conteo['resumen'] : [];
+            $lineas[] = sprintf(
+                'Resumen: %d líneas; suma %.1f; promedio %.3f granos por línea.',
+                (int) ($resumen['numero_lineas'] ?? count($lineasConteo)),
+                (float) ($resumen['suma'] ?? 0),
+                (float) ($resumen['promedio'] ?? 0)
+            );
+        } else {
+            $lineas[] = '';
+            $lineas[] = 'Conteo lineal de granos: sin líneas registradas.';
+        }
+
+        return implode("\n", $lineas);
+    }
+
+    /**
+     * Agrega al PDF la micrografía y el cuadro de resultados sin duplicarlos en Fotos_Reporte.
+     * Los espacios inferiores quedan libres para la futura imagen maestra y la foto de la pieza.
+     */
+    private function agregarAnalisisSeleccionadoAlPdf(array &$fotos, array $detallesGenerales): void
+    {
+        $analisis = $detallesGenerales['ANALISIS_IMAGEN'] ?? null;
+        if (!is_array($analisis) || empty($analisis['usar_en_reporte'])) {
+            return;
+        }
+
+        $rutaPublica = (string) ($analisis['rutas']['original'] ?? '');
+        $rutaFisica = $rutaPublica !== ''
+            ? storage_path('app/public/' . ltrim(str_replace('storage/', '', $rutaPublica), '/'))
+            : '';
+
+        // Espacio 1: se reutiliza el archivo original conservado por Fiji; no se crea otra copia.
+        if ($rutaFisica !== '' && File::exists($rutaFisica)) {
+            $fotos[] = [
+                'path' => $rutaFisica,
+                'comment' => 'FOTOMICROGRAFÍA ANALIZADA',
+                'es_cuadro_texto' => 0,
+                'una_hoja' => 0,
+                'pagina' => 1,
+                'posicion' => 'arriba_izquierda',
+                'origen_automatico' => 'analisis_imagen_original',
+            ];
+        }
+
+        // Espacio 2: muestra la redacción revisada; solo reportes antiguos recurren al generador.
+        $fotos[] = [
+            'path' => null,
+            // El texto revisado en Create/Edit tiene prioridad; el generador queda como respaldo histórico.
+            'comment' => trim((string) ($analisis['descripcion_reporte'] ?? '')) !== ''
+                ? (string) $analisis['descripcion_reporte']
+                : $this->construirTextoResultadosMetalograficos(
+                    $analisis,
+                    is_array($detallesGenerales['CONTEO_GRANOS'] ?? null)
+                        ? $detallesGenerales['CONTEO_GRANOS']
+                        : []
+                ),
+            'es_cuadro_texto' => 1,
+            'una_hoja' => 0,
+            'pagina' => 1,
+            'posicion' => 'arriba_derecha',
+            'origen_automatico' => 'resultados_analisis_imagen',
+        ];
+    }
+
     /** Normaliza la página y el cuadrante de una foto para que el PDF reciba una distribución válida. */
     private function normalizeFotoLayout($pagina, $posicion, $index): array
     {
@@ -789,7 +971,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
     }
 
-    public function FOR_PIMP_04_02_store(Request $request)
+    public function FOR_PIMP_04_02_store(Request $request, ServicioAnalisisImagenImageJ $servicioImagen)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -824,6 +1006,11 @@ class FOR_PIMP_04_02Controller extends Controller
             'ClienteSelect' => 'nullable|required_if:TieneCliente,si|string|max:255',
             'ClienteInput' => 'nullable|required_if:TieneCliente,no|string|max:255',
             'TieneContrato' => 'required|in:si,no',
+            // Datos generados por los dos componentes de análisis de imagen.
+            'Analisis_Imagen_Token' => 'nullable|uuid',
+            'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
+            'Analisis_Reporte_Descripcion' => 'nullable|string|max:20000',
+            'Conteo_Granos_JSON' => 'nullable|json|max:100000',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1018,6 +1205,25 @@ class FOR_PIMP_04_02Controller extends Controller
                 );
             }
             $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
+        }
+
+        // Adjunta únicamente un análisis previamente generado por el mismo usuario autenticado.
+        if (!empty($validatedData['Analisis_Imagen_Token'])) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+                $validatedData['Analisis_Imagen_Token'],
+                (int) Auth::id()
+            );
+            // La decisión de incluirlo en el PDF pertenece al reporte, no al resultado global de Fiji.
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+                !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
+            // Se conserva exactamente el texto que el técnico revisó en la sección FOTOS.
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
+        }
+        // Guarda líneas, cruces y resumen recalculado dentro de Detalles_Generales.
+        $conteoGranos = $this->normalizarConteoGranos($validatedData['Conteo_Granos_JSON'] ?? null);
+        if ($conteoGranos !== null) {
+            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
         }
 
         // Guardar Detalles_Generales como JSON en la base de datos
@@ -1265,7 +1471,7 @@ class FOR_PIMP_04_02Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_PIMP_04_02_update(Request $request, $id)
+    public function FOR_PIMP_04_02_update(Request $request, $id, ServicioAnalisisImagenImageJ $servicioImagen)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -1296,6 +1502,11 @@ class FOR_PIMP_04_02Controller extends Controller
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
+            // Datos generados por los dos componentes de análisis de imagen.
+            'Analisis_Imagen_Token' => 'nullable|uuid',
+            'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
+            'Analisis_Reporte_Descripcion' => 'nullable|string|max:20000',
+            'Conteo_Granos_JSON' => 'nullable|json|max:100000',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1493,6 +1704,27 @@ class FOR_PIMP_04_02Controller extends Controller
                 );
             }
             $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
+        }
+
+        // Un token nuevo reemplaza el análisis anterior; si no llega, array_merge conserva el existente.
+        if (!empty($validatedData['Analisis_Imagen_Token'])) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+                $validatedData['Analisis_Imagen_Token'],
+                (int) Auth::id()
+            );
+        }
+        // En Edit también se permite activar o retirar del PDF el análisis previamente guardado.
+        if (is_array($validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] ?? null)) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+                !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
+            // Edit permite corregir la redacción sin volver a ejecutar Fiji ni subir la micrografía.
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
+        }
+        // Recalcula y sustituye el conteo solamente cuando el componente envía JSON válido.
+        $conteoGranos = $this->normalizarConteoGranos($validatedData['Conteo_Granos_JSON'] ?? null);
+        if ($conteoGranos !== null) {
+            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
         }
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
@@ -1831,21 +2063,27 @@ class FOR_PIMP_04_02Controller extends Controller
         };
         // **1️⃣ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
-            if (isset($existingImages[$index])) {
-                $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
+            $rutaExistente = trim((string) ($existingImages[$index] ?? ''));
 
-                // Eliminar del almacenamiento
+            // Solo las fotografías tienen archivo físico; un cuadro de texto utiliza una ruta vacía.
+            if ($rutaExistente !== '') {
+                $rutaImagen = str_replace('storage/', 'public/', $rutaExistente);
                 if (Storage::exists($rutaImagen)) {
                     Storage::delete($rutaImagen);
-                    //Log::info("Imagen eliminada: {$rutaImagen}");
-                } else {
-                    //Log::warning("No se encontró la imagen para eliminar: {$rutaImagen}");
                 }
-
-                // Eliminar de `existingImages` para que no se guarde en la BD
-                unset($existingImages[$index]);
-                unset($fotoEsTexto[$index], $imagesBase64[$index], $comments[$index]);
             }
+
+            // La baja se aplica por índice incluso si no existe ruta, corrigiendo cuadros de texto eliminados.
+            unset(
+                $existingImages[$index],
+                $fotoEsTexto[$index],
+                $imagesBase64[$index],
+                $comments[$index],
+                $fotoPaginas[$index],
+                $fotoPosiciones[$index],
+                $esDisparo[$index],
+                $numeroDisparo[$index]
+            );
         }
 
         // **Reiniciar el array antes de procesar imágenes**
@@ -2117,6 +2355,10 @@ class FOR_PIMP_04_02Controller extends Controller
             }
             $totalFotos = count($Fotos);
         }
+
+        // Los dos espacios automáticos se agregan al final para que tengan prioridad en la página 1.
+        $this->agregarAnalisisSeleccionadoAlPdf($Fotos, $Detalles_Generales);
+        $totalFotos = count($Fotos);
 
         $data = [
             'title' => 'Reporte_FOR-PIMP-04-02.PDF',

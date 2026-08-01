@@ -5,10 +5,9 @@
     <title>FOTOS FOR-PIMP-04/02</title>
     <style>
         @page { 
-            margin: 
-            2cm 
+            margin: 2cm 
             1.2cm 
-            1.1cm 
+            2.1cm 
             2.2cm; 
         }
         body { 
@@ -76,7 +75,7 @@
             padding-left: 2px; 
         }
         .tablaGenerales tbody th.etiqueta-larga { 
-            font-size: 7px; 
+            text-align: center;
         }
         .tablaGenerales .line { 
             padding: 1.5px 0 0 5px; 
@@ -118,47 +117,131 @@
             font-weight: bold; 
         }
         .photo-grid { 
-            width: 100%; 
+            /* Distribución tomada del PDF principal FOR-PIMP-03_B_01. */
+            margin: 0;
+            width: 100%;
             table-layout: fixed; 
             border-collapse: separate; 
-            border-spacing: 8px 5px; 
+            /* Diez píxeles verticales impiden que una celda de texto toque la imagen de la fila siguiente. */
+            border-spacing: 0 10px;
         }
         .photo-slot { 
-            width: 50%; 
-            height: 6.1cm; 
-            border: .7px solid #000; 
+            /* El marco de 185 px del PDF principal evita que Dompdf reparta una fila entre hojas. */
+            width: 47%;
+            height: 201px;
+            border: 0;
             padding: 0; 
-            vertical-align: top; 
+            vertical-align: middle;
             text-align: center;
             overflow: hidden;
         }
-        .photo-content,
-        .photo-text-table {
+        .photo-gap {
+            width: 6%;
+            border: 0;
+            padding: 0;
+        }
+        .photo-slot.arriba_izquierda,
+        .photo-slot.abajo_izquierda {
+            text-align: left;
+            vertical-align: top;
+        }
+        .photo-slot.arriba_derecha,
+        .photo-slot.abajo_derecha {
+            text-align: right;
+        }
+        .photo-slot.arriba_derecha { vertical-align: top; }
+        .photo-slot.abajo_izquierda,
+        .photo-slot.abajo_derecha { vertical-align: bottom; }
+        .photo-content {
             width: 100%;
-            height: 6.1cm;
+            max-width: 330px;
+            height: 201px;
             border-collapse: collapse;
             table-layout: fixed;
         }
-        .photo-content .photo-image-cell {
-            height: 5.48cm;
-            padding: 0;
+        .photo-text-table {
+            width: 100%;
+            max-width: 330px;
+            /* El texto usa solo el área de imagen; los 16 px restantes equivalen al comentario. */
+            height: 185px;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .photo-slot.photo-slot-text {
+            /* La franja equivalente al comentario siempre queda debajo del cuadro. */
+            vertical-align: top !important;
+        }
+        .photo-text-comment-space {
+            /* Reserva exterior equivalente al comentario de una fotografía, pero sin dibujar borde. */
+            width: 100%;
+            max-width: 330px;
+            height: 16px;
             border: 0;
+        }
+        .photo-text-cell {
+            /* Usa exactamente la misma celda estructural de 185 px que una fotografía. */
+            padding: 0 !important;
+            text-align: left !important;
+        }
+        .photo-text-cell-inner {
+            padding: 12px 16px;
+            text-align: justify;
+            vertical-align: middle;
+            font-size: 8px;
+            line-height: 11px;
+            overflow-wrap: break-word;
+            word-break: normal;
+            white-space: pre-line;
+            overflow: hidden;
+        }
+        .photo-text-cell-inner.photo-text-box-analysis {
+            padding: 6px 8px;
+        }
+        /* Reproduce la alineación por cuadrante del PDF principal 03_B_01. */
+        .photo-slot.arriba_izquierda > table,
+        .photo-slot.abajo_izquierda > table {
+            margin-left: 0;
+            margin-right: auto;
+        }
+        .photo-slot.arriba_derecha > table,
+        .photo-slot.abajo_derecha > table {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        .photo-slot.arriba_derecha > .photo-text-box,
+        .photo-slot.arriba_derecha > .photo-text-comment-space,
+        .photo-slot.abajo_derecha > .photo-text-box,
+        .photo-slot.abajo_derecha > .photo-text-comment-space {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        .photo-content .photo-image-cell {
+            width: 100%;
+            height: 185px;
+            padding: 2px;
+            /* El marco pertenece solo a la fotografía; el comentario queda fuera y sin borde. */
+            border: 1px solid #000;
             vertical-align: middle;
             overflow: hidden;
+            text-align: center;
         }
         .photo-slot img { 
             display: block; 
-            width: 100%; 
-            height: 5.48cm; 
-            object-fit: contain; 
+            width: auto;
+            height: auto;
+            max-width: 330px;
+            max-height: 181px;
+            object-fit: contain;
+            margin: 0;
         }
         .photo-comment { 
-            height: .62cm;
-            border-top: .6px solid #000; 
-            padding: 2px 5px;
+            height: 16px;
+            border-top: 0;
+            padding: 2px 2px 0;
+            margin: 0;
             box-sizing: border-box;
-            font-size: 7px;
-            line-height: 8px;
+            font-size: 5.3px;
+            line-height: 1.05;
             font-weight: normal;
             text-align: center;
             vertical-align: middle;
@@ -173,7 +256,7 @@
         }
         .photo-text-box { 
             width: 100%; 
-            height: 6.1cm; 
+            height: 185px;
             padding: 12px 16px;
             text-align: justify;
             vertical-align: middle;
@@ -181,27 +264,43 @@
             line-height: 11px;
             overflow-wrap: break-word;
             word-break: normal;
-            white-space: normal;
+            /* Conserva los renglones del resumen automático y de los textos escritos por el técnico. */
+            white-space: pre-line;
             overflow: hidden;
             box-sizing: border-box;
-            border: 0;
+            /* Los cuadros de texto sí muestran su propia celda completa. */
+            border: 1px solid #000;
+        }
+        /* El cuadro automático puede contener una línea por cada medición del contador. */
+        .photo-text-box-analysis {
+            padding: 6px 8px;
+            font-size: 5.5px;
+            line-height: 6.5px;
+            text-align: left;
         }
         .photo-full .photo-content,
         .photo-full .photo-text-table,
         .photo-full .photo-text-box {
-            height: 13cm;
+            max-width: 100%;
+            height: 406px;
         }
         .photo-empty { 
             background: #fff; 
         }
         .photo-full { 
-            height: 13cm; 
+            width: 100% !important;
+            height: 406px !important;
         }
         .photo-full img { 
-            height: 12.38cm;
+            width: auto !important;
+            height: auto !important;
+            max-width: 100% !important;
+            max-height: 386px !important;
+            object-fit: contain;
         }
         .photo-full .photo-content .photo-image-cell {
-            height: 12.38cm;
+            width: 100%;
+            height: 390px;
         }
         .photo-page { 
             page-break-inside: avoid; 
@@ -397,7 +496,7 @@
                     <td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div>
                     </td>
-                    <th>No. REPORTE:</th>
+                    <th class="etiqueta-larga">No. REPORTE:</th>
                     <td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div>
                     </td>
@@ -407,7 +506,7 @@
                     <td class="line" colspan="3">
                         <div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div>
                     </td>
-                    <th>CONTRATO:</th>
+                    <th class="etiqueta-larga">CONTRATO:</th>
                     <td class="line">
                         <div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div>
                     </td>
@@ -447,14 +546,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <th class="etiqueta-larga">NOMBRE DE LA PIEZA:</th>
+                    <th>NOMBRE DE LA PIEZA:</th>
                     <td class="line">
                         <div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div>
                     </td>
-                    <th>MATERIAL:</th>
+                    <th class="etiqueta-larga">MATERIAL:</th>
                     <td class="line"><div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div>
                     </td>
-                    <th>TRAZABILIDAD:</th>
+                    <th class="etiqueta-larga">TRAZABILIDAD:</th>
                     <td class="line">
                         <div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div>
                     </td>
@@ -467,6 +566,20 @@
                     <th class="etiqueta-larga">CRITERIO DE EVALUACIÓN:</th>
                     <td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>ACCESORIO:</th>
+                    <td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Accesorio'] ?? '' }}</div>
+                    </td>
+                    <th class="etiqueta-larga">TUBERÍA:</th>
+                    <td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Tuberia'] ?? '' }}</div>
+                    </td>
+                    <th class="etiqueta-larga">ESTRUCTURAL:</th>
+                    <td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Estructural'] ?? '' }}</div>
                     </td>
                 </tr>
                 <tr>
@@ -546,11 +659,11 @@
         <table class="photo-grid">
             @if($fotoCompleta)
                 <tr>
-                    <td class="photo-slot photo-full" colspan="2">
+                    <td class="photo-slot photo-full {{ !empty($fotoCompleta['es_cuadro_texto']) ? 'photo-slot-text' : '' }}" colspan="3">
                         @if(!empty($fotoCompleta['es_cuadro_texto']))
                             <table class="photo-text-table">
                                 <tr>
-                                    <td class="photo-text-box">{{ $fotoCompleta['comment'] ?? '' }}</td>
+                                    <td class="photo-text-box {{ ($fotoCompleta['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $fotoCompleta['comment'] ?? '' }}</td>
                                 </tr>
                             </table>
                         @else
@@ -571,11 +684,17 @@
                 <tr>
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
-                            <td class="photo-slot">
+                            <td class="photo-slot {{ $posicion }} {{ !empty($espacios[$posicion]['es_cuadro_texto']) ? 'photo-slot-text' : '' }}">
                                 @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                                    <table class="photo-text-table">
+                                    {{-- Reutiliza la estructura de la foto: marco de 185 px y franja inferior de 16 px. --}}
+                                    <table class="photo-content">
                                         <tr>
-                                            <td class="photo-text-box">{{ $espacios[$posicion]['comment'] ?? '' }}</td>
+                                            <td class="photo-image-cell photo-text-cell">
+                                                <div class="photo-text-cell-inner {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="photo-comment">&nbsp;</td>
                                         </tr>
                                     </table>
                                 @else
@@ -592,18 +711,28 @@
                                 @endif
                             </td>
                         @else
-                            <td class="photo-slot photo-empty">&nbsp;</td>
+                            <td class="photo-slot photo-empty {{ $posicion }}">&nbsp;</td>
+                        @endif
+                        {{-- El PDF principal 03_B_01 reserva 6% entre la columna izquierda y la derecha. --}}
+                        @if($posicion === 'arriba_izquierda')
+                            <td class="photo-gap">&nbsp;</td>
                         @endif
                     @endforeach
                 </tr>
                 <tr>
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
-                            <td class="photo-slot">
+                            <td class="photo-slot {{ $posicion }} {{ !empty($espacios[$posicion]['es_cuadro_texto']) ? 'photo-slot-text' : '' }}">
                                 @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                                    <table class="photo-text-table">
+                                    {{-- Mantiene el cuadro y su espacio inferior simétricos con cualquier fotografía. --}}
+                                    <table class="photo-content">
                                         <tr>
-                                            <td class="photo-text-box">{{ $espacios[$posicion]['comment'] ?? '' }}</td>
+                                            <td class="photo-image-cell photo-text-cell">
+                                                <div class="photo-text-cell-inner {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="photo-comment">&nbsp;</td>
                                         </tr>
                                     </table>
                                 @else
@@ -620,7 +749,10 @@
                                 @endif
                             </td>
                         @else
-                            <td class="photo-slot photo-empty">&nbsp;</td>
+                            <td class="photo-slot photo-empty {{ $posicion }}">&nbsp;</td>
+                        @endif
+                        @if($posicion === 'abajo_izquierda')
+                            <td class="photo-gap">&nbsp;</td>
                         @endif
                     @endforeach
                 </tr>

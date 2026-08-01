@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AnalisisImagenController;
 
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\TICS\TICSController;
@@ -141,6 +142,11 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
     Route::middleware('auth')->group(function () {
         Route::middleware('can:tecnicos-access')->group(function () {
+        /* Análisis reutilizable de imágenes: histograma exacto y medición final con Fiji/ImageJ. */
+        Route::post('/analisis-imagen/histograma', [AnalisisImagenController::class, 'histograma'])
+            ->name('analisis-imagen.histograma');
+        Route::post('/analisis-imagen/fraccion-fases', [AnalisisImagenController::class, 'fraccionFases'])
+            ->name('analisis-imagen.fraccion-fases');
         /*vista Page in construction */
         Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
         /*vista Page welcome*/

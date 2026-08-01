@@ -6,7 +6,7 @@
 
     <style>
         @page { 
-            margin: 2cm 1.2cm 1.1cm 2.2cm; 
+            margin: 2cm 1.2cm 2.1cm 2.2cm; 
         }
         body { 
             font-family: Arial, sans-serif; 
@@ -74,7 +74,7 @@
             padding-left: 2px; 
         }
         .tablaGenerales tbody th.etiqueta-larga { 
-            font-size: 7px; 
+            text-align: center;
         }
         .tablaGenerales .line { 
             padding: 1.5px 0 0 5px; 
@@ -234,6 +234,9 @@
         .firmas-im .firma-separacion-cuatro td { 
             padding-top: 16px; 
         }
+        .centro{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -361,7 +364,7 @@
             <td class="line" colspan="2">
                 <div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div>
             </td>
-            <th>No. REPORTE:</th>
+            <th class="etiqueta-larga">No. REPORTE:</th>
             <td class="line" colspan="2">
                 <div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div>
             </td>
@@ -370,7 +373,7 @@
             <td class="line" colspan="3">
                 <div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div>
             </td>
-            <th>CONTRATO:</th>
+            <th class="etiqueta-larga">CONTRATO:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div>
             </td>
@@ -403,21 +406,21 @@
             <td class="line" colspan="3">
                 <div class="linea-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</div>
             </td>
-            <th class="etiqueta-larga">No. DE ISOMÉTRICO:</th>
+            <th  class="etiqueta-larga">No. DE ISOMÉTRICO:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</div>
             </td>
         </tr>
         <tr>
-            <th class="etiqueta-larga">NOMBRE DE LA PIEZA:</th>
+            <th>NOMBRE DE LA PIEZA:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div>
             </td>
-            <th>MATERIAL:</th>
+            <th class="etiqueta-larga">MATERIAL:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div>
             </td>
-            <th>TRAZABILIDAD:</th>
+            <th class="etiqueta-larga">TRAZABILIDAD:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div>
             </td>
@@ -437,11 +440,11 @@
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Accesorio'] ?? '' }}</div>
             </td>
-            <th>TUBERÍA:</th>
+            <th class="etiqueta-larga">TUBERÍA:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Tuberia'] ?? '' }}</div>
             </td>
-            <th>ESTRUCTURAL:</th>
+            <th class="etiqueta-larga">ESTRUCTURAL:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Estructural'] ?? '' }}</div>
             </td>
