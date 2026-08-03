@@ -269,32 +269,38 @@
         }
 
         .cuadriculaFotos {
-            /*margin-left: -15.6px;
+            width: 687.5px;
             border-collapse: separate;
-            border-spacing: 20px 20px;*/
             table-layout: fixed;
             border: 1px solid #000;
-            width: 312px;
-            height: 170px;
-            padding: 0;
+        }
+
+        .cuadriculaFotos td {
+            width: 50%;
+            padding: 10px;
             text-align: center;
             vertical-align: middle;
         }
 
-
         .fotoCuadrante {
+            margin: 0 auto;
+            padding: 0;
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
             width: 300px;
             height: auto;
-            border: 1px solid #dd2e2e;
-            overflow: hidden;
+            position: relative;
         }
 
         .fotoCuadrante img {
             display: block;
-            width: 300px;
+            max-width: 300px;
+            width: auto;
             height: auto;
-            object-fit: cover;
-            border: 1px solid #2edd60;
+            object-fit: contain;
+            margin: 0 auto;
+            border: 2px solid #000;
         }
 
         .fotoCuadranteComentario {
