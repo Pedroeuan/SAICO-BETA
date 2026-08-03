@@ -85,7 +85,7 @@
                                                 ($Prueba->Nombre == 'ACFM' ? 'ACFM.svg' :
                                                 ($Prueba->Nombre == 'ONDAS GUIADAS' ? 'ONDAS_GUIADAS.svg' :
                                                 ($Prueba->Nombre == 'VISUAL' ? 'Inspección_Visual.svg' :
-                                                ($Prueba->Nombre == 'RELEVADO DE ESFUERZOS' ? 'RELEVADO_ESFUERZOS.svg' : 'FOCO_BLANCO.svg'))))))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
+                                                ($Prueba->Nombre == 'TRATAMIENTO TÉRMICO DE PWHT' ? 'RELEVADO_ESFUERZOS.svg' : 'FOCO_BLANCO.svg'))))))))))))))))))) }}" data-text="{{ $Prueba->Nombre }}" {{ $Prueba->Nombre == $service ? 'selected' : '' }}>
                                                     {{ $Prueba->Nombre }}
                                                 </option>
                                             @endforeach
@@ -208,7 +208,7 @@
         "PMI",
         "METALOGRAFÍA",
         "ANÁLISIS QUÍMICO",
-        "RELEVADO DE ESFUERZOS",
+        "TRATAMIENTO TÉRMICO DE PWHT",
     ];
 
     // Objeto de mapeo para los nombres personalizados
