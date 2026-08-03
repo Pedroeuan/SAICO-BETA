@@ -188,15 +188,15 @@
                     <svg class="bd-placeholder-img card-img-top expansive-effect"
 
                         width="100%" height="200" 
-                        role="img" aria-label="RELEVADO DE ESFUERZOS" 
-                        data-name="RELEVADO DE ESFUERZOS"
+                        role="img" aria-label="TRATAMIENTO TÉRMICO DE PWHT" 
+                        data-name="TRATAMIENTO TÉRMICO DE PWHT"
                         onclick="redirectToView(this)"
                         focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 
-                        <title>RELEVADO DE ESFUERZOS</title>
+                        <title>TRATAMIENTO TÉRMICO DE PWHT</title>
                         <rect width="100%" height="100%" fill="#0070C0"></rect>
                         <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
-                        <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RELEVADO DE ESFUERZOS</text>
+                        <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TRATAMIENTO TÉRMICO DE PWHT</text>
                     </svg>
 
                 <div style="margin-bottom: 15px;"></div>

@@ -186,7 +186,7 @@
         }
         .imagenCapturaQuimica {
             display: block;
-            max-height: 235px;
+            max-height: auto; /*235px;*/
             object-fit: contain;
             object-position: center top;
         }
@@ -513,8 +513,7 @@
     </tbody>
 </table>
 
-<table class="grid">
-    <thead>
+<table class="grid">  <thead>
         <tr class="section-title">
             <th colspan="5">DATOS OBTENIDOS DEL MATERIAL</th>
         </tr>
