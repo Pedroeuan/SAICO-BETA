@@ -606,13 +606,16 @@
                         </div>
                     </div>
                     <div class="col-12">
+                        <div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h5><i class="icon fas fa-info"></i> Importante</h5>
+                            <p>Suba un solo PDF y seleccione hasta tres disparos para calcular el promedio y generar una captura única.</p>
+                        </div>
+                        
                         <div class="form-group border rounded p-3 bg-light">
                             <label for="analisisPdfXrf"><strong>PDF del equipo XRF</strong></label>
                             <input type="file" class="form-control-file @error('Analisis_PDF') is-invalid @enderror"
                                 id="analisisPdfXrf" name="Analisis_PDF" accept="application/pdf,.pdf">
-                            <small class="form-text text-muted">
-                                Suba un solo PDF y seleccione hasta tres disparos para calcular el promedio y generar una captura única.
-                            </small>
                             <div class="d-flex flex-wrap mt-2">
                                 @foreach(range(1, 20) as $columnaXrf)
                                     <label class="form-check mr-4 d-none">
@@ -656,6 +659,10 @@
                             <div id="normaIMObservaciones" style="white-space: pre-line;"></div>
                         </div>
                     </div>
+
+                    {{-- Herramientas reutilizables de metalografía: fracción de fases y conteo lineal. --}}
+                    @include('Reportes.IM.partials.fraccion-fases-imagej', ['analisisImagen' => []])
+                    @include('Reportes.IM.partials.conteo-granos-lineal', ['conteoGranos' => []])
 
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
@@ -871,6 +878,9 @@
                         
                         <p>
 
+                        {{-- Vista previa editable de los espacios 1 y 2 elegidos desde el análisis de imagen. --}}
+                        @include('Reportes.IM.partials.analisis-imagen-reporte-fotos', ['analisisImagen' => []])
+
                         <!--IMAGENES CON COMENTARIOS-->
                         <div class="form-group">
                             <label for="imageCount">Número de imágenes a subir:</label>
@@ -1080,4 +1090,8 @@ $(document).ready(function() {
 @php($xrfRequirePreviewBeforeSubmit = false)
 @php($xrfDetectColumnsOnFileChange = true)
 @include('Reportes.IM.partials.script-columnas-pdf-xrf-05-b-01')
+{{-- Scripts propios de las herramientas de análisis de imagen; filemtime invalida la caché del navegador. --}}
+<script src="{{ asset('js/analisis-fraccion-fases-imagej.js') }}?v={{ filemtime(public_path('js/analisis-fraccion-fases-imagej.js')) }}"></script>
+<script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
+<script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
 @endsection
