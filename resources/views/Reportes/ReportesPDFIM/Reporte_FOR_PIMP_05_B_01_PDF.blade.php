@@ -48,7 +48,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
         }
 
         .tablaheader th {

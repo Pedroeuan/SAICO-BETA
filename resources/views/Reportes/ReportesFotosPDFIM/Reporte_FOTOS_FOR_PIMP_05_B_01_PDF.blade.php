@@ -34,7 +34,7 @@
             border-collapse: collapse;
             width: 100%;
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
         }
 
         .tablaheader th {
@@ -269,14 +269,11 @@
         }
 
         .cuadriculaFotos {
-            width: 106%;
             /*margin-left: -15.6px;
             border-collapse: separate;
             border-spacing: 20px 20px;*/
             table-layout: fixed;
-        }
-
-        .cuadriculaFotos td {
+            border: 1px solid #000;
             width: 312px;
             height: 170px;
             padding: 0;
@@ -284,10 +281,11 @@
             vertical-align: middle;
         }
 
+
         .fotoCuadrante {
             width: 300px;
             height: auto;
-            border: 1px solid #000;
+            border: 1px solid #dd2e2e;
             overflow: hidden;
         }
 
@@ -296,6 +294,7 @@
             width: 300px;
             height: auto;
             object-fit: cover;
+            border: 1px solid #2edd60;
         }
 
         .fotoCuadranteComentario {
