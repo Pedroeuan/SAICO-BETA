@@ -634,6 +634,10 @@
                         </div>
                     </div>
 
+                    {{-- Herramientas compartidas: fracción de fases con Fiji y conteo lineal de granos. --}}
+                    @include('Reportes.IM.partials.fraccion-fases-imagej', ['analisisImagen' => []])
+                    @include('Reportes.IM.partials.conteo-granos-lineal', ['conteoGranos' => []])
+
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                         <div class="col-sm-15">
@@ -848,6 +852,12 @@
                         
                         <p>
 
+                        {{-- Espacios 1 y 2: micrografía original y resultados editables del análisis. --}}
+                        @include('Reportes.IM.partials.analisis-imagen-reporte-fotos', ['analisisImagen' => []])
+
+                        {{-- Configura el modo "Agregar tamaño de grano" disponible en cada tarjeta de imagen. --}}
+                        @include('Reportes.IM.partials.patron-grano-reporte', ['patronGrano' => []])
+
                         <!--IMAGENES CON COMENTARIOS-->
                         <div class="form-group">
                             <label for="imageCount">Número de imágenes a subir:</label>
@@ -862,7 +872,12 @@
                         <div class="alert alert-info py-2">
                             Asigna a cada fotografía el número de hoja y su posición. Una hoja admite hasta cuatro posiciones o una fotografía de página completa.
                             Si no cuenta con PDF XRF, marque <strong>Asignar esta imagen a un disparo</strong>; cada disparo requiere dos imágenes.
+                            Para una comparativa, marque <strong>Agregar tamaño de grano</strong> en una tarjeta vacía.
+                            Al usar Fiji o un patrón comparativo, las posiciones que elija quedan reservadas y las fotografías manuales comienzan en el primer espacio disponible.
                         </div>
+                        @error('foto_posicion')
+                            <div class="alert alert-danger py-2">{{ $message }}</div>
+                        @enderror
 
                         {{-- El JS compartido agrega posición, cuadro de texto y asignación manual de disparo. --}}
                         <div id="imageFieldsContainer" class="row" data-layout-fotos-manual="1">
@@ -1054,4 +1069,9 @@ $(document).ready(function() {
 {{-- Ruta propia del formato; el comportamiento de extracción sí se comparte mediante JavaScript. --}}
 @php($xrfExtractionRoute = route('Reportes_FOR_PIMP_04_03.extraer_analisis'))
 @include('Reportes.IM.partials.script-compartido-pdf-xrf')
+{{-- Comportamiento común de las herramientas metalográficas. --}}
+<script src="{{ asset('js/analisis-fraccion-fases-imagej.js') }}?v={{ filemtime(public_path('js/analisis-fraccion-fases-imagej.js')) }}"></script>
+<script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
+<script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
+<script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
 @endsection

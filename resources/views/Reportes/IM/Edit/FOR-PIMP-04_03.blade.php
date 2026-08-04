@@ -616,6 +616,14 @@
                         </div>
                     </div>
 
+                    {{-- Restaura el análisis Fiji y las líneas guardadas en el histórico del reporte. --}}
+                    @include('Reportes.IM.partials.fraccion-fases-imagej', [
+                        'analisisImagen' => $Detalles_Generales['ANALISIS_IMAGEN'] ?? []
+                    ])
+                    @include('Reportes.IM.partials.conteo-granos-lineal', [
+                        'conteoGranos' => $Detalles_Generales['CONTEO_GRANOS'] ?? []
+                    ])
+
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                         <div class="col-sm-15">
@@ -828,6 +836,16 @@
 
                         <p>
 
+                        {{-- Permite revisar o corregir el texto sin volver a cargar la micrografía. --}}
+                        @include('Reportes.IM.partials.analisis-imagen-reporte-fotos', [
+                            'analisisImagen' => $Detalles_Generales['ANALISIS_IMAGEN'] ?? []
+                        ])
+
+                        {{-- Configura el modo tamaño de grano y permite reconstruir su tarjeta histórica. --}}
+                        @include('Reportes.IM.partials.patron-grano-reporte', [
+                            'patronGrano' => $Detalles_Generales['PATRON_GRANO'] ?? []
+                        ])
+
                         <div class="form-group">
                             <label for="imageCount">Número de imágenes a subir:</label>
                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -841,7 +859,12 @@
                         <div class="alert alert-info py-2">
                             Asigna a cada fotografía el número de hoja y su posición. Una hoja admite hasta cuatro posiciones o una fotografía de página completa.
                             Si no cuenta con PDF XRF, marque <strong>Asignar esta imagen a un disparo</strong>; cada disparo requiere dos imágenes.
+                            Para una comparativa, marque <strong>Agregar tamaño de grano</strong> en una tarjeta vacía.
+                            Al usar Fiji o un patrón comparativo, las posiciones elegidas quedan reservadas. Las fotografías históricas deben conservar una celda distinta.
                         </div>
+                        @error('foto_posicion')
+                            <div class="alert alert-danger py-2">{{ $message }}</div>
+                        @enderror
 
                         {{-- Conserva imágenes existentes y permite cambiar posición, texto o número de disparo. --}}
                         <div data-layout-fotos-manual="1">
@@ -1171,4 +1194,9 @@ $(document).ready(function() {
 {{-- Ruta propia del formato; únicamente la lógica de navegador se reutiliza. --}}
 @php($xrfExtractionRoute = route('Reportes_FOR_PIMP_04_03.extraer_analisis'))
 @include('Reportes.IM.partials.script-compartido-pdf-xrf')
+{{-- Comportamiento común de las herramientas metalográficas. --}}
+<script src="{{ asset('js/analisis-fraccion-fases-imagej.js') }}?v={{ filemtime(public_path('js/analisis-fraccion-fases-imagej.js')) }}"></script>
+<script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
+<script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
+<script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
 @endsection

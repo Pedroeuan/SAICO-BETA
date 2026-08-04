@@ -140,58 +140,73 @@
             width: 100%; 
             table-layout: fixed; 
             border-collapse: separate; 
-            border-spacing: 8px 5px; 
+            /* Mantiene dos filas simétricas aunque uno de los espacios todavía esté vacío. */
+            border-spacing: 8px 10px;
         }
         .photo-slot { 
             padding: 0;
             border: 1px solid #000;
-            /*display: block;*/
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
             width: 330px;
-            height: auto;
-            /*line-height: 0;*/
+            /* Misma medida para imagen, descripción, patrón y fotografía de la pieza. */
+            height: 201px;
             position: relative;
         }
         .photo-slot img { 
             display: block;
-            max-width: 330px;
-            max-height: auto;
+            max-width: 326px;
+            max-height: 181px;
             width: auto;
             height: auto;
             object-fit: contain;
             margin: 0 auto;
         }
         .photo-comment { 
-            height: .42cm; 
+            height: 20px;
             border-top: .6px solid #000; 
             padding: 2px; 
+            box-sizing: border-box;
+            font-size: 6px;
+            line-height: 7px;
             text-align: center; 
             overflow-wrap: break-word; 
+            overflow: hidden;
         }
         .photo-text-box { 
             display: block; 
             width: 100%; 
-            height: 6.1cm; 
-            padding: 18px 12px; 
-            text-align: center; 
-            font-size: 9px; 
-            line-height: 13px; 
+            height: 201px;
+            padding: 12px 16px;
+            text-align: justify;
+            vertical-align: middle;
+            font-size: 8px;
+            line-height: 11px;
             overflow-wrap: break-word; 
+            white-space: pre-line;
+            overflow: hidden;
             box-sizing: border-box; 
         }
+        /* El resultado automático contiene más renglones que una descripción normal. */
+        .photo-text-box-analysis {
+            padding: 6px 8px;
+            text-align: left;
+            font-size: 5.5px;
+            line-height: 6.5px;
+        }
         .photo-full .photo-text-box { 
-            height: 13cm; 
+            height: 412px;
         }
         .photo-empty { 
             background: #fff; 
         }
         .photo-full { 
-            height: 13cm; 
+            height: 412px;
         }
         .photo-full img { 
-            height: 12.35cm; 
+            max-width: 100%;
+            max-height: 390px;
         }
         .photo-page { 
             page-break-inside: avoid; 
@@ -522,7 +537,7 @@
                 <tr>
                     <td class="photo-slot photo-full" colspan="2">
                         @if(!empty($fotoCompleta['es_cuadro_texto']))
-                        <div class="photo-text-box">{{ $fotoCompleta['comment'] ?? '' }}
+                        <div class="photo-text-box {{ ($fotoCompleta['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $fotoCompleta['comment'] ?? '' }}
                             </div>
                             @else
                             <img src="{{ $fotoCompleta['path'] }}" alt="Fotografía">
@@ -536,7 +551,7 @@
                         @if(isset($espacios[$posicion]))
                         <td class="photo-slot">
                             @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                            <div class="photo-text-box">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                            <div class="photo-text-box {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @else
                             <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
                             <div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
@@ -552,7 +567,7 @@
                         @if(isset($espacios[$posicion]))
                         <td class="photo-slot">
                             @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                            <div class="photo-text-box">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                            <div class="photo-text-box {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @else<img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
                             <div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @endif
