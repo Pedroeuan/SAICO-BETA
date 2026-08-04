@@ -416,6 +416,10 @@
                     </div>
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
 
+                    {{-- Fiji reutiliza la misma micrografía para fracción de fases y conteo lineal. --}}
+                    @include('Reportes.IM.partials.fraccion-fases-imagej', ['analisisImagen' => []])
+                    @include('Reportes.IM.partials.conteo-granos-lineal', ['conteoGranos' => []])
+
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                         <div class="col-sm-15">
@@ -631,6 +635,11 @@
                         <p>
 
                         <!--IMAGENES CON COMENTARIOS-->
+                        {{-- La micrografía y el texto de Fiji se colocan directamente en el PDF principal 03_B/01. --}}
+                        @include('Reportes.IM.partials.analisis-imagen-reporte-fotos', ['analisisImagen' => []])
+                        {{-- El check "Agregar tamaño de grano" aparecerá dentro de cada tarjeta vacía. --}}
+                        @include('Reportes.IM.partials.patron-grano-reporte', ['patronGrano' => []])
+
                         <div class="form-group">
                             <label for="imageCount">Número de imágenes a subir:</label>
                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -643,6 +652,7 @@
 
                         <div class="alert alert-info py-2">
                             Asigna a cada fotografía el número de hoja y su posición. Una hoja admite hasta cuatro posiciones o una fotografía de página completa.
+                            Para la comparativa, marque <strong>Agregar tamaño de grano</strong> en una tarjeta vacía.
                         </div>
 
                         <div id="imageFieldsContainer" class="row" data-layout-fotos-manual="1">
@@ -739,8 +749,13 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create_IM_02.js') }}"></script>
-<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create_IM_02.js') }}?v={{ filemtime(public_path('js/Reportes_Create_IM_02.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
+{{-- Scripts compartidos; filemtime evita conservar una versión anterior en caché. --}}
+<script src="{{ asset('js/analisis-fraccion-fases-imagej.js') }}?v={{ filemtime(public_path('js/analisis-fraccion-fases-imagej.js')) }}"></script>
+<script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
+<script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
+<script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">

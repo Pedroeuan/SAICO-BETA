@@ -14,18 +14,18 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-03_B/01</title>
     <style>
-        @page { margin: 3.0cm 1.5cm 2.2cm 1.5cm; }
+        @page { margin: 2.7cm 1.5cm 2.2cm 1.5cm; }
 
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            font-size: 6px;
+            font-size: 8px;
             color: #000;
         }
 
         header {
             position: fixed;
-            top: -65px;
+            top: -85px;
             left: 0;
             right: 0;
         }
@@ -43,7 +43,7 @@
             table-layout: fixed; 
         }
 
-        .tabla-header { font-size: 7px; text-align: center; }
+        .tabla-header { font-size: 10px; text-align: center; }
         .tabla-header th,
         .tabla-header td {
             border: 1px solid #000;
@@ -53,7 +53,7 @@
             vertical-align: middle;
         }
         .tabla-header .nombre-formato {
-            font-size: 9px;
+            font-size: 10px;
             /*line-height: 13px;*/
             font-weight: normal;
         }
@@ -64,10 +64,10 @@
             color: #fff;
             font-weight: bold;
             text-align: center;
-            font-size: 6px;
+            font-size: 8px;
         }
 
-        .tabla-datos { /*margin-top: 1px;*/ font-size: 6px; }
+        .tabla-datos { /*margin-top: 1px;*/ font-size: 8px; }
         .tabla-datos th,
         .tabla-datos td {
             /*border: 0;
@@ -97,18 +97,27 @@
 
         .tabla-analisis { 
             /*margin-top: 3px;*/ 
-            font-size: 5px; 
+            font-size: 7px;
+            line-height: 7px;
             text-align: center; 
         }
         .tabla-analisis th,
         .tabla-analisis td {
             border: 1px solid #9ea7b3;
-            /*padding: 3px 2px;*/
+            padding: 0 1px;
             vertical-align: middle;
         }
         .tabla-analisis th { 
             font-weight: bold; 
             /*line-height: 6px;*/ 
+        }
+        .tabla-analisis .titulo-seccion {
+            padding: 1px 0;
+            line-height: 7px;
+        }
+        .separador-datos-analisis {
+            height: 2px;
+            line-height: 2px;
         }
 
         .tabla-fotos { 
@@ -129,9 +138,8 @@
             display: block;*/
             text-align: center;
             vertical-align: middle;
-            overflow: hidden;
-            width: 330px;
-            height: auto;
+            width: 47%;
+            height: 218px;
             /*line-height: 0;*/
             position: relative;
         }
@@ -156,23 +164,33 @@
             vertical-align: bottom;
         }
 
-        .foto-container > div {
-            width: 100%;
-            max-width: 330px;
-            margin: 0 auto;
-            box-sizing: border-box;
-        }
-
         /*
-         * contain muestra la imagen completa sin deformarla y ajusta el contenedor
-         * a su proporción real.
+         * Todas las fotografías usan el mismo marco 4:3. La imagen se centra
+         * completa y mantiene su proporción; los espacios libres quedan blancos.
          */
-        .foto-container img {
-            display: block;
-            max-width: 330px;
-            max-height: auto;
-            object-fit: contain;
+        .foto-visual {
+            width: 100%;
+            height: 200px;
             margin: 0;
+            border: 1px solid #000;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .foto-visual td {
+            width: 100%;
+            height: 200px;
+            padding: 0;
+            border: 0;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .foto-visual img {
+            display: inline-block;
+            max-width: 99%;
+            max-height: 198px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
         }
 
         /* Texto descriptivo que se presenta debajo de cada fotografia. */
@@ -180,12 +198,14 @@
             margin: 0;
             padding: 3px 2px 2px;
             /*border-top: 1px solid #000;*/
-            font-size: 5.3px;
-            line-height: 1.05;
+            font-size: 7px;
+            line-height: 1.1;
             text-align: center;
             box-sizing: border-box;
             width: 100%;
             max-width: 328px;
+            height: 18px;
+            overflow: hidden;
             overflow-wrap: anywhere;
             word-break: break-word;
         }
@@ -204,10 +224,21 @@
             table-layout: fixed;
             
         }
+        /* Las dos celdas de cada fila comparten exactamente la misma altura. */
+        .imagenes-reporte > tbody > tr {
+            height: 218px;
+        }
+        /* La separación forma parte del 100 % disponible y evita desbordar la columna derecha. */
+        .foto-separador {
+            width: 6%;
+            padding: 0;
+            border: 0;
+        }
         .foto-marco {
             height: 185px;
             border: 1px solid #000;
             padding: 2px;
+            box-sizing: border-box;
             text-align: center;
             overflow: hidden;
         }
@@ -216,15 +247,18 @@
             display: block;
             max-width: 100%;
             max-height: 181px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
             margin: 0 auto;
         }
 
-        .tabla-fotos 
+        .tabla-fotos
         .foto-completa 
         .foto-marco { 
             height: 390px; 
         }
-        .tabla-fotos 
+        .tabla-fotos
         .foto-completa 
         .foto-marco img { 
             max-height: 386px; 
@@ -232,15 +266,51 @@
 
         .comentario-foto {
             height: 16px;
+            box-sizing: border-box;
             padding-top: 2px;
             /*line-height: 8px;*/
             overflow: hidden;
             text-align: center;
         }
 
+        /* La celda conserva la altura total de la fila, pero no dibuja un pie inexistente. */
+        .foto-container-texto {
+            box-sizing: border-box;
+            height: 218px;
+            padding: 0;
+            text-align: left !important;
+            vertical-align: top !important;
+        }
+        .foto-texto {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #000;
+            border-collapse: collapse;
+            table-layout: fixed;
+            box-sizing: border-box;
+        }
+        .foto-texto td {
+            /* DomPDF suma el padding a la altura: 184 + 8 + 8 = 200 px exactos. */
+            height: 184px;
+            border: 0;
+            padding: 8px;
+            box-sizing: border-box;
+            text-align: left;
+            vertical-align: top;
+            font-size: 7px;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+        .foto-texto-completa {
+            height: 390px;
+        }
+        .foto-texto-completa td {
+            height: 374px;
+        }
+
         .tabla-observaciones { 
             margin-bottom: 2px; 
-            font-size: 7px; 
+            font-size: 8px;
         }
         .tabla-observaciones th { 
             width: 17%; 
@@ -252,6 +322,27 @@
         .numero-pagina-actual::before { 
             content: counter(page); 
         }
+        /* Igualación tipográfica con FOR-PIMP-02_B/03 sin modificar el parcial compartido. */
+        .firmas-im[class] td {
+            font-size: 8px;
+        }
+        .firmas-im[class] .firma-titulo {
+            line-height: 8px;
+            min-height: 5px;
+        }
+        .firmas-im[class] .firma-linea {
+            height: 8px;
+            line-height: 8px;
+            padding-top: 8px;
+        }
+        .firmas-im[class] .firma-dato,
+        .firmas-im[class] .firma-ficha {
+            margin-top: 1px;
+            line-height: 7px;
+        }
+        .firmas-im[class] .firma-separacion-cuatro td {
+            padding-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -260,7 +351,7 @@
         <tr>
             <th style="width: 53%;">FORMATO<br>Format</th>
             <td style="width: 10%;">Código:<br>Code:</td>
-            <td style="width: 11%;">FOR-PIMP-03_B/01</td>
+            <td style="width: 15%;">FOR-PIMP-03_B/01</td>
             <td rowspan="3" style="width: 26%;"><img src="{{ $Logo }}" alt="Logo"></td>
         </tr>
         <tr>
@@ -356,7 +447,7 @@
         <td colspan="5" class="valor-general">{{ $Detalles_Generales['Observaciones'] ?? ($Datos_Equipo['Observaciones'] ?? '') }}</td>
     </tr>
 </table>
-<br>
+<div class="separador-datos-analisis">&nbsp;</div>
 <table class="tabla-analisis">
     <colgroup>
         {{--<col style="width: 14%;"><col style="width: 8%;"><col style="width: 14%;">
@@ -430,11 +521,20 @@
         <div style="page-break-before: always;"></div>
     @endif
     <table class="imagenes-reporte" style="width:100%" border="0">
+        <colgroup>
+            <col style="width:47%">
+            <col style="width:6%">
+            <col style="width:47%">
+        </colgroup>
         @if($configuracionFotos['completa'])
             <tr>
-                <td class="foto-completa" colspan="2">
-                    <div class="foto-marco"><img src="{{ $configuracionFotos['completa']['path'] }}" alt="Fotografía"></div>
-                    <div class="comentario-foto">{{ $configuracionFotos['completa']['comment'] ?? '' }}</div>
+                <td class="foto-completa {{ !empty($configuracionFotos['completa']['es_cuadro_texto']) ? 'foto-container-texto' : '' }}" colspan="3">
+                    @if(!empty($configuracionFotos['completa']['es_cuadro_texto']))
+                        <table class="foto-texto foto-texto-completa"><tr><td>{!! nl2br(e($configuracionFotos['completa']['comment'] ?? '')) !!}</td></tr></table>
+                    @else
+                        <div class="foto-marco"><img src="{{ $configuracionFotos['completa']['path'] }}" alt="Fotografía"></div>
+                        <div class="comentario-foto">{{ $configuracionFotos['completa']['comment'] ?? '' }}</div>
+                    @endif
                 </td>
             </tr>
         @else
@@ -443,22 +543,25 @@
                 @foreach($fila as $posicion)
                     @php $foto = $configuracionFotos['posiciones'][$posicion] ?? null; @endphp
                     @if($posicion === 'arriba_derecha')
-                        <th style="width:6%">
+                        <th class="foto-separador">
                             <div>
                                 &nbsp;
                             </div>
                         </th>
                     @endif
-                    <th class="foto-container {{ $posicion }}">
-                        <div>
-                            @if($foto) 
-                                <img src="{{ $foto['path'] }}" alt="Fotografía">
+                    <td class="foto-container {{ $posicion }} {{ !empty($foto['es_cuadro_texto']) ? 'foto-container-texto' : '' }}">
+                        @if($foto)
+                            @if(!empty($foto['es_cuadro_texto']))
+                                <table class="foto-texto"><tr><td>{!! nl2br(e($foto['comment'] ?? '')) !!}</td></tr></table>
+                            @else
+                                {{-- Una tabla interior conserva el centrado y el tamaño uniforme en DomPDF. --}}
+                                <table class="foto-visual"><tr><td><img src="{{ $foto['path'] }}" alt="Fotografía"></td></tr></table>
+                                <div class="comment">{{ $foto['comment'] ?? '' }}</div>
                             @endif
-                        </div>
-                        <div class="comment">{{ $foto['comment'] ?? '' }}</div>
-                    </th>
+                        @endif
+                    </td>
                     @if($posicion === 'abajo_izquierda')
-                    <th style="width:6%">
+                    <th class="foto-separador">
                         <div>
                             &nbsp;
                         </div>
