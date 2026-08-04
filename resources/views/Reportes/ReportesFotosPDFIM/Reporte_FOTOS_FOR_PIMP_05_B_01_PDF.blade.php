@@ -24,7 +24,7 @@
         }
         footer {
             position: fixed;
-            bottom: -30px;
+            bottom: -70px;
             left: 0;
             right: 0;
             text-align: center;
@@ -269,17 +269,18 @@
         }
 
         .cuadriculaFotos {
-            width: 687.5px;
-            border-collapse: separate;
+            width: 100%;
+            /*border-collapse: separate;*/
             table-layout: fixed;
             border: 1px solid #000;
         }
 
         .cuadriculaFotos td {
-            width: 50%;
-            padding: 10px;
+            /*width: 50%;*/
+            padding: 0px;
             text-align: center;
             vertical-align: middle;
+            border: 1px solid #000;
         }
 
         .fotoCuadrante {
@@ -291,6 +292,7 @@
             width: 300px;
             height: auto;
             position: relative;
+            border: 1px solid #000;
         }
 
         .fotoCuadrante img {
