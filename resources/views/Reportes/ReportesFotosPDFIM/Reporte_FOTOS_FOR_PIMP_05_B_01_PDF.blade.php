@@ -272,36 +272,40 @@
             width: 100%;
             /*border-collapse: separate;*/
             table-layout: fixed;
-            border: 1px solid #000;
+            /*border: 1px solid #eb0b0b;*/
         }
 
         .cuadriculaFotos td {
-            /*width: 50%;*/
-            padding: 0px;
-            text-align: center;
-            vertical-align: middle;
-            border: 1px solid #000;
+            width: 50%;
+            padding: 0;
+            vertical-align:top;
+            /*border: 1px solid #ffd500;*/
         }
 
+        .cuadriculaFotos td:first-child{
+            text-align:left;
+        }
+
+        .cuadriculaFotos td:last-child{
+            text-align:right;
+        }
+        
         .fotoCuadrante {
-            margin: 0 auto;
-            padding: 0;
-            text-align: center;
-            vertical-align: middle;
-            overflow: hidden;
-            width: 300px;
-            height: auto;
-            position: relative;
+            display:inline-block;
+            width:300px;
+            margin:0;
+            padding:0;
+            border:1px solid #000;
+            overflow:hidden;
             border: 1px solid #000;
         }
 
         .fotoCuadrante img {
             display: block;
-            max-width: 300px;
-            width: auto;
+            max-width: 298px;
             height: auto;
             object-fit: contain;
-            margin: 0 auto;
+            margin: 0 0 0 0;
             border: 2px solid #000;
         }
 
@@ -312,6 +316,9 @@
             font-size: 8px;
             line-height: 9px;
             overflow: hidden;
+
+            text-align: center;      /* Centrado horizontal */
+            vertical-align: middle;
         }
 
         .fotoCuadranteTexto {
