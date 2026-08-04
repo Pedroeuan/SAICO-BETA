@@ -48,6 +48,12 @@
         let histogramaImageJ = null;
         let resultadoVigente = Boolean(token.value);
         let analisisActual = {};
+        // Las revisiones y AbortController impiden que una respuesta lenta de una imagen anterior
+        // reemplace el histograma o el resultado correspondiente a la selección actual.
+        let revisionArchivo = 0;
+        let revisionMedicion = 0;
+        let solicitudHistograma = null;
+        let solicitudProcesamiento = null;
 
         // Recupera los metadatos ya guardados para que Edit muestre el mismo contenido en FOTOS.
         try {
@@ -83,6 +89,7 @@
         // Cualquier cambio posterior a Measure invalida el token para evitar guardar resultados obsoletos.
         function marcarPendiente() {
             if (!imagenSeleccionada) return;
+            revisionMedicion++;
             resultadoVigente = false;
             token.value = '';
             usarReporte.value = '0';
@@ -144,7 +151,9 @@
         }
 
         /** Envía la imagen a Fiji para obtener las mismas 256 frecuencias que muestra ImageJ. */
-        async function cargarHistogramaImageJ(seleccionado) {
+        async function cargarHistogramaImageJ(seleccionado, revisionSolicitada) {
+            if (solicitudHistograma) solicitudHistograma.abort();
+            solicitudHistograma = new AbortController();
             histogramaImageJ = null;
             estado.classList.remove('text-danger', 'text-success');
             estado.textContent = 'Fiji está preparando el histograma de 8 bits…';
@@ -157,8 +166,11 @@
                     method: 'POST',
                     headers: csrf ? { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' } : { 'Accept': 'application/json' },
                     body: datos,
+                    signal: solicitudHistograma.signal,
                 });
                 const cuerpo = await respuesta.json();
+                // La persona pudo elegir otro archivo mientras Fiji procesaba el anterior.
+                if (revisionSolicitada !== revisionArchivo) return;
                 if (!respuesta.ok || !cuerpo.ok || !Array.isArray(cuerpo.imagen?.histograma)) {
                     throw new Error(cuerpo.message || 'No se pudo obtener el histograma de Fiji.');
                 }
@@ -167,6 +179,7 @@
                 estado.classList.add('text-success');
                 estado.textContent = 'Histograma exacto de Fiji listo. Ajuste el umbral.';
             } catch (error) {
+                if (error.name === 'AbortError' || revisionSolicitada !== revisionArchivo) return;
                 estado.classList.add('text-danger');
                 estado.textContent = error.message;
             }
@@ -209,6 +222,10 @@
 
         // Carga local de la micrografía: valida tamaño, escala la vista y solicita el histograma a Fiji.
         archivo.addEventListener('change', function () {
+            revisionArchivo++;
+            revisionMedicion++;
+            if (solicitudHistograma) solicitudHistograma.abort();
+            if (solicitudProcesamiento) solicitudProcesamiento.abort();
             const seleccionado = archivo.files && archivo.files[0];
             if (!seleccionado) {
                 imagenSeleccionada = null;
@@ -247,7 +264,7 @@
                 estado.textContent = 'Ajuste el umbral y revise la selección roja.';
                 boton.disabled = !valoresValidos();
                 dibujarPrevisualizacion();
-                cargarHistogramaImageJ(seleccionado);
+                cargarHistogramaImageJ(seleccionado, revisionArchivo);
                 // Comparte el mismo File con el contador lineal para evitar una segunda selección de imagen.
                 document.dispatchEvent(new CustomEvent('saico:image-analysis-loaded', { detail: { file: seleccionado } }));
                 URL.revokeObjectURL(url);
@@ -287,6 +304,9 @@
         boton.addEventListener('click', async function () {
             if (!imagenSeleccionada || !valoresValidos()) return;
 
+            const revisionSolicitada = revisionMedicion;
+            if (solicitudProcesamiento) solicitudProcesamiento.abort();
+            solicitudProcesamiento = new AbortController();
             boton.disabled = true;
             estado.classList.remove('text-danger', 'text-success');
             estado.textContent = 'Fiji está convirtiendo y midiendo la imagen…';
@@ -303,8 +323,11 @@
                     method: 'POST',
                     headers: csrf ? { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' } : { 'Accept': 'application/json' },
                     body: datos,
+                    signal: solicitudProcesamiento.signal,
                 });
                 const cuerpo = await respuesta.json();
+                // Nunca se asocia un token calculado con parámetros que ya cambiaron en pantalla.
+                if (revisionSolicitada !== revisionMedicion) return;
                 if (!respuesta.ok || !cuerpo.ok) {
                     const primerError = cuerpo.errors ? Object.values(cuerpo.errors).flat()[0] : null;
                     throw new Error(primerError || cuerpo.message || 'No fue posible completar el análisis.');
@@ -315,7 +338,8 @@
                 token.value = analisis.token;
                 perlita.textContent = Number(analisis.porcentaje_perlita).toFixed(3) + ' %';
                 ferrita.textContent = Number(analisis.porcentaje_ferrita).toFixed(3) + ' %';
-                original.src = analisis.urls.original;
+                // Fiji entrega una copia PNG visible incluso si la evidencia original fue TIFF.
+                original.src = analisis.urls.imagen_visual || analisis.urls.original;
                 binaria.src = analisis.urls.imagen_binaria;
                 originalWrap.classList.remove('d-none');
                 binariaWrap.classList.remove('d-none');
@@ -327,6 +351,7 @@
                 estado.classList.add('text-success');
                 estado.textContent = 'Análisis completado y listo para guardarse con el reporte.';
             } catch (error) {
+                if (error.name === 'AbortError' || revisionSolicitada !== revisionMedicion) return;
                 resultadoVigente = false;
                 token.value = '';
                 estado.classList.add('text-danger');

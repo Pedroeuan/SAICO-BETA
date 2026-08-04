@@ -116,16 +116,19 @@ IJM);
         $extension = strtolower($imagen->getClientOriginalExtension() ?: 'jpg');
         $extension = $extension === 'jpeg' ? 'jpg' : $extension;
         $rutaOriginal = "{$directorioTrabajo}/original.{$extension}";
+        $rutaVisual = "{$directorioTrabajo}/imagen-visual.png";
         $rutaGrises = "{$directorioTrabajo}/imagen-8-bit.png";
         $rutaBinaria = "{$directorioTrabajo}/imagen-binaria.png";
         $rutaResultado = "{$directorioTrabajo}/resultado.txt";
         $rutaMacro = "{$directorioTrabajo}/fraccion-fases.ijm";
+        $directorioPublico = null;
 
         try {
             // Primero se preparan el original y el macro que reproducirá el flujo manual del técnico.
             $imagen->move($directorioTrabajo, basename($rutaOriginal));
             File::put($rutaMacro, $this->crearMacro(
                 $rutaOriginal,
+                $rutaVisual,
                 $rutaGrises,
                 $rutaBinaria,
                 $rutaResultado,
@@ -144,7 +147,12 @@ IJM);
             $proceso->setTimeout(max(10, (int) config('imagej.timeout', 300)));
             $proceso->mustRun();
 
-            if (!File::exists($rutaResultado) || !File::exists($rutaBinaria)) {
+            if (
+                !File::exists($rutaResultado)
+                || !File::exists($rutaVisual)
+                || !File::exists($rutaGrises)
+                || !File::exists($rutaBinaria)
+            ) {
                 throw new RuntimeException('ImageJ no generó los archivos esperados.');
             }
 
@@ -153,11 +161,13 @@ IJM);
             $directorioPublico = "Reportes/Analisis_Imagen/{$usuarioId}/{$token}";
             $archivos = [
                 'original' => ["original.{$extension}", $rutaOriginal],
+                // PNG compatible con navegador y DomPDF, incluso cuando el original es TIFF.
+                'imagen_visual' => ['imagen-visual.png', $rutaVisual],
                 'imagen_8_bit' => ['imagen-8-bit.png', $rutaGrises],
                 'imagen_binaria' => ['imagen-binaria.png', $rutaBinaria],
             ];
 
-            // Se conservan tres etapas para auditoría: original, 8 bits y máscara binaria.
+            // Se conserva original, copia visible, 8 bits y máscara binaria para auditoría completa.
             $rutas = [];
             foreach ($archivos as $clave => [$nombre, $origen]) {
                 $ruta = "{$directorioPublico}/{$nombre}";
@@ -192,6 +202,12 @@ IJM);
             );
 
             return $this->agregarUrls($metadata);
+        } catch (\Throwable $error) {
+            // Si una escritura falla a mitad del proceso, no se dejan evidencias incompletas publicadas.
+            if ($directorioPublico !== null) {
+                Storage::disk('public')->deleteDirectory($directorioPublico);
+            }
+            throw $error;
         } finally {
             // Las copias de trabajo y el macro nunca permanecen en storage/app/imagej-work.
             File::deleteDirectory($directorioTrabajo);
@@ -265,6 +281,7 @@ IJM);
     /** Construye el macro que reproduce 8-bit, Threshold, Apply, Area Fraction y Measure. */
     private function crearMacro(
         string $original,
+        string $visual,
         string $grises,
         string $binaria,
         string $resultado,
@@ -272,6 +289,7 @@ IJM);
         int $maximo
     ): string {
         $original = $this->rutaMacro($original);
+        $visual = $this->rutaMacro($visual);
         $grises = $this->rutaMacro($grises);
         $binaria = $this->rutaMacro($binaria);
         $resultado = $this->rutaMacro($resultado);
@@ -280,6 +298,8 @@ IJM);
 // Reproduce el procedimiento documentado por el técnico sin mostrar ventanas.
 setBatchMode(true);
 open("{$original}");
+// Copia PNG compatible para vista y PDF; el archivo original se conserva por separado.
+saveAs("PNG", "{$visual}");
 // Image > Type > 8-bit.
 run("8-bit");
 saveAs("PNG", "{$grises}");
