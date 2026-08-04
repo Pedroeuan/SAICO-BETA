@@ -53,6 +53,8 @@
                     if (cropper) cropper.destroy(); // Destruir cropper anterior si existe
                     cropper = new Cropper(cropperImage, {
                         aspectRatio: 1, // Cambia según tus necesidades
+                        // Sobrescribe el valor anterior para que el 03 coincida con el marco 4:3 del PDF.
+                        aspectRatio: e.target.closest('form')?.id === 'FOR-PIMP-03_B_01' ? 4 / 3 : 1,
                         viewMode: 1,
                         minContainerWidth: 760,
                         minContainerHeight: 600,
@@ -93,9 +95,15 @@
     document.getElementById('cropImageBtn').addEventListener('click', function () {
         if (usaEditorImagenes05B01) return;
         if (cropper && currentInput) {
-            const croppedCanvas = cropper.getCroppedCanvas();
+            const formularioActual = currentInput.closest('form');
+            const esFormato03B01 = formularioActual && formularioActual.id === 'FOR-PIMP-03_B_01';
+            const croppedCanvas = cropper.getCroppedCanvas(esFormato03B01
+                ? { maxWidth: 1600, maxHeight: 1200, imageSmoothingEnabled: true, imageSmoothingQuality: 'high' }
+                : undefined);
             if (croppedCanvas) {
-                const base64data = croppedCanvas.toDataURL();
+                const base64data = esFormato03B01
+                    ? croppedCanvas.toDataURL('image/jpeg', 0.98)
+                    : croppedCanvas.toDataURL();
 
                 // Actualizar la vista previa de la imagen
                 const previewDiv = currentInput.closest('.form-group').querySelector('.image-preview');
