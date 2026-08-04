@@ -287,7 +287,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                         'PMI',
                         'METALOGRAFÍA',
                         'ANÁLISIS QUÍMICO',
-                        'RELEVADO DE ESFUERZOS'
+                        'TRATAMIENTO TÉRMICO DE PWHT'
                     ];
 
                     const imagenesPrueba = {
@@ -308,7 +308,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                         'ACFM': '{{ asset('images/Menu Servicios SVG/ACFM.svg') }}',
                         'ONDAS GUIADAS': '{{ asset('images/Menu Servicios SVG/ONDAS_GUIADAS.svg') }}',
                         'VISUAL': '{{ asset('images/Menu Servicios SVG/Inspección_Visual.svg') }}',
-                        'RELEVADO DE ESFUERZOS': '{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}'
+                        'TRATAMIENTO TÉRMICO DE PWHT': '{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}'
                     };
 
                     const nombresPersonalizados = {

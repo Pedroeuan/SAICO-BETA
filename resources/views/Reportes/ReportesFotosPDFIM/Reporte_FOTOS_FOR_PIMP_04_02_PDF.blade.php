@@ -227,12 +227,9 @@
         }
         .photo-slot img { 
             display: block; 
-            width: auto;
-            height: auto;
-            max-width: 330px;
-            max-height: 181px;
-            object-fit: contain;
-            margin: 0;
+            width: 100%; 
+            height: auto;/*5.48cm; */
+            object-fit: contain; 
         }
         .photo-comment { 
             height: 16px;
