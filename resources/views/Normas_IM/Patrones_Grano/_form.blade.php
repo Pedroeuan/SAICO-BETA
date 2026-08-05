@@ -53,9 +53,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const archivo = this.files?.[0];
         if (!archivo) return;
 
-        previa.src = URL.createObjectURL(archivo);
-        previa.classList.remove('d-none');
-        previa.onload = function () { URL.revokeObjectURL(previa.src); };
+        const lector = new FileReader();
+        // data: ya esta permitido por la CSP y no modifica el archivo que se guardara.
+        lector.onload = function () {
+            previa.src = String(lector.result || '');
+            previa.classList.remove('d-none');
+        };
+        lector.onerror = function () {
+            previa.removeAttribute('src');
+            previa.classList.add('d-none');
+        };
+        lector.readAsDataURL(archivo);
     });
 });
 </script>
