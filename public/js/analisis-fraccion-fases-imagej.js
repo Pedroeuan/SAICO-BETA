@@ -243,9 +243,12 @@
                 return;
             }
 
-            const url = URL.createObjectURL(seleccionado);
+            const revisionLectura = revisionArchivo;
+            const lector = new FileReader();
             const imagen = new Image();
             imagen.onload = function () {
+                // Una lectura anterior nunca debe reemplazar la ultima imagen seleccionada.
+                if (revisionLectura !== revisionArchivo) return;
                 // La escala solo afecta la vista; Fiji procesa siempre el archivo original completo.
                 const escala = Math.min(1, 1000 / imagen.naturalWidth, 800 / imagen.naturalHeight);
                 fuente.width = Math.max(1, Math.round(imagen.naturalWidth * escala));
@@ -267,14 +270,22 @@
                 cargarHistogramaImageJ(seleccionado, revisionArchivo);
                 // Comparte el mismo File con el contador lineal para evitar una segunda selección de imagen.
                 document.dispatchEvent(new CustomEvent('saico:image-analysis-loaded', { detail: { file: seleccionado } }));
-                URL.revokeObjectURL(url);
             };
             imagen.onerror = function () {
-                URL.revokeObjectURL(url);
+                if (revisionLectura !== revisionArchivo) return;
                 estado.textContent = 'No se pudo leer la imagen seleccionada.';
                 estado.classList.add('text-danger');
             };
-            imagen.src = url;
+            // data: esta permitido por la CSP de produccion y solo se usa para la vista previa.
+            lector.onload = function () {
+                if (revisionLectura === revisionArchivo) imagen.src = String(lector.result || '');
+            };
+            lector.onerror = function () {
+                if (revisionLectura !== revisionArchivo) return;
+                estado.textContent = 'No se pudo preparar la vista previa de la imagen.';
+                estado.classList.add('text-danger');
+            };
+            lector.readAsDataURL(seleccionado);
         });
 
         minimo.addEventListener('input', function () { sincronizar(minimo, minimoRango); });
