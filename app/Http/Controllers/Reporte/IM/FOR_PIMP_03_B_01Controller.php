@@ -26,6 +26,9 @@ use App\Models\EquiposyConsumibles\certificados;
 use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Services\ServicioAnalisisImagenImageJ;
+use App\Services\ServicioMetalografiaReporte;
+use App\Services\ServicioPatronGranoReporte;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +66,99 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'posicion' => $posicionNormalizada,
             'una_hoja' => $posicionNormalizada === 'pagina_completa' ? 1 : 0,
         ];
+    }
+
+    /**
+     * Reserva dentro del PDF principal las dos celdas elegidas para Fiji y evita
+     * que una fotografía manual las sustituya silenciosamente.
+     */
+    private function validarDistribucionFotosDelRequest(Request $request): void
+    {
+        $imagesBase64 = $request->input('images_base64', []);
+        $existingImages = $request->input('existing_images', []);
+        $fotoEsTexto = $request->input('foto_es_texto', []);
+        $fotoPaginas = $request->input('foto_pagina', []);
+        $fotoPosiciones = $request->input('foto_posicion', []);
+        $eliminadas = array_map(
+            'strval',
+            array_filter($request->input('deleted_images', []), static fn ($indice) => $indice !== '')
+        );
+        $ocupadas = [];
+
+        if ($request->boolean('Analisis_Imagen_Usar_Reporte')
+            && trim((string) $request->input('Analisis_Imagen_Token', '')) !== '') {
+            $layout = app(ServicioMetalografiaReporte::class)->normalizarLayoutAnalisis(
+                $request->input('Analisis_Reporte_Layout')
+            );
+
+            foreach ([$layout['imagen'], $layout['resultados']] as $celda) {
+                $pagina = (int) $celda['pagina'];
+                $posicion = (string) $celda['posicion'];
+                $ocupadas[$pagina] = $ocupadas[$pagina] ?? [];
+
+                if (($posicion === 'pagina_completa' && $ocupadas[$pagina] !== [])
+                    || in_array('pagina_completa', $ocupadas[$pagina], true)
+                    || in_array($posicion, $ocupadas[$pagina], true)) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'foto_posicion' => "La distribución de Fiji repite una posición en la hoja {$pagina}.",
+                    ]);
+                }
+                $ocupadas[$pagina][] = $posicion;
+            }
+        }
+
+        if ($request->boolean('Patron_Grano.activo')
+            && (int) $request->input('Patron_Grano.id', 0) > 0) {
+            $layoutPatron = $this->normalizeFotoLayout(
+                $request->input('Patron_Grano.layout.pagina', 1),
+                $request->input('Patron_Grano.layout.posicion', 'abajo_izquierda'),
+                2
+            );
+            $pagina = $layoutPatron['pagina'];
+            $posicion = $layoutPatron['posicion'];
+            $ocupadas[$pagina] = $ocupadas[$pagina] ?? [];
+
+            if (($posicion === 'pagina_completa' && $ocupadas[$pagina] !== [])
+                || in_array('pagina_completa', $ocupadas[$pagina], true)
+                || in_array($posicion, $ocupadas[$pagina], true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'foto_posicion' => "La posición del tamaño de grano ya está ocupada en la hoja {$pagina}.",
+                ]);
+            }
+            $ocupadas[$pagina][] = $posicion;
+        }
+
+        foreach (array_unique(array_merge(
+            array_keys($imagesBase64),
+            array_keys($existingImages),
+            array_keys($fotoEsTexto)
+        )) as $index) {
+            if (in_array((string) $index, $eliminadas, true)
+                || (empty($imagesBase64[$index])
+                    && empty($existingImages[$index])
+                    && empty($fotoEsTexto[$index]))) {
+                continue;
+            }
+
+            $layout = $this->normalizeFotoLayout(
+                $fotoPaginas[$index] ?? null,
+                $fotoPosiciones[$index] ?? null,
+                (int) $index
+            );
+            $pagina = $layout['pagina'];
+            $posicion = $layout['posicion'];
+            $ocupadas[$pagina] = $ocupadas[$pagina] ?? [];
+
+            if (($posicion === 'pagina_completa' && $ocupadas[$pagina] !== [])
+                || in_array('pagina_completa', $ocupadas[$pagina], true)
+                || in_array($posicion, $ocupadas[$pagina], true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'foto_posicion' => "La posición " . str_replace('_', ' ', $posicion)
+                        . " de la hoja {$pagina} ya está ocupada.",
+                ]);
+            }
+            $ocupadas[$pagina][] = $posicion;
+        }
     }
 
     public function Datos_QR($datosParaCrearQR)
@@ -427,7 +523,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
     }
 
-    public function FOR_PIMP_03_B_01_store(Request $request)
+    public function FOR_PIMP_03_B_01_store(Request $request, ServicioAnalisisImagenImageJ $servicioImagen)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -462,6 +558,23 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            // Datos confiables generados por Fiji y distribución dentro del PDF principal.
+            'Analisis_Imagen_Token' => 'nullable|uuid',
+            'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
+            'Analisis_Reporte_Comentario_Imagen' => 'nullable|string|max:500',
+            'Analisis_Reporte_Descripcion' => 'nullable|string|max:20000',
+            'Analisis_Reporte_Layout' => 'nullable|array',
+            'Analisis_Reporte_Layout.*.pagina' => 'nullable|integer|min:1|max:999',
+            'Analisis_Reporte_Layout.*.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
+            'Conteo_Granos_JSON' => 'nullable|json|max:100000',
+            'Patron_Grano' => 'nullable|array',
+            'Patron_Grano.id' => 'nullable|required_if:Patron_Grano.activo,1|integer|min:1',
+            'Patron_Grano.descripcion' => 'nullable|required_with:Patron_Grano.id|string|max:500',
+            'Patron_Grano.activo' => 'nullable|boolean',
+            'Patron_Grano.usar_version_catalogo' => 'nullable|boolean',
+            'Patron_Grano.layout' => 'nullable|array',
+            'Patron_Grano.layout.pagina' => 'nullable|integer|min:1|max:999',
+            'Patron_Grano.layout.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -496,6 +609,12 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+
+            // Una celda manual puede contener una fotografía o únicamente texto.
+            'comments' => 'nullable|array',
+            'comments.*' => 'nullable|string|max:5000',
+            'foto_es_texto' => 'nullable|array',
+            'foto_es_texto.*' => 'nullable|boolean',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -565,6 +684,8 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
 
+        $this->validarDistribucionFotosDelRequest($request);
+
         /*Detalles Generales y Datos del Equipo */
         $Reportes = new reporte();  // Modelo de la tabla donde guardas los datos
         $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();  // Modelo de la tabla donde guardas los datos
@@ -616,6 +737,41 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 // Si el frontend envió un contrato válido, se utiliza ese
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
+        }
+        // Conserva una copia propia de la imagen maestra para proteger el reporte histórico.
+        $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
+        $patronGrano = $servicioPatronGrano->construirHistorico(
+            $request,
+            'FOR_PIMP_03_B_01',
+            (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+            (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
+        );
+        if ($patronGrano !== null) {
+            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
+        }
+
+        $servicioMetalografia = app(ServicioMetalografiaReporte::class);
+        // El token evita aceptar rutas manipuladas: el servidor recupera el resultado perteneciente al usuario.
+        if (!empty($validatedData['Analisis_Imagen_Token'])) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+                $validatedData['Analisis_Imagen_Token'],
+                (int) Auth::id()
+            );
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+                !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
+                $servicioMetalografia->normalizarLayoutAnalisis($validatedData['Analisis_Reporte_Layout'] ?? []);
+        }
+        // Los totales del conteo se recalculan en backend antes de formar parte del reporte.
+        $conteoGranos = $servicioMetalografia->normalizarConteoGranos(
+            $validatedData['Conteo_Granos_JSON'] ?? null
+        );
+        if ($conteoGranos !== null) {
+            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
         }
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
@@ -735,15 +891,18 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
         /* Fotos y Comentarios */
         $imagesBase64 = $request->input('images_base64', []);
+        $fotoEsTexto = $request->input('foto_es_texto', []);
         $fotoPaginas = $request->input('foto_pagina', []);
         $fotoPosiciones = $request->input('foto_posicion', []);
-        $hayImagenes = !empty(array_filter($imagesBase64));
-        if($hayImagenes)
+        $hayElementosFoto = !empty(array_filter($imagesBase64)) || !empty(array_filter($fotoEsTexto));
+        if($hayElementosFoto)
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
-        foreach ($imagesBase64 as $index => $base64Image) {
-            if (empty($base64Image)) {
+        foreach (array_unique(array_merge(array_keys($imagesBase64), array_keys($fotoEsTexto))) as $index) {
+            $base64Image = $imagesBase64[$index] ?? null;
+            $esCuadroTexto = !empty($fotoEsTexto[$index]);
+            if (empty($base64Image) && !$esCuadroTexto) {
                 continue;
             }
 
@@ -751,14 +910,19 @@ class FOR_PIMP_03_B_01Controller extends Controller
             $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
             // Decodificar Base64
-            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+            if (!$esCuadroTexto) {
+                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
 
             // Nombre único
             $imageName = 'imagen_' . time() . '_' . $index . '.png';
 
             $rutaCarpeta = "public/Reportes/FOR_PIMP_03_B_01/{$Contrato}/{$No_Reporte}/Fotos";
 
-            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+                Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+                $rutaPublicaFoto = "storage/Reportes/FOR_PIMP_03_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}";
+            } else {
+                $rutaPublicaFoto = null;
+            }
 
             $distribucionFoto = $this->normalizeFotoLayout(
                 $fotoPaginas[$index] ?? null,
@@ -789,8 +953,9 @@ class FOR_PIMP_03_B_01Controller extends Controller
             }
 
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_PIMP_03_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'ruta' => $rutaPublicaFoto,
                 'comentario' => $request->comments[$index] ?? null,
+                'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                 'una_hoja' => $distribucionFoto['una_hoja'],
                 'pagina' => $distribucionFoto['pagina'],
                 'posicion' => $distribucionFoto['posicion'],
@@ -846,7 +1011,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_PIMP_03_B_01_update(Request $request, $id)
+    public function FOR_PIMP_03_B_01_update(Request $request, $id, ServicioAnalisisImagenImageJ $servicioImagen)
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -881,6 +1046,22 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
+            'Analisis_Imagen_Token' => 'nullable|uuid',
+            'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
+            'Analisis_Reporte_Comentario_Imagen' => 'nullable|string|max:500',
+            'Analisis_Reporte_Descripcion' => 'nullable|string|max:20000',
+            'Analisis_Reporte_Layout' => 'nullable|array',
+            'Analisis_Reporte_Layout.*.pagina' => 'nullable|integer|min:1|max:999',
+            'Analisis_Reporte_Layout.*.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
+            'Conteo_Granos_JSON' => 'nullable|json|max:100000',
+            'Patron_Grano' => 'nullable|array',
+            'Patron_Grano.id' => 'nullable|required_if:Patron_Grano.activo,1|integer|min:1',
+            'Patron_Grano.descripcion' => 'nullable|required_with:Patron_Grano.id|string|max:500',
+            'Patron_Grano.activo' => 'nullable|boolean',
+            'Patron_Grano.usar_version_catalogo' => 'nullable|boolean',
+            'Patron_Grano.layout' => 'nullable|array',
+            'Patron_Grano.layout.pagina' => 'nullable|integer|min:1|max:999',
+            'Patron_Grano.layout.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -915,6 +1096,12 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+
+            // Conserva en edición el modo de cuadro de texto de cada celda.
+            'comments' => 'nullable|array',
+            'comments.*' => 'nullable|string|max:5000',
+            'foto_es_texto' => 'nullable|array',
+            'foto_es_texto.*' => 'nullable|boolean',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -982,6 +1169,8 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
+
+        $this->validarDistribucionFotosDelRequest($request);
 
         $detallesRequest = $request->input('Detalles_Generales', []);
         $validatedData['Detalles_Generales']['Codigo_Diseno'] = $validatedData['Detalles_Generales']['Codigo_Diseno']
@@ -1054,6 +1243,48 @@ class FOR_PIMP_03_B_01Controller extends Controller
         // Conservar cualquier informacion previa que no venga en el formulario de edicion.
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
+
+        $rutaPatronAnterior = (string) ($detallesActuales['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
+        $patronGrano = $servicioPatronGrano->construirHistorico(
+            $request,
+            'FOR_PIMP_03_B_01',
+            (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+            (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? ''),
+            is_array($detallesActuales['PATRON_GRANO'] ?? null)
+                ? $detallesActuales['PATRON_GRANO']
+                : null
+        );
+        if ($patronGrano === null) {
+            unset($validatedData['Detalles_Generales']['PATRON_GRANO']);
+        } else {
+            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
+        }
+
+        $servicioMetalografia = app(ServicioMetalografiaReporte::class);
+        // Un token nuevo reemplaza el análisis; sin token se conserva el histórico ya guardado.
+        if (!empty($validatedData['Analisis_Imagen_Token'])) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+                $validatedData['Analisis_Imagen_Token'],
+                (int) Auth::id()
+            );
+        }
+        if (is_array($validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] ?? null)) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+                !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
+                $servicioMetalografia->normalizarLayoutAnalisis($validatedData['Analisis_Reporte_Layout'] ?? []);
+        }
+        $conteoGranos = $servicioMetalografia->normalizarConteoGranos(
+            $validatedData['Conteo_Granos_JSON'] ?? null
+        );
+        if ($conteoGranos !== null) {
+            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
+        }
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_EQUIPO1'] = $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? ($datosEquipoActuales['ID_EQUIPO1'] ?? null);
@@ -1080,6 +1311,10 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
+
+        // Solo después de confirmar el update se elimina la copia histórica sustituida.
+        $rutaPatronNueva = (string) ($validatedData['Detalles_Generales']['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $servicioPatronGrano->eliminarCopiaSustituida($rutaPatronAnterior, $rutaPatronNueva);
 
         $titulos_json = $request->input('titulos_data', '[]');
         //dd($titulos_json);
@@ -1297,6 +1532,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $existingImages = $request->input('existing_images', []);
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
+        $fotoEsTexto = $request->input('foto_es_texto', []);
         $deletedImages = $request->input('deleted_images', []);
         $fotoPaginas = $request->input('foto_pagina', []);
         $fotoPosiciones = $request->input('foto_posicion', []);
@@ -1374,6 +1610,15 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 // Eliminar de `existingImages` para que no se guarde en la BD
                 unset($existingImages[$index]);
             }
+
+            // También elimina el estado de una celda de texto, aunque no tuviera ruta física.
+            unset(
+                $fotoEsTexto[$index],
+                $imagesBase64[$index],
+                $comments[$index],
+                $fotoPaginas[$index],
+                $fotoPosiciones[$index]
+            );
         }
 
         // **Reiniciar el array antes de procesar imágenes**
@@ -1384,6 +1629,27 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
+            // El modo texto conserva la celda y el comentario, sin mantener un archivo de imagen.
+            if (!empty($fotoEsTexto[$index])) {
+                $rutaImagenPublic = str_replace('storage/', 'public/', (string) $ruta);
+                if ($ruta !== '' && Storage::exists($rutaImagenPublic)) {
+                    Storage::delete($rutaImagenPublic);
+                }
+                $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
+                $imagenesGuardadas[] = [
+                    'ruta' => null,
+                    'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 1,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
+                    'detalles_junta' => $detalles['detalles_junta'],
+                    'datos_junta' => $detalles['datos_junta'],
+                ];
+                continue;
+            }
+
             if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
@@ -1441,11 +1707,11 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 }
             } else {
                 // **Mantener la imagen existente**
-                if (!in_array($ruta, $rutasGuardadas)) {
+                if (!empty($ruta) && !in_array($ruta, $rutasGuardadas)) {
                 $detalles = $getDetallesJunta($index);
 
                 $imagenesGuardadas[] = [
-                    'ruta' => $rutaNueva ?? $ruta,
+                    'ruta' => $ruta,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
                     'pagina' => $getDistribucionFoto($index)['pagina'],
@@ -1459,9 +1725,27 @@ class FOR_PIMP_03_B_01Controller extends Controller
         }
 
         // **3️⃣ Procesar nuevas imágenes Base64**
-        foreach ($imagesBase64 as $index => $base64Image) {
+        foreach (array_unique(array_merge(array_keys($imagesBase64), array_keys($fotoEsTexto))) as $index) {
+            $base64Image = $imagesBase64[$index] ?? null;
             if (isset($existingImages[$index])) {
                 continue; // ⛔ ya fue procesada arriba
+            }
+
+            // Permite una celda de texto nueva aun cuando no existe archivo de imagen.
+            if (!empty($fotoEsTexto[$index])) {
+                $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
+                $imagenesGuardadas[] = [
+                    'ruta' => null,
+                    'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 1,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
+                    'detalles_junta' => $detalles['detalles_junta'],
+                    'datos_junta' => $detalles['datos_junta'],
+                ];
+                continue;
             }
 
             if (!empty($base64Image)) {
@@ -1565,9 +1849,13 @@ class FOR_PIMP_03_B_01Controller extends Controller
             $totalFotos = count($fotos); // Contar el total de imágenes
         
             foreach ($fotos as $foto) {
-                $rutaFoto = storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
+                $esCuadroTexto = !empty($foto['es_cuadro_texto']);
+                $rutaFoto = $esCuadroTexto
+                    ? null
+                    : storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
 
-                if (!File::exists($rutaFoto)) {
+                // Un cuadro de texto no tiene ruta física y aun así debe llegar a la plantilla.
+                if (!$esCuadroTexto && !File::exists($rutaFoto)) {
                     continue;
                 }
 
@@ -1577,6 +1865,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 $Fotos[] = [
                     'path' => $rutaFoto,
                     'comment' => $foto['comentario'] ?? '',
+                    'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                     'una_hoja'  => $foto['una_hoja'] ?? 0,
                     'pagina' => max(1, (int) ($foto['pagina'] ?? (intdiv(count($Fotos), 4) + 1))),
                     'posicion' => $foto['posicion']
@@ -1588,6 +1877,12 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 ];
             }
         }
+
+        // Fiji se integra en esta misma plantilla principal; no se genera ni concatena un PDF de fotos.
+        app(ServicioMetalografiaReporte::class)->agregarAnalisisAlPdf($Fotos, $Detalles_Generales);
+        // El tamaño de grano usa la misma celda y proporciones que cualquier fotografía del formato.
+        app(ServicioPatronGranoReporte::class)->agregarAlPdf($Fotos, $Detalles_Generales);
+        $totalFotos = count($Fotos);
 
         $data = [
             'title' => 'Reporte_FOR-PIMP-03-B-01.PDF',

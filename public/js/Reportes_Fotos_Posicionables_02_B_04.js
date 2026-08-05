@@ -50,6 +50,57 @@
     }
 
     /*
+     * El 04/03 construye los primeros espacios desde datos que no pertenecen a
+     * Fotos_Reporte. Se calculan aquí para sugerir y validar posiciones sin
+     * duplicar la micrografía, la descripción ni el patrón del catálogo.
+     */
+    function posicionesAutomaticas(formulario) {
+        var reservadas = [];
+
+        if (!formulario || ['FOR-PIMP-03_B_01', 'FOR-PIMP-04_02', 'FOR-PIMP-04_03'].indexOf(formulario.id) === -1) {
+            return reservadas;
+        }
+
+        // Los tres elementos automáticos exponen la misma interfaz de página y posición que una foto manual.
+        formulario.querySelectorAll('[data-auto-report-layout]').forEach(function (elemento) {
+            var paginaInput = elemento.querySelector('[data-report-layout-page]');
+            var posicionInput = elemento.querySelector('[data-report-layout-position]:checked');
+            var pagina;
+
+            // Un control deshabilitado pertenece a un análisis o patrón que todavía no fue activado.
+            if (!paginaInput || paginaInput.matches(':disabled')
+                || !posicionInput || posicionInput.matches(':disabled')) return;
+            pagina = parseInt(paginaInput.value, 10);
+            if (!pagina || pagina < 1) return;
+
+            reservadas.push({
+                pagina: pagina,
+                posicion: posicionInput.value,
+                etiqueta: elemento.getAttribute('data-auto-report-label') || 'Elemento automático'
+            });
+        });
+
+        // El tamaño de grano usa la distribución de la tarjeta que el técnico marcó en la lista de imágenes.
+        formulario.querySelectorAll('.foto-grain-checkbox:checked').forEach(function (checkbox) {
+            var tarjeta = checkbox.closest('[data-grain-card], [id^="image-container-"]');
+            var paginaInput = tarjeta ? tarjeta.querySelector('.foto-pagina, [data-grain-history-page]') : null;
+            var posicionInput = tarjeta
+                ? tarjeta.querySelector('input[data-foto-posicion]:checked, input[data-grain-history-position]:checked')
+                : null;
+            var pagina = paginaInput ? parseInt(paginaInput.value, 10) : 0;
+            if (!pagina || !posicionInput) return;
+
+            reservadas.push({
+                pagina: pagina,
+                posicion: posicionInput.value,
+                etiqueta: 'Imagen de tamaño de grano'
+            });
+        });
+
+        return reservadas;
+    }
+
+    /*
      * Recupera la pagina y posicion guardadas en los atributos data-*.
      * Si no existen, distribuye automaticamente cuatro fotos por pagina
      * siguiendo el orden de los cuatro cuadrantes.
@@ -58,6 +109,33 @@
         var pagina = parseInt(contenedor.getAttribute('data-foto-pagina'), 10);
         var posicion = contenedor.getAttribute('data-foto-posicion');
         var esHojaCompleta = contenedor.getAttribute('data-foto-hoja-completa') === '1';
+        var formulario = contenedor.closest('form');
+        var tieneDistribucionGuardada = pagina >= 1
+            && posiciones.some(function (item) { return item.value === posicion; });
+        var reservadas;
+        var disponiblesPrimeraPagina;
+        var indicePosterior;
+
+        // Create y las tarjetas nuevas de Edit comienzan en la primera celda que no es automática.
+        if (!tieneDistribucionGuardada && formulario
+            && ['FOR-PIMP-03_B_01', 'FOR-PIMP-04_02', 'FOR-PIMP-04_03'].indexOf(formulario.id) !== -1) {
+            reservadas = posicionesAutomaticas(formulario)
+                .filter(function (item) { return item.pagina === 1; })
+                .map(function (item) { return item.posicion; });
+            disponiblesPrimeraPagina = posiciones.slice(0, 4).filter(function (item) {
+                return reservadas.indexOf(item.value) === -1;
+            });
+
+            if (orden < disponiblesPrimeraPagina.length) {
+                return { pagina: 1, posicion: disponiblesPrimeraPagina[orden].value };
+            }
+
+            indicePosterior = orden - disponiblesPrimeraPagina.length;
+            return {
+                pagina: Math.floor(indicePosterior / 4) + 2,
+                posicion: posiciones[indicePosterior % 4].value
+            };
+        }
 
         if (!pagina || pagina < 1) {
             pagina = Math.floor(orden / 4) + 1;
@@ -99,6 +177,7 @@
         var formulario = contenedor.closest('form');
         // Estos formatos permiten usar el espacio de una foto como cuadro de texto.
         var permiteCuadroTexto = formulario && [
+            'FOR-PIMP-03_B_01',
             'FOR-PIMP-04_02',
             'FOR-PIMP-04_03',
             'FOR-PIMP-05_B_01'
@@ -315,17 +394,39 @@
     function validarDistribucion(formulario) {
         var ocupadas = {};
         var error = '';
+        var automaticas = posicionesAutomaticas(formulario);
+
+        // Primero registra los elementos generados por Fiji y el tamaño de grano elegido en una tarjeta.
+        automaticas.forEach(function (elemento) {
+            if (error) return;
+            ocupadas[elemento.pagina] = ocupadas[elemento.pagina] || [];
+
+            if (elemento.posicion === 'pagina_completa' && ocupadas[elemento.pagina].length) {
+                error = elemento.etiqueta + ' no puede usar la hoja ' + elemento.pagina +
+                    ' completa porque esa hoja ya contiene otro elemento.';
+                return;
+            }
+            if (ocupadas[elemento.pagina].indexOf('pagina_completa') !== -1
+                || ocupadas[elemento.pagina].indexOf(elemento.posicion) !== -1) {
+                error = elemento.etiqueta + ' repite la posición "' +
+                    elemento.posicion.replace(/_/g, ' ') + '" en la hoja ' + elemento.pagina + '.';
+                return;
+            }
+            ocupadas[elemento.pagina].push(elemento.posicion);
+        });
 
         formulario.querySelectorAll('[id^="image-container-"]').forEach(function (tarjeta) {
             var paginaInput = tarjeta.querySelector('.foto-pagina');
             var posicionInput = tarjeta.querySelector('input[data-foto-posicion]:checked');
             var checkboxDisparo = tarjeta.querySelector('.foto-disparo-checkbox');
+            var checkboxGrano = tarjeta.querySelector('.foto-grain-checkbox');
             var pagina;
             var posicion;
 
             // Ignora tarjetas eliminadas/ocultas y detiene nuevas comprobaciones al fallar.
             if (error || !paginaInput || !posicionInput || tarjeta.style.display === 'none'
-                || (checkboxDisparo && checkboxDisparo.checked)) {
+                || (checkboxDisparo && checkboxDisparo.checked)
+                || (checkboxGrano && checkboxGrano.checked)) {
                 return;
             }
 
@@ -341,7 +442,9 @@
             ocupadas[pagina] = ocupadas[pagina] || [];
 
             if (posicion === 'pagina_completa' && ocupadas[pagina].length) {
-                error = 'La hoja ' + pagina + ' esta marcada como pagina completa y tambien contiene otras fotografias.';
+                error = automaticas.some(function (item) { return item.pagina === pagina; })
+                    ? 'La hoja ' + pagina + ' ya contiene elementos de Fiji o del patrón de grano; no puede usarse como página completa.'
+                    : 'La hoja ' + pagina + ' esta marcada como pagina completa y tambien contiene otras fotografias.';
                 return;
             }
 
@@ -351,7 +454,11 @@
             }
 
             if (ocupadas[pagina].indexOf(posicion) !== -1) {
-                error = 'La posicion "' + posicion.replace(/_/g, ' ') + '" esta repetida en la hoja ' + pagina + '.';
+                error = automaticas.some(function (item) {
+                    return item.pagina === pagina && item.posicion === posicion;
+                })
+                    ? 'La posición "' + posicion.replace(/_/g, ' ') + '" de la hoja ' + pagina + ' está reservada por Fiji o por el patrón comparativo.'
+                    : 'La posicion "' + posicion.replace(/_/g, ' ') + '" esta repetida en la hoja ' + pagina + '.';
                 return;
             }
 

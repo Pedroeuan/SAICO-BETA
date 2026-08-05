@@ -239,9 +239,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const formularioActual = currentInput.closest('form');
         const conservarCalidadOriginal = formularioActual && formularioActual.id === 'FOR-PIMP-05_B_01';
+        const conservarAltaCalidad03 = formularioActual && formularioActual.id === 'FOR-PIMP-03_B_01';
         const base64data = conservarCalidadOriginal
             ? canvas.toDataURL('image/png')
-            : canvas.toDataURL('image/jpeg', 0.9);
+            : canvas.toDataURL('image/jpeg', conservarAltaCalidad03 ? 0.98 : 0.9);
         const previewDiv = document.getElementById(currentInput.id + '-preview');
         const base64Input = document.getElementById(currentInput.id + '-base64');
 
@@ -422,7 +423,11 @@ document.addEventListener('DOMContentLoaded', function () {
             saveWithoutCropBtn.addEventListener('click', function () {
                 if (!cropper) return;
 
-                saveImageFromCanvas(cropper.getCroppedCanvas(), 'Guardado');
+                const formularioActual = currentInput ? currentInput.closest('form') : null;
+                const opciones = formularioActual && formularioActual.id === 'FOR-PIMP-03_B_01'
+                    ? { maxWidth: 1600, maxHeight: 1200, imageSmoothingEnabled: true, imageSmoothingQuality: 'high' }
+                    : undefined;
+                saveImageFromCanvas(cropper.getCroppedCanvas(opciones), 'Guardado');
                 hideCropperModal();
             });
         }
@@ -431,7 +436,11 @@ document.addEventListener('DOMContentLoaded', function () {
             cropImageBtn.addEventListener('click', function () {
                 if (!cropper) return;
 
-                saveImageFromCanvas(cropper.getCroppedCanvas(), 'Recortado');
+                const formularioActual = currentInput ? currentInput.closest('form') : null;
+                const opciones = formularioActual && formularioActual.id === 'FOR-PIMP-03_B_01'
+                    ? { maxWidth: 1600, maxHeight: 1200, imageSmoothingEnabled: true, imageSmoothingQuality: 'high' }
+                    : undefined;
+                saveImageFromCanvas(cropper.getCroppedCanvas(opciones), 'Recortado');
                 hideCropperModal();
             });
         }

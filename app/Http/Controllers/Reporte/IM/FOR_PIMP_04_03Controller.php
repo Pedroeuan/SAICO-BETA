@@ -30,6 +30,9 @@ use App\Models\Normas_IM\Normas_IM;
 use App\Services\ServicioAnalisisPdfXrf;
 use App\Services\ServicioImagenesPdfXrf;
 use App\Services\ServicioRegistrosFotos;
+use App\Services\ServicioAnalisisImagenImageJ;
+use App\Services\ServicioMetalografiaReporte;
+use App\Services\ServicioPatronGranoReporte;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -244,6 +247,112 @@ class FOR_PIMP_04_03Controller extends Controller
         }
 
         $this->validarFotosDeDisparos($imagenes);
+    }
+
+    /**
+     * Evita que dos fotografías terminen en la misma celda o que una fotografía
+     * manual sustituya silenciosamente los espacios automáticos del anexo.
+     */
+    private function validarDistribucionFotosDelRequest(Request $request): void
+    {
+        $imagesBase64 = $request->input('images_base64', []);
+        $existingImages = $request->input('existing_images', []);
+        $fotoEsTexto = $request->input('foto_es_texto', []);
+        $fotoPaginas = $request->input('foto_pagina', []);
+        $fotoPosiciones = $request->input('foto_posicion', []);
+        $esDisparo = $request->input('es_disparo', []);
+        $eliminadas = array_map(
+            'strval',
+            array_filter($request->input('deleted_images', []), static fn ($indice) => $indice !== '')
+        );
+
+        $automaticas = [];
+        if ($request->boolean('Analisis_Imagen_Usar_Reporte')
+            && trim((string) $request->input('Analisis_Imagen_Token', '')) !== '') {
+            $layoutAnalisis = app(ServicioMetalografiaReporte::class)->normalizarLayoutAnalisis(
+                $request->input('Analisis_Reporte_Layout')
+            );
+            $automaticas[] = array_merge($layoutAnalisis['imagen'], ['etiqueta' => 'Imagen 1 — Micrografía']);
+            $automaticas[] = array_merge($layoutAnalisis['resultados'], ['etiqueta' => 'Imagen 2 — Resultados']);
+        }
+        if ($request->boolean('Patron_Grano.activo') && (int) $request->input('Patron_Grano.id', 0) > 0) {
+            $layoutPatron = $this->normalizeFotoLayout(
+                $request->input('Patron_Grano.layout.pagina', 1),
+                $request->input('Patron_Grano.layout.posicion', 'abajo_izquierda'),
+                2
+            );
+            $automaticas[] = array_merge($layoutPatron, ['etiqueta' => 'Imagen de tamaño de grano']);
+        }
+
+        $ocupadas = [];
+        // También se validan colisiones entre los propios elementos automáticos antes de revisar fotos manuales.
+        foreach ($automaticas as $automatica) {
+            $paginaAutomatica = (int) $automatica['pagina'];
+            $posicionAutomatica = (string) $automatica['posicion'];
+            $ocupadas[$paginaAutomatica] = $ocupadas[$paginaAutomatica] ?? [];
+            if (($posicionAutomatica === 'pagina_completa' && $ocupadas[$paginaAutomatica] !== [])
+                || in_array('pagina_completa', $ocupadas[$paginaAutomatica], true)
+                || in_array($posicionAutomatica, $ocupadas[$paginaAutomatica], true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'foto_posicion' => ($automatica['etiqueta'] ?? 'Un elemento automático') .
+                        " repite una posición ocupada en la hoja {$paginaAutomatica}.",
+                ]);
+            }
+            $ocupadas[$paginaAutomatica][] = $posicionAutomatica;
+        }
+        $indices = array_unique(array_merge(
+            array_keys($imagesBase64),
+            array_keys($existingImages),
+            array_keys($fotoEsTexto)
+        ));
+
+        foreach ($indices as $index) {
+            if (in_array((string) $index, $eliminadas, true) || !empty($esDisparo[$index])) {
+                continue;
+            }
+
+            // Una tarjeta sin archivo ni modo texto no genera ningún registro fotográfico.
+            $esExistente = array_key_exists($index, $existingImages);
+            if (empty($imagesBase64[$index]) && !$esExistente && empty($fotoEsTexto[$index])) {
+                continue;
+            }
+
+            $distribucion = $this->normalizeFotoLayout(
+                $fotoPaginas[$index] ?? null,
+                $fotoPosiciones[$index] ?? null,
+                (int) $index
+            );
+            $pagina = $distribucion['pagina'];
+            $posicion = $distribucion['posicion'];
+            $ocupadas[$pagina] = $ocupadas[$pagina] ?? [];
+
+            if ($posicion === 'pagina_completa' && $ocupadas[$pagina] !== []) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'foto_posicion' => "La hoja {$pagina} ya contiene otros espacios y no puede utilizarse como página completa.",
+                ]);
+            }
+
+            if (in_array('pagina_completa', $ocupadas[$pagina], true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'foto_posicion' => "La hoja {$pagina} ya está ocupada por una fotografía de página completa.",
+                ]);
+            }
+
+            if (in_array($posicion, $ocupadas[$pagina], true)) {
+                $nombrePosicion = str_replace('_', ' ', $posicion);
+                $esAutomatica = collect($automaticas)->contains(
+                    static fn ($item) => (int) $item['pagina'] === $pagina
+                        && (string) $item['posicion'] === $posicion
+                );
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'foto_posicion' => $esAutomatica
+                        ? "La posición {$nombrePosicion} de la hoja {$pagina} está reservada por Fiji o por el patrón comparativo."
+                        : "La posición {$nombrePosicion} está repetida en la hoja {$pagina}.",
+                ]);
+            }
+
+            $ocupadas[$pagina][] = $posicion;
+        }
     }
 
     /** Construye la copia histórica de norma, composición, promedios y PDF que conserva el reporte. */
@@ -735,7 +844,11 @@ class FOR_PIMP_04_03Controller extends Controller
 
     }
 
-    public function FOR_PIMP_04_03_store(Request $request)
+    public function FOR_PIMP_04_03_store(
+        Request $request,
+        ServicioAnalisisImagenImageJ $servicioImagen,
+        ServicioMetalografiaReporte $servicioMetalografia
+    )
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
@@ -777,6 +890,15 @@ class FOR_PIMP_04_03Controller extends Controller
             'ClienteSelect' => 'nullable|required_if:TieneCliente,si|string|max:255',
             'ClienteInput' => 'nullable|required_if:TieneCliente,no|string|max:255',
             'TieneContrato' => 'required|in:si,no',
+            // Datos generados por Fiji y por el contador lineal de granos.
+            'Analisis_Imagen_Token' => 'nullable|uuid',
+            'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
+            'Analisis_Reporte_Comentario_Imagen' => 'nullable|string|max:500',
+            'Analisis_Reporte_Descripcion' => 'nullable|string|max:20000',
+            'Analisis_Reporte_Layout' => 'nullable|array',
+            'Analisis_Reporte_Layout.*.pagina' => 'nullable|integer|min:1|max:999',
+            'Analisis_Reporte_Layout.*.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
+            'Conteo_Granos_JSON' => 'nullable|json|max:100000',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -832,6 +954,14 @@ class FOR_PIMP_04_03Controller extends Controller
             'Norma_IM.Promedio.*' => 'nullable|string|max:255',
             'Analisis_PDF' => 'nullable|array|max:10',
             'Analisis_PDF.*' => 'file|mimes:pdf|max:10240',
+            'Patron_Grano' => 'nullable|array',
+            'Patron_Grano.id' => 'nullable|required_if:Patron_Grano.activo,1|integer|min:1',
+            'Patron_Grano.descripcion' => 'nullable|required_with:Patron_Grano.id|string|max:500',
+            'Patron_Grano.activo' => 'nullable|boolean',
+            'Patron_Grano.usar_version_catalogo' => 'nullable|boolean',
+            'Patron_Grano.layout' => 'nullable|array',
+            'Patron_Grano.layout.pagina' => 'nullable|integer|min:1|max:999',
+            'Patron_Grano.layout.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
 
             //Validar el campo NumFirmas
             'comments' => 'nullable|array',
@@ -915,6 +1045,7 @@ class FOR_PIMP_04_03Controller extends Controller
 
         // La validación considera juntas las imágenes nuevas y las que permanecen en Edit.
         $this->validarDisparosDelRequest($request);
+        $this->validarDistribucionFotosDelRequest($request);
 
         /*Detalles Generales y Datos del Equipo */
         $Reportes = new reporte();  // Modelo de la tabla donde guardas los datos
@@ -983,6 +1114,46 @@ class FOR_PIMP_04_03Controller extends Controller
                 );
             }
             $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
+        }
+
+        // Congela la imagen maestra seleccionada para que el histórico no cambie al editar el catálogo.
+        $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
+        $patronGrano = $servicioPatronGrano->construirHistorico(
+            $request,
+            'FOR_PIMP_04_03',
+            (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+            (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
+        );
+        if ($patronGrano !== null) {
+            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
+        }
+
+        // Solo permite adjuntar un análisis Fiji generado por el usuario autenticado.
+        if (!empty($validatedData['Analisis_Imagen_Token'])) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+                $validatedData['Analisis_Imagen_Token'],
+                (int) Auth::id()
+            );
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+                !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
+            // Guarda el comentario visible debajo de la micrografía como dato independiente.
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
+            // La distribución elegida se guarda junto con el análisis para reconstruir el PDF y Edit.
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
+                $servicioMetalografia->normalizarLayoutAnalisis(
+                    $validatedData['Analisis_Reporte_Layout'] ?? []
+                );
+        }
+
+        // El servidor vuelve a calcular el conteo y el promedio antes de guardarlos.
+        $conteoGranos = $servicioMetalografia->normalizarConteoGranos(
+            $validatedData['Conteo_Granos_JSON'] ?? null
+        );
+        if ($conteoGranos !== null) {
+            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
         }
 
         // Guardar Detalles_Generales como JSON en la base de datos
@@ -1230,7 +1401,12 @@ class FOR_PIMP_04_03Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_PIMP_04_03_update(Request $request, $id)
+    public function FOR_PIMP_04_03_update(
+        Request $request,
+        $id,
+        ServicioAnalisisImagenImageJ $servicioImagen,
+        ServicioMetalografiaReporte $servicioMetalografia
+    )
     {
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
@@ -1268,6 +1444,14 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales.Num_Soldador' => 'nullable|string',
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
+            'Analisis_Imagen_Token' => 'nullable|uuid',
+            'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
+            'Analisis_Reporte_Comentario_Imagen' => 'nullable|string|max:500',
+            'Analisis_Reporte_Descripcion' => 'nullable|string|max:20000',
+            'Analisis_Reporte_Layout' => 'nullable|array',
+            'Analisis_Reporte_Layout.*.pagina' => 'nullable|integer|min:1|max:999',
+            'Analisis_Reporte_Layout.*.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
+            'Conteo_Granos_JSON' => 'nullable|json|max:100000',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1323,6 +1507,14 @@ class FOR_PIMP_04_03Controller extends Controller
             'Norma_IM.Promedio.*' => 'nullable|string|max:255',
             'Analisis_PDF' => 'nullable|array|max:10',
             'Analisis_PDF.*' => 'file|mimes:pdf|max:10240',
+            'Patron_Grano' => 'nullable|array',
+            'Patron_Grano.id' => 'nullable|required_if:Patron_Grano.activo,1|integer|min:1',
+            'Patron_Grano.descripcion' => 'nullable|required_with:Patron_Grano.id|string|max:500',
+            'Patron_Grano.activo' => 'nullable|boolean',
+            'Patron_Grano.usar_version_catalogo' => 'nullable|boolean',
+            'Patron_Grano.layout' => 'nullable|array',
+            'Patron_Grano.layout.pagina' => 'nullable|integer|min:1|max:999',
+            'Patron_Grano.layout.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
             //Validar el campo NumFirmas
             'comments' => 'nullable|array',
             'comments.*' => 'nullable|string|max:5000',
@@ -1405,6 +1597,7 @@ class FOR_PIMP_04_03Controller extends Controller
 
         // Valida el resultado final antes de eliminar o reemplazar archivos existentes.
         $this->validarDisparosDelRequest($request);
+        $this->validarDistribucionFotosDelRequest($request);
 
         $detallesRequest = $request->input('Detalles_Generales', []);
         $validatedData['Detalles_Generales']['Codigo_Diseno'] = $validatedData['Detalles_Generales']['Codigo_Diseno']
@@ -1475,6 +1668,52 @@ class FOR_PIMP_04_03Controller extends Controller
             }
             $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
+
+        $rutaPatronAnterior = (string) ($detallesActuales['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
+        $patronGrano = $servicioPatronGrano->construirHistorico(
+            $request,
+            'FOR_PIMP_04_03',
+            (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+            (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? ''),
+            is_array($detallesActuales['PATRON_GRANO'] ?? null)
+                ? $detallesActuales['PATRON_GRANO']
+                : null
+        );
+        if ($patronGrano === null) {
+            unset($validatedData['Detalles_Generales']['PATRON_GRANO']);
+        } else {
+            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
+        }
+
+        // Un token nuevo reemplaza el análisis; sin token se conserva el histórico existente.
+        if (!empty($validatedData['Analisis_Imagen_Token'])) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+                $validatedData['Analisis_Imagen_Token'],
+                (int) Auth::id()
+            );
+        }
+        if (is_array($validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] ?? null)) {
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+                !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
+            // Edit modifica el pie de fotografía guardado sin alterar la imagen histórica.
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+                trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
+            // Edit conserva la imagen original y permite cambiar únicamente su distribución en el anexo.
+            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
+                $servicioMetalografia->normalizarLayoutAnalisis(
+                    $validatedData['Analisis_Reporte_Layout'] ?? []
+                );
+        }
+
+        $conteoGranos = $servicioMetalografia->normalizarConteoGranos(
+            $validatedData['Conteo_Granos_JSON'] ?? null
+        );
+        if ($conteoGranos !== null) {
+            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
+        }
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_EQUIPO1'] = $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? ($datosEquipoActuales['ID_EQUIPO1'] ?? null);
@@ -1501,6 +1740,10 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
+
+        // Elimina únicamente la copia anterior que fue sustituida por otra dentro del mismo reporte.
+        $rutaPatronNueva = (string) ($validatedData['Detalles_Generales']['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $servicioPatronGrano->eliminarCopiaSustituida($rutaPatronAnterior, $rutaPatronNueva);
 
         $titulos_json = $request->input('titulos_data', '[]');
         //dd($titulos_json);
@@ -2097,8 +2340,12 @@ class FOR_PIMP_04_03Controller extends Controller
                     'datos_junta' => $datosJunta,
                 ];
             }
-            $totalFotos = count($Fotos);
         }
+
+        // Los cuatro espacios metalográficos se agregan al final para prevalecer sobre posiciones manuales.
+        app(ServicioMetalografiaReporte::class)->agregarAnalisisAlPdf($Fotos, $Detalles_Generales);
+        app(ServicioPatronGranoReporte::class)->agregarAlPdf($Fotos, $Detalles_Generales);
+        $totalFotos = count($Fotos);
 
         $data = [
             'title' => 'Reporte_FOR-PIMP-04-03.PDF',
