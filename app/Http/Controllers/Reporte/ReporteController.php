@@ -29,6 +29,7 @@ use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Admin\Usuario;
 use App\Services\ServicioRegistrosFotos;
+use App\Services\ServicioPatronGranoReporte;
 
 
 use Illuminate\Http\Request;
@@ -46,6 +47,16 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReporteController extends Controller
 {
+    /** Carga el catálogo visual solo para los formatos IM que realmente lo consumen. */
+    private function catalogoPatronesGranoIM(?string $nombreFormato): \Illuminate\Support\Collection
+    {
+        if (!in_array($nombreFormato, ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03'], true)) {
+            return collect();
+        }
+
+        return app(ServicioPatronGranoReporte::class)->catalogoParaVista();
+    }
+
         public function FOR_PIMP_02_B_03()
     {
 
@@ -1025,7 +1036,10 @@ class ReporteController extends Controller
             ];
         })->values();
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM'));
+        // Catálogo independiente: el reporte recibe solo datos seguros para construir el select y su vista previa.
+        $PatronesGranoIM = $this->catalogoPatronesGranoIM($Nombre_Formato);
+
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM','PatronesGranoIM'));
 
     }
 
@@ -1241,7 +1255,10 @@ class ReporteController extends Controller
             ];
         })->values();
 
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM'));
+        // Las rutas públicas se usan solo en la vista previa; el servidor vuelve a resolver el ID al guardar.
+        $PatronesGranoIM = $this->catalogoPatronesGranoIM($Nombre_Formato);
+
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM','PatronesGranoIM'));
     }
 
     public function indexINS2(Request $request)

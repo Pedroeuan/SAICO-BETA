@@ -72,7 +72,8 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-05_B_01" action="{{route('Reportes_FOR_PIMP_05_B_01.store')}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-05_B_01" action="{{route('Reportes_FOR_PIMP_05_B_01.store')}}" method="post" enctype="multipart/form-data"
+                data-validation-errors="{{ $errors->any() ? 1 : 0 }}">
                 @csrf
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -834,35 +835,6 @@ $(document).ready(function() {
         'equipos1'
     );
 });
-
-    /*FOR-PIMP-05_B_01*/
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('FOR-PIMP-05_B_01');
-        if (!form) return;
-
-        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-            el.addEventListener('input', function () {
-                if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
-                localStorage.setItem('FOR-PIMP-05_B_01_Form_' + el.name, el.value);
-            });
-        });
-
-        // Restaurar al cargar la página (solo si el campo está vacío)
-        form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-            if (!el.value) {
-                const value = localStorage.getItem('FOR-PIMP-05_B_01_Form_' + el.name);
-                if (value !== null) el.value = value;
-            }
-        });
-
-        // Limpiar localStorage al enviar el formulario
-        form.addEventListener('submit', function () {
-            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
-                localStorage.removeItem('FOR-PIMP-05_B_01_Form_' + el.name);
-                //localStorage.clear();
-            });
-        });
-    });
 
 </script>
 {{-- Ruta propia del formato; el comportamiento de extracción sí se comparte mediante JavaScript. --}}

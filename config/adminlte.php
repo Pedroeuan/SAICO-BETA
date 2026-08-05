@@ -626,6 +626,16 @@ return [
                         'icon' => 'far fa-list-alt',
                         'url' => '/index/Normas_IM',
                     ],
+                    [
+                        'text' => 'Registro de Patrones de Grano',
+                        'icon' => 'far fa-image',
+                        'url' => '/Patrones_Grano_IM/create',
+                    ],
+                    [
+                        'text' => 'Lista de Patrones de Grano',
+                        'icon' => 'far fa-images',
+                        'url' => '/Patrones_Grano_IM',
+                    ],
                 ],
             ],
 
