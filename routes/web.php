@@ -13,6 +13,7 @@ use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
 use App\Http\Controllers\Normas_IM\NormasIMController;
+use App\Http\Controllers\Normas_IM\PatronesGranoIMController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\PDFReportes\PDFReportesController;
@@ -144,8 +145,12 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::middleware('can:tecnicos-access')->group(function () {
         /* Análisis reutilizable de imágenes: histograma exacto y medición final con Fiji/ImageJ. */
         Route::post('/analisis-imagen/histograma', [AnalisisImagenController::class, 'histograma'])
+            // El histograma inicia Fiji; este límite evita saturación accidental por usuario autenticado.
+            ->middleware('throttle:12,1')
             ->name('analisis-imagen.histograma');
         Route::post('/analisis-imagen/fraccion-fases', [AnalisisImagenController::class, 'fraccionFases'])
+            // Measure conserva tres evidencias, por lo que se aplica un límite más estricto.
+            ->middleware('throttle:6,1')
             ->name('analisis-imagen.fraccion-fases');
         /*vista Page in construction */
         Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
@@ -229,6 +234,12 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         Route::post('/Normas_IM/update/{id}', [NormasIMController::class, 'update'])->name('Normas_IM.update');
         /*Ruta de Eliminación*/
         Route::delete('/Normas_IM/destroy/{id}', [NormasIMController::class, 'destroy'])->name('Normas_IM.destroy');
+
+        /* Catálogo de imágenes maestras para la comparación metalográfica de tamaño de grano. */
+        Route::resource('/Patrones_Grano_IM', PatronesGranoIMController::class)
+            ->parameters(['Patrones_Grano_IM' => 'patron'])
+            ->names('Patrones_Grano_IM')
+            ->except('show');
 
         /*Vista Menu Servicios*/
         Route::get('/Menu/Servicios', [ReporteController::class, 'indexMenuServicios'])->name('Menu.Servicios');
