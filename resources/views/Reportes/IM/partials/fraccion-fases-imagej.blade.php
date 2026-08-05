@@ -2,6 +2,8 @@
     // En Edit se reciben metadatos y rutas del análisis anterior para mostrar sus evidencias.
     $analisisImagenActual = $analisisImagen ?? [];
     $rutasAnalisis = $analisisImagenActual['rutas'] ?? [];
+    // PNG visible para TIFF; los análisis históricos conservan la ruta original como respaldo.
+    $rutaVisualAnalisis = $rutasAnalisis['imagen_visual'] ?? $rutasAnalisis['original'] ?? '';
 @endphp
 
 {{--
@@ -145,10 +147,10 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mt-2 {{ empty($rutasAnalisis['original']) ? 'd-none' : '' }}" data-imagej-original-wrap>
+            <div class="col-md-6 mt-2 {{ empty($rutaVisualAnalisis) ? 'd-none' : '' }}" data-imagej-original-wrap>
                 <strong>Imagen original</strong>
                 <img class="img-fluid border rounded d-block mt-1" data-imagej-original
-                    src="{{ !empty($rutasAnalisis['original']) ? asset($rutasAnalisis['original']) : '' }}" alt="Imagen original analizada">
+                    src="{{ !empty($rutaVisualAnalisis) ? asset($rutaVisualAnalisis) : '' }}" alt="Imagen original analizada">
             </div>
             <div class="col-md-6 mt-2 {{ empty($rutasAnalisis['imagen_binaria']) ? 'd-none' : '' }}" data-imagej-binary-wrap>
                 <strong>Evidencia binaria generada por Fiji</strong>

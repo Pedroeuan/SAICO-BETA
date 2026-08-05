@@ -405,6 +405,14 @@
 
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
 
+                    {{-- Edit reconstruye las herramientas con el análisis y las líneas guardadas en el reporte. --}}
+                    @include('Reportes.IM.partials.fraccion-fases-imagej', [
+                        'analisisImagen' => $Detalles_Generales['ANALISIS_IMAGEN'] ?? []
+                    ])
+                    @include('Reportes.IM.partials.conteo-granos-lineal', [
+                        'conteoGranos' => $Detalles_Generales['CONTEO_GRANOS'] ?? []
+                    ])
+
                     <!-- Select para elegir el número de firmas -->
                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">Número de Firmas:</div>
                         <div class="col-sm-15">
@@ -617,6 +625,15 @@
 
                         <p>
 
+                        {{-- No usa FOTOS_03_B_01: ambos elementos se distribuyen en la plantilla PDF principal. --}}
+                        @include('Reportes.IM.partials.analisis-imagen-reporte-fotos', [
+                            'analisisImagen' => $Detalles_Generales['ANALISIS_IMAGEN'] ?? []
+                        ])
+                        {{-- Reconstruye el patrón histórico sin depender de cambios posteriores del catálogo. --}}
+                        @include('Reportes.IM.partials.patron-grano-reporte', [
+                            'patronGrano' => $Detalles_Generales['PATRON_GRANO'] ?? []
+                        ])
+
                         <div class="form-group">
                             <label for="imageCount">Número de imágenes a subir:</label>
                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
@@ -630,6 +647,7 @@
 
                         <div class="alert alert-info py-2">
                             Asigna a cada fotografía el número de hoja y su posición. Una hoja admite hasta cuatro posiciones o una fotografía de página completa.
+                            Para la comparativa, marque <strong>Agregar tamaño de grano</strong> en una tarjeta vacía.
                         </div>
 
                         <div data-layout-fotos-manual="1">
@@ -640,12 +658,15 @@
                                         id="image-container-{{ $index }}"
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
-                                        data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}">
+                                        data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}"
+                                        data-foto-es-texto="{{ !empty($foto['es_cuadro_texto']) ? 1 : 0 }}">
                                         <div class="form-group">
                                             <label for="replace_image_{{ $index }}">Imagen subida {{ $index + 1 }}:</label>
 
                                             <div class="image-preview mt-2">
-                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                @if(empty($foto['es_cuadro_texto']) && !empty($foto['ruta']))
+                                                    <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                @endif
                                             </div>
 
                                             <div class="form-check mt-2">
@@ -663,7 +684,7 @@
                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
                                             <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] ?? '' }}</textarea>
                                             <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
-                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
+                                            <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] ?? '' }}">
                                             <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
                                             <button type="button" class="btn btn-danger mt-2 remove-image" data-index="{{ $index }}">Eliminar</button>
                                         </div>
@@ -807,8 +828,13 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
-<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}?v={{ filemtime(public_path('js/Reportes_Edit.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
+{{-- Comportamiento compartido de Fiji, contador y presentación en el PDF principal. --}}
+<script src="{{ asset('js/analisis-fraccion-fases-imagej.js') }}?v={{ filemtime(public_path('js/analisis-fraccion-fases-imagej.js')) }}"></script>
+<script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
+<script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
+<script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
