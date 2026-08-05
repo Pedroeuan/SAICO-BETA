@@ -24,7 +24,7 @@
         }
         footer {
             position: fixed;
-            bottom: -30px;
+            bottom: -70px;
             left: 0;
             right: 0;
             text-align: center;
@@ -34,7 +34,7 @@
             border-collapse: collapse;
             width: 100%;
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
         }
 
         .tablaheader th {
@@ -269,33 +269,44 @@
         }
 
         .cuadriculaFotos {
-            width: 106%;
-            /*margin-left: -15.6px;
-            border-collapse: separate;
-            border-spacing: 20px 20px;*/
+            width: 100%;
+            /*border-collapse: separate;*/
             table-layout: fixed;
+            /*border: 1px solid #eb0b0b;*/
         }
 
         .cuadriculaFotos td {
-            width: 312px;
-            height: 170px;
+            width: 50%;
             padding: 0;
-            text-align: center;
-            vertical-align: middle;
+            vertical-align:top;
+            /*border: 1px solid #ffd500;*/
         }
 
+        .cuadriculaFotos td:first-child{
+            text-align:left;
+        }
+
+        .cuadriculaFotos td:last-child{
+            text-align:right;
+        }
+        
         .fotoCuadrante {
-            width: 300px;
-            height: auto;
+            display:inline-block;
+            width:300px;
+            margin:0;
+            padding:0;
+            border:1px solid #000;
+            overflow:hidden;
             border: 1px solid #000;
-            overflow: hidden;
         }
 
         .fotoCuadrante img {
             display: block;
-            width: 300px;
+            max-width: 298px;
             height: auto;
-            object-fit: cover;
+            object-fit: contain;
+            margin: 0 0 0 0;
+            border: 2px solid #000;
         }
 
         .fotoCuadranteComentario {
@@ -305,6 +316,9 @@
             font-size: 8px;
             line-height: 9px;
             overflow: hidden;
+
+            text-align: center;      /* Centrado horizontal */
+            vertical-align: middle;
         }
 
         .fotoCuadranteTexto {
