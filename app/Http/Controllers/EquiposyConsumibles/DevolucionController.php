@@ -122,9 +122,7 @@ class DevolucionController extends Controller
                 //Log::info('general: ', ['general' => $general]);
                 //Log::info('folio: ', ['folio' => $folio]);
                 // Verificar si el registro está en Historial_Almacen con Tipo "DEVOLUCIÓN"
-                $Fecha = now()->format('Y-m-d');
                 $historialAlmacenExistente = Historial_Almacen::where('idGeneral_EyC', $detalle->idGeneral_EyC)
-                    ->where('Fecha', $Fecha)
                     ->where('Folio', $folio)
                     ->where('Tipo', 'DEVOLUCIÓN')
                     ->exists(); // Si existe el registro con "DEVOLUCIÓN"
