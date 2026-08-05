@@ -881,6 +881,9 @@
                         {{-- Vista previa editable de los espacios 1 y 2 elegidos desde el análisis de imagen. --}}
                         @include('Reportes.IM.partials.analisis-imagen-reporte-fotos', ['analisisImagen' => []])
 
+                        {{-- Configura el modo "Agregar tamaño de grano" disponible en cada tarjeta de imagen. --}}
+                        @include('Reportes.IM.partials.patron-grano-reporte', ['patronGrano' => []])
+
                         <!--IMAGENES CON COMENTARIOS-->
                         <div class="form-group">
                             <label for="imageCount">Número de imágenes a subir:</label>
@@ -895,6 +898,7 @@
                         <div class="alert alert-info py-2">
                             Asigna a cada fotografía el número de hoja y su posición. Una hoja admite hasta cuatro posiciones o una fotografía de página completa.
                             Si no cuenta con PDF XRF, marque <strong>Asignar esta imagen a un disparo</strong>; cada disparo requiere dos imágenes.
+                            Para una comparativa, marque <strong>Agregar tamaño de grano</strong> en una tarjeta vacía.
                         </div>
 
                         {{-- El JS compartido agrega posición, cuadro de texto y asignación manual de disparo. --}}
@@ -1094,4 +1098,5 @@ $(document).ready(function() {
 <script src="{{ asset('js/analisis-fraccion-fases-imagej.js') }}?v={{ filemtime(public_path('js/analisis-fraccion-fases-imagej.js')) }}"></script>
 <script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
 <script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
+<script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
 @endsection

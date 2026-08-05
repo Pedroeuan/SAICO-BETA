@@ -16,6 +16,14 @@
         let ultimoToken = contenedor.dataset.analysisReportToken || '';
         let descripcionEditada = descripcion.value.trim() !== '';
 
+        /** Activa los controles de distribución únicamente cuando el análisis fue enviado al PDF. */
+        function actualizarControlesDistribucion(activo) {
+            contenedor.querySelectorAll('[data-auto-report-layout] input').forEach(function (control) {
+                // Los checks que explican el tipo imagen/texto son informativos y siempre permanecen bloqueados.
+                if (control.type !== 'checkbox') control.disabled = !activo;
+            });
+        }
+
         // Restaura los datos de Edit para mantener visible la selección previamente guardada.
         try {
             analisisActual = JSON.parse(datosExistentes?.textContent || '{}');
@@ -78,7 +86,7 @@
         /** Muestra la ruta original que ya fue almacenada por el análisis. */
         function mostrarImagen() {
             const imagenAnalisis = document.querySelector('[data-imagej-original]');
-            const ruta = analisisActual.urls?.original || imagenAnalisis?.src || '';
+            const ruta = analisisActual.urls?.imagen_visual || analisisActual.urls?.original || imagenAnalisis?.src || '';
             imagen.src = ruta;
             imagen.classList.toggle('d-none', !ruta);
             sinImagen.classList.toggle('d-none', Boolean(ruta));
@@ -100,6 +108,7 @@
             const nuevoAnalisis = evento.detail?.analysis;
             if (nuevoAnalisis && typeof nuevoAnalisis === 'object') analisisActual = nuevoAnalisis;
             contenedor.classList.toggle('d-none', !seleccionado);
+            actualizarControlesDistribucion(seleccionado);
             if (!seleccionado) return;
 
             mostrarImagen();
@@ -121,7 +130,9 @@
             }
         });
 
-        if (!contenedor.classList.contains('d-none')) mostrarImagen();
+        const activoInicial = !contenedor.classList.contains('d-none');
+        actualizarControlesDistribucion(activoInicial);
+        if (activoInicial) mostrarImagen();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
