@@ -90,9 +90,11 @@
         // Recibe el mismo archivo que el usuario cargó en Fracción de Fases.
         document.addEventListener('saico:image-analysis-loaded', function (evento) {
             if (!evento.detail?.file) return;
-            const url = URL.createObjectURL(evento.detail.file);
-            cargarImagen(url);
-            setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+            const lector = new FileReader();
+            // data: evita que la CSP de produccion bloquee la micrografia compartida.
+            lector.onload = function () { cargarImagen(String(lector.result || '')); };
+            lector.onerror = function () { mensaje('No se pudo preparar la micrografia para el conteo.', 'danger'); };
+            lector.readAsDataURL(evento.detail.file);
         });
 
         // En Edit, si no hay File nuevo, se usa la ruta de la evidencia original ya almacenada.
