@@ -850,6 +850,8 @@ class FOR_PIMP_04_03Controller extends Controller
         ServicioMetalografiaReporte $servicioMetalografia
     )
     {
+        // Recupera los PDF privados si una recarga vacio el selector del navegador.
+        app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -1408,6 +1410,8 @@ class FOR_PIMP_04_03Controller extends Controller
         ServicioMetalografiaReporte $servicioMetalografia
     )
     {
+        // Edit conserva el mismo UUID y nunca acepta temporales de otro usuario.
+        app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([

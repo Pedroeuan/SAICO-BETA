@@ -1,3 +1,4 @@
+<script src="{{ asset('js/procesamiento-asincrono-saico.js') }}?v={{ filemtime(public_path('js/procesamiento-asincrono-saico.js')) }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Script compartido: usa el formulario activo y la ruta independiente que inyecta cada formato.
@@ -320,11 +321,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: data
             });
-            const payload = await response.json();
+            let payload = await response.json();
             if (!response.ok) {
                 const validationMessage = payload.errors ? Object.values(payload.errors).flat()[0] : null;
                 throw new Error(validationMessage || payload.message || 'No fue posible procesar los PDF.');
             }
+
+            if (!payload.trabajo?.estado_url) throw new Error('No se recibio el identificador del procesamiento.');
+            const claveTrabajo = 'saico:xrf:' + window.location.pathname + ':' + form.id;
+            localStorage.setItem(claveTrabajo, JSON.stringify(payload.trabajo));
+            window.SaicoProcesamiento.asignarTrabajo(form, payload.trabajo.id);
+            const trabajo = await window.SaicoProcesamiento.esperar(payload.trabajo.estado_url, {
+                alCambiar: function (actual) { setStatus(actual.mensaje || 'Procesando PDF XRF...'); }
+            });
+            payload = trabajo.resultado;
 
             renderPreview(payload);
             setStatus(payload.analisis.length + ' PDF procesado(s). Revise los resultados antes de finalizar.');
@@ -336,6 +346,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     fileInput.addEventListener('change', function () {
+        localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
         cropsReady = false;
         restoreExistingShotImages();
         if (shotCropsContainer) shotCropsContainer.innerHTML = '';
@@ -343,6 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
         status.classList.add('d-none');
     });
     standardSelect.addEventListener('change', function () {
+        localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
         cropsReady = false;
         restoreExistingShotImages();
         if (shotCropsContainer) shotCropsContainer.innerHTML = '';
@@ -356,7 +368,31 @@ document.addEventListener('DOMContentLoaded', function () {
             setStatus('Presione “Extraer datos y calcular promedio” para generar las imágenes de los disparos antes de finalizar.', true);
             fileInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        if (cropsReady) localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
     });
+
+    // Una recarga no obliga a seleccionar otra vez los PDF mientras el UUID siga vigente.
+    const trabajoGuardado = localStorage.getItem('saico:xrf:' + window.location.pathname + ':' + form.id);
+    if (trabajoGuardado) {
+        try {
+            const referencia = JSON.parse(trabajoGuardado);
+            window.SaicoProcesamiento.asignarTrabajo(form, referencia.id);
+            extractButton.disabled = true;
+            setStatus('Procesando PDF XRF...');
+            window.SaicoProcesamiento.esperar(referencia.estado_url, {
+                alCambiar: function (actual) { setStatus(actual.mensaje || 'Procesando PDF XRF...'); }
+            }).then(function (trabajo) {
+                renderPreview(trabajo.resultado);
+                cropsReady = true;
+                setStatus('PDF XRF procesado correctamente.');
+            }).catch(function (error) {
+                localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
+                setStatus(error.message, true);
+            }).finally(function () { extractButton.disabled = false; });
+        } catch (error) {
+            localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
+        }
+    }
 });
 </script>
 <script>

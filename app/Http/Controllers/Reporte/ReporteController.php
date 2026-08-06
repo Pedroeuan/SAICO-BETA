@@ -1508,15 +1508,15 @@ class ReporteController extends Controller
         }
         elseif($Nombre_Formato == "FOR-PIMP-03_B/01")
         {
-            return redirect()->route('Reporte_FOR_PIMP_03_B_01.PDF', ['id' => $id]);
+            return redirect()->route('procesamientos.pdf.pagina', ['reporte' => $id, 'formato' => '03_B_01']);
         }
         elseif($Nombre_Formato == "FOR-PIMP-04/02")
         {
-            return redirect()->route('Reporte_FOR_PIMP_04_02.PDF', ['id' => $id]);
+            return redirect()->route('procesamientos.pdf.pagina', ['reporte' => $id, 'formato' => '04_02']);
         }
         elseif($Nombre_Formato == "FOR-PIMP-04/03")
         {
-            return redirect()->route('Reporte_FOR_PIMP_04_03.PDF', ['id' => $id]);
+            return redirect()->route('procesamientos.pdf.pagina', ['reporte' => $id, 'formato' => '04_03']);
         }
         elseif($Nombre_Formato == "FOR-PIMP-05/01")
         {
@@ -1524,11 +1524,11 @@ class ReporteController extends Controller
         }
         elseif($Nombre_Formato == "FOR-PIMP-05_B/01")
         {
-            return redirect()->route('Reporte_FOR_PIMP_05_B_01.PDF', ['id' => $id]);
+            return redirect()->route('procesamientos.pdf.pagina', ['reporte' => $id, 'formato' => '05_B_01']);
         }
         elseif($Nombre_Formato == "FOR-PIMP-06_B/01")
         {
-            return redirect()->route('Reporte_FOR_PIMP_06_B_01.PDF', ['id' => $id]);
+            return redirect()->route('procesamientos.pdf.pagina', ['reporte' => $id, 'formato' => '06_B_01']);
         }
         elseif($Nombre_Formato == "FOR-PIMP-07_B/01")
         {
