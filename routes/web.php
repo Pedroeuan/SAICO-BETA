@@ -4,6 +4,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AnalisisImagenController;
+use App\Http\Controllers\Procesamiento\TrabajoProcesamientoController;
+use App\Http\Controllers\Procesamiento\ProcesamientoXrfController;
+use App\Http\Controllers\Procesamiento\ProcesamientoPdfController;
 
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\TICS\TICSController;
@@ -152,6 +155,16 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
             // Measure conserva tres evidencias, por lo que se aplica un límite más estricto.
             ->middleware('throttle:6,1')
             ->name('analisis-imagen.fraccion-fases');
+        /* Estado durable de Fiji, XRF y PDF; el UUID se valida contra el tecnico autenticado. */
+        Route::get('/procesamientos/{trabajo}/estado', [TrabajoProcesamientoController::class, 'estado'])
+            ->middleware('throttle:120,1')
+            ->name('procesamientos.estado');
+        Route::get('/procesamientos/{trabajo}/descargar', [TrabajoProcesamientoController::class, 'descargar'])
+            ->middleware('throttle:30,1')
+            ->name('procesamientos.descargar');
+        Route::get('/procesamientos/pdf/{reporte}/{formato}', [ProcesamientoPdfController::class, 'pagina'])
+            ->middleware('throttle:12,1')
+            ->name('procesamientos.pdf.pagina');
         /*vista Page in construction */
         Route::get('/Page_In_Construction', [general_eycController::class, 'PageInConstruction'])->name('Page_In_Construction');
         /*vista Page welcome*/
@@ -476,7 +489,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         /*Ruta de Guardado Reportes/IM FOR_PIMP_04_02*/
         Route::post('/Reportes_FOR_PIMP_04_02/store', [FOR_PIMP_04_02Controller::class, 'FOR_PIMP_04_02_store'])->name('Reportes_FOR_PIMP_04_02.store');
         /*Vista previa: valida norma, extrae lecturas y devuelve recortes sin guardar el reporte.*/
-        Route::post('/Reportes_FOR_PIMP_04_02/extraer-analisis', [FOR_PIMP_04_02Controller::class, 'extraerAnalisisPdf'])->name('Reportes_FOR_PIMP_04_02.extraer_analisis');
+        Route::post('/Reportes_FOR_PIMP_04_02/extraer-analisis', [ProcesamientoXrfController::class, 'encolarColumnas'])->name('Reportes_FOR_PIMP_04_02.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_04_02*/
         Route::post('/Reportes_FOR_PIMP_04_02/update/{id}', [FOR_PIMP_04_02Controller::class, 'FOR_PIMP_04_02_update'])->name('Reportes_FOR_PIMP_04_02.update');
         /*Ruta del PDF de Reportes/IM FOR_PIMP_04_02*/
@@ -485,7 +498,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         /*Ruta de Guardado Reportes/IM FOR_PIMP_04_03*/
         Route::post('/Reportes_FOR_PIMP_04_03/store', [FOR_PIMP_04_03Controller::class, 'FOR_PIMP_04_03_store'])->name('Reportes_FOR_PIMP_04_03.store');
         /*Vista previa: valida norma, extrae lecturas y devuelve recortes sin guardar el reporte.*/
-        Route::post('/Reportes_FOR_PIMP_04_03/extraer-analisis', [FOR_PIMP_04_03Controller::class, 'extraerAnalisisPdf'])->name('Reportes_FOR_PIMP_04_03.extraer_analisis');
+        Route::post('/Reportes_FOR_PIMP_04_03/extraer-analisis', [ProcesamientoXrfController::class, 'encolarMultiple'])->name('Reportes_FOR_PIMP_04_03.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_04_03*/
         Route::post('/Reportes_FOR_PIMP_04_03/update/{id}', [FOR_PIMP_04_03Controller::class, 'FOR_PIMP_04_03_update'])->name('Reportes_FOR_PIMP_04_03.update');
         /*Ruta del PDF de Reportes/IM FOR_PIMP_04_03*/
@@ -501,7 +514,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         /*Ruta de Guardado Reportes/IM FOR_PIMP_05_B_01*/
         Route::post('/Reportes_FOR_PIMP_05_B_01/store', [FOR_PIMP_05_B_01Controller::class, 'FOR_PIMP_05_B_01_store'])->name('Reportes_FOR_PIMP_05_B_01.store');
         /*Vista previa XRF: extrae las tres columnas seleccionadas sin guardar el reporte.*/
-        Route::post('/Reportes_FOR_PIMP_05_B_01/extraer-analisis', [FOR_PIMP_05_B_01Controller::class, 'extraerAnalisisPdf'])->name('Reportes_FOR_PIMP_05_B_01.extraer_analisis');
+        Route::post('/Reportes_FOR_PIMP_05_B_01/extraer-analisis', [ProcesamientoXrfController::class, 'encolarColumnas'])->name('Reportes_FOR_PIMP_05_B_01.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_05_B_01*/
         Route::post('/Reportes_FOR_PIMP_05_B_01/update/{id}', [FOR_PIMP_05_B_01Controller::class, 'FOR_PIMP_05_B_01_update'])->name('Reportes_FOR_PIMP_05_B_01.update');
         /*Ruta del PDF de Reportes/IM FOR_PIMP_05_B_01*/
@@ -510,7 +523,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         /*Ruta de Guardado Reportes/IM FOR_PIMP_06_B_01*/
         Route::post('/Reportes_FOR_PIMP_06_B_01/store', [FOR_PIMP_06_B_01Controller::class, 'FOR_PIMP_06_B_01_store'])->name('Reportes_FOR_PIMP_06_B_01.store');
         /*Vista previa XRF independiente para el formato 06_B_01.*/
-        Route::post('/Reportes_FOR_PIMP_06_B_01/extraer-analisis', [FOR_PIMP_06_B_01Controller::class, 'extraerAnalisisPdf'])->name('Reportes_FOR_PIMP_06_B_01.extraer_analisis');
+        Route::post('/Reportes_FOR_PIMP_06_B_01/extraer-analisis', [ProcesamientoXrfController::class, 'encolarMultiple'])->name('Reportes_FOR_PIMP_06_B_01.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_06_B_01*/
         Route::post('/Reportes_FOR_PIMP_06_B_01/update/{id}', [FOR_PIMP_06_B_01Controller::class, 'FOR_PIMP_06_B_01_update'])->name('Reportes_FOR_PIMP_06_B_01.update');
         /*Ruta del PDF de Reportes/IM FOR_PIMP_06_B_01*/

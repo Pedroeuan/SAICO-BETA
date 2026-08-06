@@ -62,3 +62,13 @@
     </div>
 </div>
 @stop
+
+@section('js')
+{{-- Mantiene activa la sesión y actualiza las notificaciones del encabezado. --}}
+<script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+@stop
