@@ -1063,6 +1063,8 @@ class FOR_PIMP_04_02Controller extends Controller
 
     public function FOR_PIMP_04_02_store(Request $request, ServicioAnalisisImagenImageJ $servicioImagen)
     {
+        // Restaura el PDF de columnas procesado en cola cuando el FileList se perdio.
+        app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -1596,6 +1598,8 @@ class FOR_PIMP_04_02Controller extends Controller
 
     public function FOR_PIMP_04_02_update(Request $request, $id, ServicioAnalisisImagenImageJ $servicioImagen)
     {
+        // El servicio valida UUID, propietario y estado antes de reconstruir el archivo.
+        app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([

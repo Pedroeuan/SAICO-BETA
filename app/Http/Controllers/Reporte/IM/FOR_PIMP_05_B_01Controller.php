@@ -772,6 +772,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
     public function FOR_PIMP_05_B_01_store(Request $request)
     {
+        // Permite guardar despues de recargar sin volver a subir el PDF ya procesado.
+        app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -1218,6 +1220,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
     public function FOR_PIMP_05_B_01_update(Request $request, $id)
     {
+        // Nunca restaura archivos si el trabajo pertenece a otro tecnico.
+        app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([

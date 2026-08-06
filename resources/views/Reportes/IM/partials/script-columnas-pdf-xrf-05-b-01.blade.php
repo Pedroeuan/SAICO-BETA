@@ -1,3 +1,4 @@
+<script src="{{ asset('js/procesamiento-asincrono-saico.js') }}?v={{ filemtime(public_path('js/procesamiento-asincrono-saico.js')) }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById(@json($xrfFormId ?? 'FOR-PIMP-05_B_01'));
@@ -410,8 +411,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: data
             });
-            const payload = await response.json();
+            let payload = await response.json();
             if (!response.ok) throw new Error(payload.errors ? Object.values(payload.errors).flat()[0] : payload.message);
+            if (!payload.trabajo?.estado_url) throw new Error('No se recibio el identificador del procesamiento.');
+            const claveTrabajo = 'saico:xrf:' + window.location.pathname + ':' + form.id;
+            localStorage.setItem(claveTrabajo, JSON.stringify(payload.trabajo));
+            window.SaicoProcesamiento.asignarTrabajo(form, payload.trabajo.id);
+            const trabajo = await window.SaicoProcesamiento.esperar(payload.trabajo.estado_url, {
+                alCambiar: function (actual) { setStatus(actual.mensaje || 'Procesando PDF XRF...', false); }
+            });
+            payload = trabajo.resultado;
             syncAvailableColumns(payload.columnas_disponibles, []);
             const total = (payload.columnas_disponibles || []).length;
             setStatus('Se detectaron ' + total + ' disparo(s). Seleccione hasta tres.', false);
@@ -437,8 +446,16 @@ document.addEventListener('DOMContentLoaded', function () {
         setStatus('Procesando PDF...', false);
         try {
             const response = await fetch(url, {method: 'POST', headers: {'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value, 'Accept': 'application/json'}, body: data});
-            const payload = await response.json();
+            let payload = await response.json();
             if (!response.ok) throw new Error(payload.errors ? Object.values(payload.errors).flat()[0] : payload.message);
+            if (!payload.trabajo?.estado_url) throw new Error('No se recibio el identificador del procesamiento.');
+            const claveTrabajo = 'saico:xrf:' + window.location.pathname + ':' + form.id;
+            localStorage.setItem(claveTrabajo, JSON.stringify(payload.trabajo));
+            window.SaicoProcesamiento.asignarTrabajo(form, payload.trabajo.id);
+            const trabajo = await window.SaicoProcesamiento.esperar(payload.trabajo.estado_url, {
+                alCambiar: function (actual) { setStatus(actual.mensaje || 'Procesando PDF XRF...', false); }
+            });
+            payload = trabajo.resultado;
             renderPreview(payload);
             processed = true;
             setStatus('Promedios y disparo generados.', false);
@@ -459,6 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // Cambiar el archivo invalida la vista previa y obliga a detectar nuevamente sus columnas.
     file.addEventListener('change', function () {
+        localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
         invalidate();
         resetColumnAvailability(!detectColumnsOnFileChange);
         preview.classList.add('d-none');
@@ -484,7 +502,37 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
             setStatus('Genere el disparo antes de finalizar.', true);
         }
+        if (processed) localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
     });
+
+    // Restaura deteccion, promedio y captura si la pagina se recargo durante el worker.
+    const trabajoGuardado = localStorage.getItem('saico:xrf:' + window.location.pathname + ':' + form.id);
+    if (trabajoGuardado) {
+        try {
+            const referencia = JSON.parse(trabajoGuardado);
+            window.SaicoProcesamiento.asignarTrabajo(form, referencia.id);
+            button.disabled = true;
+            setStatus('Procesando PDF XRF...', false);
+            window.SaicoProcesamiento.esperar(referencia.estado_url, {
+                alCambiar: function (actual) { setStatus(actual.mensaje || 'Procesando PDF XRF...', false); }
+            }).then(function (trabajo) {
+                const salida = trabajo.resultado || {};
+                if (salida.solo_deteccion) {
+                    syncAvailableColumns(salida.columnas_disponibles, []);
+                    setStatus('Disparos detectados. Seleccione hasta tres.', false);
+                    return;
+                }
+                renderPreview(salida);
+                processed = true;
+                setStatus('PDF XRF procesado correctamente.', false);
+            }).catch(function (error) {
+                localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
+                setStatus(error.message, true);
+            }).finally(function () { button.disabled = false; });
+        } catch (error) {
+            localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
+        }
+    }
 
     /*
      * Inicializacion del borrador local.
