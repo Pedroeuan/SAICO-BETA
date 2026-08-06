@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderPreview(payload) {
         const analyses = payload.analisis || [];
         const averages = payload.promedios || {};
-        const warnings = [];
+        const warnings = Array.isArray(payload.advertencias) ? [...payload.advertencias] : [];
         if (analyses.length > 3) {
             warnings.push('Solo los primeros tres PDF se asignaron a disparos; todos se utilizaron para calcular los promedios.');
         }
