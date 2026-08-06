@@ -2110,7 +2110,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(151.5, 28.5);
+            $combinedPdf->SetXY(151.5, 26.5);
             $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount", 0, 'C');
         }
 
@@ -2124,7 +2124,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY(151.5, 28.5);
+                $combinedPdf->SetXY(151.5, 26.5);
                 $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 'C');
             }
         }

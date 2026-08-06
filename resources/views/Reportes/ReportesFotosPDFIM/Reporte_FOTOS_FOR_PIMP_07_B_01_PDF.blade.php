@@ -96,36 +96,49 @@
         }
 
         .imagenes-reporte {
-            margin-left: -15px;
-            width: 106%;
+            width: 687.5px;
+            margin: 0px 0px;
             border-collapse: separate;
-            border-spacing: 20px 14px;
+            /* Separacion horizontal y vertical entre fotografias. 
+            border-spacing: 85px 10px;
+            background: #920404;*/
             table-layout: fixed;
         }
 
         .foto-container {
-            width: 312px;
-            height: 170px;
-            border: 1px solid black;
             padding: 0;
-            vertical-align: middle;
+            /*border: 1px solid #000;
+            display: block;*/
             text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            width: 310px;
+            height: auto;
+            /*line-height: 0;*/
+            position: relative;
         }
 
         .foto-container img {
-            width: 312px;
-            height: 170px;
-            object-fit: cover;
             display: block;
+            max-width: 310px;
+            max-height: auto;
+            object-fit: contain;
+            margin: 0 auto;
+            border: 2px solid #000;
         }
 
         .comment {
-            border-top: 1px solid black;
-            padding-top: 5px;
-            margin-top: 0;
-            text-align: center;
+            margin: 0;
+            padding: 6px 4px 4px;
+            /*border-top: 1px solid #000;*/
             font-size: 8px;
-            word-wrap: break-word;
+            line-height: 1;
+            text-align: center;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 310px;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         .empty-box {
