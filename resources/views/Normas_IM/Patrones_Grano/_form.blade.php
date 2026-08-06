@@ -48,13 +48,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const entrada = document.getElementById('imagen');
     const previa = document.getElementById('vistaPreviaPatron');
 
-    // La vista previa permite comprobar que el archivo corresponde al número antes de guardarlo.
+    // La vista previa utiliza data: para respetar la CSP sin modificar el archivo original.
     entrada?.addEventListener('change', function () {
         const archivo = this.files?.[0];
-        if (!archivo) return;
+        if (!archivo || !previa) return;
 
         const lector = new FileReader();
-        // data: ya esta permitido por la CSP y no modifica el archivo que se guardara.
         lector.onload = function () {
             previa.src = String(lector.result || '');
             previa.classList.remove('d-none');

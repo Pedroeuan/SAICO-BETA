@@ -537,7 +537,7 @@
                 <tr>
                     <td class="photo-slot photo-full" colspan="2">
                         @if(!empty($fotoCompleta['es_cuadro_texto']))
-                        <div class="photo-text-box {{ ($fotoCompleta['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $fotoCompleta['comment'] ?? '' }}
+                        <div @class(['photo-text-box', 'photo-text-box-analysis' => ($fotoCompleta['origen_automatico'] ?? '') === 'resultados_analisis_imagen'])>{{ $fotoCompleta['comment'] ?? '' }}
                             </div>
                             @else
                             <img src="{{ $fotoCompleta['path'] }}" alt="Fotografía">
@@ -551,7 +551,7 @@
                         @if(isset($espacios[$posicion]))
                         <td class="photo-slot">
                             @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                            <div class="photo-text-box {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                            <div @class(['photo-text-box', 'photo-text-box-analysis' => ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen'])>{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @else
                             <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
                             <div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
@@ -567,7 +567,7 @@
                         @if(isset($espacios[$posicion]))
                         <td class="photo-slot">
                             @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                            <div class="photo-text-box {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                            <div @class(['photo-text-box', 'photo-text-box-analysis' => ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen'])>{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @else<img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
                             <div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @endif
