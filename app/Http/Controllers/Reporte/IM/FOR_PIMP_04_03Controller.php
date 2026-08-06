@@ -62,10 +62,25 @@ class FOR_PIMP_04_03Controller extends Controller
         ];
         $posicionesPredeterminadas = array_slice($posicionesPermitidas, 0, 4);
         $indice = max(0, (int) $index);
-        $paginaNormalizada = max(1, (int) ($pagina ?: (intdiv($indice, 4) + 1)));
+
+        /*
+         * Los recortes automáticos XRF usan claves 1000–1005 para no mezclarse
+         * con las fotografías manuales. Esas claves son identificadores del
+         * formulario, no números de hoja: cada par pertenece a su disparo 1–3.
+         */
+        $esIndiceRecorteXrf = $indice >= 1000;
+        $indiceDistribucion = $esIndiceRecorteXrf ? $indice - 1000 : $indice;
+        $paginaPredeterminada = $esIndiceRecorteXrf
+            ? intdiv($indiceDistribucion, 2) + 1
+            : intdiv($indiceDistribucion, 4) + 1;
+        $posicionPredeterminada = $esIndiceRecorteXrf
+            ? $posicionesPredeterminadas[$indiceDistribucion % 2]
+            : $posicionesPredeterminadas[$indiceDistribucion % 4];
+
+        $paginaNormalizada = max(1, (int) ($pagina ?: $paginaPredeterminada));
         $posicionNormalizada = in_array($posicion, $posicionesPermitidas, true)
             ? $posicion
-            : $posicionesPredeterminadas[$indice % 4];
+            : $posicionPredeterminada;
 
         return [
             'pagina' => $paginaNormalizada,

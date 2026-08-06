@@ -107,7 +107,8 @@ class ServicioPatronGranoReporte
         }
 
         $rutaFisica = storage_path('app/public/' . $this->rutaRelativa((string) $patron['ruta_imagen']));
-        if (!File::exists($rutaFisica)) {
+        // Evita enviar carpetas o rutas historicas incompletas al motor de PDF como si fueran imagenes.
+        if (!File::isFile($rutaFisica)) {
             return;
         }
 

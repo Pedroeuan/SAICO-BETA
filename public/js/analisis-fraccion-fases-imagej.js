@@ -100,6 +100,15 @@
             }
         }
 
+        /** Traduce los limites HTTP esperados a mensajes claros para el tecnico. */
+        function mensajeErrorRespuesta(respuesta, cuerpo, mensajeAlternativo) {
+            if (respuesta.status === 429) {
+                return 'Se realizaron demasiadas solicitudes. Espere un minuto y vuelva a intentarlo.';
+            }
+
+            return cuerpo?.message || mensajeAlternativo;
+        }
+
         /** Consulta el estado durable sin mostrar detalles internos del worker. */
         async function esperarTrabajo(estadoUrl, revisionSolicitada) {
             while (revisionSolicitada === revisionMedicion) {
@@ -115,7 +124,11 @@
                 }
                 if (!respuesta.ok || trabajo.estado === 'error') {
                     localStorage.removeItem(claveTrabajo);
-                    throw new Error(trabajo.mensaje || 'No fue posible procesar la imagen.');
+                    throw new Error(
+                        respuesta.status === 429
+                            ? mensajeErrorRespuesta(respuesta, cuerpo, 'No fue posible consultar el procesamiento.')
+                            : (trabajo.mensaje || mensajeErrorRespuesta(respuesta, cuerpo, 'No fue posible procesar la imagen.'))
+                    );
                 }
                 estado.textContent = trabajo.mensaje || 'Procesando imagen con Fiji...';
                 await new Promise(function (resolver) { window.setTimeout(resolver, 1500); });
@@ -232,7 +245,7 @@
                 // La persona pudo elegir otro archivo mientras Fiji procesaba el anterior.
                 if (revisionSolicitada !== revisionArchivo) return;
                 if (!respuesta.ok || !cuerpo.ok || !Array.isArray(cuerpo.imagen?.histograma)) {
-                    throw new Error(cuerpo.message || 'No se pudo obtener el histograma de Fiji.');
+                    throw new Error(mensajeErrorRespuesta(respuesta, cuerpo, 'No se pudo obtener el histograma de Fiji.'));
                 }
                 histogramaImageJ = cuerpo.imagen.histograma.map(Number);
                 dibujarPrevisualizacion();
@@ -402,7 +415,11 @@
                 if (revisionSolicitada !== revisionMedicion) return;
                 if (!respuesta.ok || !cuerpo.ok) {
                     const primerError = cuerpo.errors ? Object.values(cuerpo.errors).flat()[0] : null;
-                    throw new Error(primerError || cuerpo.message || 'No fue posible completar el análisis.');
+                    throw new Error(
+                        respuesta.status === 429
+                            ? mensajeErrorRespuesta(respuesta, cuerpo, 'No fue posible completar el análisis.')
+                            : (primerError || mensajeErrorRespuesta(respuesta, cuerpo, 'No fue posible completar el análisis.'))
+                    );
                 }
 
                 if (!cuerpo.trabajo?.estado_url) {

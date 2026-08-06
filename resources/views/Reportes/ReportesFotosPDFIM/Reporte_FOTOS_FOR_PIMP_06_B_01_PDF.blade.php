@@ -120,47 +120,83 @@
         }
 
         .imagenes-reporte {
-            margin-left: -15px;
-            width: 106%;
+            width: 100%;
             border-collapse: separate;
-            border-spacing: 20px 14px;
+            /* Replica la cuadricula estable del 04_03: dos columnas y dos filas iguales. */
+            border-spacing: 8px 10px;
             table-layout: fixed;
+        }
+
+        .imagenes-reporte tr {
+            height: 201px;
         }
 
         .foto-container {
             padding: 0;
             border: 1px solid #000;
-            /*display: block;*/
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
-            width: 335px;
-            height: auto;
-            line-height: 0;
+            width: 330px;
+            height: 201px;
+            box-sizing: border-box;
             position: relative;
         }
 
-        .foto-container img {
-            display: block;
-            max-width: 335px;
-            max-height: auto;
+        /* El lienzo fijo iguala fotografias horizontales, verticales y patrones de grano. */
+        .foto-imagen-area {
+            width: 100%;
+            height: 181px;
+            line-height: 181px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .foto-imagen-area img {
+            display: inline-block;
+            max-width: 326px;
+            max-height: 181px;
+            width: auto;
+            height: auto;
             object-fit: contain;
-            margin: 0 auto;
+            vertical-align: middle;
         }
 
         .foto-vacia {
-            border: none !important;
+            /* Conserva la celda aunque el usuario deje libre ese cuadrante. */
             background-color: #fff;
         }
 
         .comment {
-            line-height: 1;
-            border-top: 1px solid black;
-            padding-top: 5px;
-            margin-top: 0;
+            height: 20px;
+            line-height: 7px;
+            border-top: .6px solid black;
+            padding: 2px;
+            margin: 0;
+            box-sizing: border-box;
             text-align: center;
-            font-size: 8px;
+            font-size: 6px;
             word-wrap: break-word;
+            overflow: hidden;
+        }
+
+        /* La descripción ocupa la misma celda reservada para una fotografía. */
+        .descripcion-reporte {
+            box-sizing: border-box;
+            width: 100%;
+            height: 201px;
+            padding: 12px;
+            line-height: 11px;
+            text-align: left;
+            vertical-align: top;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            overflow: hidden;
+            font-size: 8px;
+        }
+
+        .foto-full .descripcion-reporte {
+            height: 412px;
         }
 
         .empty-box {
@@ -195,20 +231,19 @@
             transform: rotate(-27deg);
         }
 
-        .foto-container[colspan="2"] img {
-            width: 100%;
-            height: 170px;
-        }
-
         .foto-full {
             width: 100% !important;
-            height: 300px !important;
+            height: 412px !important;
         }
 
-        .foto-full img {
-            width: 100% !important;
-            height: 272px !important;
-            object-fit: contain;
+        .foto-full .foto-imagen-area {
+            height: 390px;
+            line-height: 390px;
+        }
+
+        .foto-full .foto-imagen-area img {
+            max-width: 100%;
+            max-height: 390px;
         }
 
         .photo-page {
@@ -542,8 +577,12 @@
             @if($esHojaCompleta)
                 <tr>
                     <td class="foto-container foto-full" colspan="2">
-                        <img src="{{ $fotoCompleta['path'] }}">
-                        <p class="comment">{{ $fotoCompleta['comment'] }}</p>
+                        @if(!empty($fotoCompleta['es_cuadro_texto']))
+                            <div class="descripcion-reporte">{{ $fotoCompleta['comment'] ?? '' }}</div>
+                        @else
+                            <div class="foto-imagen-area"><img src="{{ $fotoCompleta['path'] }}" alt="Fotografia"></div>
+                            <p class="comment">{{ $fotoCompleta['comment'] }}</p>
+                        @endif
                     </td>
                 </tr>
             @else
@@ -551,8 +590,12 @@
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             <td class="foto-container">
-                                <img src="{{ $espacios[$posicion]['path'] }}">
-                                <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                                @if(!empty($espacios[$posicion]['es_cuadro_texto']))
+                                    <div class="descripcion-reporte">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                                @else
+                                    <div class="foto-imagen-area"><img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografia"></div>
+                                    <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                                @endif
                             </td>
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
@@ -563,8 +606,12 @@
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             <td class="foto-container">
-                                <img src="{{ $espacios[$posicion]['path'] }}">
-                                <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                                @if(!empty($espacios[$posicion]['es_cuadro_texto']))
+                                    <div class="descripcion-reporte">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                                @else
+                                    <div class="foto-imagen-area"><img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografia"></div>
+                                    <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                                @endif
                             </td>
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>

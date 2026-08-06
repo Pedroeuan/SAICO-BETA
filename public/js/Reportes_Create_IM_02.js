@@ -264,6 +264,10 @@ document.addEventListener('DOMContentLoaded', function () {
         imageFieldsContainer.innerHTML = '';
 
         for (let i = 1; i <= count; i++) {
+            // 04_03 comparte el formulario con recortes XRF indexados desde 1000.
+            // Un índice explícito mantiene unidas imagen, comentario, hoja y posición.
+            const indiceFoto = i - 1;
+            const sufijoCampo = formId === 'FOR-PIMP-04_03' ? `[${indiceFoto}]` : '[]';
             const col = document.createElement('div');
             col.classList.add('col-sm-6');
             col.id = 'image-container-' + i;
@@ -286,13 +290,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     ${formId === 'FOR-PIMP-04_03' ? `
                     <!-- Alternativa manual: dos imágenes forman cada disparo cuando no existe PDF XRF. -->
                     <div class="form-check mt-2">
-                        <input type="hidden" name="es_disparo[]" id="esDisparoValue${i}" value="0">
+                        <input type="hidden" name="es_disparo${sufijoCampo}" id="esDisparoValue${i}" value="0">
                         <input type="checkbox" class="form-check-input foto-disparo-checkbox" data-index="${i}" id="esDisparo${i}">
                         <label class="form-check-label" for="esDisparo${i}">Asignar esta imagen a un disparo</label>
                     </div>
                     <div class="mt-2 d-none numero-disparo-container" id="numeroDisparoContainer${i}">
                         <label for="numeroDisparo${i}">Disparo:</label>
-                        <select class="form-control" name="numero_disparo[]" id="numeroDisparo${i}">
+                        <select class="form-control" name="numero_disparo${sufijoCampo}" id="numeroDisparo${i}">
                             <option value="">Seleccione un disparo</option>
                             <option value="1">1er. disparo</option>
                             <option value="2">2do. disparo</option>
@@ -301,8 +305,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         <small class="text-muted">Alternativa cuando no se cuenta con PDF XRF. Cada disparo requiere dos imágenes.</small>
                     </div>` : ''}
                     <div class="image-preview mt-2" id="image${i}-preview"></div>
-                    <textarea class="form-control mt-2" name="comments[]" id="comment${i}" placeholder="Comentario"></textarea>
-                    <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                    <textarea class="form-control mt-2" name="comments${sufijoCampo}" id="comment${i}" placeholder="Comentario"></textarea>
+                    <input type="hidden" name="images_base64${sufijoCampo}" id="image${i}-base64">
                     <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                 </div>
             `;

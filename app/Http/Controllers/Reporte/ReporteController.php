@@ -50,7 +50,7 @@ class ReporteController extends Controller
     /** Carga el catálogo visual solo para los formatos IM que realmente lo consumen. */
     private function catalogoPatronesGranoIM(?string $nombreFormato): \Illuminate\Support\Collection
     {
-        if (!in_array($nombreFormato, ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03'], true)) {
+        if (!in_array($nombreFormato, ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-06_B/01'], true)) {
             return collect();
         }
 

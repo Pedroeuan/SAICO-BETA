@@ -93,4 +93,93 @@ class FORPIMP0403MetalografiaTest extends TestCase
             $this->assertStringContainsString('TAMAÑO DE GRANO 3.5', $texto);
         }
     }
+
+    /** Create y Edit de 06 deben ofrecer exactamente el mismo flujo de tamaño de grano. */
+    public function test_06_b_01_comparte_el_patron_de_grano_y_no_muestra_detalles_de_junta(): void
+    {
+        $create = file_get_contents(resource_path('views/Reportes/IM/Create/FOR-PIMP-06_B_01.blade.php'));
+        $edit = file_get_contents(resource_path('views/Reportes/IM/Edit/FOR-PIMP-06_B_01.blade.php'));
+        $scriptGrano = file_get_contents(public_path('js/patron-grano-reporte.js'));
+        $scriptImagenes = file_get_contents(public_path('js/Reportes_Create-For-02-06-IM.js'));
+
+        foreach ([$create, $edit] as $vista) {
+            $this->assertStringContainsString('partials.patron-grano-reporte', $vista);
+            $this->assertStringContainsString('js/patron-grano-reporte.js', $vista);
+            $this->assertStringNotContainsString('id="inputSuccess"', $vista);
+        }
+
+        $this->assertStringContainsString("'FOR-PIMP-06_B_01'", $scriptGrano);
+        $this->assertStringContainsString('${!permiteDisparos ?', $scriptImagenes);
+        $this->assertStringContainsString('Descripción para este reporte', $scriptGrano);
+    }
+
+    /** El controlador 06 guarda, actualiza y envía al anexo la copia histórica del grano. */
+    public function test_06_b_01_conserva_el_patron_historico_hasta_el_pdf(): void
+    {
+        $controlador = file_get_contents(app_path('Http/Controllers/Reporte/IM/FOR_PIMP_06_B_01Controller.php'));
+
+        $this->assertStringContainsString('ServicioPatronGranoReporte', $controlador);
+        $this->assertSame(2, substr_count($controlador, '->construirHistorico('));
+        $this->assertStringContainsString('->eliminarCopiaSustituida(', $controlador);
+        $this->assertStringContainsString('->agregarAlPdf($Fotos, $Detalles_Generales)', $controlador);
+    }
+
+    /** El espacio de descripción del 06 se conserva sin imagen desde Create hasta el anexo. */
+    public function test_06_b_01_permite_un_cuadro_de_descripcion_sin_archivo(): void
+    {
+        $scriptLayout = file_get_contents(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js'));
+        $controlador = file_get_contents(app_path('Http/Controllers/Reporte/IM/FOR_PIMP_06_B_01Controller.php'));
+        $anexo = file_get_contents(resource_path('views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_06_B_01_PDF.blade.php'));
+
+        $this->assertStringContainsString("'FOR-PIMP-06_B_01'", $scriptLayout);
+        $this->assertStringContainsString('Usar este espacio como descripción para el reporte', $scriptLayout);
+        $this->assertStringContainsString("'foto_es_texto' => 'nullable|array'", $controlador);
+        $this->assertStringContainsString("'es_cuadro_texto' => 1", $controlador);
+        $this->assertStringContainsString("!empty(\$foto['es_cuadro_texto'])", $controlador);
+        $this->assertStringContainsString("!empty(\$espacios[\$posicion]['es_cuadro_texto'])", $anexo);
+        $this->assertStringContainsString('descripcion-reporte', $anexo);
+    }
+
+    /** Una fotografia opcional sin ruta no debe convertir la carpeta publica en una imagen de Dompdf. */
+    public function test_06_b_01_descarta_rutas_vacias_antes_de_generar_el_pdf(): void
+    {
+        $controlador = file_get_contents(app_path('Http/Controllers/Reporte/IM/FOR_PIMP_06_B_01Controller.php'));
+        $servicioGrano = file_get_contents(app_path('Services/ServicioPatronGranoReporte.php'));
+
+        $this->assertStringContainsString("if (\$rutaGuardada === '')", $controlador);
+        $this->assertStringContainsString('File::isFile($rutaFoto)', $controlador);
+        $this->assertStringContainsString('File::isFile($rutaFisica)', $servicioGrano);
+    }
+
+    /** La cuadricula logica de cuatro espacios del 06 debe caber en una sola hoja fisica. */
+    public function test_06_b_01_no_divide_una_cuadricula_de_cuatro_fotos(): void
+    {
+        $imagen = public_path('images/MenuServicios/RELEVADO_DE_ESFUERZO.png');
+        $posiciones = ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'];
+        $fotos = [];
+
+        foreach ($posiciones as $posicion) {
+            $fotos[] = [
+                'path' => $imagen,
+                'comment' => 'EVIDENCIA FOTOGRAFICA',
+                'pagina' => 1,
+                'posicion' => $posicion,
+            ];
+        }
+
+        $contenido = Pdf::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_06_B_01_PDF', [
+            'Logo' => public_path('images/Logo_AICO_R.jpg'),
+            'Detalles_Generales' => ['No_Reporte' => 'QA-06'],
+            'Firmas_Reportes' => [],
+            'numFirmas' => 1,
+            'Fotos' => $fotos,
+        ])->setPaper('letter', 'portrait')->output();
+
+        $fpdi = new Fpdi();
+        $this->assertSame(
+            1,
+            $fpdi->setSourceFile(StreamReader::createByString($contenido)),
+            'Las dos filas del 06 no deben repartirse entre dos hojas fisicas.'
+        );
+    }
 }

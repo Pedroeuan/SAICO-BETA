@@ -123,8 +123,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Proyecto:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto', $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
+                            <label class="col-form-label" for="proyecto0403Edit">Proyecto:</label>
+                            <textarea class="form-control  is-waning" id="proyecto0403Edit" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto', $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
                             @error('Proyecto')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -133,8 +133,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo', $Detalles_Generales['Orden_Trabajo'] ?? '')}}</textarea>
+                            <label class="col-form-label" for="ordenTrabajo0403Edit">Orden de Trabajo:</label>
+                            <textarea class="form-control  is-waning" id="ordenTrabajo0403Edit" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo', $Detalles_Generales['Orden_Trabajo'] ?? '')}}</textarea>
                             @error('Orden_Trabajo')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -173,8 +173,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Isométrico:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico', $Detalles_Generales['No_Isometrico'] ?? '')}}">
+                            <label class="col-form-label" for="noIsometrico0403Edit">No. Isométrico:</label>
+                            <input type="text" class="form-control  is-waning" id="noIsometrico0403Edit" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico', $Detalles_Generales['No_Isometrico'] ?? '')}}">
                             @error('No_Isometrico')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -203,8 +203,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Junta:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta', $Detalles_Generales['No_Junta'] ?? '')}}">
+                            <label class="col-form-label" for="noJunta0403Edit">No. Junta:</label>
+                            <input type="text" class="form-control  is-waning" id="noJunta0403Edit" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta', $Detalles_Generales['No_Junta'] ?? '')}}">
                             @error('No_Junta')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -213,8 +213,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad', $Detalles_Generales['Trazabilidad'] ?? '')}}">
+                            <label class="col-form-label" for="trazabilidad0403Edit">Trazabilidad:</label>
+                            <input type="text" class="form-control  is-waning" id="trazabilidad0403Edit" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad', $Detalles_Generales['Trazabilidad'] ?? '')}}">
                             @error('Trazabilidad')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -597,7 +597,6 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        <div id="recortesXrfDisparos" class="mt-3"></div>
                     </div>
                     <div class="col-12 d-none" id="normaIMResultadosContainer">
                         <div class="table-responsive">
@@ -869,8 +868,14 @@
                         {{-- Conserva imágenes existentes y permite cambiar posición, texto o número de disparo. --}}
                         <div data-layout-fotos-manual="1">
                         @if(!empty($Fotos_Comentarios))
+                            @php
+                                // Las fotografías editables se presentan primero; los recortes de disparos quedan al final.
+                                $fotosOrdenadas = collect($Fotos_Comentarios)->sortBy(
+                                    static fn ($foto) => !empty($foto['es_disparo']) ? 1 : 0
+                                );
+                            @endphp
                             <div class="row">
-                                @foreach($Fotos_Comentarios as $index => $foto)
+                                @foreach($fotosOrdenadas as $index => $foto)
                                     <div class="col-sm-6" id="image-container-{{ $index }}"
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
@@ -918,6 +923,9 @@
                             <!-- Aquí se agregarán dinámicamente los campos -->
                         </div>
                         </div>
+
+                        {{-- Los nuevos recortes XRF también se muestran después de las fotografías del usuario. --}}
+                        <div id="recortesXrfDisparos" class="mt-3"></div>
 
                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">

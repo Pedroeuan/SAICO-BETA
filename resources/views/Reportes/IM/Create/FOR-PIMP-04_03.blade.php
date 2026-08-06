@@ -162,8 +162,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Proyecto:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
+                            <label class="col-form-label" for="proyecto0403Create">Proyecto:</label>
+                            <textarea class="form-control  is-waning" id="proyecto0403Create" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
                             @error('Proyecto')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -172,8 +172,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
+                            <label class="col-form-label" for="ordenTrabajo0403Create">Orden de Trabajo:</label>
+                            <textarea class="form-control  is-waning" id="ordenTrabajo0403Create" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo')}}</textarea>
                             @error('Orden_Trabajo')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -212,8 +212,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Isométrico:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico')}}">
+                            <label class="col-form-label" for="noIsometrico0403Create">No. Isométrico:</label>
+                            <input type="text" class="form-control  is-waning" id="noIsometrico0403Create" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico')}}">
                             @error('No_Isometrico')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -242,8 +242,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad')}}">
+                            <label class="col-form-label" for="trazabilidad0403Create">Trazabilidad:</label>
+                            <input type="text" class="form-control  is-waning" id="trazabilidad0403Create" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Trazabilidad')}}">
                             @error('Trazabilidad')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -262,8 +262,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Criterio de Evaluación:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Criterio_Evaluacion]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
+                            <label class="col-form-label" for="criterioEvaluacion0403Create">Criterio de Evaluación:</label>
+                            <input type="text" class="form-control  is-waning" id="criterioEvaluacion0403Create" name="Detalles_Generales[Criterio_Evaluacion]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Criterio_Evaluacion')}}">
                             @error('Criterio_Evaluacion')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -282,8 +282,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Tubería:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Tuberia]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Tuberia')}}">
+                            <label class="col-form-label" for="tuberia0403Create">Tubería:</label>
+                            <input type="text" class="form-control  is-waning" id="tuberia0403Create" name="Detalles_Generales[Tuberia]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Tuberia')}}">
                             @error('Tuberia')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -292,8 +292,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Estructural:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Estructural]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Estructural')}}">
+                            <label class="col-form-label" for="estructural0403Create">Estructural:</label>
+                            <input type="text" class="form-control  is-waning" id="estructural0403Create" name="Detalles_Generales[Estructural]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.Estructural')}}">
                             @error('Estructural')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
