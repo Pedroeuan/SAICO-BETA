@@ -72,8 +72,8 @@
             token.value = analisis.token;
             perlita.textContent = Number(analisis.porcentaje_perlita).toFixed(3) + ' %';
             ferrita.textContent = Number(analisis.porcentaje_ferrita).toFixed(3) + ' %';
-            original.src = analisis.urls.imagen_visual || analisis.urls.original;
-            binaria.src = analisis.urls.imagen_binaria;
+            original.src = normalizarUrlEvidencia(analisis.urls.imagen_visual || analisis.urls.original);
+            binaria.src = normalizarUrlEvidencia(analisis.urls.imagen_binaria);
             originalWrap.classList.remove('d-none');
             binariaWrap.classList.remove('d-none');
             resultados.classList.remove('d-none');
@@ -82,6 +82,22 @@
             mostrarSeleccionReporte(false);
             estado.classList.add('text-success');
             estado.textContent = 'Imagen procesada correctamente.';
+        }
+
+        /**
+         * Conserva únicamente la ruta pública de una evidencia. También repara resultados
+         * creados por workers antiguos que todavía contienen el host de otro ambiente.
+         */
+        function normalizarUrlEvidencia(ruta) {
+            if (!ruta || typeof ruta !== 'string') return '';
+            if (/^(?:data|blob):/i.test(ruta)) return ruta;
+
+            try {
+                const url = new URL(ruta, window.location.origin);
+                return url.pathname + url.search + url.hash;
+            } catch (error) {
+                return ruta;
+            }
         }
 
         /** Consulta el estado durable sin mostrar detalles internos del worker. */
@@ -401,8 +417,8 @@
                 perlita.textContent = Number(analisis.porcentaje_perlita).toFixed(3) + ' %';
                 ferrita.textContent = Number(analisis.porcentaje_ferrita).toFixed(3) + ' %';
                 // Fiji entrega una copia PNG visible incluso si la evidencia original fue TIFF.
-                original.src = analisis.urls.imagen_visual || analisis.urls.original;
-                binaria.src = analisis.urls.imagen_binaria;
+                original.src = normalizarUrlEvidencia(analisis.urls.imagen_visual || analisis.urls.original);
+                binaria.src = normalizarUrlEvidencia(analisis.urls.imagen_binaria);
                 originalWrap.classList.remove('d-none');
                 binariaWrap.classList.remove('d-none');
                 resultados.classList.remove('d-none');
