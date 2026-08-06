@@ -54,12 +54,56 @@
         let revisionMedicion = 0;
         let solicitudHistograma = null;
         let solicitudProcesamiento = null;
+        // Una clave por formulario permite recuperar un Measure pendiente despues de recargar.
+        const indiceComponente = Array.from(document.querySelectorAll('[data-imagej-phase]')).indexOf(componente);
+        const claveTrabajo = 'saico:fiji:' + window.location.pathname + ':' + indiceComponente;
 
         // Recupera los metadatos ya guardados para que Edit muestre el mismo contenido en FOTOS.
         try {
             analisisActual = JSON.parse(analisisExistente?.textContent || '{}');
         } catch (error) {
             analisisActual = {};
+        }
+
+        /** Presenta la salida final usando la misma estructura en Create y Edit. */
+        function aplicarAnalisis(analisis) {
+            if (!analisis || !analisis.token) throw new Error('Fiji devolvio un resultado incompleto.');
+            analisisActual = analisis;
+            token.value = analisis.token;
+            perlita.textContent = Number(analisis.porcentaje_perlita).toFixed(3) + ' %';
+            ferrita.textContent = Number(analisis.porcentaje_ferrita).toFixed(3) + ' %';
+            original.src = analisis.urls.imagen_visual || analisis.urls.original;
+            binaria.src = analisis.urls.imagen_binaria;
+            originalWrap.classList.remove('d-none');
+            binariaWrap.classList.remove('d-none');
+            resultados.classList.remove('d-none');
+            resultadoVigente = true;
+            botonUsarReporte.disabled = false;
+            mostrarSeleccionReporte(false);
+            estado.classList.add('text-success');
+            estado.textContent = 'Imagen procesada correctamente.';
+        }
+
+        /** Consulta el estado durable sin mostrar detalles internos del worker. */
+        async function esperarTrabajo(estadoUrl, revisionSolicitada) {
+            while (revisionSolicitada === revisionMedicion) {
+                const respuesta = await fetch(estadoUrl, {
+                    headers: { 'Accept': 'application/json' },
+                    signal: solicitudProcesamiento?.signal,
+                });
+                const cuerpo = await respuesta.json();
+                const trabajo = cuerpo.trabajo || {};
+                if (trabajo.estado === 'completado') {
+                    localStorage.removeItem(claveTrabajo);
+                    return trabajo.resultado?.analisis;
+                }
+                if (!respuesta.ok || trabajo.estado === 'error') {
+                    localStorage.removeItem(claveTrabajo);
+                    throw new Error(trabajo.mensaje || 'No fue posible procesar la imagen.');
+                }
+                estado.textContent = trabajo.mensaje || 'Procesando imagen con Fiji...';
+                await new Promise(function (resolver) { window.setTimeout(resolver, 1500); });
+            }
         }
 
         /**
@@ -226,6 +270,7 @@
             revisionMedicion++;
             if (solicitudHistograma) solicitudHistograma.abort();
             if (solicitudProcesamiento) solicitudProcesamiento.abort();
+            localStorage.removeItem(claveTrabajo);
             const seleccionado = archivo.files && archivo.files[0];
             if (!seleccionado) {
                 imagenSeleccionada = null;
@@ -344,7 +389,13 @@
                     throw new Error(primerError || cuerpo.message || 'No fue posible completar el análisis.');
                 }
 
-                const analisis = cuerpo.analisis;
+                if (!cuerpo.trabajo?.estado_url) {
+                    throw new Error('No se recibio el identificador del procesamiento.');
+                }
+                // Solo se conserva la URL autenticada del UUID; nunca se guarda la imagen en localStorage.
+                localStorage.setItem(claveTrabajo, cuerpo.trabajo.estado_url);
+                estado.textContent = 'Procesando imagen con Fiji...';
+                const analisis = await esperarTrabajo(cuerpo.trabajo.estado_url, revisionSolicitada);
                 analisisActual = analisis;
                 token.value = analisis.token;
                 perlita.textContent = Number(analisis.porcentaje_perlita).toFixed(3) + ' %';
@@ -383,6 +434,23 @@
             setTimeout(function () {
                 mostrarSeleccionReporte(usarReporte.value === '1');
             }, 0);
+        }
+
+        // Recupera una medicion pendiente si el navegador fue recargado durante el trabajo.
+        const trabajoPendiente = localStorage.getItem(claveTrabajo);
+        if (trabajoPendiente && !resultadoVigente) {
+            revisionMedicion++;
+            solicitudProcesamiento = new AbortController();
+            boton.disabled = true;
+            estado.textContent = 'Procesando imagen con Fiji...';
+            esperarTrabajo(trabajoPendiente, revisionMedicion)
+                .then(aplicarAnalisis)
+                .catch(function (error) {
+                    if (error.name === 'AbortError') return;
+                    estado.classList.add('text-danger');
+                    estado.textContent = error.message;
+                })
+                .finally(function () { boton.disabled = !imagenSeleccionada; });
         }
 
         // Evita guardar un reporte si el usuario cambió imagen/umbral y no volvió a medir.

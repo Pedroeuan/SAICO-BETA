@@ -709,6 +709,8 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
     public function FOR_PIMP_06_B_01_store(Request $request)
     {
+        // Restaura los PDF multiples que quedaron asociados al UUID del formulario.
+        app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
@@ -1136,6 +1138,8 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
     public function FOR_PIMP_06_B_01_update(Request $request, $id)
     {
+        // Edit usa la misma validacion de propiedad y estado que Create.
+        app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([

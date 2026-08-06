@@ -226,10 +226,14 @@
             text-align: center;
         }
         .photo-slot img { 
-            display: block; 
-            width: 100%; 
-            height: auto;/*5.48cm; */
-            object-fit: contain; 
+            /* Mantiene cualquier proporción dentro del mismo marco, como en el formato 04_03. */
+            display: block;
+            max-width: 326px;
+            max-height: 181px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
         }
         .photo-comment { 
             height: 16px;
