@@ -25,7 +25,8 @@
         }
         footer { 
             position: fixed; 
-            bottom: -30px; 
+            /* Baja ligeramente las firmas sin acercarlas al contenido del análisis químico. */
+            bottom: -38px;
             left: 0; 
             right: 0; 
             height: auto; 
@@ -137,6 +138,8 @@
         }
         .capturaComposicion {
             padding-left: 7px !important;
+            /* Alinea la captura XRF con el inicio de la tabla de composición teórica. */
+            padding-top: 20px !important;
         }
         .tablaResultadosQuimicos {
             width: 70%;
@@ -179,14 +182,18 @@
             line-height: 8px;
             text-align: center;
         }
-        .tituloCapturaQuimica,
-        .imagenCapturaQuimica {
+        .tituloCapturaQuimica {
             width: 80%;
             margin: 0;
         }
         .imagenCapturaQuimica {
             display: block;
-            max-height: auto; /*235px;*/
+            /* Conserva la proporción original y limita la captura para respetar las firmas. */
+            width: auto;
+            height: auto;
+            max-width: 80%;
+            max-height: 235px;
+            margin: 0;
             object-fit: contain;
             object-position: center top;
         }
@@ -586,9 +593,26 @@
 <div style="margin-bottom: 2px;"></div>
 
 @if(!empty($NormaIM['Tabla']))
+@php
+    // Calcula una sola escala para que la captura XRF y su título terminen con el mismo ancho.
+    $capturaAnchoOriginal = max(0, (int) ($NormaIM['Captura_XRF']['ancho'] ?? 0));
+    $capturaAltoOriginal = max(0, (int) ($NormaIM['Captura_XRF']['alto'] ?? 0));
+    $capturaAnchoPdf = null;
+    $capturaAltoPdf = null;
+    $capturaAnchoTituloPdf = null;
+
+    if ($capturaAnchoOriginal > 0 && $capturaAltoOriginal > 0) {
+        $escalaCaptura = min(270 / $capturaAnchoOriginal, 235 / $capturaAltoOriginal);
+        $capturaAnchoPdf = max(1, (int) round($capturaAnchoOriginal * $escalaCaptura));
+        $capturaAltoPdf = max(1, (int) round($capturaAltoOriginal * $escalaCaptura));
+        // Compensa el margen blanco derecho que forma parte de la captura generada.
+        $capturaAnchoTituloPdf = max(1, $capturaAnchoPdf - 16);
+    }
+@endphp
 <div class="paginaComposicion">
     
-<div style="margin-bottom: 30px;"></div>
+{{-- El bloque inicia inmediatamente para reservar una separación segura antes de las firmas. --}}
+<div style="margin-bottom: 0;"></div>
 
     <table class="layoutComposicion">
         <tbody>
@@ -617,11 +641,17 @@
                     </table>
                 </td>
                 <td class="capturaComposicion">
-                    <div class="tituloCapturaQuimica">
+                    <div class="tituloCapturaQuimica"
+                         @if($capturaAnchoTituloPdf) style="width: {{ $capturaAnchoTituloPdf }}px;" @endif>
                         VALORES OBTENIDOS DE LA PIEZA ANALIZADA<br>
                     </div>
                     @if(!empty($CapturaXrf))
-                        <img class="imagenCapturaQuimica" src="{{ $CapturaXrf }}" alt="Captura del análisis químico">
+                        <img class="imagenCapturaQuimica"
+                             src="{{ $CapturaXrf }}"
+                             alt="Captura del análisis químico"
+                             @if($capturaAnchoPdf && $capturaAltoPdf)
+                                 style="width: {{ $capturaAnchoPdf }}px; height: {{ $capturaAltoPdf }}px;"
+                             @endif>
                     @endif
                 </td>
             </tr>
