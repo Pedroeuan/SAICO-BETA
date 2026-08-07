@@ -56,6 +56,32 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        /* Acordeon de herramientas metalograficas.
+           Mantiene visible el titulo azul y oculta solo Fiji + conteo para reducir ruido visual. */
+        .saico-metalografia-tools-section {
+            border: 1px solid #0d6efd;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.08);
+        }
+
+        .saico-metalografia-tools-header {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .saico-metalografia-tools-header .saico-section-icon {
+            margin-left: auto;
+            font-weight: bold;
+        }
+
+        .saico-metalografia-tools-body {
+            padding: 12px;
+        }
+
+        .saico-metalografia-tools-section.is-collapsed .saico-metalografia-tools-body {
+            display: none !important;
+        }
     </style>
 @endsection
 
@@ -224,7 +250,9 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
+                            {{-- Edit conserva el procedimiento historico y su relacion asignada. --}}
+                            <input type="text" class="form-control inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]" value="{{ old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '') }}" readonly>
+                            <input type="hidden" name="Detalles_Generales[idProcedimiento]" value="{{ $Detalles_Generales['idProcedimiento'] ?? ($idProcedimiento ?? '') }}">
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -487,46 +515,8 @@
                         </div>
                     </div>
 
-                    {{-- Los datos metalográficos editados se muestran también en el anexo fotográfico. --}}
-                    <div class="col-12">
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">ANÁLISIS METALOGRÁFICO</div>
-                        <div class="table-responsive mb-3">
-                            <table class="table table-bordered text-center align-middle mb-0">
-                                <colgroup>
-                                    <col style="width: 12%;"><col style="width: 10%;"><col style="width: 12%;">
-                                    <col style="width: 10%;"><col style="width: 12%;"><col style="width: 10%;">
-                                    <col style="width: 12%;"><col style="width: 11%;"><col style="width: 11%;">
-                                </colgroup>
-                                <thead class="bg-primary text-white">
-                                    <tr>
-                                        <th colspan="3">NÚMERO DE LIJA PARA EL DESBASTE</th>
-                                        <th colspan="2">MATERIAL PARA EL PULIDO</th>
-                                        <th colspan="2">DATOS DE ATAQUE QUÍMICO</th>
-                                        <th>FASES PRESENTES</th>
-                                        <th>ESPECIFICACIÓN APROXIMADA DEL MATERIAL</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>240</td><td>320</td><td>400</td>
-                                        <th class="bg-light">PAÑO</th>
-                                        <td><input type="text" class="form-control text-center" name="Datos_Equipo[MATERIAL_PANO]" value="{{ old('Datos_Equipo.MATERIAL_PANO', $Datos_Equipo['MATERIAL_PANO'] ?? '') }}"></td>
-                                        <th class="bg-light">REACTIVO</th>
-                                        <td><input type="text" class="form-control text-center" name="Datos_Equipo[REACTIVO]" value="{{ old('Datos_Equipo.REACTIVO', $Datos_Equipo['REACTIVO'] ?? '') }}"></td>
-                                        <td rowspan="2"><textarea class="form-control text-center h-100" rows="3" name="Datos_Equipo[FASES_PRESENTES]">{{ old('Datos_Equipo.FASES_PRESENTES', $Datos_Equipo['FASES_PRESENTES'] ?? '') }}</textarea></td>
-                                        <td rowspan="2"><textarea class="form-control text-center h-100" rows="3" name="Datos_Equipo[ESPECIFICACION_MATERIAL]">{{ old('Datos_Equipo.ESPECIFICACION_MATERIAL', $Datos_Equipo['ESPECIFICACION_MATERIAL'] ?? '') }}</textarea></td>
-                                    </tr>
-                                    <tr>
-                                        <td>500</td><td>1000</td><td>1500</td>
-                                        <th class="bg-light">ABRASIVO</th>
-                                        <td><input type="text" class="form-control text-center" name="Datos_Equipo[MATERIAL_ABRASIVO]" value="{{ old('Datos_Equipo.MATERIAL_ABRASIVO', $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '') }}"></td>
-                                        <th class="bg-light">TIEMPO</th>
-                                        <td><input type="text" class="form-control text-center" name="Datos_Equipo[TIEMPO_ATAQUE]" value="{{ old('Datos_Equipo.TIEMPO_ATAQUE', $Datos_Equipo['TIEMPO_ATAQUE'] ?? '') }}"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{-- Los mismos catálogos se recuperan en Edit sin alterar el histórico. --}}
+                    @include('Reportes.IM.partials.datos-metalograficos', ['esEdicionMetalografica' => true])
 
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
 
@@ -954,31 +944,6 @@
 
                         <p>
 
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
-                        
-                        <p>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
-                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '')}}">
-                                @error('Num_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
-                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '')}}">
-                                @error('Nombre_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-                        <p>
-
                         <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>
                                         
                         <p>
@@ -1062,6 +1027,65 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 <script>
+    // Minimiza solo las herramientas pesadas de metalografia: Fiji + conteo lineal.
+    // No cambia campos, rutas ni datos enviados; unicamente reorganiza la vista para produccion.
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-PIMP-04_03');
+        if (!form || form.dataset.saicoMetalografiaTools === '1') return;
+
+        const phase = form.querySelector('[data-imagej-phase]');
+        const grain = form.querySelector('[data-grain-counter]');
+        if (!phase) return;
+
+        form.dataset.saicoMetalografiaTools = '1';
+
+        const header = phase.querySelector('.d-flex.justify-content-center.align-items-center.p-2.bg-primary.text-white.rounded');
+        if (!header) return;
+
+        const section = document.createElement('div');
+        const body = document.createElement('div');
+        const icon = document.createElement('span');
+        const storageKey = 'saico:' + form.id + ':metalografia-tools:' + window.location.pathname;
+        const savedState = localStorage.getItem(storageKey);
+        const opened = savedState === null ? false : savedState === '1';
+
+        section.className = 'col-12 saico-metalografia-tools-section my-3' + (opened ? '' : ' is-collapsed');
+        body.className = 'saico-metalografia-tools-body row';
+        icon.className = 'saico-section-icon';
+
+        header.classList.add('saico-metalografia-tools-header');
+        header.setAttribute('role', 'button');
+        header.setAttribute('tabindex', '0');
+        header.innerHTML = '<span>FRACCION DE FASES POR ANALISIS DE IMAGEN Y CONTEO LINEAL DE GRANOS</span>';
+        header.appendChild(icon);
+
+        const refresh = function () {
+            const closed = section.classList.contains('is-collapsed');
+            icon.textContent = closed ? '+' : '-';
+            body.style.display = closed ? 'none' : 'flex';
+        };
+
+        const toggle = function () {
+            section.classList.toggle('is-collapsed');
+            localStorage.setItem(storageKey, section.classList.contains('is-collapsed') ? '0' : '1');
+            refresh();
+        };
+
+        phase.parentNode.insertBefore(section, phase);
+        section.appendChild(header);
+        body.appendChild(phase);
+        if (grain) body.appendChild(grain);
+        section.appendChild(body);
+        refresh();
+
+        header.addEventListener('click', toggle);
+        header.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                toggle();
+            }
+        });
+    });
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('FOR-PIMP-04_03');
