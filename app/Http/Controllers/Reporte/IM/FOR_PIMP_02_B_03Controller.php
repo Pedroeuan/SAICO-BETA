@@ -43,6 +43,57 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_02_B_03Controller extends Controller
 {
+    /**
+     * Calcula el promedio entero de todas las lecturas del formato 02_B_03.
+     * El servidor recalcula el resultado y no confia en el valor enviado por el navegador.
+     */
+    private function calcularPromedioDurezaEntero(Request $request): string
+    {
+        $valores = [];
+
+        for ($columna = 1; $columna <= 5; $columna++) {
+            $grupos = $request->input("valor_dureza{$columna}", []);
+            if (!is_array($grupos)) {
+                continue;
+            }
+
+            foreach ($grupos as $grupo => $lecturas) {
+                if (!is_array($lecturas)) {
+                    continue;
+                }
+
+                foreach ($lecturas as $indice => $lectura) {
+                    $texto = trim((string) $lectura);
+
+                    // Un campo vacio o hasta tres guiones representa una medicion no realizada.
+                    if ($texto === '' || preg_match('/^-{1,3}$/', $texto)) {
+                        continue;
+                    }
+
+                    $normalizado = str_replace(',', '.', $texto);
+                    if (!preg_match('/^(?:\d+(?:\.\d*)?|\.\d+)$/', $normalizado)) {
+                        throw \Illuminate\Validation\ValidationException::withMessages([
+                            "valor_dureza{$columna}.{$grupo}.{$indice}" =>
+                                'Capture una dureza numerica mayor o igual a cero, deje el campo vacio o use hasta tres guiones.',
+                        ]);
+                    }
+
+                    $valores[] = (float) $normalizado;
+                }
+            }
+        }
+
+        if ($valores === []) {
+            return '';
+        }
+
+        return (string) (int) round(
+            array_sum($valores) / count($valores),
+            0,
+            PHP_ROUND_HALF_UP
+        );
+    }
+
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
@@ -436,12 +487,11 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Detalles_Generales.Esp_Ced' => 'nullable|string',
             'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Codigo_Diseño' => 'nullable|string',
             'Detalles_Generales.Diam_Nominal' => 'nullable|string',
             'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -467,6 +517,7 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.ESCALA_DUREZA' => 'nullable|string|max:50',
             'Datos_Equipo.DUREZA_PROMEDIO_MEDIDO' => 'nullable|string',
             'Datos_Equipo.DUREZA_ESPECIFICACION_REFERENCIA' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
@@ -601,6 +652,9 @@ class FOR_PIMP_02_B_03Controller extends Controller
                 $validatedData['Detalles_Generales']['Contrato'] = $actual;
             }
         }
+        // El promedio calculado sustituye cualquier valor manipulado desde el navegador.
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO_MEDIDO'] = $this->calcularPromedioDurezaEntero($request);
+
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -907,10 +961,9 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Detalles_Generales.Esp_Ced' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Codigo_Aplicable' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -941,6 +994,7 @@ class FOR_PIMP_02_B_03Controller extends Controller
             'Datos_Equipo.EXCEP' => 'nullable|string',
             'Datos_Equipo.NOTAS' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.ESCALA_DUREZA' => 'nullable|string|max:50',
             'Datos_Equipo.DUREZA_PROMEDIO_MEDIDO' => 'nullable|string',
             'Datos_Equipo.DUREZA_ESPECIFICACION_REFERENCIA' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
@@ -1084,6 +1138,9 @@ class FOR_PIMP_02_B_03Controller extends Controller
             $validatedData['Detalles_Generales']['Reporte_Firmado'] = $detallesActuales['Reporte_Firmado'] ?? null;
         }
         
+        // Edit recalcula nuevamente todas las lecturas y conserva un resultado entero verificable.
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO_MEDIDO'] = $this->calcularPromedioDurezaEntero($request);
+
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_SONDA'] = $validatedData['Datos_Equipo']['ID_SONDA'] ?? ($datosEquipoActuales['ID_SONDA'] ?? null);
         $validatedData['Datos_Equipo']['ID_BLOCK'] = $validatedData['Datos_Equipo']['ID_BLOCK'] ?? ($datosEquipoActuales['ID_BLOCK'] ?? null);

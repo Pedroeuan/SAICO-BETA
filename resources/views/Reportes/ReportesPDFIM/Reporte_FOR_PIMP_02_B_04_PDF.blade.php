@@ -192,15 +192,17 @@
             padding: 4px 1px;
         }
 
-        .croquisSoldadura {
-            height: 40px;
-            text-align: center;
-            padding: 0;
+        .croquisSoldadura img{
+            display:block;
+            margin:0;
+            width:40%;
+            height:40px;
+            object-fit:contain;
         }
 
-        .croquisWrapper {
-            width: 100%;
-            text-align: center;
+        .croquisWrapper{
+            width:100%;
+            text-align:center;
         }
 
         .croquisSoldadura svg {
@@ -324,7 +326,7 @@
         }
 
         .valorGeneral {
-            border-bottom: 1px solid black;
+            border-bottom: .5px solid black;
             text-align: center !important;
             vertical-align: middle !important;
             /*height: 13px;*/
@@ -538,6 +540,21 @@
         </table>
 </footer>
 
+@php
+    // La etapa y las etiquetas se guardan dentro del reporte para mantener el PDF historico.
+    $etapaDureza = ($Datos_Equipo['DUREZA_ETAPA'] ?? 'ANTES') === 'DESPUES' ? 'DESPUES' : 'ANTES';
+    $tituloEtapaDureza = $etapaDureza === 'DESPUES'
+        ? ['DESPUÉS DEL RELEVADO DE ESFUERZOS', 'AFTER PWHT']
+        : ['ANTES DEL RELEVADO DE ESFUERZOS', 'BEFORE PWHT'];
+    $etiquetaMaterialA = trim((string) ($Datos_Equipo['ETIQUETA_MATERIAL_A'] ?? '')) ?: 'Base Metal';
+    $etiquetaMaterialA1 = trim((string) ($Datos_Equipo['ETIQUETA_MATERIAL_A1'] ?? '')) ?: 'Base Metal';
+    $escalaDureza = trim((string) ($Datos_Equipo['ESCALA_DUREZA'] ?? '')) ?: '---';
+    $mostrarPromedioDureza = static function ($valor) {
+        $texto = trim((string) $valor);
+        return $texto === '' ? '---' : $texto;
+    };
+@endphp
+
 @if(!empty($durezaPages))
 <div style="margin-bottom: 2px;"></div>
 @foreach($durezaPages as $pageIndex => $page)
@@ -628,7 +645,7 @@
                     <td colspan="6" rowspan="2" class="croquisSoldadura">
                         <div class="croquisWrapper">
                             @if($croquisExiste)
-                                <img src="{{ $croquisPath }}" alt="Croquis de soldadura" style="width:30%; height:35px; display:block; margin:0 auto; object-fit:contain;">
+                                <img src="{{ $croquisPath }}" alt="Croquis de soldadura" style="width:40%; height:50px; display:block; margin:0 auto; object-fit:contain;">
                             @endif
                         </div>
                     </td>
@@ -645,7 +662,8 @@
                     </th>
                     <th class="etiquetaPromedio encabezadoCompacto">
                         <span style="font-size:5.8px;">METAL BASE</span><br>
-                        <small style="font-size:4.8px;">Base Metal (A)</small>
+                        <span style="font-size:5.8px;">{{ $etiquetaMaterialA }}</span><br>
+                        <span style="font-size:5.8px;">(A)</span>
                     </th>
                     <th class="etiquetaPromedio encabezadoCompacto">
                         <span style="font-size:5.8px;">ZAC</span><br>
@@ -661,7 +679,8 @@
                     </th>
                     <th class="etiquetaPromedio encabezadoCompacto">
                         <span style="font-size:5.8px;">METAL BASE</span><br>
-                        <small style="font-size:4.8px;">Base Metal (A1)</small>
+                        <span style="font-size:5.8px;">{{ $etiquetaMaterialA1 }}</span><br>
+                        <span style="font-size:5.8px;">(A1)</span>
                     </th>
                     <th class="etiquetaEquipoLateral">MARCA:<br>Brand:</th>
                     <td class="valorEquipoLateral valorUsuario">{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td>
@@ -670,27 +689,27 @@
             <tbody>
                 <tr>
                     <th class="etiquetaPromedioPrincipal encabezadoCompactoPrincipal celdaEtiquetaPromedio">
-                        <span class="texto-es">ANTES DEL RELEVADO DE ESFUERZOS (HB):</span>
-                        <small>Before PWHT (HB)</small>
+                        <span class="texto-es">ANTES DEL RELEVADO DE ESFUERZOS ({{ $escalaDureza }}):</span>
+                        <small>Before PWHT ({{ $escalaDureza }})</small>
                     </th>
-                    <td class="valorUsuario">{{ $durezaPromedio['ANTES_A'] ?? '' }}</td>
-                    <td class="valorUsuario">{{ $durezaPromedio['ANTES_B'] ?? '' }}</td>
-                    <td class="valorUsuario">{{ $durezaPromedio['ANTES_C'] ?? '' }}</td>
-                    <td class="valorUsuario">{{ $durezaPromedio['ANTES_B1'] ?? '' }}</td>
-                    <td class="valorUsuario">{{ $durezaPromedio['ANTES_BM'] ?? '' }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['ANTES_A'] ?? null) }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['ANTES_B'] ?? null) }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['ANTES_C'] ?? null) }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['ANTES_B1'] ?? null) }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['ANTES_BM'] ?? null) }}</td>
                     <th class="etiquetaEquipoLateral">MODELO:<br>Model:</th>
                     <td class="valorEquipoLateral valorUsuario">{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td>
                 </tr>
                 <tr>
                     <th class="etiquetaPromedioPrincipal encabezadoCompactoPrincipal celdaEtiquetaPromedio">
-                        <span class="texto-es">POSTERIOR AL RELEVADO DE ESFUERZOS (HB):</span>
-                        <small>After PWHT (HB)</small>
+                        <span class="texto-es">POSTERIOR AL RELEVADO DE ESFUERZOS ({{ $escalaDureza }}):</span>
+                        <small>After PWHT ({{ $escalaDureza }})</small>
                     </th>
-                    <td class="valorUsuario">{{ $durezaPromedio['DESPUES_A'] ?? '' }}</td>
-                    <td class="valorUsuario">{{ $durezaPromedio['DESPUES_B'] ?? '' }}</td>
-                    <td class="valorUsuario">{{ $durezaPromedio['DESPUES_C'] ?? '' }}</td>
-                    <td class="valorUsuario">{{ $durezaPromedio['DESPUES_B1'] ?? '' }}</td>
-                    <td class="valorUsuario">{{ $durezaPromedio['DESPUES_BM'] ?? '' }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['DESPUES_A'] ?? null) }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['DESPUES_B'] ?? null) }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['DESPUES_C'] ?? null) }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['DESPUES_B1'] ?? null) }}</td>
+                    <td class="valorUsuario">{{ $mostrarPromedioDureza($durezaPromedio['DESPUES_BM'] ?? null) }}</td>
                     <th class="etiquetaEquipoLateral">NO. DE SERIE:<br>Serial Number:</th>
                     <td class="valorEquipoLateral valorUsuario">{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td>
                 </tr>
@@ -699,23 +718,23 @@
     <table class="tablaDurezaPdf">
         <thead class="encabezadoAzul">
             <tr>
-                <th colspan="8">ANTES O DESPUES DEL RELEVADO DE ESFUERZOS<br>BEFORE OR AFTER PWHT</th>
+                <th colspan="8">{{ $tituloEtapaDureza[0] }}<br>{{ $tituloEtapaDureza[1] }}</th>
             </tr>
         </thead>
         <thead>
             <tr>
                 <th colspan="2">DATOS DE LA JUNTA<br>Join Data</th>
-                <th colspan="5">VALORES DE DUREZA (ESCALA BRINELL)<br>Hardness Values (Brinell Scale)</th>
+                <th colspan="5">VALORES DE DUREZA EN {{ $escalaDureza }}<br>Hardness Values {{ $escalaDureza }}</th>
                 <th rowspan="2" style="width: 14%;">OBSERVACIONES<br>Remarks</th>
             </tr>
             <tr>
                 <th style="width: 18%;">DESCRIPCION<br>Description</th>
                 <th style="width: 10%;">HORARIOS TECNICOS<br>Technical schedules</th>
-                <th style="width: 11%;">METAL BASE<br>Base Metal (A)</th>
+                <th style="width: 11%;">METAL BASE<br>{{ $etiquetaMaterialA }}<br>(A)</th>
                 <th style="width: 11%;">ZAC / HAZ<br>(B)</th>
                 <th style="width: 11%;">SOLDADURA<br>Weld (C)</th>
                 <th style="width: 11%;">ZAC / HAZ<br>(B1)</th>
-                <th style="width: 11%;">METAL BASE<br>Base Metal (A1)</th>
+                <th style="width: 11%;">METAL BASE<br>{{ $etiquetaMaterialA1 }}<br>(A1)</th>
             </tr>
         </thead>
         <tbody>
