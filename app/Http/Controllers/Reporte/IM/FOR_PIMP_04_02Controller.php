@@ -1090,9 +1090,8 @@ class FOR_PIMP_04_02Controller extends Controller
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
             'TieneCliente' => 'required|in:si,no',
             'ClienteSelect' => 'nullable|required_if:TieneCliente,si|string|max:255',
@@ -1136,6 +1135,8 @@ class FOR_PIMP_04_02Controller extends Controller
             'Datos_Equipo.RESISTENCIA_CEDENCIA_ESPECIFICADA' => 'nullable|string|max:100',
             'Datos_Equipo.RESISTENCIA_TENSION_MAX' => 'nullable|string|max:100',
             'Datos_Equipo.MATERIAL_PANO' => 'nullable|string|max:255',
+            'Datos_Equipo.LIJAS_DESBASTE' => 'nullable|array|max:6',
+            'Datos_Equipo.LIJAS_DESBASTE.*' => 'nullable|string|max:50',
             'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string|max:255',
             'Datos_Equipo.REACTIVO' => 'nullable|string|max:255',
             'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string|max:100',
@@ -1625,9 +1626,8 @@ class FOR_PIMP_04_02Controller extends Controller
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
             // Datos generados por los dos componentes de análisis de imagen.
             'Analisis_Imagen_Token' => 'nullable|uuid',
@@ -1667,6 +1667,8 @@ class FOR_PIMP_04_02Controller extends Controller
             'Datos_Equipo.RESISTENCIA_CEDENCIA_ESPECIFICADA' => 'nullable|string|max:100',
             'Datos_Equipo.RESISTENCIA_TENSION_MAX' => 'nullable|string|max:100',
             'Datos_Equipo.MATERIAL_PANO' => 'nullable|string|max:255',
+            'Datos_Equipo.LIJAS_DESBASTE' => 'nullable|array|max:6',
+            'Datos_Equipo.LIJAS_DESBASTE.*' => 'nullable|string|max:50',
             'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string|max:255',
             'Datos_Equipo.REACTIVO' => 'nullable|string|max:255',
             'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string|max:100',
@@ -2526,8 +2528,8 @@ class FOR_PIMP_04_02Controller extends Controller
             $totalFotos = count($Fotos);
         }
 
-        // Los dos espacios automáticos se agregan al final para que tengan prioridad en la página 1.
-        $this->agregarAnalisisSeleccionadoAlPdf($Fotos, $Detalles_Generales);
+        // Los tres formatos Fiji comparten una sola construcción del texto y de sus dos espacios automáticos.
+        app(ServicioMetalografiaReporte::class)->agregarAnalisisAlPdf($Fotos, $Detalles_Generales, $Datos_Equipo);
         // La copia histórica del patrón ocupa el tercer espacio y reemplaza cualquier asignación manual antigua.
         app(ServicioPatronGranoReporte::class)->agregarAlPdf($Fotos, $Detalles_Generales);
         $totalFotos = count($Fotos);

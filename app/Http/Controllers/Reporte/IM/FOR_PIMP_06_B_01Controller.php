@@ -732,10 +732,9 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1195,10 +1194,9 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/

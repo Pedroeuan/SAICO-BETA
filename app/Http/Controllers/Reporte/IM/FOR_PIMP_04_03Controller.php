@@ -895,13 +895,12 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
             'Detalles_Generales.Diam_Nominal' => 'nullable|string',
             'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
             'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
             'TieneCliente' => 'required|in:si,no',
             'ClienteSelect' => 'nullable|required_if:TieneCliente,si|string|max:255',
@@ -956,6 +955,8 @@ class FOR_PIMP_04_03Controller extends Controller
             'Datos_Equipo.RESISTENCIA_CEDENCIA_ESPECIFICADA' => 'nullable|string|max:100',
             'Datos_Equipo.RESISTENCIA_TENSION_MAX' => 'nullable|string|max:100',
             'Datos_Equipo.MATERIAL_PANO' => 'nullable|string|max:255',
+            'Datos_Equipo.LIJAS_DESBASTE' => 'nullable|array|max:6',
+            'Datos_Equipo.LIJAS_DESBASTE.*' => 'nullable|string|max:50',
             'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string|max:255',
             'Datos_Equipo.REACTIVO' => 'nullable|string|max:255',
             'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string|max:100',
@@ -1455,13 +1456,12 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
             'Detalles_Generales.Diam_Nominal' => 'nullable|string',
             'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
             'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
             'Analisis_Imagen_Token' => 'nullable|uuid',
             'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
@@ -1511,6 +1511,8 @@ class FOR_PIMP_04_03Controller extends Controller
             'Datos_Equipo.RESISTENCIA_CEDENCIA_ESPECIFICADA' => 'nullable|string|max:100',
             'Datos_Equipo.RESISTENCIA_TENSION_MAX' => 'nullable|string|max:100',
             'Datos_Equipo.MATERIAL_PANO' => 'nullable|string|max:255',
+            'Datos_Equipo.LIJAS_DESBASTE' => 'nullable|array|max:6',
+            'Datos_Equipo.LIJAS_DESBASTE.*' => 'nullable|string|max:50',
             'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string|max:255',
             'Datos_Equipo.REACTIVO' => 'nullable|string|max:255',
             'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string|max:100',
@@ -2362,7 +2364,7 @@ class FOR_PIMP_04_03Controller extends Controller
         }
 
         // Los cuatro espacios metalográficos se agregan al final para prevalecer sobre posiciones manuales.
-        app(ServicioMetalografiaReporte::class)->agregarAnalisisAlPdf($Fotos, $Detalles_Generales);
+        app(ServicioMetalografiaReporte::class)->agregarAnalisisAlPdf($Fotos, $Detalles_Generales, $Datos_Equipo);
         app(ServicioPatronGranoReporte::class)->agregarAlPdf($Fotos, $Detalles_Generales);
         $totalFotos = count($Fotos);
 
