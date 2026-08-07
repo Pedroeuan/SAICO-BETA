@@ -76,6 +76,8 @@
                 usarActualInput.value = this.value ? '1' : '0';
                 idInput.value = this.value;
                 mostrarSeleccion(tarjeta, false);
+                // El cuadro de resultados de Fiji actualiza el tamaño sin esperar a guardar el reporte.
+                document.dispatchEvent(new CustomEvent('saico:grain-pattern-updated'));
             });
         }
 

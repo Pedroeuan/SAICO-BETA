@@ -67,13 +67,17 @@
             font-size: 8px;
         }
 
-        .tabla-datos { /*margin-top: 1px;*/ font-size: 8px; }
+        .tabla-datos {
+            /*margin-top: 1px;*/
+            font-size: 8px;
+        }
         .tabla-datos th,
         .tabla-datos td {
             /*border: 0;
             padding: 1px 3px;
             height: 15px;
             vertical-align: middle;*/
+            padding: .5px 1px;
         }
         .tabla-datos th {
             font-weight: bold;
@@ -175,6 +179,12 @@
             border: 1px solid #000;
             border-collapse: collapse;
             table-layout: fixed;
+        }
+        /* El patrón comparativo ASTM usa únicamente los límites superior e inferior. */
+        .foto-visual.foto-visual-grain,
+        .foto-marco.foto-visual-grain {
+            border-left: 0;
+            border-right: 0;
         }
         .foto-visual td {
             width: 100%;
@@ -465,9 +475,9 @@
         <th rowspan="2">ESPECIFICACIÓN APROXIMADA DEL MATERIAL<br>Approximate Material Specification</th>
     </tr>
     <tr>
-        <td>240</td>
-        <td>320</td>
-        <td>400</td>
+        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][0] ?? '240' }}</td>
+        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][1] ?? '320' }}</td>
+        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][2] ?? '400' }}</td>
         <th>PAÑO<br>Cloth</th>
         <td>{{ $Datos_Equipo['MATERIAL_PANO'] ?? '' }}</td>
         <th>REACTIVO<br>Reagent</th>
@@ -475,9 +485,9 @@
         <td rowspan="2">{{ $Datos_Equipo['FASES_PRESENTES'] ?? '' }}</td>
     </tr>
     <tr>
-        <td>500</td>
-        <td>1000</td>
-        <td>1500</td>
+        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][3] ?? '500' }}</td>
+        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][4] ?? '1000' }}</td>
+        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][5] ?? '1500' }}</td>
         <th>ABRASIVO<br>Abrasive</th>
         <td>{{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}</td>
         <th>TIEMPO<br>Time</th>
@@ -532,7 +542,7 @@
                     @if(!empty($configuracionFotos['completa']['es_cuadro_texto']))
                         <table class="foto-texto foto-texto-completa"><tr><td>{!! nl2br(e($configuracionFotos['completa']['comment'] ?? '')) !!}</td></tr></table>
                     @else
-                        <div class="foto-marco"><img src="{{ $configuracionFotos['completa']['path'] }}" alt="Fotografía"></div>
+                        <div class="foto-marco {{ ($configuracionFotos['completa']['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'foto-visual-grain' : '' }}"><img src="{{ $configuracionFotos['completa']['path'] }}" alt="Fotografía"></div>
                         <div class="comentario-foto">{{ $configuracionFotos['completa']['comment'] ?? '' }}</div>
                     @endif
                 </td>
@@ -555,7 +565,7 @@
                                 <table class="foto-texto"><tr><td>{!! nl2br(e($foto['comment'] ?? '')) !!}</td></tr></table>
                             @else
                                 {{-- Una tabla interior conserva el centrado y el tamaño uniforme en DomPDF. --}}
-                                <table class="foto-visual"><tr><td><img src="{{ $foto['path'] }}" alt="Fotografía"></td></tr></table>
+                                <table class="foto-visual {{ ($foto['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'foto-visual-grain' : '' }}"><tr><td><img src="{{ $foto['path'] }}" alt="Fotografía"></td></tr></table>
                                 <div class="comment">{{ $foto['comment'] ?? '' }}</div>
                             @endif
                         @endif

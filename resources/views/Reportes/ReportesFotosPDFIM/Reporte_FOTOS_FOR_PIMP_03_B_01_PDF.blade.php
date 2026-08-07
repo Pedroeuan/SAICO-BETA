@@ -113,6 +113,12 @@
             text-align: center;
         }
 
+        /* El patrón ASTM conserva únicamente las líneas superior e inferior solicitadas. */
+        .foto-container.foto-container-grain {
+            border-left: 0;
+            border-right: 0;
+        }
+
         .foto-container img {
             width: 312px;
             height: 170px;
@@ -539,12 +545,12 @@
             <tr>
                 @foreach($fotosGrupo as $index => $foto)
                     @if(!empty($foto['una_hoja']) && $foto['una_hoja'] == 1)
-                        <td class="foto-container foto-full" colspan="2">
+                        <td class="foto-container foto-full {{ ($foto['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'foto-container-grain' : '' }}" colspan="2">
                             <img src="{{ $foto['path'] }}">
                             <p class="comment">{{ $foto['comment'] }}</p>
                         </td>
                     @else
-                        <td class="foto-container">
+                        <td class="foto-container {{ ($foto['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'foto-container-grain' : '' }}">
                             <img src="{{ $foto['path'] }}">
                             <p class="comment">{{ $foto['comment'] }}</p>
                         </td>

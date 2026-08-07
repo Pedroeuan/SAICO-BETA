@@ -19,6 +19,7 @@ class ServicioPatronGranoReporte
             return [
                 'id' => $patron->id,
                 'nombre' => $patron->nombre,
+                'valor_grano' => (string) $patron->valor_grano,
                 // asset() respeta el dominio, HTTPS y el subdirectorio reales de la solicitud actual.
                 'url_imagen' => asset('storage/' . ltrim($patron->ruta_imagen, '/')),
             ];

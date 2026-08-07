@@ -225,6 +225,11 @@
             overflow: hidden;
             text-align: center;
         }
+        /* El patrón comparativo ASTM se delimita solo arriba y abajo. */
+        .photo-content.photo-content-grain .photo-image-cell {
+            border-left: 0;
+            border-right: 0;
+        }
         .photo-slot img { 
             /* Mantiene cualquier proporción dentro del mismo marco, como en el formato 04_03. */
             display: block;
@@ -625,9 +630,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>240</td>
-                        <td>320</td>
-                        <td>400</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][0] ?? '240' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][1] ?? '320' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][2] ?? '400' }}</td>
                         <th class="label">PAÑO</th>
                         <td>{{ $Datos_Equipo['MATERIAL_PANO'] ?? '' }}</td>
                         <th class="label">REACTIVO</th>
@@ -636,9 +641,9 @@
                         <td rowspan="2">{{ $Datos_Equipo['ESPECIFICACION_MATERIAL'] ?? '' }}</td>
                     </tr>
                     <tr>
-                        <td>500</td>
-                        <td>1000</td>
-                        <td>1500</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][3] ?? '500' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][4] ?? '1000' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][5] ?? '1500' }}</td>
                         <th class="label">ABRASIVO</th>
                         <td>{{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}</td>
                         <th class="label">TIEMPO</th>
@@ -668,7 +673,7 @@
                                 </tr>
                             </table>
                         @else
-                            <table class="photo-content">
+                            <table class="photo-content {{ ($fotoCompleta['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                 <tr>
                                     <td class="photo-image-cell">
                                         <img src="{{ $fotoCompleta['path'] }}" alt="Fotografía">
@@ -688,7 +693,7 @@
                             <td class="photo-slot {{ $posicion }} {{ !empty($espacios[$posicion]['es_cuadro_texto']) ? 'photo-slot-text' : '' }}">
                                 @if(!empty($espacios[$posicion]['es_cuadro_texto']))
                                     {{-- Reutiliza la estructura de la foto: marco de 185 px y franja inferior de 16 px. --}}
-                                    <table class="photo-content">
+                                    <table class="photo-content {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                         <tr>
                                             <td class="photo-image-cell photo-text-cell">
                                                 <div class="photo-text-cell-inner {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
@@ -699,7 +704,7 @@
                                         </tr>
                                     </table>
                                 @else
-                                    <table class="photo-content">
+                                    <table class="photo-content {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                         <tr>
                                             <td class="photo-image-cell">
                                                 <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">

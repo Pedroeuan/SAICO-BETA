@@ -11,20 +11,41 @@ use Tests\TestCase;
 /** Asegura que Create, Edit y el anexo conserven los datos metalográficos. */
 class FORPIMP0403MetalografiaTest extends TestCase
 {
+    /** Solo los tres formatos con Fiji comparten el catálogo editable de preparación metalográfica. */
+    public function test_03_y_04_comparten_selectores_editables_sin_extender_fiji_a_05_y_06(): void
+    {
+        foreach (['03_B_01', '04_02', '04_03'] as $formato) {
+            foreach (['Create', 'Edit'] as $modo) {
+                $vista = file_get_contents(resource_path("views/Reportes/IM/{$modo}/FOR-PIMP-{$formato}.blade.php"));
+                $this->assertStringContainsString('partials.datos-metalograficos', $vista);
+                $this->assertStringContainsString('partials.fraccion-fases-imagej', $vista);
+            }
+        }
+
+        $selector = file_get_contents(resource_path('views/Reportes/IM/partials/selector-catalogo-metalografia.blade.php'));
+        $tabla = file_get_contents(resource_path('views/Reportes/IM/partials/datos-metalograficos.blade.php'));
+        $controlador = file_get_contents(app_path('Http/Controllers/Reporte/ReporteController.php'));
+
+        $this->assertStringContainsString('+ Escribir nuevo...', $selector);
+        $this->assertStringContainsString('Datos_Equipo[LIJAS_DESBASTE]', $tabla);
+        $this->assertStringContainsString('catalogosMetalografiaIM', $controlador);
+        $this->assertStringContainsString("'FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03'", $controlador);
+    }
+
     /** Verifica que los campos pertenezcan directamente a Create y Edit y que Edit recupere datos guardados. */
     public function test_create_y_edit_contienen_sus_propios_campos_metalograficos(): void
     {
         $create = file_get_contents(resource_path('views/Reportes/IM/Create/FOR-PIMP-04_03.blade.php'));
         $edit = file_get_contents(resource_path('views/Reportes/IM/Edit/FOR-PIMP-04_03.blade.php'));
 
-        foreach (['MATERIAL_PANO', 'MATERIAL_ABRASIVO', 'REACTIVO', 'TIEMPO_ATAQUE', 'FASES_PRESENTES', 'ESPECIFICACION_MATERIAL'] as $campo) {
-            $this->assertStringContainsString("Datos_Equipo[$campo]", $create);
-            $this->assertStringContainsString("Datos_Equipo[$campo]", $edit);
-        }
+        $parcial = file_get_contents(resource_path('views/Reportes/IM/partials/datos-metalograficos.blade.php'));
 
-        $this->assertStringNotContainsString('partials.metallographic-analysis-form', $create);
-        $this->assertStringNotContainsString('partials.metallographic-analysis-form', $edit);
-        $this->assertStringContainsString("\$Datos_Equipo['MATERIAL_PANO']", $edit);
+        $this->assertStringContainsString('partials.datos-metalograficos', $create);
+        $this->assertStringContainsString('partials.datos-metalograficos', $edit);
+        foreach (['MATERIAL_PANO', 'MATERIAL_ABRASIVO', 'REACTIVO', 'TIEMPO_ATAQUE', 'FASES_PRESENTES', 'ESPECIFICACION_MATERIAL', 'LIJAS_DESBASTE'] as $campo) {
+            $this->assertStringContainsString("Datos_Equipo[$campo]", $parcial);
+        }
+        $this->assertStringContainsString('selector-catalogo-metalografia', $parcial);
     }
 
     /** Confirma que la tabla metalográfica y sus valores aparezcan en la primera hoja del anexo. */
@@ -92,6 +113,21 @@ class FORPIMP0403MetalografiaTest extends TestCase
             $this->assertStringContainsString('RESULTADOS DEL ANÁLISIS METALOGRÁFICO', $texto);
             $this->assertStringContainsString('TAMAÑO DE GRANO 3.5', $texto);
         }
+    }
+
+    /** Las fotografías normales conservan marco completo y el patrón solo límites horizontales. */
+    public function test_el_patron_de_grano_usa_borde_superior_e_inferior(): void
+    {
+        foreach (['03_B_01', '04_02', '04_03'] as $formato) {
+            $anexo = file_get_contents(resource_path("views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_{$formato}_PDF.blade.php"));
+            $this->assertStringContainsString('patron_grano_historico', $anexo);
+            $this->assertStringContainsString('border-left: 0', $anexo);
+            $this->assertStringContainsString('border-right: 0', $anexo);
+        }
+
+        $pdfPrincipal03 = file_get_contents(resource_path('views/Reportes/ReportesPDFIM/Reporte_FOR_PIMP_03_B_01_PDF.blade.php'));
+        $this->assertStringContainsString('foto-visual-grain', $pdfPrincipal03);
+        $this->assertStringContainsString('patron_grano_historico', $pdfPrincipal03);
     }
 
     /** Create y Edit de 06 deben ofrecer exactamente el mismo flujo de tamaño de grano. */
