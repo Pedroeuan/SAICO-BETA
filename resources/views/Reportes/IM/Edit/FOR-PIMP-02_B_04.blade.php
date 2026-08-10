@@ -373,7 +373,9 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
-                            <input type="text" class="form-control inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]" placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
+                            {{-- Edit conserva el procedimiento historico y su relacion asignada. --}}
+                            <input type="text" class="form-control inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]" value="{{ old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '') }}" readonly>
+                            <input type="hidden" name="Detalles_Generales[idProcedimiento]" value="{{ $Detalles_Generales['idProcedimiento'] ?? ($idProcedimiento ?? '') }}">
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -518,23 +520,73 @@
                     <div class="col-sm-4"><div class="form-group"><label class="col-form-label" for="inputSuccess">MODELO:</label><input type="text" class="form-control  inputForm" id="modeloInputE" name="Datos_Equipo[MODELO_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.MODELO_EQUIPO', $Datos_Equipo['MODELO_EQUIPO'] ?? '')}}"></div></div>
                     <div class="col-sm-4"><div class="form-group"><label class="col-form-label" for="inputSuccess">N.S:</label><input type="text" class="form-control  inputForm" id="nsInputE" name="Datos_Equipo[NS_EQUIPO]" placeholder="" value="{{old('Datos_Equipo.NS_EQUIPO', $Datos_Equipo['NS_EQUIPO'] ?? '')}}"></div></div>
 
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">VALORES PROMEDIO DE DUREZAS</div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">
+                        <label for="escalaDureza0204" class="mb-0 mr-2">ESCALA DE DUREZA / HARDNESS SCALE:</label>
+                        {{-- El campo oculto conserva el valor guardado aunque se use una opcion nueva. --}}
+                        <input type="hidden" name="Datos_Equipo[ESCALA_DUREZA]"
+                            value="{{ old('Datos_Equipo.ESCALA_DUREZA', $Datos_Equipo['ESCALA_DUREZA'] ?? '') }}"
+                            data-catalogo-valor="escala" data-escala-dureza>
+                        <div style="width: 220px;">
+                            <select id="escalaDureza0204" class="form-control form-control-sm text-center"
+                                data-catalogo-selector="escala" aria-label="Seleccionar escala de dureza">
+                                <option value="">Seleccione una escala</option>
+                                @foreach(($EscalasDureza0204 ?? collect(['HB', 'HV', 'HL', 'HRC', 'HRB'])) as $escalaDureza)
+                                    <option value="{{ $escalaDureza }}">{{ $escalaDureza }}</option>
+                                @endforeach
+                                <option value="__nuevo__">+ Escribir nueva escala...</option>
+                            </select>
+                            <input type="text" class="form-control form-control-sm text-center mt-1 d-none"
+                                maxlength="50" placeholder="Escriba la nueva escala"
+                                data-catalogo-nuevo="escala" aria-label="Nueva escala de dureza">
+                        </div>
+                    </div>
+                    <small class="d-block mb-2">Seleccione una escala existente o escriba una nueva; se guardará al actualizar el reporte.</small>
                     <table class="table table-bordered text-center align-middle">
                         <thead>
                             <tr>
                                 <th style="width:25%;">VALORES PROMEDIO DE DUREZAS:<br><small>Average Hardness Values</small>
                                 </th>
-                                <th>METAL BASE<br>Base Metal<br>(A)</th>
+                                <th>METAL BASE<br>
+                                    <input type="hidden" name="Datos_Equipo[ETIQUETA_MATERIAL_A]"
+                                        value="{{ old('Datos_Equipo.ETIQUETA_MATERIAL_A', $Datos_Equipo['ETIQUETA_MATERIAL_A'] ?? 'Base Metal') }}"
+                                        data-catalogo-valor="material-a" data-etiqueta-material="A">
+                                    <select class="form-control form-control-sm text-center" data-catalogo-selector="material-a"
+                                        aria-label="Seleccionar material A">
+                                        @foreach(($MaterialesDureza0204 ?? collect(['Base Metal'])) as $materialDureza)
+                                            <option value="{{ $materialDureza }}">{{ $materialDureza }}</option>
+                                        @endforeach
+                                        <option value="__nuevo__">+ Escribir nuevo...</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm text-center mt-1 d-none"
+                                        maxlength="100" placeholder="Escriba el material"
+                                        data-catalogo-nuevo="material-a" aria-label="Nuevo material A"><br>
+                                    (A)
+                                </th>
                                 <th>ZAC<br>HAZ (B)</th>
                                 <th>SOLDADURA<br>Welding<br>(C)</th>
                                 <th>ZAC<br>HAZ (B1)</th>
-                                <th>METAL BASE<br>Base Metal<br>(A1)</th>
+                                <th>METAL BASE<br>
+                                    <input type="hidden" name="Datos_Equipo[ETIQUETA_MATERIAL_A1]"
+                                        value="{{ old('Datos_Equipo.ETIQUETA_MATERIAL_A1', $Datos_Equipo['ETIQUETA_MATERIAL_A1'] ?? 'Base Metal') }}"
+                                        data-catalogo-valor="material-a1" data-etiqueta-material="A1">
+                                    <select class="form-control form-control-sm text-center" data-catalogo-selector="material-a1"
+                                        aria-label="Seleccionar material A1">
+                                        @foreach(($MaterialesDureza0204 ?? collect(['Base Metal'])) as $materialDureza)
+                                            <option value="{{ $materialDureza }}">{{ $materialDureza }}</option>
+                                        @endforeach
+                                        <option value="__nuevo__">+ Escribir nuevo...</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm text-center mt-1 d-none"
+                                        maxlength="100" placeholder="Escriba el material"
+                                        data-catalogo-nuevo="material-a1" aria-label="Nuevo material A1"><br>
+                                    (A1)
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
-                                    <strong>ANTES DEL RELEVADO DE ESFUERZOS (HB):</strong><br>Before PWHT (HB)</td>
+                                    <strong>ANTES DEL RELEVADO DE ESFUERZOS (<span data-escala-dureza-vista>---</span>):</strong><br>Before PWHT (<span data-escala-dureza-vista>---</span>)</td>
                                     <td><input type="text" class="form-control" name="Dureza[ANTES_A]" value="{{ old('Dureza.ANTES_A', $durezaPromedio['ANTES_A'] ?? '') }}"></td>
                                     <td><input type="text" class="form-control" name="Dureza[ANTES_B]" value="{{ old('Dureza.ANTES_B', $durezaPromedio['ANTES_B'] ?? '') }}"></td>
                                     <td><input type="text" class="form-control" name="Dureza[ANTES_C]" value="{{ old('Dureza.ANTES_C', $durezaPromedio['ANTES_C'] ?? '') }}"></td>
@@ -543,8 +595,8 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <strong>POSTERIOR AL RELEVADO DE ESFUERZOS (HB):</strong>
-                                        <br>After PWHT (HB)</td>
+                                        <strong>POSTERIOR AL RELEVADO DE ESFUERZOS (<span data-escala-dureza-vista>---</span>):</strong>
+                                        <br>After PWHT (<span data-escala-dureza-vista>---</span>)</td>
                                         <td>
                                             <input type="text" class="form-control" name="Dureza[DESPUES_A]" value="{{ old('Dureza.DESPUES_A', $durezaPromedio['DESPUES_A'] ?? '') }}"></td>
                                             <td>
@@ -555,7 +607,17 @@
                                             </tr>
                                         </tbody>
                     </table>
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">ANTES O DESPUÉS DEL RELEVADO DE ESFUERZOS</div>
+                    {{-- Edit recupera la etapa guardada; el consecutivo llega automaticamente en DESPUES. --}}
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">
+                        <label for="durezaEtapa0204" class="mb-0 mr-2">ETAPA DEL RELEVADO DE ESFUERZOS:</label>
+                        <select id="durezaEtapa0204" class="form-control form-control-sm" style="max-width: 330px;"
+                            name="Datos_Equipo[DUREZA_ETAPA]" data-dureza-etapa-select>
+                            <option value="ANTES" @selected(old('Datos_Equipo.DUREZA_ETAPA', $Datos_Equipo['DUREZA_ETAPA'] ?? 'ANTES') === 'ANTES')>ANTES DEL RELEVADO DE ESFUERZOS</option>
+                            <option value="DESPUES" @selected(old('Datos_Equipo.DUREZA_ETAPA', $Datos_Equipo['DUREZA_ETAPA'] ?? 'ANTES') === 'DESPUES')>DESPUÉS DEL RELEVADO DE ESFUERZOS</option>
+                        </select>
+                    </div>
+
+                    <small class="d-block mb-2">En (A) y (A1), seleccione un material existente o escriba uno nuevo para reutilizarlo después.</small>
                     <div class="alert alert alert-info alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         <h5><i class="icon fas fa-info"></i> Información</h5>
@@ -623,18 +685,18 @@
                                 <tr>
                                     <th rowspan="2" style="width: 60px;">No.</th>
                                     <th colspan="2">DATOS DE LA JUNTA</th>
-                                    <th colspan="5">VALORES DE DUREZA (ESCALA BRINELL)</th>
+                                    <th colspan="5">VALORES DE DUREZA (ESCALA <span data-escala-dureza-vista>---</span>)<br><span>Hardness Values (<span data-escala-dureza-vista>---</span> Scale)</span></th>
                                     <th rowspan="2" style="min-width: 220px;">OBSERVACIONES</th>
                                     <th rowspan="2" style="width: 80px;">Eliminar</th>
                                 </tr>
                                 <tr>
                                     <th style="min-width: 210px;">DESCRIPCIÓN<br></th>
                                     <th style="min-width: 130px;">HORARIOS TÉCNICOS</th>
-                                    <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
+                                    <th style="min-width: 125px;">METAL BASE<br><small data-etiqueta-material-vista="A">{{ old('Datos_Equipo.ETIQUETA_MATERIAL_A', $Datos_Equipo['ETIQUETA_MATERIAL_A'] ?? 'Base Metal') }}</small><br>(A)</th>
                                     <th style="min-width: 125px;">ZAC<br><small>HAZ</small><br>(B)</th>
                                     <th style="min-width: 125px;">SOLDADURA<br><small>Weld</small><br>(C)</th>
                                     <th style="min-width: 125px;">ZAC<br><small>HAZ</small><br>(B1)</th>
-                                    <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A1)</th>
+                                    <th style="min-width: 125px;">METAL BASE<br><small data-etiqueta-material-vista="A1">{{ old('Datos_Equipo.ETIQUETA_MATERIAL_A1', $Datos_Equipo['ETIQUETA_MATERIAL_A1'] ?? 'Base Metal') }}</small><br>(A1)</th>
                                 </tr>
                             </thead>
                             <tbody id="durezaAutoFillBody">
@@ -1010,31 +1072,6 @@
                             </div>
                         </div>
 
-                        <p>
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
-                        
-                        <p>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
-                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '')}}">
-                                @error('Num_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
-                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '')}}">
-                                @error('Nombre_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
                         <p>
 
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>

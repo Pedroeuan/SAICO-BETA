@@ -234,7 +234,9 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
+                            {{-- Edit conserva el procedimiento historico y su relacion asignada. --}}
+                            <input type="text" class="form-control inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]" value="{{ old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '') }}" readonly>
+                            <input type="hidden" name="Detalles_Generales[idProcedimiento]" value="{{ $Detalles_Generales['idProcedimiento'] ?? ($idProcedimiento ?? '') }}">
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -353,7 +355,12 @@
                     </div>
 
                     <!--***************************************** VALORES DE DUREZA MEDIDOS *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">VALORES DE DUREZA MEDIDOS (ESCALA BRINELL)</div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
+                        VALORES DE DUREZA MEDIDOS (ESCALA&nbsp;
+                        <input type="text" class="form-control form-control-sm d-inline-block text-center"
+                            style="width: 100px; height: 25px;" name="Datos_Equipo[ESCALA_DUREZA]"
+                            value="{{ old('Datos_Equipo.ESCALA_DUREZA', $Datos_Equipo['ESCALA_DUREZA'] ?? '') }}" placeholder="Ej. HRC" aria-label="Escala de dureza">)
+                    </div>
 
                     <div style="margin-bottom: 5px;"></div>
 
@@ -403,7 +410,7 @@
                     <table class="table table-bordered">
                         <tr>
                             <td><strong>DUREZA PROMEDIO MEDIDO</strong></td>
-                            <td><input type="text" class="form-control inputForm" name="Datos_Equipo[DUREZA_PROMEDIO_MEDIDO]" value="{{ old('Datos_Equipo.DUREZA_PROMEDIO_MEDIDO', $Datos_Equipo['DUREZA_PROMEDIO_MEDIDO'] ?? '') }}"></td>
+                            <td><input type="text" class="form-control inputForm" name="Datos_Equipo[DUREZA_PROMEDIO_MEDIDO]" value="{{ old('Datos_Equipo.DUREZA_PROMEDIO_MEDIDO', $Datos_Equipo['DUREZA_PROMEDIO_MEDIDO'] ?? '') }}" readonly></td>
                         </tr>
                         <tr>
                             <td><strong>DUREZA DE ACUERDO A LA ESPECIFICACIÓN DE REFERENCIA</strong></td>
@@ -718,31 +725,6 @@
 
                         <p>
 
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
-                        
-                        <p>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
-                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '')}}">
-                                @error('Num_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
-                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '')}}">
-                                @error('Nombre_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-                        <p>
-
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>
                                                         
                                         <p>
@@ -820,6 +802,7 @@
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/Reportes_Create-For-02-06-IM.js') }}"></script>
+<script src="{{ asset('js/promedio-dureza-02-b-03.js') }}?v={{ filemtime(public_path('js/promedio-dureza-02-b-03.js')) }}"></script>
 <script src="{{ asset('js/Reportes_Edit.js') }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->

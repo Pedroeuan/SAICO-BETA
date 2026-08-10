@@ -19,6 +19,7 @@ class ServicioPatronGranoReporte
             return [
                 'id' => $patron->id,
                 'nombre' => $patron->nombre,
+                'valor_grano' => (string) $patron->valor_grano,
                 // asset() respeta el dominio, HTTPS y el subdirectorio reales de la solicitud actual.
                 'url_imagen' => asset('storage/' . ltrim($patron->ruta_imagen, '/')),
             ];
@@ -107,7 +108,8 @@ class ServicioPatronGranoReporte
         }
 
         $rutaFisica = storage_path('app/public/' . $this->rutaRelativa((string) $patron['ruta_imagen']));
-        if (!File::exists($rutaFisica)) {
+        // Evita enviar carpetas o rutas historicas incompletas al motor de PDF como si fueran imagenes.
+        if (!File::isFile($rutaFisica)) {
             return;
         }
 

@@ -31,6 +31,55 @@ class FORPIMP0403DistribucionFotosTest extends TestCase
         ], $this->normalizar(null, null, 5));
     }
 
+    /** Los identificadores 1000+ de los recortes XRF no deben convertirse en hojas 251 o superiores. */
+    public function test_distribuye_los_recortes_xrf_por_numero_de_disparo(): void
+    {
+        $this->assertSame([
+            'pagina' => 1,
+            'posicion' => 'arriba_izquierda',
+            'una_hoja' => 0,
+        ], $this->normalizar(null, null, 1000));
+
+        $this->assertSame([
+            'pagina' => 1,
+            'posicion' => 'arriba_derecha',
+            'una_hoja' => 0,
+        ], $this->normalizar(null, null, 1001));
+
+        $this->assertSame([
+            'pagina' => 3,
+            'posicion' => 'arriba_derecha',
+            'una_hoja' => 0,
+        ], $this->normalizar(null, null, 1005));
+    }
+
+    /** Create conserva un mismo índice para todos los datos de una fotografía manual. */
+    public function test_create_no_mezcla_indices_manuales_con_recortes_xrf(): void
+    {
+        $scriptCreate = file_get_contents(public_path('js/Reportes_Create_IM_02.js'));
+        $scriptLayout = file_get_contents(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js'));
+
+        $this->assertStringContainsString("const sufijoCampo = formId === 'FOR-PIMP-04_03'", $scriptCreate);
+        $this->assertStringContainsString('name="images_base64${sufijoCampo}"', $scriptCreate);
+        $this->assertStringContainsString('name="comments${sufijoCampo}"', $scriptCreate);
+        $this->assertStringContainsString("indice = obtenerIndiceCampo(contenedor);", $scriptLayout);
+    }
+
+    /** Edit presenta primero lo editable y evita los identificadores duplicados reportados por Chrome. */
+    public function test_edit_deja_disparos_abajo_y_las_vistas_no_duplican_input_success(): void
+    {
+        $create = file_get_contents(resource_path('views/Reportes/IM/Create/FOR-PIMP-04_03.blade.php'));
+        $edit = file_get_contents(resource_path('views/Reportes/IM/Edit/FOR-PIMP-04_03.blade.php'));
+
+        $this->assertStringContainsString('collect($Fotos_Comentarios)->sortBy(', $edit);
+        $this->assertGreaterThan(
+            strpos($edit, 'id="imageFieldsContainer"'),
+            strpos($edit, 'id="recortesXrfDisparos"')
+        );
+        $this->assertStringNotContainsString('id="inputSuccess"', $create);
+        $this->assertStringNotContainsString('id="inputSuccess"', $edit);
+    }
+
     /** Permite formar un disparo combinando una imagen nueva y otra ya guardada. */
     public function test_acepta_dos_imagenes_manuales_para_un_disparo_sin_pdf(): void
     {

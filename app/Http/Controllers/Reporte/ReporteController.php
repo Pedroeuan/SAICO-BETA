@@ -50,11 +50,106 @@ class ReporteController extends Controller
     /** Carga el catálogo visual solo para los formatos IM que realmente lo consumen. */
     private function catalogoPatronesGranoIM(?string $nombreFormato): \Illuminate\Support\Collection
     {
-        if (!in_array($nombreFormato, ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03'], true)) {
+        if (!in_array($nombreFormato, ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-06_B/01'], true)) {
             return collect();
         }
 
         return app(ServicioPatronGranoReporte::class)->catalogoParaVista();
+    }
+
+    /**
+     * Reutiliza materiales y escalas guardados en reportes 02_B_04.
+     * Cada reporte conserva su texto historico y los valores nuevos alimentan ambos catalogos.
+     */
+    private function catalogosDureza0204(?string $nombreFormato, ?int $idFormato): array
+    {
+        if ($nombreFormato !== 'FOR-PIMP-02_B/04' || !$idFormato) {
+            return ['materiales' => collect(), 'escalas' => collect()];
+        }
+
+        $idsPruebaAplica = Prueba_Aplica::where('idFormato', $idFormato)->pluck('idPrueba_Aplica');
+        $materiales = collect(['Base Metal']);
+        $escalas = collect(['HB', 'HV', 'HL', 'HRC', 'HRB']);
+
+        reporte::whereIn('idPrueba_Aplica', $idsPruebaAplica)
+            ->whereNotNull('Datos_Equipo')
+            ->pluck('Datos_Equipo')
+            ->each(function ($datosEquipo) use ($materiales, $escalas) {
+                $datos = json_decode($datosEquipo, true) ?: [];
+
+                foreach (['ETIQUETA_MATERIAL_A', 'ETIQUETA_MATERIAL_A1'] as $campo) {
+                    $nombre = trim((string) ($datos[$campo] ?? ''));
+                    if ($nombre !== '') {
+                        $materiales->push($nombre);
+                    }
+                }
+
+                $escala = trim((string) ($datos['ESCALA_DUREZA'] ?? ''));
+                if ($escala !== '') {
+                    $escalas->push($escala);
+                }
+            });
+
+        $normalizarCatalogo = static fn ($valores) => $valores
+            ->unique(fn ($valor) => mb_strtolower($valor, 'UTF-8'))
+            ->sort(SORT_NATURAL | SORT_FLAG_CASE)
+            ->values();
+
+        return [
+            'materiales' => $normalizarCatalogo($materiales),
+            'escalas' => $normalizarCatalogo($escalas),
+        ];
+    }
+
+    /**
+     * Reutiliza la preparación metalográfica capturada en 03_B/01, 04_02 y 04_03.
+     * No impone opciones iniciales: el catálogo se forma con los valores realmente guardados.
+     */
+    private function catalogosMetalografiaIM(?string $nombreFormato): array
+    {
+        $formatosCompatibles = ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03'];
+        $catalogos = [
+            'lijas' => collect(),
+            'abrasivos' => collect(),
+            'reactivos' => collect(),
+            'fases' => collect(),
+        ];
+
+        if (!in_array($nombreFormato, $formatosCompatibles, true)) {
+            return $catalogos;
+        }
+
+        $idsFormato = formato::whereIn('Nombre', $formatosCompatibles)->pluck('idFormato');
+        $idsPruebaAplica = Prueba_Aplica::whereIn('idFormato', $idsFormato)->pluck('idPrueba_Aplica');
+
+        reporte::whereIn('idPrueba_Aplica', $idsPruebaAplica)
+            ->whereNotNull('Datos_Equipo')
+            ->pluck('Datos_Equipo')
+            ->each(function ($datosEquipo) use (&$catalogos) {
+                $datos = json_decode($datosEquipo, true) ?: [];
+
+                foreach (is_array($datos['LIJAS_DESBASTE'] ?? null) ? $datos['LIJAS_DESBASTE'] : [] as $lija) {
+                    $catalogos['lijas']->push(trim((string) $lija));
+                }
+
+                foreach ([
+                    'MATERIAL_ABRASIVO' => 'abrasivos',
+                    'REACTIVO' => 'reactivos',
+                    'FASES_PRESENTES' => 'fases',
+                ] as $campo => $catalogo) {
+                    $catalogos[$catalogo]->push(trim((string) ($datos[$campo] ?? '')));
+                }
+            });
+
+        foreach ($catalogos as $nombre => $valores) {
+            $catalogos[$nombre] = $valores
+                ->filter()
+                ->unique(fn ($valor) => mb_strtolower($valor, 'UTF-8'))
+                ->sort(SORT_NATURAL | SORT_FLAG_CASE)
+                ->values();
+        }
+
+        return $catalogos;
     }
 
         public function FOR_PIMP_02_B_03()
@@ -1038,8 +1133,12 @@ class ReporteController extends Controller
 
         // Catálogo independiente: el reporte recibe solo datos seguros para construir el select y su vista previa.
         $PatronesGranoIM = $this->catalogoPatronesGranoIM($Nombre_Formato);
+        $CatalogosDureza0204 = $this->catalogosDureza0204($Nombre_Formato, (int) $Obtener_idFormato);
+        $MaterialesDureza0204 = $CatalogosDureza0204['materiales'];
+        $EscalasDureza0204 = $CatalogosDureza0204['escalas'];
+        $CatalogosMetalografiaIM = $this->catalogosMetalografiaIM($Nombre_Formato);
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM','PatronesGranoIM'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM'));
 
     }
 
@@ -1257,8 +1356,12 @@ class ReporteController extends Controller
 
         // Las rutas públicas se usan solo en la vista previa; el servidor vuelve a resolver el ID al guardar.
         $PatronesGranoIM = $this->catalogoPatronesGranoIM($Nombre_Formato);
+        $CatalogosDureza0204 = $this->catalogosDureza0204($Nombre_Formato, (int) $idFormato);
+        $MaterialesDureza0204 = $CatalogosDureza0204['materiales'];
+        $EscalasDureza0204 = $CatalogosDureza0204['escalas'];
+        $CatalogosMetalografiaIM = $this->catalogosMetalografiaIM($Nombre_Formato);
 
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM','PatronesGranoIM'));
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM'));
     }
 
     public function indexINS2(Request $request)
@@ -1726,7 +1829,8 @@ class ReporteController extends Controller
                     : [];
 
                 foreach (['DESPUES_A', 'DESPUES_B', 'DESPUES_C', 'DESPUES_B1', 'DESPUES_BM'] as $campo) {
-                    $promedios[$campo] = '';
+                    // La segunda etapa inicia pendiente, pero nunca deja celdas vacias en el PDF.
+                    $promedios[$campo] = '---';
                 }
 
                 $datosEquipo['DUREZA_PROMEDIO'] = $promedios;

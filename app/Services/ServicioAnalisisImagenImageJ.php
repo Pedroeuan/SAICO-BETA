@@ -350,12 +350,13 @@ IJM;
         ];
     }
 
-    /** Agrega URLs web sin reemplazar las rutas relativas que se guardan en el reporte. */
+    /** Agrega URLs del mismo origen para que local, pruebas y producción compartan la evidencia. */
     private function agregarUrls(array $metadata): array
     {
         $metadata['urls'] = [];
         foreach (($metadata['rutas'] ?? []) as $clave => $ruta) {
-            $metadata['urls'][$clave] = asset($ruta);
+            // Una URL relativa evita conservar el APP_URL cargado por un worker de larga duración.
+            $metadata['urls'][$clave] = '/' . ltrim(str_replace('\\', '/', (string) $ruta), '/');
         }
 
         return $metadata;

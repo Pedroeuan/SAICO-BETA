@@ -180,8 +180,12 @@
             'FOR-PIMP-03_B_01',
             'FOR-PIMP-04_02',
             'FOR-PIMP-04_03',
-            'FOR-PIMP-05_B_01'
+            'FOR-PIMP-05_B_01',
+            'FOR-PIMP-06_B_01'
         ].indexOf(formulario.id) !== -1;
+        var etiquetaCuadroTexto = formulario && formulario.id === 'FOR-PIMP-06_B_01'
+            ? 'Usar este espacio como descripción para el reporte'
+            : 'Usar este espacio como cuadro de texto';
         var esCuadroTexto = contenedor.getAttribute('data-foto-es-texto') === '1';
 
         // Evita duplicarlos cuando MutationObserver vuelve a recorrer el DOM.
@@ -232,7 +236,7 @@
                         'name="' + escapar(nombreCampo('foto_es_texto', indice)) + '" ' +
                         'id="fotoEsTexto_' + indice + '" value="1" ' + (esCuadroTexto ? 'checked' : '') + '>' +
                     '<label class="form-check-label font-weight-bold" for="fotoEsTexto_' + indice + '">' +
-                        'Usar este espacio como cuadro de texto' +
+                        escapar(etiquetaCuadroTexto) +
                     '</label>' +
                     '<small class="form-text text-muted">El texto ocupará el mismo espacio que una fotografía.</small>' +
                 '</div>' : '');
@@ -335,6 +339,7 @@
      */
     function sincronizarIndicePorOrden(contenedor, orden) {
         var bloque;
+        var indice;
 
         if (!reindexarPorOrden) {
             return;
@@ -345,16 +350,23 @@
             return;
         }
 
+        // Si la tarjeta ya tiene un índice explícito, se conserva aunque se
+        // eliminen otras tarjetas; solo los formularios heredados usan el orden.
+        indice = obtenerIndiceCampo(contenedor);
+        if (indice === null) {
+            indice = orden;
+        }
+
         bloque.querySelectorAll('input[data-foto-posicion]').forEach(function (radio) {
-            radio.name = nombreCampo('foto_posicion', orden);
+            radio.name = nombreCampo('foto_posicion', indice);
         });
 
         bloque.querySelectorAll('.foto-pagina').forEach(function (pagina) {
-            pagina.name = nombreCampo('foto_pagina', orden);
+            pagina.name = nombreCampo('foto_pagina', indice);
         });
 
         bloque.querySelectorAll('.foto-texto-checkbox').forEach(function (checkbox) {
-            checkbox.name = nombreCampo('foto_es_texto', orden);
+            checkbox.name = nombreCampo('foto_es_texto', indice);
         });
     }
 

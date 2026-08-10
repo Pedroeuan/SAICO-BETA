@@ -551,13 +551,12 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
             'Detalles_Generales.Diam_Nominal' => 'nullable|string',
             'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
             'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             // Datos confiables generados por Fiji y distribución dentro del PDF principal.
             'Analisis_Imagen_Token' => 'nullable|uuid',
             'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
@@ -601,6 +600,8 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
             'Datos_Equipo.MATERIAL_PANO' => 'nullable|string',
+            'Datos_Equipo.LIJAS_DESBASTE' => 'nullable|array|max:6',
+            'Datos_Equipo.LIJAS_DESBASTE.*' => 'nullable|string|max:50',
             'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string',
             'Datos_Equipo.REACTIVO' => 'nullable|string',
             'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string',
@@ -1039,13 +1040,12 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
             'Detalles_Generales.Diam_Nominal' => 'nullable|string',
             'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
             'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Analisis_Imagen_Token' => 'nullable|uuid',
             'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
             'Analisis_Reporte_Comentario_Imagen' => 'nullable|string|max:500',
@@ -1088,6 +1088,8 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
             'Datos_Equipo.MATERIAL_PANO' => 'nullable|string',
+            'Datos_Equipo.LIJAS_DESBASTE' => 'nullable|array|max:6',
+            'Datos_Equipo.LIJAS_DESBASTE.*' => 'nullable|string|max:50',
             'Datos_Equipo.MATERIAL_ABRASIVO' => 'nullable|string',
             'Datos_Equipo.REACTIVO' => 'nullable|string',
             'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string',
@@ -1879,7 +1881,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
         }
 
         // Fiji se integra en esta misma plantilla principal; no se genera ni concatena un PDF de fotos.
-        app(ServicioMetalografiaReporte::class)->agregarAnalisisAlPdf($Fotos, $Detalles_Generales);
+        app(ServicioMetalografiaReporte::class)->agregarAnalisisAlPdf($Fotos, $Detalles_Generales, $Datos_Equipo);
         // El tamaño de grano usa la misma celda y proporciones que cualquier fotografía del formato.
         app(ServicioPatronGranoReporte::class)->agregarAlPdf($Fotos, $Detalles_Generales);
         $totalFotos = count($Fotos);
