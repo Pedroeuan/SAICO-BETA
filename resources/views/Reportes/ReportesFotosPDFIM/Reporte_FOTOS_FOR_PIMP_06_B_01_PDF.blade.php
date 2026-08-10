@@ -56,6 +56,20 @@
             font-size: 8px;
         }
 
+        /* Replica el estilo de DATOS GENERALES del reporte PDF principal. */
+        .tablaGenerales {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+            table-layout: fixed;
+        }
+
+        .tablaGenerales th,
+        .tablaGenerales td {
+            padding: 1.5px;
+            vertical-align: middle;
+        }
+
         .datosgenerales th,
         .datosgenerales td {
             padding: 1.5px 1.5px;
@@ -75,15 +89,24 @@
         }
 
         .etiquetaGeneral {
-            width: 12%;
+            width: 15%;
             font-weight: bold;
+            white-space: nowrap !important;
             line-height: 10px;
+            text-align: left;
+            padding-left: 2px;
+            vertical-align: middle;
+        }
+
+        .etiquetaGeneralCentrada {
+            text-align: center !important;
+            vertical-align: middle !important;
         }
 
         .valorGeneral {
-            border-bottom: 1px solid black;
             text-align: center !important;
-            vertical-align: middle !important;
+            vertical-align: bottom !important;
+            padding: 0 !important;
             height: 10px;
         }
 
@@ -98,15 +121,26 @@
 
         .valorGeneralConLinea {
             border-bottom: none !important;
-            padding-bottom: 0 !important;
+            padding: 0 !important;
+            vertical-align: bottom !important;
         }
 
         .lineaValorGeneral {
+            position: relative;
             width: 100%;
-            min-height: 10px;
-            border-bottom: 1px solid black;
-            box-sizing: border-box;
+            height: 11px;
+            border-bottom: .5px solid black;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .textoValorGeneral {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 2px;
             text-align: center;
+            line-height: 8px;
         }
 
         .tablaEquipos {
@@ -163,8 +197,12 @@
         }
 
         .foto-vacia {
-            /* Conserva la celda aunque el usuario deje libre ese cuadrante. */
-            background-color: #fff;
+            /*
+             * Conserva la posicion de la cuadricula (arriba/abajo, izquierda/derecha)
+             * sin dibujar una celda visual cuando el usuario no cargo imagen en ese espacio.
+             */
+            border: none !important;
+            background-color: transparent;
         }
 
         .comment {
@@ -499,65 +537,95 @@
         $espacios = $configuracionPagina['espacios'];
     @endphp
     <div class="content photo-page">
-        <table class="datosgenerales">
+        <table class="tablaGenerales">
             <thead class="encabezadoAzul">
                 <tr>
                     <th colspan="6">DATOS GENERALES<br>General Data</th>
                 </tr>
             </thead>
             <tbody>
-        <tr>
-            <th class="etiquetaGeneral">FECHA<br>Date:</th>
-            <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada">No. REPORTE<br>No. Report:</th>
-            <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral">CLIENTE<br>Client:</th>
-            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada">No. CONTRATO<br>No. Contract:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">CONTRATO<br>Contract:</th>
-            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO<br>Work Order:</th>
-            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral">FOLIO<br>Folio:</th>
-            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral">PARTIDA<br>Lot:</th>
-            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral">INSTALACION<br>Location:</th>
-            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada" style="white-space: nowrap;">NUMERO DE ISOMETRICO<br>No. Isometric:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">NOMBRE DE LA PIEZA<br>Name of the Piece:</th>
-            <td class="valorGeneral" colspan="3">{!! str_replace('⌀', '<span class="simboloDiametro">⌀</span>', e($Detalles_Generales['Nom_Pieza'] ?? '')) !!}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada">MATERIAL<br>Material:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral">PROCEDIMIENTO<br>Procedure:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada" style="white-space: nowrap;">CRITERIO DE EVALUACION<br>Evaluation Criteria:</th>
-            <td class="valorGeneral valorGeneralConLinea"><div class="lineaValorGeneral">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div></td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada">TRAZABILIDAD<br>Traceability:</th>
-            <td class="valorGeneral valorGeneralConLinea"><div class="lineaValorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div></td>
-        </tr>
-        <tr>
-            <th class="etiquetaGeneral">No. JUNTA<br>No. Joint:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
-        </tr>
+                <tr>
+                    <th class="etiquetaGeneral">FECHA<br>Date:</th>
+                    <td class="valorGeneral valorGeneralConLinea" colspan="2">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Fecha'] ?? '' }}</span></div>
+                    </td>
+                    <th class="etiquetaGeneral etiquetaGeneralCentrada">No. REPORTE<br>No. Report:</th>
+                    <td class="valorGeneral valorGeneralConLinea" colspan="2">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="etiquetaGeneral">CLIENTE<br>Client:</th>
+                    <td class="valorGeneral valorGeneralConLinea" colspan="3">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Cliente'] ?? '' }}</span></div>
+                    </td>
+                    <th class="etiquetaGeneral etiquetaGeneralCentrada">No. CONTRATO<br>No. Contract:</th>
+                    <td class="valorGeneral valorGeneralConLinea">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="etiquetaGeneral">CONTRATO<br>Contract:</th>
+                    <td class="valorGeneral valorGeneralConLinea" colspan="5">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Proyecto'] ?? '' }}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="etiquetaGeneral">ORDEN DE TRABAJO<br>Work Order:</th>
+                    <td class="valorGeneral valorGeneralConLinea" colspan="5">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="etiquetaGeneral">FOLIO<br>Folio:</th>
+                    <td class="valorGeneral valorGeneralConLinea" colspan="5">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Folio'] ?? '' }}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="etiquetaGeneral">PARTIDA<br>Lot:</th>
+                    <td class="valorGeneral valorGeneralConLinea" colspan="5">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Partida'] ?? '' }}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="etiquetaGeneral">INSTALACION<br>Location:</th>
+                    <td class="valorGeneral valorGeneralConLinea" colspan="3">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Instalacion'] ?? '' }}</span></div>
+                    </td>
+                    <th class="etiquetaGeneral etiquetaGeneralCentrada">NUMERO DE ISOMETRICO<br>No. Isometric:</th>
+                    <td class="valorGeneral valorGeneralConLinea">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="etiquetaGeneral">NOMBRE DE LA PIEZA<br>Name of the Piece:</th>
+                    <td class="valorGeneral valorGeneralConLinea">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{!! str_replace('⌀', '<span class="simboloDiametro">⌀</span>', e($Detalles_Generales['Nom_Pieza'] ?? '')) !!}</span></div>
+                    </td>
+                    <th class="etiquetaGeneral etiquetaGeneralCentrada">No. JUNTA<br>No. Joint:</th>
+                    <td class="valorGeneral valorGeneralConLinea">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</span></div>
+                    </td>
+                    <th class="etiquetaGeneral etiquetaGeneralCentrada">MATERIAL<br>Material:</th>
+                    <td class="valorGeneral valorGeneralConLinea">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="etiquetaGeneral">PROCEDIMIENTO<br>Procedure:</th>
+                    <td class="valorGeneral valorGeneralConLinea">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</span></div>
+                    </td>
+                    <th class="etiquetaGeneral etiquetaGeneralCentrada">CRITERIO DE EVALUACION<br>Evaluation Criteria:</th>
+                    <td class="valorGeneral valorGeneralConLinea">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</span></div>
+                    </td>
+                    <th class="etiquetaGeneral etiquetaGeneralCentrada">TRAZABILIDAD<br>Traceability:</th>
+                    <td class="valorGeneral valorGeneralConLinea">
+                        <div class="lineaValorGeneral"><span class="textoValorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</span></div>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -578,23 +646,30 @@
                 <tr>
                     <td class="foto-container foto-full" colspan="2">
                         @if(!empty($fotoCompleta['es_cuadro_texto']))
-                            <div class="descripcion-reporte">{{ $fotoCompleta['comment'] ?? '' }}</div>
+                            <div class="descripcion-reporte">{!! nl2br(e($fotoCompleta['comment'] ?? '')) !!}</div>
                         @else
                             <div class="foto-imagen-area"><img src="{{ $fotoCompleta['path'] }}" alt="Fotografia"></div>
-                            <p class="comment">{{ $fotoCompleta['comment'] }}</p>
+                            <p class="comment">{!! nl2br(e($fotoCompleta['comment'] ?? '')) !!}</p>
                         @endif
                     </td>
                 </tr>
             @else
+                @php
+                    // La fila solo existe si tiene al menos una foto/texto, pero dentro
+                    // de la fila se conservan las dos columnas para respetar la posicion.
+                    $hayFotosArriba = isset($espacios['arriba_izquierda']) || isset($espacios['arriba_derecha']);
+                    $hayFotosAbajo = isset($espacios['abajo_izquierda']) || isset($espacios['abajo_derecha']);
+                @endphp
+                @if($hayFotosArriba)
                 <tr>
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             <td class="foto-container">
                                 @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                                    <div class="descripcion-reporte">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                                    <div class="descripcion-reporte">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</div>
                                 @else
                                     <div class="foto-imagen-area"><img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografia"></div>
-                                    <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                                    <p class="comment">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</p>
                                 @endif
                             </td>
                         @else
@@ -602,15 +677,17 @@
                         @endif
                     @endforeach
                 </tr>
+                @endif
+                @if($hayFotosAbajo)
                 <tr>
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             <td class="foto-container">
                                 @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                                    <div class="descripcion-reporte">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
+                                    <div class="descripcion-reporte">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</div>
                                 @else
                                     <div class="foto-imagen-area"><img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografia"></div>
-                                    <p class="comment">{{ $espacios[$posicion]['comment'] }}</p>
+                                    <p class="comment">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</p>
                                 @endif
                             </td>
                         @else
@@ -618,6 +695,7 @@
                         @endif
                     @endforeach
                 </tr>
+                @endif
             @endif
         </table>
     </div>

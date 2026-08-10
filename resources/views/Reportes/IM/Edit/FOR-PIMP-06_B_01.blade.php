@@ -620,14 +620,44 @@
                         </div>
 
                         <div data-layout-fotos-manual="1">
+                            <div id="imageFieldsContainer" class="row">
+                                <!-- Las imagenes nuevas se muestran antes de los recortes XRF para evitar scroll innecesario. -->
+                            </div>
+
                         @if(!empty($Fotos_Comentarios))
+                            @php
+                                // Fotos normales primero; recortes de disparos XRF al final para no estorbar al agregar nuevas fotos.
+                                $fotosComentariosOrdenadas = collect($Fotos_Comentarios)
+                                    ->map(fn ($foto, $index) => ['index' => $index, 'foto' => $foto])
+                                    ->sortBy(fn ($item) => !empty($item['foto']['es_disparo']) ? 1 : 0)
+                                    ->values();
+                            @endphp
                             <div class="row">
-                                @foreach($Fotos_Comentarios as $index => $foto)
+                                @foreach($fotosComentariosOrdenadas as $itemFoto)
+                                    @php
+                                        $index = $itemFoto['index'];
+                                        $foto = $itemFoto['foto'];
+                                        // Comentarios base del formato 06_B/01; solo rellenan fotos normales sin comentario histórico.
+                                        $comentariosDefaultFotos06 = [
+                                            0 => "FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece",
+                                            1 => "FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance",
+                                        ];
+                                        $comentarioFoto06 = $foto['comentario'] ?? '';
+                                        if (
+                                            trim((string) $comentarioFoto06) === ''
+                                            && empty($foto['es_disparo'])
+                                            && empty($foto['es_cuadro_texto'])
+                                            && isset($comentariosDefaultFotos06[$index])
+                                        ) {
+                                            $comentarioFoto06 = $comentariosDefaultFotos06[$index];
+                                        }
+                                    @endphp
                                     <div class="col-sm-6"
                                         id="image-container-{{ $index }}"
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
                                         data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}"
+                                        data-foto-es-disparo="{{ !empty($foto['es_disparo']) ? 1 : 0 }}"
                                         data-foto-es-texto="{{ !empty($foto['es_cuadro_texto']) ? 1 : 0 }}">
                                         <div class="form-group">
                                             <label for="replace_image_{{ $index }}">Imagen subida {{ $index + 1 }}:</label>
@@ -667,7 +697,7 @@
                                                 </select>
                                             </div>
                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
-                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] ?? '' }}</textarea>
+                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $comentarioFoto06 }}</textarea>
                                             <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
                                             <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
                                             <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
@@ -680,9 +710,6 @@
                             <p>No hay imágenes disponibles.</p>
                         @endif
 
-                        <div id="imageFieldsContainer" class="row">
-                            <!-- Aquí se agregarán dinámicamente los campos -->
-                        </div>
                         </div>
 
                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -806,6 +833,40 @@ document.addEventListener('DOMContentLoaded', function () {
     const detallesGenerales = @json($Detalles_Generales ?? []);
     const datosEquipo = @json($Datos_Equipo ?? []);
     const firmas = @json($Firmas ?? []);
+
+    /*
+     * Los recortes XRF guardados suelen ser muchos y empujan hacia abajo
+     * las nuevas fotos/granos. En Edit se agrupan al final y cerrados por defecto.
+     */
+    const layoutFotos = form.querySelector('[data-layout-fotos-manual="1"]');
+    const disparosGuardados = layoutFotos
+        ? Array.from(layoutFotos.querySelectorAll('[data-foto-es-disparo="1"]'))
+        : [];
+
+    if (layoutFotos && disparosGuardados.length > 0) {
+        const bloqueDisparos = document.createElement('details');
+        bloqueDisparos.className = 'border rounded bg-light p-2 mt-3';
+
+        const tituloDisparos = document.createElement('summary');
+        tituloDisparos.className = 'font-weight-bold text-primary';
+        tituloDisparos.textContent = 'Recortes XRF guardados / disparos (' + disparosGuardados.length + ')';
+
+        const ayudaDisparos = document.createElement('small');
+        ayudaDisparos.className = 'd-block text-muted mb-2';
+        ayudaDisparos.textContent = 'Se dejan al final para que las fotos nuevas y el patron de grano queden primero.';
+
+        const filaDisparos = document.createElement('div');
+        filaDisparos.className = 'row mt-2';
+
+        disparosGuardados.forEach(function (tarjetaDisparo) {
+            filaDisparos.appendChild(tarjetaDisparo);
+        });
+
+        bloqueDisparos.appendChild(tituloDisparos);
+        bloqueDisparos.appendChild(ayudaDisparos);
+        bloqueDisparos.appendChild(filaDisparos);
+        layoutFotos.appendChild(bloqueDisparos);
+    }
 
     function setValue(name, value) {
         if (value === undefined || value === null) return;

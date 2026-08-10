@@ -321,9 +321,16 @@ document.addEventListener("DOMContentLoaded", function () {
         function generateImageFields(count) {
             container.innerHTML = '';
             const permiteDisparos = document.getElementById('FOR-PIMP-06_B_01') !== null;
+            const comentarioFotoDefault06 = function (indiceVisual) {
+                if (!permiteDisparos) return '';
+                if (indiceVisual === 1) return 'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece';
+                if (indiceVisual === 2) return 'FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance';
+                return '';
+            };
             for (let i = 1; i <= count; i++) {
                 const indiceEnvio = i - 1;
                 const sufijoCampo = permiteDisparos ? `[${indiceEnvio}]` : '[]';
+                const comentarioDefault = comentarioFotoDefault06(i);
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
                 col.setAttribute('id', `image-container-${i}`); // ID único para eliminarlo después
@@ -363,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         <!-- Comentario -->
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments${sufijoCampo}" placeholder="Comentario"></textarea>
+                        <textarea class="form-control mt-2" name="comments${sufijoCampo}" id="comment${i}" placeholder="Comentario">${comentarioDefault}</textarea>
 
                         ${!permiteDisparos ? `<!-- El detalle de junta se conserva solo en los formatos que lo requieren. -->
                         <div class="form-check mt-2">
