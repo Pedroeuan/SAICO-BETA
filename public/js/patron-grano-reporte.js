@@ -13,7 +13,7 @@
     /** Inicializa el único catálogo del reporte y lo ofrece como modo para cada fotografía. */
     function iniciar(configuracion) {
         const formulario = configuracion.closest('form');
-        if (!formulario || ['FOR-PIMP-03_B_01', 'FOR-PIMP-04_02', 'FOR-PIMP-04_03'].indexOf(formulario.id) === -1) return;
+        if (!formulario || ['FOR-PIMP-03_B_01', 'FOR-PIMP-04_02', 'FOR-PIMP-04_03', 'FOR-PIMP-06_B_01'].indexOf(formulario.id) === -1) return;
 
         const raizFotos = formulario.querySelector('[data-layout-fotos-manual="1"]');
         const contenedorDinamico = formulario.querySelector('#imageFieldsContainer');
@@ -76,6 +76,8 @@
                 usarActualInput.value = this.value ? '1' : '0';
                 idInput.value = this.value;
                 mostrarSeleccion(tarjeta, false);
+                // El cuadro de resultados de Fiji actualiza el tamaño sin esperar a guardar el reporte.
+                document.dispatchEvent(new CustomEvent('saico:grain-pattern-updated'));
             });
         }
 
@@ -98,6 +100,16 @@
             const archivo = tarjeta.querySelector('input[type="file"]');
             grupo.insertBefore(checkWrap, archivo || grupo.firstChild);
             crearPanelGrano(tarjeta);
+
+            // El mismo textarea de la fotografía funciona como descripción, pero se rotula claramente al activar grano.
+            const descripcion = tarjeta.querySelector('textarea[name^="comments"]');
+            if (descripcion && !tarjeta.querySelector('[data-grain-description-label]')) {
+                const etiquetaDescripcion = document.createElement('label');
+                etiquetaDescripcion.className = 'font-weight-bold mt-2 d-none';
+                etiquetaDescripcion.textContent = 'Descripción para este reporte';
+                etiquetaDescripcion.setAttribute('data-grain-description-label', '1');
+                descripcion.parentNode.insertBefore(etiquetaDescripcion, descripcion);
+            }
 
             checkWrap.querySelector('.foto-grain-checkbox').addEventListener('change', function () {
                 if (this.checked) activarTarjeta(tarjeta, false);
@@ -148,6 +160,7 @@
             const archivo = tarjeta.querySelector('input[type="file"]');
             const vistaNormal = tarjeta.querySelector('.image-preview');
             const comentario = tarjeta.querySelector('textarea[name^="comments"], [data-grain-card-description]');
+            const etiquetaDescripcion = tarjeta.querySelector('[data-grain-description-label]');
             const texto = tarjeta.querySelector('.foto-texto-checkbox');
             const disparo = tarjeta.querySelector('.foto-disparo-checkbox');
             const etiquetaArchivo = archivo?.id ? tarjeta.querySelector('label[for="' + archivo.id + '"]') : null;
@@ -167,6 +180,7 @@
                 comentario.rows = activo ? 4 : 3;
                 comentario.required = activo;
             }
+            if (etiquetaDescripcion) etiquetaDescripcion.classList.toggle('d-none', !activo);
 
             // Tamaño de grano, cuadro de texto y disparo son tres modos excluyentes de la misma tarjeta.
             [texto, disparo].forEach(function (check) {
@@ -266,7 +280,9 @@
                             '<div class="form-check mt-2"><input class="form-check-input" type="checkbox" disabled>' +
                                 '<span class="form-check-label font-weight-bold">Usar este espacio como cuadro de texto</span></div>' +
                         '</div>' +
-                        '<textarea class="form-control mt-2" data-grain-card-description></textarea>' +
+                        '<label class="font-weight-bold mt-2" data-grain-description-label>Descripción para este reporte</label>' +
+                        '<textarea class="form-control mt-2" data-grain-card-description ' +
+                            'placeholder="Descripción del tamaño de grano para este reporte"></textarea>' +
                     '</div>' +
                 '</div>';
 

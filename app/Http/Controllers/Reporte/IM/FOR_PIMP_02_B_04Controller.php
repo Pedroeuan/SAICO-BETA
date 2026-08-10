@@ -176,6 +176,25 @@ class FOR_PIMP_02_B_04Controller extends Controller
         return $promedios;
     }
 
+    /** Limita la etapa a los dos estados validos usados por el reporte. */
+    private function normalizarEtapaDureza($etapa): string
+    {
+        return strtoupper(trim((string) $etapa)) === 'DESPUES' ? 'DESPUES' : 'ANTES';
+    }
+
+    /**
+     * Evita celdas vacias en el resumen del PDF sin reemplazar mediciones existentes.
+     * Los guiones representan que la etapa todavia no ha sido realizada.
+     */
+    private function completarPromediosDureza(array $promedios): array
+    {
+        foreach ($this->sanitizeDurezaPromedio($promedios) as $campo => $valor) {
+            $promedios[$campo] = $valor === '' ? '---' : $valor;
+        }
+
+        return $promedios;
+    }
+
     private function normalizarMergeConfig($mergeConfig): array
     {
         $allowedFields = [
@@ -721,13 +740,12 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.Temperatura_pieza' => 'nullable|string',
             'Detalles_Generales.Espesor_cedula' => 'nullable|string',
             'Detalles_Generales.Metodo' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -756,6 +774,10 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+            'Datos_Equipo.DUREZA_ETAPA' => 'required|in:ANTES,DESPUES',
+            'Datos_Equipo.ESCALA_DUREZA' => 'required|string|max:50',
+            'Datos_Equipo.ETIQUETA_MATERIAL_A' => 'nullable|string|max:100',
+            'Datos_Equipo.ETIQUETA_MATERIAL_A1' => 'nullable|string|max:100',
             'Dureza' => 'nullable|array',
             'Dureza.*.descripcion' => 'nullable|string',
             'Dureza.*.horario' => 'nullable|string',
@@ -888,7 +910,15 @@ class FOR_PIMP_02_B_04Controller extends Controller
             }
         }
 
-        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->calculateDurezaPromedio($request->input('Dureza', []));
+        // La primera captura inicia en ANTES; el select permite conservar la etapa de forma explicita.
+        $etapaDureza = $this->normalizarEtapaDureza($validatedData['Datos_Equipo']['DUREZA_ETAPA'] ?? 'ANTES');
+        $validatedData['Datos_Equipo']['DUREZA_ETAPA'] = $etapaDureza;
+        $validatedData['Datos_Equipo']['ESCALA_DUREZA'] = trim((string) $validatedData['Datos_Equipo']['ESCALA_DUREZA']);
+        $validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A'] = trim((string) ($validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A'] ?? '')) ?: 'Base Metal';
+        $validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A1'] = trim((string) ($validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A1'] ?? '')) ?: 'Base Metal';
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->completarPromediosDureza(
+            $this->calculateDurezaPromedio($request->input('Dureza', []), $etapaDureza)
+        );
         $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
         $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(
             $request->input('Dureza_MergeConfig', '[]'),
@@ -1150,13 +1180,12 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.Temperatura_pieza' => 'nullable|string',
             'Detalles_Generales.Espesor_cedula' => 'nullable|string',
             'Detalles_Generales.Metodo' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1185,6 +1214,10 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
+            'Datos_Equipo.DUREZA_ETAPA' => 'required|in:ANTES,DESPUES',
+            'Datos_Equipo.ESCALA_DUREZA' => 'required|string|max:50',
+            'Datos_Equipo.ETIQUETA_MATERIAL_A' => 'nullable|string|max:100',
+            'Datos_Equipo.ETIQUETA_MATERIAL_A1' => 'nullable|string|max:100',
             'Dureza' => 'nullable|array',
             'Dureza.*.descripcion' => 'nullable|string',
             'Dureza.*.horario' => 'nullable|string',
@@ -1306,12 +1339,21 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
 
-        $etapaDureza = ($datosEquipoActuales['DUREZA_ETAPA'] ?? 'ANTES') === 'DESPUES'
-            ? 'DESPUES'
-            : 'ANTES';
-        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->calculateDurezaPromedio(
-            $request->input('Dureza', []),
-            $etapaDureza
+        $etapaDureza = $this->normalizarEtapaDureza(
+            $validatedData['Datos_Equipo']['DUREZA_ETAPA'] ?? ($datosEquipoActuales['DUREZA_ETAPA'] ?? 'ANTES')
+        );
+        $validatedData['Datos_Equipo']['DUREZA_ETAPA'] = $etapaDureza;
+        $validatedData['Datos_Equipo']['ESCALA_DUREZA'] = trim((string) $validatedData['Datos_Equipo']['ESCALA_DUREZA']);
+        $validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A'] = trim((string) ($validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A'] ?? '')) ?: 'Base Metal';
+        $validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A1'] = trim((string) ($validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A1'] ?? '')) ?: 'Base Metal';
+
+        // El consecutivo conserva los promedios ANTES y calcula solo la etapa seleccionada.
+        $promediosBase = array_replace(
+            is_array($datosEquipoActuales['DUREZA_PROMEDIO'] ?? null) ? $datosEquipoActuales['DUREZA_PROMEDIO'] : [],
+            $request->input('Dureza', [])
+        );
+        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->completarPromediosDureza(
+            $this->calculateDurezaPromedio($promediosBase, $etapaDureza)
         );
         $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
         $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(

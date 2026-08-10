@@ -40,21 +40,49 @@
             }
         }
 
+        /** Lee un dato del bloque metalográfico aunque visualmente use select + caja nueva. */
+        function obtenerDatoEquipo(campo, respaldo) {
+            const entrada = document.querySelector('[name="Datos_Equipo[' + campo + ']"]');
+            const valor = String(entrada?.value || '').trim();
+            return valor || respaldo;
+        }
+
+        /** Obtiene el valor ASTM del patrón activo, incluida su copia histórica en Edit. */
+        function obtenerTamanoGrano() {
+            const configuracion = document.querySelector('[data-grain-pattern-config]');
+            const id = String(configuracion?.querySelector('[data-grain-pattern-id]')?.value || '');
+            let catalogo = [];
+            let historico = {};
+
+            if (!id || !configuracion) return '---';
+            try {
+                catalogo = JSON.parse(configuracion.querySelector('[data-grain-pattern-catalog]')?.textContent || '[]');
+                historico = JSON.parse(configuracion.querySelector('[data-grain-pattern-historical]')?.textContent || '{}');
+            } catch (error) {
+                return '---';
+            }
+
+            const patron = catalogo.find(function (elemento) {
+                return String(elemento.id) === id;
+            }) || (String(historico.id || '') === id ? historico : {});
+
+            return String(patron.valor_grano || patron.nombre || '').trim() || '---';
+        }
+
         /** Convierte los resultados técnicos en una base editable para la descripción del reporte. */
         function construirDescripcion() {
-            const fase = analisisActual.fase_seleccionada === 'ferrita'
-                ? 'Ferrita / fase clara'
-                : 'Perlita / fase oscura';
             const lineas = [
                 'RESULTADOS DEL ANÁLISIS METALOGRÁFICO',
-                'Archivo: ' + (analisisActual.archivo_original || 'Sin nombre'),
-                'Conversión: 8 bits',
-                'Umbral: ' + Number(analisisActual.umbral_minimo || 0) + '–' + Number(analisisActual.umbral_maximo || 0),
-                'Fase revisada: ' + fase,
-                'Perlita / fase oscura: ' + Number(analisisActual.porcentaje_perlita || 0).toFixed(3) + ' %',
-                'Ferrita / fase clara: ' + Number(analisisActual.porcentaje_ferrita || 0).toFixed(3) + ' %',
-                'Total verificado: 100.000 %',
-                'Método: ' + (analisisActual.metodo_medicion || 'ImageJ Area Fraction / Measure'),
+                '',
+                'Fases presentes: ' + obtenerDatoEquipo('FASES_PRESENTES', '---'),
+                'Morfología de la microestructura: ---',
+                '% fracción volumétrica Perlita / zonas oscuras: ' + Number(analisisActual.porcentaje_perlita || 0).toFixed(3) + ' %',
+                '% fracción volumétrica Ferrita / zonas claras: ' + Number(analisisActual.porcentaje_ferrita || 0).toFixed(3) + ' %',
+                'Método de tamaño de grano ASTM E112: Comparativo',
+                'Tamaño de grano: ' + obtenerTamanoGrano(),
+                'Bandeamiento: ---',
+                'Magnificación: 100 X',
+                'Analizador: Fiji',
             ];
             const conteo = obtenerConteo();
             const lineasConteo = Array.isArray(conteo.lineas) ? conteo.lineas : [];
@@ -126,6 +154,19 @@
         // Mientras el técnico no edite el texto, los cruces, suma y promedio permanecen sincronizados.
         document.addEventListener('saico:grain-count-updated', function () {
             if (!contenedor.classList.contains('d-none') && !descripcionEditada) {
+                descripcion.value = construirDescripcion();
+            }
+        });
+
+        // Los catálogos y el patrón comparativo alimentan el texto mientras el técnico no lo haya editado.
+        document.addEventListener('saico:grain-pattern-updated', function () {
+            if (!contenedor.classList.contains('d-none') && !descripcionEditada) {
+                descripcion.value = construirDescripcion();
+            }
+        });
+        document.addEventListener('input', function (evento) {
+            if (evento.target.matches('[name="Datos_Equipo[FASES_PRESENTES]"]')
+                && !contenedor.classList.contains('d-none') && !descripcionEditada) {
                 descripcion.value = construirDescripcion();
             }
         });
