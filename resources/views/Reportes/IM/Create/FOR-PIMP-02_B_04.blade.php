@@ -416,7 +416,9 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                            {{-- Igual que PINS, el procedimiento pertenece al formato y no se captura manualmente. --}}
+                            <input type="text" class="form-control inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]" value="{{ old('Detalles_Generales.Procedimiento', $Procedimiento->Nombre ?? '') }}" readonly>
+                            <input type="hidden" name="Detalles_Generales[idProcedimiento]" value="{{ $Procedimiento->idProcedimiento ?? '' }}">
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -590,7 +592,27 @@
                     </div>
                     
                     <!--***************************************** VALORES DE DUREZA MEDIDOS *****************************************-->
-                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">VALORES PROMEDIO DE DUREZAS</div>
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">
+                        <label for="escalaDureza0204" class="mb-0 mr-2">ESCALA DE DUREZA / HARDNESS SCALE:</label>
+                        {{-- El campo oculto conserva el mismo nombre esperado por el controlador y el PDF. --}}
+                        <input type="hidden" name="Datos_Equipo[ESCALA_DUREZA]"
+                            value="{{ old('Datos_Equipo.ESCALA_DUREZA') }}"
+                            data-catalogo-valor="escala" data-escala-dureza>
+                        <div style="width: 220px;">
+                            <select id="escalaDureza0204" class="form-control form-control-sm text-center"
+                                data-catalogo-selector="escala" aria-label="Seleccionar escala de dureza">
+                                <option value="">Seleccione una escala</option>
+                                @foreach(($EscalasDureza0204 ?? collect(['HB', 'HV', 'HL', 'HRC', 'HRB'])) as $escalaDureza)
+                                    <option value="{{ $escalaDureza }}">{{ $escalaDureza }}</option>
+                                @endforeach
+                                <option value="__nuevo__">+ Escribir nueva escala...</option>
+                            </select>
+                            <input type="text" class="form-control form-control-sm text-center mt-1 d-none"
+                                maxlength="50" placeholder="Escriba la nueva escala"
+                                data-catalogo-nuevo="escala" aria-label="Nueva escala de dureza">
+                        </div>
+                    </div>
+                    <small class="d-block mb-2">Seleccione una escala existente o escriba una nueva; se guardará al finalizar el reporte.</small>
 
                     <table class="table table-bordered text-center align-middle">
                         <thead>
@@ -601,7 +623,19 @@
                                 </th>
                                 <th>
                                     METAL BASE<br>
-                                    Base Metal<br>
+                                    <input type="hidden" name="Datos_Equipo[ETIQUETA_MATERIAL_A]"
+                                        value="{{ old('Datos_Equipo.ETIQUETA_MATERIAL_A', 'Base Metal') }}"
+                                        data-catalogo-valor="material-a" data-etiqueta-material="A">
+                                    <select class="form-control form-control-sm text-center" data-catalogo-selector="material-a"
+                                        aria-label="Seleccionar material A">
+                                        @foreach(($MaterialesDureza0204 ?? collect(['Base Metal'])) as $materialDureza)
+                                            <option value="{{ $materialDureza }}">{{ $materialDureza }}</option>
+                                        @endforeach
+                                        <option value="__nuevo__">+ Escribir nuevo...</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm text-center mt-1 d-none"
+                                        maxlength="100" placeholder="Escriba el material"
+                                        data-catalogo-nuevo="material-a" aria-label="Nuevo material A"><br>
                                     (A)
                                 </th>
                                 <th>
@@ -619,7 +653,19 @@
                                 </th>
                                 <th>
                                     METAL BASE<br>
-                                    Base Metal<br>
+                                    <input type="hidden" name="Datos_Equipo[ETIQUETA_MATERIAL_A1]"
+                                        value="{{ old('Datos_Equipo.ETIQUETA_MATERIAL_A1', 'Base Metal') }}"
+                                        data-catalogo-valor="material-a1" data-etiqueta-material="A1">
+                                    <select class="form-control form-control-sm text-center" data-catalogo-selector="material-a1"
+                                        aria-label="Seleccionar material A1">
+                                        @foreach(($MaterialesDureza0204 ?? collect(['Base Metal'])) as $materialDureza)
+                                            <option value="{{ $materialDureza }}">{{ $materialDureza }}</option>
+                                        @endforeach
+                                        <option value="__nuevo__">+ Escribir nuevo...</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm text-center mt-1 d-none"
+                                        maxlength="100" placeholder="Escriba el material"
+                                        data-catalogo-nuevo="material-a1" aria-label="Nuevo material A1"><br>
                                     (A1)
                                 </th>
                             </tr>
@@ -628,8 +674,8 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <strong>ANTES DEL RELEVADO DE ESFUERZOS (HB):</strong><br>
-                                    Before PWHT (HB)
+                                    <strong>ANTES DEL RELEVADO DE ESFUERZOS (<span data-escala-dureza-vista>---</span>):</strong><br>
+                                    Before PWHT (<span data-escala-dureza-vista>---</span>)
                                 </td>
 
                                 <td>
@@ -665,8 +711,8 @@
 
                             <tr>
                                 <td>
-                                    <strong>POSTERIOR AL RELEVADO DE ESFUERZOS (HB):</strong><br>
-                                    After PWHT (HB)
+                                    <strong>POSTERIOR AL RELEVADO DE ESFUERZOS (<span data-escala-dureza-vista>---</span>):</strong><br>
+                                    After PWHT (<span data-escala-dureza-vista>---</span>)
                                 </td>
 
                                 <td>
@@ -702,6 +748,8 @@
                         </tbody>
                     </table>
 
+                    <small class="d-block mb-2">En (A) y (A1), seleccione un material existente o escriba uno nuevo para reutilizarlo después.</small>
+
                     <fieldset disabled class="d-none">
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">ANTES O DESPUÉS DEL RELEVADO DE ESFUERZOS</div>
 
@@ -716,8 +764,8 @@
                                 </th>
 
                                 <th colspan="5">
-                                    VALORES DE DUREZA (ESCALA BRINELL)<br>
-                                    <small>Hardness Values (Brinell Scale)</small>
+                                    VALORES DE DUREZA (ESCALA <span data-escala-dureza-vista>---</span>)<br>
+                                    <small>Hardness Values (<span data-escala-dureza-vista>---</span> Scale)</small>
                                 </th>
 
                                 <th rowspan="2">
@@ -790,6 +838,16 @@
                         </p>                 
                     </div>
                     </fieldset>
+
+                    {{-- El primer reporte inicia en ANTES; el consecutivo cambia esta etapa a DESPUES. --}}
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded mb-2">
+                        <label for="durezaEtapa0204" class="mb-0 mr-2">ETAPA DEL RELEVADO DE ESFUERZOS:</label>
+                        <select id="durezaEtapa0204" class="form-control form-control-sm" style="max-width: 330px;"
+                            name="Datos_Equipo[DUREZA_ETAPA]" data-dureza-etapa-select>
+                            <option value="ANTES" @selected(old('Datos_Equipo.DUREZA_ETAPA', 'ANTES') === 'ANTES')>ANTES DEL RELEVADO DE ESFUERZOS</option>
+                            <option value="DESPUES" @selected(old('Datos_Equipo.DUREZA_ETAPA') === 'DESPUES')>DESPUÉS DEL RELEVADO DE ESFUERZOS</option>
+                        </select>
+                    </div>
 
                     @php
                         $durezaRows = collect(old('Dureza', []))
@@ -884,18 +942,18 @@
                                     <tr>
                                         <th rowspan="2" style="width: 60px;">No.</th>
                                         <th colspan="2">DATOS DE LA JUNTA<br><small>Join Data</small></th>
-                                        <th colspan="5">VALORES DE DUREZA (ESCALA BRINELL)<br><small>Hardness Values (Brinell Scale)</small></th>
+                                        <th colspan="5">VALORES DE DUREZA (ESCALA <span data-escala-dureza-vista>---</span>)<br><span>Hardness Values (<span data-escala-dureza-vista>---</span> Scale)</span></th>
                                         <th rowspan="2" style="min-width: 220px;">OBSERVACIONES<br><small>Remarks</small></th>
                                         <th rowspan="2" style="width: 80px;">Eliminar</th>
                                     </tr>
                                     <tr>
                                         <th style="min-width: 210px;">DESCRIPCIÓN</th>
                                         <th style="min-width: 130px;">HORARIOS TÉCNICOS</th>
-                                        <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A)</th>
+                                        <th style="min-width: 125px;">METAL BASE<br><small data-etiqueta-material-vista="A">{{ old('Datos_Equipo.ETIQUETA_MATERIAL_A', 'Base Metal') }}</small><br>(A)</th>
                                         <th style="min-width: 125px;">ZAC<br><small>HAZ</small><br>(B)</th>
                                         <th style="min-width: 125px;">SOLDADURA<br><small>Weld</small><br>(C)</th>
                                         <th style="min-width: 125px;">ZAC<br><small>HAZ</small><br>(B1)</th>
-                                        <th style="min-width: 125px;">METAL BASE<br><small>Base Metal</small><br>(A1)</th>
+                                        <th style="min-width: 125px;">METAL BASE<br><small data-etiqueta-material-vista="A1">{{ old('Datos_Equipo.ETIQUETA_MATERIAL_A1', 'Base Metal') }}</small><br>(A1)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="durezaAutoFillBody">
@@ -1216,32 +1274,6 @@
                                 </div>
                             </div>
                         </div>
-                        <p>
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
-                        
-                        <p>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
-                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
-                                @error('Num_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
-                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
-                                @error('Nombre_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
                         <div class="container">
                             <div class="float-right">
                                 <button type="submit" class="btn btn-info bg-primary">Finalizar</button>

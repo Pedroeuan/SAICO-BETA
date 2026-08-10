@@ -80,4 +80,27 @@ class ServicioMetalografiaReporteTest extends TestCase
         $this->assertSame(['pagina' => 1, 'posicion' => 'arriba_izquierda'], $layout['imagen']);
         $this->assertSame(['pagina' => 3, 'posicion' => 'abajo_derecha'], $layout['resultados']);
     }
+
+    /** El respaldo del PDF debe contener el resumen mínimo acordado y los valores de Fiji. */
+    public function test_construye_descripcion_metalografica_con_fases_y_tamano_de_grano(): void
+    {
+        $texto = $this->servicio->construirTextoResultados([
+            'porcentaje_perlita' => 35.271,
+            'porcentaje_ferrita' => 64.729,
+            'archivo_original' => 'muestra.jpg',
+            'umbral_minimo' => 10,
+            'umbral_maximo' => 90,
+        ], [], [
+            'FASES_PRESENTES' => 'Ferrita + perlita',
+        ], [
+            'valor_grano' => '10',
+        ]);
+
+        $this->assertStringContainsString('Fases presentes: Ferrita + perlita', $texto);
+        $this->assertStringContainsString('Perlita / zonas oscuras: 35.271 %', $texto);
+        $this->assertStringContainsString('Ferrita / zonas claras: 64.729 %', $texto);
+        $this->assertStringContainsString('Método de tamaño de grano ASTM E112: Comparativo', $texto);
+        $this->assertStringContainsString('Tamaño de grano: 10', $texto);
+        $this->assertStringContainsString('Analizador: Fiji', $texto);
+    }
 }

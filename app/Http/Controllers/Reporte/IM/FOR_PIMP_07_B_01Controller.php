@@ -428,13 +428,12 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
             'Detalles_Generales.Diam_Nominal' => 'nullable|string',
             'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
             'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -831,13 +830,12 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
             'Detalles_Generales.Diam_Nominal' => 'nullable|string',
             'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
             'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array

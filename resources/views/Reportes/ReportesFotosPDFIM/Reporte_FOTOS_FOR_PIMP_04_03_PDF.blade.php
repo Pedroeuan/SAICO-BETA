@@ -143,6 +143,10 @@
             /* Mantiene dos filas simétricas aunque uno de los espacios todavía esté vacío. */
             border-spacing: 8px 10px;
         }
+        .photo-grid tr {
+            /* Dompdf no debe calcular una altura distinta para la fila inferior. */
+            height: 201px;
+        }
         .photo-slot { 
             padding: 0;
             border: 1px solid #000;
@@ -152,16 +156,29 @@
             width: 330px;
             /* Misma medida para imagen, descripción, patrón y fotografía de la pieza. */
             height: 201px;
+            box-sizing: border-box;
             position: relative;
         }
-        .photo-slot img { 
-            display: block;
+        /* El patrón comparativo ASTM conserva solo sus límites horizontal superior e inferior. */
+        .photo-slot.photo-slot-grain {
+            border-left: 0;
+            border-right: 0;
+        }
+        .photo-image-area {
+            width: 100%;
+            height: 181px;
+            line-height: 181px;
+            overflow: hidden;
+            text-align: center;
+        }
+        .photo-image-area img { 
+            display: inline-block;
             max-width: 326px;
             max-height: 181px;
             width: auto;
             height: auto;
             object-fit: contain;
-            margin: 0 auto;
+            vertical-align: middle;
         }
         .photo-comment { 
             height: 20px;
@@ -207,6 +224,10 @@
         .photo-full img { 
             max-width: 100%;
             max-height: 390px;
+        }
+        .photo-full .photo-image-area {
+            height: 390px;
+            line-height: 390px;
         }
         .photo-page { 
             page-break-inside: avoid; 
@@ -500,9 +521,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>240</td>
-                        <td>320</td>
-                        <td>400</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][0] ?? '240' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][1] ?? '320' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][2] ?? '400' }}</td>
                         <th class="label">PAÑO</th>
                         <td>{{ $Datos_Equipo['MATERIAL_PANO'] ?? '' }}</td>
                         <th class="label">REACTIVO</th>
@@ -511,9 +532,9 @@
                         <td rowspan="2">{{ $Datos_Equipo['ESPECIFICACION_MATERIAL'] ?? '' }}</td>
                     </tr>
                     <tr>
-                        <td>500</td>
-                        <td>1000</td>
-                        <td>1500</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][3] ?? '500' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][4] ?? '1000' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][5] ?? '1500' }}</td>
                         <th class="label">ABRASIVO</th>
                         <td>{{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}</td>
                         <th class="label">TIEMPO</th>
@@ -535,12 +556,12 @@
         <table class="photo-grid">
             @if($fotoCompleta)
                 <tr>
-                    <td class="photo-slot photo-full" colspan="2">
+                    <td class="photo-slot photo-full {{ ($fotoCompleta['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-slot-grain' : '' }}" colspan="2">
                         @if(!empty($fotoCompleta['es_cuadro_texto']))
                         <div @class(['photo-text-box', 'photo-text-box-analysis' => ($fotoCompleta['origen_automatico'] ?? '') === 'resultados_analisis_imagen'])>{{ $fotoCompleta['comment'] ?? '' }}
                             </div>
                             @else
-                            <img src="{{ $fotoCompleta['path'] }}" alt="Fotografía">
+                            <div class="photo-image-area"><img src="{{ $fotoCompleta['path'] }}" alt="Fotografía"></div>
                             <div class="photo-comment">{{ $fotoCompleta['comment'] ?? '' }}</div>
                             @endif
                     </td>
@@ -549,11 +570,11 @@
                 <tr>
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
-                        <td class="photo-slot">
+                        <td class="photo-slot {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-slot-grain' : '' }}">
                             @if(!empty($espacios[$posicion]['es_cuadro_texto']))
                             <div @class(['photo-text-box', 'photo-text-box-analysis' => ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen'])>{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @else
-                            <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                            <div class="photo-image-area"><img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía"></div>
                             <div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @endif
                         </td>
@@ -565,10 +586,10 @@
                 <tr>
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
-                        <td class="photo-slot">
+                        <td class="photo-slot {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-slot-grain' : '' }}">
                             @if(!empty($espacios[$posicion]['es_cuadro_texto']))
                             <div @class(['photo-text-box', 'photo-text-box-analysis' => ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen'])>{{ $espacios[$posicion]['comment'] ?? '' }}</div>
-                            @else<img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                            @else<div class="photo-image-area"><img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía"></div>
                             <div class="photo-comment">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
                             @endif
                         </td>

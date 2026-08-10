@@ -131,7 +131,7 @@
         /* Valores capturados; el borde inferior funciona como renglon visual. */
         .valorGeneral {
             /*height: 13px;*/
-            border-bottom: 1px solid #000;
+            border-bottom: .5px solid #000;
             text-align: center;
             vertical-align: middle;
         }
@@ -464,6 +464,11 @@
 </footer>
 
 @php
+    /* La hoja fotografica usa la misma etapa guardada por el reporte principal. */
+    $etapaFotograficaDureza = ($Datos_Equipo['DUREZA_ETAPA'] ?? 'ANTES') === 'DESPUES'
+        ? ['DESPUÉS DEL RELEVADO DE ESFUERZOS', 'AFTER PWHT']
+        : ['ANTES DEL RELEVADO DE ESFUERZOS', 'BEFORE PWHT'];
+
     /*
      * DISTRIBUCION MANUAL DE FOTOGRAFIAS
      * La pagina y la posicion llegan desde los radios de Create/Edit.
@@ -581,7 +586,12 @@
 
         <table class="datosgenerales">
             <thead class="encabezadoAzul">
-                <tr><th>EVIDENCIA FOTOGRÁFICA ANTES O DESPUÉS DEL RELEVADO DE ESFUERZOS<br>PHOTOGRAPHIC EVIDENCE BEFORE OR AFTER PWHT</th></tr>
+                <tr>
+                    <th>
+                        EVIDENCIA FOTOGRÁFICA {{ $etapaFotograficaDureza[0] }}<br>
+                        PHOTOGRAPHIC EVIDENCE {{ $etapaFotograficaDureza[1] }}
+                    </th>
+                </tr>
             </thead>
         </table>
 

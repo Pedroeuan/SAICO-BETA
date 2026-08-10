@@ -259,7 +259,7 @@
         }
 
         .filaGeneral .valorGeneral {
-            border-bottom: 1px solid black;
+            border-bottom: .5px solid black;
             text-align: center;
             height: 13px;
         }
@@ -669,7 +669,7 @@
 <table class="tablaDureza">
     <thead class="encabezadoAzul">
         <tr>
-            <th colspan="5">VALORES DE DUREZA MEDIDOS (ESCALA BRINELL)<br>Measured Hardness Values (Brinell)</th>
+            <th colspan="5">VALORES DE DUREZA MEDIDOS EN {{ $Datos_Equipo['ESCALA_DUREZA'] ?? '' }}<br>Measured Hardness Values ({{ $Datos_Equipo['ESCALA_DUREZA'] ?? '' }})</th>
         </tr>
     </thead>
     <tbody>

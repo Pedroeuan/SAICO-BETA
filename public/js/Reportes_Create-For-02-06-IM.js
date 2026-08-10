@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
                         <textarea class="form-control mt-2" name="comments${sufijoCampo}" placeholder="Comentario"></textarea>
 
-                        <!-- NUEVO CHECK DETALLES JUNTA -->
+                        ${!permiteDisparos ? `<!-- El detalle de junta se conserva solo en los formatos que lo requieren. -->
                         <div class="form-check mt-2">
                             <input type="checkbox"
                                 class="form-check-input detalles-junta-checkbox"
@@ -397,7 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <input type="text" class="form-control mt-1" name="direccion_sonda[]" placeholder="Dirección de la Sonda">
                             Recubrimiento
                             <input type="text" class="form-control mt-1" name="recubrimiento[]" placeholder="Recubrimiento">
-                        </div>
+                        </div>` : ''}
                         <input type="hidden" name="images_base64${sufijoCampo}" id="image${i}-base64">
                         <br>
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
