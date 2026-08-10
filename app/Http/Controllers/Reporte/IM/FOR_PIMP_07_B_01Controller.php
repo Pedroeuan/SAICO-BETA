@@ -450,11 +450,11 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Datos_Equipo.TEMPERATURA_INICIAL' => 'nullable|string',
             'Datos_Equipo.HORA_INICIO' => 'nullable|string',
             'Datos_Equipo.VELOCIDAD_CALENTAMIENTO' => 'nullable|string',
-            'Datos_Equipo.HORA_FINAL' => 'nullable|string',
+            'Datos_Equipo.HORA_FINAL' => 'nullable|date_format:H:i',
             'Datos_Equipo.TEMPERATURA_SOSTENIMIENTO' => 'nullable|string',
-            'Datos_Equipo.DIA_INICIO' => 'nullable|string',
+            'Datos_Equipo.DIA_INICIO' => 'nullable|date',
             'Datos_Equipo.TIEMPO_SOSTENIMIENTO' => 'nullable|string',
-            'Datos_Equipo.DIA_FINAL' => 'nullable|string',
+            'Datos_Equipo.DIA_FINAL' => 'nullable|date',
             'Datos_Equipo.VEL_ENFRIAMIENTO' => 'nullable|string',
             'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
             'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
@@ -852,7 +852,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Datos_Equipo.TEMPERATURA_INICIAL' => 'nullable|string',
             'Datos_Equipo.HORA_INICIO' => 'nullable|string',
             'Datos_Equipo.VELOCIDAD_CALENTAMIENTO' => 'nullable|string',
-            'Datos_Equipo.HORA_FINAL' => 'nullable|string',
+            'Datos_Equipo.HORA_FINAL' => 'nullable|date_format:H:i',
             'Datos_Equipo.TEMPERATURA_SOSTENIMIENTO' => 'nullable|string',
             'Datos_Equipo.DIA_INICIO' => 'nullable|string',
             'Datos_Equipo.TIEMPO_SOSTENIMIENTO' => 'nullable|string',
@@ -1553,8 +1553,8 @@ class FOR_PIMP_07_B_01Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(151.5, 32);
-            $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount" . "\n" . "$i OF $totalPageCount", 0, 'C');
+            $combinedPdf->SetXY(151.5, 28.5);
+            $combinedPdf->MultiCell(20, 2.5, "$i DE $totalPageCount" . "\n" . "$i OF $totalPageCount", 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -1567,8 +1567,8 @@ class FOR_PIMP_07_B_01Controller extends Controller
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY(151.5, 32);
-                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount" . "\n" . "$paginaActual OF $totalPageCount", 0, 'C');
+                $combinedPdf->SetXY(152, 27.5);
+                $combinedPdf->MultiCell(20, 2.5, "$paginaActual DE $totalPageCount" . "\n" . "$paginaActual OF $totalPageCount", 0, 'C');
             }
         }
 

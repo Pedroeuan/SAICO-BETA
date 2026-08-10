@@ -427,7 +427,10 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Día de inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaInicioInputP" name="Datos_Equipo[DIA_INICIO]" placeholder="" value="{{old('Datos_Equipo.DIA_INICIO', $Datos_Equipo['DIA_INICIO'] ?? '')}}">
+                            <input type="date" class="form-control  inputForm @error('DIA_INICIO') is-invalid @enderror" name="Datos_Equipo[DIA_INICIO]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Datos_Equipo.DIA_INICIO', $Datos_Equipo['DIA_INICIO'] ?? '')}}">
+                            @error('DIA_INICIO')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
                         </div>
                     </div>
 
@@ -441,7 +444,10 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Día de Finalización de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="diaFinalInputP" name="Datos_Equipo[DIA_FINAL]" placeholder="" value="{{old('Datos_Equipo.DIA_FINAL', $Datos_Equipo['DIA_FINAL'] ?? '')}}">
+                            <input type="date" class="form-control  inputForm @error('DIA_FINAL') is-invalid @enderror" name="Datos_Equipo[DIA_FINAL]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Datos_Equipo.DIA_FINAL', $Datos_Equipo['DIA_FINAL'] ?? '')}}">
+                            @error('DIA_FINAL')
+                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                            @enderror
                         </div>
                     </div>
 
