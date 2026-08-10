@@ -793,13 +793,12 @@ class FOR_PIMP_05_B_01Controller extends Controller
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.Accesorio' => 'nullable|string',
             'Detalles_Generales.Tuberia' => 'nullable|string',
             'Detalles_Generales.Estructural' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1241,13 +1240,12 @@ class FOR_PIMP_05_B_01Controller extends Controller
             'Detalles_Generales.Material' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.Accesorio' => 'nullable|string',
             'Detalles_Generales.Tuberia' => 'nullable|string',
             'Detalles_Generales.Estructural' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/

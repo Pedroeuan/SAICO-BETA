@@ -51,6 +51,7 @@
         var etapa = formulario.getAttribute('data-dureza-etapa') === 'DESPUES'
             ? 'DESPUES'
             : 'ANTES';
+        var etapaInactiva = etapa === 'DESPUES' ? 'ANTES' : 'DESPUES';
 
         // Sin la tabla de mediciones no hay valores que procesar.
         if (!cuerpo) {
@@ -85,13 +86,132 @@
                 : '';
         });
 
-        // En el consecutivo, los promedios ANTES pertenecen al reporte
-        // original y nunca deben ser modificados por las mediciones nuevas.
-        if (etapa === 'DESPUES') {
-            formulario.querySelectorAll('input[name^="Dureza[ANTES_"]').forEach(function (entradaAnterior) {
-                entradaAnterior.readOnly = true;
-            });
+        // La etapa no seleccionada conserva sus datos y usa guiones cuando aun no existe medicion.
+        formulario.querySelectorAll('input[name^="Dureza[' + etapaInactiva + '_"]').forEach(function (entradaInactiva) {
+            entradaInactiva.readOnly = true;
+            if (String(entradaInactiva.value || '').trim() === '') {
+                entradaInactiva.value = '---';
+            }
+        });
+    }
+
+    /** Mantiene sincronizados el select, el calculo y el titulo que se guardara. */
+    function inicializarEtapa(formulario) {
+        var selector = formulario.querySelector('[data-dureza-etapa-select]');
+
+        if (!selector) {
+            return;
         }
+
+        formulario.setAttribute('data-dureza-etapa', selector.value === 'DESPUES' ? 'DESPUES' : 'ANTES');
+        selector.addEventListener('change', function () {
+            formulario.setAttribute('data-dureza-etapa', selector.value === 'DESPUES' ? 'DESPUES' : 'ANTES');
+            calcularPromedios(formulario);
+        });
+    }
+
+    /**
+     * Convierte cada catalogo en un control claro: permite seleccionar un valor
+     * guardado o habilita una caja independiente cuando el usuario elige crear uno.
+     * El valor final se copia al campo oculto que ya conoce el backend.
+     */
+    function inicializarCatalogosEditables(formulario) {
+        formulario.querySelectorAll('[data-catalogo-selector]').forEach(function (selector) {
+            var clave = selector.getAttribute('data-catalogo-selector');
+            var valor = formulario.querySelector('[data-catalogo-valor="' + clave + '"]');
+            var entradaNueva = formulario.querySelector('[data-catalogo-nuevo="' + clave + '"]');
+            var valorActual;
+            var opcionExistente;
+
+            if (!valor || !entradaNueva) {
+                return;
+            }
+
+            valorActual = String(valor.value || '').trim();
+            opcionExistente = Array.prototype.find.call(selector.options, function (opcion) {
+                return opcion.value !== ''
+                    && opcion.value !== '__nuevo__'
+                    && opcion.value.toLocaleLowerCase() === valorActual.toLocaleLowerCase();
+            });
+
+            // En Edit conserva valores antiguos aunque todavia no formen parte del catalogo.
+            if (opcionExistente) {
+                selector.value = opcionExistente.value;
+            } else if (valorActual !== '') {
+                selector.value = '__nuevo__';
+                entradaNueva.value = valorActual;
+            } else {
+                selector.value = '';
+            }
+
+            var notificarCambio = function () {
+                valor.dispatchEvent(new Event('input', { bubbles: true }));
+            };
+
+            var sincronizar = function () {
+                if (selector.value === '__nuevo__') {
+                    entradaNueva.classList.remove('d-none');
+                    valor.value = String(entradaNueva.value || '').trim();
+                } else {
+                    entradaNueva.classList.add('d-none');
+                    entradaNueva.value = '';
+                    valor.value = selector.value;
+                }
+
+                notificarCambio();
+            };
+
+            selector.addEventListener('change', function () {
+                sincronizar();
+                if (selector.value === '__nuevo__') {
+                    entradaNueva.focus();
+                }
+            });
+
+            entradaNueva.addEventListener('input', function () {
+                valor.value = String(entradaNueva.value || '').trim();
+                notificarCambio();
+            });
+
+            sincronizar();
+        });
+    }
+
+    /** Refleja en ambas tablas el nombre libre elegido para los materiales A y A1. */
+    function inicializarEtiquetasMaterial(formulario) {
+        formulario.querySelectorAll('[data-etiqueta-material]').forEach(function (entrada) {
+            var clave = entrada.getAttribute('data-etiqueta-material');
+            var actualizar = function () {
+                var texto = String(entrada.value || '').trim() || 'Base Metal';
+                formulario.querySelectorAll('[data-etiqueta-material-vista="' + clave + '"]').forEach(function (vista) {
+                    vista.textContent = texto;
+                });
+            };
+
+            entrada.addEventListener('input', actualizar);
+            entrada.addEventListener('change', actualizar);
+            actualizar();
+        });
+    }
+
+    /** Muestra la escala capturada en todos los encabezados español/ingles del formulario. */
+    function inicializarEscalaDureza(formulario) {
+        var entrada = formulario.querySelector('[data-escala-dureza]');
+
+        if (!entrada) {
+            return;
+        }
+
+        var actualizar = function () {
+            var escala = String(entrada.value || '').trim() || '---';
+            formulario.querySelectorAll('[data-escala-dureza-vista]').forEach(function (vista) {
+                vista.textContent = escala;
+            });
+        };
+
+        entrada.addEventListener('input', actualizar);
+        entrada.addEventListener('change', actualizar);
+        actualizar();
     }
 
     /* Inicializa el calculo cuando el formulario ya esta disponible en el DOM. */
@@ -109,6 +229,11 @@
         if (!cuerpo) {
             return;
         }
+
+        inicializarCatalogosEditables(formulario);
+        inicializarEtapa(formulario);
+        inicializarEtiquetasMaterial(formulario);
+        inicializarEscalaDureza(formulario);
 
         /*
          * Recalcula cuando cambia una medicion directa de la tabla o un campo

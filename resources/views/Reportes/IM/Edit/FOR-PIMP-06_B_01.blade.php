@@ -131,8 +131,8 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo', $Detalles_Generales['Orden_Trabajo'] ?? '')}}</textarea>
+                            <label class="col-form-label" for="ordenTrabajo0601Edit">Orden de Trabajo:</label>
+                            <textarea class="form-control  is-waning" id="ordenTrabajo0601Edit" name="Detalles_Generales[Orden_Trabajo]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . .">{{old('Detalles_Generales.Orden_Trabajo', $Detalles_Generales['Orden_Trabajo'] ?? '')}}</textarea>
                             @error('Orden_Trabajo')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -171,8 +171,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Isométrico:</label>
-                            <input type="text" class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico', $Detalles_Generales['No_Isometrico'] ?? '')}}">
+                            <label class="col-form-label" for="noIsometrico0601Edit">No. Isométrico:</label>
+                            <input type="text" class="form-control  is-waning" id="noIsometrico0601Edit" name="Detalles_Generales[No_Isometrico]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Isometrico', $Detalles_Generales['No_Isometrico'] ?? '')}}">
                             @error('No_Isometrico')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -202,7 +202,9 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}">
+                            {{-- Edit conserva el procedimiento historico y su relacion asignada. --}}
+                            <input type="text" class="form-control inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]" value="{{ old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '') }}" readonly>
+                            <input type="hidden" name="Detalles_Generales[idProcedimiento]" value="{{ $Detalles_Generales['idProcedimiento'] ?? ($idProcedimiento ?? '') }}">
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -221,8 +223,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Trazabilidad:</label>
-                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Trazabilidad', $Detalles_Generales['Trazabilidad'] ?? '') }}">
+                            <label class="col-form-label" for="trazabilidad0601Edit">Trazabilidad:</label>
+                            <input type="text" class="form-control inputForm is-waning" id="trazabilidad0601Edit" name="Detalles_Generales[Trazabilidad]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.Trazabilidad', $Detalles_Generales['Trazabilidad'] ?? '') }}">
                             @error('Trazabilidad')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -231,8 +233,8 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">No. Junta</label>
-                            <input type="text" class="form-control inputForm is-waning" id="inputSuccess" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.No_Junta', $Detalles_Generales['No_Junta'] ?? '') }}">
+                            <label class="col-form-label" for="noJunta0601Edit">No. Junta</label>
+                            <input type="text" class="form-control inputForm is-waning" id="noJunta0601Edit" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{ old('Detalles_Generales.No_Junta', $Detalles_Generales['No_Junta'] ?? '') }}">
                             @error('No_Junta')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -603,6 +605,11 @@
                         <p>
 
                         <div class="form-group">
+                            {{-- Reconstruye el tamaño de grano histórico y permite cambiarlo sin alterar el catálogo original. --}}
+                            @include('Reportes.IM.partials.patron-grano-reporte', [
+                                'patronGrano' => $Detalles_Generales['PATRON_GRANO'] ?? []
+                            ])
+
                             <label for="imageCount">Número de imágenes a subir:</label>
                             <select class="form-control" id="imageCount" name="imageCount" autocomplete="off">
                                 <option value="">Selecciona Cuantas Imagenes Quieres Agregar</option>
@@ -620,12 +627,15 @@
                                         id="image-container-{{ $index }}"
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
-                                        data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}">
+                                        data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}"
+                                        data-foto-es-texto="{{ !empty($foto['es_cuadro_texto']) ? 1 : 0 }}">
                                         <div class="form-group">
                                             <label for="replace_image_{{ $index }}">Imagen subida {{ $index + 1 }}:</label>
 
                                             <div class="image-preview mt-2">
-                                                <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                @if(empty($foto['es_cuadro_texto']) && !empty($foto['ruta']))
+                                                    <img src="{{ asset($foto['ruta']) }}" class="img-fluid img-thumbnail" alt="Imagen Reporte">
+                                                @endif
                                             </div>
 
                                             <div class="form-check mt-2">
@@ -700,31 +710,6 @@
                             </div>
                         </div>
 
-                        <p>
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
-                        
-                        <p>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
-                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador', $Detalles_Generales['Num_Soldador'] ?? '')}}">
-                                @error('Num_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
-                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador', $Detalles_Generales['Nombre_Soldador'] ?? '')}}">
-                                @error('Nombre_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
                         <p>
 
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-success text-white rounded">SUBIR REPORTE FIRMADO</div>
@@ -810,6 +795,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
+{{-- Mantiene en Edit la misma selección, vista previa, descripción y distribución que en Create. --}}
+<script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -29,6 +29,7 @@ use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Services\ServicioAnalisisPdfXrf;
 use App\Services\ServicioImagenesPdfXrf;
+use App\Services\ServicioPatronGranoReporte;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -731,10 +732,9 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -753,6 +753,22 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Norma_IM.Promedio.*' => 'nullable|string|max:255',
             'Analisis_PDF' => 'nullable|array|max:10',
             'Analisis_PDF.*' => 'file|mimes:pdf|max:10240',
+            'Patron_Grano' => 'nullable|array',
+            'Patron_Grano.id' => 'nullable|required_if:Patron_Grano.activo,1|integer|min:1',
+            'Patron_Grano.descripcion' => 'nullable|required_with:Patron_Grano.id|string|max:500',
+            'Patron_Grano.activo' => 'nullable|boolean',
+            'Patron_Grano.usar_version_catalogo' => 'nullable|boolean',
+            'Patron_Grano.layout' => 'nullable|array',
+            'Patron_Grano.layout.pagina' => 'nullable|integer|min:1|max:999',
+            'Patron_Grano.layout.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
+            'comments' => 'nullable|array',
+            'comments.*' => 'nullable|string|max:5000',
+            'foto_es_texto' => 'nullable|array',
+            'foto_es_texto.*' => 'nullable|boolean',
+            'foto_pagina' => 'nullable|array',
+            'foto_pagina.*' => 'nullable|integer|min:1',
+            'foto_posicion' => 'nullable|array',
+            'foto_posicion.*' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
 
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
@@ -900,6 +916,18 @@ class FOR_PIMP_06_B_01Controller extends Controller
             $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
 
+        // Congela el patrón elegido dentro del expediente para proteger el reporte histórico.
+        $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
+        $patronGrano = $servicioPatronGrano->construirHistorico(
+            $request,
+            'FOR_PIMP_06_B_01',
+            (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+            (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
+        );
+        if ($patronGrano !== null) {
+            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
+        }
+
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -1022,28 +1050,33 @@ class FOR_PIMP_06_B_01Controller extends Controller
         $numeroDisparo = $request->input('numero_disparo', []);
         $fotoPaginas = $request->input('foto_pagina', []);
         $fotoPosiciones = $request->input('foto_posicion', []);
-        $hayImagenes = !empty(array_filter($imagesBase64));
-        if($hayImagenes)
+        $fotoEsTexto = $request->input('foto_es_texto', []);
+        $comentariosFoto = $request->input('comments', []);
+        $hayElementosFoto = !empty(array_filter($imagesBase64)) || !empty(array_filter($fotoEsTexto));
+        if($hayElementosFoto)
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
-        foreach ($imagesBase64 as $index => $base64Image) {
-            if (empty($base64Image)) {
+        $indicesFoto = array_unique(array_merge(array_keys($imagesBase64), array_keys($fotoEsTexto)));
+        foreach ($indicesFoto as $index) {
+            $base64Image = $imagesBase64[$index] ?? null;
+            $esCuadroTexto = !empty($fotoEsTexto[$index]);
+            if (empty($base64Image) && !$esCuadroTexto) {
                 continue;
             }
 
             $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
             $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
-            // Decodificar Base64
-            $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
-
-            // Nombre único
-            $imageName = 'imagen_' . time() . '_' . $index . '.png';
-
-            $rutaCarpeta = "public/Reportes/FOR_PIMP_06_B_01/{$Contrato}/{$No_Reporte}/Fotos";
-
-            Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+            // Un cuadro de texto no crea un archivo artificial; conserva solo contenido y distribución.
+            $rutaPublicaFoto = null;
+            if (!$esCuadroTexto) {
+                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
+                $imageName = 'imagen_' . time() . '_' . $index . '.png';
+                $rutaCarpeta = "public/Reportes/FOR_PIMP_06_B_01/{$Contrato}/{$No_Reporte}/Fotos";
+                Storage::put("{$rutaCarpeta}/{$imageName}", $image);
+                $rutaPublicaFoto = "storage/Reportes/FOR_PIMP_06_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}";
+            }
 
             // Los disparos usan un acomodo fijo de dos imágenes; las demás fotos usan el diseño manual.
             $distribucionFoto = $this->normalizeStoredPhotoLayout(
@@ -1077,8 +1110,9 @@ class FOR_PIMP_06_B_01Controller extends Controller
             }
 
             $imagenesGuardadas[] = [
-                'ruta' => "storage/Reportes/FOR_PIMP_06_B_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
-                'comentario' => $request->comments[$index] ?? null,
+                'ruta' => $rutaPublicaFoto,
+                'comentario' => $comentariosFoto[$index] ?? null,
+                'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                 'una_hoja' => $distribucionFoto['una_hoja'],
                 'pagina' => $distribucionFoto['pagina'],
                 'posicion' => $distribucionFoto['posicion'],
@@ -1160,10 +1194,9 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
-            'Detalles_Generales.Num_Soldador' => 'nullable|string',
-            'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
@@ -1183,6 +1216,22 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Norma_IM.Promedio.*' => 'nullable|string|max:255',
             'Analisis_PDF' => 'nullable|array|max:10',
             'Analisis_PDF.*' => 'file|mimes:pdf|max:10240',
+            'Patron_Grano' => 'nullable|array',
+            'Patron_Grano.id' => 'nullable|required_if:Patron_Grano.activo,1|integer|min:1',
+            'Patron_Grano.descripcion' => 'nullable|required_with:Patron_Grano.id|string|max:500',
+            'Patron_Grano.activo' => 'nullable|boolean',
+            'Patron_Grano.usar_version_catalogo' => 'nullable|boolean',
+            'Patron_Grano.layout' => 'nullable|array',
+            'Patron_Grano.layout.pagina' => 'nullable|integer|min:1|max:999',
+            'Patron_Grano.layout.posicion' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
+            'comments' => 'nullable|array',
+            'comments.*' => 'nullable|string|max:5000',
+            'foto_es_texto' => 'nullable|array',
+            'foto_es_texto.*' => 'nullable|boolean',
+            'foto_pagina' => 'nullable|array',
+            'foto_pagina.*' => 'nullable|integer|min:1',
+            'foto_posicion' => 'nullable|array',
+            'foto_posicion.*' => 'nullable|in:arriba_izquierda,arriba_derecha,abajo_izquierda,abajo_derecha,pagina_completa',
             //Validar el campo NumFirmas
             'numFirmas' => 'nullable|integer|in:1,2,3,4',
 
@@ -1343,6 +1392,24 @@ class FOR_PIMP_06_B_01Controller extends Controller
             }
             $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
+
+        // Edit conserva la copia histórica salvo que el técnico seleccione otra versión del catálogo.
+        $rutaPatronAnterior = (string) ($detallesActuales['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
+        $patronGrano = $servicioPatronGrano->construirHistorico(
+            $request,
+            'FOR_PIMP_06_B_01',
+            (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+            (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? ''),
+            is_array($detallesActuales['PATRON_GRANO'] ?? null)
+                ? $detallesActuales['PATRON_GRANO']
+                : null
+        );
+        if ($patronGrano === null) {
+            unset($validatedData['Detalles_Generales']['PATRON_GRANO']);
+        } else {
+            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
+        }
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_SONDA'] = $validatedData['Datos_Equipo']['ID_SONDA'] ?? ($datosEquipoActuales['ID_SONDA'] ?? null);
@@ -1367,6 +1434,10 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
+
+        // La copia anterior se elimina solo después de que el reporte apunta correctamente a la nueva.
+        $rutaPatronNueva = (string) ($validatedData['Detalles_Generales']['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $servicioPatronGrano->eliminarCopiaSustituida($rutaPatronAnterior, $rutaPatronNueva);
 
         $titulos_json = $request->input('titulos_data', '[]');
         //dd($titulos_json);
@@ -1584,6 +1655,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
         $existingImages = $request->input('existing_images', []);
         $comments = $request->input('comments', []);
         $imagesBase64 = $request->input('images_base64', []);
+        $fotoEsTexto = $request->input('foto_es_texto', []);
         $deletedImages = $request->input('deleted_images', []);
         $imagenHoja = $request->input('imagen_hoja', []);
         $esDisparo = $request->input('es_disparo', []);
@@ -1667,6 +1739,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
                 // Eliminar de `existingImages` para que no se guarde en la BD
                 unset($existingImages[$index]);
+                unset($fotoEsTexto[$index], $imagesBase64[$index], $comments[$index]);
             }
         }
 
@@ -1678,6 +1751,28 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
+            // Un espacio de descripción conserva su texto y distribución sin exigir una imagen.
+            if (!empty($fotoEsTexto[$index])) {
+                $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
+                $imagenesGuardadas[] = [
+                    'ruta' => $ruta ?: null,
+                    'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 1,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
+                    'es_disparo' => 0,
+                    'numero_disparo' => null,
+                    'detalles_junta' => $detalles['detalles_junta'],
+                    'datos_junta' => $detalles['datos_junta'],
+                ];
+                if (!empty($ruta)) {
+                    $rutasGuardadas[] = $ruta;
+                }
+                continue;
+            }
+
             if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
@@ -1701,6 +1796,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 0,
                     'una_hoja' => $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -1729,6 +1825,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 0,
                     'una_hoja' => $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -1748,6 +1845,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $ruta,
                     'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 0,
                     'una_hoja' => $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -1767,6 +1865,25 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 continue; // ⛔ ya fue procesada arriba
             }
 
+            // Las tarjetas en modo descripción se guardan aunque su campo de imagen esté vacío.
+            if (!empty($fotoEsTexto[$index])) {
+                $detalles = $getDetallesJunta($index);
+                $distribucionFoto = $getDistribucionFoto($index);
+                $imagenesGuardadas[] = [
+                    'ruta' => null,
+                    'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 1,
+                    'una_hoja' => $distribucionFoto['una_hoja'],
+                    'pagina' => $distribucionFoto['pagina'],
+                    'posicion' => $distribucionFoto['posicion'],
+                    'es_disparo' => 0,
+                    'numero_disparo' => null,
+                    'detalles_junta' => $detalles['detalles_junta'],
+                    'datos_junta' => $detalles['datos_junta'],
+                ];
+                continue;
+            }
+
             if (!empty($base64Image)) {
                 $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $base64Image));
                 $imageName = 'imagen_' . time() . '_' . $index . '.png';
@@ -1783,6 +1900,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 0,
                     'una_hoja' => $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -1883,10 +2001,22 @@ class FOR_PIMP_06_B_01Controller extends Controller
             $totalFotos = count($fotos); // Contar el total de imágenes
         
             foreach ($fotos as $foto) {
-                $rutaFoto = storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
+                $esCuadroTexto = !empty($foto['es_cuadro_texto']);
+                $rutaFoto = null;
+                if (!$esCuadroTexto) {
+                    $rutaGuardada = trim((string) ($foto['ruta'] ?? ''));
 
-                if (!File::exists($rutaFoto)) {
-                    continue;
+                    // Una ruta vacia resolvia a storage/app/public (una carpeta existente),
+                    // y Dompdf intentaba leerla como imagen. El anexo solo admite archivos reales.
+                    if ($rutaGuardada === '') {
+                        continue;
+                    }
+
+                    $rutaFoto = storage_path('app/public/' . ltrim(str_replace('storage/', '', $rutaGuardada), '/\\'));
+
+                    if (!File::isFile($rutaFoto)) {
+                        continue;
+                    }
                 }
 
                 $detallesActivo = $foto['detalles_junta'] ?? 0;
@@ -1910,6 +2040,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 $Fotos[] = [
                     'path' => $rutaFoto,
                     'comment' => $foto['comentario'] ?? '',
+                    'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                     'una_hoja' => $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -1919,8 +2050,11 @@ class FOR_PIMP_06_B_01Controller extends Controller
                     'datos_junta' => $datosJunta,
                 ];
             }
-            $totalFotos = count($Fotos);
         }
+
+        // El tamaño de grano participa en la misma cuadrícula posicionable que las fotografías normales.
+        app(ServicioPatronGranoReporte::class)->agregarAlPdf($Fotos, $Detalles_Generales);
+        $totalFotos = count($Fotos);
 
         $data = [
             'title' => 'Reporte_FOR-PIMP-06-B-01.PDF',

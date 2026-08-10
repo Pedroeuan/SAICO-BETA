@@ -46,6 +46,15 @@ class ServicioAnalisisImagenImageJTest extends TestCase
         $this->assertTrue(Storage::disk('public')->exists(
             "Reportes/Analisis_Imagen/987654321/{$resultado['token']}/imagen-binaria.png"
         ));
+        // Las evidencias deben resolverse en el host actual, sin depender del APP_URL del worker.
+        $this->assertSame(
+            "/storage/Reportes/Analisis_Imagen/987654321/{$resultado['token']}/imagen-visual.png",
+            $resultado['urls']['imagen_visual']
+        );
+        $this->assertSame(
+            "/storage/Reportes/Analisis_Imagen/987654321/{$resultado['token']}/imagen-binaria.png",
+            $resultado['urls']['imagen_binaria']
+        );
     }
 
     /** El histograma oficial debe conservar exactamente los 3,000 píxeles oscuros y 7,000 claros. */

@@ -118,22 +118,25 @@ class ServicioMetalografiaReporte
     }
 
     /** Construye el texto automático para reportes históricos sin redacción revisada. */
-    public function construirTextoResultados(array $analisis, array $conteo): string
+    public function construirTextoResultados(
+        array $analisis,
+        array $conteo,
+        array $datosEquipo = [],
+        array $patronGrano = []
+    ): string
     {
-        $fase = ($analisis['fase_seleccionada'] ?? 'perlita') === 'ferrita'
-            ? 'Ferrita / fase clara'
-            : 'Perlita / fase oscura';
-
         $lineas = [
             'RESULTADOS DEL ANÁLISIS METALOGRÁFICO',
-            'Archivo: ' . ($analisis['archivo_original'] ?? 'Sin nombre'),
-            'Conversión: 8 bits',
-            'Umbral: ' . ($analisis['umbral_minimo'] ?? 0) . '–' . ($analisis['umbral_maximo'] ?? 0),
-            'Fase revisada: ' . $fase,
-            'Perlita / fase oscura: ' . number_format((float) ($analisis['porcentaje_perlita'] ?? 0), 3) . ' %',
-            'Ferrita / fase clara: ' . number_format((float) ($analisis['porcentaje_ferrita'] ?? 0), 3) . ' %',
-            'Total verificado: 100.000 %',
-            'Método: ' . ($analisis['metodo_medicion'] ?? 'ImageJ Area Fraction / Measure'),
+            '',
+            'Fases presentes: ' . (trim((string) ($datosEquipo['FASES_PRESENTES'] ?? '')) ?: '---'),
+            'Morfología de la microestructura: ---',
+            '% fracción volumétrica Perlita / zonas oscuras: ' . number_format((float) ($analisis['porcentaje_perlita'] ?? 0), 3) . ' %',
+            '% fracción volumétrica Ferrita / zonas claras: ' . number_format((float) ($analisis['porcentaje_ferrita'] ?? 0), 3) . ' %',
+            'Método de tamaño de grano ASTM E112: Comparativo',
+            'Tamaño de grano: ' . (trim((string) ($patronGrano['valor_grano'] ?? $patronGrano['nombre'] ?? '')) ?: '---'),
+            'Bandeamiento: ---',
+            'Magnificación: 100 X',
+            'Analizador: Fiji',
         ];
 
         $lineasConteo = is_array($conteo['lineas'] ?? null) ? $conteo['lineas'] : [];
@@ -171,7 +174,7 @@ class ServicioMetalografiaReporte
      * Inserta la micrografía y sus resultados en los dos espacios superiores
      * del anexo. No duplica registros dentro de Fotos_Reporte.
      */
-    public function agregarAnalisisAlPdf(array &$fotos, array $detallesGenerales): void
+    public function agregarAnalisisAlPdf(array &$fotos, array $detallesGenerales, array $datosEquipo = []): void
     {
         $analisis = $detallesGenerales['ANALISIS_IMAGEN'] ?? null;
         if (!is_array($analisis) || empty($analisis['usar_en_reporte'])) {
@@ -211,7 +214,14 @@ class ServicioMetalografiaReporte
             'path' => null,
             'comment' => $descripcion !== ''
                 ? $descripcion
-                : $this->construirTextoResultados($analisis, $conteo),
+                : $this->construirTextoResultados(
+                    $analisis,
+                    $conteo,
+                    $datosEquipo,
+                    is_array($detallesGenerales['PATRON_GRANO'] ?? null)
+                        ? $detallesGenerales['PATRON_GRANO']
+                        : []
+                ),
             'es_cuadro_texto' => 1,
             'pagina' => $layout['resultados']['pagina'],
             'posicion' => $layout['resultados']['posicion'],

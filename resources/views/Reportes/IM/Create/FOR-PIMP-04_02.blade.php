@@ -56,6 +56,33 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        /* Acordeon visual del FOR-PIMP-04_02.
+           Solo ordena la captura en bloques; no cambia nombres de campos ni estructura enviada al servidor. */
+        .saico-form-section {
+            border: 1px solid #0d6efd;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.08);
+        }
+
+        .saico-form-section-header {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .saico-form-section-header .saico-section-icon {
+            margin-left: auto;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .saico-form-section-body {
+            padding: 12px;
+        }
+
+        .saico-form-section.is-collapsed .saico-form-section-body {
+            display: none !important;
+        }
     </style>
 @endsection
 
@@ -263,7 +290,9 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Procedimiento:</label>
-                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento')}}">
+                            {{-- Igual que PINS, el procedimiento pertenece al formato y no se captura manualmente. --}}
+                            <input type="text" class="form-control inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]" value="{{ old('Detalles_Generales.Procedimiento', $Procedimiento->Nombre ?? '') }}" readonly>
+                            <input type="hidden" name="Detalles_Generales[idProcedimiento]" value="{{ $Procedimiento->idProcedimiento ?? '' }}">
                             @error('Procedimiento')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -529,46 +558,8 @@
                         </div>
                     </div>
 
-                    {{-- Datos metalográficos que se imprimirán en la primera hoja del anexo fotográfico. --}}
-                    <div class="col-12">
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">ANÁLISIS METALOGRÁFICO</div>
-                        <div class="table-responsive mb-3">
-                            <table class="table table-bordered text-center align-middle mb-0">
-                                <colgroup>
-                                    <col style="width: 12%;"><col style="width: 10%;"><col style="width: 12%;">
-                                    <col style="width: 10%;"><col style="width: 12%;"><col style="width: 10%;">
-                                    <col style="width: 12%;"><col style="width: 11%;"><col style="width: 11%;">
-                                </colgroup>
-                                <thead class="bg-primary text-white">
-                                    <tr>
-                                        <th colspan="3">NÚMERO DE LIJA PARA EL DESBASTE</th>
-                                        <th colspan="2">MATERIAL PARA EL PULIDO</th>
-                                        <th colspan="2">DATOS DE ATAQUE QUÍMICO</th>
-                                        <th>FASES PRESENTES</th>
-                                        <th>ESPECIFICACIÓN APROXIMADA DEL MATERIAL</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>240</td><td>320</td><td>400</td>
-                                        <th class="bg-light">PAÑO</th>
-                                        <td><input type="text" class="form-control text-center" name="Datos_Equipo[MATERIAL_PANO]" value="{{ old('Datos_Equipo.MATERIAL_PANO') }}"></td>
-                                        <th class="bg-light">REACTIVO</th>
-                                        <td><input type="text" class="form-control text-center" name="Datos_Equipo[REACTIVO]" value="{{ old('Datos_Equipo.REACTIVO') }}"></td>
-                                        <td rowspan="2"><textarea class="form-control text-center h-100" rows="3" name="Datos_Equipo[FASES_PRESENTES]">{{ old('Datos_Equipo.FASES_PRESENTES') }}</textarea></td>
-                                        <td rowspan="2"><textarea class="form-control text-center h-100" rows="3" name="Datos_Equipo[ESPECIFICACION_MATERIAL]">{{ old('Datos_Equipo.ESPECIFICACION_MATERIAL') }}</textarea></td>
-                                    </tr>
-                                    <tr>
-                                        <td>500</td><td>1000</td><td>1500</td>
-                                        <th class="bg-light">ABRASIVO</th>
-                                        <td><input type="text" class="form-control text-center" name="Datos_Equipo[MATERIAL_ABRASIVO]" value="{{ old('Datos_Equipo.MATERIAL_ABRASIVO') }}"></td>
-                                        <th class="bg-light">TIEMPO</th>
-                                        <td><input type="text" class="form-control text-center" name="Datos_Equipo[TIEMPO_ATAQUE]" value="{{ old('Datos_Equipo.TIEMPO_ATAQUE') }}"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {{-- Datos metalográficos compartidos por 03_B/01, 04_02 y 04_03. --}}
+                    @include('Reportes.IM.partials.datos-metalograficos', ['esEdicionMetalografica' => false])
 
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
 
@@ -931,32 +922,6 @@
                                 </div>
                             </div>
                         </div>
-                        <p>
-
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS SOLDADOR</div>
-                        
-                        <p>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Num. de Soldador:</label>
-                                <input type="text" class="form-control  inputForm @error('Num_Soldador') is-invalid @enderror" name="Detalles_Generales[Num_Soldador]"  placeholder="Ejemplo: 12345" value="{{old('Detalles_Generales.Num_Soldador')}}">
-                                @error('Num_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Nombre soldador/Iniciales:</label>
-                                <input type="text" class="form-control  inputForm @error('Nombre_Soldador') is-invalid @enderror" name="Detalles_Generales[Nombre_Soldador]"  placeholder="Ejemplo: Juan Pérez" value="{{old('Detalles_Generales.Nombre_Soldador')}}">
-                                @error('Nombre_Soldador')
-                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                @enderror
-                            </div>
-                        </div>
-
                         <div class="container">
                             <div class="float-right">
                                 <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
@@ -1003,6 +968,95 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 <script>
+    // Agrupa el formato en 4 partes grandes para que el usuario no vea toda la captura de golpe.
+    // Produccion: no modifica inputs, names ni valores; solo mueve nodos en pantalla dentro del mismo formulario.
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-PIMP-04_02');
+        if (!form || form.dataset.saicoSecciones04Inicializadas === '1') return;
+
+        form.dataset.saicoSecciones04Inicializadas = '1';
+
+        const normalizar = function (texto) {
+            return (texto || '').replace(/\s+/g, ' ').trim().toUpperCase();
+        };
+
+        const encabezados = Array.from(form.querySelectorAll('.d-flex.justify-content-center.align-items-center.p-2.bg-primary.text-white.rounded'));
+        const buscarEncabezado = function (texto) {
+            return encabezados.find(function (encabezado) {
+                return normalizar(encabezado.textContent).includes(texto);
+            });
+        };
+
+        const secciones = [
+            { clave: 'generales', titulo: '1. Datos generales', encabezado: buscarEncabezado('DATOS GENERALES'), abierta: true },
+            { clave: 'equipo', titulo: '2. Datos del equipo', encabezado: buscarEncabezado('DATOS DEL EQUIPO'), abierta: false },
+            { clave: 'norma', titulo: '3. Norma y resultados', encabezado: buscarEncabezado('NORMA Y RESULTADOS'), abierta: false },
+            { clave: 'final', titulo: '4. Fraccion de fases, granos, firmas y fotos', encabezado: buscarEncabezado('FRACCI'), abierta: false },
+        ].filter(function (seccion) {
+            return seccion.encabezado;
+        }).map(function (seccion) {
+            // El encabezado de Fiji vive dentro de su componente; el acordeon debe iniciar en el contenedor completo.
+            seccion.inicio = seccion.clave === 'final'
+                ? (seccion.encabezado.closest('[data-imagej-phase]') || seccion.encabezado)
+                : seccion.encabezado;
+
+            return seccion;
+        });
+
+        secciones.forEach(function (seccion, indice) {
+            const siguienteInicio = secciones[indice + 1] ? secciones[indice + 1].inicio : null;
+            const contenedor = document.createElement('div');
+            const cuerpo = document.createElement('div');
+            const icono = document.createElement('span');
+            const claveEstado = 'saico:FOR-PIMP-04_02:seccion:' + window.location.pathname + ':' + seccion.clave;
+            const estadoGuardado = localStorage.getItem(claveEstado);
+            const abierta = estadoGuardado === null ? seccion.abierta : estadoGuardado === '1';
+
+            contenedor.className = 'col-12 saico-form-section mb-3' + (abierta ? '' : ' is-collapsed');
+            cuerpo.className = 'saico-form-section-body row';
+            icono.className = 'saico-section-icon';
+
+            seccion.encabezado.classList.add('saico-form-section-header');
+            seccion.encabezado.setAttribute('role', 'button');
+            seccion.encabezado.setAttribute('tabindex', '0');
+            seccion.encabezado.innerHTML = '<span>' + seccion.titulo + '</span>';
+            seccion.encabezado.appendChild(icono);
+
+            const actualizarVista = function () {
+                const cerrado = contenedor.classList.contains('is-collapsed');
+                icono.textContent = cerrado ? '+' : '-';
+                // Bootstrap carga estilos .row despues en esta vista; por eso se fuerza el display aqui tambien.
+                cuerpo.style.display = cerrado ? 'none' : 'flex';
+            };
+
+            const alternar = function () {
+                contenedor.classList.toggle('is-collapsed');
+                localStorage.setItem(claveEstado, contenedor.classList.contains('is-collapsed') ? '0' : '1');
+                actualizarVista();
+            };
+
+            seccion.inicio.parentNode.insertBefore(contenedor, seccion.inicio);
+            contenedor.appendChild(seccion.encabezado);
+
+            let nodo = contenedor.nextSibling;
+            while (nodo && nodo !== siguienteInicio) {
+                const mover = nodo;
+                nodo = nodo.nextSibling;
+                cuerpo.appendChild(mover);
+            }
+
+            contenedor.appendChild(cuerpo);
+            actualizarVista();
+
+            seccion.encabezado.addEventListener('click', alternar);
+            seccion.encabezado.addEventListener('keydown', function (evento) {
+                if (evento.key === 'Enter' || evento.key === ' ') {
+                    evento.preventDefault();
+                    alternar();
+                }
+            });
+        });
+    });
 
  /*Selects */
     /* Selects de equipos */
