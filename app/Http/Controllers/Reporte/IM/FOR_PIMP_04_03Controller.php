@@ -27,6 +27,7 @@ use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Normas_IM\Normas_IM;
+use App\Models\Procedimientos\Procedimiento;
 use App\Services\ServicioAnalisisPdfXrf;
 use App\Services\ServicioImagenesPdfXrf;
 use App\Services\ServicioRegistrosFotos;
@@ -50,6 +51,128 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_04_03Controller extends Controller
 {
+    /** Devuelve las rutas posibles de un PDF guardado en BD sin asumir un solo prefijo. */
+    private function getPdfCandidatePaths($rutaDb)
+    {
+        if (empty($rutaDb)) {
+            return [];
+        }
+
+        $ruta = trim(str_replace('\\', '/', $rutaDb));
+        if ($ruta === '') {
+            return [];
+        }
+
+        $ruta = preg_replace('#^/?storage/#', '', $ruta);
+        $ruta = preg_replace('#^/?public/#', '', $ruta);
+        $ruta = ltrim($ruta, '/');
+
+        $candidates = [];
+
+        if (preg_match('#^([A-Za-z]:[\\/]|/)#', $rutaDb)) {
+            $candidates[] = $rutaDb;
+        }
+
+        $candidates[] = storage_path('app/public/' . $ruta);
+        $candidates[] = storage_path($ruta);
+        $candidates[] = public_path($ruta);
+        $candidates[] = public_path('storage/' . $ruta);
+        $candidates[] = public_path('public/' . $ruta);
+
+        return array_values(array_unique($candidates));
+    }
+
+    /** Resuelve el archivo real para facturas, certificados y procedimientos anexados al QR. */
+    private function resolvePdfPath($rutaDb)
+    {
+        foreach ($this->getPdfCandidatePaths($rutaDb) as $candidate) {
+            if ($candidate && is_file($candidate)) {
+                return $candidate;
+            }
+        }
+
+        $ruta = trim(str_replace('\\', '/', $rutaDb));
+        $ruta = preg_replace('#^/?storage/#', '', $ruta);
+        $ruta = preg_replace('#^/?public/#', '', $ruta);
+        $ruta = ltrim($ruta, '/');
+
+        $storagePublicDisk = Storage::disk('public');
+        if ($storagePublicDisk->exists($ruta)) {
+            return $storagePublicDisk->path($ruta);
+        }
+
+        return null;
+    }
+
+    /** Busca Ghostscript por variable de entorno, rutas comunes o PATH antes de compatibilizar PDFs. */
+    private function detectGhostscriptBinary()
+    {
+        $candidates = [];
+
+        foreach ([getenv('GHOSTSCRIPT_BIN'), getenv('GS_BIN'), getenv('GS_PATH')] as $envCandidate) {
+            if (!empty($envCandidate)) {
+                $candidates[] = $envCandidate;
+            }
+        }
+
+        $candidates = array_merge($candidates, [
+            'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs9.55.0\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs9.55.0\\bin\\gswin64c',
+        ]);
+
+        if (is_dir('C:\\Program Files\\gs')) {
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gswin64c*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gswin32c*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gs*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+        }
+
+        foreach (['gswin64c.exe', 'gswin64c', 'gswin32c.exe', 'gswin32c', 'gs.exe', 'gs'] as $name) {
+            $candidates[] = $name;
+        }
+
+        foreach (array_unique($candidates) as $candidate) {
+            if (empty($candidate)) {
+                continue;
+            }
+
+            if (is_string($candidate) && is_file($candidate)) {
+                return $candidate;
+            }
+
+            if (PHP_OS_FAMILY === 'Windows') {
+                $command = 'where.exe ' . escapeshellarg($candidate) . ' 2>nul';
+                exec($command, $output, $exitCode);
+
+                if ($exitCode === 0 && !empty($output[0])) {
+                    return trim($output[0]);
+                }
+            } else {
+                $command = 'command -v ' . escapeshellarg($candidate) . ' 2>/dev/null';
+                exec($command, $output, $exitCode);
+
+                if ($exitCode === 0 && !empty($output[0])) {
+                    return trim($output[0]);
+                }
+            }
+        }
+
+        return null;
+    }
+
     /** Normaliza la página y el cuadrante de una foto para que el PDF reciba una distribución válida. */
     private function normalizeFotoLayout($pagina, $posicion, $index): array
     {
@@ -502,6 +625,7 @@ class FOR_PIMP_04_03Controller extends Controller
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
         $token = $datosParaCrearQR['qr_token'] ?? null;
+        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? null;
 
         $idsConsumibles = array_filter([
             $datosParaCrearQR['idEquipo'] ?? null,
@@ -526,7 +650,15 @@ class FOR_PIMP_04_03Controller extends Controller
             ->pluck('Certificado_Actual')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+        // El QR de IM debe anexar los documentos de equipos y, cuando exista, el procedimiento usado.
+        $procedimientos = $idProcedimiento
+            ? Procedimiento::where('idProcedimiento', $idProcedimiento)
+                ->whereNotNull('PDF')
+                ->pluck('PDF')
+                ->toArray()
+            : [];
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados, $procedimientos));
 
         /*
         |--------------------------------------------------------------------------
@@ -565,10 +697,14 @@ class FOR_PIMP_04_03Controller extends Controller
         */
 
         foreach ($rutasValidas as $rutaPdf) {
-            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
+            $rutaOriginal = $this->resolvePdfPath($rutaPdf);
 
-            if (!File::exists($rutaOriginal)) {
-                Log::warning('PDF no encontrado', ['ruta' => $rutaOriginal]);
+            if (!$rutaOriginal || !File::exists($rutaOriginal)) {
+                Log::warning('PDF no encontrado para anexar en QR 04_03', [
+                    'rutaDb' => $rutaPdf,
+                    'rutaOriginal' => $rutaOriginal,
+                    'rutasProbadas' => $this->getPdfCandidatePaths($rutaPdf),
+                ]);
                 continue;
             }
 
@@ -624,6 +760,7 @@ class FOR_PIMP_04_03Controller extends Controller
         */
 
         $pdf = new Fpdi();
+        $ghostscript = $this->detectGhostscriptBinary();
 
         foreach ($pdfsTemporales as $archivoPdf) {
             try {
@@ -634,22 +771,31 @@ class FOR_PIMP_04_03Controller extends Controller
                 */
 
                 $archivoCompatible = str_replace('.pdf', '_compatible.pdf', $archivoPdf);
+                $archivoParaImportar = $archivoPdf;
 
-                $comando =
-                    'gswin64c -sDEVICE=pdfwrite '
-                    . '-dCompatibilityLevel=1.4 '
-                    . '-dNOPAUSE '
-                    . '-dQUIET '
-                    . '-dBATCH '
-                    . '-sOutputFile="'
-                    . $archivoCompatible
-                    . '" "'
-                    . $archivoPdf
-                    . '"';
+                if ($ghostscript) {
+                    $comando =
+                        escapeshellarg($ghostscript) . ' -sDEVICE=pdfwrite '
+                        . '-dCompatibilityLevel=1.4 '
+                        . '-dNOPAUSE '
+                        . '-dQUIET '
+                        . '-dBATCH '
+                        . '-sOutputFile=' . escapeshellarg($archivoCompatible) . ' '
+                        . escapeshellarg($archivoPdf);
 
-                exec($comando);
+                    exec($comando, $salidaGhostscript, $codigoGhostscript);
 
-                $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
+                    if ($codigoGhostscript === 0 && File::exists($archivoCompatible)) {
+                        $archivoParaImportar = $archivoCompatible;
+                    } else {
+                        Log::warning('Ghostscript no pudo compatibilizar PDF 04_03; se intentara leer original.', [
+                            'archivo' => $archivoPdf,
+                            'codigo' => $codigoGhostscript,
+                        ]);
+                    }
+                }
+
+                $cantidadPaginas = $pdf->setSourceFile($archivoParaImportar);
 
                 for ($pagina = 1; $pagina <= $cantidadPaginas; $pagina++) {
                     $template = $pdf->importPage($pagina);
@@ -1200,6 +1346,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'idEquipo1' => $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? null,
             'idSonda' => $validatedData['Datos_Equipo']['ID_SONDA'] ?? null,
             'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null,
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
         ];
 
         /*
@@ -1750,6 +1897,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'idEquipo1' => $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? null,
             'idSonda' => $validatedData['Datos_Equipo']['ID_SONDA'] ?? null,
             'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null,
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
         ];
 
         $resultadoQR = $this->Datos_QR($datosParaCrearQR);
@@ -2312,6 +2460,7 @@ class FOR_PIMP_04_03Controller extends Controller
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
         $qrPdf = !empty($Datos_Equipo['QR_PDF']) ? public_path(str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])) : null;
+        $qrPdf = ($qrPdf && File::exists($qrPdf)) ? $qrPdf : null;
         $Fotos = [];
         $Disparos = [];
         $totalFotos = 0;

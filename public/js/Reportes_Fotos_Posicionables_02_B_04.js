@@ -165,6 +165,52 @@
         }
     }
 
+    /* Comentarios sugeridos para el registro fotografico del FOR-PIMP-04/03. */
+    function comentarioPredeterminado0403(posicion) {
+        var comentarios = {
+            arriba_izquierda: 'FOTOMICROGRAFIA A 100X.',
+            abajo_izquierda: 'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112.',
+            abajo_derecha: 'FOTOGRAFÍA ESPECÍFICA DONDE SE MUESTRA LA ZONA A LA CUAL SE LE REALIZÓ LA CARACTERIZACIÓN.'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+    function esComentarioPredeterminado0403(valor) {
+        return [
+            'FOTOMICROGRAFIA A 100X.',
+            'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112.',
+            'FOTOGRAFÍA ESPECÍFICA DONDE SE MUESTRA LA ZONA A LA CUAL SE LE REALIZÓ LA CARACTERIZACIÓN.'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado0403(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var checkboxTexto;
+        var textoActual;
+        var sugerido;
+
+        if (!formulario || formulario.id !== 'FOR-PIMP-04_03') return;
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+        seleccion = contenedor.querySelector('input[type="radio"][data-foto-posicion]:checked');
+        checkboxTexto = contenedor.querySelector('.foto-texto-checkbox');
+
+        // Los cuadros de texto usan su propio contenido; no se les impone pie de fotografia.
+        if (!comentario || !seleccion || (checkboxTexto && checkboxTexto.checked)) return;
+
+        sugerido = comentarioPredeterminado0403(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (sugerido && (textoActual === '' || esComentarioPredeterminado0403(textoActual))) {
+            comentario.value = sugerido;
+        } else if (!sugerido && esComentarioPredeterminado0403(textoActual)) {
+            comentario.value = '';
+        }
+    }
+
     /* Crea e inserta los controles de pagina y posicion de una fotografia. */
     function crearControl(contenedor, orden) {
         var indice;
@@ -265,11 +311,13 @@
         bloque.querySelectorAll('input[type="radio"][data-foto-posicion]').forEach(function (radio) {
             radio.addEventListener('change', function () {
                 sincronizarHojaCompleta(contenedor);
+                aplicarComentarioPredeterminado0403(contenedor);
             });
         });
 
         // También sincroniza el valor inicial al crear los controles.
         sincronizarHojaCompleta(contenedor);
+        aplicarComentarioPredeterminado0403(contenedor);
 
         // En modo texto se oculta la carga de archivo y el comentario ocupa el espacio completo.
         if (permiteCuadroTexto) {
@@ -292,10 +340,16 @@
                     comentario.placeholder = activo
                         ? 'Escriba el contenido que aparecerá dentro del cuadro de texto'
                         : 'Comentario de la fotografía';
+                    if (activo && esComentarioPredeterminado0403(comentario.value)) {
+                        comentario.value = '';
+                    }
                 }
             };
 
             checkboxTexto.addEventListener('change', actualizarModoTexto);
+            checkboxTexto.addEventListener('change', function () {
+                aplicarComentarioPredeterminado0403(contenedor);
+            });
             actualizarModoTexto();
         }
 
@@ -553,8 +607,10 @@
                 .map(Number)
                 .filter(Number.isFinite);
 
+            // El promedio de dureza se reporta como numero entero:
+            // se calcula con todas las lecturas validas y se redondea el resultado final.
             promedio.value = numeros.length
-                ? (numeros.reduce(function (total, valor) { return total + valor; }, 0) / numeros.length).toFixed(2)
+                ? String(Math.round(numeros.reduce(function (total, valor) { return total + valor; }, 0) / numeros.length))
                 : '';
         }
 

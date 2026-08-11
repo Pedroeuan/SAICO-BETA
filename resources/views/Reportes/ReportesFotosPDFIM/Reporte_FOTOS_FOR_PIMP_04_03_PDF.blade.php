@@ -20,7 +20,7 @@
         }
         header { 
             position: fixed; 
-            top: -32px; 
+            top: -38px; 
             left: 0; 
             right: 0; 
             text-align: 
@@ -41,7 +41,7 @@
             border-collapse: collapse; 
             width: 100%; 
             text-align: center; 
-            font-size: 10px;
+            font-size: 9.5px;
         }
         .tablaheader th { 
             border: 1px solid #000; 
@@ -216,7 +216,9 @@
             height: 412px;
         }
         .photo-empty { 
-            background: #fff; 
+            /* Conserva la posicion en la cuadricula sin dibujar borde cuando no hay foto, grano ni texto. */
+            border: none !important;
+            background: transparent; 
         }
         .photo-full { 
             height: 412px;
@@ -272,6 +274,15 @@
         .firmas-im .firma-separacion-cuatro td { 
         padding-top: 16px; 
         }
+        .etiquetaGeneralCentrada {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+        .etiquetaGeneralCentrada .titulo-es-nowrap {
+            display: block;
+            white-space: nowrap;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -280,8 +291,13 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width:400%">FORMATO</th>
-                <th style="width:70%">CÓDIGO</th>
+                <th style="width:360%">FORMATO</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
+                </th>
+                <th style="width:60%">CÓDIGO</th>
                 <th style="width:100%">FOR-PIMP-04_B/03</th>
                 <th rowspan="3" style="width:80%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
@@ -401,6 +417,7 @@
             $paginasFotos[$pagina]['espacios'][$posicion] = $foto;
         }
     }
+
     ksort($paginasFotos);
 @endphp
 
@@ -422,7 +439,7 @@
                     <th>FECHA:</th><td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div>
                     </td>
-                    <th>No. REPORTE:</th><td class="line" colspan="2">
+                    <th class="etiquetaGeneralCentrada">No. REPORTE:</th><td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div>
                     </td>
                 </tr>
@@ -430,7 +447,7 @@
                     <th>CLIENTE:</th><td class="line" colspan="3">
                         <div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div>
                     </td>
-                    <th>CONTRATO:</th><td class="line">
+                    <th class="etiquetaGeneralCentrada">CONTRATO:</th><td class="line">
                         <div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div>
                     </td>
                 </tr>
@@ -455,21 +472,23 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>INSTALACIÓN:</th><td class="line" colspan="3">
+                    <th>INSTALACIÓN:</th>
+                    <td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</div>
                     </td>
-                    <th class="etiqueta-larga">No. DE ISOMÉTRICO:</th><td class="line">
+                    <th class="etiquetaGeneralCentrada">No. DE ISOMÉTRICO:</th>
+                    <td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</div>
                     </td>
                 </tr>
                 <tr>
-                    <th class="etiqueta-larga">NOMBRE DE LA PIEZA:</th><td class="line">
+                    <th>NOMBRE DE LA PIEZA:</th><td class="line">
                         <div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div>
                     </td>
-                    <th>MATERIAL:</th><td class="line">
+                    <th class="etiquetaGeneralCentrada">MATERIAL:</th><td class="line">
                         <div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div>
                     </td>
-                    <th>TRAZABILIDAD:</th><td class="line">
+                    <th class="etiquetaGeneralCentrada">TRAZABILIDAD:</th><td class="line">
                         <div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div>
                     </td>
                 </tr>
@@ -477,8 +496,21 @@
                     <th>PROCEDIMIENTO:</th><td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['Procedimiento'] ?? 'PRO-PIMP-04' }}</div>
                     </td>
-                    <th class="etiqueta-larga">CRITERIO DE EVALUACIÓN:</th><td class="line" colspan="2">
+                    <th class="etiquetaGeneralCentrada">CRITERIO DE EVALUACIÓN:</th><td class="line" colspan="2">
                         <div class="linea-general">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>ACCESORIO:</th>
+                    <td class="line"><div class="linea-general">{{ $Detalles_Generales['Accesorio'] ?? '' }}</div>
+                    </td>
+                    <th class="etiquetaGeneralCentrada">TUBERÍA:</th>
+                    <td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Tuberia'] ?? '' }}</div>
+                    </td>
+                    <th class="etiquetaGeneralCentrada">ESTRUCTURAL:</th>
+                    <td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Estructural'] ?? '' }}</div>
                     </td>
                 </tr>
                 <tr>
@@ -567,6 +599,12 @@
                     </td>
                 </tr>
             @else
+                @php
+                    // Solo se dibuja la fila que contiene al menos una foto, grano o cuadro de texto.
+                    $hayFotosArriba = isset($espacios['arriba_izquierda']) || isset($espacios['arriba_derecha']);
+                    $hayFotosAbajo = isset($espacios['abajo_izquierda']) || isset($espacios['abajo_derecha']);
+                @endphp
+                @if($hayFotosArriba)
                 <tr>
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
@@ -583,6 +621,8 @@
                         @endif
                     @endforeach
                 </tr>
+                @endif
+                @if($hayFotosAbajo)
                 <tr>
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
@@ -598,6 +638,7 @@
                         @endif
                     @endforeach
                 </tr>
+                @endif
             @endif
         </table>
     </div>

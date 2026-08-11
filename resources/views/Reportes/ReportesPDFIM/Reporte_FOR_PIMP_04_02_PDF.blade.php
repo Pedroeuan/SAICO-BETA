@@ -142,11 +142,14 @@
             padding-top: 20px !important;
         }
         .tablaResultadosQuimicos {
-            width: 70%;
+            /* Tabla comparativa mas compacta y centrada dentro de su columna. */
+            width: 62%;
             border-collapse: collapse;
             table-layout: fixed;
             font-size: 5.7px;
             margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .tablaResultadosQuimicos th,
         .tablaResultadosQuimicos td {
@@ -494,6 +497,11 @@
 {{-- Siempre se imprimen diez celdas de dureza, aun cuando algunas lecturas estén vacías. --}}
 @php
     $valoresDurezaPdf = array_values(array_pad(array_slice($Datos_Equipo['VALORES_DUREZA'] ?? [], 0, 10), 10, ''));
+    // El promedio de dureza se presenta redondeado sin decimales, aunque venga guardado con decimal.
+    $promedioDurezaPdf = $Datos_Equipo['PROMEDIO_DUREZA'] ?? '';
+    if ($promedioDurezaPdf !== '' && is_numeric(str_replace(',', '.', $promedioDurezaPdf))) {
+        $promedioDurezaPdf = (string) round((float) str_replace(',', '.', $promedioDurezaPdf));
+    }
 @endphp
 <table class="grid hardness-values">
     <colgroup>
@@ -514,7 +522,7 @@
         <tr>
             @foreach(array_slice($valoresDurezaPdf, 0, 5) as $valor)<td>{{ $valor }}</td>@endforeach
             <th class="label" rowspan="2">PROMEDIO</th>
-            <td rowspan="2">{{ $Datos_Equipo['PROMEDIO_DUREZA'] ?? '' }}</td>
+            <td rowspan="2">{{ $promedioDurezaPdf }}</td>
         </tr>
         <tr>@foreach(array_slice($valoresDurezaPdf, 5, 5) as $valor)<td>{{ $valor }}</td>@endforeach</tr>
     </tbody>

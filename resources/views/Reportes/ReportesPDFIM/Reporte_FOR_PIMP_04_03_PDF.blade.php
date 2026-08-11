@@ -4,227 +4,242 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-04/03</title>
     <style>
-        @page { 
-            margin: 2cm 1.2cm 1.1cm 2.2cm; 
+        @page {
+            margin: 2cm 
+            1.2cm 
+            1.5cm 
+            2.2cm;
         }
-        body { 
-            font-family: Arial, sans-serif; 
-            margin-top: 27px; 
-            padding-top: 0; 
-            padding-bottom: 0; 
-            color: #000; 
+        body {
+            font-family: Arial, sans-serif;
+            margin-top: 27px;
+            padding-top: 0;
+            padding-bottom: 0;
+            color: #000;
         }
-        header { 
-            position: fixed; 
-            top: -32px; 
-            left: 0; 
-            right: 0; 
-            height: auto; 
-            text-align: center; 
+        header {
+            position: fixed;
+            top: -38px;
+            left: 0;
+            right: 0;
+            height: auto;
+            text-align: center;
         }
-        footer { 
-            position: fixed; 
-            bottom: -30px; 
-            left: 0; 
-            right: 0; 
-            height: auto; 
-            text-align: center; 
+        footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            height: auto;
+            text-align: center;
         }
-        table { 
-            border-collapse: collapse; 
-            width: 100%; 
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
-        .tablaheader { 
-            border-collapse: collapse; 
-            width: 100%; 
-            text-align: center; 
-            font-size: 10px; 
+        .tablaheader {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+            font-size: 9.5px;
         }
-        .tablaheader th { 
-            border: 1px solid #000; 
+        .tablaheader th {
+            border: 1px solid #000;
         }
-        .section-title, .encabezadoAzul { 
-            background: #305496; 
-            color: #fff; 
-            text-align: center; 
-            font-weight: bold; 
-            font-size: 8px; 
+        .section-title, .encabezadoAzul {
+            background: #305496;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+            font-size: 8px;
         }
-        .section-title th { 
-            border: .7px solid #000; 
-            padding: 2px; 
+        .section-title th {
+            border: .7px solid #000;
+            padding: 2px;
         }
-        .tablaGenerales { 
-            border-collapse: collapse; 
-            width: 100%; 
-            font-size: 8px; 
-            table-layout: fixed; 
+        .tablaGenerales {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+            table-layout: fixed;
         }
-        .tablaGenerales th, .tablaGenerales td { 
-            padding: 1.5px; 
-            vertical-align: middle; 
+        .tablaGenerales th, .tablaGenerales td {
+            padding: 1.5px;
+            vertical-align: middle;
         }
-        .tablaGenerales tbody th { 
-            width: 15%; 
-            font-weight: bold; 
-            white-space: nowrap; 
-            line-height: 10px; 
-            text-align: left; 
-            padding-left: 2px; 
+        .tablaGenerales tbody th {
+            width: 15%;
+            font-weight: bold;
+            white-space: nowrap;
+            line-height: 10px;
+            text-align: left;
+            padding-left: 2px;
         }
-        .tablaGenerales tbody th.etiqueta-larga { 
-            font-size: 7px; 
+        .tablaGenerales tbody th.etiqueta-larga {
+            font-size: 7px;
         }
-        .etiquetaGeneral { 
-            width: 15%; 
-            font-weight: bold; 
-            white-space: nowrap; 
-            line-height: 10px; 
-            text-align: left; 
-            padding-left: 2px; 
-            vertical-align: middle; 
+        .etiquetaGeneral {
+            width: 15%;
+            font-weight: bold;
+            white-space: nowrap;
+            line-height: 10px;
+            text-align: left;
+            padding-left: 2px;
+            vertical-align: middle;
         }
-        .etiquetaGeneralCentrada { 
-            text-align: center; 
-            vertical-align: middle; 
+
+        .etiquetaGeneralCentrada {
+            text-align: center !important;
+            vertical-align: middle !important;
         }
-        .valorGeneral { 
-            border-bottom: 1px solid #000; 
-            text-align: center; 
-            vertical-align: middle; 
-            height: 10px; 
+        .etiquetaGeneralCentrada .titulo-es-nowrap {
+            display: block;
+            white-space: nowrap;
+            text-align: center;
         }
-        .tablaGenerales .line { 
-            padding: 1.5px 0 0 5px; 
-            text-align: center; 
-            vertical-align: middle; 
+        .valorGeneral {
+            border-bottom: 1px solid #000;
+            text-align: center;
+            vertical-align: middle;
+            height: 10px;
         }
-        .linea-general { 
-            min-height: 10px; 
-            line-height: 10px; 
-            border-bottom: 1px solid #000; 
-            box-sizing: border-box; 
-            text-align: center; 
+        .tablaGenerales .line {
+            padding: 1.5px 0 0 5px;
+            text-align: center;
+            vertical-align: middle;
         }
-        .linea-desplazada { 
-            margin-left: 7mm; 
+        .linea-general {
+            min-height: 10px;
+            line-height: 10px;
+            border-bottom: 1px solid #000;
+            box-sizing: border-box;
+            text-align: center;
         }
-        .spacer { 
-            height: 3px; 
+        .linea-desplazada {
+            margin-left: 7mm;
         }
-        .grid { 
-            table-layout: fixed; 
-            text-align: center; 
-            font-size: 8px; 
+        .spacer {
+            height: 3px;
         }
-        .grid th, .grid td { 
-            border: .6px solid #000; 
-            padding: 2px; 
-            line-height: 7px; 
+        .grid {
+            table-layout: fixed;
+            text-align: center;
+            font-size: 8px;
         }
-        .grid .label { 
-            background: #e7e6e6; 
-            font-weight: bold; 
+        .grid th, .grid td {
+            border: .6px solid #000;
+            padding: 2px;
+            line-height: 7px;
+        }
+        .grid .label {
+            background: #e7e6e6;
+            font-weight: bold;
         }
         .hardness-values tbody td,
-        .hardness-values tbody th { 
-            height: 8px; 
-            padding: .5px 1px; 
-            line-height: 7px; 
-            font-size: 7px; 
+        .hardness-values tbody th {
+            height: 8px;
+            padding: .5px 1px;
+            line-height: 7px;
+            font-size: 7px;
         }
-        .shots { 
-            table-layout: fixed; 
+        .shots {
+            table-layout: fixed;
         }
-        .shot-cell { 
-            width: 50%; 
-            padding: 2px 4px 1px; 
-            vertical-align: top; 
+        .shot-cell {
+            width: 50%;
+            /* Menos margen interno para que los disparos ocupen mejor el espacio disponible del formato. */
+            padding: 1px 3px 1px;
+            vertical-align: top;
         }
-        .shot-title { 
-            background: #305496; 
-            color: #fff; 
-            border: .6px solid #000; 
-            text-align: center; 
-            font-weight: bold; 
-            padding: 2px; 
-            font-size: 5.8px; 
+        .shot-title {
+            background: #305496;
+            color: #fff;
+            border: .6px solid #000;
+            text-align: center;
+            font-weight: bold;
+            padding: 2px;
+            font-size: 6.8px;
         }
-        .shot-images { 
-            table-layout: fixed; 
+        .shot-images {
+            table-layout: fixed;
         }
-        .shot-images td { 
-            width: 50%; 
-            padding: 2px; 
+        .shot-images td {
+            width: 50%;
+            padding: 1px;
         }
-        .shot-image { 
-            height: 4.25cm; 
-            border: .6px solid #000; 
-            
+        .shot-image {
+            /* Crecimiento moderado: 04_03 tiene mas tablas arriba que 06_B/01. */
+            height: 4.7cm;
+            border: .6px solid #000;
+
             text-align: center; }
-        .shot-image img { 
-            width: 100%; 
-            height: 4.2cm; 
-            object-fit: contain; 
+        .shot-image img {
+            width: 100%;
+            height: 4.65cm;
+            object-fit: contain;
         }
-        .chemical { 
-            table-layout: fixed; 
-            text-align: center; 
-            font-size: 5.2px; 
+        .chemical {
+            table-layout: fixed;
+            text-align: center;
+            font-size: 5.2px;
+            /* Tabla comparativa mas angosta y centrada dentro de la celda derecha del 04_03. */
+            width: 86%;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .chemical th, .chemical td { 
-            border: .6px solid #000; 
-            padding: 1px; 
-            line-height: 5.8px; 
-            overflow-wrap: break-word; 
+        .chemical th, .chemical td {
+            border: .6px solid #000;
+            padding: 1px;
+            line-height: 5.8px;
+            overflow-wrap: break-word;
         }
-        .chemical thead th { 
-            background: #e7e6e6; 
-            font-weight: bold; 
+        .chemical thead th {
+            background: #e7e6e6;
+            font-weight: bold;
         }
-        .firmas-im { 
-            width: 100%; 
-            border-collapse: collapse; 
-            table-layout: fixed; 
+        .firmas-im {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
         }
-        .firmas-im td { 
-            text-align: center; 
-            vertical-align: top; 
-            padding: 0 12px; 
-            font-size: 8px; 
+        .firmas-im td {
+            text-align: center;
+            vertical-align: top;
+            padding: 0 12px;
+            font-size: 8px;
         }
-        .firmas-im .firma-titulo { 
-            font-weight: bold; 
-            line-height: 11px; 
-            min-height: 8px; 
+        .firmas-im .firma-titulo {
+            font-weight: bold;
+            line-height: 11px;
+            min-height: 8px;
         }
-        .firmas-im .firma-linea { 
-            border-bottom: 1px solid #000; 
-            height: 10px; 
-            margin-top: 0; 
-            line-height: 10px; 
-            padding-top: 10px; 
-            box-sizing: border-box; 
-            font-weight: bold; 
+        .firmas-im .firma-linea {
+            border-bottom: 1px solid #000;
+            height: 10px;
+            margin-top: 0;
+            line-height: 10px;
+            padding-top: 10px;
+            box-sizing: border-box;
+            font-weight: bold;
         }
-        .firmas-im .firma-dato { 
-            margin-top: 2px; 
-            line-height: 10px; 
-            font-weight: bold; 
+        .firmas-im .firma-dato {
+            margin-top: 2px;
+            line-height: 10px;
+            font-weight: bold;
         }
-        .firmas-im .firma-ficha { 
-            margin-top: 2px; 
-            line-height: 10px; 
-            font-weight: bold; 
+        .firmas-im .firma-ficha {
+            margin-top: 2px;
+            line-height: 10px;
+            font-weight: bold;
         }
-        .firmas-im-4 td { 
-            padding: 2px 12px 0 12px; 
+        .firmas-im-4 td {
+            padding: 2px 12px 0 12px;
         }
-        .firmas-im .firma-separacion-tres td { 
-            padding-top: 0px; 
+        .firmas-im .firma-separacion-tres td {
+            padding-top: 0px;
         }
-        .firmas-im .firma-separacion-cuatro td { 
-            padding-top: 16px; 
+        .firmas-im .firma-separacion-cuatro td {
+            padding-top: 16px;
         }
     </style>
 </head>
@@ -234,8 +249,13 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width:400%">FORMATO</th>
-                <th style="width:70%">CÓDIGO</th>
+                <th style="width:360%">FORMATO</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
+                </th>
+                <th style="width:60%">CÓDIGO</th>
                 <th style="width:100%">FOR-PIMP-04_B/03</th>
                 <th rowspan="3" style="width:80%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
@@ -353,7 +373,7 @@
             <td class="line" colspan="2">
                 <div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div>
             </td>
-            <th>No. REPORTE:</th>
+            <th class="etiquetaGeneralCentrada">No. REPORTE:</th>
             <td class="line" colspan="2">
                 <div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div>
             </td>
@@ -363,7 +383,7 @@
             <td class="line" colspan="3">
                 <div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div>
             </td>
-            <th>CONTRATO:</th>
+            <th class="etiquetaGeneralCentrada">CONTRATO:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div>
             </td>
@@ -391,24 +411,24 @@
         </tr>
         <tr>
             <th>INSTALACIÓN:</th>
-            <td class="line" colspan="3">
+            <td class="line" colspan="2">
                 <div class="linea-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</div>
             </td>
-            <th class="etiqueta-larga">No. DE ISOMÉTRICO:</th>
-            <td class="line">
+            <th class="etiquetaGeneralCentrada">No. DE ISOMÉTRICO:</th>
+            <td class="line" colspan="2">
                 <div class="linea-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</div>
             </td>
         </tr>
         <tr>
-            <th class="etiqueta-larga">NOMBRE DE LA PIEZA:</th>
+            <th>NOMBRE DE LA PIEZA:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div>
             </td>
-            <th>MATERIAL:</th>
+            <th class="etiquetaGeneralCentrada">MATERIAL:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div>
             </td>
-            <th>TRAZABILIDAD:</th>
+            <th class="etiquetaGeneralCentrada">TRAZABILIDAD:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div>
             </td>
@@ -418,7 +438,7 @@
             <td class="line" colspan="2">
                 <div class="linea-general">{{ $Detalles_Generales['Procedimiento'] ?? 'PRO-PIMP-04' }}</div>
             </td>
-            <th class="etiqueta-larga">CRITERIO DE EVALUACIÓN:</th>
+            <th class="etiquetaGeneralCentrada">CRITERIO DE EVALUACIÓN:</th>
             <td class="line" colspan="2">
                 <div class="linea-general">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div>
             </td>
@@ -427,11 +447,11 @@
             <th>ACCESORIO:</th>
             <td class="line"><div class="linea-general">{{ $Detalles_Generales['Accesorio'] ?? '' }}</div>
             </td>
-            <th>TUBERÍA:</th>
+            <th class="etiquetaGeneralCentrada">TUBERÍA:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Tuberia'] ?? '' }}</div>
             </td>
-            <th>ESTRUCTURAL:</th>
+            <th class="etiquetaGeneralCentrada">ESTRUCTURAL:</th>
             <td class="line">
                 <div class="linea-general">{{ $Detalles_Generales['Estructural'] ?? '' }}</div>
             </td>
@@ -473,6 +493,11 @@
 {{-- Siempre se imprimen diez celdas de dureza, aun cuando algunas lecturas estén vacías. --}}
 @php
     $valoresDurezaPdf = array_values(array_pad(array_slice($Datos_Equipo['VALORES_DUREZA'] ?? [], 0, 10), 10, ''));
+    // El promedio de dureza se presenta redondeado sin decimales, aunque venga guardado con decimal.
+    $promedioDurezaPdf = $Datos_Equipo['PROMEDIO_DUREZA'] ?? '';
+    if ($promedioDurezaPdf !== '' && is_numeric(str_replace(',', '.', $promedioDurezaPdf))) {
+        $promedioDurezaPdf = (string) round((float) str_replace(',', '.', $promedioDurezaPdf));
+    }
 @endphp
 <table class="grid hardness-values">
     <colgroup>
@@ -486,7 +511,7 @@
     </colgroup>
     <thead>
         <tr class="section-title">
-            <th colspan="7">VALORES DE DUREZA MEDIDOS (ESCALA {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }})</th>
+            <th colspan="7">VALORES DE DUREZA MEDIDOS EN {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }}</th>
         </tr>
     </thead>
     <tbody>
@@ -495,7 +520,7 @@
             <td>{{ $valor }}</td>
             @endforeach
             <th class="label" rowspan="2">PROMEDIO</th>
-            <td rowspan="2">{{ $Datos_Equipo['PROMEDIO_DUREZA'] ?? '' }}</td>
+            <td rowspan="2">{{ $promedioDurezaPdf }}</td>
         </tr>
         <tr>
             @foreach(array_slice($valoresDurezaPdf, 5, 5) as $valor)
