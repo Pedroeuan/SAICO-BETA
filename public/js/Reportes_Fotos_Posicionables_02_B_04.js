@@ -252,6 +252,61 @@
             comentario.value = '';
         }
     }
+    /* Comentarios automáticos exclusivos para FOR-PIMP-02_B_04 */
+    function comentarioPredeterminado02B04(posicion) {
+        var comentarios = {
+            arriba_izquierda:
+                'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece',
+
+            abajo_derecha:
+                'FOTO: REALIZACIÓN DE LA PRUEBA DE DUREZA\nPhoto: Hardness Test Performance'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+    function esComentarioPredeterminado02B04(valor) {
+        return [
+            'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece',
+            'FOTO: REALIZACIÓN DE LA PRUEBA DE DUREZA\nPhoto: Hardness Test Performance'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado02B04(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var textoActual;
+        var sugerido;
+
+        if (!formulario || formulario.id !== 'FOR-PIMP-02_B_04') {
+            return;
+        }
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+        seleccion = contenedor.querySelector(
+            'input[type="radio"][data-foto-posicion]:checked'
+        );
+
+        if (!comentario || !seleccion) {
+            return;
+        }
+
+        sugerido = comentarioPredeterminado02B04(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (
+            sugerido &&
+            (textoActual === '' || esComentarioPredeterminado02B04(textoActual))
+        ) {
+            comentario.value = sugerido;
+        } else if (
+            !sugerido &&
+            esComentarioPredeterminado02B04(textoActual)
+        ) {
+            comentario.value = '';
+        }
+    }
 
     function aplicarComentarioPredeterminado0403(contenedor) {
         var formulario = contenedor.closest('form');
@@ -380,6 +435,7 @@
         bloque.querySelectorAll('input[type="radio"][data-foto-posicion]').forEach(function (radio) {
             radio.addEventListener('change', function () {
                 sincronizarHojaCompleta(contenedor);
+                aplicarComentarioPredeterminado02B04(contenedor);
                 aplicarComentarioPredeterminado0403(contenedor);
                 aplicarComentarioPredeterminado03B01(contenedor);
             });
@@ -387,6 +443,7 @@
 
         // También sincroniza el valor inicial al crear los controles.
         sincronizarHojaCompleta(contenedor);
+        aplicarComentarioPredeterminado02B04(contenedor);
         aplicarComentarioPredeterminado0403(contenedor);
         aplicarComentarioPredeterminado03B01(contenedor);
 
