@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Reporte\IM;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Usuario;
 
 use App\Models\OC\OC;
 use App\Models\Prueba\prueba;
@@ -27,6 +28,7 @@ use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Normas_IM\Normas_IM;
+use App\Models\Procedimientos\Procedimiento;
 use App\Services\ServicioAnalisisPdfXrf;
 use App\Services\ServicioImagenesPdfXrf;
 use App\Services\ServicioAnalisisColumnasPdfXrf;
@@ -53,6 +55,128 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_04_02Controller extends Controller
 {
+    /** Devuelve las rutas posibles de un PDF guardado en BD sin asumir un solo prefijo. */
+    private function getPdfCandidatePaths($rutaDb)
+    {
+        if (empty($rutaDb)) {
+            return [];
+        }
+
+        $ruta = trim(str_replace('\\', '/', $rutaDb));
+        if ($ruta === '') {
+            return [];
+        }
+
+        $ruta = preg_replace('#^/?storage/#', '', $ruta);
+        $ruta = preg_replace('#^/?public/#', '', $ruta);
+        $ruta = ltrim($ruta, '/');
+
+        $candidates = [];
+
+        if (preg_match('#^([A-Za-z]:[\\/]|/)#', $rutaDb)) {
+            $candidates[] = $rutaDb;
+        }
+
+        $candidates[] = storage_path('app/public/' . $ruta);
+        $candidates[] = storage_path($ruta);
+        $candidates[] = public_path($ruta);
+        $candidates[] = public_path('storage/' . $ruta);
+        $candidates[] = public_path('public/' . $ruta);
+
+        return array_values(array_unique($candidates));
+    }
+
+    /** Resuelve el archivo real para facturas, certificados y procedimientos anexados al QR. */
+    private function resolvePdfPath($rutaDb)
+    {
+        foreach ($this->getPdfCandidatePaths($rutaDb) as $candidate) {
+            if ($candidate && is_file($candidate)) {
+                return $candidate;
+            }
+        }
+
+        $ruta = trim(str_replace('\\', '/', $rutaDb));
+        $ruta = preg_replace('#^/?storage/#', '', $ruta);
+        $ruta = preg_replace('#^/?public/#', '', $ruta);
+        $ruta = ltrim($ruta, '/');
+
+        $storagePublicDisk = Storage::disk('public');
+        if ($storagePublicDisk->exists($ruta)) {
+            return $storagePublicDisk->path($ruta);
+        }
+
+        return null;
+    }
+
+    /** Busca Ghostscript por variable de entorno, rutas comunes o PATH antes de compatibilizar PDFs. */
+    private function detectGhostscriptBinary()
+    {
+        $candidates = [];
+
+        foreach ([getenv('GHOSTSCRIPT_BIN'), getenv('GS_BIN'), getenv('GS_PATH')] as $envCandidate) {
+            if (!empty($envCandidate)) {
+                $candidates[] = $envCandidate;
+            }
+        }
+
+        $candidates = array_merge($candidates, [
+            'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs9.55.0\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs9.55.0\\bin\\gswin64c',
+        ]);
+
+        if (is_dir('C:\\Program Files\\gs')) {
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gswin64c*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gswin32c*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gs*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+        }
+
+        foreach (['gswin64c.exe', 'gswin64c', 'gswin32c.exe', 'gswin32c', 'gs.exe', 'gs'] as $name) {
+            $candidates[] = $name;
+        }
+
+        foreach (array_unique($candidates) as $candidate) {
+            if (empty($candidate)) {
+                continue;
+            }
+
+            if (is_string($candidate) && is_file($candidate)) {
+                return $candidate;
+            }
+
+            if (PHP_OS_FAMILY === 'Windows') {
+                $command = 'where.exe ' . escapeshellarg($candidate) . ' 2>nul';
+                exec($command, $output, $exitCode);
+
+                if ($exitCode === 0 && !empty($output[0])) {
+                    return trim($output[0]);
+                }
+            } else {
+                $command = 'command -v ' . escapeshellarg($candidate) . ' 2>/dev/null';
+                exec($command, $output, $exitCode);
+
+                if ($exitCode === 0 && !empty($output[0])) {
+                    return trim($output[0]);
+                }
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Normaliza el conteo lineal enviado por el lienzo del navegador.
      *
@@ -704,6 +828,8 @@ class FOR_PIMP_04_02Controller extends Controller
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
         $token = $datosParaCrearQR['qr_token'] ?? null;
+        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? null;
+        $idTecnico = $datosParaCrearQR['ID_TECNICO'] ?? null;
 
         $idsConsumibles = array_filter([
             $datosParaCrearQR['idEquipo'] ?? null,
@@ -728,7 +854,23 @@ class FOR_PIMP_04_02Controller extends Controller
             ->pluck('Certificado_Actual')
             ->toArray();
 
-        $todasLasRutas = array_values(array_merge($facturas, $certificados));
+        // El QR de IM debe anexar los documentos de equipos y, cuando exista, el procedimiento usado.
+        $procedimientos = $idProcedimiento
+            ? Procedimiento::where('idProcedimiento', $idProcedimiento)
+                ->whereNotNull('PDF')
+                ->pluck('PDF')
+                ->toArray()
+            : [];
+
+        // Igual que en PINS, si se seleccionó un técnico se anexa su CV al PDF vinculado por QR.
+        $tecnicos = $idTecnico
+            ? Usuario::where('id', $idTecnico)
+                ->whereNotNull('cv_pdf')
+                ->pluck('cv_pdf')
+                ->toArray()
+            : [];
+
+        $todasLasRutas = array_values(array_merge($facturas, $certificados, $procedimientos, $tecnicos));
 
         /*
         |--------------------------------------------------------------------------
@@ -767,10 +909,14 @@ class FOR_PIMP_04_02Controller extends Controller
         */
 
         foreach ($rutasValidas as $rutaPdf) {
-            $rutaOriginal = storage_path('app/public/' . $rutaPdf);
+            $rutaOriginal = $this->resolvePdfPath($rutaPdf);
 
-            if (!File::exists($rutaOriginal)) {
-                Log::warning('PDF no encontrado', ['ruta' => $rutaOriginal]);
+            if (!$rutaOriginal || !File::exists($rutaOriginal)) {
+                Log::warning('PDF no encontrado para anexar en QR 04_02', [
+                    'rutaDb' => $rutaPdf,
+                    'rutaOriginal' => $rutaOriginal,
+                    'rutasProbadas' => $this->getPdfCandidatePaths($rutaPdf),
+                ]);
                 continue;
             }
 
@@ -826,6 +972,7 @@ class FOR_PIMP_04_02Controller extends Controller
         */
 
         $pdf = new Fpdi();
+        $ghostscript = $this->detectGhostscriptBinary();
 
         foreach ($pdfsTemporales as $archivoPdf) {
             try {
@@ -836,22 +983,31 @@ class FOR_PIMP_04_02Controller extends Controller
                 */
 
                 $archivoCompatible = str_replace('.pdf', '_compatible.pdf', $archivoPdf);
+                $archivoParaImportar = $archivoPdf;
 
-                $comando =
-                    'gswin64c -sDEVICE=pdfwrite '
-                    . '-dCompatibilityLevel=1.4 '
-                    . '-dNOPAUSE '
-                    . '-dQUIET '
-                    . '-dBATCH '
-                    . '-sOutputFile="'
-                    . $archivoCompatible
-                    . '" "'
-                    . $archivoPdf
-                    . '"';
+                if ($ghostscript) {
+                    $comando =
+                        escapeshellarg($ghostscript) . ' -sDEVICE=pdfwrite '
+                        . '-dCompatibilityLevel=1.4 '
+                        . '-dNOPAUSE '
+                        . '-dQUIET '
+                        . '-dBATCH '
+                        . '-sOutputFile=' . escapeshellarg($archivoCompatible) . ' '
+                        . escapeshellarg($archivoPdf);
 
-                exec($comando);
+                    exec($comando, $salidaGhostscript, $codigoGhostscript);
 
-                $cantidadPaginas = $pdf->setSourceFile($archivoCompatible);
+                    if ($codigoGhostscript === 0 && File::exists($archivoCompatible)) {
+                        $archivoParaImportar = $archivoCompatible;
+                    } else {
+                        Log::warning('Ghostscript no pudo compatibilizar PDF 04_02; se intentara leer original.', [
+                            'archivo' => $archivoPdf,
+                            'codigo' => $codigoGhostscript,
+                        ]);
+                    }
+                }
+
+                $cantidadPaginas = $pdf->setSourceFile($archivoParaImportar);
 
                 for ($pagina = 1; $pagina <= $cantidadPaginas; $pagina++) {
                     $template = $pdf->importPage($pagina);
@@ -1181,6 +1337,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -1190,6 +1347,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -1205,6 +1363,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1225,6 +1384,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1378,6 +1538,12 @@ class FOR_PIMP_04_02Controller extends Controller
             'idEquipo1' => $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? null,
             'idSonda' => $validatedData['Datos_Equipo']['ID_SONDA'] ?? null,
             'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null,
+            // El técnico seleccionado permite anexar su CV al QR, igual que en PINS.
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes4.ID_TECNICO'),
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
         ];
 
         /*
@@ -1413,7 +1579,7 @@ class FOR_PIMP_04_02Controller extends Controller
         //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
         $numFilasSin = count($filasSinTitulo);//agregar
 
-        // 🔹 cuántas filas debe tener cada bloque
+        // ðŸ”¹ cuántas filas debe tener cada bloque
         $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
         $bloques = []; //agregar
@@ -1511,7 +1677,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 $index
             );
 
-            // ✔ Detalles Junta activado
+            // âœ” Detalles Junta activado
             $detallesJunta = isset($request->detalles_junta_check[$index]) 
                                 ? (bool)$request->detalles_junta_check[$index] 
                                 : false;
@@ -1712,6 +1878,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -1721,6 +1888,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -1736,6 +1904,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1756,6 +1925,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1909,6 +2079,12 @@ class FOR_PIMP_04_02Controller extends Controller
             'idEquipo1' => $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? null,
             'idSonda' => $validatedData['Datos_Equipo']['ID_SONDA'] ?? null,
             'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null,
+            // El técnico seleccionado permite anexar su CV al QR, igual que en PINS.
+            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes2.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes3.ID_TECNICO')
+                ?? $request->input('Firmas_Reportes4.ID_TECNICO'),
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
         ];
 
         $resultadoQR = $this->Datos_QR($datosParaCrearQR);
@@ -1936,7 +2112,7 @@ class FOR_PIMP_04_02Controller extends Controller
         //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
         $numFilasSin = count($filasSinTitulo);//agregar
 
-        // 🔹 cuántas filas debe tener cada bloque
+        // ðŸ”¹ cuántas filas debe tener cada bloque
         $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
         $bloques = []; //agregar
@@ -2233,7 +2409,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 'datos_junta' => $detalles['datos_junta'],
             ];
         };
-        // **1️⃣ Eliminar imágenes marcadas para borrar**
+        // **1ï¸âƒ£ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
             $rutaExistente = trim((string) ($existingImages[$index] ?? ''));
 
@@ -2264,7 +2440,7 @@ class FOR_PIMP_04_02Controller extends Controller
         // **Evitar duplicados en las rutas ya guardadas**
         $rutasGuardadas = [];
 
-        // **2️⃣ Procesar imágenes existentes**
+        // **2ï¸âƒ£ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
             if (!empty($fotoEsTexto[$index])) {
                 $imagenesGuardadas[] = $crearRegistroFoto($index, $ruta);
@@ -2357,10 +2533,10 @@ class FOR_PIMP_04_02Controller extends Controller
             }
         }
 
-        // **3️⃣ Procesar nuevas imágenes Base64**
+        // **3ï¸âƒ£ Procesar nuevas imágenes Base64**
         foreach ($imagesBase64 as $index => $base64Image) {
             if (isset($existingImages[$index])) {
-                continue; // ⛔ ya fue procesada arriba
+                continue; // â›” ya fue procesada arriba
             }
 
             if (!empty($fotoEsTexto[$index])) {
@@ -2399,7 +2575,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         $imagenesGuardadas = ServicioRegistrosFotos::deduplicar($imagenesGuardadas);
 
-        // **4️⃣ Guardar las imágenes actualizadas en la BD**
+        // **4ï¸âƒ£ Guardar las imágenes actualizadas en la BD**
         if ($Fotos_Reportes) {
             $Fotos_Reportes->update([
                 'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)), // Se usa array reindexado
@@ -2479,6 +2655,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
         $qrPdf = !empty($Datos_Equipo['QR_PDF']) ? public_path(str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])) : null;
+        $qrPdf = ($qrPdf && File::exists($qrPdf)) ? $qrPdf : null;
         $CapturaXrf = null;
         if (!empty($NormaIM['Captura_XRF']['ruta'])) {
             $rutaCaptura = storage_path('app/public/' . str_replace('storage/', '', $NormaIM['Captura_XRF']['ruta']));
@@ -2520,7 +2697,7 @@ class FOR_PIMP_04_02Controller extends Controller
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
 
-                    // 🔥 NUEVO
+                    // ðŸ”¥ NUEVO
                     'detalles_junta' => $detallesActivo,
                     'datos_junta' => $datosJunta,
                 ];
@@ -2586,7 +2763,7 @@ class FOR_PIMP_04_02Controller extends Controller
         }
 
 
-        // Ahora sí combinamos
+        // Ahora si­ combinamos
         $combinedPdf = new Fpdi();
         $totalPageCount = $pageCount1 + $pageCount2;
 
@@ -2597,7 +2774,8 @@ class FOR_PIMP_04_02Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(151.5, 25);
+            // El encabezado 04_02 ahora incluye QR; esta coordenada alinea la paginacion con la celda PAGINA.
+            $combinedPdf->SetXY(152.5, 25);
             $combinedPdf->Cell(24, 3.5, "$i DE $totalPageCount", 0, 0, 'C');
         }
 
@@ -2611,7 +2789,8 @@ class FOR_PIMP_04_02Controller extends Controller
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY(151.5, 25);
+                // Mantiene la misma posicion de paginacion en las paginas del anexo fotografico.
+                $combinedPdf->SetXY(152.5, 25);
                 $combinedPdf->Cell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 0, 'C');
             }
         }

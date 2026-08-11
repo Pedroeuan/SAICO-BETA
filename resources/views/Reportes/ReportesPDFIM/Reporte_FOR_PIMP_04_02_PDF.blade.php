@@ -5,125 +5,125 @@
     <title>FOR-PIMP-04/02</title>
 
     <style>
-        @page { 
-            margin: 2cm 1.2cm 2.1cm 2.2cm; 
+        @page {
+            margin: 2cm 1.2cm 2.1cm 2.2cm;
         }
-        body { 
-            font-family: Arial, sans-serif; 
-            margin-top: 27px; 
-            padding-top: 0; 
-            padding-bottom: 0; 
-            color: #000; 
+        body {
+            font-family: Arial, sans-serif;
+            margin-top: 27px;
+            padding-top: 0;
+            padding-bottom: 0;
+            color: #000;
         }
-        header { 
-            position: fixed; 
-            top: -32px; 
-            left: 0; 
-            right: 0; 
-            height: auto; 
-            text-align: center; 
-        }
-        footer { 
-            position: fixed; 
-            /* Baja ligeramente las firmas sin acercarlas al contenido del análisis químico. */
-            bottom: -38px;
-            left: 0; 
-            right: 0; 
-            height: auto; 
-            text-align: center; 
-        }
-        table { 
-            border-collapse: collapse; 
-            width: 100%; 
-        }
-        .tablaheader { 
-            border-collapse: collapse; 
-            width: 100%; 
-            text-align: center; 
-            font-size: 10px; 
-        }
-        .tablaheader th { 
-            border: 1px solid #000; 
-        }
-        .section-title, .encabezadoAzul { 
-            background: #305496; 
-            color: #fff; 
-            text-align: center; 
-            font-weight: bold; 
-            font-size: 8px; 
-        }
-        .section-title th { 
-            border: .7px solid #000; 
-            padding: 2px; 
-        }
-        .tablaGenerales { 
-            border-collapse: collapse; 
-            width: 100%; 
-            font-size: 8px; 
-            table-layout: fixed; 
-        }
-        .tablaGenerales th, .tablaGenerales td { 
-            padding: 1.5px; 
-            vertical-align: middle; 
-        }
-        .tablaGenerales tbody th { 
-            width: 15%; 
-            font-weight: bold; 
-            white-space: nowrap; 
-            line-height: 10px; 
-            text-align: left; 
-            padding-left: 2px; 
-        }
-        .tablaGenerales tbody th.etiqueta-larga { 
+        header {
+            position: fixed;
+            top: -38px;
+            left: 0;
+            right: 0;
+            height: auto;
             text-align: center;
         }
-        .tablaGenerales .line { 
-            padding: 1.5px 0 0 5px; 
-            text-align: center; 
-            vertical-align: middle; 
+        footer {
+            position: fixed;
+            /* Baja ligeramente las firmas sin acercarlas al contenido del análisis químico. */
+            bottom: -38px;
+            left: 0;
+            right: 0;
+            height: auto;
+            text-align: center;
         }
-        .linea-general { 
-            min-height: 10px; 
-            line-height: 10px; 
-            border-bottom: 1px solid #000; 
-            box-sizing: border-box; 
-            text-align: center; 
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
-        .linea-desplazada { 
-            margin-left: 7mm; 
+        .tablaheader {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+            font-size: 9.5px;
         }
-        .spacer { 
-            height: 3px; 
+        .tablaheader th {
+            border: 1px solid #000;
         }
-        .grid { 
-            table-layout: fixed; 
-            text-align: center; 
-            font-size: 8px; 
+        .section-title, .encabezadoAzul {
+            background: #305496;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+            font-size: 8px;
         }
-        .grid th, .grid td { 
-            border: .6px solid #000; 
-            padding: 2px; 
-            line-height: 7px; 
+        .section-title th {
+            border: .7px solid #000;
+            padding: 2px;
         }
-        .grid .label { 
-            background: #e7e6e6; 
-            font-weight: bold; 
+        .tablaGenerales {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+            table-layout: fixed;
+        }
+        .tablaGenerales th, .tablaGenerales td {
+            padding: 1.5px;
+            vertical-align: middle;
+        }
+        .tablaGenerales tbody th {
+            width: 15%;
+            font-weight: bold;
+            white-space: nowrap;
+            line-height: 10px;
+            text-align: left;
+            padding-left: 2px;
+        }
+        .tablaGenerales tbody th.etiqueta-larga {
+            text-align: center;
+        }
+        .tablaGenerales .line {
+            padding: 1.5px 0 0 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .linea-general {
+            min-height: 10px;
+            line-height: 10px;
+            border-bottom: 1px solid #000;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .linea-desplazada {
+            margin-left: 7mm;
+        }
+        .spacer {
+            height: 3px;
+        }
+        .grid {
+            table-layout: fixed;
+            text-align: center;
+            font-size: 8px;
+        }
+        .grid th, .grid td {
+            border: .6px solid #000;
+            padding: 2px;
+            line-height: 7px;
+        }
+        .grid .label {
+            background: #e7e6e6;
+            font-weight: bold;
         }
         .hardness-values tbody td,
-        .hardness-values tbody th { 
-            height: 8px; 
-            padding: .5px 1px; 
-            line-height: 7px; 
-            font-size: 7px; 
+        .hardness-values tbody th {
+            height: 8px;
+            padding: .5px 1px;
+            line-height: 7px;
+            font-size: 7px;
         }
         .paginaComposicion {
             page-break-before: auto;
         }
         .layoutComposicion {
-            width: 100%;
+            width: 92%;
             border-collapse: collapse;
             table-layout: fixed;
-            margin-top: 0;
+            margin-top: auto; /* centra ambas tablas como conjunto */
         }
         .layoutComposicion > tbody > tr > td {
             padding: 0;
@@ -134,16 +134,16 @@
             width: 50%;
         }
         .resultadoComposicion {
-            padding-right: 7px !important;
+            padding-right: 5px !important;
         }
         .capturaComposicion {
-            padding-left: 7px !important;
+            padding-left: 5px !important;
             /* Alinea la captura XRF con el inicio de la tabla de composición teórica. */
             padding-top: 20px !important;
         }
         .tablaResultadosQuimicos {
             /* Tabla comparativa mas compacta y centrada dentro de su columna. */
-            width: 62%;
+            width: 78%;
             border-collapse: collapse;
             table-layout: fixed;
             font-size: 5.7px;
@@ -185,64 +185,70 @@
             line-height: 8px;
             text-align: center;
         }
+        .bloqueCapturaQuimica {
+            /* El contenedor manda: encabezado e imagen respetan el mismo ancho real en dompdf. */
+            max-width: 100%;
+            margin: 0 auto;
+            margin-right: auto;
+        }
         .tituloCapturaQuimica {
-            width: 80%;
+            width: 97.5%;
             margin: 0;
         }
         .imagenCapturaQuimica {
             display: block;
             /* Conserva la proporción original y limita la captura para respetar las firmas. */
-            width: auto;
+            width: 100%;
             height: auto;
-            max-width: 80%;
+            max-width: 100%;
             max-height: 235px;
             margin: 0;
             object-fit: contain;
             object-position: center top;
         }
-        .firmas-im { 
-            width: 100%; 
-            border-collapse: collapse; 
-            table-layout: fixed; 
+        .firmas-im {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
         }
-        .firmas-im td { 
-            text-align: center; 
-            vertical-align: top; 
-            padding: 0 12px; 
-            font-size: 8px; 
+        .firmas-im td {
+            text-align: center;
+            vertical-align: top;
+            padding: 0 12px;
+            font-size: 8px;
         }
-        .firmas-im .firma-titulo { 
-            font-weight: bold; 
-            line-height: 11px; 
-            min-height: 8px; 
+        .firmas-im .firma-titulo {
+            font-weight: bold;
+            line-height: 11px;
+            min-height: 8px;
         }
-        .firmas-im .firma-linea { 
-            border-bottom: 1px solid #000; 
-            height: 10px; 
-            margin-top: 0; 
-            line-height: 10px; 
-            padding-top: 10px; 
-            box-sizing: border-box; 
-            font-weight: bold; 
+        .firmas-im .firma-linea {
+            border-bottom: 1px solid #000;
+            height: 10px;
+            margin-top: 0;
+            line-height: 10px;
+            padding-top: 10px;
+            box-sizing: border-box;
+            font-weight: bold;
         }
-        .firmas-im .firma-dato { 
-            margin-top: 2px; 
-            line-height: 10px; 
-            font-weight: bold; 
+        .firmas-im .firma-dato {
+            margin-top: 2px;
+            line-height: 10px;
+            font-weight: bold;
         }
-        .firmas-im .firma-ficha { 
-            margin-top: 2px; 
-            line-height: 10px; 
-            font-weight: bold; 
+        .firmas-im .firma-ficha {
+            margin-top: 2px;
+            line-height: 10px;
+            font-weight: bold;
         }
-        .firmas-im-4 td { 
-            padding: 2px 12px 0 12px; 
+        .firmas-im-4 td {
+            padding: 2px 12px 0 12px;
         }
-        .firmas-im .firma-separacion-tres td { 
-            padding-top: 0px; 
+        .firmas-im .firma-separacion-tres td {
+            padding-top: 0px;
         }
-        .firmas-im .firma-separacion-cuatro td { 
-            padding-top: 16px; 
+        .firmas-im .firma-separacion-cuatro td {
+            padding-top: 16px;
         }
         .centro{
             text-align: center;
@@ -255,7 +261,12 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width:400%">FORMATO</th>
+                <th style="width:360%">FORMATO</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
+                </th>
                 <th style="width:70%">CÓDIGO</th>
                 <th style="width:100%">FOR-PIMP-04/02</th>
                 <th rowspan="3" style="width:80%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
@@ -515,7 +526,7 @@
     </colgroup>
     <thead>
         <tr class="section-title">
-            <th colspan="7">VALORES DE DUREZA MEDIDOS (ESCALA {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }})</th>
+            <th colspan="7">VALORES DE DUREZA MEDIDOS EN {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }}</th>
         </tr>
     </thead>
     <tbody>
@@ -610,15 +621,15 @@
     $capturaAnchoTituloPdf = null;
 
     if ($capturaAnchoOriginal > 0 && $capturaAltoOriginal > 0) {
-        $escalaCaptura = min(270 / $capturaAnchoOriginal, 235 / $capturaAltoOriginal);
+        $escalaCaptura = min(320 / $capturaAnchoOriginal, 270 / $capturaAltoOriginal);
         $capturaAnchoPdf = max(1, (int) round($capturaAnchoOriginal * $escalaCaptura));
         $capturaAltoPdf = max(1, (int) round($capturaAltoOriginal * $escalaCaptura));
-        // Compensa el margen blanco derecho que forma parte de la captura generada.
-        $capturaAnchoTituloPdf = max(1, $capturaAnchoPdf - 16);
+        // El encabezado debe abarcar exactamente el mismo ancho que el recorte XRF visible en el PDF.
+        $capturaAnchoTituloPdf = $capturaAnchoPdf;
     }
 @endphp
 <div class="paginaComposicion">
-    
+
 {{-- El bloque inicia inmediatamente para reservar una separación segura antes de las firmas. --}}
 <div style="margin-bottom: 0;"></div>
 
@@ -649,18 +660,16 @@
                     </table>
                 </td>
                 <td class="capturaComposicion">
-                    <div class="tituloCapturaQuimica"
-                         @if($capturaAnchoTituloPdf) style="width: {{ $capturaAnchoTituloPdf }}px;" @endif>
-                        VALORES OBTENIDOS DE LA PIEZA ANALIZADA<br>
+                    <div class="bloqueCapturaQuimica" @if($capturaAnchoPdf) style="width: {{ $capturaAnchoPdf }}px;" @endif>
+                        <div class="tituloCapturaQuimica">
+                            VALORES OBTENIDOS DE LA PIEZA ANALIZADA<br>
+                        </div>
+                        @if(!empty($CapturaXrf))
+                            <img class="imagenCapturaQuimica"
+                                src="{{ $CapturaXrf }}"
+                                alt="Captura del análisis químico">
+                        @endif
                     </div>
-                    @if(!empty($CapturaXrf))
-                        <img class="imagenCapturaQuimica"
-                             src="{{ $CapturaXrf }}"
-                             alt="Captura del análisis químico"
-                             @if($capturaAnchoPdf && $capturaAltoPdf)
-                                 style="width: {{ $capturaAnchoPdf }}px; height: {{ $capturaAltoPdf }}px;"
-                             @endif>
-                    @endif
                 </td>
             </tr>
         </tbody>

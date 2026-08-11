@@ -165,7 +165,7 @@
         }
     }
 
-    /* Comentarios sugeridos para el registro fotografico del FOR-PIMP-04/03. */
+    /* Comentarios sugeridos para el registro fotografico de FOR-PIMP-04/02 y FOR-PIMP-04/03. */
     function comentarioPredeterminado0403(posicion) {
         var comentarios = {
             arriba_izquierda: 'FOTOMICROGRAFIA A 100X.',
@@ -192,7 +192,7 @@
         var textoActual;
         var sugerido;
 
-        if (!formulario || formulario.id !== 'FOR-PIMP-04_03') return;
+        if (!formulario || ['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].indexOf(formulario.id) === -1) return;
 
         comentario = contenedor.querySelector('textarea[name^="comments"]');
         seleccion = contenedor.querySelector('input[type="radio"][data-foto-posicion]:checked');
