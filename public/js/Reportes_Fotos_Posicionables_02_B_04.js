@@ -183,6 +183,75 @@
             'FOTOGRAFÍA ESPECÍFICA DONDE SE MUESTRA LA ZONA A LA CUAL SE LE REALIZÓ LA CARACTERIZACIÓN.'
         ].indexOf(String(valor || '').trim()) !== -1;
     }
+    /* Comentarios automáticos exclusivos para FOR-PIMP-03_B_01 */
+    function comentarioPredeterminado03B01(posicion) {
+        var comentarios = {
+            arriba_izquierda:
+                'FOTOMICROGRAFIA A 100X.\nPHOTOMICROGRAPHY AT 100X.',
+
+            abajo_izquierda:
+                'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112\nGRAIN SIZE XXX COMPARATIVE ASTM E-112',
+
+            abajo_derecha:
+                'FOTO: PIEZA INSPECCIONADA\nPHOTO: INSPECTED PIECE'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+        function esComentarioPredeterminado03B01(valor) {
+        return [
+            // Nuevos comentarios bilingües
+            'FOTOMICROGRAFIA A 100X.\nPHOTOMICROGRAPHY AT 100X.',
+            'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112\nGRAIN SIZE XXX COMPARATIVE ASTM E-112',
+            'FOTO: PIEZA INSPECCIONADA\nPHOTO: INSPECTED PIECE',
+
+            // Comentarios anteriores guardados en Edit
+            'FOTOMICROGRAFIA A 100X.',
+            'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112.',
+            'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112',
+            'FOTO: PIEZA INSPECCIONADA'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado03B01(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var checkboxTexto;
+        var textoActual;
+        var sugerido;
+
+        /* SOLO aplica al formato 03_B_01 */
+        if (!formulario || formulario.id !== 'FOR-PIMP-03_B_01') {
+            return;
+        }
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+        seleccion = contenedor.querySelector(
+            'input[type="radio"][data-foto-posicion]:checked'
+        );
+        checkboxTexto = contenedor.querySelector('.foto-texto-checkbox');
+
+        if (!comentario || !seleccion || (checkboxTexto && checkboxTexto.checked)) {
+            return;
+        }
+
+        sugerido = comentarioPredeterminado03B01(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (
+            sugerido &&
+            (textoActual === '' || esComentarioPredeterminado03B01(textoActual))
+        ) {
+            comentario.value = sugerido;
+        } else if (
+            !sugerido &&
+            esComentarioPredeterminado03B01(textoActual)
+        ) {
+            comentario.value = '';
+        }
+    }
 
     function aplicarComentarioPredeterminado0403(contenedor) {
         var formulario = contenedor.closest('form');
@@ -312,12 +381,14 @@
             radio.addEventListener('change', function () {
                 sincronizarHojaCompleta(contenedor);
                 aplicarComentarioPredeterminado0403(contenedor);
+                aplicarComentarioPredeterminado03B01(contenedor);
             });
         });
 
         // También sincroniza el valor inicial al crear los controles.
         sincronizarHojaCompleta(contenedor);
         aplicarComentarioPredeterminado0403(contenedor);
+        aplicarComentarioPredeterminado03B01(contenedor);
 
         // En modo texto se oculta la carga de archivo y el comentario ocupa el espacio completo.
         if (permiteCuadroTexto) {
