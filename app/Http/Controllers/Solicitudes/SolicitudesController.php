@@ -556,75 +556,65 @@ class SolicitudesController extends Controller
     /*Eliminación de Toda la Solicitud-Boton eliminar del Index*/
     public function destroySolicitud($id)
     {
-        //Obtener la solicitud y su fecha de salida
-        $solicitud = Solicitudes::find($id);
-        $fechaSalida = $solicitud->Fecha;
+        try {
+            $solicitud = Solicitudes::findOrFail($id);
+            $fechaSalida = $solicitud->Fecha;
 
-        $Tipo = ['SALIDA', 'EN RENTA']; 
-        $disponibilidadEstado = 'DISPONIBLE';
-    
-        // Obtener los detalles relacionados con la solicitud
-        $detallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-            Log::info([
-            'idGeneral_EyC' => $idGeneral_EyC,
-            'fechaSalida' => $fechaSalida,
-            'historial_encontrado' => $Historial_Almacen->count(),
-            'historial' => $Historial_Almacen
-        ]);
-        foreach ($detallesSolicitud as $detalle) {
-            $idGeneral_EyC = $detalle->idGeneral_EyC;
-    
-            // Obtener el historial relacionado
-            $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)
-                ->where('Fecha', $fechaSalida)
-                ->whereIn('Tipo', $Tipo)
-                ->get();
+            $Tipo = ['SALIDA', 'EN RENTA'];
+            $disponibilidadEstado = 'DISPONIBLE';
 
-            $almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
-            $generalEyC = general_eyc::with('ISO', 'almacen')->find($idGeneral_EyC);
-            foreach ($Historial_Almacen as $h_almacen) {
+            // Obtener los detalles relacionados con la solicitud
+            $detallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
 
-                // Obtener el registro en la tabla Almacen
-                if ($almacen && $generalEyC->Disponibilidad_Estado == 'NO DISPONIBLE' || $almacen && $generalEyC->Disponibilidad_Estado == 'En Servicio') {
-                    // Actualizar el Stock en Almacen
-                    $nuevoStock = $almacen->Stock + $detalle->Cantidad;
-                    $almacen->update(['Stock' => $nuevoStock]);
-                }
-                // Obtener el equipo con su relación ISO
-                //$generalEyC = general_eyc::with('ISO')->find($idGeneral_EyC);
-                
-                if ($generalEyC) {
-                // Verificar si el equipo pertenece a la ISO 17025
-                if ($generalEyC->ISO->NombreISO == '17025') {
-                    // Cambiar disponibilidad a "EN SERVICIO"
-                    $generalEyC->update([
-                        'Disponibilidad_Estado' => 'Equipo Disponible',
-                    ]);
-                } else {
-                    // Para los demás, volver a "DISPONIBLE"
-                    $generalEyC->update([
-                        'Disponibilidad_Estado' => $disponibilidadEstado,
-                    ]);
+            foreach ($detallesSolicitud as $detalle) {
+                $idGeneral_EyC = $detalle->idGeneral_EyC;
+
+                // Obtener el historial relacionado
+                $Historial_Almacen = Historial_Almacen::where('idGeneral_EyC', $idGeneral_EyC)
+                    ->where('Fecha', $fechaSalida)
+                    ->whereIn('Tipo', $Tipo)
+                    ->get();
+
+                $almacen = almacen::where('idGeneral_EyC', $idGeneral_EyC)->first();
+                $generalEyC = general_eyc::with('ISO', 'almacen')->find($idGeneral_EyC);
+
+                foreach ($Historial_Almacen as $h_almacen) {
+                    if ($almacen && $generalEyC) {
+                        $estado = $generalEyC->Disponibilidad_Estado;
+
+                        if ($estado === 'NO DISPONIBLE' || $estado === 'En Servicio') {
+                            $nuevoStock = $almacen->Stock + $detalle->Cantidad;
+                            $almacen->update(['Stock' => $nuevoStock]);
+                        }
+
+                        if ($generalEyC->ISO && $generalEyC->ISO->NombreISO === '17025') {
+                            $generalEyC->update(['Disponibilidad_Estado' => 'Equipo Disponible']);
+                        } else {
+                            $generalEyC->update(['Disponibilidad_Estado' => $disponibilidadEstado]);
+                        }
+                    }
+
+                    $h_almacen->delete();
                 }
             }
-                // Eliminar el historial
-                $h_almacen->delete();
-            }
+
+            devolucion::where('idSolicitud', $id)->delete();
+            manifiesto::where('idSolicitud', $id)->delete();
+            detalles_solicitud::where('idSolicitud', $id)->delete();
+            Solicitudes::where('idSolicitud', $id)->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Throwable $e) {
+            Log::error('Error al eliminar solicitud', [
+                'id' => $id,
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo eliminar la solicitud.',
+            ], 500);
         }
-        // Eliminar el manifiesto relacionado con la solicitud
-        devolucion::where('idSolicitud', $id)->delete();
-        // Eliminar el manifiesto relacionado con la solicitud
-        manifiesto::where('idSolicitud', $id)->delete();
-        // Eliminar el manifiesto relacionado con la solicitud
-        manifiesto::where('idSolicitud', $id)->delete();
-    
-        // Eliminar los detalles de la solicitud
-        detalles_solicitud::where('idSolicitud', $id)->delete();
-    
-        // Eliminar la solicitud
-        Solicitudes::where('idSolicitud', $id)->delete();
-    
-        return redirect()->route('solicitud.index');
     }
     
 
