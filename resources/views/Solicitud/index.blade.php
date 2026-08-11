@@ -299,36 +299,28 @@
         if (result.isConfirmed) {
             // Enviar la solicitud DELETE al servidor
             $.ajax({
-                url: '/solicitudes/eliminar/' + idSolicitud, // URL del endpoint de eliminación
-                type: 'DELETE', // Método HTTP DELETE
+                url: '/solicitudes/eliminar/' + idSolicitud,
+                type: 'DELETE',
+                dataType: 'json',
                 data: {
-                    _token: '{{ csrf_token() }}' // Token CSRF si es necesario
+                    _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    // Manejar la respuesta del servidor si es necesario
                     if (response.success) {
-                        // Si la eliminación fue exitosa, hacer algo (por ejemplo, recargar la página)
-                        location.reload();
+                        Swal.fire({
+                            title: 'Eliminado',
+                            text: 'Solicitud eliminada correctamente.',
+                            icon: 'success'
+                        }).then(() => {
+                            location.reload();
+                        });
                     } else {
-                        // Si ocurrió un error durante la eliminación, mostrar un mensaje de error
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire('Error!', response.message || 'No se pudo eliminar el elemento.', 'error');
                     }
                 },
-                error: function() {
-                     // Manejar errores de la solicitud AJAX
-                    //Swal.fire("Error!", "No se pudo eliminar el elemento.2", "error");
-                    Swal.fire({
-                        title: "Confirmado!",
-                        text: "Solicitud Eliminado Correctamente!",
-                        icon: "success",
-                        didClose: function() {
-                            location.reload();
-                            }
-                        });
-                    // Esperar 3 segundos (3000 milisegundos) antes de recargar la página
-                        /*  setTimeout(function() {
-                            location.reload();
-                        }, 3000);*/
+                error: function(xhr) {
+                    const message = xhr.responseJSON?.message || 'No se pudo eliminar el elemento.';
+                    Swal.fire('Error!', message, 'error');
                 }
             });
         } 
