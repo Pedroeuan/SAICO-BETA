@@ -155,41 +155,59 @@
 
         .imagenes-reporte {
             width: 100%;
-            border-collapse: separate;
-            /* Replica la cuadricula estable del 04_03: dos columnas y dos filas iguales. */
-            border-spacing: 8px 10px;
+            border-collapse: collapse;
             table-layout: fixed;
         }
 
-        .imagenes-reporte tr {
-            height: 201px;
+        .imagenes-reporte td {
+            width: 50%;
+            padding: 0 0 4px;
+            vertical-align: top;
+        }
+
+        .imagenes-reporte td:first-child {
+            text-align: left;
+            padding-right: 10px;
+        }
+
+        .imagenes-reporte td:last-child {
+            text-align: right;
+            padding-left: 10px;
         }
 
         .foto-container {
             padding: 0;
-            border: 1px solid #000;
+            border: none;
             text-align: center;
-            vertical-align: middle;
+            vertical-align: top;
             overflow: hidden;
-            width: 330px;
-            height: 201px;
-            box-sizing: border-box;
-            position: relative;
         }
 
-        /* El lienzo fijo iguala fotografias horizontales, verticales y patrones de grano. */
+        .foto-cuadrante {
+            display: inline-block;
+            width: 312px;
+            margin: 0;
+            padding: 0;
+            border: none;
+            overflow: visible;
+        }
+
+        /* El borde visual pertenece a la imagen, no al comentario. */
         .foto-imagen-area {
-            width: 100%;
-            height: 181px;
-            line-height: 181px;
+            width: 310px;
+            height: 240px;
             overflow: hidden;
             text-align: center;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            display: table;
         }
 
         .foto-imagen-area img {
             display: inline-block;
-            max-width: 326px;
-            max-height: 181px;
+            max-width: 308px;
+            max-height: 238px;
+            overflow: hidden;
             width: auto;
             height: auto;
             object-fit: contain;
@@ -206,14 +224,14 @@
         }
 
         .comment {
-            height: 20px;
-            line-height: 7px;
-            border-top: .6px solid black;
-            padding: 2px;
+            min-height: 20px;
+            line-height: 9px;
+            border: none !important;
+            padding: 5px 3px 2px;
             margin: 0;
             box-sizing: border-box;
             text-align: center;
-            font-size: 6px;
+            font-size: 8px;
             word-wrap: break-word;
             overflow: hidden;
         }
@@ -221,20 +239,23 @@
         /* La descripción ocupa la misma celda reservada para una fotografía. */
         .descripcion-reporte {
             box-sizing: border-box;
-            width: 100%;
-            height: 201px;
-            padding: 12px;
-            line-height: 11px;
+            width: 312px;
+            height: 240px;
+            padding: 8px;
+            line-height: 10px;
             text-align: left;
             vertical-align: top;
             white-space: pre-wrap;
             overflow-wrap: break-word;
             overflow: hidden;
             font-size: 8px;
+            border: 1px solid #000;
+            margin: 0 auto;
         }
 
         .foto-full .descripcion-reporte {
-            height: 412px;
+            width: 100%;
+            height: 435px;
         }
 
         .empty-box {
@@ -271,17 +292,18 @@
 
         .foto-full {
             width: 100% !important;
-            height: 412px !important;
+            height: 435px !important;
         }
 
         .foto-full .foto-imagen-area {
-            height: 390px;
-            line-height: 390px;
+            width: 100%;
+            height: 404px;
+            line-height: 404px;
         }
 
         .foto-full .foto-imagen-area img {
             max-width: 100%;
-            max-height: 390px;
+            max-height: 402px;
         }
 
         .photo-page {
@@ -319,6 +341,18 @@
             white-space: nowrap;
             text-align: center;
         }
+        .foto-full .foto-imagen-centro {
+            width: 100%;
+            height: 402px;
+        }
+        .foto-imagen-centro {
+            display: table-cell;
+            width: 308px;
+            height: 238px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
     </style>
 </head>
 <body>
@@ -326,21 +360,24 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>Format</th>
-                <th style="width: 70%;">CÓDIGO<br>Code</th>
-                <th style="width: 100%;">FOR-PIMP-06_B/01</th>
-                <th rowspan="3" style="width: 80%;">
-                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                <th style="width:390%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
                 </th>
+                <th style="width:60%">Código<br>Code</td>
+                <th style="width:100%">FOR-PIMP-06_B/01</th>
+                <th rowspan="3" style="width:85%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
                 <th rowspan="2">Informe de Análisis químico mediante la Técnica de Fluorescencia de Rayos X (XRF)<br>
                     Chemicals Analysis Report Using the X-Ray Fluorescense Technique (XRF)</th>
-                <th>VERSIÓN<br>Version</th>
+                <th>VERSIÓN<br>Version:</td>
                 <th>3</th>
             </tr>
             <tr>
-                <th>PÁGINA<br>Page</th>
+                <th>PÁGINA<br>Page:</th>
                 <th></th>
             </tr>
         </thead>
@@ -640,7 +677,7 @@
                 </tr>
             </thead>
         </table>
-
+        <div style="margin-bottom: 4px;"></div>
         <table class="imagenes-reporte">
             @if($esHojaCompleta)
                 <tr>
@@ -648,7 +685,11 @@
                         @if(!empty($fotoCompleta['es_cuadro_texto']))
                             <div class="descripcion-reporte">{!! nl2br(e($fotoCompleta['comment'] ?? '')) !!}</div>
                         @else
-                            <div class="foto-imagen-area"><img src="{{ $fotoCompleta['path'] }}" alt="Fotografia"></div>
+                            <div class="foto-imagen-area">
+                                <div class="foto-imagen-centro">
+                                    <img src="{{ $fotoCompleta['path'] }}" alt="Fotografia">
+                                </div>
+                            </div>
                             <p class="comment">{!! nl2br(e($fotoCompleta['comment'] ?? '')) !!}</p>
                         @endif
                     </td>
@@ -665,12 +706,18 @@
                     @foreach(['arriba_izquierda', 'arriba_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             <td class="foto-container">
-                                @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                                    <div class="descripcion-reporte">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</div>
-                                @else
-                                    <div class="foto-imagen-area"><img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografia"></div>
-                                    <p class="comment">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</p>
-                                @endif
+                                <div class="foto-cuadrante">
+                                    @if(!empty($espacios[$posicion]['es_cuadro_texto']))
+                                        <div class="descripcion-reporte">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</div>
+                                    @else
+                                        <div class="foto-imagen-area">
+                                            <div class="foto-imagen-centro">
+                                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografia">
+                                            </div>
+                                        </div>
+                                        <p class="comment">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</p>
+                                    @endif
+                                </div>
                             </td>
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>
@@ -683,12 +730,18 @@
                     @foreach(['abajo_izquierda', 'abajo_derecha'] as $posicion)
                         @if(isset($espacios[$posicion]))
                             <td class="foto-container">
-                                @if(!empty($espacios[$posicion]['es_cuadro_texto']))
-                                    <div class="descripcion-reporte">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</div>
-                                @else
-                                    <div class="foto-imagen-area"><img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografia"></div>
-                                    <p class="comment">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</p>
-                                @endif
+                                <div class="foto-cuadrante">
+                                    @if(!empty($espacios[$posicion]['es_cuadro_texto']))
+                                        <div class="descripcion-reporte">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</div>
+                                    @else
+                                        <div class="foto-imagen-area">
+                                            <div class="foto-imagen-centro">
+                                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografia">
+                                            </div>
+                                        </div>
+                                        <p class="comment">{!! nl2br(e($espacios[$posicion]['comment'] ?? '')) !!}</p>
+                                    @endif
+                                </div>
                             </td>
                         @else
                             <td class="foto-container foto-vacia">&nbsp;</td>

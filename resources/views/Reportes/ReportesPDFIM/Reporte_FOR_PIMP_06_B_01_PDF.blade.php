@@ -455,21 +455,24 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>Format</th>
-                <th style="width: 70%;">CÓDIGO<br>Code</th>
-                <th style="width: 100%;">FOR-PIMP-06_B/01</th>
-                <th rowspan="3" style="width: 80%;">
-                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                <th style="width:390%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
                 </th>
+                <th style="width:60%">Código<br>Code</td>
+                <th style="width:100%">FOR-PIMP-06_B/01</th>
+                <th rowspan="3" style="width:85%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
                 <th rowspan="2">Informe de Análisis químico mediante la Técnica de Fluorescencia de Rayos X (XRF)<br>
                     Chemicals Analysis Report Using the X-Ray Fluorescense Technique (XRF)</th>
-                <th>VERSIÓN<br>Version</th>
+                <th>VERSIÓN<br>Version:</td>
                 <th>3</th>
             </tr>
             <tr>
-                <th>PÁGINA<br>Page</th>
+                <th>PÁGINA<br>Page:</th>
                 <th></th>
             </tr>
         </thead>

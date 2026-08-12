@@ -335,6 +335,120 @@
         }
     }
 
+    /* Comentarios automáticos exclusivos para FOR-PIMP-05_B_01 */
+    function comentarioPredeterminado05B01(posicion) {
+        var comentarios = {
+            arriba_izquierda:
+                'FOTO: PIEZA ANALIZADA \n Photo: Analyzed Piece',
+
+            abajo_derecha:
+                'FOTO: REALIZANDO EL ANÁLISIS\nPhoto: Performing the analysis'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+    function esComentarioPredeterminado05B01(valor) {
+        return [
+            'FOTO: PIEZA ANALIZADA \n Photo: Analyzed Piece',
+            'FOTO: REALIZANDO EL ANÁLISIS \n Photo: Performing the analysis'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado05B01(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var textoActual;
+        var sugerido;
+
+        // SOLO aplica al formato 05_B_01
+        if (!formulario || formulario.id !== 'FOR-PIMP-05_B_01') {
+            return;
+        }
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+
+        seleccion = contenedor.querySelector(
+            'input[type="radio"][data-foto-posicion]:checked'
+        );
+
+        if (!comentario || !seleccion) {
+            return;
+        }
+
+        sugerido = comentarioPredeterminado05B01(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (
+            sugerido &&
+            (textoActual === '' || esComentarioPredeterminado05B01(textoActual))
+        ) {
+            comentario.value = sugerido;
+
+        } else if (
+            !sugerido &&
+            esComentarioPredeterminado05B01(textoActual)
+        ) {
+            comentario.value = '';
+        }
+    }
+    /* Comentarios automáticos exclusivos para FOR-PIMP-06_B_01 */
+    function comentarioPredeterminado06B01(posicion) {
+        var comentarios = {
+            arriba_izquierda:
+                'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece',
+
+            abajo_derecha:
+                'FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+    function esComentarioPredeterminado06B01(valor) {
+        return [
+            'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece',
+            'FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado06B01(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var textoActual;
+        var sugerido;
+
+        if (!formulario || formulario.id !== 'FOR-PIMP-06_B_01') {
+            return;
+        }
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+
+        seleccion = contenedor.querySelector(
+            'input[type="radio"][data-foto-posicion]:checked'
+        );
+
+        if (!comentario || !seleccion) {
+            return;
+        }
+
+        sugerido = comentarioPredeterminado06B01(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (
+            sugerido &&
+            (textoActual === '' || esComentarioPredeterminado06B01(textoActual))
+        ) {
+            comentario.value = sugerido;
+        } else if (
+            !sugerido &&
+            esComentarioPredeterminado06B01(textoActual)
+        ) {
+            comentario.value = '';
+        }
+    }
     /* Crea e inserta los controles de pagina y posicion de una fotografia. */
     function crearControl(contenedor, orden) {
         var indice;
@@ -438,6 +552,8 @@
                 aplicarComentarioPredeterminado02B04(contenedor);
                 aplicarComentarioPredeterminado0403(contenedor);
                 aplicarComentarioPredeterminado03B01(contenedor);
+                aplicarComentarioPredeterminado05B01(contenedor);
+                aplicarComentarioPredeterminado06B01(contenedor); 
             });
         });
 
@@ -446,6 +562,8 @@
         aplicarComentarioPredeterminado02B04(contenedor);
         aplicarComentarioPredeterminado0403(contenedor);
         aplicarComentarioPredeterminado03B01(contenedor);
+        aplicarComentarioPredeterminado05B01(contenedor);
+        aplicarComentarioPredeterminado06B01(contenedor); 
 
         // En modo texto se oculta la carga de archivo y el comentario ocupa el espacio completo.
         if (permiteCuadroTexto) {
