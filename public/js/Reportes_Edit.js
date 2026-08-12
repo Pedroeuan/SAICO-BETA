@@ -325,10 +325,29 @@
                 || document.getElementById('FOR-PIMP-04_03') !== null;
             const usaLayoutManual = document.getElementById('FOR-PIMP-04_03') !== null;
             const esFormato06B01 = document.getElementById('FOR-PIMP-06_B_01') !== null;
-            const comentarioFotoDefault06 = function (indiceVisual) {
-                if (!esFormato06B01) return '';
-                if (indiceVisual === 1) return 'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece';
-                if (indiceVisual === 2) return 'FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance';
+            const esFormato07B01 = document.getElementById('FOR-PIMP-07_B_01') !== null;
+            const comentarioFotoDefault = function (indiceVisual) {
+
+                if (esFormato06B01) {
+                    if (indiceVisual === 1) {
+                        return 'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece';
+                    }
+
+                    if (indiceVisual === 2) {
+                        return 'FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance';
+                    }
+                }
+
+                if (esFormato07B01) {
+                    if (indiceVisual === 1) {
+                        return 'FOTO DE LA PIEZA\nPHOTOS OF THE PIECE';
+                    }
+
+                    if (indiceVisual === 2) {
+                        return 'FOTO DE LA PIEZA DURANTE EL RELEVADO DE ESFUERZOS\nPHOTO OF THE PIECE DURING THE STRESS RELIEF';
+                    }
+                }
+
                 return '';
             };
 
@@ -337,7 +356,7 @@
             for (let i = 0; i < count; i++) {
                 const index = existingCount + i;
                 const displayIndex = index + 1;
-                const comentarioDefault = comentarioFotoDefault06(displayIndex);
+                const comentarioDefault = comentarioFotoDefault(displayIndex);
                 const col = document.createElement('div');
                 col.classList.add('col-sm-6');
                 col.setAttribute('id', `image-container-${index}`);
