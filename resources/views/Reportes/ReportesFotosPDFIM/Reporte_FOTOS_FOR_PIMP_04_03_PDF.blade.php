@@ -148,7 +148,7 @@
         .photo-slot {
             /* El marco de 185 px del PDF principal evita que Dompdf reparta una fila entre hojas. */
             width: 47%;
-            height: 201px;
+            height: 260px;
             border: 0;
             padding: 0;
             vertical-align: middle;
@@ -174,8 +174,8 @@
         .photo-slot.abajo_derecha { vertical-align: bottom; }
         .photo-content {
             width: 100%;
-            max-width: 330px;
-            height: 201px;
+            max-width: 300px;
+            height: 260px;
             border-collapse: collapse;
             table-layout: fixed;
         }
@@ -197,6 +197,12 @@
             max-width: 330px;
             height: 16px;
             border: 0;
+        }
+        .photo-content .photo-image-cell.photo-text-cell {
+           height: 200px; /* ← AQUÍ aumentas el ALTO */
+            border: 1px solid #000 !important;
+            padding: 0 !important;
+            vertical-align: middle;
         }
         .photo-text-cell {
             /* Usa exactamente la misma celda estructural de 185 px que una fotografía. */
@@ -237,13 +243,12 @@
         }
         .photo-content .photo-image-cell {
             width: 100%;
-            height: 185px;
-            padding: 2px;
-            /* El marco pertenece solo a la fotografía; el comentario queda fuera y sin borde. */
-            border: 1px solid #000;
-            vertical-align: middle;
-            overflow: hidden;
+            height: auto;
+            padding: 0;
+            border: none;
+            vertical-align: top;
             text-align: center;
+            overflow: visible;
         }
         /* El patrón comparativo ASTM se delimita solo arriba y abajo. */
         .photo-content.photo-content-grain .photo-image-cell {
@@ -251,14 +256,15 @@
             border-right: 0;
         }
         .photo-slot img {
-            /* Mantiene cualquier proporción dentro del mismo marco, como en el formato 04_03. */
             display: block;
-            max-width: 326px;
-            max-height: 181px;
+            max-width: 298px;
+            max-height: 238px;
             width: auto;
             height: auto;
             object-fit: contain;
-            margin: 0 auto;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #000;
         }
         .photo-comment {
             height: 16px;

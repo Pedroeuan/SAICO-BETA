@@ -991,8 +991,8 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal" id="cancelBtn">Cancelar</button>
-                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">âŸ² Rotar -90°</button>
-                                        <button type="button" id="rotateRightBtn" class="btn btn-info">âŸ³ Rotar +90°</button>
+                                        <button type="button" id="rotateLeftBtn" class="btn btn-info">⟲ Rotar -90°</button>
+                                        <button type="button" id="rotateRightBtn" class="btn btn-info">⟳ Rotar +90°</button>
                                         <button type="button" class="btn btn-primary" id="cropImageBtn">Recortar y Guardar</button>
                                         <button type="button" class="btn btn-success" id="saveWithoutCropBtn">Guardar Sin Recortar</button>
                                     </div>

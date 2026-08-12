@@ -1579,7 +1579,7 @@ class FOR_PIMP_04_02Controller extends Controller
         //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
         $numFilasSin = count($filasSinTitulo);//agregar
 
-        // ðŸ”¹ cuántas filas debe tener cada bloque
+        // cuántas filas debe tener cada bloque
         $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
         $bloques = []; //agregar
@@ -1677,7 +1677,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 $index
             );
 
-            // âœ” Detalles Junta activado
+            //Detalles Junta activado
             $detallesJunta = isset($request->detalles_junta_check[$index]) 
                                 ? (bool)$request->detalles_junta_check[$index] 
                                 : false;
@@ -2112,7 +2112,7 @@ class FOR_PIMP_04_02Controller extends Controller
         //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
         $numFilasSin = count($filasSinTitulo);//agregar
 
-        // ðŸ”¹ cuántas filas debe tener cada bloque
+        //  cuántas filas debe tener cada bloque
         $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
 
         $bloques = []; //agregar
@@ -2409,7 +2409,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 'datos_junta' => $detalles['datos_junta'],
             ];
         };
-        // **1ï¸âƒ£ Eliminar imágenes marcadas para borrar**
+        // **Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
             $rutaExistente = trim((string) ($existingImages[$index] ?? ''));
 
@@ -2440,7 +2440,7 @@ class FOR_PIMP_04_02Controller extends Controller
         // **Evitar duplicados en las rutas ya guardadas**
         $rutasGuardadas = [];
 
-        // **2ï¸âƒ£ Procesar imágenes existentes**
+        // **Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
             if (!empty($fotoEsTexto[$index])) {
                 $imagenesGuardadas[] = $crearRegistroFoto($index, $ruta);
@@ -2533,10 +2533,10 @@ class FOR_PIMP_04_02Controller extends Controller
             }
         }
 
-        // **3ï¸âƒ£ Procesar nuevas imágenes Base64**
+        // **Procesar nuevas imágenes Base64**
         foreach ($imagesBase64 as $index => $base64Image) {
             if (isset($existingImages[$index])) {
-                continue; // â›” ya fue procesada arriba
+                continue; //ya fue procesada arriba
             }
 
             if (!empty($fotoEsTexto[$index])) {
@@ -2575,7 +2575,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         $imagenesGuardadas = ServicioRegistrosFotos::deduplicar($imagenesGuardadas);
 
-        // **4ï¸âƒ£ Guardar las imágenes actualizadas en la BD**
+        // **Guardar las imágenes actualizadas en la BD**
         if ($Fotos_Reportes) {
             $Fotos_Reportes->update([
                 'Fotos_Reportes' => json_encode(array_values($imagenesGuardadas)), // Se usa array reindexado
@@ -2697,7 +2697,7 @@ class FOR_PIMP_04_02Controller extends Controller
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
 
-                    // ðŸ”¥ NUEVO
+                    //NUEVO
                     'detalles_junta' => $detallesActivo,
                     'datos_junta' => $datosJunta,
                 ];

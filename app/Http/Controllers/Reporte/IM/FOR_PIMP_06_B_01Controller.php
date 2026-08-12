@@ -2306,7 +2306,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 $combinedPdf->useTemplate($tplId, 0, 0, $tamanoPagina['width'], $tamanoPagina['height']);
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY($orientacion === 'L' ? 220 : 157.5, 20);
+                $combinedPdf->SetXY($orientacion === 'L' ? 220 : 157.5, 25.5);
                 $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount" . "\n" . "$paginaActual of $totalPageCount", 0, 'C');
             }
         }

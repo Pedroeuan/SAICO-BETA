@@ -126,15 +126,14 @@
             border-spacing: 0 10px;
         }
         .photo-slot {
-            /* El marco de 185 px del PDF principal evita que Dompdf reparta una fila entre hojas. */
-            width: 47%;
-            height: 201px;
-            border: 0;
-            padding: 0;
-            vertical-align: middle;
-            text-align: center;
-            overflow: hidden;
-        }
+        width: 47%;
+        height: 260px;
+        border: 0;
+        padding: 0;
+        vertical-align: middle;
+        text-align: center;
+        overflow: hidden;
+    }
         .photo-gap {
             width: 6%;
             border: 0;
@@ -154,8 +153,8 @@
         .photo-slot.abajo_derecha { vertical-align: bottom; }
         .photo-content {
             width: 100%;
-            max-width: 330px;
-            height: 201px;
+            max-width: 300px;
+            height: 260px;
             border-collapse: collapse;
             table-layout: fixed;
         }
@@ -182,6 +181,16 @@
             /* Usa exactamente la misma celda estructural de 185 px que una fotografía. */
             padding: 0 !important;
             text-align: left !important;
+        }
+        /* BORDE SOLO PARA EL CUADRO DE DESCRIPCIÓN */
+        .photo-content .photo-image-cell.photo-text-cell {
+            height: 202px;
+            border: 1px solid #000 !important;
+            padding: 0 !important;
+            vertical-align: middle !important;
+            text-align: left !important;
+            box-sizing: border-box;
+            overflow: hidden;
         }
         .photo-text-cell-inner {
             padding: 12px 16px;
@@ -217,13 +226,14 @@
         }
         .photo-content .photo-image-cell {
             width: 100%;
-            height: 185px;
-            padding: 2px;
-            /* El marco pertenece solo a la fotografía; el comentario queda fuera y sin borde. */
-            border: 1px solid #000;
-            vertical-align: middle;
-            overflow: hidden;
+            height: auto;
+
+            padding: 0;
+            border: none;
+
+            vertical-align: top;
             text-align: center;
+            overflow: visible;
         }
         /* El patrón comparativo ASTM se delimita solo arriba y abajo. */
         .photo-content.photo-content-grain .photo-image-cell {
@@ -231,14 +241,15 @@
             border-right: 0;
         }
         .photo-slot img {
-            /* Mantiene cualquier proporción dentro del mismo marco, como en el formato 04_03. */
             display: block;
-            max-width: 326px;
-            max-height: 181px;
+            max-width: 298px;
+            max-height: 238px;
             width: auto;
             height: auto;
             object-fit: contain;
-            margin: 0 auto;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #000;
         }
         .photo-comment {
             height: 16px;

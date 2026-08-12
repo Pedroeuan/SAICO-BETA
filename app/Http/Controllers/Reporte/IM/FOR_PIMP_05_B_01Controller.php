@@ -2292,7 +2292,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY(153, 26.5);
+                $combinedPdf->SetXY(153, 29.5);
                 $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 'C');
             }
         }
