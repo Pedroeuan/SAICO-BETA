@@ -549,7 +549,7 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Tipo</label>
-                                                <select class="form-control select2" style="width: 100%;" name="TIPO">
+                                                <select class="form-control select2" style="width: 100%;" name="Tipo">
                                                         <option value="">Elige el tipo</option>
                                                         <option value="EQUIPOS" {{ old('TIPO') == 'EQUIPOS' ? 'selected' : '' }}>EQUIPOS</option>
                                                         <option value="ACCESORIOS" {{ old('TIPO') == 'ACCESORIOS' ? 'selected' : '' }}>ACCESORIOS</option>
