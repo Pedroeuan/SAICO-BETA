@@ -309,6 +309,39 @@
             border: 1px solid #000;
         }
 
+        /*
+         * Control exclusivo para patrones comparativos de tamaño de grano.
+         * Las fotos normales conservan su tamaño; el grano se centra y no
+         * crece de más para evitar que empuje firmas o desorganice la hoja.
+         */
+        .fotoCuadrante.fotoCuadranteGrano {
+            width: 300px;
+            text-align: center;
+            overflow: visible;
+        }
+
+        .fotoCuadrante.fotoCuadranteGrano .fotoGranoCelda {
+            width: 294px;
+            height: 215px;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            text-align: center;
+            overflow: hidden;
+            margin: 0 auto;
+            padding-top: 7px;
+        }
+
+        .fotoCuadrante.fotoCuadranteGrano img {
+            display: inline-block;
+            max-width: 280px;
+            max-height: 200px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
+            border: 0;
+        }
+
         .fotoCuadranteComentario {
             min-height: 20px;
             padding: 5px 3px 2px;
@@ -914,7 +947,7 @@
                             @php($foto = $fotosPorPosicion[$posicion] ?? null)
                             <td class="{{ $foto ? '' : 'fotoCuadranteVacio' }}">
                                 @if($foto)
-                                    <div class="fotoCuadrante">
+                                    <div class="fotoCuadrante {{ ($foto['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'fotoCuadranteGrano' : '' }}">
                                         @if(!empty($foto['es_cuadro_texto']))
                                             <div class="fotoCuadranteTexto">
                                                 <table class="fotoCuadranteTextoTabla">
@@ -926,7 +959,13 @@
                                                 </table>
                                             </div>
                                         @else
-                                            <img src="{{ $foto['path'] }}">
+                                            @if(($foto['origen_automatico'] ?? '') === 'patron_grano_historico')
+                                                <div class="fotoGranoCelda">
+                                                    <img src="{{ $foto['path'] }}">
+                                                </div>
+                                            @else
+                                                <img src="{{ $foto['path'] }}">
+                                            @endif
                                             <div class="fotoCuadranteComentario">{{ $foto['comment'] ?? '' }}</div>
                                         @endif
                                     </div>
