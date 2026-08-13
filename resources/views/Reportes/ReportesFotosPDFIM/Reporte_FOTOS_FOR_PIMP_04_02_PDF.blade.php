@@ -4,137 +4,136 @@
     <meta charset="UTF-8">
     <title>FOTOS FOR-PIMP-04/02</title>
     <style>
-        @page { 
-            margin: 2cm 
-            1.2cm 
-            2.1cm 
-            2.2cm; 
+        @page {
+            margin: 2cm
+            1.2cm
+            2.1cm
+            2.2cm;
         }
-        body { 
-            font-family: Arial, sans-serif; 
-            margin-top: 27px; 
-            padding-top: 0; 
-            padding-bottom: 0; 
-            color: #000; 
+        body {
+            font-family: Arial, sans-serif;
+            margin-top: 27px;
+            padding-top: 0;
+            padding-bottom: 0;
+            color: #000;
         }
-        header { 
-            position: fixed; 
-            top: -32px; 
-            left: 0; 
-            right: 0; 
-            text-align: 
-            
+        header {
+            position: fixed;
+            top: -38px;
+            left: 0;
+            right: 0;
+            text-align:
+
             center; }
-        footer { 
-            position: fixed; 
-            bottom: -30px; 
-            left: 0; 
-            right: 0; 
-            text-align: center; 
-        }
-        table { 
-            border-collapse: collapse; 
-            width: 100%; 
-        }
-        .tablaheader { 
-            border-collapse: collapse; 
-            width: 100%; 
-            text-align: center; 
-            font-size: 10px;
-        }
-        .tablaheader th { 
-            border: 1px solid #000; 
-        }
-        .section-title, .encabezadoAzul { 
-            background: #305496; 
-            color: #fff; 
-            text-align: center; 
-            font-weight: bold; 
-            font-size: 8px; 
-        }
-        .section-title th { 
-            border: .7px solid #000; 
-            padding: 2px; 
-        }
-        .tablaGenerales { 
-            border-collapse: collapse; 
-            width: 100%; 
-            font-size: 8px; 
-            table-layout: fixed; 
-        }
-        .tablaGenerales th, .tablaGenerales td { 
-            padding: 1.5px; 
-            vertical-align: middle; 
-        }
-        .tablaGenerales tbody th { 
-            width: 15%; 
-            font-weight: bold; 
-            white-space: nowrap; 
-            line-height: 10px; 
-            text-align: left; 
-            padding-left: 2px; 
-        }
-        .tablaGenerales tbody th.etiqueta-larga { 
+        footer {
+            position: fixed;
+            bottom: -30px;
+            left: 0;
+            right: 0;
             text-align: center;
         }
-        .tablaGenerales .line { 
-            padding: 1.5px 0 0 5px; 
-            text-align: center; 
-            vertical-align: middle; 
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
-        .linea-general { 
-            min-height: 10px; 
-            line-height: 10px; 
-            border-bottom: 1px solid #000; 
-            box-sizing: border-box; 
-            text-align: center; 
+        .tablaheader {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+            font-size: 9.5px;
         }
-        .linea-desplazada { 
-            margin-left: 7mm; 
+        .tablaheader th {
+            border: 1px solid #000;
         }
-        .spacer { 
-            height: 5px; 
+        .section-title, .encabezadoAzul {
+            background: #305496;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+            font-size: 8px;
         }
-        .metallographic { 
-            table-layout: fixed; 
-            text-align: center; 
-            font-size: 6.5px; 
+        .section-title th {
+            border: .7px solid #000;
+            padding: 2px;
         }
-        .metallographic th, .metallographic td { 
-            border: .6px solid #000; 
-            padding: 1.5px; 
-            line-height: 7px; 
-            vertical-align: middle; 
-            overflow-wrap: break-word; 
+        .tablaGenerales {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 8px;
+            table-layout: fixed;
         }
-        .metallographic .subhead { 
-            background: #305496; 
-            color: #fff; 
-            font-weight: bold; 
+        .tablaGenerales th, .tablaGenerales td {
+            padding: 1.5px;
+            vertical-align: middle;
         }
-        .metallographic .label { 
-            background: #e7e6e6; 
-            font-weight: bold; 
+        .tablaGenerales tbody th {
+            width: 15%;
+            font-weight: bold;
+            white-space: nowrap;
+            line-height: 10px;
+            text-align: left;
+            padding-left: 2px;
         }
-        .photo-grid { 
+        .tablaGenerales tbody th.etiqueta-larga {
+            text-align: center;
+        }
+        .tablaGenerales .line {
+            padding: 1.5px 0 0 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .linea-general {
+            min-height: 10px;
+            line-height: 10px;
+            border-bottom: 1px solid #000;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .linea-desplazada {
+            margin-left: 7mm;
+        }
+        .spacer {
+            height: 5px;
+        }
+        .metallographic {
+            table-layout: fixed;
+            text-align: center;
+            font-size: 6.5px;
+        }
+        .metallographic th, .metallographic td {
+            border: .6px solid #000;
+            padding: 1.5px;
+            line-height: 7px;
+            vertical-align: middle;
+            overflow-wrap: break-word;
+        }
+        .metallographic .subhead {
+            background: #305496;
+            color: #fff;
+            font-weight: bold;
+        }
+        .metallographic .label {
+            background: #e7e6e6;
+            font-weight: bold;
+        }
+        .photo-grid {
             /* Distribución tomada del PDF principal FOR-PIMP-03_B_01. */
             margin: 0;
             width: 100%;
-            table-layout: fixed; 
-            border-collapse: separate; 
+            table-layout: fixed;
+            border-collapse: separate;
             /* Diez píxeles verticales impiden que una celda de texto toque la imagen de la fila siguiente. */
             border-spacing: 0 10px;
         }
-        .photo-slot { 
-            /* El marco de 185 px del PDF principal evita que Dompdf reparta una fila entre hojas. */
-            width: 47%;
-            height: 201px;
-            border: 0;
-            padding: 0; 
-            vertical-align: middle;
-            text-align: center;
-            overflow: hidden;
-        }
+        .photo-slot {
+        width: 47%;
+        height: 260px;
+        border: 0;
+        padding: 0;
+        vertical-align: middle;
+        text-align: center;
+        overflow: hidden;
+    }
         .photo-gap {
             width: 6%;
             border: 0;
@@ -154,8 +153,8 @@
         .photo-slot.abajo_derecha { vertical-align: bottom; }
         .photo-content {
             width: 100%;
-            max-width: 330px;
-            height: 201px;
+            max-width: 300px;
+            height: 260px;
             border-collapse: collapse;
             table-layout: fixed;
         }
@@ -182,6 +181,16 @@
             /* Usa exactamente la misma celda estructural de 185 px que una fotografía. */
             padding: 0 !important;
             text-align: left !important;
+        }
+        /* BORDE SOLO PARA EL CUADRO DE DESCRIPCIÓN */
+        .photo-content .photo-image-cell.photo-text-cell {
+            height: 202px;
+            border: 1px solid #000 !important;
+            padding: 0 !important;
+            vertical-align: middle !important;
+            text-align: left !important;
+            box-sizing: border-box;
+            overflow: hidden;
         }
         .photo-text-cell-inner {
             padding: 12px 16px;
@@ -217,37 +226,41 @@
         }
         .photo-content .photo-image-cell {
             width: 100%;
-            height: 185px;
-            padding: 2px;
-            /* El marco pertenece solo a la fotografía; el comentario queda fuera y sin borde. */
-            border: 1px solid #000;
-            vertical-align: middle;
-            overflow: hidden;
+            height: auto;
+
+            padding: 0;
+            border: none;
+
+            vertical-align: top;
             text-align: center;
+            overflow: visible;
         }
         /* El patrón comparativo ASTM se delimita solo arriba y abajo. */
         .photo-content.photo-content-grain .photo-image-cell {
             border-left: 0;
             border-right: 0;
         }
-        .photo-slot img { 
-            /* Mantiene cualquier proporción dentro del mismo marco, como en el formato 04_03. */
+        .photo-slot img {
             display: block;
-            max-width: 326px;
-            max-height: 181px;
+            max-width: 298px;
+            max-height: 238px;
             width: auto;
             height: auto;
             object-fit: contain;
-            margin: 0 auto;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #000;
         }
-        .photo-comment { 
+        .photo-comment {
             height: 16px;
+            border: 0 !important;
             border-top: 0;
+            background: transparent;
             padding: 2px 2px 0;
             margin: 0;
             box-sizing: border-box;
-            font-size: 5.3px;
-            line-height: 1.05;
+            font-size: 7.2px;
+            line-height: 1.08;
             font-weight: normal;
             text-align: center;
             vertical-align: middle;
@@ -257,16 +270,22 @@
             overflow: hidden;
         }
         .photo-comment-long {
-            font-size: 5.5px;
-            line-height: 6px;
+            font-size: 6.9px;
+            line-height: 6.4px;
         }
-        .photo-text-box { 
-            width: 100%; 
+        .photo-content .photo-comment {
+            /* El pie de foto no es una celda visible; solo conserva el texto centrado bajo la imagen. */
+            border: 0 !important;
+            outline: 0;
+            background: transparent;
+        }
+        .photo-text-box {
+            width: 100%;
             height: 185px;
             padding: 12px 16px;
             text-align: justify;
             vertical-align: middle;
-            font-size: 8px;
+            font-size: 7px;
             line-height: 11px;
             overflow-wrap: break-word;
             word-break: normal;
@@ -280,7 +299,7 @@
         /* El cuadro automático puede contener una línea por cada medición del contador. */
         .photo-text-box-analysis {
             padding: 6px 8px;
-            font-size: 5.5px;
+            font-size: 7.5px;
             line-height: 6.5px;
             text-align: left;
         }
@@ -290,14 +309,14 @@
             max-width: 100%;
             height: 406px;
         }
-        .photo-empty { 
-            background: #fff; 
+        .photo-empty {
+            background: #fff;
         }
-        .photo-full { 
+        .photo-full {
             width: 100% !important;
             height: 406px !important;
         }
-        .photo-full img { 
+        .photo-full img {
             width: auto !important;
             height: auto !important;
             max-width: 100% !important;
@@ -308,48 +327,48 @@
             width: 100%;
             height: 390px;
         }
-        .photo-page { 
-            page-break-inside: avoid; 
+        .photo-page {
+            page-break-inside: avoid;
         }
         .firmas-im { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .firmas-im td { 
-        text-align: center; 
-        vertical-align: top; 
-        padding: 0 12px; 
-        font-size: 8px; 
+        .firmas-im td {
+        text-align: center;
+        vertical-align: top;
+        padding: 0 12px;
+        font-size: 8px;
         }
-        .firmas-im .firma-titulo { 
-        font-weight: bold; 
-        line-height: 11px; 
-        min-height: 8px; 
+        .firmas-im .firma-titulo {
+        font-weight: bold;
+        line-height: 11px;
+        min-height: 8px;
         }
-        .firmas-im .firma-linea { 
-        border-bottom: 1px solid #000; 
-        height: 10px; 
-        margin-top: 0; 
-        line-height: 10px; 
-        padding-top: 10px; 
-        box-sizing: border-box; 
-        font-weight: bold; 
+        .firmas-im .firma-linea {
+        border-bottom: 1px solid #000;
+        height: 10px;
+        margin-top: 0;
+        line-height: 10px;
+        padding-top: 10px;
+        box-sizing: border-box;
+        font-weight: bold;
         }
-        .firmas-im .firma-dato { 
-        margin-top: 2px; 
-        line-height: 10px; 
-        font-weight: bold; 
+        .firmas-im .firma-dato {
+        margin-top: 2px;
+        line-height: 10px;
+        font-weight: bold;
         }
-        .firmas-im .firma-ficha { 
-        margin-top: 2px; 
-        line-height: 10px; 
-        font-weight: bold; 
+        .firmas-im .firma-ficha {
+        margin-top: 2px;
+        line-height: 10px;
+        font-weight: bold;
         }
-        .firmas-im-4 td { 
-        padding: 2px 12px 0 12px; 
+        .firmas-im-4 td {
+        padding: 2px 12px 0 12px;
         }
-        .firmas-im .firma-separacion-tres td { 
-        padding-top: 0px; 
+        .firmas-im .firma-separacion-tres td {
+        padding-top: 0px;
         }
-        .firmas-im .firma-separacion-cuatro td { 
-        padding-top: 16px; 
+        .firmas-im .firma-separacion-cuatro td {
+        padding-top: 16px;
         }
     </style>
 </head>
@@ -359,7 +378,12 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width:400%">FORMATO</th>
+                <th style="width:360%">FORMATO</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
+                </th>
                 <th style="width:70%">CÓDIGO</th>
                 <th style="width:100%">FOR-PIMP-04/02</th>
                 <th rowspan="3" style="width:80%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
@@ -731,7 +755,7 @@
                             <td class="photo-slot {{ $posicion }} {{ !empty($espacios[$posicion]['es_cuadro_texto']) ? 'photo-slot-text' : '' }}">
                                 @if(!empty($espacios[$posicion]['es_cuadro_texto']))
                                     {{-- Mantiene el cuadro y su espacio inferior simétricos con cualquier fotografía. --}}
-                                    <table class="photo-content">
+                                    <table class="photo-content {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                         <tr>
                                             <td class="photo-image-cell photo-text-cell">
                                                 <div class="photo-text-cell-inner {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'resultados_analisis_imagen' ? 'photo-text-box-analysis' : '' }}">{{ $espacios[$posicion]['comment'] ?? '' }}</div>
@@ -742,7 +766,7 @@
                                         </tr>
                                     </table>
                                 @else
-                                    <table class="photo-content">
+                                    <table class="photo-content {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                         <tr>
                                             <td class="photo-image-cell">
                                                 <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">

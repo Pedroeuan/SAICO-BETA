@@ -346,25 +346,27 @@
 </head>
 
 <body>
-
 <header>
-    <table class="tablaheader">
+<table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>Format</th>
-                <th style="width: 70%;">Código<br>Code</th>
-                <th style="width: 100%;">FOR-PIMP-02_B/04</th>
-                <th rowspan="3" style="width: 80%;">
-                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                <th style="width:360%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:58px; height:58px; display:block; margin:auto; padding:0;">
+                    @endif
                 </th>
+                <th style="width:60%">Código<br>Code</td>
+                <th style="width:100%">FOR-PIMP-02_B/04</th>
+                <th rowspan="3" style="width:80%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
                 <th rowspan="2">Informe de Ensayo de Durezas en Soldaduras<br>Test Report on Welding Hardness</th>
-                <th>Versión<br>Version</th>
+                <th>VERSIÓN<br>Version:</td>
                 <th>2</th>
             </tr>
             <tr>
-                <th>Página<br>Page</th>
+                <th>PÁGINA<br>Page:</th>
                 <th></th>
             </tr>
         </thead>

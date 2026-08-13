@@ -1,16 +1,34 @@
 <style>
     .firmas-im { width: 100%; border-collapse: collapse; table-layout: fixed; }
-    .firmas-im td { text-align: center; vertical-align: top; padding: 0 12px; font-size: 7px; }
+    .firmas-im td { 
+        text-align: center; 
+        vertical-align: top; 
+        padding: 0 12px; 
+        font-size: 7.5px; 
+    }
     .firmas-im .firma-titulo { font-weight: bold; line-height: 10px; min-height: 6px; }
-    .firmas-im .firma-linea { border-bottom: 1px solid #000; height: 10px; margin-top: 0; line-height: 10px; padding-top: 10px; box-sizing: border-box; font-weight: bold; }
+    .firmas-im .firma-linea { 
+        border-bottom: 1px solid #000; 
+        height: 10px; 
+        margin-top: 0; 
+        line-height: 10px; 
+        padding-top: 10px; 
+        box-sizing: border-box; 
+        font-weight: bold; 
+    }
     .firmas-im .firma-dato { margin-top: 2px; line-height: 6px; font-weight: bold; }
     .firmas-im .firma-ficha { margin-top: 2px; line-height: 10px; font-weight: bold; }
     .firmas-im-4 td { padding: 2px 12px 0 12px; }
     .firmas-im .firma-separacion-tres td { padding-top: 0px; }
     .firmas-im .firma-separacion-cuatro td { padding-top: 10px; }
+    .firmas-im-1 .firma-linea {
+    width: 5cm;
+    margin-left: auto;
+    margin-right: auto;
+}
 </style>
 
-<table class="firmas-im firmas-im-{{ $numFirmas }}">
+<table class="firmas-im firmas-im-1">
     @if($numFirmas == 1)
         <tr>
             <td>

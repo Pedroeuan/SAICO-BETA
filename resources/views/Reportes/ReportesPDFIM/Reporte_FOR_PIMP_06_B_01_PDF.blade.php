@@ -4,343 +4,449 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-06_B/01</title>
 
-    <style>
-        @page {
-            margin: 2cm 1.2cm 1.1cm 2.2cm;
-        }
+<style>
+    @page {
+        margin: 2cm 1.2cm 1.1cm 2.2cm;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            margin-top: 27px;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        margin-top: 27px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 
-        header {
-            position: fixed;
-            top: -56px;
-            left: 0;
-            right: 0;
-            height: auto;
-            text-align: center;
-        }
+    header {
+        position: fixed;
+        top: -56px;
+        left: 0;
+        right: 0;
+        height: auto;
+        text-align: center;
+    }
 
-        footer {
-            position: fixed;
-            bottom: -30px;
-            left: 0;
-            right: 0;
-            height: auto;
-            text-align: center;
-        }
+    footer {
+        position: fixed;
+        bottom: -30px;
+        left: 0;
+        right: 0;
+        height: auto;
+        text-align: center;
+    }
 
-        footer table {
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
+    footer table {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
 
-        footer th,
-        footer td {
-            text-align: center;
-            vertical-align: middle;
-        }
+    footer th,
+    footer td {
+        text-align: center;
+        vertical-align: middle;
+    }
 
-        .tablaheader {
-            border-collapse: collapse;
-            width: 100%;
-            text-align: center;
-            font-size: 10px;
-        }
+    /* =========================
+    ENCABEZADO
+    ========================= */
 
-        .tablaheader th {
-            border: 1px solid black;
-        }
+    .tablaheader {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: center;
+        font-size: 10px;
+    }
 
-        .encabezadoAzul {
-            text-align: center;
-            background-color: #305496;
-            color: #fff;
-            font-size: 8px;
-        }
+    .tablaheader th {
+        border: 1px solid black;
+    }
 
-        .datosgenerales,
-        .datosinspeccion {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 8px;
-        }
+    .encabezadoAzul {
+        text-align: center;
+        background-color: #305496;
+        color: #fff;
+        font-size: 8px;
+    }
 
-        .datosinspeccion th,
-        .datosinspeccion td {
-            border: .6px solid black;
-            padding: 3px;
-        }
+    /* =========================
+        DATOS DE INSPECCION
+       ========================= */
 
-        .tablaEquipos {
-            table-layout: fixed;
-            height: 42px;
-        }
+    .datosgenerales,
+    .datosinspeccion {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 8px;
+    }
 
-        .tablaEquipos th,
-        .tablaEquipos td {
-            padding: 1px;
-        }
+    .datosinspeccion th,
+    .datosinspeccion td {
+        border: .6px solid black;
+        padding: 3px;
+        text-align: center;
+    }
 
-        .celdaGris {
-            background-color: #fdfafa;
-        }
+    /* =========================
+        DATOS DE EQUIPOS
+       ========================= */
 
-        .lineaInferior {
-            border-bottom: 1px solid black;
-        }
+    .tablaEquipos {
+        table-layout: fixed;
+        height: 42px;
+    }
 
-        .tablaPrueba {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 8px;
-            border: none;
-        }
+    .tablaEquipos th,
+    .tablaEquipos td {
+        padding: 3px;
+    }
 
-        .tablaPrueba th {
-            padding: 0;
-            line-height: 9px;
-        }
+    .celdaGris {
+        background-color: #fdfafa;
+    }
 
-        .tablaPrueba td {
-            padding: 6px 3px;
-            text-align: center;
-            vertical-align: middle;
-            border: none;
-        }
+    .lineaInferior {
+        border-bottom: 1px solid black;
+    }
 
+    /* =========================
+        TABLA PRUEBA
+       ========================= */
 
-        .etiquetaPrueba {
-            width: 28%;
-            font-weight: bold;
-            line-height: 11px;
-        }
+    .tablaPrueba {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 8px;
+        border: none;
+    }
 
-        .valorPrueba {
-            width: 18%;
-            border-bottom: 1px solid black;
-            min-height: 12px;
-        }
+    .tablaPrueba th {
+        padding: 0;
+        line-height: 9px;
+    }
 
-        .tablaPrueba td.valorPrueba {
-            border-bottom: 1px solid black;
-        }
+    .tablaPrueba td {
+        padding: 6px 3px;
+        text-align: center;
+        vertical-align: middle;
+        border: none;
+    }
 
-        .separadorPrueba {
-            width: 8%;
-        }
+    .etiquetaPrueba {
+        width: 28%;
+        font-weight: bold;
+        line-height: 11px;
+    }
 
-        .tablaGenerales {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 8px;
-            table-layout: fixed;
-        }
+    .valorPrueba {
+        width: 18%;
+        border-bottom: 1px solid black;
+        min-height: 12px;
+    }
 
-        .tablaGenerales th,
-        .tablaGenerales td {
-            padding: 1.5px 1.5px;
-            vertical-align: middle;
-        }
-        .valorGeneral {
-            border-bottom: 1px solid black;
-            text-align: center !important;
-            vertical-align: middle !important;
-            height: 10px;
-        }
+    .tablaPrueba td.valorPrueba {
+        border-bottom: 1px solid black;
+    }
 
-        /* Solo el glifo ⌀ usa una fuente Unicode; el resto conserva las métricas de Arial. */
-        .simboloDiametro {
-            font-family: "DejaVu Sans", sans-serif;
-        }
+    .separadorPrueba {
+        width: 8%;
+    }
 
-        .valorGeneralAlto {
-            height: 15px;
-        }
+    /* =========================
+        DATOS GENERALES
+       ========================= */
 
-        .valorGeneralConLinea {
-            border-bottom: none !important;
-            padding-bottom: 0 !important;
-        }
+    .tablaGenerales {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 8px;
+        table-layout: fixed;
+    }
 
-        .lineaValorGeneral {
-            width: 100%;
-            min-height: 10px;
-            border-bottom: 1px solid black;
-            box-sizing: border-box;
-            text-align: center;
-        }
+    .tablaGenerales th,
+    .tablaGenerales td {
+        padding: 1.5px;
+        vertical-align: middle;
+    }
 
-        .paginaDisparos {
-            page-break-inside: avoid;
-        }
+    .etiquetaGeneral {
+        width: 15%;
+        font-weight: bold;
+        white-space: nowrap !important;
+        line-height: 10px;
+        text-align: left;
+        padding-left: 2px;
+        vertical-align: middle;
+    }
 
-        .tablaDisparos {
-            width: 17.22cm;
-            margin: 0 auto;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
+    .etiquetaGeneralCentrada {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
 
-        .celdaDisparo {
-            width: 8.61cm;
-            padding: 0;
-            vertical-align: top;
-            box-sizing: border-box;
-            padding-bottom: 0.3cm;
-        }
+    .etiquetaGeneralCentrada .titulo-es-nowrap {
+        display: block;
+        white-space: nowrap;
+        text-align: center;
+    }
 
-        .celdaDisparoIzquierda {
-            padding-right: 0.25cm;
-        }
+    /* Celda de valor */
+    .valorGeneral {
+    text-align: center !important;
+    vertical-align: bottom !important;
+    padding: 0 !important;
+    height: 10px;
+}
 
-        .celdaDisparoDerecha {
-            padding-left: 0.25cm;
-        }
+.valorGeneralConLinea {
+    border-bottom: none !important;
+    padding: 0 !important;
+    vertical-align: bottom !important;
+}
 
-        .tituloDisparo {
-            background-color: #305496;
-            color: white;
-            border: 1px solid black;
-            box-sizing: border-box;
-            padding: 2px;
-            text-align: center;
-            font-size: 6px;
-            line-height: 7px;
-        }
+/* CONTENEDOR DE LA LINEA */
+.lineaValorGeneral {
+    position: relative;
+    width: 100%;
+    height: 11px;
+    border-bottom: .5px solid black;
+    padding: 0 !important;
+    margin: 0 !important;
+}
 
-        .espacioImagenDisparo {
-            width: 4.125cm;
-            padding: 0;
-            vertical-align: top;
-            box-sizing: border-box;
-        }
+/* DATO DEL USUARIO */
+.textoValorGeneral {
+    position: absolute;
+    left: 0;
+    right: 0;
 
-        .espacioImagenDisparoIzquierdo {
-            padding-right: 0.33cm;
-        }
+    /* ESTE VALOR CONTROLA LA ALTURA DEL TEXTO */
+    bottom: 2px;
 
-        .espacioImagenDisparoDerecho {
-            padding-left: 0.33cm;
-        }
+    text-align: center;
+    line-height: 8px;
+}
 
-        .espacioImagenDisparoDerecho .imagenDisparo {
-            width: 3.68cm;
-        }
+    .valorGeneralAlto {
+        height: 15px;
+    }
 
-        .espacioImagenDisparoDerecho .imagenDisparo img {
-            width: 3.62cm;
-        }
+    /* Simbolo diametro */
+    .simboloDiametro {
+        font-family: "DejaVu Sans", sans-serif;
+    }
 
-        .imagenDisparo {
-            width: 3.78cm;
-            height: 3.99cm;
-            box-sizing: border-box;
-            border: 1px solid black;
-            text-align: center;
-            vertical-align: middle;
-            padding: 2px;
-        }
+    /* =========================
+        DISPAROS
+       ========================= */
 
-        .imagenDisparo img {
-            display: block;
-            width: 3.68cm;
-            height: 3.89cm;
-            object-fit: contain;
-            margin: 0 auto;
-        }
+    .paginaDisparos {
+        page-break-inside: avoid;
+        position: relative;
+        top: -12px;
+    }
 
-        .tablaImagenesDisparo {
-            width: 8.27cm;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
+    .tablaDisparos {
+        /* Mismo ancho util que el encabezado "RESULTADOS..." para alinear el 2do disparo al borde derecho. */
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+        border-spacing: 0;
+        table-layout: fixed;
+    }
 
-        .espacioTablaQuimica {
-            width: 8.36cm;
-            height: 4.99cm;
-        }
+    .celdaDisparo {
+        width: 50%;
+        padding: 0;
+        vertical-align: top;
+        box-sizing: border-box;
+        padding-bottom: 0.3cm;
+    }
 
-        .tablaQuimicaDisparo {
-            width: 8.36cm;
-            height: 4.99cm;
-            border-collapse: collapse;
-            table-layout: fixed;
-            text-align: center;
-            font-size: 5.5px;
-        }
+    .celdaDisparoIzquierda {
+        /* Separa la tarjeta azul/imagenes del disparo izquierdo contra la tarjeta derecha. */
+        padding-right: 0.15cm;
+    }
 
-        .tablaQuimicaDisparo th,
-        .tablaQuimicaDisparo td {
-            border: 1px solid black;
-            padding: 1px;
-            line-height: 6px;
-            overflow-wrap: break-word;
-        }
+    .celdaDisparoDerecha {
+        /* Separa la tarjeta azul/imagenes del disparo derecho contra la tarjeta izquierda. */
+        padding-left: 0.15cm;
+    }
 
-        .tablaQuimicaDisparo thead th {
-            height: 1.25cm;
-            font-weight: bold;
-        }
+    .tituloDisparo {
+        width: 98.2%;
+        display: block;
+        background-color: #305496;
+        color: white;
+        border: 1px solid black;
+        box-sizing: border-box;
+        padding: 2px;
+        text-align: center;
+        font-size: 7.5px;
+        line-height: 8px;
+    }
 
-        .sinImagenDisparo {
-            color: #777;
-            font-size: 8px;
-        }
-        .etiquetaGeneral {
-            width: 15%;
-            font-weight: bold;
-            white-space: nowrap !important;
-            line-height: 10px;
-            text-align: left;
-            padding-left: 2px;
-            vertical-align: middle;
-        }
+    /* =========================
+        IMAGENES DE DISPAROS
+       ========================= */
 
-        .etiquetaGeneralCentrada {
-            text-align: center !important;
-            vertical-align: middle !important;
-        }
+    .espacioImagenDisparo {
+    width: 49%;
+    padding: 0;
+    vertical-align: top;
+    box-sizing: border-box;
+    border: none;
+}
 
-        .etiquetaGeneralCentrada .titulo-es-nowrap {
-            display: block;
-            white-space: nowrap;
-            text-align: center;
-        }
-        .observacionesBox {
-            width: 50%;
-            margin-left: 50%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            margin-bottom: 4px;
-            position: relative;
-            top: -25px;
-        }
+    .espacioImagenDisparoIzquierdo {
+        padding: 0 !important;
+    }
 
-        .observacionesBox th,
-        .observacionesBox td {
-            width: 50%;
-            padding: 3px 5px;
-            text-align: center;
-            font-size: 8px;
-        }
+    .espacioImagenDisparoDerecho {
+    padding: 0 !important;
+}
 
-        .observacionesTitulo {
-            vertical-align: middle;
-            font-weight: bold;
-        }
+.separacionImagenDisparo {
+    width: 0.04cm;
+    padding: 0 !important;
+    border: none !important;
+    /* Separacion fina tipo Excel: el borde lo dibuja cada imagen, no una barra negra. */
+    background: #fff;
+}
 
-        .observacionesLineas {
-            height: 24px;
-            border-bottom: 1px solid black;
-            vertical-align: bottom;
-        }
-    </style>
+.imagenDisparo {
+    width: 100%;
+    /* Aprovecha el espacio libre antes de la especificacion sin deformar la distribucion de disparos. */
+    height: 5.05cm;
+    box-sizing: border-box;
+    border: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Imagen */
+.imagenDisparo img {
+    display: block;
+    width: 100%;
+    height: 5.05cm;
+    /* Marco directo en la imagen: es lo mas estable en Dompdf para no perder lados. */
+    border: 1px solid black !important;
+    box-sizing: border-box;
+    padding: 2px;
+    object-fit: cover;
+    margin: 0;
+}
+
+    .tablaImagenesDisparo {
+    width: 100%;
+    /* La separacion interna se controla con una celda central para no desfasar el encabezado azul. */
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    margin: 0;
+}
+
+    .marcoImagenDisparo {
+        width: 100%;
+        height: 5.05cm;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin: 0;
+    }
+
+    .marcoImagenDisparo td {
+        border: 1px solid black;
+        /* Sin padding: el recorte XRF debe quedar al paño del borde de la celda del disparo. */
+        padding: 0;
+        vertical-align: middle;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .marcoImagenDisparo img {
+        display: block;
+        width: 100%;
+        height: 5.05cm;
+        object-fit: cover;
+        margin: 0;
+        padding: 0;
+        border: none !important;
+    }
+
+    /* =========================
+        TABLA QUIMICA
+       ========================= */
+
+    .espacioTablaQuimica {
+        width: 7.85cm;
+        height: 4.99cm;
+        margin: 0 auto;
+    }
+
+    .tablaQuimicaDisparo {
+        /* Aqui se controla el ancho completo de la tabla quimica. */
+        width: 7.85cm;
+        height: 4.99cm;
+        margin: 0 auto;
+        border-collapse: collapse;
+        table-layout: fixed;
+        text-align: center;
+        font-size: 5.5px;
+    }
+
+    .tablaQuimicaDisparo th,
+    .tablaQuimicaDisparo td {
+        border: 1px solid black;
+        padding: 1px;
+        line-height: 6px;
+        overflow-wrap: break-word;
+    }
+
+    .tablaQuimicaDisparo thead th {
+        height: 0.70cm;
+        padding: 1px 2px;
+        line-height: 5.5px;
+        font-weight: bold;
+    }
+
+    .sinImagenDisparo {
+        color: #777;
+        font-size: 8px;
+    }
+
+    /* =========================
+        OBSERVACIONES
+       ========================= */
+
+    .observacionesBox {
+        width: 50%;
+        margin-left: 50%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin-bottom: 4px;
+        position: relative;
+        top: -45px;
+    }
+
+    .observacionesBox th,
+    .observacionesBox td {
+        width: 50%;
+        padding: 3px 5px;
+        text-align: center;
+        font-size: 7.5px;
+    }
+
+    .observacionesTitulo {
+        vertical-align: middle;
+        font-weight: bold;
+    }
+
+    .observacionesLineas {
+        height: 24px;
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+    }
+</style>
 </head>
 
 <body>
@@ -349,21 +455,24 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>Format</th>
-                <th style="width: 70%;">CÓDIGO<br>Code</th>
-                <th style="width: 100%;">FOR-PIMP-06_B/01</th>
-                <th rowspan="3" style="width: 80%;">
-                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                <th style="width:390%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
                 </th>
+                <th style="width:60%">Código<br>Code</td>
+                <th style="width:100%">FOR-PIMP-06_B/01</th>
+                <th rowspan="3" style="width:85%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
                 <th rowspan="2">Informe de Análisis químico mediante la Técnica de Fluorescencia de Rayos X (XRF)<br>
                     Chemicals Analysis Report Using the X-Ray Fluorescense Technique (XRF)</th>
-                <th>VERSIÓN<br>Version</th>
+                <th>VERSIÓN<br>Version:</td>
                 <th>3</th>
             </tr>
             <tr>
-                <th>PÁGINA<br>Page</th>
+                <th>PÁGINA<br>Page:</th>
                 <th></th>
             </tr>
         </thead>
@@ -524,70 +633,294 @@
         </table>
 </footer>
 
-            {{-- ================= DATOS GENERALES ================= --}}
+{{-- ================= DATOS GENERALES ================= --}}
+
 <div style="margin-bottom: 2px;"></div>
 
 <table class="tablaGenerales">
+
     <thead class="encabezadoAzul">
         <tr>
-            <th colspan="6">DATOS GENERALES<br>General Data</th>
+            <th colspan="6">
+                DATOS GENERALES<br>
+                General Data
+            </th>
         </tr>
     </thead>
+
     <tbody>
+
+        {{-- FECHA / No. REPORTE --}}
         <tr>
-            <th class="etiquetaGeneral">FECHA<br>Date:</th>
-            <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada">No. REPORTE<br>No. Report:</th>
-            <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
+
+            <th class="etiquetaGeneral">
+                FECHA<br>
+                Date:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea" colspan="2">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Fecha'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                No. REPORTE<br>
+                No. Report:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea" colspan="2">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['No_Reporte'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
         </tr>
+
+
+        {{-- CLIENTE / No. CONTRATO --}}
         <tr>
-            <th class="etiquetaGeneral">CLIENTE<br>Client:</th>
-            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada">No. CONTRATO<br>No. Contract:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
+
+            <th class="etiquetaGeneral">
+                CLIENTE<br>
+                Client:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea" colspan="3">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Cliente'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                No. CONTRATO<br>
+                No. Contract:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Contrato'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
         </tr>
+
+
+        {{-- CONTRATO --}}
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">CONTRATO<br>Contract:</th>
-            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
+
+            <th class="etiquetaGeneral" style="white-space: nowrap;">
+                CONTRATO<br>
+                Contract:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea" colspan="5">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Proyecto'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
         </tr>
+
+
+        {{-- ORDEN DE TRABAJO --}}
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO<br>Work Order:</th>
-            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
+
+            <th class="etiquetaGeneral" style="white-space: nowrap;">
+                ORDEN DE TRABAJO<br>
+                Work Order:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea" colspan="5">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
         </tr>
+
+
+        {{-- FOLIO --}}
         <tr>
-            <th class="etiquetaGeneral">FOLIO<br>Folio:</th>
-            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
+
+            <th class="etiquetaGeneral">
+                FOLIO<br>
+                Folio:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea" colspan="5">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Folio'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
         </tr>
+
+
+        {{-- PARTIDA --}}
         <tr>
-            <th class="etiquetaGeneral">PARTIDA<br>Lot:</th>
-            <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
+
+            <th class="etiquetaGeneral">
+                PARTIDA<br>
+                Lot:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea" colspan="5">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Partida'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
         </tr>
+
+
+        {{-- INSTALACION / NUMERO DE ISOMETRICO --}}
         <tr>
-            <th class="etiquetaGeneral">INSTALACION<br>Location:</th>
-            <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada" style="white-space: nowrap;">NUMERO DE ISOMETRICO<br>No. Isometric:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
+
+            <th class="etiquetaGeneral">
+                INSTALACION<br>
+                Location:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea" colspan="3">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Instalacion'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada"
+                style="white-space: nowrap;">
+                NUMERO DE ISOMETRICO<br>
+                No. Isometric:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['No_Isometrico'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
         </tr>
+
+
+        {{-- NOMBRE DE LA PIEZA / MATERIAL --}}
         <tr>
-            <th class="etiquetaGeneral" style="white-space: nowrap;">NOMBRE DE LA PIEZA<br>Name of the Piece:</th>
-            <td class="valorGeneral" colspan="3">{!! str_replace('⌀', '<span class="simboloDiametro">⌀</span>', e($Detalles_Generales['Nom_Pieza'] ?? '')) !!}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada">MATERIAL<br>Material:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
-        </tr>
+
+    <th class="etiquetaGeneral" style="white-space: nowrap;">
+        NOMBRE DE LA PIEZA<br>
+        Name of the Piece:
+    </th>
+
+    <td class="valorGeneral valorGeneralConLinea">
+        <div class="lineaValorGeneral">
+            <span class="textoValorGeneral">
+                {!! str_replace(
+                    '⌀',
+                    '<span class="simboloDiametro">⌀</span>',
+                    e($Detalles_Generales['Nom_Pieza'] ?? '')
+                ) !!}
+            </span>
+        </div>
+    </td>
+
+    <th class="etiquetaGeneral etiquetaGeneralCentrada">
+        No. JUNTA<br>
+        No. Joint:
+    </th>
+
+    <td class="valorGeneral valorGeneralConLinea">
+        <div class="lineaValorGeneral">
+            <span class="textoValorGeneral">
+                {{ $Detalles_Generales['No_Junta'] ?? '' }}
+            </span>
+        </div>
+    </td>
+
+    <th class="etiquetaGeneral etiquetaGeneralCentrada">
+        MATERIAL<br>
+        Material:
+    </th>
+
+    <td class="valorGeneral valorGeneralConLinea">
+        <div class="lineaValorGeneral">
+            <span class="textoValorGeneral">
+                {{ $Detalles_Generales['Material'] ?? '' }}
+            </span>
+        </div>
+    </td>
+
+</tr>
+
+
+        {{-- PROCEDIMIENTO / CRITERIO / TRAZABILIDAD --}}
         <tr>
-            <th class="etiquetaGeneral">PROCEDIMIENTO<br>Procedure:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada" style="white-space: nowrap;">CRITERIO DE EVALUACION<br>Evaluation Criteria:</th>
-            <td class="valorGeneral valorGeneralConLinea"><div class="lineaValorGeneral">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div></td>
-            <th class="etiquetaGeneral etiquetaGeneralCentrada">TRAZABILIDAD<br>Traceability:</th>
-            <td class="valorGeneral valorGeneralConLinea"><div class="lineaValorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div></td>
+
+            <th class="etiquetaGeneral">
+                PROCEDIMIENTO<br>
+                Procedure:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Procedimiento'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada"
+                style="white-space: nowrap;">
+                CRITERIO DE EVALUACION<br>
+                Evaluation Criteria:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                TRAZABILIDAD<br>
+                Traceability:
+            </th>
+
+            <td class="valorGeneral valorGeneralConLinea">
+                <div class="lineaValorGeneral">
+                    <span class="textoValorGeneral">
+                        {{ $Detalles_Generales['Trazabilidad'] ?? '' }}
+                    </span>
+                </div>
+            </td>
+
         </tr>
-        <tr>
-            <th class="etiquetaGeneral">No. JUNTA<br>No. Joint:</th>
-            <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
-        </tr>
+
     </tbody>
+
 </table>
+
 <div style="margin-bottom: 2px;"></div>
 <table class="datosinspeccion tablaEquipos">
     <colgroup>
@@ -603,24 +936,31 @@
 
     <tbody>
         <tr class="celdaGris">
-            <th>MARCA<br> 
-                Brand</th>
-                <td>{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td>
-            <th>MODELO<br> 
-                Model</th>
-                <td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td>
-            <th>No. SERIE<br> 
-                Serial Number</th>
-                <td>{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td>
+            <th>MARCA / Brand</></th>
+            <td>{{ $Datos_Equipo['MARCA_EQUIPO'] ?? '' }}</td>
+            <th>MODELO / Model</th>
+            <td>{{ $Datos_Equipo['MODELO_EQUIPO'] ?? '' }}</td>
+            <th>No. SERIE / Serial Number</th>
+            <td>{{ $Datos_Equipo['NS_EQUIPO'] ?? '' }}</td>
         </tr>
     </tbody>
+</table>
+<div style="margin-bottom: 3px;"></div>
+
+<table class="datosinspeccion tablaEquipos">
+
     <thead class="encabezadoAzul">
         <tr>
-            <th colspan="6">RESULTADOS DEL ANÁLISIS QUÍMICO DEL ELEMENTO<br>Results of the Chemical Analysis of the Element</th>
+            <th colspan="6">
+                RESULTADOS DEL ANÁLISIS QUÍMICO DEL ELEMENTO<br>
+                Results of the Chemical Analysis of the Element
+            </th>
         </tr>
     </thead>
+
 </table>
-<div style="margin-bottom: 2px;"></div>
+
+<div style="margin-bottom: 0px;"></div>
 
 @php
         $ordinalesDisparoPdf = [1 => '1er.', 2 => '2do.', 3 => '3er.'];
@@ -667,22 +1007,32 @@
                         @elseif (!empty($Disparos[$celdaDisparo]))
                             <td class="celdaDisparo {{ $loop->first ? 'celdaDisparoIzquierda' : 'celdaDisparoDerecha' }}">
                                 <div class="tituloDisparo">
-                                    {{ $ordinalesDisparoPdf[$celdaDisparo] }} DISPARO<br>
+                                    {{ $ordinalesDisparoPdf[$celdaDisparo] }} DISPARO
                                     ({{ $ordinalesDisparoIngles[$celdaDisparo] }} shot)<br>
                                     VALORES OBTENIDOS EN LA PIEZA ANALIZADA<br>
                                     Values obtained in the analyzed piece
                                 </div><table class="tablaImagenesDisparo">
                                     <colgroup>
-                                        <col style="width: 4.125cm;">
-                                        <col style="width: 4.125cm;">
+                                        <col style="width: 49.75%;">
+                                        <col style="width: 0.04cm;">
+                                        <col style="width: 49.75%;">
                                     </colgroup>
                                     <tr>
                                         @foreach ($Disparos[$celdaDisparo] as $indiceImagen => $imagen)
                                             <td class="espacioImagenDisparo {{ $indiceImagen === 0 ? 'espacioImagenDisparoIzquierdo' : 'espacioImagenDisparoDerecho' }}">
-                                                <div class="imagenDisparo">
-                                                    <img src="{{ $imagen }}" alt="Imagen {{ $indiceImagen + 1 }} del disparo {{ $celdaDisparo }}">
-                                                </div>
+                                                {{-- Marco en tabla: Dompdf conserva mejor los cuatro bordes que con div/img. --}}
+                                                <table class="marcoImagenDisparo">
+                                                    <tr>
+                                                        <td>
+                                                            <img src="{{ $imagen }}" alt="Imagen {{ $indiceImagen + 1 }} del disparo {{ $celdaDisparo }}">
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </td>
+                                            @if ($indiceImagen === 0 && count($Disparos[$celdaDisparo]) > 1)
+                                                {{-- Separacion visual entre ambas evidencias sin modificar el ancho total del disparo. --}}
+                                                <td class="separacionImagenDisparo"></td>
+                                            @endif
                                         @endforeach
                                     </tr>
                                 </table>
@@ -711,8 +1061,8 @@
 @endphp
 <table class="observacionesBox">
     <tr>
-        <th class="observacionesTitulo">NORMA O ESPECIFICACIÓN APROXIMADA DEL MATERIAL:<br>
-            Approximate Material Standard or Specification:</th>
+        <th class="observacionesTitulo">ESPECIFICACIÓN APROX. DEL MATERIAL:<br>
+            Approx. Material Specification:</th>
         <td class="observacionesLineas">
             {{ $nombreNormaPdf }}
             @if ($variableNormaPdf !== '')

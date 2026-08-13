@@ -263,12 +263,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
         imageFieldsContainer.innerHTML = '';
 
+        const esFormato07B01 = formId === 'FOR-PIMP-07_B_01';
+
+        function comentarioFotoDefault07(indiceVisual) {
+            if (!esFormato07B01) return '';
+
+            if (indiceVisual === 1) {
+                return 'FOTO DE LA PIEZA\nPHOTOS OF THE PIECE';
+            }
+
+            if (indiceVisual === 2) {
+                return 'FOTO DE LA PIEZA DURANTE EL RELEVADO DE ESFUERZOS\nPHOTO OF THE PIECE DURING THE STRESS RELIEF';
+            }
+
+            return '';
+        }
         for (let i = 1; i <= count; i++) {
             // 04_03 comparte el formulario con recortes XRF indexados desde 1000.
             // Un índice explícito mantiene unidas imagen, comentario, hoja y posición.
             const indiceFoto = i - 1;
             const sufijoCampo = formId === 'FOR-PIMP-04_03' ? `[${indiceFoto}]` : '[]';
             const col = document.createElement('div');
+            const comentarioDefault = comentarioFotoDefault07(i);
             col.classList.add('col-sm-6');
             col.id = 'image-container-' + i;
 
@@ -305,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <small class="text-muted">Alternativa cuando no se cuenta con PDF XRF. Cada disparo requiere dos imágenes.</small>
                     </div>` : ''}
                     <div class="image-preview mt-2" id="image${i}-preview"></div>
-                    <textarea class="form-control mt-2" name="comments${sufijoCampo}" id="comment${i}" placeholder="Comentario"></textarea>
+                    <textarea class="form-control mt-2" name="comments${sufijoCampo}" id="comment${i}"placeholder="Comentario">${comentarioDefault}</textarea>
                     <input type="hidden" name="images_base64${sufijoCampo}" id="image${i}-base64">
                     <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                 </div>

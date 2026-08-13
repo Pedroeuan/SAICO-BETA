@@ -17,7 +17,7 @@
 
         header {
             position: fixed;
-            top: -58px;
+            top: -48px;
             left: 0;
             right: 0;
             text-align: center;
@@ -184,6 +184,7 @@
 
         .photo-page {
             page-break-inside: avoid;
+            padding-top: 2px;
         }
 
         footer table {
@@ -295,9 +296,8 @@
             width:300px;
             margin:0;
             padding:0;
-            border:1px solid #000;
+            border: 0 !important;  
             overflow:hidden;
-            border: 1px solid #000;
         }
 
         .fotoCuadrante img {
@@ -306,13 +306,13 @@
             height: auto;
             object-fit: contain;
             margin: 0 0 0 0;
-            border: 2px solid #000;
+            border: 1px solid #000;
         }
 
         .fotoCuadranteComentario {
             min-height: 20px;
             padding: 5px 3px 2px;
-            border-top: 1px solid #000;
+            border: none !important;
             font-size: 8px;
             line-height: 9px;
             overflow: hidden;
@@ -322,10 +322,19 @@
         }
 
         .fotoCuadranteTexto {
-            padding: 8px;
+            width: 270px;
+            height: 205px;
+            border: 1px solid #000 !important;
+            box-sizing: border-box;
+            overflow: hidden;
+            padding: 12px;
             font-size: 8px;
             line-height: 10px;
-            text-align: left;
+            text-align: left !important;
+            vertical-align: middle;
+        }
+        .fotoCuadranteTexto * {
+            text-align: left !important;
         }
 
         .fotoCuadranteVacio {
@@ -338,21 +347,24 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>Format</th>
-                <th style="width: 70%;">CÓDIGO<br>Code</th>
-                <th style="width: 100%;">FOR-PIMP-05_B/01</th>
-                <th rowspan="3" style="width: 80%;">
-                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                <th style="width:390%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
                 </th>
+                <th style="width:60%">Código<br>Code</td>
+                <th style="width:100%">FOR-PIMP-05_B/01</th>
+                <th rowspan="3" style="width:85%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
-                <th rowspan="2"> Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)<br>
+                <th rowspan="2">Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)<br>
                     Chemical Analysis Report Using the Optical Emission Spectrometry Technique (OES)</th>
-                <th>VERSIÓN<br>Version</th>
+                <th>VERSIÓN<br>Version:</td>
                 <th>2</th>
             </tr>
             <tr>
-                <th>PÁGINA<br>Page</th>
+                <th>PÁGINA<br>Page:</th>
                 <th></th>
             </tr>
         </thead>
