@@ -58,7 +58,7 @@ class equiposController extends Controller
                 'Serie' => 'required|string|max:255',
                 'ISO' => 'required|in:9001,17025',
                 'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
-                'TIPO' => ['required', 'string', 'max:255', 'not_in:'],
+                'Tipo' => ['required', 'string', 'max:255', 'not_in:'],
             ]);
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
@@ -110,14 +110,14 @@ class equiposController extends Controller
                 $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'AD-', ''))) = ?", [$noEconomicoLimpio])
                 ->where('Tipo', 'HERRAMIENTAS')
                 ->exists();
-            }
+            }*/
             //$existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
             // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
             $existsSerie = false;
             if ($serie !== '---') {
                 $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
             }
-            Log::info('***********************');
+            /*Log::info('***********************');
             Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
             Log::info('***********************');
             Log::info('existsSerie: ', ['existsSerie' => $existsSerie]);*/
