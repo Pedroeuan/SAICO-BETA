@@ -65,7 +65,7 @@ class equiposController extends Controller
             $serie = Str::lower($request->input('Serie'));
 
             /*Esta validaciones es por el apartado de la 17025*/
-            $Tipo = $request->input('TIPO');
+            $Tipo = $request->input('Tipo');
 
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
             $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
@@ -206,11 +206,11 @@ class equiposController extends Controller
             }else{
                 $general->BMPRO = $request->input('BMPRO');
             }
-            if($request->input('TIPO')==null)
+            if($request->input('Tipo')==null)
             {
                 $general->Tipo = $EsperaDato;
             }else{
-                $general->Tipo = $request->input('TIPO');
+                $general->Tipo = $request->input('Tipo');
             } 
             if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
             {
