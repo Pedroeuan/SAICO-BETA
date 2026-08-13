@@ -551,12 +551,12 @@
                                                 <label class="col-form-label" for="inputSuccess">Tipo</label>
                                                 <select class="form-control select2" style="width: 100%;" name="Tipo">
                                                         <option value="">Elige el tipo</option>
-                                                        <option value="EQUIPOS" {{ old('TIPO') == 'EQUIPOS' ? 'selected' : '' }}>EQUIPOS</option>
-                                                        <option value="ACCESORIOS" {{ old('TIPO') == 'ACCESORIOS' ? 'selected' : '' }}>ACCESORIOS</option>
-                                                        <option value="BLOCK Y PROBETA" {{ old('TIPO') == 'BLOCK Y PROBETA' ? 'selected' : '' }}>BLOCK Y PROBETA</option>
-                                                        <option value="HERRAMIENTAS" {{ old('TIPO') == 'HERRAMIENTAS' ? 'selected' : '' }}>HERRAMIENTAS</option>
+                                                        <option value="EQUIPOS" {{ old('Tipo') == 'EQUIPOS' ? 'selected' : '' }}>EQUIPOS</option>
+                                                        <option value="ACCESORIOS" {{ old('Tipo') == 'ACCESORIOS' ? 'selected' : '' }}>ACCESORIOS</option>
+                                                        <option value="BLOCK Y PROBETA" {{ old('Tipo') == 'BLOCK Y PROBETA' ? 'selected' : '' }}>BLOCK Y PROBETA</option>
+                                                        <option value="HERRAMIENTAS" {{ old('Tipo') == 'HERRAMIENTAS' ? 'selected' : '' }}>HERRAMIENTAS</option>
                                                 </select>
-                                            @error('TIPO')
+                                            @error('Tipo')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
                                                 </div>
@@ -568,7 +568,7 @@
                                             <div class="form-group">
                                                 <label class="col-form-label" for="inputSuccess">Tipo</label>
                                                 <input type="text" class="form-control inputForm" placeholder="" name="Tipo" value="EQUIPOS" readonly>
-                                            @error('TIPO')
+                                            @error('Tipo')
                                                 <div class="invalid-feedback d-block">
                                                     {{ $message }}
                                                 </div>
