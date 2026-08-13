@@ -411,7 +411,28 @@
                                         </tr>
 
                                         <tr>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                            <td>
+                                                <div class="col-sm-50 d-flex justify-content-center">
+                                                    <div class="form-group text-center">
+                                                        <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                        <select class="form-select inputForm" id="tecnicosSelect">
+                                                            <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                            @foreach($Tecnicos as $Tecnico)
+                                                                <option value="{{ $Tecnico->id }}"
+                                                                        data-name="{{ $Tecnico->name }}">
+                                                                    {{ $Tecnico->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        {{-- Guarda el ID del técnico seleccionado para el QR/CV. --}}
+                                                        <input type="hidden" name="Firmas_Reportes1[ID_TECNICO]" id="IDTECNICO" value="{{ old('Firmas_Reportes1.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '') }}">
+                                                        <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                        <input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{ old('Firmas_Reportes1.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '') }}" readonly>
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
 
                                         <tr>
@@ -442,7 +463,28 @@
                                     </tr>
 
                                     <tr>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                        <td>
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                    <select class="form-select inputForm" id="tecnicosSelect2">
+                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    {{-- Guarda el ID del técnico seleccionado para el QR/CV. --}}
+                                                    <input type="hidden" name="Firmas_Reportes2[ID_TECNICO]" id="IDTECNICO2" value="{{ old('Firmas_Reportes2.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '') }}">
+                                                    <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                    <input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO2" value="{{ old('Firmas_Reportes2.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '') }}" readonly>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                     </tr>
@@ -485,8 +527,28 @@
                                     </tr>
 
                                     <tr>
+                                        <td>
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                    <select class="form-select inputForm" id="tecnicosSelect3">
+                                                        <option value="" selected disabled>Seleccione un Técnico</option>
 
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    {{-- Guarda el ID del técnico seleccionado para el QR/CV. --}}
+                                                    <input type="hidden" name="Firmas_Reportes3[ID_TECNICO]" id="IDTECNICO3" value="{{ old('Firmas_Reportes3.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '') }}">
+                                                    <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                    <input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" id="NOMBRE_TECNICO3" value="{{ old('Firmas_Reportes3.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '') }}" readonly>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                         <td></td>
@@ -550,8 +612,28 @@
                                     </tr>
 
                                     <tr>
+                                        <td>
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                    <select class="form-select inputForm" id="tecnicosSelect4">
+                                                        <option value="" selected disabled>Seleccione un Técnico</option>
 
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '')}}"></td>
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    {{-- Guarda el ID del técnico seleccionado para el QR/CV. --}}
+                                                    <input type="hidden" name="Firmas_Reportes4[ID_TECNICO]" id="IDTECNICO4" value="{{ old('Firmas_Reportes4.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '') }}">
+                                                    <label class="col-form-label" for="inputSuccess">TECNICO SELECCIONADO:</label>
+                                                    <input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" id="NOMBRE_TECNICO4" value="{{ old('Firmas_Reportes4.NOMBRE_TECNICO', $Firmas['NOMBRE_TECNICO'] ?? '') }}" readonly>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO', $Firmas['NOMBRE_ENCARGADO'] ?? '')}}"></td>
                                         <td></td>
@@ -620,14 +702,44 @@
                         </div>
 
                         <div data-layout-fotos-manual="1">
+                            <div id="imageFieldsContainer" class="row">
+                                <!-- Las imagenes nuevas se muestran antes de los recortes XRF para evitar scroll innecesario. -->
+                            </div>
+
                         @if(!empty($Fotos_Comentarios))
+                            @php
+                                // Fotos normales primero; recortes de disparos XRF al final para no estorbar al agregar nuevas fotos.
+                                $fotosComentariosOrdenadas = collect($Fotos_Comentarios)
+                                    ->map(fn ($foto, $index) => ['index' => $index, 'foto' => $foto])
+                                    ->sortBy(fn ($item) => !empty($item['foto']['es_disparo']) ? 1 : 0)
+                                    ->values();
+                            @endphp
                             <div class="row">
-                                @foreach($Fotos_Comentarios as $index => $foto)
+                                @foreach($fotosComentariosOrdenadas as $itemFoto)
+                                    @php
+                                        $index = $itemFoto['index'];
+                                        $foto = $itemFoto['foto'];
+                                        // Comentarios base del formato 06_B/01; solo rellenan fotos normales sin comentario histórico.
+                                        $comentariosDefaultFotos06 = [
+                                            0 => "FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece",
+                                            1 => "FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance",
+                                        ];
+                                        $comentarioFoto06 = $foto['comentario'] ?? '';
+                                        if (
+                                            trim((string) $comentarioFoto06) === ''
+                                            && empty($foto['es_disparo'])
+                                            && empty($foto['es_cuadro_texto'])
+                                            && isset($comentariosDefaultFotos06[$index])
+                                        ) {
+                                            $comentarioFoto06 = $comentariosDefaultFotos06[$index];
+                                        }
+                                    @endphp
                                     <div class="col-sm-6"
                                         id="image-container-{{ $index }}"
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
                                         data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}"
+                                        data-foto-es-disparo="{{ !empty($foto['es_disparo']) ? 1 : 0 }}"
                                         data-foto-es-texto="{{ !empty($foto['es_cuadro_texto']) ? 1 : 0 }}">
                                         <div class="form-group">
                                             <label for="replace_image_{{ $index }}">Imagen subida {{ $index + 1 }}:</label>
@@ -667,7 +779,7 @@
                                                 </select>
                                             </div>
                                             <input type="file" class="form-control image-input mt-2" id="replace_image_{{ $index }}" name="replace_images[{{ $index }}]" accept="image/*">
-                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] ?? '' }}</textarea>
+                                            <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $comentarioFoto06 }}</textarea>
                                             <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
                                             <input type="hidden" name="existing_images[{{ $index }}]" value="{{ $foto['ruta'] }}">
                                             <input type="hidden" name="deleted_images[]" id="deleted_image_{{ $index }}" value="">
@@ -680,9 +792,6 @@
                             <p>No hay imágenes disponibles.</p>
                         @endif
 
-                        <div id="imageFieldsContainer" class="row">
-                            <!-- Aquí se agregarán dinámicamente los campos -->
-                        </div>
                         </div>
 
                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -806,6 +915,58 @@ document.addEventListener('DOMContentLoaded', function () {
     const detallesGenerales = @json($Detalles_Generales ?? []);
     const datosEquipo = @json($Datos_Equipo ?? []);
     const firmas = @json($Firmas ?? []);
+
+    // Edit 06_B_01 no siempre toma el rellenado global; este enlace local cubre solo este formulario.
+    const rellenarVaciosBtn = form.querySelector('#preFormBtn');
+    if (rellenarVaciosBtn) {
+        rellenarVaciosBtn.addEventListener('click', function () {
+            form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (campo) {
+                if (campo.closest('#dynamicTable')) return;
+                if (campo.disabled || campo.readOnly || campo.type === 'hidden') return;
+                if (campo.value.trim() !== '') return;
+
+                campo.value = campo.type === 'date'
+                    ? new Date().toISOString().split('T')[0]
+                    : '---';
+                campo.dispatchEvent(new Event('input', { bubbles: true }));
+                campo.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+        });
+    }
+
+    /*
+     * Los recortes XRF guardados suelen ser muchos y empujan hacia abajo
+     * las nuevas fotos/granos. En Edit se agrupan al final y cerrados por defecto.
+     */
+    const layoutFotos = form.querySelector('[data-layout-fotos-manual="1"]');
+    const disparosGuardados = layoutFotos
+        ? Array.from(layoutFotos.querySelectorAll('[data-foto-es-disparo="1"]'))
+        : [];
+
+    if (layoutFotos && disparosGuardados.length > 0) {
+        const bloqueDisparos = document.createElement('details');
+        bloqueDisparos.className = 'border rounded bg-light p-2 mt-3';
+
+        const tituloDisparos = document.createElement('summary');
+        tituloDisparos.className = 'font-weight-bold text-primary';
+        tituloDisparos.textContent = 'Recortes XRF guardados / disparos (' + disparosGuardados.length + ')';
+
+        const ayudaDisparos = document.createElement('small');
+        ayudaDisparos.className = 'd-block text-muted mb-2';
+        ayudaDisparos.textContent = 'Se dejan al final para que las fotos nuevas y el patron de grano queden primero.';
+
+        const filaDisparos = document.createElement('div');
+        filaDisparos.className = 'row mt-2';
+
+        disparosGuardados.forEach(function (tarjetaDisparo) {
+            filaDisparos.appendChild(tarjetaDisparo);
+        });
+
+        bloqueDisparos.appendChild(tituloDisparos);
+        bloqueDisparos.appendChild(ayudaDisparos);
+        bloqueDisparos.appendChild(filaDisparos);
+        layoutFotos.appendChild(bloqueDisparos);
+    }
 
     function setValue(name, value) {
         if (value === undefined || value === null) return;
@@ -1066,6 +1227,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+// Sincroniza los selects de técnicos con los campos ocultos/visibles que se guardan para el reporte, siguiendo el patrón de PINS.
+    document.addEventListener('DOMContentLoaded', function () {
+        for (let indice = 1; indice <= 4; indice++) {
+            const sufijo = indice === 1 ? '' : indice;
+            const select = document.getElementById('tecnicosSelect' + sufijo);
+            const idTecnico = document.getElementById('IDTECNICO' + sufijo);
+            const nombre = document.getElementById('NOMBRE_TECNICO' + sufijo);
+
+            if (!select || !idTecnico || !nombre) continue;
+
+            if (idTecnico.value) {
+                select.value = idTecnico.value;
+            }
+
+            select.addEventListener('change', function () {
+                const opcion = select.options[select.selectedIndex];
+                idTecnico.value = select.value || '';
+                nombre.value = opcion ? (opcion.getAttribute('data-name') || '') : '';
+            });
+        }
+    });
 </script>
 
 {{-- Comparte solamente el comportamiento JS; la ruta y los campos pertenecen al 06_B_01. --}}

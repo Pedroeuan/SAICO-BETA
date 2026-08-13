@@ -14,7 +14,12 @@
     <meta charset="UTF-8">
     <title>FOR-PIMP-03_B/01</title>
     <style>
-        @page { margin: 2.7cm 1.5cm 2.2cm 1.5cm; }
+        @page { 
+            margin-top: 3cm;     /* ARRIBA */
+            margin-right: 1.5cm;   /* DERECHA */
+            margin-bottom: 2.7cm;  /* ABAJO */
+            margin-left: 1.5cm;    /* IZQUIERDA */
+        }
 
         body {
             margin: 0;
@@ -25,7 +30,7 @@
 
         header {
             position: fixed;
-            top: -85px;
+            top: -70px;
             left: 0;
             right: 0;
         }
@@ -68,7 +73,7 @@
         }
 
         .tabla-datos {
-            /*margin-top: 1px;*/
+            margin-top: 15px;
             font-size: 8px;
         }
         .tabla-datos th,
@@ -87,6 +92,8 @@
         .tabla-datos td.valor-general {
             border-bottom: 1px solid #000;
             text-align: center;
+            padding-top: 4.5px;    /* BAJA el texto del usuario */
+            padding-bottom: 0;
         }
         .tabla-datos .titulo-seccion {
             /*border: 1px solid #000;
@@ -306,7 +313,7 @@
             padding: 8px;
             box-sizing: border-box;
             text-align: left;
-            vertical-align: top;
+            vertical-align: middle;
             font-size: 7px;
             font-weight: normal;
             line-height: 1.2;
@@ -353,26 +360,42 @@
         .firmas-im[class] .firma-separacion-cuatro td {
             padding-top: 4px;
         }
+        .tablaheader {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+            font-size: 9.5px;
+        }
+        .tablaheader th {
+            border: 1px solid #000;
+        }
     </style>
 </head>
 <body>
 <header>
-    <table class="tabla-header">
-        <tr>
-            <th style="width: 53%;">FORMATO<br>Format</th>
-            <td style="width: 10%;">Código:<br>Code:</td>
-            <td style="width: 15%;">FOR-PIMP-03_B/01</td>
-            <td rowspan="3" style="width: 26%;"><img src="{{ $Logo }}" alt="Logo"></td>
-        </tr>
-        <tr>
-            <td rowspan="2" class="nombre-formato">Informe de Análisis Metalográfico<br>Metallographic Analysis Report</td>
-            <td>Versión:<br>Version:</td>
-            <td>2</td>
-        </tr>
-        <tr>
-            <td>Página:<br>Page:</td>
-            <td><span class="numero-pagina-actual"></span> DE {{ $totalPaginasPdf }}<br><span class="numero-pagina-actual"></span> Of {{ $totalPaginasPdf }}</td>
-        </tr>
+<table class="tablaheader">
+        <thead>
+            <tr>
+                <th style="width:360%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:58px; height:58px; display:block; margin:auto; padding:0;">
+                    @endif
+                </th>
+                <th style="width:60%">CÓDIGO<br>Code:</td>
+                <th style="width:100%">FOR-PIMP-03_B/01</th>
+                <th rowspan="3" style="width:80%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
+            </tr>
+            <tr>
+                <th rowspan="2">Informe de Análisis Metalográfico<br>Metallographic Analysis Report</th>
+                <th>VERSIÓN<br>Version:</td>
+                <th>2</th>
+            </tr>
+            <tr>
+                <th>PÁGINA<br>Page:</th>
+                <th><span class="numero-pagina-actual"></span> DE {{ $totalPaginasPdf }}<br><span class="numero-pagina-actual"></span> Of {{ $totalPaginasPdf }}</th>
+            </tr>
+        </thead>
     </table>
 </header>
 

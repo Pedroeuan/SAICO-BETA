@@ -301,10 +301,10 @@
         .fotoDurezaBox {
             position: absolute;
             left: 56%;
-            top: 405px;
+            top: 400px;
             width: 43.7%;
             height: 250px;
-            border: 1px solid black;
+            border: none;
             text-align: center;
             overflow: hidden;
         }
@@ -317,7 +317,7 @@
         }
 
         .fotoDurezaComentario {
-            border-top: 1px solid black;
+            border-top: none;
             height: 20px;
             margin: 0;
             padding: 5px 3px 0 3px;
@@ -352,20 +352,23 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>Format</th>
-                <th style="width: 70%;">Código:<br>Code:</th>
-                <th style="width: 100%;">FOR-PIMP-02_B/03</th>
-                <th rowspan="3" style="width: 80%;">
-                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                <th style="width:360%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:58px; height:58px; display:block; margin:auto; padding:0;">
+                    @endif
                 </th>
+                <th style="width:60%">Código<br>Code</td>
+                <th style="width:100%">FOR-PIMP-02_B/03</th>
+                <th rowspan="3" style="width:80%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
                 <th rowspan="2">Informe de Ensayo de Durezas en Metales Base<br>Hardness Test Report on Base Metals</th>
-                <th>Versión:<br>Version:</th>
+                <th>VERSIÓN<br>Version:</td>
                 <th>2</th>
             </tr>
             <tr>
-                <th>Página:<br>Page:</th>
+                <th>PÁGINA<br>Page:</th>
                 <th></th>
             </tr>
         </thead>
