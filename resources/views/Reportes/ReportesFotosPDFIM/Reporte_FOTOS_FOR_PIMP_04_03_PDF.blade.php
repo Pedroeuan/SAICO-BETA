@@ -252,8 +252,11 @@
         }
         /* El patrón comparativo ASTM se delimita solo arriba y abajo. */
         .photo-content.photo-content-grain .photo-image-cell {
-            border-left: 0;
-            border-right: 0;
+            height: 208px;
+            border: 1px solid #000;
+            vertical-align: middle;
+            text-align: center;
+            overflow: hidden;
         }
         .photo-slot img {
             display: block;
@@ -265,6 +268,26 @@
             margin-left: auto;
             margin-right: auto;
             border: 1px solid #000;
+        }
+        /*
+         * Control exclusivo para patrones de tamaño de grano.
+         * No toca fotografías normales: solo aplica cuando el servicio marca
+         * la imagen como patron_grano_historico y la tabla recibe photo-content-grain.
+         */
+        .photo-content.photo-content-grain img {
+            max-width: 280px;
+            max-height: 200px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border: 0;
+            margin: auto;
+        }
+        .photo-full .photo-content.photo-content-grain img {
+            max-width: 280px !important;
+            max-height: 200px !important;
+            width: auto !important;
+            height: auto !important;
         }
         .photo-comment {
             height: 16px;
