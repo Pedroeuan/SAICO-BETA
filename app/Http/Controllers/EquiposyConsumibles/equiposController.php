@@ -49,7 +49,7 @@ class equiposController extends Controller
      */
     public function storeEquipos(Request $request)
     {
-        //dd($request->all());
+        dd($request->all());
             $request->validate([
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'No_economico' => 'required|string|max:255',
@@ -206,11 +206,11 @@ class equiposController extends Controller
             }else{
                 $general->BMPRO = $request->input('BMPRO');
             }
-            if($request->input('TIPO')==null)
+            if($request->input('Tipo')==null)
             {
                 $general->Tipo = $EsperaDato;
             }else{
-                $general->Tipo = $request->input('TIPO');
+                $general->Tipo = $request->input('Tipo');
             } 
             if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
             {
