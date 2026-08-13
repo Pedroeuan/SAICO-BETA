@@ -165,6 +165,290 @@
         }
     }
 
+    /* Comentarios sugeridos para el registro fotografico de FOR-PIMP-04/02 y FOR-PIMP-04/03. */
+    function comentarioPredeterminado0403(posicion) {
+        var comentarios = {
+            arriba_izquierda: 'FOTOMICROGRAFIA A 100X.',
+            abajo_izquierda: 'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112.',
+            abajo_derecha: 'FOTOGRAFÍA ESPECÍFICA DONDE SE MUESTRA LA ZONA A LA CUAL SE LE REALIZÓ LA CARACTERIZACIÓN.'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+    function esComentarioPredeterminado0403(valor) {
+        return [
+            'FOTOMICROGRAFIA A 100X.',
+            'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112.',
+            'FOTOGRAFÍA ESPECÍFICA DONDE SE MUESTRA LA ZONA A LA CUAL SE LE REALIZÓ LA CARACTERIZACIÓN.'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+    /* Comentarios automáticos exclusivos para FOR-PIMP-03_B_01 */
+    function comentarioPredeterminado03B01(posicion) {
+        var comentarios = {
+            arriba_izquierda:
+                'FOTOMICROGRAFIA A 100X.\nPHOTOMICROGRAPHY AT 100X.',
+
+            abajo_izquierda:
+                'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112\nGRAIN SIZE XXX COMPARATIVE ASTM E-112',
+
+            abajo_derecha:
+                'FOTO: PIEZA INSPECCIONADA\nPHOTO: INSPECTED PIECE'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+        function esComentarioPredeterminado03B01(valor) {
+        return [
+            // Nuevos comentarios bilingües
+            'FOTOMICROGRAFIA A 100X.\nPHOTOMICROGRAPHY AT 100X.',
+            'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112\nGRAIN SIZE XXX COMPARATIVE ASTM E-112',
+            'FOTO: PIEZA INSPECCIONADA\nPHOTO: INSPECTED PIECE',
+
+            // Comentarios anteriores guardados en Edit
+            'FOTOMICROGRAFIA A 100X.',
+            'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112.',
+            'TAMAÑO DE GRANO XXX COMPARATIVA ASTM E-112',
+            'FOTO: PIEZA INSPECCIONADA'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado03B01(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var checkboxTexto;
+        var textoActual;
+        var sugerido;
+
+        /* SOLO aplica al formato 03_B_01 */
+        if (!formulario || formulario.id !== 'FOR-PIMP-03_B_01') {
+            return;
+        }
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+        seleccion = contenedor.querySelector(
+            'input[type="radio"][data-foto-posicion]:checked'
+        );
+        checkboxTexto = contenedor.querySelector('.foto-texto-checkbox');
+
+        if (!comentario || !seleccion || (checkboxTexto && checkboxTexto.checked)) {
+            return;
+        }
+
+        sugerido = comentarioPredeterminado03B01(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (
+            sugerido &&
+            (textoActual === '' || esComentarioPredeterminado03B01(textoActual))
+        ) {
+            comentario.value = sugerido;
+        } else if (
+            !sugerido &&
+            esComentarioPredeterminado03B01(textoActual)
+        ) {
+            comentario.value = '';
+        }
+    }
+    /* Comentarios automáticos exclusivos para FOR-PIMP-02_B_04 */
+    function comentarioPredeterminado02B04(posicion) {
+        var comentarios = {
+            arriba_izquierda:
+                'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece',
+
+            abajo_derecha:
+                'FOTO: REALIZACIÓN DE LA PRUEBA DE DUREZA\nPhoto: Hardness Test Performance'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+    function esComentarioPredeterminado02B04(valor) {
+        return [
+            'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece',
+            'FOTO: REALIZACIÓN DE LA PRUEBA DE DUREZA\nPhoto: Hardness Test Performance'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado02B04(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var textoActual;
+        var sugerido;
+
+        if (!formulario || formulario.id !== 'FOR-PIMP-02_B_04') {
+            return;
+        }
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+        seleccion = contenedor.querySelector(
+            'input[type="radio"][data-foto-posicion]:checked'
+        );
+
+        if (!comentario || !seleccion) {
+            return;
+        }
+
+        sugerido = comentarioPredeterminado02B04(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (
+            sugerido &&
+            (textoActual === '' || esComentarioPredeterminado02B04(textoActual))
+        ) {
+            comentario.value = sugerido;
+        } else if (
+            !sugerido &&
+            esComentarioPredeterminado02B04(textoActual)
+        ) {
+            comentario.value = '';
+        }
+    }
+
+    function aplicarComentarioPredeterminado0403(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var checkboxTexto;
+        var textoActual;
+        var sugerido;
+
+        if (!formulario || ['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].indexOf(formulario.id) === -1) return;
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+        seleccion = contenedor.querySelector('input[type="radio"][data-foto-posicion]:checked');
+        checkboxTexto = contenedor.querySelector('.foto-texto-checkbox');
+
+        // Los cuadros de texto usan su propio contenido; no se les impone pie de fotografia.
+        if (!comentario || !seleccion || (checkboxTexto && checkboxTexto.checked)) return;
+
+        sugerido = comentarioPredeterminado0403(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (sugerido && (textoActual === '' || esComentarioPredeterminado0403(textoActual))) {
+            comentario.value = sugerido;
+        } else if (!sugerido && esComentarioPredeterminado0403(textoActual)) {
+            comentario.value = '';
+        }
+    }
+
+    /* Comentarios automáticos exclusivos para FOR-PIMP-05_B_01 */
+    function comentarioPredeterminado05B01(posicion) {
+        var comentarios = {
+            arriba_izquierda:
+                'FOTO: PIEZA ANALIZADA \n Photo: Analyzed Piece',
+
+            abajo_derecha:
+                'FOTO: REALIZANDO EL ANÁLISIS\nPhoto: Performing the analysis'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+    function esComentarioPredeterminado05B01(valor) {
+        return [
+            'FOTO: PIEZA ANALIZADA \n Photo: Analyzed Piece',
+            'FOTO: REALIZANDO EL ANÁLISIS \n Photo: Performing the analysis'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado05B01(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var textoActual;
+        var sugerido;
+
+        // SOLO aplica al formato 05_B_01
+        if (!formulario || formulario.id !== 'FOR-PIMP-05_B_01') {
+            return;
+        }
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+
+        seleccion = contenedor.querySelector(
+            'input[type="radio"][data-foto-posicion]:checked'
+        );
+
+        if (!comentario || !seleccion) {
+            return;
+        }
+
+        sugerido = comentarioPredeterminado05B01(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (
+            sugerido &&
+            (textoActual === '' || esComentarioPredeterminado05B01(textoActual))
+        ) {
+            comentario.value = sugerido;
+
+        } else if (
+            !sugerido &&
+            esComentarioPredeterminado05B01(textoActual)
+        ) {
+            comentario.value = '';
+        }
+    }
+    /* Comentarios automáticos exclusivos para FOR-PIMP-06_B_01 */
+    function comentarioPredeterminado06B01(posicion) {
+        var comentarios = {
+            arriba_izquierda:
+                'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece',
+
+            abajo_derecha:
+                'FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance'
+        };
+
+        return comentarios[posicion] || '';
+    }
+
+    function esComentarioPredeterminado06B01(valor) {
+        return [
+            'FOTO: PIEZA INSPECCIONADA\nPhoto: Inspected Piece',
+            'FOTO: REALIZACIÓN DE LA PRUEBA\nPhoto: Test Performance'
+        ].indexOf(String(valor || '').trim()) !== -1;
+    }
+
+    function aplicarComentarioPredeterminado06B01(contenedor) {
+        var formulario = contenedor.closest('form');
+        var comentario;
+        var seleccion;
+        var textoActual;
+        var sugerido;
+
+        if (!formulario || formulario.id !== 'FOR-PIMP-06_B_01') {
+            return;
+        }
+
+        comentario = contenedor.querySelector('textarea[name^="comments"]');
+
+        seleccion = contenedor.querySelector(
+            'input[type="radio"][data-foto-posicion]:checked'
+        );
+
+        if (!comentario || !seleccion) {
+            return;
+        }
+
+        sugerido = comentarioPredeterminado06B01(seleccion.value);
+        textoActual = String(comentario.value || '').trim();
+
+        if (
+            sugerido &&
+            (textoActual === '' || esComentarioPredeterminado06B01(textoActual))
+        ) {
+            comentario.value = sugerido;
+        } else if (
+            !sugerido &&
+            esComentarioPredeterminado06B01(textoActual)
+        ) {
+            comentario.value = '';
+        }
+    }
     /* Crea e inserta los controles de pagina y posicion de una fotografia. */
     function crearControl(contenedor, orden) {
         var indice;
@@ -265,11 +549,21 @@
         bloque.querySelectorAll('input[type="radio"][data-foto-posicion]').forEach(function (radio) {
             radio.addEventListener('change', function () {
                 sincronizarHojaCompleta(contenedor);
+                aplicarComentarioPredeterminado02B04(contenedor);
+                aplicarComentarioPredeterminado0403(contenedor);
+                aplicarComentarioPredeterminado03B01(contenedor);
+                aplicarComentarioPredeterminado05B01(contenedor);
+                aplicarComentarioPredeterminado06B01(contenedor); 
             });
         });
 
         // También sincroniza el valor inicial al crear los controles.
         sincronizarHojaCompleta(contenedor);
+        aplicarComentarioPredeterminado02B04(contenedor);
+        aplicarComentarioPredeterminado0403(contenedor);
+        aplicarComentarioPredeterminado03B01(contenedor);
+        aplicarComentarioPredeterminado05B01(contenedor);
+        aplicarComentarioPredeterminado06B01(contenedor); 
 
         // En modo texto se oculta la carga de archivo y el comentario ocupa el espacio completo.
         if (permiteCuadroTexto) {
@@ -292,10 +586,16 @@
                     comentario.placeholder = activo
                         ? 'Escriba el contenido que aparecerá dentro del cuadro de texto'
                         : 'Comentario de la fotografía';
+                    if (activo && esComentarioPredeterminado0403(comentario.value)) {
+                        comentario.value = '';
+                    }
                 }
             };
 
             checkboxTexto.addEventListener('change', actualizarModoTexto);
+            checkboxTexto.addEventListener('change', function () {
+                aplicarComentarioPredeterminado0403(contenedor);
+            });
             actualizarModoTexto();
         }
 
@@ -553,8 +853,10 @@
                 .map(Number)
                 .filter(Number.isFinite);
 
+            // El promedio de dureza se reporta como numero entero:
+            // se calcula con todas las lecturas validas y se redondea el resultado final.
             promedio.value = numeros.length
-                ? (numeros.reduce(function (total, valor) { return total + valor; }, 0) / numeros.length).toFixed(2)
+                ? String(Math.round(numeros.reduce(function (total, valor) { return total + valor; }, 0) / numeros.length))
                 : '';
         }
 
