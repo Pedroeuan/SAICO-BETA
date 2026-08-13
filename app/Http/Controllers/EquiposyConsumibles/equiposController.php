@@ -58,14 +58,14 @@ class equiposController extends Controller
                 'Serie' => 'required|string|max:255',
                 'ISO' => 'required|in:9001,17025',
                 'Disponibilidad_Estado' => ['required', 'string', 'max:255', 'not_in:'],
-                'TIPO' => ['required', 'string', 'max:255', 'not_in:'],
+                'Tipo' => ['required', 'string', 'max:255', 'not_in:'],
             ]);
             // Limpia y normaliza el número económico
             $noEconomico = $request->input('No_economico');
             $serie = Str::lower($request->input('Serie'));
 
             /*Esta validaciones es por el apartado de la 17025*/
-            $Tipo = $request->input('TIPO');
+            $Tipo = $request->input('Tipo');
 
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
             $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
@@ -110,14 +110,14 @@ class equiposController extends Controller
                 $existsNo_Economico = general_eyc::whereRaw("TRIM(LEADING '0' FROM LOWER(REPLACE(REPLACE(No_economico, 'No. ', ''), 'AD-', ''))) = ?", [$noEconomicoLimpio])
                 ->where('Tipo', 'HERRAMIENTAS')
                 ->exists();
-            }
+            }*/
             //$existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
             // ⚠️ Solo verificar duplicado de serie si el valor no es '---'
             $existsSerie = false;
             if ($serie !== '---') {
                 $existsSerie = general_eyc::whereRaw("LOWER(Serie) = ?", [$serie])->exists();
             }
-            Log::info('***********************');
+            /*Log::info('***********************');
             Log::info('existsNo_Economico: ', ['existsNo_Economico' => $existsNo_Economico]);
             Log::info('***********************');
             Log::info('existsSerie: ', ['existsSerie' => $existsSerie]);*/
@@ -206,11 +206,11 @@ class equiposController extends Controller
             }else{
                 $general->BMPRO = $request->input('BMPRO');
             }
-            if($request->input('TIPO')==null)
+            if($request->input('Tipo')==null)
             {
                 $general->Tipo = $EsperaDato;
             }else{
-                $general->Tipo = $request->input('TIPO');
+                $general->Tipo = $request->input('Tipo');
             } 
             if($request->input('Disponibilidad_Estado')=='Elige un Tipo')
             {
