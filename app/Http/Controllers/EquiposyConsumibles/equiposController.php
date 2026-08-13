@@ -49,7 +49,7 @@ class equiposController extends Controller
      */
     public function storeEquipos(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
             $request->validate([
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'No_economico' => 'required|string|max:255',
