@@ -49,7 +49,7 @@ class equiposController extends Controller
      */
     public function storeEquipos(Request $request)
     {
-        //dd($request->all());
+        dd($request->all());
             $request->validate([
                 'Nombre_E_P_BP' => 'required|string|max:255',
                 'No_economico' => 'required|string|max:255',
@@ -65,7 +65,7 @@ class equiposController extends Controller
             $serie = Str::lower($request->input('Serie'));
 
             /*Esta validaciones es por el apartado de la 17025*/
-            $Tipo = $request->input('TIPO');
+            $Tipo = $request->input('Tipo');
 
             // Eliminar prefijos como "No. Eco-", "No Eco-", "Eco-" y ceros a la izquierda
             $noEconomicoLimpio = preg_replace('/^(no\.?\s*eco[- ]?|eco[- ]?)/i', '', $noEconomico);// Elimina el prefijo
