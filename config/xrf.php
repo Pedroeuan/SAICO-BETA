@@ -7,8 +7,8 @@ return [
 
     // Coordenadas relativas de la hoja generada por el equipo XRF.
     'crops' => [
-        // Mantiene visibles la penúltima y última fila en los tres recortes del formato 04_03.
-        'tabla_elementos' => ['x' => 0.054, 'y' => 0.225, 'width' => 0.410, 'height' => 0.400],
+        // Recorta la tabla al paño del borde negro para que no viaje margen blanco al PDF final.
+        'tabla_elementos' => ['x' => 0.0638, 'y' => 0.2333, 'width' => 0.3938, 'height' => 0.3786],
         'grafica_espectro' => ['x' => 0.575, 'y' => 0.105, 'width' => 0.395, 'height' => 0.305],
     ],
 ];

@@ -56,6 +56,34 @@
         max-height: 200px; /* Ajusta la altura según sea necesario */
         overflow-y: auto;
         }
+        /* Acordeon visual del FOR-PIMP-04_03.
+           Solo ordena la vista en bloques; no cambia nombres de campos ni datos enviados. */
+        .saico-form-section {
+            border: 1px solid #0d6efd;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.08);
+        }
+
+        .saico-form-section-header {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .saico-form-section-header .saico-section-icon {
+            margin-left: auto;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .saico-form-section-body {
+            padding: 12px;
+        }
+
+        .saico-form-section.is-collapsed .saico-form-section-body {
+            display: none !important;
+        }
+
         /* Acordeon de herramientas metalograficas.
            Mantiene visible el titulo azul y oculta solo Fiji + conteo para reducir ruido visual. */
         .saico-metalografia-tools-section {
@@ -654,7 +682,25 @@
                                         </tr>
 
                                         <tr>
-                                            <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                            <td>
+                                                <div class="col-sm-50 d-flex justify-content-center">
+                                                    <div class="form-group text-center">
+                                                        <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                        <select class="form-select inputForm" id="tecnicosSelect" name="Firmas_Reportes1[ID_TECNICO]">
+                                                            <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                            @foreach($Tecnicos as $Tecnico)
+                                                                <option value="{{ $Tecnico->id }}"
+                                                                        data-name="{{ $Tecnico->name }}">
+                                                                    {{ $Tecnico->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <input type="hidden" name="Firmas_Reportes1[NOMBRE_TECNICO]" id="NOMBRE_TECNICO" value="{{ old('Firmas_Reportes1.NOMBRE_TECNICO') }}">
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
 
                                         <tr>
@@ -685,7 +731,25 @@
                                     </tr>
 
                                     <tr>
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_TECNICO]" placeholder="Ejemplo: NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                        <td>
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                    <select class="form-select inputForm" id="tecnicosSelect2" name="Firmas_Reportes2[ID_TECNICO]">
+                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <input type="hidden" name="Firmas_Reportes2[NOMBRE_TECNICO]" id="NOMBRE_TECNICO2" value="{{ old('Firmas_Reportes2.NOMBRE_TECNICO') }}">
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                     </tr>
@@ -729,7 +793,25 @@
 
                                     <tr>
 
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                        <td>
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                    <select class="form-select inputForm" id="tecnicosSelect3" name="Firmas_Reportes3[ID_TECNICO]">
+                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <input type="hidden" name="Firmas_Reportes3[NOMBRE_TECNICO]" id="NOMBRE_TECNICO3" value="{{ old('Firmas_Reportes3.NOMBRE_TECNICO') }}">
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                         <td></td>
@@ -794,7 +876,25 @@
 
                                     <tr>
 
-                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_TECNICO]" placeholder="NOMBRE DEL TÉCNICO" value="{{old('NOMBRE_TECNICO')}}"></td>
+                                        <td>
+                                            <div class="col-sm-50 d-flex justify-content-center">
+                                                <div class="form-group text-center">
+                                                    <label class="col-form-label" for="inputSuccess">SELECCIÓN DE TÉCNICOS:</label>
+                                                    <select class="form-select inputForm" id="tecnicosSelect4" name="Firmas_Reportes4[ID_TECNICO]">
+                                                        <option value="" selected disabled>Seleccione un Técnico</option>
+
+                                                        @foreach($Tecnicos as $Tecnico)
+                                                            <option value="{{ $Tecnico->id }}"
+                                                                    data-name="{{ $Tecnico->name }}">
+                                                                {{ $Tecnico->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <input type="hidden" name="Firmas_Reportes4[NOMBRE_TECNICO]" id="NOMBRE_TECNICO4" value="{{ old('Firmas_Reportes4.NOMBRE_TECNICO') }}">
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td></td>
                                         <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO')}}"></td>
                                         <td></td>
@@ -934,6 +1034,90 @@
 
 <script src="{{ asset('js/session-handler.js') }}"></script>
 <script>
+    // Agrupa el FOR-PIMP-04_03 en 5 bloques funcionales para reducir scroll.
+    // El bloque 4 (Fiji + conteo de granos) lo controla el minimizador metalografico existente.
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('FOR-PIMP-04_03');
+        if (!form || form.dataset.saicoSecciones0403Inicializadas === '1') return;
+
+        form.dataset.saicoSecciones0403Inicializadas = '1';
+
+        const normalizar = function (texto) {
+            return (texto || '').replace(/\s+/g, ' ').trim().toUpperCase();
+        };
+
+        const encabezados = Array.from(form.querySelectorAll('.d-flex.justify-content-center.align-items-center.p-2.bg-primary.text-white.rounded'));
+        const buscarEncabezado = function (texto) {
+            return encabezados.find(function (encabezado) {
+                return normalizar(encabezado.textContent).includes(texto);
+            });
+        };
+
+        const inicioFraccion = form.querySelector('[data-imagej-phase]');
+        const secciones = [
+            { clave: 'generales', titulo: '1. Datos generales', inicio: buscarEncabezado('DATOS GENERALES'), fin: buscarEncabezado('DATOS DEL EQUIPO'), abierta: true },
+            { clave: 'equipo', titulo: '2. Datos del equipo', inicio: buscarEncabezado('DATOS DEL EQUIPO'), fin: buscarEncabezado('NORMA Y RESULTADOS'), abierta: false },
+            { clave: 'norma', titulo: '3. Norma y resultados', inicio: buscarEncabezado('NORMA Y RESULTADOS'), fin: inicioFraccion, abierta: false },
+            { clave: 'firmas_fotos', titulo: '5. Firmas y fotos', inicio: buscarEncabezado('FIRMAS'), fin: null, abierta: false },
+        ].filter(function (seccion) {
+            return seccion.inicio;
+        });
+
+        secciones.forEach(function (seccion) {
+            const contenedor = document.createElement('div');
+            const cuerpo = document.createElement('div');
+            const icono = document.createElement('span');
+            const claveEstado = 'saico:FOR-PIMP-04_03:seccion:' + window.location.pathname + ':' + seccion.clave;
+            const estadoGuardado = localStorage.getItem(claveEstado);
+            const abierta = estadoGuardado === null ? seccion.abierta : estadoGuardado === '1';
+
+            contenedor.className = 'col-12 saico-form-section mb-3' + (abierta ? '' : ' is-collapsed');
+            cuerpo.className = 'saico-form-section-body row';
+            icono.className = 'saico-section-icon';
+
+            seccion.inicio.classList.add('saico-form-section-header');
+            seccion.inicio.setAttribute('role', 'button');
+            seccion.inicio.setAttribute('tabindex', '0');
+            seccion.inicio.innerHTML = '<span>' + seccion.titulo + '</span>';
+            seccion.inicio.appendChild(icono);
+
+            const actualizarVista = function () {
+                const cerrado = contenedor.classList.contains('is-collapsed');
+                icono.textContent = cerrado ? '+' : '-';
+                cuerpo.style.display = cerrado ? 'none' : 'flex';
+            };
+
+            const alternar = function () {
+                contenedor.classList.toggle('is-collapsed');
+                localStorage.setItem(claveEstado, contenedor.classList.contains('is-collapsed') ? '0' : '1');
+                actualizarVista();
+            };
+
+            seccion.inicio.parentNode.insertBefore(contenedor, seccion.inicio);
+            contenedor.appendChild(seccion.inicio);
+
+            let nodo = contenedor.nextSibling;
+            while (nodo && nodo !== seccion.fin) {
+                const mover = nodo;
+                nodo = nodo.nextSibling;
+                cuerpo.appendChild(mover);
+            }
+
+            contenedor.appendChild(cuerpo);
+            actualizarVista();
+
+            seccion.inicio.addEventListener('click', alternar);
+            seccion.inicio.addEventListener('keydown', function (evento) {
+                if (evento.key === 'Enter' || evento.key === ' ') {
+                    evento.preventDefault();
+                    alternar();
+                }
+            });
+        });
+    });
+</script>
+
+<script>
     const updateNotificationUrl = "{{ url('notificaciones/update') }}";
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
@@ -974,7 +1158,7 @@
         header.classList.add('saico-metalografia-tools-header');
         header.setAttribute('role', 'button');
         header.setAttribute('tabindex', '0');
-        header.innerHTML = '<span>FRACCION DE FASES POR ANALISIS DE IMAGEN Y CONTEO LINEAL DE GRANOS</span>';
+        header.innerHTML = '<span>4. Fraccion de fases y granos</span>';
         header.appendChild(icon);
 
         const refresh = function () {
@@ -1087,6 +1271,21 @@ $(document).ready(function() {
         });
     });
 
+    // Sincroniza los selects de técnicos con el campo oculto que se guarda para el reporte, siguiendo el patrón de PINS.
+    document.addEventListener('DOMContentLoaded', function () {
+        for (let indice = 1; indice <= 4; indice++) {
+            const sufijo = indice === 1 ? '' : indice;
+            const select = document.getElementById('tecnicosSelect' + sufijo);
+            const nombre = document.getElementById('NOMBRE_TECNICO' + sufijo);
+
+            if (!select || !nombre) continue;
+
+            select.addEventListener('change', function () {
+                const opcion = select.options[select.selectedIndex];
+                nombre.value = opcion ? (opcion.getAttribute('data-name') || '') : '';
+            });
+        }
+    });
 </script>
 
 {{-- Ruta propia del formato; el comportamiento de extracción sí se comparte mediante JavaScript. --}}

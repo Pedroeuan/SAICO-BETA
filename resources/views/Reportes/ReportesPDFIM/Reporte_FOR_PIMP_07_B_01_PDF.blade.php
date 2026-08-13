@@ -6,7 +6,11 @@
 
     <style>
         @page {
-            margin: 3cm 1.2cm 2.1cm 2.2cm;
+            margin: 
+            2.5cm 
+            1.2cm 
+            2.8cm 
+            1.6cm;
         }
 
         body {
@@ -66,7 +70,7 @@
             text-align: center;
             background-color: #305496;
             color: #fff;
-            font-size: 8px;
+            font-size: 8.5px;
         }
 
         .datosgenerales,
@@ -79,7 +83,7 @@
         .datosinspeccion th,
         .datosinspeccion td {
             border: .6px solid black;
-            padding: 3px;
+            padding: 1px;
             text-align: center;
             vertical-align: middle;
         }
@@ -123,13 +127,15 @@
         .etiquetaPrueba {
             width: 28%;
             font-weight: bold;
-            line-height: 11px;
+            line-height: 13px;
         }
 
         .valorPrueba {
             width: 18%;
             border-bottom: 1px solid black;
             min-height: 12px;
+            vertical-align: bottom !important;
+            padding-bottom: 2px !important;
         }
 
         .tablaPrueba td.valorPrueba {
@@ -157,11 +163,12 @@
             width: 12%;
             font-weight: bold;
             line-height: 10px;
+            font-size: 8.5px;
         }
 
         .valorGeneral {
-            border-bottom: 1px solid black;
-            height: 13px;
+            border-bottom: .5px solid black;
+            height: 23px;
         }
         .observacionesBox {
             width: 100%;
@@ -199,25 +206,24 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>
-                FORMAT</th>
-                <th style="width: 70%;">CÓDIGO<br>
-                    CODE
+                <th style="width:390%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
                 </th>
-                <th style="width: 100%;">FOR-PIMP-07_B/01</th>
-                <th rowspan="3" style="width: 80%;">
-                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
-                </th>
+                <th style="width:60%">Código<br>Code</td>
+                <th style="width:100%">FOR-PIMP-07_B/01</th>
+                <th rowspan="3" style="width:85%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
                 <th rowspan="2">INFORME DE RELEVADO DE ESFUERZOS<br>
                     RELIEVED OF STRESS INFORM</th>
-                <th>VERSIÓN<br>
-                VERSION</th>
+                <th>VERSIÓN<br>Version:</td>
                 <th>1</th>
             </tr>
             <tr>
-                <th>PÁGINA<br>PAGE</th>
+                <th>PÁGINA<br>Page:</th>
                 <th></th>
             </tr>
         </thead>
@@ -397,66 +403,92 @@
     </thead>
     <tbody>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda">FECHA<br>DATE:</th>
+            <th class="etiquetaGeneral alinearIzquierda">FECHA<br>Date:</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. REPORTE<br>No. REPORT:</th>
+            <th class="etiquetaGeneral">No. REPORTE<br>No. Report:</th>
             <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda">CLIENTE<br>CLIENT:</th>
+            <th class="etiquetaGeneral alinearIzquierda">CLIENTE<br>Client:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. CONTRATO<br>No. CONTRACT:</th>
+            <th class="etiquetaGeneral">No. CONTRATO<br>No. Contract:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda">PROYECTO<br>PROJECT:</th>
+            <th class="etiquetaGeneral alinearIzquierda">PROYECTO<br>Project:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda" style="white-space: nowrap;">ORDEN DE TRABAJO<br>WORK ORDER:</th>
+            <th class="etiquetaGeneral alinearIzquierda" style="white-space: nowrap;">ORDEN DE TRABAJO<br>Work Order:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda">FOLIO<br>FOLIO:</th>
+            <th class="etiquetaGeneral alinearIzquierda">FOLIO<br>Folio:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda">PARTIDA<br>LOT:</th>
+            <th class="etiquetaGeneral alinearIzquierda">PARTIDA<br>Lot:</th>
             <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda">INSTALACION<br>LOCATION:</th>
+            <th class="etiquetaGeneral alinearIzquierda">INSTALACION<br>Location:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
-            <th class="etiquetaGeneral">No. ISOMETRICO<br>No. ISOMETRIC:</th>
+            <th class="etiquetaGeneral">No. ISOMETRICO<br>No. Isometric:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda" style="white-space: nowrap;">ELEMENTOS SOLDADOS<br>WELDINGS:</th>
+            <th class="etiquetaGeneral alinearIzquierda" style="white-space: nowrap;">ELEMENTOS SOLDADOS<br>Weldings:</th>
             <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Elementos_Soldados'] ?? '' }}</td>
-            <th class="etiquetaGeneral">MATERIAL<br>MATERIAL:</th>
+            <th class="etiquetaGeneral">MATERIAL<br>Material:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda">No. JUNTA<br>No. JOINT:</th>
+            <th class="etiquetaGeneral alinearIzquierda">No. JUNTA<br>No. Joint:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['No_Junta'] ?? '' }}</td>
-            <th class="etiquetaGeneral">TRAZABILIDAD<br>TRACEABILITY:</th>
+            <th class="etiquetaGeneral">TRAZABILIDAD<br>Traceability:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
-            <th class="etiquetaGeneral">ESPESORES<br>THICKNESSES:</th>
+            <th class="etiquetaGeneral">ESPESORES<br>Thicknesses:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Espesores'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral alinearIzquierda">PROCEDIMIENTO<br>PROCEDURE:</th>
+            <th class="etiquetaGeneral alinearIzquierda">PROCEDIMIENTO<br>Procedure:</th>
             <td class="valorGeneral">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
-            <th class="etiquetaGeneral">CODIGO DE DISENO<br>DESIGN CODE:</th>
+            <th class="etiquetaGeneral">
+                <span style="white-space: nowrap;">CODIGO DE DISENO</span><br>
+                <span style="white-space: nowrap;">Design Code:</span>
+            </th>
             <td class="valorGeneral">{{ $Detalles_Generales['Codigo_Diseno'] ?? '' }}</td>
-            <th class="etiquetaGeneral">DIAM. NOMINAL<br>NOMINAL DIAMETER:</th>
+            <th class="etiquetaGeneral">DIAM. NOMINAL<br>Nominal Diameter:</th>
             <td class="valorGeneral valor-diametro">{{ $Detalles_Generales['Diam_Nominal'] ?? '' }}</td>
         </tr>
         <tr>
-            <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA ANTES<br>DEL RELEVADO<br>HARDNESS REPORT BEFORE THE<br>RELIEVED OF STRESS:</th>
-            <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Antes_Relevado'] ?? '' }}</td>
-            <th class="etiquetaGeneral" colspan="2" style="width: 28%;">REPORTE DE DUREZA<br>DESPUES DEL RELEVADO<br>HARDNESS REPORT AFTER THE<br>RELIEVED OF STRESS:</th>
-            <td class="valorGeneral" style="width: 22%;">{{ $Detalles_Generales['Reporte_Despues_Relevado'] ?? '' }}</td>
+        <td colspan="6" style="padding: 0;">
+        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+            <tr>
+                <!-- ETIQUETA IZQUIERDA -->
+                <th style="width: 35%; text-align: left; font-size: 8.5px; line-height: 10px; padding-left: 4px; font-weight: bold;">
+                    <span style="white-space: nowrap;">REPORTE DE DUREZA ANTES DEL RELEVADO</span><br>
+                    <span style="white-space: nowrap;">Hardness Report Before The Relieved of Stress:</span>
+                </th>
+
+                <!-- VALOR / LINEA IZQUIERDA -->
+                <td style="width: 25%; text-align: center; vertical-align: bottom; border-bottom: .5px solid black; transform: translateX(-10px);">
+                    {{ $Detalles_Generales['Reporte_Antes_Relevado'] ?? '' }}
+                </td>
+
+                <!-- ETIQUETA DERECHA -->
+                <th style="width: 35%; text-align: center; font-size: 8.5px; line-height: 10px; font-weight: bold;">
+                    <span style="white-space: nowrap;">REPORTE DE DUREZA DESPUES DEL RELEVADO</span><br>
+                    <span style="white-space: nowrap;">Hardness Report After The Relieved of Stress:</span>
+                </th>
+
+                <!-- VALOR / LINEA DERECHA -->
+                <td style="width: 25%; text-align: center; vertical-align: bottom; border-bottom: .5px solid black; transform: translateX(18-px);">
+                    {{ $Detalles_Generales['Reporte_Despues_Relevado'] ?? '' }}
+                </td>
+            </tr>
+        </table>
+    </td>
         </tr>
     </tbody>
 </table>
