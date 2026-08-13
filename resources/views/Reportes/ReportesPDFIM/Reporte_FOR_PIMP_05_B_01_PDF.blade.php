@@ -7,7 +7,7 @@
     <style>
         @page {
             margin:
-            2.5cm    /* Superior */
+            2.5cm  /* Superior */
             1.2cm  /* Derecho */
             2.1cm  /* Inferior */
             2.2cm; /* Izquierdo */
@@ -29,7 +29,7 @@
          */
         header {
             position: fixed;
-            top: -58px;
+            top: -60px;
             left: 0;
             right: 0;
             text-align: center;
@@ -48,7 +48,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            font-size: 9px;
+            font-size: 9.5px;
         }
 
         .tablaheader th {
@@ -132,6 +132,10 @@
             vertical-align: middle;
         }
 
+        .textoValorGeneral {
+            position: relative;
+            top: .5px; /* BAJA SOLO EL TEXTO HACIA LA LÍNEA */
+        }
         /* Titulo principal de la seccion DATOS GENERALES. */
         .tituloGeneralPdf {
             font-weight: bold;
@@ -217,6 +221,8 @@
         /* Mantiene juntos los datos generales y sus fotografias en una pagina. */
         .photo-page {
             page-break-inside: avoid;
+            position: relative;
+            top: -5px; /* SUBE DATOS GENERALES Y TODO EL BLOQUE */
         }
 
         /* Centrado de las tablas y celdas que se imprimen en el pie de pagina. */
@@ -255,7 +261,7 @@
             table-layout: fixed;
             margin-bottom: 4px;
             position: relative;
-            top: -12px;
+            top: -30px;
         }
 
         .observacionesBox td {
@@ -297,7 +303,7 @@
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            margin-top: 0;
+            margin-top: 20;
         }
 
         .composicionLayout > tbody > tr > td {
@@ -316,11 +322,13 @@
         }
 
         .tablaComposicion {
-            width: 70%;
+            width: 85%;
             border-collapse: collapse;
             table-layout: fixed;
-            font-size: 5.7px;
-            margin-top: 20px;
+            font-size: 6.2px;
+            margin-top: 35px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .tablaComposicion th,
@@ -330,12 +338,12 @@
             padding: 0 2px;
             text-align: center;
             vertical-align: middle;
-            line-height: 7px;
+            line-height: 8px;
         }
 
         .tablaComposicion thead th {
             height: 32px;
-            font-size: 5.2px;
+            font-size: 6.2px;
             line-height: 6px;
         }
 
@@ -372,6 +380,7 @@
             text-align: center;
             position: relative;
             left: -75px;
+            top: -15px;
         }
 
         .etiquetaReferencia {
@@ -384,6 +393,8 @@
             position: relative;
             left: -75px;
             text-align: center;
+            top: -15px;
+            font-size: 7px;
         }
 
         .tituloValoresXrf {
@@ -414,6 +425,10 @@
             height: 210px;
             border: .6px solid #000;
         }
+        .firmasArriba {
+            position: relative;
+            top: -15px;
+        }
     </style>
 </head>
 
@@ -423,21 +438,24 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width: 400%;">FORMATO<br>Format</th>
-                <th style="width: 70%;">CÓDIGO<br>Code</th>
-                <th style="width: 100%;">FOR-PIMP-05_B/01</th>
-                <th rowspan="3" style="width: 80%;">
-                    <img src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;">
+                <th style="width:390%">FORMATO<br>Format</th>
+                <th rowspan="3" style="width:70%">
+                    @if(!empty($QR_PDF))
+                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                    @endif
                 </th>
+                <th style="width:60%">Código<br>Code</td>
+                <th style="width:90%">FOR-PIMP-05_B/01</th>
+                <th rowspan="3" style="width:85%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
-                <th rowspan="2"> Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)<br>
+                <th rowspan="2">Informe de Análisis Químico Mediante la Técnica de Espectrometría de Emisión Óptica (OES)<br>
                     Chemical Analysis Report Using the Optical Emission Spectrometry Technique (OES)</th>
-                <th>VERSIÓN<br>Version</th>
+                <th>VERSIÓN<br>Version:</td>
                 <th>2</th>
             </tr>
             <tr>
-                <th>PÁGINA<br>Page</th>
+                <th>PÁGINA<br>Page:</th>
                 <th></th>
             </tr>
         </thead>
@@ -453,7 +471,9 @@
             </tr>
         </table>
 
-        @include('Reportes.partials.firmas_im_pdf')
+        <div class="firmasArriba">
+            @include('Reportes.partials.firmas_im_pdf')
+        </div>
         <table class="datosgenerales" style="display: none;">
             <thead>
                 @if( $numFirmas == 2)
@@ -607,74 +627,228 @@
 </footer>
 
             {{-- ================= DATOS GENERALES ================= --}}
-<div style="margin-bottom: 2px;"></div>
+<div class="photo-page" style="position: relative; top: -1px;">
 
 <div class="photo-page">
     <table class="tablaGenerales">
-        <thead class="encabezadoAzul">
-            <tr>
-                <th colspan="6" class="tituloGeneralPdf">DATOS GENERALES<br>General Data</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th class="etiquetaGeneral">FECHA:<br>Date</th>
-                <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Fecha'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">No. REPORTE:</span>No. Report:</th>
-                <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral">CLIENTE:<br>Client:</th>
-                <td class="valorGeneral" colspan="3">{{ $Detalles_Generales['Cliente'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">No. CONTRATO:</span>No. Contract:</th>
-                <td class="valorGeneral">{{ $Detalles_Generales['Contrato'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral">PROYECTO:<br>Project:</th>
-                <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Proyecto'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral" style="white-space: nowrap;">ORDEN DE TRABAJO:<br>Work Order:</th>
-                <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral">FOLIO:<br>Folio:</th>
-                <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Folio'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral">PARTIDA:<br>Lot:</th>
-                <td class="valorGeneral" colspan="5">{{ $Detalles_Generales['Partida'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral">INSTALACIÓN:<br>Location:</th>
-                <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Instalacion'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">No. ISOMÉTRICO:</span>No. Isometric:</th>
-                <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral" style="white-space: nowrap;">NOMBRE DE LAS PIEZAS:<br>Name of the Piece:</th>
-                <td class="valorGeneral">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">MATERIAL:</span>Material: </th>
-                <td class="valorGeneral">{{ $Detalles_Generales['Material'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">TRAZABILIDAD:</span>Traceability:</th>
-                <td class="valorGeneral">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral">PROCEDIMIENTO:<br>Procedure:</th>
-                <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">CRITERIO DE EVALUACIÓN:</span>Evaluation Criterion:</th>
-                <td class="valorGeneral" colspan="2">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <th class="etiquetaGeneral">ACCESORIO:<br>Fittings:</th>
-                <td class="valorGeneral">{{ $Detalles_Generales['Accesorio'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">TUBERÍA</span>Piping:</th>
-                <td class="valorGeneral">{{ $Detalles_Generales['Tuberia'] ?? '' }}</td>
-                <th class="etiquetaGeneral etiquetaGeneralCentrada"><span class="titulo-es-nowrap">ESTRUCTURAL:</span>Structural:</th>
-                <td class="valorGeneral">{{ $Detalles_Generales['Estructural'] ?? '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <thead class="encabezadoAzul">
+        <tr>
+            <th colspan="6" class="tituloGeneralPdf">
+                DATOS GENERALES<br>General Data
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <th class="etiquetaGeneral">
+                FECHA:<br>Date
+            </th>
+
+            <td class="valorGeneral" colspan="2">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Fecha'] ?? '' }}
+                </span>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                <span class="titulo-es-nowrap">No. REPORTE:</span>
+                No. Report:
+            </th>
+
+            <td class="valorGeneral" colspan="2">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['No_Reporte'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral">
+                CLIENTE:<br>Client:
+            </th>
+
+            <td class="valorGeneral" colspan="3">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Cliente'] ?? '' }}
+                </span>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                <span class="titulo-es-nowrap">No. CONTRATO:</span>
+                No. Contract:
+            </th>
+
+            <td class="valorGeneral">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Contrato'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral">
+                PROYECTO:<br>Project:
+            </th>
+
+            <td class="valorGeneral" colspan="5">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Proyecto'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral" style="white-space: nowrap;">
+                ORDEN DE TRABAJO:<br>Work Order:
+            </th>
+
+            <td class="valorGeneral" colspan="5">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral">
+                FOLIO:<br>Folio:
+            </th>
+
+            <td class="valorGeneral" colspan="5">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Folio'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral">
+                PARTIDA:<br>Lot:
+            </th>
+
+            <td class="valorGeneral" colspan="5">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Partida'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral">
+                INSTALACIÓN:<br>Location:
+            </th>
+
+            <td class="valorGeneral" colspan="2">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Instalacion'] ?? '' }}
+                </span>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                <span class="titulo-es-nowrap">No. ISOMÉTRICO:</span>
+                No. Isometric:
+            </th>
+
+            <td class="valorGeneral" colspan="2">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['No_Isometrico'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral" style="white-space: nowrap;">
+                NOMBRE DE LAS PIEZAS:<br>Name of the Piece:
+            </th>
+
+            <td class="valorGeneral">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}
+                </span>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                <span class="titulo-es-nowrap">MATERIAL:</span>
+                Material:
+            </th>
+
+            <td class="valorGeneral">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Material'] ?? '' }}
+                </span>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                <span class="titulo-es-nowrap">TRAZABILIDAD:</span>
+                Traceability:
+            </th>
+
+            <td class="valorGeneral">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Trazabilidad'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral">
+                PROCEDIMIENTO:<br>Procedure:
+            </th>
+
+            <td class="valorGeneral" colspan="2">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Procedimiento'] ?? '' }}
+                </span>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                <span class="titulo-es-nowrap">CRITERIO DE EVALUACIÓN:</span>
+                Evaluation Criterion:
+            </th>
+
+            <td class="valorGeneral" colspan="2">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="etiquetaGeneral">
+                ACCESORIO:<br>Fittings:
+            </th>
+
+            <td class="valorGeneral">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Accesorio'] ?? '' }}
+                </span>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                <span class="titulo-es-nowrap">TUBERÍA</span>
+                Piping:
+            </th>
+
+            <td class="valorGeneral">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Tuberia'] ?? '' }}
+                </span>
+            </td>
+
+            <th class="etiquetaGeneral etiquetaGeneralCentrada">
+                <span class="titulo-es-nowrap">ESTRUCTURAL:</span>
+                Structural:
+            </th>
+
+            <td class="valorGeneral">
+                <span class="textoValorGeneral">
+                    {{ $Detalles_Generales['Estructural'] ?? '' }}
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>
 <div style="margin-bottom: 3px;"></div>
 {{-- ================= DATOS DEL EQUIPO ================= --}}
 <table class="datosinspeccion">
