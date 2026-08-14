@@ -273,26 +273,31 @@
                                             <td scope="row">N/A</td>
                                     @endif
 
-                                    @if($general_eyc->iso->Frec_Cali_Mant_Prev == 'ESPERA DE DATO')
-                                        <!-- Mantenimiento Preventivo --> 
-                                        <td scope="row">NO ASIGNADO</td>
-                                    @elseif($general_eyc->iso->Frec_Cali_Mant_Prev == 'N/A')
-                                        <!-- Mantenimiento Preventivo --> 
-                                        <td scope="row">N/A</td>
-                                    @else
-                                        <!-- Mantenimiento Preventivo -->
-                                        <td scope="row">{{$general_eyc->iso->Frec_Cali_Mant_Prev}}</td>
-                                    @endif
+                                    @if($general_eyc->iso)
+                                        @if($general_eyc->iso->Frec_Cali_Mant_Prev == 'ESPERA DE DATO')
+                                            <!-- Mantenimiento Preventivo --> 
+                                            <td scope="row">NO ASIGNADO</td>
+                                        @elseif($general_eyc->iso->Frec_Cali_Mant_Prev == 'N/A')
+                                            <!-- Mantenimiento Preventivo --> 
+                                            <td scope="row">N/A</td>
+                                        @else
+                                            <!-- Mantenimiento Preventivo -->
+                                            <td scope="row">{{$general_eyc->iso->Frec_Cali_Mant_Prev}}</td>
+                                        @endif
 
-                                    @if($general_eyc->iso->Frec_Man_Inter_Time == 'N/A')
-                                        <!-- INTERVALO DE TIEMPO --> 
-                                        <td scope="row">N/A</td>
-                                    @elseif($general_eyc->iso->Frec_Man_Inter_Time ==  'ESPERA DE DATO')
-                                        <!-- INTERVALO DE TIEMPO --> 
-                                        <td scope="row">SIN INTERVALO ASIGNADO</td>
+                                        @if($general_eyc->iso->Frec_Man_Inter_Time == 'N/A')
+                                            <!-- INTERVALO DE TIEMPO --> 
+                                            <td scope="row">N/A</td>
+                                        @elseif($general_eyc->iso->Frec_Man_Inter_Time ==  'ESPERA DE DATO')
+                                            <!-- INTERVALO DE TIEMPO --> 
+                                            <td scope="row">SIN INTERVALO ASIGNADO</td>
+                                        @else
+                                            <!-- INTERVALO DE TIEMPO -->
+                                            <td scope="row">{{$general_eyc->iso->Frec_Man_Inter_Time}}</td>
+                                        @endif
                                     @else
-                                        <!-- INTERVALO DE TIEMPO -->
-                                        <td scope="row">{{$general_eyc->iso->Frec_Man_Inter_Time}}</td>
+                                        <td scope="row">N/A</td>
+                                        <td scope="row">N/A</td>
                                     @endif
 
                                     @if($general_eyc->equipos)
