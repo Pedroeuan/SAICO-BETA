@@ -58,7 +58,7 @@ class TICSController extends Controller
         'Marca' => 'required|string|max:255',
         'Modelo' => 'required|string|max:255',
         'Serie' => 'required|string|max:255',
-        //'ISO' => 'required|in:9001,17025',
+        'ISO' => 'required|in:9001,17025',
         'Disponibilidad_Estado' => 'required|string|max:255',
     ]);
             $NA='N/A';
