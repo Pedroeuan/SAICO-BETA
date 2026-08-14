@@ -49,6 +49,7 @@ class HerramientasController extends Controller
     /*HERRAMIENTAS*/
     public function storeHerramientas(Request $request)
     {
+        //dd($request->all());
         $request->validate([
             'Nombre_E_P_BP' => 'required|string|max:255',
             'No_economico' => 'required|string|max:255',
@@ -248,6 +249,12 @@ class HerramientasController extends Controller
         }else{
             $generalConISO->NombreISO =  $request->input('ISO');
         }
+
+        $generalConISO->Alcance = $request->input('Alcance') ?? $EsperaDato;
+        $generalConISO->Frec_Cali_Mant_Prev = $request->input('Frec_Cali_Mant_Prev') ?? $EsperaDato;
+        $generalConISO->Frec_Man_Inter_Time = $request->input('Frec_Man_Inter_Time') ?? $EsperaDato;
+        $generalConISO->Frec_Verificacion = $request->input('Frec_Verificacion') ?? $EsperaDato;
+        $generalConISO->save();
 
         /* Certificados */
         $generalConCertificados = new certificados;
@@ -675,10 +682,18 @@ class HerramientasController extends Controller
                 'Unidad' => $request->input('Unidad'),
             ]);
             // Actualizar los datos de ISO
-            $generalConISO= ISO::where('idGeneral_EyC', $id)->first();
-            $generalConISO->update([
-                'NombreISO' => $request->input('ISO'),
-            ]);
+            $generalConISO = ISO::where('idGeneral_EyC', $id)->first();
+            if (!$generalConISO) {
+                $generalConISO = new ISO;
+                $generalConISO->idGeneral_EyC = $id;
+            }
+
+            $generalConISO->NombreISO = $request->input('ISO') ?? $EsperaDato;
+            $generalConISO->Alcance = $request->input('Alcance') ?? $EsperaDato;
+            $generalConISO->Frec_Cali_Mant_Prev = $request->input('Frec_Cali_Mant_Prev') ?? $EsperaDato;
+            $generalConISO->Frec_Man_Inter_Time = $request->input('Frec_Man_Inter_Time') ?? $EsperaDato;
+            $generalConISO->Frec_Verificacion = $request->input('Frec_Verificacion') ?? $EsperaDato;
+            $generalConISO->save();
 
         return redirect()->route('inventario');
     }
