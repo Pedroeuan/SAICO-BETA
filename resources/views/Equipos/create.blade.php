@@ -827,6 +827,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
                                     
@@ -1031,6 +1036,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -1255,6 +1265,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
                                     
@@ -1470,6 +1485,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
