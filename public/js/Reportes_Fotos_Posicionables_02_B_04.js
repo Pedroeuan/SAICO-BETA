@@ -847,11 +847,24 @@
         }
 
         function calcular() {
-            var numeros = valores
-                .map(function (input) { return input.value.trim().replace(',', '.'); })
+            var capturas = valores.map(function (input) {
+                return input.value.trim();
+            });
+            var todasSonGuiones = capturas.length > 0 && capturas.every(function (valor) {
+                return /^-+$/.test(valor);
+            });
+            var numeros = capturas
+                .map(function (valor) { return valor.replace(',', '.'); })
                 .filter(function (valor) { return valor !== '' && /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(valor); })
                 .map(Number)
                 .filter(Number.isFinite);
+
+            // Si el tecnico deja todas las lecturas como "---", el promedio
+            // tambien debe reportarse como "---" para evitar una celda vacia.
+            if (todasSonGuiones) {
+                promedio.value = '---';
+                return;
+            }
 
             // El promedio de dureza se reporta como numero entero:
             // se calcula con todas las lecturas validas y se redondea el resultado final.
