@@ -6,10 +6,10 @@
     <style>
         @page { 
             margin: 
-            2cm 
-            1.2cm 
-            1.1cm 
-            2.2cm; 
+            2.5cm /* superior */
+            1.5cm /* derecho */
+            1.1cm /* inferior */
+            1.5cm; /* izquierdo */
         }
         body { 
             font-family: Arial, sans-serif; 
@@ -252,8 +252,11 @@
         }
         /* El patrón comparativo ASTM se delimita solo arriba y abajo. */
         .photo-content.photo-content-grain .photo-image-cell {
-            border-left: 0;
-            border-right: 0;
+            height: 208px;
+            border: 1px solid #000;
+            vertical-align: middle;
+            text-align: center;
+            overflow: hidden;
         }
         .photo-slot img {
             display: block;
@@ -265,6 +268,26 @@
             margin-left: auto;
             margin-right: auto;
             border: 1px solid #000;
+        }
+        /*
+         * Control exclusivo para patrones de tamaño de grano.
+         * No toca fotografías normales: solo aplica cuando el servicio marca
+         * la imagen como patron_grano_historico y la tabla recibe photo-content-grain.
+         */
+        .photo-content.photo-content-grain img {
+            max-width: 280px;
+            max-height: 200px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border: 0;
+            margin: auto;
+        }
+        .photo-full .photo-content.photo-content-grain img {
+            max-width: 280px !important;
+            max-height: 200px !important;
+            width: auto !important;
+            height: auto !important;
         }
         .photo-comment {
             height: 16px;
@@ -426,90 +449,7 @@
 </header>
 
 <footer>
-    <table class="firmas-im firmas-im-{{ $numFirmas }}">
-    @if($numFirmas == 1)
-        <tr>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Realizo'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
-            </td>
-        </tr>
-    @elseif($numFirmas == 2)
-        <tr>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Realizo'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
-            </td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo1'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] ?? '' }}</div>
-            </td>
-        </tr>
-    @elseif($numFirmas == 3)
-        <tr>
-            <td></td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo1'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] ?? '' }}</div>
-            </td>
-            <td></td>
-        </tr>
-        <tr class="firma-separacion-tres">
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Realizo'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
-            </td>
-            <td></td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo2'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-ficha">{{ $Firmas_Reportes['NUMERO_FICHA'] ?? '' }}</div>
-            </td>
-        </tr>
-    @elseif($numFirmas == 4)
-        <tr>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Realizo'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
-            </td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo1'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] ?? '' }}</div>
-            </td>
-        </tr>
-        <tr class="firma-separacion-cuatro">
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo2'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] ?? '' }}</div>
-            </td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo3'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_3RO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-ficha">{{ $Firmas_Reportes['NUMERO_FICHA'] ?? '' }}</div>
-            </td>
-        </tr>
-    @endif
-</table>
+    @include('Reportes.partials.firmas_im_pdf')
 </footer>
 
 {{-- Agrupa cada registro por página y cuadrante; página completa sustituye los cuatro espacios. --}}
