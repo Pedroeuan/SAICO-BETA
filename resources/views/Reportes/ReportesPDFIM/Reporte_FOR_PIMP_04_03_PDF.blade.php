@@ -413,6 +413,16 @@
     $valoresDurezaPdf = array_values(array_pad(array_slice($Datos_Equipo['VALORES_DUREZA'] ?? [], 0, 10), 10, ''));
     // El promedio de dureza se presenta redondeado sin decimales, aunque venga guardado con decimal.
     $promedioDurezaPdf = $Datos_Equipo['PROMEDIO_DUREZA'] ?? '';
+    $todosValoresDurezaGuiones = count($valoresDurezaPdf) > 0;
+    foreach ($valoresDurezaPdf as $valorDurezaPdf) {
+        if (!preg_match('/^-+$/', trim((string) $valorDurezaPdf))) {
+            $todosValoresDurezaGuiones = false;
+            break;
+        }
+    }
+    if (trim((string) $promedioDurezaPdf) === '' && $todosValoresDurezaGuiones) {
+        $promedioDurezaPdf = '---';
+    }
     if ($promedioDurezaPdf !== '' && is_numeric(str_replace(',', '.', $promedioDurezaPdf))) {
         $promedioDurezaPdf = (string) round((float) str_replace(',', '.', $promedioDurezaPdf));
     }
