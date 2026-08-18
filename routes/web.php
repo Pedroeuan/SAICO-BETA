@@ -89,7 +89,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
     Route::redirect('/', '/dashboard');
     Route::redirect('/register', '/dashboard');
-    Route::get('Reporte/FOR_PIMP_02_B/03', [ReporteController::class, 'FOR_PIMP_02_B_03'])->name('Plantilla_FOR_PIMP_02_B_03.PDF');
+    /*Route::get('Reporte/FOR_PIMP_02_B/03', [ReporteController::class, 'FOR_PIMP_02_B_03'])->name('Plantilla_FOR_PIMP_02_B_03.PDF');
     Route::get('Reporte/FOR_PIMP_02_B/04', [ReporteController::class, 'FOR_PIMP_02_B_04'])->name('Plantilla_FOR_PIMP_02_B_04.PDF');
     Route::get('Reporte/FOR_PIMP_07_B/01', [ReporteController::class, 'FOR_PIMP_07_B_01'])->name('Plantilla_FOR_PIMP_07_B_01.PDF');
     Route::get('Reporte/FOR_PIMP_03_B/01', [ReporteController::class, 'FOR_PIMP_03_B_01'])->name('Plantilla_FOR_PIMP_03_B_01.PDF');
@@ -97,7 +97,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     Route::get('Reporte/FOR_PIMP_05_B/01', [ReporteController::class, 'FOR_PIMP_05_B_01'])->name('Plantilla_FOR_PIMP_05_B_01.PDF');
     Route::get('Reporte/FOR_PIMP_06_B/01', [ReporteController::class, 'FOR_PIMP_06_B_01'])->name('Plantilla_FOR_PIMP_06_B_01.PDF');
     Route::get('Reporte/FOR_PIMP_04/02', [ReporteController::class, 'FOR_PIMP_04_02'])->name('Plantilla_FOR_PIMP_04_02.PDF');
-    Route::get('Reporte/FOR_PIMP_04/03', [ReporteController::class, 'FOR_PIMP_04_03'])->name('Plantilla_FOR_PIMP_04_03.PDF');
+    Route::get('Reporte/FOR_PIMP_04/03', [ReporteController::class, 'FOR_PIMP_04_03'])->name('Plantilla_FOR_PIMP_04_03.PDF');*/
 
     /*QR de Reportes Publicos*/
     Route::get('/qr/reporte/{token}',[ReporteController::class, 'VerPdfQR'])->name('qr.reporte');

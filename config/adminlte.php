@@ -455,7 +455,7 @@ return [
             ],
         ],*/
 
-            [
+            /*[
                 'text' => 'REPORTE',
                 'icon' => 'fas fa-clipboard',
                 'can' => 'administrador-access',
@@ -570,7 +570,7 @@ return [
                             'can' => 'equipos-access',
                         ],
                     ],
-            ],
+            ],*/
 
                // Sidebar Operativos:
                 [
