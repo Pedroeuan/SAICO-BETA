@@ -201,7 +201,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">ISO</label>
-                                            <select class="form-control select2" style="width: 100%;" name="ISO" required @if($rol != 'Super Administrador' || $rol != 'Administrador')readonly @endif>
+                                            <select class="form-control select2" style="width: 100%;" name="ISO" required readonly>
                                                 @if ($rol == 'Equipos')<option selected="selected" value="9001" {{ old('ISO') == '9001' ? 'selected' : '' }}>9001</option>@endif
                                                 @if ($rol == 'Laboratorio')<option selected="selected" value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option> @endif
                                                 @if ($rol == 'Super Administrador' || $rol == 'Administrador')
@@ -210,6 +210,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -827,6 +832,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
                                     
@@ -1031,6 +1041,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -1255,6 +1270,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
                                     
@@ -1470,6 +1490,11 @@
                                                     <option value="17025" {{ old('ISO') == '17025' ? 'selected' : '' }}>17025</option>
                                                 @endif
                                             </select>
+                                            @error('ISO')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
 
