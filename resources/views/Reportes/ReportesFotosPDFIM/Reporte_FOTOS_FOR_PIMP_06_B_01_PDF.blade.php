@@ -5,9 +5,12 @@
     <title>FOTOS FOR-PIMP-06_B/01</title>
     <style>
         @page {
-            margin: 2.5cm 1.2cm 2.1cm 2.2cm;
-        }
-
+            margin: 
+            2.5cm /* superior */
+            1.5cm /* derecho */
+            2.1cm /* inferior */
+            1.5cm; /* izquierdo */        
+    }
         body {
             font-family: Arial, sans-serif;
             margin-top: 27px;
@@ -17,7 +20,7 @@
 
         header {
             position: fixed;
-            top: -50px;
+            top: -56px;
             left: 0;
             right: 0;
             text-align: center;
@@ -34,7 +37,7 @@
             border-collapse: collapse;
             width: 100%;
             text-align: center;
-            font-size: 9px;
+            font-size: 10px;
         }
 
         .tablaheader th {
@@ -76,19 +79,48 @@
 
         .etiquetaGeneral {
             width: 15%;
-            padding-left: 2px;
             font-weight: bold;
+            white-space: nowrap !important;
             line-height: 10px;
             text-align: left;
+            padding-left: 2px;
             vertical-align: middle;
-            white-space: nowrap;
         }
 
         .valorGeneral {
-            height: 13px;
-            border-bottom: 1px solid #000;
+            text-align: center !important;
+            vertical-align: bottom !important;
+            padding: 0 !important;
+            height: auto !important;
+        }
+        .valorGeneralConLinea {
+            border-bottom: none !important;
+            padding: 0 !important;
+            vertical-align: bottom !important;
+        }
+
+        .lineaValorGeneral {
+            width: 100%;
+            min-height: 11px;
+            height: auto !important;
+            border-bottom: .5px solid black;
+            padding: 1px 2px !important;
+            margin: 0 !important;
+            box-sizing: border-box;
+        }
+
+        .textoValorGeneral {
+            position: static !important;
+            display: block;
+            width: 100%;
             text-align: center;
-            vertical-align: middle;
+
+            line-height: 8px;
+            font-size: 8.5px;
+
+            white-space: normal !important;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
 
         .tablaEquipos {
@@ -307,6 +339,39 @@
             object-fit: contain;
             margin: 0 0 0 0;
             border: 1px solid #000;
+        }
+
+        /*
+         * Control exclusivo para patrones comparativos de tamaño de grano.
+         * Las fotos normales conservan su tamaño; el grano se centra y no
+         * crece de más para evitar que empuje firmas o desorganice la hoja.
+         */
+        .fotoCuadrante.fotoCuadranteGrano {
+            width: 300px;
+            text-align: center;
+            overflow: visible;
+        }
+
+        .fotoCuadrante.fotoCuadranteGrano .fotoGranoCelda {
+            width: 294px;
+            height: 215px;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            text-align: center;
+            overflow: hidden;
+            margin: 0 auto;
+            padding-top: 7px;
+        }
+
+        .fotoCuadrante.fotoCuadranteGrano img {
+            display: inline-block;
+            max-width: 280px;
+            max-height: 200px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
+            border: 0;
         }
 
         .fotoCuadranteComentario {
@@ -914,7 +979,7 @@
                             @php($foto = $fotosPorPosicion[$posicion] ?? null)
                             <td class="{{ $foto ? '' : 'fotoCuadranteVacio' }}">
                                 @if($foto)
-                                    <div class="fotoCuadrante">
+                                    <div class="fotoCuadrante {{ ($foto['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'fotoCuadranteGrano' : '' }}">
                                         @if(!empty($foto['es_cuadro_texto']))
                                             <div class="fotoCuadranteTexto">
                                                 <table class="fotoCuadranteTextoTabla">
@@ -926,7 +991,13 @@
                                                 </table>
                                             </div>
                                         @else
-                                            <img src="{{ $foto['path'] }}">
+                                            @if(($foto['origen_automatico'] ?? '') === 'patron_grano_historico')
+                                                <div class="fotoGranoCelda">
+                                                    <img src="{{ $foto['path'] }}">
+                                                </div>
+                                            @else
+                                                <img src="{{ $foto['path'] }}">
+                                            @endif
                                             <div class="fotoCuadranteComentario">{{ $foto['comment'] ?? '' }}</div>
                                         @endif
                                     </div>

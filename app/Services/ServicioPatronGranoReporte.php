@@ -47,7 +47,8 @@ class ServicioPatronGranoReporte
             return null;
         }
 
-        $descripcion = trim((string) $request->input('Patron_Grano.descripcion', ''));
+        // La vista puede enviar la leyenda completa; aquí se conserva solo el valor para congelar el reporte.
+        $descripcion = $this->normalizarValorGrano((string) $request->input('Patron_Grano.descripcion', ''));
         $layout = $this->normalizarLayout($request->input('Patron_Grano.layout'));
         $usarVersionCatalogo = $request->boolean('Patron_Grano.usar_version_catalogo');
         $mismoPatron = is_array($historico)
@@ -89,7 +90,7 @@ class ServicioPatronGranoReporte
             'id' => $patron->id,
             'nombre' => $patron->nombre,
             'valor_grano' => (string) $patron->valor_grano,
-            'descripcion' => $descripcion,
+            'descripcion' => $descripcion !== '' ? $descripcion : (string) $patron->valor_grano,
             'ruta_imagen' => 'storage/' . $rutaCopia,
             'layout' => $layout,
         ];
@@ -108,7 +109,7 @@ class ServicioPatronGranoReporte
         }
 
         $rutaFisica = storage_path('app/public/' . $this->rutaRelativa((string) $patron['ruta_imagen']));
-        // Evita enviar carpetas o rutas historicas incompletas al motor de PDF como si fueran imagenes.
+        // Evita enviar carpetas o rutas históricas incompletas al motor de PDF como si fueran imágenes.
         if (!File::isFile($rutaFisica)) {
             return;
         }
@@ -119,11 +120,16 @@ class ServicioPatronGranoReporte
             'posicion' => $posicion,
         ]);
 
+        $valorGrano = $this->normalizarValorGrano(
+            (string) ($patron['descripcion'] ?? ($patron['valor_grano'] ?? ($patron['nombre'] ?? '')))
+        );
+        $comentario = $valorGrano !== ''
+            ? 'TAMAÑO DE GRANO ' . $valorGrano . ' COMPARATIVA ASTM E-112.'
+            : (string) ($patron['nombre'] ?? 'PATRÓN COMPARATIVO DE GRANO');
+
         $fotos[] = [
             'path' => $rutaFisica,
-            'comment' => trim((string) ($patron['descripcion'] ?? '')) !== ''
-                ? (string) $patron['descripcion']
-                : (string) ($patron['nombre'] ?? 'PATRÓN COMPARATIVO DE GRANO'),
+            'comment' => $comentario,
             'es_cuadro_texto' => 0,
             'una_hoja' => $layout['posicion'] === 'pagina_completa' ? 1 : 0,
             'pagina' => $layout['pagina'],
@@ -143,6 +149,18 @@ class ServicioPatronGranoReporte
     private function rutaRelativa(string $rutaPublica): string
     {
         return ltrim(str_replace('storage/', '', $rutaPublica), '/');
+    }
+
+    /** Extrae el valor numérico del patrón desde el nombre, valor o leyenda visible. */
+    private function normalizarValorGrano(string $valor): string
+    {
+        $valor = str_replace(',', '.', $valor);
+
+        if (preg_match('/-?\d{1,3}(?:\.\d)?/', $valor, $coincidencia)) {
+            return $coincidencia[0];
+        }
+
+        return '';
     }
 
     /** Normaliza la celda seleccionada para que el tamaño de grano nunca guarde coordenadas inválidas. */
