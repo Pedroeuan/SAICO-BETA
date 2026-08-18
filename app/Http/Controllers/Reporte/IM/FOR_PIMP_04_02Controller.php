@@ -792,20 +792,22 @@ class FOR_PIMP_04_02Controller extends Controller
             : [];
         $valoresGuardados = [];
         $valoresNumericos = [];
+        $todosSonGuiones = true;
 
         for ($index = 0; $index < 10; $index++) {
             $valor = trim((string) ($valoresRecibidos[$index] ?? ''));
             $valoresGuardados[] = $valor;
+            $todosSonGuiones = $todosSonGuiones && preg_match('/^-+$/', $valor);
 
-            // Vacío o de uno a tres guiones significa que la medición no fue realizada.
-            if ($valor === '' || preg_match('/^-{1,3}$/', $valor)) {
+            // Vacio o guiones significa que la medicion no fue realizada.
+            if ($valor === '' || preg_match('/^-+$/', $valor)) {
                 continue;
             }
 
             $valorNormalizado = str_replace(',', '.', $valor);
             if (!preg_match('/^(?:\d+(?:\.\d*)?|\.\d+)$/', $valorNormalizado)) {
                 throw \Illuminate\Validation\ValidationException::withMessages([
-                    "Datos_Equipo.VALORES_DUREZA.{$index}" => 'Capture un valor numérico mayor o igual a cero, deje el campo vacío o utilice hasta tres guiones.',
+                    "Datos_Equipo.VALORES_DUREZA.{$index}" => 'Capture un valor numerico mayor o igual a cero, deje el campo vacio o utilice guiones.',
                 ]);
             }
 
@@ -814,7 +816,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         $datosEquipo['VALORES_DUREZA'] = $valoresGuardados;
         $datosEquipo['PROMEDIO_DUREZA'] = empty($valoresNumericos)
-            ? ''
+            ? ($todosSonGuiones ? '---' : '')
             : number_format(
                 round(array_sum($valoresNumericos) / count($valoresNumericos), 2, PHP_ROUND_HALF_UP),
                 2,

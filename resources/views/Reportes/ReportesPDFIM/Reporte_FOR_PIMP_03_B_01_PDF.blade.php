@@ -190,8 +190,17 @@
         /* El patrón comparativo ASTM usa únicamente los límites superior e inferior. */
         .foto-visual.foto-visual-grain,
         .foto-marco.foto-visual-grain {
-            border-left: 0;
-            border-right: 0;
+            border: 1px solid #000;
+            overflow: hidden;
+        }
+        .foto-visual.foto-visual-grain img,
+        .foto-marco.foto-visual-grain img {
+            max-width: 280px;
+            max-height: 180px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border: 0;
         }
         .foto-visual td {
             width: 100%;

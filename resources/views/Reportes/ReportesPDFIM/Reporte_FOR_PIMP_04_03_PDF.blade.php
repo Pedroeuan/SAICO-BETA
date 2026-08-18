@@ -5,10 +5,11 @@
     <title>FOR-PIMP-04/03</title>
     <style>
         @page {
-            margin: 2cm 
-            1.2cm 
-            1.5cm 
-            2.2cm;
+            margin: 
+            2.5cm /* superior */
+            1.5cm /* derecho */
+            2.4cm /* inferior */
+            1.5cm; /* izquierdo */
         }
         body {
             font-family: Arial, sans-serif;
@@ -273,90 +274,7 @@
 </header>
 
 <footer>
-    <table class="firmas-im firmas-im-{{ $numFirmas }}">
-    @if($numFirmas == 1)
-        <tr>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Realizo'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
-            </td>
-        </tr>
-    @elseif($numFirmas == 2)
-        <tr>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Realizo'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
-            </td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo1'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] ?? '' }}</div>
-            </td>
-        </tr>
-    @elseif($numFirmas == 3)
-        <tr>
-            <td></td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo1'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] ?? '' }}</div>
-            </td>
-            <td></td>
-        </tr>
-        <tr class="firma-separacion-tres">
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Realizo'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
-            </td>
-            <td></td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo2'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-ficha">{{ $Firmas_Reportes['NUMERO_FICHA'] ?? '' }}</div>
-            </td>
-        </tr>
-    @elseif($numFirmas == 4)
-        <tr>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Realizo'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['CARGO_TECNICO'] ?? '' }}</div>
-                <div class="firma-dato">Asesoría e Inspección en Construcción Costa Fuera, S.C.</div>
-            </td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo1'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] ?? '' }}</div>
-            </td>
-        </tr>
-        <tr class="firma-separacion-cuatro">
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo2'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_2DO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] ?? '' }}</div>
-            </td>
-            <td>
-                <div class="firma-titulo">{{ $Firmas_Reportes['Vobo3'] ?? '' }}</div>
-                <div class="firma-linea">{{ $Firmas_Reportes['NOMBRE_3RO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['PUESTO_3RO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-dato">{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] ?? '' }}</div>
-                <div class="firma-ficha">{{ $Firmas_Reportes['NUMERO_FICHA'] ?? '' }}</div>
-            </td>
-        </tr>
-    @endif
-</table>
+    @include('Reportes.partials.firmas_im_pdf')
 </footer>
 
 {{-- Datos generales conservan líneas independientes para evitar que las etiquetas se superpongan. --}}
@@ -495,6 +413,16 @@
     $valoresDurezaPdf = array_values(array_pad(array_slice($Datos_Equipo['VALORES_DUREZA'] ?? [], 0, 10), 10, ''));
     // El promedio de dureza se presenta redondeado sin decimales, aunque venga guardado con decimal.
     $promedioDurezaPdf = $Datos_Equipo['PROMEDIO_DUREZA'] ?? '';
+    $todosValoresDurezaGuiones = count($valoresDurezaPdf) > 0;
+    foreach ($valoresDurezaPdf as $valorDurezaPdf) {
+        if (!preg_match('/^-+$/', trim((string) $valorDurezaPdf))) {
+            $todosValoresDurezaGuiones = false;
+            break;
+        }
+    }
+    if (trim((string) $promedioDurezaPdf) === '' && $todosValoresDurezaGuiones) {
+        $promedioDurezaPdf = '---';
+    }
     if ($promedioDurezaPdf !== '' && is_numeric(str_replace(',', '.', $promedioDurezaPdf))) {
         $promedioDurezaPdf = (string) round((float) str_replace(',', '.', $promedioDurezaPdf));
     }
