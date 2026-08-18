@@ -2607,8 +2607,8 @@ class FOR_PIMP_04_03Controller extends Controller
             $combinedPdf->AddPage('P');
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(151.5, 25);
-            $combinedPdf->Cell(24, 3.5, "$i DE $totalPageCount", 0, 0, 'C');
+            $combinedPdf->SetXY(150.8, 30);
+            $combinedPdf->Cell(20, 3.5, "$i DE $totalPageCount", 0, 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -2621,8 +2621,8 @@ class FOR_PIMP_04_03Controller extends Controller
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
-                $combinedPdf->SetXY(151.5, 25);
-                $combinedPdf->Cell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 0, 'C');
+                $combinedPdf->SetXY(150.8, 30);
+                $combinedPdf->Cell(20, 3.5, "$paginaActual DE $totalPageCount", 0, 0, 'C');
             }
         }
 

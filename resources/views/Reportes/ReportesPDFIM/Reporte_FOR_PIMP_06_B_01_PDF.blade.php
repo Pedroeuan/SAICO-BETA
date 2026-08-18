@@ -6,7 +6,11 @@
 
 <style>
     @page {
-        margin: 2cm 1.2cm 1.1cm 2.2cm;
+        margin: 
+        2.5cm /* superior */
+        1.5cm /* derecho */
+        1.1cm /* inferior */
+        1.5cm; /* izquierdo */
     }
 
     body {
@@ -194,7 +198,7 @@
     text-align: center !important;
     vertical-align: bottom !important;
     padding: 0 !important;
-    height: 10px;
+    height: auto !important;
 }
 
 .valorGeneralConLinea {
@@ -205,25 +209,26 @@
 
 /* CONTENEDOR DE LA LINEA */
 .lineaValorGeneral {
-    position: relative;
     width: 100%;
-    height: 11px;
+    min-height: 11px;
+    height: auto !important;
     border-bottom: .5px solid black;
-    padding: 0 !important;
+    padding: 1px 2px !important;
     margin: 0 !important;
+    box-sizing: border-box;
 }
 
 /* DATO DEL USUARIO */
 .textoValorGeneral {
-    position: absolute;
-    left: 0;
-    right: 0;
-
-    /* ESTE VALOR CONTROLA LA ALTURA DEL TEXTO */
-    bottom: 2px;
-
+    position: static !important;
+    display: block;
+    width: 100%;
     text-align: center;
     line-height: 8px;
+    font-size: 8.5px;
+    white-space: normal !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
     .valorGeneralAlto {
@@ -316,7 +321,7 @@
 .imagenDisparo {
     width: 100%;
     /* Aprovecha el espacio libre antes de la especificacion sin deformar la distribucion de disparos. */
-    height: 5.05cm;
+    height: 5.65cm;
     box-sizing: border-box;
     border: none;
     padding: 0;
@@ -328,7 +333,7 @@
 .imagenDisparo img {
     display: block;
     width: 100%;
-    height: 5.05cm;
+    height: 5.65cm;
     /* Marco directo en la imagen: es lo mas estable en Dompdf para no perder lados. */
     border: 1px solid black !important;
     box-sizing: border-box;
@@ -348,7 +353,7 @@
 
     .marcoImagenDisparo {
         width: 100%;
-        height: 5.05cm;
+        height: 5.65cm;
         border-collapse: collapse;
         table-layout: fixed;
         margin: 0;
@@ -366,11 +371,16 @@
     .marcoImagenDisparo img {
         display: block;
         width: 100%;
-        height: 5.05cm;
+        height: 5.65cm;
         object-fit: cover;
         margin: 0;
         padding: 0;
         border: none !important;
+    }
+
+    .marcoImagenDisparoTabla img {
+        /* La tabla puede crecer segun la norma; se muestra completa para no cortar filas. */
+        object-fit: contain;
     }
 
     /* =========================
@@ -391,7 +401,7 @@
         border-collapse: collapse;
         table-layout: fixed;
         text-align: center;
-        font-size: 5.5px;
+        font-size: 7px;
     }
 
     .tablaQuimicaDisparo th,
@@ -405,7 +415,7 @@
     .tablaQuimicaDisparo thead th {
         height: 0.70cm;
         padding: 1px 2px;
-        line-height: 5.5px;
+        line-height: 7.5px;
         font-weight: bold;
     }
 
@@ -419,13 +429,13 @@
        ========================= */
 
     .observacionesBox {
-        width: 50%;
-        margin-left: 50%;
+        width: 7.85cm;
+        margin: 0 auto;
         border-collapse: collapse;
         table-layout: fixed;
         margin-bottom: 4px;
         position: relative;
-        top: -45px;
+        top: 0;
     }
 
     .observacionesBox th,
@@ -812,7 +822,7 @@
                 No. Isometric:
             </th>
 
-            <td class="valorGeneral valorGeneralConLinea">
+            <td class="valorGeneral valorGeneralConLinea" colspan="1">
                 <div class="lineaValorGeneral">
                     <span class="textoValorGeneral">
                         {{ $Detalles_Generales['No_Isometrico'] ?? '' }}
@@ -963,6 +973,18 @@
 <div style="margin-bottom: 0px;"></div>
 
 @php
+        // Datos de especificacion usados debajo de la tabla quimica para que
+        // acompanen a cualquier norma y no se encimen con las firmas.
+        $nombreNormaPdf = str_replace(
+            ["\u{2212}", "\u{2013}", "\u{2014}"],
+            '-',
+            (string) ($NormaIM['Nombre_Espe'] ?? '')
+        );
+        $variableNormaPdf = str_replace(
+            ["\u{2212}", "\u{2013}", "\u{2014}"],
+            '-',
+            (string) ($NormaIM['Variable'] ?? '')
+        );
         $ordinalesDisparoPdf = [1 => '1er.', 2 => '2do.', 3 => '3er.'];
         $ordinalesDisparoIngles = [1 => '1st', 2 => '2nd', 3 => '3rd'];
         ksort($Disparos);
@@ -1003,6 +1025,18 @@
                                 @else
                                     <div class="espacioTablaQuimica"></div>
                                 @endif
+                                <table class="observacionesBox">
+                                    <tr>
+                                        <th class="observacionesTitulo">ESPECIFICACION APROX. DEL MATERIAL:<br>
+                                            Approx. Material Specification:</th>
+                                        <td class="observacionesLineas">
+                                            {{ $nombreNormaPdf }}
+                                            @if ($variableNormaPdf !== '')
+                                                <br>{{ $variableNormaPdf }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         @elseif (!empty($Disparos[$celdaDisparo]))
                             <td class="celdaDisparo {{ $loop->first ? 'celdaDisparoIzquierda' : 'celdaDisparoDerecha' }}">
@@ -1021,7 +1055,7 @@
                                         @foreach ($Disparos[$celdaDisparo] as $indiceImagen => $imagen)
                                             <td class="espacioImagenDisparo {{ $indiceImagen === 0 ? 'espacioImagenDisparoIzquierdo' : 'espacioImagenDisparoDerecho' }}">
                                                 {{-- Marco en tabla: Dompdf conserva mejor los cuatro bordes que con div/img. --}}
-                                                <table class="marcoImagenDisparo">
+                                                <table class="marcoImagenDisparo {{ $indiceImagen === 0 ? 'marcoImagenDisparoTabla' : '' }}">
                                                     <tr>
                                                         <td>
                                                             <img src="{{ $imagen }}" alt="Imagen {{ $indiceImagen + 1 }} del disparo {{ $celdaDisparo }}">
@@ -1045,31 +1079,5 @@
             @endforeach
         </table>
 </div>
-<div style="margin-bottom: 30px;"></div>
-@php
-    // Dompdf puede mostrar como "?" algunos guiones Unicode usados por las normas ASTM.
-    $nombreNormaPdf = str_replace(
-        ["\u{2212}", "\u{2013}", "\u{2014}"],
-        '-',
-        (string) ($NormaIM['Nombre_Espe'] ?? '')
-    );
-    $variableNormaPdf = str_replace(
-        ["\u{2212}", "\u{2013}", "\u{2014}"],
-        '-',
-        (string) ($NormaIM['Variable'] ?? '')
-    );
-@endphp
-<table class="observacionesBox">
-    <tr>
-        <th class="observacionesTitulo">ESPECIFICACIÓN APROX. DEL MATERIAL:<br>
-            Approx. Material Specification:</th>
-        <td class="observacionesLineas">
-            {{ $nombreNormaPdf }}
-            @if ($variableNormaPdf !== '')
-                <br>{{ $variableNormaPdf }}
-            @endif
-        </td>
-    </tr>
-</table>
 </body>
 </html>
