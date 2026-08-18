@@ -10,6 +10,24 @@
             .replace(/"/g, '&quot;');
     }
 
+    /** Extrae solo el valor del grano; el comentario fijo del PDF se arma en servidor. */
+    function valorGranoDesdeTexto(valor) {
+        const coincidencia = String(valor == null ? '' : valor).replace(',', '.').match(/-?\d{1,3}(?:\.\d)?/);
+        return coincidencia ? coincidencia[0] : '';
+    }
+
+    /** Prioriza valor_grano del catalogo y usa el nombre como respaldo historico. */
+    function valorGranoDesdeItem(item) {
+        if (!item) return '';
+        return valorGranoDesdeTexto(item.valor_grano || item.nombre || '');
+    }
+
+    /** Arma el pie de foto estandar que debe ver el tecnico al seleccionar tamaño de grano. */
+    function comentarioGranoDesdeValor(valor) {
+        const valorGrano = valorGranoDesdeTexto(valor);
+        return valorGrano ? 'TAMAÑO DE GRANO ' + valorGrano + ' COMPARATIVA ASTM E-112.' : '';
+    }
+
     /** Inicializa el único catálogo del reporte y lo ofrece como modo para cada fotografía. */
     function iniciar(configuracion) {
         const formulario = configuracion.closest('form');
@@ -76,6 +94,7 @@
                 usarActualInput.value = this.value ? '1' : '0';
                 idInput.value = this.value;
                 mostrarSeleccion(tarjeta, false);
+                sincronizarDescripcionGrano(tarjeta, true);
                 // El cuadro de resultados de Fiji actualiza el tamaño sin esperar a guardar el reporte.
                 document.dispatchEvent(new CustomEvent('saico:grain-pattern-updated'));
             });
@@ -145,7 +164,25 @@
             vacio.classList.toggle('d-none', Boolean(url));
         }
 
-        /** Sincroniza la página y el cuadrante de la tarjeta con los campos únicos enviados al servidor. */
+        /** Sincroniza el valor numerico del grano con el textarea y el hidden del reporte. */
+        function sincronizarDescripcionGrano(tarjeta, forzarSeleccion) {
+            const panel = tarjeta.querySelector('[data-grain-card-panel]');
+            const select = panel?.querySelector('[data-grain-card-select]');
+            const item = catalogo.find(function (patron) { return String(patron.id) === String(select?.value); });
+            const valorSeleccionado = valorGranoDesdeItem(item) || valorGranoDesdeItem(historico);
+            const comentario = tarjeta.querySelector('textarea[name^="comments"], [data-grain-card-description]');
+            let valor = forzarSeleccion ? valorSeleccionado : valorGranoDesdeTexto(comentario?.value || descripcionInput.value);
+
+            if (!valor) valor = valorSeleccionado;
+            const comentarioCompleto = comentarioGranoDesdeValor(valor);
+            descripcionInput.value = comentarioCompleto || valor;
+
+            if (comentario && comentario.value !== comentarioCompleto) {
+                comentario.value = comentarioCompleto;
+            }
+        }
+
+        /** Sincroniza la pagina y el cuadrante de la tarjeta con los campos unicos enviados al servidor. */
         function sincronizarLayout(tarjeta) {
             if (!tarjeta || tarjeta !== tarjetaActiva) return;
             const pagina = tarjeta.querySelector('.foto-pagina, [data-grain-history-page]');
@@ -175,10 +212,11 @@
             if (vistaNormal) vistaNormal.classList.toggle('d-none', activo);
             if (comentario) {
                 comentario.placeholder = activo
-                    ? 'Descripción del tamaño de grano para este reporte'
+                    ? 'TAMAÑO DE GRANO 3.5 COMPARATIVA ASTM E-112.'
                     : 'Comentario';
                 comentario.rows = activo ? 4 : 3;
                 comentario.required = activo;
+                comentario.removeAttribute('inputmode');
             }
             if (etiquetaDescripcion) etiquetaDescripcion.classList.toggle('d-none', !activo);
 
@@ -218,12 +256,16 @@
             if (desdeHistorico) {
                 select.value = idInput.value;
                 const comentario = tarjeta.querySelector('textarea[name^="comments"], [data-grain-card-description]');
-                if (comentario) comentario.value = descripcionInput.value;
+                if (comentario) {
+                    comentario.value = comentarioGranoDesdeValor(descripcionInput.value)
+                        || comentarioGranoDesdeValor(valorGranoDesdeItem(historico));
+                }
             } else {
                 idInput.value = select.value || '';
             }
             select.required = true;
             mostrarSeleccion(tarjeta, desdeHistorico && usarActualInput.value !== '1');
+            sincronizarDescripcionGrano(tarjeta, !desdeHistorico);
             sincronizarLayout(tarjeta);
             document.dispatchEvent(new CustomEvent('saico:report-layout-updated'));
         }
@@ -282,7 +324,7 @@
                         '</div>' +
                         '<label class="font-weight-bold mt-2" data-grain-description-label>Descripción para este reporte</label>' +
                         '<textarea class="form-control mt-2" data-grain-card-description ' +
-                            'placeholder="Descripción del tamaño de grano para este reporte"></textarea>' +
+                            'placeholder="TAMAÑO DE GRANO 3.5 COMPARATIVA ASTM E-112."></textarea>' +
                     '</div>' +
                 '</div>';
 
