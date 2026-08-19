@@ -99,6 +99,10 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     Route::get('Reporte/FOR_PIMP_04/02', [ReporteController::class, 'FOR_PIMP_04_02'])->name('Plantilla_FOR_PIMP_04_02.PDF');
     Route::get('Reporte/FOR_PIMP_04/03', [ReporteController::class, 'FOR_PIMP_04_03'])->name('Plantilla_FOR_PIMP_04_03.PDF');*/
 
+    /*Vista Clientes Publicos*/
+    Route::get('/reportes-publicos', function () {
+        return view('reportes_publicos.index');
+        })->name('reportes.publicos');
     /*QR de Reportes Publicos*/
     Route::get('/qr/reporte/{token}',[ReporteController::class, 'VerPdfQR'])->name('qr.reporte');
 
