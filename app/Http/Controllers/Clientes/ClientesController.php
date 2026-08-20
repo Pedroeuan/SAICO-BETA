@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 use App\Models\Clientes\clientes;
 
@@ -23,6 +24,16 @@ class ClientesController extends Controller
         return view('Clientes.index', compact('clientes'));
     }
 
+    public function Portal_index($token)
+        {
+            $cliente = clientes::where('portal_token', $token)->first();
+
+            if (!$cliente) {
+                abort(404);
+            }
+
+            return view('Reportes_publicos.index', compact('cliente'));
+        }
     /**
      * Show the form for creating a new resource.
      */
@@ -38,39 +49,122 @@ class ClientesController extends Controller
     {
         $request->validate([
             'Cliente' => 'required|string|max:255',
+            'RFC' => 'nullable|string|max:255',
+            'Telefono' => 'nullable|string|max:255',
+            'Correo' => 'nullable|string|max:255',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
+
         $clientes = new clientes;
-        $EsperaDato ='ESPERA DE DATO';
 
-        if($request->input('Cliente')==null)
-        {
+        $EsperaDato = 'ESPERA DE DATO';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATOS DEL CLIENTE
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->input('Cliente') == null) {
+
             $clientes->Cliente = $EsperaDato;
-        }else{
+
+        } else {
+
             $clientes->Cliente = $request->input('Cliente');
+
         }
 
-        if($request->input('RFC')==null)
-        {
+
+        if ($request->input('RFC') == null) {
+
             $clientes->RFC = $EsperaDato;
-        }else{
+
+        } else {
+
             $clientes->RFC = $request->input('RFC');
+
         }
 
-        if($request->input('Telefono')==null)
-        {
+
+        if ($request->input('Telefono') == null) {
+
             $clientes->Telefono = $EsperaDato;
-        }else{
+
+        } else {
+
             $clientes->Telefono = $request->input('Telefono');
+
         }
 
-        if($request->input('Correo')==null)
-        {
+
+        if ($request->input('Correo') == null) {
+
             $clientes->Correo = $EsperaDato;
-        }else{
+
+        } else {
+
             $clientes->Correo = $request->input('Correo');
+
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR TOKEN DEL PORTAL
+        |--------------------------------------------------------------------------
+        */
+
+        $clientes->portal_token = (string) Str::uuid();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR LOGO
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('logo')) {
+
+            $rutaLogo = $request->file('logo')->store('clientes', 'public');
+
+            $clientes->logo = $rutaLogo;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR CLIENTE
+        |--------------------------------------------------------------------------
+        */
+
         $clientes->save();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESPUESTA PARA AJAX
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->ajax()) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cliente guardado correctamente.',
+                'idCliente' => $clientes->idClientes,
+            ]);
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESPUESTA NORMAL
+        |--------------------------------------------------------------------------
+        */
 
         return redirect()->route('clientes.index');
     }
@@ -98,17 +192,106 @@ class ClientesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Obtener el equipo existente
-        $clientes  = clientes::find($id);
-                // Actualizar los datos del equipo
-        $clientes ->update([
-            'Cliente' => $request->input('Cliente'),
-            'RFC' => $request->input('RFC'),
-            'Telefono' => $request->input('Telefono'),
-            'Correo' => $request->input('Correo'),
+        $request->validate([
+            'Cliente' => 'required|string|max:255',
+            'RFC' => 'nullable|string|max:255',
+            'Telefono' => 'nullable|string|max:255',
+            'Correo' => 'nullable|string|max:255',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        return redirect()->route('clientes.index');
+
+        /*
+        |--------------------------------------------------------------------------
+        | OBTENER CLIENTE
+        |--------------------------------------------------------------------------
+        */
+
+        $clientes = clientes::find($id);
+
+
+        if (!$clientes) {
+
+            return redirect()
+                ->route('clientes.index')
+                ->with('error', 'Cliente no encontrado.');
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTUALIZAR DATOS
+        |--------------------------------------------------------------------------
+        */
+
+        $clientes->Cliente = $request->input('Cliente');
+        $clientes->RFC = $request->input('RFC');
+        $clientes->Telefono = $request->input('Telefono');
+        $clientes->Correo = $request->input('Correo');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTUALIZAR LOGO
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('logo')) {
+
+            /*
+            | Eliminar logo anterior
+            */
+
+            if ($clientes->logo) {
+
+                Storage::disk('public')->delete($clientes->logo);
+
+            }
+
+
+            /*
+            | Guardar nuevo logo
+            */
+
+            $rutaLogo = $request->file('logo')->store('clientes', 'public');
+
+            $clientes->logo = $rutaLogo;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ASEGURAR TOKEN
+        |--------------------------------------------------------------------------
+        |
+        | Esto es importante para clientes antiguos.
+        |
+        | Si un cliente fue creado antes de implementar
+        | portal_token, aquí se le genera automáticamente.
+        |
+        */
+
+        if (empty($clientes->portal_token)) {
+
+            $clientes->portal_token = (string) Str::uuid();
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR
+        |--------------------------------------------------------------------------
+        */
+
+        $clientes->save();
+
+
+        return redirect()
+            ->route('clientes.index')
+            ->with('success', 'Cliente actualizado correctamente.');
     }
 
     /**
