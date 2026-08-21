@@ -100,9 +100,13 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     Route::get('Reporte/FOR_PIMP_04/03', [ReporteController::class, 'FOR_PIMP_04_03'])->name('Plantilla_FOR_PIMP_04_03.PDF');*/
 
     /*Vista Clientes Publicos*/
-    Route::get('/reportes-publicos', function () {
-        return view('reportes_publicos.index');
-        })->name('reportes.publicos');
+    Route::get('/reportes-publicos', function () {return view('reportes_publicos.index');})->name('reportes.publicos');
+    /*Ruta del portal de los Clientes*/
+    Route::get('/portal/{token}', [ClientesController::class, 'Portal_index'])->name('portal.cliente');
+    /*Ruta de los contratos de los Clientes*/
+    Route::get('/portal/{token}/contrato/{contrato}',[ClientesController::class, 'contrato'])->name('portal.contrato');
+
+    
     /*QR de Reportes Publicos*/
     Route::get('/qr/reporte/{token}',[ReporteController::class, 'VerPdfQR'])->name('qr.reporte');
 
@@ -723,8 +727,6 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     Route::post('/edicion/update/{id}', [ClientesController::class, 'update'])->name('editClientes.update');
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
-    /*Ruta del portal de los Clientes*/
-    Route::get('/portal/{token}', [ClientesController::class, 'Portal_index'])->name('portal.cliente');
     
     });
 

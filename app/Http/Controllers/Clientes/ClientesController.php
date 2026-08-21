@@ -13,6 +13,58 @@ use App\Models\Clientes\clientes;
 
 class ClientesController extends Controller
 {
+        public function Portal_index($token)
+        {
+            // Buscar el cliente mediante el token
+            $cliente = clientes::where('portal_token', $token)->first();
+
+            // Si el token no existe
+            if (!$cliente) {
+                abort(404);
+            }
+
+            // Obtener los contratos únicos de las órdenes
+            // pertenecientes SOLAMENTE a este cliente
+            $contratos = DB::table('orden_servicio')
+                ->where('idClientes', $cliente->idClientes)
+                ->whereNotNull('Contrato')
+                ->where('Contrato', '!=', '')
+                ->select(
+                    'Contrato',
+                    'Proyecto_actividad'
+                )
+                ->distinct()
+                ->orderBy('Contrato')
+                ->get()
+                ->groupBy('Contrato');
+            //dd($contratos);
+            return view(
+                'Reportes_publicos.index',
+                compact('cliente', 'contratos')
+            );
+        }
+
+        public function contrato($token, $contrato)
+        {
+            $cliente = clientes::where('portal_token', $token)->first();
+
+            if (!$cliente) {
+                abort(404);
+            }
+
+            $ordenesServicio = DB::table('orden_servicio')
+                ->where('idClientes', $cliente->idClientes)
+                ->where('Contrato', $contrato)
+                ->get();
+                
+
+            return view('portal.contrato', compact(
+                'cliente',
+                'contrato',
+                'ordenesServicio'
+            ));
+        }
+
     /**
      * Display a listing of the resource.
      */
@@ -23,17 +75,6 @@ class ClientesController extends Controller
 
         return view('Clientes.index', compact('clientes'));
     }
-
-    public function Portal_index($token)
-        {
-            $cliente = clientes::where('portal_token', $token)->first();
-
-            if (!$cliente) {
-                abort(404);
-            }
-
-            return view('Reportes_publicos.index', compact('cliente'));
-        }
     /**
      * Show the form for creating a new resource.
      */
