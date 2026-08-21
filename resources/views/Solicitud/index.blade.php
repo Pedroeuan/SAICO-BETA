@@ -157,13 +157,27 @@
                                 @else <!-- MANIFIESTO, PRE-CONCLUIDO -->
 
                                     <div class="btn-group">
-                                        <td>
-                                            <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                        </td>
+                                        @if(!$solicitud->hidePlus)
+                                            <td>
+                                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                            </td>
 
-                                        <td>        
-                                            <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
-                                        </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                            </td>
+                                        @else
+                                            <td>
+                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </span>
+                                            </td>
+                                        @endif
                                     <!--PDF GENERADO-->
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
