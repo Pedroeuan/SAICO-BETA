@@ -62,7 +62,19 @@
                             <td>{{ $detalles['No_Reporte'] ?? '' }}</td>
                             <td>{{ $detalles['Fecha'] ?? '' }}</td>
                             <td>
-                                <a class="btn btn-primary" href="{{ route('Obtener.RutaPDF', ['id' => $reporte->idReportes]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                @if(($formatosPorReporte[$reporte->idReportes] ?? '') === 'FOR-PIMP-04/03')
+                                    {{-- FOR-PIMP-04/03 dispone de dos juegos completos de plantillas. --}}
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary btnPdfIdioma0403"
+                                        data-pdf-url="{{ route('Obtener.RutaPDF', ['id' => $reporte->idReportes]) }}"
+                                        aria-label="Seleccionar idioma del PDF"
+                                    >
+                                        <i class="far fa-file-pdf"></i>
+                                    </button>
+                                @else
+                                    <a class="btn btn-primary" href="{{ route('Obtener.RutaPDF', ['id' => $reporte->idReportes]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                                @endif
                             </td>
                             <td>
                                 @if ($Reporte_Firmado == '')
@@ -148,6 +160,42 @@ let table = new DataTable('#tablaJs', {
                         "sortDescending": ": activar para ordenar la columna descendente"
                     }
                 }
+});
+
+// Solicita el idioma solo para FOR-PIMP-04/03 y conserva la apertura en otra pestana.
+$(document).on('click', '.btnPdfIdioma0403', function () {
+    const urlBase = $(this).data('pdf-url');
+
+    Swal.fire({
+        title: 'Idioma del reporte',
+        html: 'Seleccione el idioma en el que desea generar y visualizar el PDF.',
+        icon: 'question',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Español',
+        denyButtonText: 'Inglés',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            confirmButton: 'btn btn-primary me-2',
+            denyButton: 'btn btn-success me-2',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    }).then(function (resultado) {
+        if (!resultado.isConfirmed && !resultado.isDenied) {
+            return;
+        }
+
+        const idioma = resultado.isConfirmed ? 'es' : 'en';
+        const urlPdf = new URL(urlBase, window.location.origin);
+        urlPdf.searchParams.set('idioma', idioma);
+
+        // Si el navegador bloquea la nueva pestana, se abre en la actual como respaldo.
+        const ventanaPdf = window.open(urlPdf.toString(), '_blank');
+        if (!ventanaPdf) {
+            window.location.href = urlPdf.toString();
+        }
+    });
 });
 
 

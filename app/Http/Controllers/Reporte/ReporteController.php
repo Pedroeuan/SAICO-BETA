@@ -721,7 +721,36 @@ class ReporteController extends Controller
         })->filter(); // filter() elimina los valores nulos*/
 
         if ($reportesEncontrados->isNotEmpty()) {
-            return view('Reportes.INS.Index.indexINS2', compact('reportesEncontrados', 'contratoSeleccionado', 'Proyecto'));
+            // El indice necesita conocer el formato para mostrar el selector de idioma
+            // exclusivamente en FOR-PIMP-04/03, sin alterar los demas botones PDF.
+            $pruebasAplican = Prueba_Aplica::whereIn(
+                'idPrueba_Aplica',
+                $reportesEncontrados->pluck('idPrueba_Aplica')->filter()->unique()
+            )->get(['idPrueba_Aplica', 'idFormato']);
+
+            $nombresFormato = formato::whereIn(
+                'idFormato',
+                $pruebasAplican->pluck('idFormato')->filter()->unique()
+            )->pluck('Nombre', 'idFormato');
+
+            $formatoPorPruebaAplica = $pruebasAplican->mapWithKeys(function ($pruebaAplica) use ($nombresFormato) {
+                return [
+                    $pruebaAplica->idPrueba_Aplica => $nombresFormato[$pruebaAplica->idFormato] ?? '',
+                ];
+            });
+
+            $formatosPorReporte = $reportesEncontrados->mapWithKeys(function ($reporte) use ($formatoPorPruebaAplica) {
+                return [
+                    $reporte->idReportes => $formatoPorPruebaAplica[$reporte->idPrueba_Aplica] ?? '',
+                ];
+            });
+
+            return view('Reportes.INS.Index.indexINS2', compact(
+                'reportesEncontrados',
+                'contratoSeleccionado',
+                'Proyecto',
+                'formatosPorReporte'
+            ));
         } else {
             return redirect()->route('indexINS1');
         }
@@ -826,7 +855,7 @@ class ReporteController extends Controller
         );
     }
     
-    public function ObtenerRutaPDF($id)
+    public function ObtenerRutaPDF(Request $request, $id)
     {
         $Reporte = reporte::where('idReportes',$id)->first();
         $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
@@ -963,7 +992,15 @@ class ReporteController extends Controller
         }
         elseif($Nombre_Formato == "FOR-PIMP-04/03")
         {
-            return redirect()->route('procesamientos.pdf.pagina', ['reporte' => $id, 'formato' => '04_03']);
+            // Solo este formato cuenta con plantillas completas en espanol e ingles.
+            $idioma = strtolower((string) $request->query('idioma', 'es'));
+            $idioma = in_array($idioma, ['es', 'en'], true) ? $idioma : 'es';
+
+            return redirect()->route('procesamientos.pdf.pagina', [
+                'reporte' => $id,
+                'formato' => '04_03',
+                'idioma' => $idioma,
+            ]);
         }
         elseif($Nombre_Formato == "FOR-PIMP-05/01")
         {

@@ -2,123 +2,139 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FOTOS FOR-PIMP-04/02</title>
+    <title>PHOTOS FOR-PIMP-04/03</title>
     <style>
-        @page {
+        @page { 
             margin: 
-            2.2cm
-            1.2cm
-            2.1cm
-            1.2cm;
+            2.5cm /* superior */
+            1.5cm /* derecho */
+            1.1cm /* inferior */
+            1.5cm; /* izquierdo */
         }
-        body {
-            font-family: Arial, sans-serif;
-            margin-top: 27px;
-            padding-top: 0;
-            padding-bottom: 0;
-            color: #000;
+        body { 
+            font-family: Arial, sans-serif; 
+            margin-top: 27px; 
+            padding-top: 0; 
+            padding-bottom: 0; 
+            color: #000; 
         }
-        header {
-            position: fixed;
-            top: -52px;
-            left: 0;
-            right: 0;
-            text-align:
-
+        header { 
+            position: fixed; 
+            top: -38px; 
+            left: 0; 
+            right: 0; 
+            text-align: 
+            
             center; }
-        footer {
-            position: fixed;
-            bottom: -30px;
-            left: 0;
-            right: 0;
-            text-align: center;
+        footer { 
+            position: fixed; 
+            bottom: -30px; 
+            left: 0; 
+            right: 0; 
+            text-align: center; 
         }
-        table {
-            border-collapse: collapse;
-            width: 100%;
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
         }
-        .tablaheader {
-            border-collapse: collapse;
-            width: 100%;
-            text-align: center;
+        .tablaheader { 
+            border-collapse: collapse; 
+            width: 100%; 
+            text-align: center; 
             font-size: 9.5px;
         }
-        .tablaheader th {
-            border: 1px solid #000;
+        .tablaheader th { 
+            border: 1px solid #000; 
         }
-        .section-title, 
-        .encabezadoAzul {
-            background: #305496;
-            color: #fff;
-            text-align: center;
-            font-weight: bold;
-            font-size: 8px;
+        .section-title, .encabezadoAzul { 
+            background: #305496; 
+            color: #fff; 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 8px; 
         }
-        .section-title th {
-            border: .7px solid #000;
-            padding: 2px;
+        .section-title th { 
+            border: .7px solid #000; 
+            padding: 2px; 
         }
-        .tablaGenerales {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 8px;
-            table-layout: fixed;
+        .tablaGenerales { 
+            border-collapse: collapse; 
+            width: 100%; 
+            font-size: 8px; 
+            table-layout: fixed; 
         }
-        .tablaGenerales th, 
-        .tablaGenerales td {
-            padding: 1.5px;
-            vertical-align: middle;
+        .tablaGenerales th, .tablaGenerales td { 
+            padding: 1.5px; 
+            vertical-align: middle; 
         }
-        .tablaGenerales tbody th {
-            width: 15%;
-            font-weight: bold;
-            white-space: nowrap;
-            line-height: 7px;
-            text-align: left;
-            padding-left: 2px;
+        .tablaGenerales tbody th { 
+            width: 15%; 
+            font-weight: bold; 
+            white-space: nowrap; 
+            line-height: 10px; 
+            text-align: left; 
+            padding-left: 2px; 
         }
-        .tablaGenerales tbody th.etiqueta-larga {
-            text-align: center;
+        .tablaGenerales tbody th.etiqueta-larga { 
+            font-size: 7px; 
         }
-        .tablaGenerales .line {
-            padding: 1.5px 0 0 5px;
-            text-align: center;
-            vertical-align: middle;
+        .etiquetaGeneral { 
+            width: 15%; 
+            font-weight: bold; 
+            white-space: nowrap; 
+            line-height: 10px; 
+            text-align: left; 
+            padding-left: 2px; 
+            vertical-align: middle; 
         }
-        .linea-general {
-            min-height: 10px;
-            line-height: 10px;
-            border-bottom: 1px solid #000;
-            box-sizing: border-box;
-            text-align: center;
+        .etiquetaGeneralCentrada { 
+            text-align: center; 
+            vertical-align: middle; 
         }
-        .linea-desplazada {
-            margin-left: 7mm;
+        .valorGeneral { 
+            border-bottom: 1px solid #000; 
+            text-align: center; 
+            vertical-align: middle; 
+            height: 10px; 
         }
-        .spacer {
-            height: 5px;
+        .tablaGenerales .line { 
+            padding: 1.5px 0 0 5px; 
+            text-align: center; 
+            vertical-align: middle; 
         }
-        .metallographic {
-            table-layout: fixed;
-            text-align: center;
-            font-size: 6.5px;
+        .linea-general { 
+            min-height: 10px; 
+            line-height: 10px; 
+            border-bottom: 1px solid #000; 
+            box-sizing: border-box; 
+            text-align: center; 
         }
-        .metallographic th, 
-        .metallographic td {
-            border: .6px solid #000;
-            padding: 1.5px;
-            line-height: 7px;
-            vertical-align: middle;
-            overflow-wrap: break-word;
+        .linea-desplazada { 
+            margin-left: 7mm; 
         }
-        .metallographic .subhead {
-            background: #305496;
-            color: #fff;
-            font-weight: bold;
+        .spacer { 
+            height: 5px; 
         }
-        .metallographic .label {
-            background: #e7e6e6;
-            font-weight: bold;
+        .metallographic { 
+            table-layout: fixed; 
+            text-align: center; 
+            font-size: 6.5px; 
+        }
+        .metallographic th, .metallographic td { 
+            border: .6px solid #000; 
+            padding: 1.5px; 
+            line-height: 7px; 
+            vertical-align: middle; 
+            overflow-wrap: break-word; 
+        }
+        .metallographic .subhead { 
+            background: #305496; 
+            color: #fff; 
+            font-weight: bold; 
+        }
+        .metallographic .label { 
+            background: #e7e6e6; 
+            font-weight: bold; 
         }
         .photo-grid {
             /* Distribución tomada del PDF principal FOR-PIMP-03_B_01. */
@@ -127,11 +143,12 @@
             table-layout: fixed;
             border-collapse: separate;
             /* Diez píxeles verticales impiden que una celda de texto toque la imagen de la fila siguiente. */
-            border-spacing: 0 6px;
+            border-spacing: 0 10px;
         }
         .photo-slot {
+            /* El marco de 185 px del PDF principal evita que Dompdf reparta una fila entre hojas. */
             width: 47%;
-            height: 230px;
+            height: 260px;
             border: 0;
             padding: 0;
             vertical-align: middle;
@@ -154,19 +171,11 @@
         }
         .photo-slot.arriba_derecha { vertical-align: top; }
         .photo-slot.abajo_izquierda,
-        .photo-slot.abajo_derecha { 
-            vertical-align: top !important;
-            overflow: visible !important;
-        }
-        .photo-slot.abajo_izquierda > table,
-        .photo-slot.abajo_derecha > table {
-            position: relative;
-            top: -15px;
-        }
+        .photo-slot.abajo_derecha { vertical-align: bottom; }
         .photo-content {
             width: 100%;
             max-width: 300px;
-            height: 230px;
+            height: 260px;
             border-collapse: collapse;
             table-layout: fixed;
         }
@@ -189,20 +198,16 @@
             height: 16px;
             border: 0;
         }
+        .photo-content .photo-image-cell.photo-text-cell {
+           height: 200px; /* ← AQUÍ aumentas el ALTO */
+            border: 1px solid #000 !important;
+            padding: 0 !important;
+            vertical-align: middle;
+        }
         .photo-text-cell {
             /* Usa exactamente la misma celda estructural de 185 px que una fotografía. */
             padding: 0 !important;
             text-align: left !important;
-        }
-        /* BORDE SOLO PARA EL CUADRO DE DESCRIPCIÓN */
-        .photo-content .photo-image-cell.photo-text-cell {
-            height: 202px;
-            border: 1px solid #000 !important;
-            padding: 0 !important;
-            vertical-align: middle !important;
-            text-align: left !important;
-            box-sizing: border-box;
-            overflow: hidden;
         }
         .photo-text-cell-inner {
             padding: 12px 16px;
@@ -246,8 +251,7 @@
             overflow: visible;
         }
         /* El patrón comparativo ASTM se delimita solo arriba y abajo. */
-        .photo-content.photo-content-grain 
-        .photo-image-cell {
+        .photo-content.photo-content-grain .photo-image-cell {
             height: 208px;
             border: 1px solid #000;
             vertical-align: middle;
@@ -257,7 +261,7 @@
         .photo-slot img {
             display: block;
             max-width: 298px;
-            max-height: 208px;
+            max-height: 238px;
             width: auto;
             height: auto;
             object-fit: contain;
@@ -272,7 +276,7 @@
          */
         .photo-content.photo-content-grain img {
             max-width: 280px;
-            max-height: 210px;
+            max-height: 200px;
             width: auto;
             height: auto;
             object-fit: contain;
@@ -281,7 +285,7 @@
         }
         .photo-full .photo-content.photo-content-grain img {
             max-width: 280px !important;
-            max-height: 210px !important;
+            max-height: 200px !important;
             width: auto !important;
             height: auto !important;
         }
@@ -319,7 +323,7 @@
             padding: 12px 16px;
             text-align: justify;
             vertical-align: middle;
-            font-size: 7px;
+            font-size: 10px;
             line-height: 11px;
             overflow-wrap: break-word;
             word-break: normal;
@@ -361,8 +365,57 @@
             width: 100%;
             height: 390px;
         }
-        .photo-page {
-            page-break-inside: avoid;
+        .photo-page { 
+            page-break-inside: avoid; 
+        }
+        .firmas-im { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .firmas-im td { 
+        text-align: center; 
+        vertical-align: top; 
+        padding: 0 12px; 
+        font-size: 8px; 
+        }
+        .firmas-im .firma-titulo { 
+        font-weight: bold; 
+        line-height: 11px; 
+        min-height: 8px; 
+        }
+        .firmas-im .firma-linea { 
+        border-bottom: 1px solid #000; 
+        height: 10px; 
+        margin-top: 0; 
+        line-height: 10px; 
+        padding-top: 10px; 
+        box-sizing: border-box; 
+        font-weight: bold; 
+        }
+        .firmas-im .firma-dato { 
+        margin-top: 2px; 
+        line-height: 10px; 
+        font-weight: bold; 
+        }
+        .firmas-im .firma-ficha { 
+        margin-top: 2px; 
+        line-height: 10px; 
+        font-weight: bold; 
+        }
+        .firmas-im-4 td { 
+        padding: 2px 12px 0 12px; 
+        }
+        .firmas-im .firma-separacion-tres td { 
+        padding-top: 0px; 
+        }
+        .firmas-im .firma-separacion-cuatro td { 
+        padding-top: 16px; 
+        }
+        .etiquetaGeneralCentrada {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+        .etiquetaGeneralCentrada .titulo-es-nowrap {
+            display: block;
+            white-space: nowrap;
+            text-align: center;
         }
     </style>
 </head>
@@ -372,37 +425,23 @@
     <table class="tablaheader">
         <thead>
             <tr>
-                <th style="width:360%">
-                    FORMATO<br>Format
-                </th>
+                <th style="width:360%">FORMAT</th>
                 <th rowspan="3" style="width:70%">
                     @if(!empty($QR_PDF))
-                        <img src="{{ $QR_PDF }}" alt="QR de documentos" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
+                        <img src="{{ $QR_PDF }}" alt="Documents QR" style="width:55px; height:55px; display:block; margin:auto; padding:0;">
                     @endif
                 </th>
-                <th style="width:65%">
-                    CÓDIGO<br>Code
-                </th>
-                <th style="width:85%">
-                    FOR-PIMP-04/02
-                </th>
-                <th rowspan="3" style="width:80%">
-                    <img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto">
-                </th>
+                <th style="width:60%">CODE</th>
+                <th style="width:100%">FOR-PIMP-04_B/03</th>
+                <th rowspan="3" style="width:80%"><img src="{{ $Logo }}" alt="Logo" style="width:55%; height:auto"></th>
             </tr>
             <tr>
-                <th rowspan="2">Informe de Caracterización de Materiales Mediante la Técnica de Espectrometría de Emisión Óptica (OES)<br>
-                    Material Characterization Report Using Optical Emission Spectrometry (OES)
-                </th>
-                <th>
-                    VERSIÓN<br>Version
-                </th>
-                <th>2</th>
+                <th rowspan="2">Material Characterization Report Using the X-Ray Fluorescence (XRF) Technique</th>
+                <th>VERSION</th>
+                <th>0</th>
             </tr>
             <tr>
-                <th>
-                    PÁGINA<br>Page
-                </th>
+                <th>PAGE</th>
                 <th></th>
             </tr>
         </thead>
@@ -415,12 +454,7 @@
 
 {{-- Agrupa cada registro por página y cuadrante; página completa sustituye los cuatro espacios. --}}
 @php
-    $posicionesFoto = [
-        'arriba_izquierda', 
-        'arriba_derecha', 
-        'abajo_izquierda', 
-        'abajo_derecha'
-        ];
+    $posicionesFoto = ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'];
     $paginasFotos = [];
 
     foreach ($Fotos as $indiceFoto => $foto) {
@@ -434,6 +468,7 @@
             $paginasFotos[$pagina]['espacios'][$posicion] = $foto;
         }
     }
+
     ksort($paginasFotos);
 @endphp
 
@@ -447,319 +482,155 @@
         <table class="tablaGenerales">
             <thead class="encabezadoAzul">
                 <tr>
-                    <th colspan="6">
-                        DATOS GENERALES<br>General Data
-                    </th>
+                    <th colspan="6">GENERAL DATA</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>FECHA:<br>Date:</th>
+                    <th>DATE:</th><td class="line" colspan="2">
+                        <div class="linea-general">{{ $Detalles_Generales['Fecha'] ?? '' }}</div>
+                    </td>
+                    <th class="etiquetaGeneralCentrada">REPORT No.:</th><td class="line" colspan="2">
+                        <div class="linea-general">{{ $Detalles_Generales['No_Reporte'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>CLIENT:</th><td class="line" colspan="3">
+                        <div class="linea-general">{{ $Detalles_Generales['Cliente'] ?? '' }}</div>
+                    </td>
+                    <th class="etiquetaGeneralCentrada">CONTRACT:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Contrato'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>PROJECT:</th><td class="line" colspan="5">
+                        <div class="linea-general">{{ $Detalles_Generales['Proyecto'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>WORK ORDER:</th><td class="line" colspan="5">
+                        <div class="linea-general">{{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>FOLIO:</th><td class="line" colspan="5">
+                        <div class="linea-general">{{ $Detalles_Generales['Folio'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>ITEM:</th><td class="line" colspan="5">
+                        <div class="linea-general">{{ $Detalles_Generales['Partida'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>FACILITY:</th>
                     <td class="line" colspan="2">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Fecha'] ?? '' }}
-                        </div>
+                        <div class="linea-general">{{ $Detalles_Generales['Instalacion'] ?? '' }}</div>
                     </td>
-
-                    <th class="etiqueta-larga">
-                        No. REPORTE:<br>Report No.:
-                    </th>
+                    <th class="etiquetaGeneralCentrada">ISOMETRIC No.:</th>
                     <td class="line" colspan="2">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['No_Reporte'] ?? '' }}
-                        </div>
+                        <div class="linea-general">{{ $Detalles_Generales['No_Isometrico'] ?? '' }}</div>
                     </td>
                 </tr>
-
                 <tr>
-                    <th>CLIENTE:<br>Client:</th>
-                    <td class="line" colspan="3">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Cliente'] ?? '' }}
-                        </div>
+                    <th>PART NAME:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}</div>
                     </td>
-
-                    <th class="etiqueta-larga">
-                        CONTRATO:<br>Contract:
-                    </th>
+                    <th class="etiquetaGeneralCentrada">MATERIAL:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Material'] ?? '' }}</div>
+                    </td>
+                    <th class="etiquetaGeneralCentrada">TRACEABILITY:</th><td class="line">
+                        <div class="linea-general">{{ $Detalles_Generales['Trazabilidad'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>PROCEDURE:</th><td class="line" colspan="2">
+                        <div class="linea-general">{{ $Detalles_Generales['Procedimiento'] ?? 'PRO-PIMP-04' }}</div>
+                    </td>
+                    <th class="etiquetaGeneralCentrada">EVALUATION CRITERIA:</th><td class="line" colspan="2">
+                        <div class="linea-general">{{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>ACCESSORY:</th>
+                    <td class="line"><div class="linea-general">{{ $Detalles_Generales['Accesorio'] ?? '' }}</div>
+                    </td>
+                    <th class="etiquetaGeneralCentrada">PIPING:</th>
                     <td class="line">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Contrato'] ?? '' }}
-                        </div>
+                        <div class="linea-general">{{ $Detalles_Generales['Tuberia'] ?? '' }}</div>
                     </td>
-                </tr>
-
-                <tr>
-                    <th>PROYECTO:<br>Project:</th>
-                    <td class="line" colspan="5">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Proyecto'] ?? '' }}
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>
-                        ORDEN DE TRABAJO:<br>Work Order:
-                    </th>
-                    <td class="line" colspan="5">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Orden_Trabajo'] ?? '' }}
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>FOLIO:<br>Reference:</th>
-                    <td class="line" colspan="5">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Folio'] ?? '' }}
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>PARTIDA:<br>Item:</th>
-                    <td class="line" colspan="5">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Partida'] ?? '' }}
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>
-                        INSTALACIÓN:<br>Facility:
-                    </th>
-                    <td class="line" colspan="3">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Instalacion'] ?? '' }}
-                        </div>
-                    </td>
-
-                    <th class="etiqueta-larga">
-                        No. DE ISOMÉTRICO:<br>Isometric No.:
-                    </th>
+                    <th class="etiquetaGeneralCentrada">STRUCTURAL:</th>
                     <td class="line">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['No_Isometrico'] ?? '' }}
-                        </div>
+                        <div class="linea-general">{{ $Detalles_Generales['Estructural'] ?? '' }}</div>
                     </td>
                 </tr>
-
                 <tr>
-                    <th>
-                        NOMBRE DE LA PIEZA:<br>Part Name:
-                    </th>
-                    <td class="line">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Nombre_Pieza'] ?? '' }}
-                        </div>
-                    </td>
-
-                    <th class="etiqueta-larga">
-                        MATERIAL:<br>Material:
-                    </th>
-                    <td class="line">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Material'] ?? '' }}
-                        </div>
-                    </td>
-
-                    <th class="etiqueta-larga">
-                        TRAZABILIDAD:<br>Traceability:
-                    </th>
-                    <td class="line">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Trazabilidad'] ?? '' }}
-                        </div>
+                    <th>ISOMETRIC AND/OR DRAWING No.:</th><td class="line" colspan="5">
+                        <div class="linea-general linea-desplazada">{{ $Detalles_Generales['No_Isometrico_Plano'] ?? '' }}</div>
                     </td>
                 </tr>
-
                 <tr>
-                    <th>
-                        PROCEDIMIENTO:<br>Procedure:
-                    </th>
-                    <td class="line" colspan="2">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Procedimiento'] ?? 'PRO-PIMP-04' }}
-                        </div>
-                    </td>
-
-                    <th class="etiqueta-larga">
-                        CRITERIO DE EVALUACIÓN:<br>Evaluation Criteria:
-                    </th>
-                    <td class="line" colspan="2">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Criterio_Evaluacion'] ?? '' }}
-                        </div>
+                    <th>OBSERVATIONS AND NOTES:</th><td class="line" colspan="5">
+                        <div class="linea-general linea-desplazada">{{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}</div>
                     </td>
                 </tr>
-
-                <tr>
-                    <th>
-                        ACCESORIO:<br>Fitting:
-                    </th>
-                    <td class="line">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Accesorio'] ?? '' }}
-                        </div>
-                    </td>
-
-                    <th class="etiqueta-larga">
-                        TUBERÍA:<br>Pipe:
-                    </th>
-                    <td class="line">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Tuberia'] ?? '' }}
-                        </div>
-                    </td>
-
-                    <th class="etiqueta-larga">
-                        ESTRUCTURAL:<br>Structural:
-                    </th>
-                    <td class="line">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Estructural'] ?? '' }}
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>
-                        No. DE ISOMÉTRICO Y/O PLANO:<br>Isometric and/or Drawing No.:
-                    </th>
-                    <td class="line" colspan="5">
-                        <div class="linea-general linea-desplazada">
-                            {{ $Detalles_Generales['No_Isometrico_Plano'] ?? '' }}
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>
-                        OBSERVACIONES Y NOTAS:<br>Remarks and Notes:
-                    </th>
-                    <td class="line" colspan="5">
-                        <div class="linea-general linea-desplazada">
-                            {{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
         </table>
+        <div class="spacer"></div>
         {{-- La tabla metalográfica aparece una sola vez, en la primera página del anexo. --}}
         @if($loop->first)
             <table class="metallographic">
                 <colgroup>
-                    <col style="width:5%">
-                    <col style="width:5%">
-                    <col style="width:5%">
-                    <!-- MATERIAL PARA EL PULIDO -->
-                    <col style="width:9%">
+                    <col style="width:12%">
                     <col style="width:10%">
-                    <!-- DATOS DE ATAQUE QUÍMICO -->
-                    <col style="width:9%">
+                    <col style="width:12%">
                     <col style="width:10%">
-                    <!-- FASES PRESENTES -->
-                    <col style="width:22%">
-                    <!-- ESPECIFICACIÓN -->
-                    <col style="width:25%">
+                    <col style="width:12%">
+                    <col style="width:10%">
+                    <col style="width:12%">
+                    <col style="width:11%">
+                    <col style="width:11%">
                 </colgroup>
                 <thead>
                     <tr class="subhead">
-                        <th colspan="9">
-                            ANÁLISIS METALOGRÁFICO / Metallographic Analysis
-                        </th>
+                        <th colspan="9">METALLOGRAPHIC ANALYSIS</th>
                     </tr>
                     <tr>
-                        <th colspan="3" style="width:18%;">
-                            NÚMERO DE LIJA PARA EL DESBASTE<br>Grinding Sandpaper Number
-                        </th>
-
-                        <th colspan="2" style="width:29%;">
-                            MATERIAL PARA EL PULIDO<br>Polishing Material
-                        </th>
-
-                        <th colspan="2" style="width:27%;">
-                            DATOS DE ATAQUE QUÍMICO<br>Chemical Etching Data
-                        </th>
-
-                        <th style="width:16%;">
-                            FASES PRESENTES<br>Phases Present
-                        </th>
-
-                        <th style="width:16%;">
-                            ESPEC. APROX. DEL MATERIAL<br>Approx. Material Spec.
-                        </th>
+                        <th colspan="3">SANDPAPER GRIT NUMBER FOR GRINDING</th>
+                        <th colspan="2">POLISHING MATERIAL</th>
+                        <th colspan="2">CHEMICAL ETCHING DATA</th>
+                        <th>PHASES PRESENT</th>
+                        <th>APPROXIMATE MATERIAL SPECIFICATION</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="width:6%;">
-                            {{ $Datos_Equipo['LIJAS_DESBASTE'][0] ?? '240' }}
-                        </td>
-                        <td style="width:6%;">
-                            {{ $Datos_Equipo['LIJAS_DESBASTE'][1] ?? '320' }}
-                        </td>
-                        <td style="width:6%;">
-                            {{ $Datos_Equipo['LIJAS_DESBASTE'][2] ?? '400' }}
-                        </td>
-
-                        <th class="label">
-                            PAÑO / Cloth
-                        </th>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][0] ?? '240' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][1] ?? '320' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][2] ?? '400' }}</td>
+                        <th class="label">CLOTH</th>
                         <td>{{ $Datos_Equipo['MATERIAL_PANO'] ?? '' }}</td>
-
-                        <th class="label">
-                            REACTIVO / Reagent
-                        </th>
+                        <th class="label">REAGENT</th>
                         <td>{{ $Datos_Equipo['REACTIVO'] ?? '' }}</td>
-
-                        <td rowspan="2">
-                            {{ $Datos_Equipo['FASES_PRESENTES'] ?? '' }}
-                        </td>
-
-                        <td rowspan="2">
-                            {{ $Datos_Equipo['ESPECIFICACION_MATERIAL'] ?? '' }}
-                        </td>
+                        <td rowspan="2">{{ $Datos_Equipo['FASES_PRESENTES'] ?? '' }}</td>
+                        <td rowspan="2">{{ $Datos_Equipo['ESPECIFICACION_MATERIAL'] ?? '' }}</td>
                     </tr>
-
                     <tr>
-                        <td style="width:6%;">
-                            {{ $Datos_Equipo['LIJAS_DESBASTE'][3] ?? '500' }}
-                        </td>
-                        <td style="width:6%;">
-                            {{ $Datos_Equipo['LIJAS_DESBASTE'][4] ?? '1000' }}
-                        </td>
-                        <td style="width:6%;">
-                            {{ $Datos_Equipo['LIJAS_DESBASTE'][5] ?? '1500' }}
-                        </td>
-
-                        <th class="label">
-                            ABRASIVO / Abrasive
-                        </th>
-                        <td>
-                            {{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}
-                        </td>
-
-                        <th class="label">
-                            TIEMPO / Time
-                        </th>
-
-                        <td>
-                            {{ $Datos_Equipo['TIEMPO_ATAQUE'] ?? '' }}
-                        </td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][3] ?? '500' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][4] ?? '1000' }}</td>
+                        <td>{{ $Datos_Equipo['LIJAS_DESBASTE'][5] ?? '1500' }}</td>
+                        <th class="label">ABRASIVE</th>
+                        <td>{{ $Datos_Equipo['MATERIAL_ABRASIVO'] ?? '' }}</td>
+                        <th class="label">TIME</th>
+                        <td>{{ $Datos_Equipo['TIEMPO_ATAQUE'] ?? '' }}</td>
                     </tr>
                 </tbody>
             </table>
+            <div class="spacer"></div>
         @endif
         <table>
             <thead class="section-title">
                 <tr>
-                    <th>
-                        REGISTRO FOTOGRÁFICO / PHOTOGRAPHIC RECORD
-                    </th>
+                    <th>PHOTOGRAPHIC RECORD</th>
                 </tr>
             </thead>
         </table>
@@ -779,7 +650,7 @@
                             <table class="photo-content {{ ($fotoCompleta['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                 <tr>
                                     <td class="photo-image-cell">
-                                        <img src="{{ $fotoCompleta['path'] }}" alt="Fotografía">
+                                        <img src="{{ $fotoCompleta['path'] }}" alt="Photograph">
                                     </td>
                                 </tr>
                                 <tr>
@@ -810,7 +681,7 @@
                                     <table class="photo-content {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                         <tr>
                                             <td class="photo-image-cell">
-                                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Photograph">
                                             </td>
                                         </tr>
                                         <tr>
@@ -848,7 +719,7 @@
                                     <table class="photo-content {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                         <tr>
                                             <td class="photo-image-cell">
-                                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Photograph">
                                             </td>
                                         </tr>
                                         <tr>
