@@ -15,13 +15,24 @@ class ProcesamientoPdfController extends Controller
     {
         abort_unless(array_key_exists($formato, GenerarReportePdfJob::FORMATOS), 404);
 
+        // FOR-PIMP-04/03 permite seleccionar sus plantillas en espanol o ingles.
+        // Los demas formatos conservan exactamente su comportamiento anterior.
+        $idioma = strtolower((string) $request->query('idioma', 'es'));
+        $idioma = $formato === '04_03' && in_array($idioma, ['es', 'en'], true)
+            ? $idioma
+            : 'es';
+
         $trabajo = TrabajoProcesamiento::create([
             'id' => (string) Str::uuid(),
             'usuario_id' => (int) $request->user()->getAuthIdentifier(),
             'tipo' => 'reporte_pdf',
             'estado' => TrabajoProcesamiento::ESTADO_PENDIENTE,
             'mensaje' => 'Generando reporte PDF...',
-            'contexto' => ['reporte_id' => $reporte, 'formato' => $formato],
+            'contexto' => [
+                'reporte_id' => $reporte,
+                'formato' => $formato,
+                'idioma' => $idioma,
+            ],
             'expira_at' => now()->addHours(8),
         ]);
 

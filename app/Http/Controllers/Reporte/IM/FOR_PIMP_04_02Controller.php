@@ -2777,7 +2777,7 @@ class FOR_PIMP_04_02Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             // El encabezado 04_02 ahora incluye QR; esta coordenada alinea la paginacion con la celda PAGINA.
-            $combinedPdf->SetXY(152.5, 25);
+            $combinedPdf->SetXY(151.5, 24);
             $combinedPdf->Cell(24, 3.5, "$i DE $totalPageCount", 0, 0, 'C');
         }
 
@@ -2792,7 +2792,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 $combinedPdf->SetFont('Arial', 'B', 8);
                 $paginaActual = $i + $pageCount1;
                 // Mantiene la misma posicion de paginacion en las paginas del anexo fotografico.
-                $combinedPdf->SetXY(152.5, 25);
+                $combinedPdf->SetXY(152, 26);
                 $combinedPdf->Cell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 0, 'C');
             }
         }

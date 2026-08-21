@@ -49,9 +49,18 @@ class GenerarReportePdfJob implements ShouldQueue
         try {
             $formato = (string) data_get($trabajo->contexto, 'formato');
             [$clase, $metodo] = self::FORMATOS[$formato] ?? throw new \RuntimeException('Formato PDF no permitido.');
-            $respuesta = app()->call([app($clase), $metodo], [
+            $parametros = [
                 'id' => (int) data_get($trabajo->contexto, 'reporte_id'),
-            ]);
+            ];
+
+            // El parametro adicional se envia unicamente al generador bilingue;
+            // asi no se modifican las firmas de los otros controladores PDF.
+            if ($formato === '04_03') {
+                $idioma = strtolower((string) data_get($trabajo->contexto, 'idioma', 'es'));
+                $parametros['idioma'] = in_array($idioma, ['es', 'en'], true) ? $idioma : 'es';
+            }
+
+            $respuesta = app()->call([app($clase), $metodo], $parametros);
             $contenido = method_exists($respuesta, 'getContent') ? $respuesta->getContent() : null;
             if (!is_string($contenido) || !str_starts_with($contenido, '%PDF')) {
                 throw new \RuntimeException('El generador no devolvio un documento PDF valido.');
