@@ -331,23 +331,41 @@
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-plus').forEach(function(btn) {
-        btn.addEventListener('click', function(event) {
-            event.preventDefault(); // Evita la navegación inmediata
-            let url = this.href; // Guarda la URL del enlace
+$(document).on("click", ".btn-plus", function(event) {
 
-            // Deshabilitar el botón inmediatamente
-            this.setAttribute('disabled', 'true');
-            this.style.pointerEvents = 'none'; // Evita más clics en el botón
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; // Muestra el spinner de carga
+    event.preventDefault();
 
-            // Redirigir de inmediato
+    let url = this.href;
+    let idSolicitud = $(this).data('id');
+
+    Swal.fire({
+        title: 'Complementar solicitud',
+        text: '¿Desea complementar esta solicitud?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, complementar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            // Deshabilitar el botón
+            $(this).css({
+                'pointer-events': 'none',
+                'opacity': '0.6'
+            });
+
+            // Mostrar spinner
+            $(this).html('<i class="fas fa-spinner fa-spin"></i>');
+
+            // Ir a la pantalla de complementar
             window.location.href = url;
-        });
-    });
-});
+        }
 
+    });
+
+});
 </script>
 
 @endsection
