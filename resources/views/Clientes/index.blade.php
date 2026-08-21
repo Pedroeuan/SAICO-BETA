@@ -8,16 +8,25 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
 
 <style>
-    #tablaJs td {
-        text-align: center; /* Centra el contenido horizontalmente */
-    }
-    #tablaJs th {
-        text-align: center; /* Centra el texto del encabezado horizontalmente */
+    #my-notification .dropdown-menu {
+        max-height: 200px;
+        overflow-y: auto;
     }
 
-    #my-notification .dropdown-menu {
-    max-height: 200px; /* Ajusta la altura según sea necesario */
-    overflow-y: auto;
+    .logo-preview-container {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .logo-preview {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 5px;
+        background: #f8f9fa;
+        display: none;
     }
 
 </style>
@@ -34,37 +43,176 @@
         <h3 align="center">Clientes Registrados</h3>
         <br>
         <div class="box-body">
-            <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
+            <table id="tablaJs"
+                class="table table-bordered table-striped dt-responsive tablas">
+
                 <thead>
+
                     <tr>
+
+                        <th>Logo</th>
+
                         <th>Cliente</th>
+
                         <th>RFC</th>
+
                         <th>Telefono</th>
+
                         <th>Correo</th>
+
+                        <th>Portal</th>
+
                         <th>Editar</th>
+
                         <th>Eliminar</th>
+
                     </tr>
+
                 </thead>
+
+
                 <tbody>
+
                     @foreach($clientes as $cliente)
+
                         <tr>
-                            <td scope="row">{{$cliente->Cliente}}</td>
-                            <td scope="row">{{$cliente->RFC}}</td>
-                            <td scope="row">{{$cliente->Telefono}}</td>
-                            <td scope="row">{{$cliente->Correo}}</td>
+
+                            {{-- LOGO --}}
+
                             <td>
-                                <div class="btn-group">
-                                    <a href="{{ route('edicion.editClientes', ['id' => $cliente->idClientes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                </div>
+
+                                @if($cliente->logo)
+
+                                    <img src="{{ asset('storage/' . $cliente->logo) }}"
+                                        alt="Logo {{ $cliente->Cliente }}"
+                                        style="
+                                            width: 60px;
+                                            height: 60px;
+                                            object-fit: contain;
+                                            border-radius: 8px;
+                                            padding: 3px;
+                                            border: 1px solid #ddd;
+                                        ">
+
+                                @else
+
+                                    <div style="
+                                        width: 60px;
+                                        height: 60px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        background:#f1f1f1;
+                                        border-radius:8px;
+                                        margin:auto;
+                                    ">
+
+                                        <i class="fas fa-building text-muted"></i>
+
+                                    </div>
+
+                                @endif
+
                             </td>
+
+
+                            {{-- CLIENTE --}}
+
                             <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-danger btnEliminarSolicitud" idCliente="{{$cliente->idClientes}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
-                                </div>
+                                {{ $cliente->Cliente }}
                             </td>
+
+
+                            {{-- RFC --}}
+
+                            <td>
+                                {{ $cliente->RFC }}
+                            </td>
+
+
+                            {{-- TELEFONO --}}
+
+                            <td>
+                                {{ $cliente->Telefono }}
+                            </td>
+
+
+                            {{-- CORREO --}}
+
+                            <td>
+                                {{ $cliente->Correo }}
+                            </td>
+
+
+                            {{-- PORTAL --}}
+
+                            <td>
+
+                                @if($cliente->portal_token)
+
+                                    <a href="{{ route('portal.cliente', ['token' => $cliente->portal_token]) }}"
+                                    target="_blank"
+                                    class="btn btn-primary"
+                                    title="Abrir portal">
+
+                                        <i class="fas fa-globe"></i>
+
+                                    </a>
+
+                                @else
+
+                                    <span class="badge badge-warning">
+                                        Sin portal
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+
+                            {{-- EDITAR --}}
+
+                            <td>
+
+                                <div class="btn-group">
+
+                                    <a href="{{ route('edicion.editClientes', ['id' => $cliente->idClientes]) }}"
+                                    class="btn btn-warning"
+                                    role="button">
+
+                                        <i class="fas fa-pencil-alt"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+
+                            {{-- ELIMINAR --}}
+
+                            <td>
+
+                                <div class="btn-group">
+
+                                    <button type="button"
+                                            class="btn btn-danger btnEliminarSolicitud"
+                                            idCliente="{{ $cliente->idClientes }}">
+
+                                        <i class="fa fa-times"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </td>
+
                         </tr>
+
                     @endforeach
+
                 </tbody>
+
             </table>
         </div>
     </div>

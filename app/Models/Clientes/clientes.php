@@ -13,6 +13,8 @@ class clientes extends Model
         'RFC',
         'Telefono',
         'Correo',
+        'logo',
+        'portal_token',
     ];
     protected $table = 'clientes';
     protected $primaryKey = 'idClientes';
