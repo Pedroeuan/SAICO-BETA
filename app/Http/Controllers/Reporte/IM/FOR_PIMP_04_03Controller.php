@@ -2442,8 +2442,19 @@ class FOR_PIMP_04_03Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    public function FOR_PIMP_04_03($id)
+    public function FOR_PIMP_04_03($id, string $idioma = 'es')
     {
+
+        // La seleccion controla en pareja el PDF principal y el fotografico.
+        // Cualquier valor no reconocido vuelve de forma segura al reporte espanol.
+        $idioma = strtolower($idioma);
+        $esIngles = $idioma === 'en';
+        $vistaPrincipal = $esIngles
+            ? 'Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_B_03_PDF'
+            : 'Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_03_PDF';
+        $vistaFotos = $esIngles
+            ? 'Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_B_03_PDF'
+            : 'Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_03_PDF';
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes', $id)->first();
@@ -2548,7 +2559,9 @@ class FOR_PIMP_04_03Controller extends Controller
         $totalFotos = count($Fotos);
 
         $data = [
-            'title' => 'Reporte_FOR-PIMP-04-03.PDF',
+            'title' => $esIngles
+                ? 'Report_FOR-PIMP-04-B-03.PDF'
+                : 'Reporte_FOR-PIMP-04-03.PDF',
             'Logo' => $Logo,
             //Detalles_Generales
             'Detalles_Generales' => $Detalles_Generales,
@@ -2574,12 +2587,12 @@ class FOR_PIMP_04_03Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_03_PDF', $data)->setPaper('letter', 'portrait');
+        $pdf1 = PDF::loadView($vistaPrincipal, $data)->setPaper('letter', 'portrait');
         $pdf2Content = null;
         $pageCount2 = 0;
 
         if (!empty($Fotos)) {
-            $pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_03_PDF', $data)->setPaper('letter', 'portrait');
+            $pdf2 = PDF::loadView($vistaFotos, $data)->setPaper('letter', 'portrait');
             $pdf2Content = $pdf2->output();
         }
 
@@ -2628,7 +2641,11 @@ class FOR_PIMP_04_03Controller extends Controller
             }
         }
 
-        return response($combinedPdf->Output('Reporte_FOR_PIMP_04_03.PDF', 'S'), 200)
+        $nombrePdf = $esIngles
+            ? 'Report_FOR_PIMP_04_B_03.PDF'
+            : 'Reporte_FOR_PIMP_04_03.PDF';
+
+        return response($combinedPdf->Output($nombrePdf, 'S'), 200)
             ->header('Content-Type', 'application/pdf');
     }
 
