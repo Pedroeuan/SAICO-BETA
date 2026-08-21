@@ -303,7 +303,9 @@
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            margin-top: 20;
+            margin-top: 20px;
+            position: relative;
+            left: 30px;
         }
 
         .composicionLayout > tbody > tr > td {
@@ -312,12 +314,12 @@
         }
 
         .columnaResultados {
-            width: 50%;
+            width: 45%;
             padding-right: 7px !important;
         }
 
         .columnaEvidencia {
-            width: 50%;
+            width: 55%;
             padding-left: 7px !important;
         }
 
@@ -403,22 +405,27 @@
         }
 
         .tituloValoresXrfCaja {
-            width: auto;
+            width: 100%;
             border: 1px solid #000;
             box-sizing: border-box;
             padding: 2px;
             font-weight: bold;
             line-height: 8px;
             text-align: center;
+            position: relative;
+            left: -2.5%;
         }
 
         .capturaXrfOficial {
             display: block;
-            width: 100%;
-            max-height: 235px;
-            object-fit: contain;
+            width: 105%;
+            max-width: none;
+            height: 270px;
+            max-height: 270px;
+            margin-left: -2.5%;
+            margin-top: 0;
+            object-fit: fill;
             object-position: center top;
-            margin: 0;
         }
 
         .capturaXrfVacia {
