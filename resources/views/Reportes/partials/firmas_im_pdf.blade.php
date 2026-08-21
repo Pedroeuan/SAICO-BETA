@@ -62,8 +62,9 @@
 
         text-align: center;
         font-weight: bold;
-        font-size: 10px;
+        font-size: 9px;
         line-height: 9px;
+        white-space: nowrap;   /* NO PERMITE DOS LÍNEAS */
     }
 
     /* =========================
