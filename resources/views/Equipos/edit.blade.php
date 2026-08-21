@@ -1826,12 +1826,18 @@
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Marca</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalEyC->Marca }}" name="Marca" placeholder="Enter ...">
+                                            @error('Marca')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Modelo</label>
                                             <input type="text" class="form-control inputForm" value="{{ $generalEyC->Modelo }}" name="Modelo" placeholder="Enter ...">
+                                            @error('Modelo')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-4">

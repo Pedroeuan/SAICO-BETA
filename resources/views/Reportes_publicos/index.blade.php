@@ -399,7 +399,7 @@
         <div class="contratos-container">
 
             <h2>
-                Mis contratos
+                Mis contratos / Proyectos
             </h2>
 
 
