@@ -77,6 +77,37 @@
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
+                    {{-- La serie se define desde el primer reporte para reservar su secuencia de paginas. --}}
+                    <div class="col-12 mb-3">
+                        <div class="card border-primary mb-0">
+                            <div class="card-body py-2">
+                                <div class="row align-items-end">
+                                    <div class="col-md-4">
+                                        <label class="col-form-label font-weight-bold" for="cantidadReportesSerie">
+                                            Cantidad de reportes que se generar&aacute;n en esta serie:
+                                        </label>
+                                        <input
+                                            id="cantidadReportesSerie"
+                                            type="number"
+                                            min="1"
+                                            max="999"
+                                            required
+                                            class="form-control @error('Serie_Reportes.cantidad_planificada') is-invalid @enderror"
+                                            name="Serie_Reportes[cantidad_planificada]"
+                                            value="{{ old('Serie_Reportes.cantidad_planificada', 1) }}"
+                                        >
+                                        @error('Serie_Reportes.cantidad_planificada')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-8 text-muted pb-2">
+                                        El bot&oacute;n <strong>Siguiente reporte &gt; Consecutivo</strong> reutilizar&aacute; los datos generales,
+                                        pero solicitar&aacute; disparos, resultados e im&aacute;genes nuevos. La cantidad puede ampliarse despu&eacute;s.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
                     <div class="col-sm-4">
@@ -996,7 +1027,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!nombreSelect || !registroSelect || !tbody) return;
 
     function tienePromedios() {
-        return Array.from(tbody.querySelectorAll('input')).some(input => input.value.trim() !== '');
+        return Array.from(tbody.querySelectorAll('input')).some(input => {
+            const valor = input.value.trim().toUpperCase();
+            return valor !== '' && valor !== 'ND';
+        });
     }
 
     function limpiarResultados() {
@@ -1034,8 +1068,9 @@ document.addEventListener('DOMContentLoaded', function () {
             input.className = 'form-control text-center';
             input.name = 'Norma_IM[Promedio][' + index + ']';
             input.dataset.elemento = fila.Elemento || '';
-            input.value = promedios[index] ?? fila.Promedio ?? '';
-            input.placeholder = 'Capture el promedio';
+            const valorPromedio = promedios[index] ?? fila.Promedio ?? '';
+            input.value = String(valorPromedio).trim() || 'ND';
+            input.placeholder = 'ND';
             promedio.appendChild(input);
             tr.append(elemento, promedio, composicion);
             tbody.appendChild(tr);
