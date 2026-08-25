@@ -61,7 +61,22 @@ it('no promedia valores calificados ni elementos ausentes', function () {
 
     expect($averages['P']['cantidad'])->toBe(1)
         ->and($averages['P']['esperados'])->toBe(2)
-        ->and($averages['Cr']['promedio'])->toBeNull();
+        ->and($averages['P']['valor_reporte'])->toBe('ND')
+        ->and($averages['Cr']['promedio'])->toBeNull()
+        ->and($averages['Cr']['valor_reporte'])->toBe('ND');
+});
+
+// Conserva las filas ND del equipo para mostrarlas y evita tratarlas como cero.
+it('reconoce ND con limite de deteccion y lo conserva fuera del promedio', function () {
+    $service = new ServicioAnalisisPdfXrf(new Parser());
+    $notDetected = $service->parseText("Al ND <0.16\nSi 0.249 0.086");
+    $averages = $service->averageForElements([$notDetected], ['Al', 'Si']);
+
+    expect($notDetected['lecturas']['Al']['valor'])->toBeNull()
+        ->and($notDetected['lecturas']['Al']['valor_original'])->toBe('ND')
+        ->and($notDetected['lecturas']['Al']['incertidumbre_3sigma'])->toBe('<0.16')
+        ->and($averages['Al']['valor_reporte'])->toBe('ND')
+        ->and($averages['Si']['valor_reporte'])->toBe('0.2490');
 });
 
 // Rechaza tanto una norma incompatible como una mezcla de grados entre archivos cargados.

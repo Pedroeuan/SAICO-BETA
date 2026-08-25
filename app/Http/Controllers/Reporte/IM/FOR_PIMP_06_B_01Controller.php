@@ -30,6 +30,7 @@ use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Services\ServicioAnalisisPdfXrf;
 use App\Services\ServicioImagenesPdfXrf;
 use App\Services\ServicioPatronGranoReporte;
+use App\Services\ServicioSerieReportes;
 use App\Models\Procedimientos\Procedimiento;
 
 use Illuminate\Http\Request;
@@ -432,11 +433,9 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
                 $elemento = $service->canonicalElement((string) ($filaCatalogo['Elemento'] ?? ''));
                 $resultado = $promediosExtraidos[$elemento] ?? null;
-                if ($resultado && $resultado['cantidad'] === $resultado['esperados'] && $resultado['promedio'] !== null) {
-                    $promedios[$indice] = number_format($resultado['promedio'], 4, '.', '');
-                } else {
-                    $promedios[$indice] = '';
-                }
+                // Un elemento ausente, ND o limitado con < / > no genera un
+                // promedio parcial engañoso: el resultado oficial queda como ND.
+                $promedios[$indice] = (string) ($resultado['valor_reporte'] ?? 'ND');
             }
         } elseif (is_array($normaHistorica)
             && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma) {
@@ -452,9 +451,12 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 continue;
             }
 
+            $promedioGuardado = trim((string) ($promedios[$indice] ?? ($filaCatalogo['Promedio'] ?? '')));
+
             $filas[] = [
                 'Elemento' => (string) ($filaCatalogo['Elemento'] ?? ''),
-                'Promedio' => trim((string) ($promedios[$indice] ?? ($filaCatalogo['Promedio'] ?? ''))),
+                // Evita celdas vacias en la edicion y en el PDF historico.
+                'Promedio' => $promedioGuardado !== '' ? $promedioGuardado : 'ND',
                 'Composicion' => (string) ($filaCatalogo['Composicion'] ?? ''),
             ];
         }
@@ -888,6 +890,8 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
+            // El primer reporte define una sola vez el total planeado de la serie.
+            'Serie_Reportes.cantidad_planificada' => 'required|integer|min:1|max:999',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1137,6 +1141,12 @@ class FOR_PIMP_06_B_01Controller extends Controller
         
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
+        // El primer reporte abre su serie inmediatamente; los consecutivos se
+        // incorporan desde el boton Siguiente reporte.
+        app(ServicioSerieReportes::class)->iniciar(
+            (int) $idReportes,
+            (int) $request->input('Serie_Reportes.cantidad_planificada')
+        );
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -1359,6 +1369,9 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf',
+            // En Edit se conserva el total original; solo se recibe otro al ampliar.
+            'Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999',
+            'Serie_Reportes.nueva_cantidad' => 'nullable|integer|min:1|max:999',
             
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
@@ -1498,6 +1511,42 @@ class FOR_PIMP_06_B_01Controller extends Controller
         $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
         $Firmas = Firma_Reporte::firstOrNew(['idReportes' => $id]);
         $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
+
+        // La cantidad se captura una sola vez. Los consecutivos heredan el total
+        // original y solo lo cambian mediante la accion explicita "Ampliar serie".
+        $servicioSeries = app(ServicioSerieReportes::class);
+        $serieActual = $servicioSeries->obtener((int) $id);
+        if (!$serieActual) {
+            $cantidadInicial = (int) $request->input('Serie_Reportes.cantidad_planificada', 0);
+            if ($cantidadInicial < 1) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'Serie_Reportes.cantidad_planificada' => 'Indique la cantidad total para configurar este reporte anterior.',
+                ]);
+            }
+
+            $servicioSeries->iniciar(
+                (int) $id,
+                $cantidadInicial
+            );
+        } elseif ($request->filled('Serie_Reportes.nueva_cantidad')) {
+            $nuevaCantidad = (int) $request->input('Serie_Reportes.nueva_cantidad');
+            if ($nuevaCantidad <= (int) $serieActual->cantidad_planificada) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'Serie_Reportes.nueva_cantidad' => 'El nuevo total debe ser mayor que el total actual de la serie.',
+                ]);
+            }
+
+            try {
+                $servicioSeries->actualizarCantidad(
+                    (int) $id,
+                    $nuevaCantidad
+                );
+            } catch (\RuntimeException $exception) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'Serie_Reportes.nueva_cantidad' => $exception->getMessage(),
+                ]);
+            }
+        }
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
@@ -2280,6 +2329,10 @@ class FOR_PIMP_06_B_01Controller extends Controller
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
         $totalPageCount = $pageCount1 + $pageCount2;
+        // La pagina visible se calcula sobre toda la serie, no solo sobre el PDF actual.
+        $paginacionSerie = app(ServicioSerieReportes::class)->registrarPaginas((int) $id, $totalPageCount);
+        $paginaInicialSerie = $paginacionSerie['pagina_inicial'];
+        $totalSerie = $paginacionSerie['total_estimado'];
 
         // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
@@ -2291,7 +2344,8 @@ class FOR_PIMP_06_B_01Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, $tamanoPagina['width'], $tamanoPagina['height']);
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY($orientacion === 'L' ? 220 : 153.5, 25.5);
-            $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount" . "\n" . "$i of $totalPageCount", 0, 'C');
+            $paginaActualSerie = $paginaInicialSerie + $i - 1;
+            $combinedPdf->MultiCell(24, 3.5, "$paginaActualSerie DE $totalSerie" . "\n" . "$paginaActualSerie of $totalSerie", 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -2305,9 +2359,9 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 $combinedPdf->AddPage($orientacion, [$tamanoPagina['width'], $tamanoPagina['height']]);
                 $combinedPdf->useTemplate($tplId, 0, 0, $tamanoPagina['width'], $tamanoPagina['height']);
                 $combinedPdf->SetFont('Arial', 'B', 8);
-                $paginaActual = $i + $pageCount1;
+                $paginaActual = $paginaInicialSerie + $pageCount1 + $i - 1;
                 $combinedPdf->SetXY($orientacion === 'L' ? 220 : 153.5, 25.5);
-                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount" . "\n" . "$paginaActual of $totalPageCount", 0, 'C');
+                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalSerie" . "\n" . "$paginaActual of $totalSerie", 0, 'C');
             }
         }
 

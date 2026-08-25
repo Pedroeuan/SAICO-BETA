@@ -65,6 +65,29 @@ class ServicioAnalisisPdfXrf
         $readings = [];
 
         foreach ($lines as $index => $line) {
+            // El equipo puede reportar un elemento como ND y conservar en la
+            // siguiente columna un limite (por ejemplo: "Al ND <0.16"). Se
+            // registra la fila para mostrarla, pero nunca participa del promedio.
+            if (preg_match('/^(' . $symbols . ')\s+(ND|N\/?D|NO\s+DETECTADO)\s+([<>≤≥]?\s*\d+(?:[.,]\d+)?)(?:\s+(.*))?$/iu', $line, $notDetectedMatch)) {
+                $element = $this->canonicalElement($notDetectedMatch[1]);
+                $specification = trim($notDetectedMatch[4] ?? '');
+
+                if ($specification === '' && isset($lines[$index + 1]) && $this->looksLikeSpecification($lines[$index + 1])) {
+                    $specification = $lines[$index + 1];
+                }
+
+                $readings[$element] = [
+                    'elemento' => $element,
+                    'valor' => null,
+                    'valor_original' => 'ND',
+                    'calificador' => 'ND',
+                    'incertidumbre_3sigma' => preg_replace('/\s+/u', '', $notDetectedMatch[3]),
+                    'especificacion_pdf' => $specification,
+                ];
+
+                continue;
+            }
+
             if (!preg_match('/^(' . $symbols . ')\s+([<>≤≥]?\s*\d+(?:[.,]\d+)?)\s+(\d+(?:[.,]\d+)?)(?:\s+(.*))?$/iu', $line, $match)) {
                 continue;
             }
@@ -116,6 +139,11 @@ class ServicioAnalisisPdfXrf
                 'valores' => $values,
                 'cantidad' => count($values),
                 'esperados' => count($analyses),
+                // Solo existe promedio oficial si todos los PDF aportaron un
+                // numero valido. ND, limites y ausencias producen ND.
+                'valor_reporte' => count($values) === count($analyses) && $values !== []
+                    ? number_format(array_sum($values) / count($values), 4, '.', '')
+                    : 'ND',
             ];
         }
 
