@@ -30,6 +30,7 @@ use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Admin\Usuario;
 use App\Services\ServicioRegistrosFotos;
 use App\Services\ServicioPatronGranoReporte;
+use App\Services\ServicioSerieReportes;
 
 
 use Illuminate\Http\Request;
@@ -1137,8 +1138,12 @@ class ReporteController extends Controller
         $MaterialesDureza0204 = $CatalogosDureza0204['materiales'];
         $EscalasDureza0204 = $CatalogosDureza0204['escalas'];
         $CatalogosMetalografiaIM = $this->catalogosMetalografiaIM($Nombre_Formato);
+        // Solo 06_B_01 consume este control; los demas formatos reciben null.
+        $SerieReporte = $Nombre_Formato === ServicioSerieReportes::FORMATO_06_B_01
+            ? app(ServicioSerieReportes::class)->obtener((int) $id)
+            : null;
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM','SerieReporte'));
 
     }
 
@@ -1361,7 +1366,9 @@ class ReporteController extends Controller
         $EscalasDureza0204 = $CatalogosDureza0204['escalas'];
         $CatalogosMetalografiaIM = $this->catalogosMetalografiaIM($Nombre_Formato);
 
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM'));
+        // Create inicia una serie nueva; Edit recibe el registro real correspondiente.
+        $SerieReporte = null;
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM','SerieReporte'));
     }
 
     public function indexINS2(Request $request)
@@ -1401,11 +1408,16 @@ class ReporteController extends Controller
                 ];
             });
 
+            // La serie ya viaja dentro de Detalles_Generales; no requiere otra tabla.
+            $seriesPorReporte = app(ServicioSerieReportes::class)
+                ->obtenerVarios($reportesEncontrados);
+
             return view('Reportes.INS.Index.indexINS2', compact(
                 'reportesEncontrados',
                 'contratoSeleccionado',
                 'Proyecto',
-                'formatosPorReporte'
+                'formatosPorReporte',
+                'seriesPorReporte'
             ));
         } else {
             return redirect()->route('indexINS1');
@@ -1681,6 +1693,10 @@ class ReporteController extends Controller
      */
     public function destroyReportes($id)
     {
+        // Elimina primero la membresia para conservar correlativos y rangos de
+        // pagina validos en los demas integrantes de la serie.
+        app(ServicioSerieReportes::class)->eliminarReporte((int) $id);
+
         //Primero Eliminar el registro de la tabla 'lineal_ideal'
         $Lineal_Ideal  = Lineal_Ideal::where('idReportes', $id)->first();
         if ($Lineal_Ideal) {
@@ -1775,6 +1791,8 @@ class ReporteController extends Controller
             $Detalles_Generales = json_decode($ReporteOriginal->Detalles_Generales, true) ?? [];
             $Detalles_Generales['No_Reporte'] = $this->generarNuevoNoReporte($Detalles_Generales['No_Reporte'] ?? '');
             $Detalles_Generales['Fecha'] = now()->format('Y-m-d');
+            // Un reporte nuevo e independiente no debe heredar la serie del original.
+            unset($Detalles_Generales['SERIE_REPORTES']);
 
             $idPrueba = (int)$request->input('Prueba');
             $idNorma = (int)$request->input('NormaCodigo');
@@ -1833,10 +1851,11 @@ class ReporteController extends Controller
     {
         $nuevoId = null;
 
-        DB::transaction(function () use ($id, &$nuevoId) {
+        try {
+            DB::transaction(function () use ($id, &$nuevoId) {
 
             // Obtener reporte original
-            $ReporteOriginal = reporte::where('idReportes', $id)->firstOrFail();
+            $ReporteOriginal = reporte::where('idReportes', $id)->lockForUpdate()->firstOrFail();
 
             // Clonar reporte
             $NuevoReporte = $ReporteOriginal->replicate();
@@ -1858,6 +1877,44 @@ class ReporteController extends Controller
             $nombreFormato = $pruebaAplicaOriginal
                 ? formato::where('idFormato', $pruebaAplicaOriginal->idFormato)->value('Nombre')
                 : null;
+
+            $servicioSeries = app(ServicioSerieReportes::class);
+            if ($nombreFormato === ServicioSerieReportes::FORMATO_06_B_01) {
+                $serie = $servicioSeries->obtener((int) $id);
+                if (!$serie) {
+                    throw new \RuntimeException('Este reporte anterior no tiene una serie configurada. Abra Editar y guarde la cantidad de reportes antes de continuar.');
+                }
+                if (!$servicioSeries->esUltimo((int) $id)) {
+                    throw new \RuntimeException('Seleccione el ultimo reporte de la serie para crear el siguiente consecutivo.');
+                }
+                if (!$servicioSeries->puedeCrearSiguiente((int) $id)) {
+                    throw new \RuntimeException('La serie ya alcanzo la cantidad planificada. Amplie la cantidad desde Editar para continuar.');
+                }
+
+                // Conserva la norma elegida, pero obliga a cargar disparos, promedios,
+                // micrografia y patron de grano nuevos para el siguiente reporte.
+                if (is_array($Detalles_Generales['Norma_IM'] ?? null)) {
+                    $Detalles_Generales['Norma_IM']['Analisis_PDF'] = [];
+                    foreach (($Detalles_Generales['Norma_IM']['Tabla'] ?? []) as &$filaNorma) {
+                        if (is_array($filaNorma)) {
+                            $filaNorma['Promedio'] = '';
+                        }
+                    }
+                    unset($filaNorma);
+                }
+                unset(
+                    $Detalles_Generales['SERIE_REPORTES'],
+                    $Detalles_Generales['ANALISIS_IMAGEN'],
+                    $Detalles_Generales['CONTEO_GRANOS'],
+                    $Detalles_Generales['PATRON_GRANO'],
+                    $Detalles_Generales['Reporte_Firmado']
+                );
+                $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
+
+                $datosEquipo = json_decode($ReporteOriginal->Datos_Equipo, true) ?? [];
+                unset($datosEquipo['QR_TOKEN'], $datosEquipo['QR_PDF'], $datosEquipo['PDF_UNIFICADO']);
+                $NuevoReporte->Datos_Equipo = json_encode($datosEquipo);
+            }
 
             if ($nombreFormato === 'FOR-PIMP-02_B/04') {
                 $datosEquipo = json_decode($ReporteOriginal->Datos_Equipo, true) ?? [];
@@ -1883,6 +1940,10 @@ class ReporteController extends Controller
             $NuevoReporte->save();
 
             $nuevoId = $NuevoReporte->idReportes;
+
+            if ($nombreFormato === ServicioSerieReportes::FORMATO_06_B_01) {
+                $servicioSeries->registrarConsecutivo((int) $id, (int) $nuevoId);
+            }
 
             // =====================================
             // BUSCAR RELACIÓN EN LINEAL_IDEAL
@@ -1929,7 +1990,10 @@ class ReporteController extends Controller
                 'idReportes' => $nuevoId,
                 'Juntas_Grupo_Re' => json_encode([]),
             ]);
-        });
+            });
+        } catch (\RuntimeException $exception) {
+            return redirect()->back()->with('error', $exception->getMessage());
+        }
 
         return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
     }

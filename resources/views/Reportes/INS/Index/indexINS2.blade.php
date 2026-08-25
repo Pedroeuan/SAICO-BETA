@@ -93,7 +93,20 @@
                             </td>
                             <td>
                                 {{-- <a href=" route('Next.Reporte', ['id' => $reporte->idReportes])  }}"  class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a> --}}
-                                <button type="button" class="btn btn-success btnSiguienteReporte" idReporte="{{$reporte->idReportes}}" idSolicitud="{{ $idSolicitud }}"><i class="fas ffas fa-file-export" aria-hidden="true"></i></button>
+                                @php
+                                    // Recupera la serie asociada para informar el avance del consecutivo.
+                                    $serieFila = $seriesPorReporte[$reporte->idReportes] ?? null;
+                                @endphp
+                                <button type="button"
+                                    class="btn btn-success btnSiguienteReporte"
+                                    idReporte="{{$reporte->idReportes}}"
+                                    idSolicitud="{{ $idSolicitud }}"
+                                    data-next-url="{{ route('Next.Reporte', ['id' => $reporte->idReportes]) }}"
+                                    data-formato="{{ $formatosPorReporte[$reporte->idReportes] ?? '' }}"
+                                    data-serie-orden="{{ $serieFila->numero_orden ?? '' }}"
+                                    data-serie-total="{{ $serieFila->cantidad_planificada ?? '' }}">
+                                    <i class="fas ffas fa-file-export" aria-hidden="true"></i>
+                                </button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminarReportes" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -133,6 +146,14 @@
 @php
     $pruebas = \App\Models\Prueba\prueba::with('norma_codigo.formato')->get();
 @endphp
+
+@if(session('error'))
+Swal.fire({
+    icon: 'error',
+    title: 'No fue posible crear el consecutivo',
+    text: @json(session('error'))
+});
+@endif
 
 let table = new DataTable('#tablaJs', {
     // options
@@ -243,10 +264,24 @@ $(document).on("click", ".btnEliminarReportes", function() {
 
 $(document).on("click", ".btnSiguienteReporte", function() {
     var idReporte = $(this).attr("idReporte");
+    // La URL pertenece al botón consecutivo y se envía por POST para crear una sola vez.
+    const nextReporteUrl = $(this).data('next-url');
+    const formato = $(this).data('formato');
+    const ordenSerie = $(this).data('serie-orden');
+    const totalSerie = $(this).data('serie-total');
     let idReporteSeleccionado = idReporte;
+        const detalleSerie = formato === 'FOR-PIMP-06_B/01' && ordenSerie && totalSerie
+            ? `<br><small class="text-muted">Serie actual: reporte ${ordenSerie} de ${totalSerie}. Los resultados XRF y las fotograf&iacute;as iniciar&aacute;n vac&iacute;os.</small>`
+            : '';
         Swal.fire({
             title: 'Siguiente Reporte',
             html: '¿El reporte es <span style="color:#0d6efd; font-size:16px;">CONSECUTIVO</span>? o ¿desea crear un <span style="color:#198754; font-size:16px;"> NUEVO REPORTE?</span>',
+            didOpen: () => {
+                if (detalleSerie) {
+                    const contenido = Swal.getHtmlContainer();
+                    contenido.insertAdjacentHTML('beforeend', detalleSerie);
+                }
+            },
             icon: 'question',
             showDenyButton: true,
             showCancelButton: true,
@@ -261,8 +296,17 @@ $(document).on("click", ".btnSiguienteReporte", function() {
             buttonsStyling: false
         }).then((result) => {
         if (result.isConfirmed) {
-            const nextReporteUrl = '/Next/Reporte/' + idReporte;
-            window.location.href = nextReporteUrl;
+            // POST evita que actualizar o precargar la URL cree otro consecutivo.
+            const formulario = document.createElement('form');
+            formulario.method = 'POST';
+            formulario.action = nextReporteUrl;
+            const token = document.createElement('input');
+            token.type = 'hidden';
+            token.name = '_token';
+            token.value = @json(csrf_token());
+            formulario.appendChild(token);
+            document.body.appendChild(formulario);
+            formulario.submit();
         } else if (result.isDenied) {
             Swal.fire({
                 title: 'Nuevo Reporte',

@@ -1016,7 +1016,7 @@
                                             @foreach ($NormaIM['Tabla'] as $filaNorma)
                                                 <tr>
                                                     <th>{{ $filaNorma['Elemento'] ?? '' }}</th>
-                                                    <td>{{ $filaNorma['Promedio'] ?? '' }}</td>
+                                                    <td>{{ trim((string) ($filaNorma['Promedio'] ?? '')) !== '' ? $filaNorma['Promedio'] : 'ND' }}</td>
                                                     <td>{{ $filaNorma['Composicion'] ?? '' }}</td>
                                                 </tr>
                                             @endforeach

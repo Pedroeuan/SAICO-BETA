@@ -77,6 +77,87 @@
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
+                    {{--
+                        La cantidad se decide una sola vez al crear el primer reporte.
+                        Los consecutivos muestran el avance, pero no vuelven a pedir el total.
+                    --}}
+                    <div class="col-12 mb-3">
+                        <div class="card border-primary mb-0">
+                            <div class="card-body py-2">
+                                @if($SerieReporte)
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                        <div>
+                                            <span class="badge badge-primary p-2">
+                                                Reporte {{ $SerieReporte->numero_orden }} de {{ $SerieReporte->cantidad_planificada }}
+                                            </span>
+                                            <span class="text-muted ml-2">
+                                                La serie conserva autom&aacute;ticamente el total definido en el primer reporte.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Details no depende de Bootstrap y evita que conflictos de versiones impidan abrirlo. --}}
+                                    <details class="mt-3" @if($errors->has('Serie_Reportes.nueva_cantidad')) open @endif>
+                                        <summary class="text-primary" style="cursor: pointer;">
+                                            Ampliar serie solamente si el cliente pide m&aacute;s reportes
+                                        </summary>
+                                        <div class="border rounded p-2 mt-2">
+                                            <div class="row align-items-end">
+                                                <div class="col-md-4">
+                                                    <label class="col-form-label font-weight-bold" for="nuevaCantidadReportesSerie">
+                                                        Nuevo total de reportes:
+                                                    </label>
+                                                    <input
+                                                        id="nuevaCantidadReportesSerie"
+                                                        type="number"
+                                                        min="{{ (int) $SerieReporte->cantidad_planificada + 1 }}"
+                                                        max="999"
+                                                        class="form-control @error('Serie_Reportes.nueva_cantidad') is-invalid @enderror"
+                                                        name="Serie_Reportes[nueva_cantidad]"
+                                                        data-no-rellenar-vacios="1"
+                                                        data-no-cache-local="1"
+                                                        value="{{ old('Serie_Reportes.nueva_cantidad') }}"
+                                                        placeholder="M&iacute;nimo {{ (int) $SerieReporte->cantidad_planificada + 1 }}"
+                                                    >
+                                                    @error('Serie_Reportes.nueva_cantidad')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-8 text-muted pb-2">
+                                                    El total actual no se modifica si deja este campo vac&iacute;o.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </details>
+                                @else
+                                    {{-- Compatibilidad con reportes antiguos que todavia no pertenecen a una serie. --}}
+                                    <div class="row align-items-end">
+                                        <div class="col-md-4">
+                                            <label class="col-form-label font-weight-bold" for="cantidadReportesSerie">
+                                                Cantidad de reportes que se generar&aacute;n:
+                                            </label>
+                                            <input
+                                                id="cantidadReportesSerie"
+                                                type="number"
+                                                min="1"
+                                                max="999"
+                                                required
+                                                class="form-control @error('Serie_Reportes.cantidad_planificada') is-invalid @enderror"
+                                                name="Serie_Reportes[cantidad_planificada]"
+                                                value="{{ old('Serie_Reportes.cantidad_planificada', 1) }}"
+                                            >
+                                            @error('Serie_Reportes.cantidad_planificada')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-8 text-muted pb-2">
+                                            Este reporte es anterior al control de series. Defina el total una sola vez.
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
 
                     <div class="col-sm-4">
@@ -922,6 +1003,7 @@ document.addEventListener('DOMContentLoaded', function () {
         rellenarVaciosBtn.addEventListener('click', function () {
             form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (campo) {
                 if (campo.closest('#dynamicTable')) return;
+                if (campo.dataset.noRellenarVacios === '1') return;
                 if (campo.disabled || campo.readOnly || campo.type === 'hidden') return;
                 if (campo.value.trim() !== '') return;
 
@@ -1065,12 +1147,14 @@ $(document).ready(function() {
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
             el.addEventListener('input', function () {
                 if (el.closest('#dynamicTable')) return; // Ignora inputs de la tabla
+                if (el.dataset.noCacheLocal === '1') return; // No recuerda ampliaciones opcionales.
                 localStorage.setItem('FOR-PIMP-06_B_01_Form_' + el.name, el.value);
             });
         });
 
         // Restaurar al cargar la página (solo si el campo está vacío)
         form.querySelectorAll('input:not([type="file"]), textarea, select').forEach(function (el) {
+            if (el.dataset.noCacheLocal === '1') return;
             if (!el.value) {
                 const value = localStorage.getItem('FOR-PIMP-06_B_01_Form_' + el.name);
                 if (value !== null) el.value = value;
@@ -1105,7 +1189,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!nombreSelect || !registroSelect || !tbody) return;
 
     function tienePromedios() {
-        return Array.from(tbody.querySelectorAll('input')).some(input => input.value.trim() !== '');
+        return Array.from(tbody.querySelectorAll('input')).some(input => {
+            const valor = input.value.trim().toUpperCase();
+            return valor !== '' && valor !== 'ND';
+        });
     }
 
     function limpiarResultados() {
@@ -1143,8 +1230,9 @@ document.addEventListener('DOMContentLoaded', function () {
             input.className = 'form-control text-center';
             input.name = 'Norma_IM[Promedio][' + index + ']';
             input.dataset.elemento = fila.Elemento || '';
-            input.value = promedios[index] ?? fila.Promedio ?? '';
-            input.placeholder = 'Capture el promedio';
+            const valorPromedio = promedios[index] ?? fila.Promedio ?? '';
+            input.value = String(valorPromedio).trim() || 'ND';
+            input.placeholder = 'ND';
             promedio.appendChild(input);
             tr.append(elemento, promedio, composicion);
             tbody.appendChild(tr);
