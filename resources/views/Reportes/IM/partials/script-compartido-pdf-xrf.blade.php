@@ -169,15 +169,17 @@ document.addEventListener('DOMContentLoaded', function () {
         status.classList.add(isError ? 'text-danger' : 'text-success');
     }
 
-    // Solo llena un elemento cuando todos los PDF aportaron un valor numérico válido.
+    // Solo llena un promedio numerico cuando todos los PDF aportaron una lectura
+    // valida; los elementos ND, limitados o ausentes quedan identificados como ND.
     function applyAverages(averages) {
         document.querySelectorAll('#tablaNormaIM input[data-elemento]').forEach(input => {
             const key = input.dataset.elemento.toLowerCase();
             const entry = Object.entries(averages).find(([element]) => element.toLowerCase() === key);
             const result = entry ? entry[1] : null;
-            input.value = result && result.cantidad === result.esperados && result.promedio !== null
-                ? Number(result.promedio).toFixed(4)
-                : '';
+            input.value = result?.valor_reporte
+                ?? (result && result.cantidad === result.esperados && result.promedio !== null
+                    ? Number(result.promedio).toFixed(4)
+                    : 'ND');
         });
     }
 
@@ -259,16 +261,17 @@ document.addEventListener('DOMContentLoaded', function () {
         table.querySelector('tbody').innerHTML = Object.entries(averages).map(([element, result]) => {
             const cells = analyses.map(item => {
                 const reading = item.lecturas ? item.lecturas[element] : null;
-                if (!reading) return '<td class="table-warning">No encontrado</td>';
+                if (!reading) return '<td class="table-warning">ND</td>';
                 const qualifier = reading.calificador || '';
-                return '<td>' + escapeHtml(qualifier + reading.valor)
+                const displayedValue = qualifier === 'ND' ? 'ND' : qualifier + reading.valor;
+                return '<td>' + escapeHtml(displayedValue)
                     + '<small class="d-block text-muted">±3σ ' + escapeHtml(reading.incertidumbre_3sigma) + '</small></td>';
             }).join('');
             const complete = result.cantidad === result.esperados && result.promedio !== null;
             if (!complete) warnings.push(element + ': faltan lecturas válidas (' + result.cantidad + ' de ' + result.esperados + ').');
 
             return '<tr><th>' + escapeHtml(element) + '</th>' + cells
-                + '<td><strong>' + (complete ? Number(result.promedio).toFixed(4) : '—') + '</strong></td>'
+                + '<td><strong>' + escapeHtml(result.valor_reporte || (complete ? Number(result.promedio).toFixed(4) : 'ND')) + '</strong></td>'
                 + '<td class="' + (complete ? 'table-success' : 'table-warning') + '">'
                 + (complete ? 'Calculado' : 'Revisar') + '</td></tr>';
         }).join('');
