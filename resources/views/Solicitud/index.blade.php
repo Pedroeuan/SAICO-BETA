@@ -157,13 +157,27 @@
                                 @else <!-- MANIFIESTO, PRE-CONCLUIDO -->
 
                                     <div class="btn-group">
-                                        <td>
-                                            <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
-                                        </td>
+                                        @if(!$solicitud->hidePlus)
+                                            <td>
+                                                <a href="{{ route('solicitud.edit', ['id' => $solicitud->idSolicitud]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                                            </td>
 
-                                        <td>        
-                                            <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>          
-                                        </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btnEliminarSolicitud" id-Solicitud="{{$solicitud->idSolicitud}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                            </td>
+                                        @else
+                                            <td>
+                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <span class="btn btn-primary" style="background-color: gray; border-color: gray; color: white; cursor: not-allowed;">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </span>
+                                            </td>
+                                        @endif
                                     <!--PDF GENERADO-->
                                         <td>
                                             <a class="btn btn-primary" href="{{ route('Manifiesto.NewFormat.pdf', ['id' => $solicitud->idSolicitud]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
@@ -331,23 +345,41 @@
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-plus').forEach(function(btn) {
-        btn.addEventListener('click', function(event) {
-            event.preventDefault(); // Evita la navegación inmediata
-            let url = this.href; // Guarda la URL del enlace
+$(document).on("click", ".btn-plus", function(event) {
 
-            // Deshabilitar el botón inmediatamente
-            this.setAttribute('disabled', 'true');
-            this.style.pointerEvents = 'none'; // Evita más clics en el botón
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; // Muestra el spinner de carga
+    event.preventDefault();
 
-            // Redirigir de inmediato
+    let url = this.href;
+    let idSolicitud = $(this).data('id');
+
+    Swal.fire({
+        title: 'Complementar solicitud',
+        text: '¿Desea complementar esta solicitud?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, complementar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            // Deshabilitar el botón
+            $(this).css({
+                'pointer-events': 'none',
+                'opacity': '0.6'
+            });
+
+            // Mostrar spinner
+            $(this).html('<i class="fas fa-spinner fa-spin"></i>');
+
+            // Ir a la pantalla de complementar
             window.location.href = url;
-        });
-    });
-});
+        }
 
+    });
+
+});
 </script>
 
 @endsection
