@@ -200,7 +200,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
         /*Rutas de Vistas del index despues de la seleccion prueba,norma y codigo */
         Route::get('/ReportesindexManifiesto', [ReporteController::class, 'ReportesindexManifiesto'])->name('ReportesindexManifiesto');
         /*Rutas de controlador para duplicar los datos y redirigir el Reporte*/
-        Route::get('/Next/Reporte/{id}', [ReporteController::class, 'Next_Reporte'])->name('Next.Reporte');
+        // Crear un consecutivo modifica datos; POST evita duplicaciones por precarga o refresco.
+        Route::post('/Next/Reporte/{id}', [ReporteController::class, 'Next_Reporte'])->name('Next.Reporte');
 
         /*PROCEDIMIENTOS*/
         /*Vista Menu Procedimientos*/
