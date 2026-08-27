@@ -6,16 +6,30 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use RuntimeException;
+use Smalot\PdfParser\Parser;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 class ServicioImagenesPdfXrf
 {
+    private const PROFILE_CURRENT = 'actual';
+    private const PROFILE_OLYMPUS = 'olympus';
+
     /** Áreas relativas de la tabla química y de la gráfica dentro de la hoja XRF. */
     private const DEFAULT_CROPS = [
         // La altura incluye la última fila química sin alcanzar la sección inferior de notas.
         'tabla_elementos' => ['x' => 0.054, 'y' => 0.225, 'width' => 0.410, 'height' => 0.400],
         'grafica_espectro' => ['x' => 0.575, 'y' => 0.105, 'width' => 0.395, 'height' => 0.305],
     ];
+
+    private const DEFAULT_OLYMPUS_CROPS = [
+        'tabla_elementos' => ['x' => 0.015, 'y' => 0.150, 'width' => 0.205, 'height' => 0.190],
+        'grafica_espectro' => ['x' => 0.075, 'y' => 0.385, 'width' => 0.640, 'height' => 0.062],
+    ];
+
+    public function __construct(private readonly Parser $parser)
+    {
+    }
 
     /**
      * Coordenadas relativas al tamaño de la hoja. Esto mantiene el recorte
@@ -32,7 +46,11 @@ class ServicioImagenesPdfXrf
         $renderedPage = $temporaryDirectory . DIRECTORY_SEPARATOR . 'pagina.png';
 
         try {
-            $this->renderFirstPage($file->getRealPath(), $renderedPage);
+            $profile = $this->detectProfile($file);
+            $renderDpi = $profile === self::PROFILE_OLYMPUS
+                ? (int) config('xrf.olympus_render_dpi', 360)
+                : (int) config('xrf.render_dpi', 180);
+            $this->renderFirstPage($file->getRealPath(), $renderedPage, $renderDpi);
             $source = @imagecreatefrompng($renderedPage);
 
             if ($source === false) {
@@ -44,10 +62,14 @@ class ServicioImagenesPdfXrf
                 $pageHeight = imagesy($source);
                 $results = [];
 
-                $configuredCrops = config('xrf.crops');
+                $configuredCrops = $profile === self::PROFILE_OLYMPUS
+                    ? config('xrf.olympus_crops')
+                    : config('xrf.crops');
                 $crops = is_array($configuredCrops) && $configuredCrops !== []
                     ? $configuredCrops
-                    : self::DEFAULT_CROPS;
+                    : ($profile === self::PROFILE_OLYMPUS
+                        ? self::DEFAULT_OLYMPUS_CROPS
+                        : self::DEFAULT_CROPS);
 
                 foreach ($crops as $type => $relative) {
                     $rectangle = [
@@ -57,7 +79,14 @@ class ServicioImagenesPdfXrf
                         'height' => (int) round($pageHeight * $relative['height']),
                     ];
 
-                    if ($type === 'tabla_elementos') {
+                    if ($profile === self::PROFILE_OLYMPUS && $type === 'tabla_elementos') {
+                        $rectangle = $this->detectOlympusTableRectangle(
+                            $source,
+                            $pageWidth,
+                            $pageHeight,
+                            $rectangle
+                        );
+                    } elseif ($type === 'tabla_elementos') {
                         $rectangle = $this->detectTableElementsRectangle($source, $pageWidth, $pageHeight, $rectangle);
                     }
 
@@ -94,6 +123,110 @@ class ServicioImagenesPdfXrf
         } finally {
             File::deleteDirectory($temporaryDirectory);
         }
+    }
+
+    /**
+     * Identifica exclusivamente el diseño Olympus sin cambiar el comportamiento
+     * histórico de los demás PDF. Se exigen varias firmas del reporte para no
+     * confundir un nombre comercial aislado con el formato visual Olympus.
+     */
+    private function detectProfile(UploadedFile $file): string
+    {
+        try {
+            $text = $this->parser->parseFile($file->getRealPath())->getText();
+            $normalized = mb_strtoupper((string) preg_replace('/\s+/u', ' ', $text), 'UTF-8');
+            $signatures = [
+                'RESULT. DE ENSAYO',
+                'MODO DE ANALIZADOR',
+                'NO DETECTADO',
+                'RESULT. DE CORRESP. DE GRADOS',
+            ];
+            $matches = 0;
+
+            foreach ($signatures as $signature) {
+                if (str_contains($normalized, $signature)) {
+                    $matches++;
+                }
+            }
+
+            return $matches >= 2 ? self::PROFILE_OLYMPUS : self::PROFILE_CURRENT;
+        } catch (Throwable) {
+            // Si el texto no puede leerse, conserva el perfil que ya funciona.
+            return self::PROFILE_CURRENT;
+        }
+    }
+
+    /**
+     * Olympus no encierra la tabla con bordes. El rectángulo configurado sirve
+     * como zona segura y sus cuatro lados se ajustan al texto realmente impreso.
+     * La búsqueda vertical tolera las filas ND y termina antes de "Espectro".
+     */
+    private function detectOlympusTableRectangle($source, int $pageWidth, int $pageHeight, array $fallback): array
+    {
+        $searchLeft = max(0, (int) round($fallback['x'] - ($pageWidth * 0.008)));
+        $searchRight = min(
+            $pageWidth - 1,
+            (int) round($fallback['x'] + $fallback['width'] + ($pageWidth * 0.008))
+        );
+        $searchTop = max(0, (int) round($fallback['y'] - ($pageHeight * 0.012)));
+        $searchBottom = min(
+            $pageHeight - 1,
+            (int) round($fallback['y'] + $fallback['height'] + ($pageHeight * 0.035))
+        );
+        $scanWidth = max(1, $searchRight - $searchLeft + 1);
+        $minimumPixels = max(2, (int) round($scanWidth * 0.004));
+        /*
+         * La separación antes de "No detectado" es mayor que el espacio entre
+         * filas cuantificadas. Un umbral corto cierra el bloque justo en el
+         * último elemento que sí participa en el promedio.
+         */
+        $allowedGap = max(8, (int) round($pageHeight * 0.007));
+        $firstContentY = null;
+        $lastContentY = null;
+        $pendingGap = 0;
+
+        for ($y = $searchTop; $y <= $searchBottom; $y++) {
+            $contentPixels = 0;
+
+            for ($x = $searchLeft; $x <= $searchRight; $x++) {
+                if ($this->isNonWhitePixel($source, $x, $y)) {
+                    $contentPixels++;
+                }
+            }
+
+            if ($contentPixels >= $minimumPixels) {
+                $firstContentY ??= $y;
+                $lastContentY = $y;
+                $pendingGap = 0;
+            } elseif ($firstContentY !== null) {
+                $pendingGap++;
+                if ($pendingGap > $allowedGap) {
+                    break;
+                }
+            }
+        }
+
+        if ($firstContentY === null || $lastContentY === null) {
+            return $this->normalizeRectangle($fallback, $pageWidth, $pageHeight);
+        }
+
+        [$left, $right] = $this->detectTableContentBounds(
+            $source,
+            $pageWidth,
+            $firstContentY,
+            $lastContentY,
+            $searchLeft,
+            $searchRight
+        );
+        $paddingX = max(2, (int) round($pageWidth * 0.003));
+        $paddingY = max(2, (int) round($pageHeight * 0.003));
+
+        return $this->normalizeRectangle([
+            'x' => $left - $paddingX,
+            'y' => $firstContentY - $paddingY,
+            'width' => ($right - $left) + ($paddingX * 2) + 1,
+            'height' => ($lastContentY - $firstContentY) + ($paddingY * 2) + 1,
+        ], $pageWidth, $pageHeight);
     }
 
     /**
@@ -408,9 +541,10 @@ class ServicioImagenesPdfXrf
     }
 
     /** Renderiza únicamente la primera hoja porque el equipo genera un PDF de una hoja por disparo. */
-    private function renderFirstPage(string $pdfPath, string $outputPath): void
+    private function renderFirstPage(string $pdfPath, string $outputPath, ?int $dpi = null): void
     {
         $ghostscript = $this->detectGhostscriptBinary();
+        $dpi = max(72, $dpi ?? (int) config('xrf.render_dpi', 180));
         $process = new Process([
             $ghostscript,
             '-dSAFER',
@@ -421,7 +555,7 @@ class ServicioImagenesPdfXrf
             '-sDEVICE=png16m',
             '-dTextAlphaBits=4',
             '-dGraphicsAlphaBits=4',
-            '-r' . (int) config('xrf.render_dpi', 180),
+            '-r' . $dpi,
             '-sOutputFile=' . $outputPath,
             $pdfPath,
         ]);

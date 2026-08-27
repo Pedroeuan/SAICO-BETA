@@ -357,6 +357,13 @@ document.addEventListener('DOMContentLoaded', function () {
         status.classList.add('d-none');
     });
     standardSelect.addEventListener('change', function () {
+        // En 06_B/01 los recortes y promedios pertenecen a los PDF analizados,
+        // no a la norma. Cambiar la norma solo reordena los elementos y actualiza
+        // su composicion teorica; por eso se conservan las evidencias ya generadas.
+        if (form?.id === 'FOR-PIMP-06_B_01') {
+            setStatus('Norma actualizada. Se conservaron los promedios y los recortes de los disparos.');
+            return;
+        }
         localStorage.removeItem('saico:xrf:' + window.location.pathname + ':' + form.id);
         cropsReady = false;
         restoreExistingShotImages();
