@@ -104,7 +104,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     /*Ruta del portal de los Clientes*/
     Route::get('/portal/{token}', [ClientesController::class, 'Portal_index'])->name('portal.cliente');
     /*Ruta de los contratos de los Clientes*/
-    Route::get('/portal/{token}/contrato/{contrato}',[ClientesController::class, 'contrato'])->name('portal.contrato');
+    Route::get('/portal/{token}/reportes_clientes/{contrato}',[ClientesController::class, 'reportes_clientes'])->name('Reportes.Clientes');
 
     
     /*QR de Reportes Publicos*/
