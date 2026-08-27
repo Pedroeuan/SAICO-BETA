@@ -19,12 +19,16 @@
             margin: 0;
             padding: 0;
 
-            background-image: url('{{ asset('images/fondo-portal.jpg') }}');
+            background-image:
+                linear-gradient(
+                    rgba(255, 255, 255, 0.55),
+                    rgba(255, 255, 255, 0.55)
+                ),
+                url('{{ asset('images/fondo.png') }}');
 
             background-size: cover;
-            background-position: center;
+            background-position: center center;
             background-repeat: no-repeat;
-
             background-attachment: fixed;
 
             min-height: 100vh;
@@ -267,7 +271,7 @@
         }
 
         /* ==============================
-           SIN CONTRATOS
+            SIN CONTRATOS
         ============================== */
 
         .sin-contratos {
