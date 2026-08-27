@@ -72,7 +72,7 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-06_B_01" action="{{route('Reportes_FOR_PIMP_06_B_01.update', $id)}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-06_B_01" data-modo="edit" action="{{route('Reportes_FOR_PIMP_06_B_01.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -124,7 +124,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-8 text-muted pb-2">
-                                                    El total actual no se modifica si deja este campo vac&iacute;o.
+                                                    El total actual no se modifica si deja este campo vacío.
                                                 </div>
                                             </div>
                                         </div>
@@ -987,6 +987,8 @@
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 {{-- Mantiene en Edit la misma selección, vista previa, descripción y distribución que en Create. --}}
 <script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
+{{-- Edit conserva el mismo editor de anotaciones de Create y guarda el resultado aplanado para el PDF. --}}
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1183,19 +1185,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const observaciones = document.getElementById('normaIMObservaciones');
     const idAnterior = @json(old('Norma_IM.idnormas_im'));
     const promediosAnteriores = @json(old('Norma_IM.Promedio'));
+    const promediosPorElemento = new Map();
     let nombreActual = '';
     let registroActual = '';
 
     if (!nombreSelect || !registroSelect || !tbody) return;
 
-    function tienePromedios() {
-        return Array.from(tbody.querySelectorAll('input')).some(input => {
-            const valor = input.value.trim().toUpperCase();
-            return valor !== '' && valor !== 'ND';
+    function claveElemento(elemento) {
+        return String(elemento || '')
+            .trim()
+            .replace(/^%+\s*/, '')
+            .replace(/\s+/g, '')
+            .toUpperCase();
+    }
+
+    function guardarPromediosVisibles() {
+        tbody.querySelectorAll('input[data-elemento]').forEach(input => {
+            const clave = claveElemento(input.dataset.elemento);
+            if (clave) promediosPorElemento.set(clave, input.value);
         });
     }
 
     function limpiarResultados() {
+        guardarPromediosVisibles();
         tbody.innerHTML = '';
         contenedor.classList.add('d-none');
         observaciones.textContent = '';
@@ -1216,6 +1228,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function mostrarNorma(norma, promedios) {
+        guardarPromediosVisibles();
+        (norma.Tabla || []).forEach((fila, index) => {
+            const clave = claveElemento(fila.Elemento);
+            if (clave && promedios?.[index] !== undefined) {
+                promediosPorElemento.set(clave, promedios[index]);
+            }
+        });
         tbody.innerHTML = '';
         (norma.Tabla || []).forEach((fila, index) => {
             const tr = document.createElement('tr');
@@ -1230,7 +1249,10 @@ document.addEventListener('DOMContentLoaded', function () {
             input.className = 'form-control text-center';
             input.name = 'Norma_IM[Promedio][' + index + ']';
             input.dataset.elemento = fila.Elemento || '';
-            const valorPromedio = promedios[index] ?? fila.Promedio ?? '';
+            const clave = claveElemento(fila.Elemento);
+            const valorPromedio = promediosPorElemento.has(clave)
+                ? promediosPorElemento.get(clave)
+                : (fila.Promedio ?? '');
             input.value = String(valorPromedio).trim() || 'ND';
             input.placeholder = 'ND';
             promedio.appendChild(input);
@@ -1244,12 +1266,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     nombreSelect.addEventListener('change', function () {
-        if (nombreActual && this.value !== nombreActual && tienePromedios()
-            && !window.confirm('Al cambiar la norma se eliminaran los promedios capturados. Desea continuar?')) {
-            this.value = nombreActual;
-            return;
-        }
-
+        guardarPromediosVisibles();
         nombreActual = this.value;
         registroActual = '';
         limpiarResultados();
@@ -1262,12 +1279,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     registroSelect.addEventListener('change', function () {
-        if (registroActual && this.value !== registroActual && tienePromedios()
-            && !window.confirm('Al cambiar la tabla se eliminaran los promedios capturados. Desea continuar?')) {
-            this.value = registroActual;
-            return;
-        }
-
+        guardarPromediosVisibles();
         registroActual = this.value;
         const norma = catalogo.find(item => String(item.idnormas_im) === String(this.value));
         norma ? mostrarNorma(norma, []) : limpiarResultados();
