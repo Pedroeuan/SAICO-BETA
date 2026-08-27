@@ -383,6 +383,67 @@
         object-fit: contain;
     }
 
+    /*
+     * Olympus entrega la tabla de elementos en un recorte horizontal. No debe
+     * forzarse a los 5.65 cm de alto porque las letras se estiran y pierden
+     * claridad. Se conserva su proporcion y se centra dentro del mismo marco.
+     * La grafica y las tablas verticales del equipo Vanta conservan el estilo
+     * anterior.
+     */
+    .marcoImagenDisparoTablaHorizontal img {
+        display: inline-block;
+        width: 100%;
+        height: auto;
+        max-height: 5.65cm;
+        margin: 0 auto;
+        vertical-align: middle;
+    }
+
+    /*
+     * Dompdf puede reducir la tabla contenedora cuando la imagen horizontal es
+     * más baja. Se fija también la altura de la celda para que el marco de la
+     * tabla Olympus mida exactamente lo mismo que el marco de la gráfica.
+     */
+    .marcoImagenDisparoTablaHorizontal,
+    .marcoImagenDisparoTablaHorizontal tr,
+    .marcoImagenDisparoTablaHorizontal td {
+        height: 5.65cm !important;
+    }
+
+    .marcoImagenDisparoTablaHorizontal td {
+        vertical-align: middle !important;
+        text-align: center !important;
+    }
+
+    /*
+     * La gráfica que el técnico sustituye para Olympus suele ser horizontal.
+     * Se reduce proporcionalmente hasta caber completa en la celda y se centra;
+     * las gráficas verticales del flujo Vanta mantienen las reglas existentes.
+     */
+    .marcoImagenDisparoGraficaHorizontal,
+    .marcoImagenDisparoGraficaHorizontal tr,
+    .marcoImagenDisparoGraficaHorizontal td {
+        height: 5.65cm !important;
+    }
+
+    .marcoImagenDisparoGraficaHorizontal td {
+        vertical-align: middle !important;
+        text-align: center !important;
+    }
+
+    .marcoImagenDisparoGraficaHorizontal img {
+        display: inline-block;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 5.65cm;
+        margin: 0 auto;
+        vertical-align: middle;
+        /* Ajusta solo este valor para aumentar o reducir la altura de la gráfica Olympus. */
+        transform: scaleY(1.60);
+        transform-origin: center center;
+    }
+
     /* =========================
         TABLA QUIMICA
        ========================= */
@@ -1052,10 +1113,37 @@
                                         <col style="width: 49.75%;">
                                     </colgroup>
                                     <tr>
+                                        @php
+                                            /*
+                                             * El perfil del disparo se determina con su primera imagen:
+                                             * Olympus genera una tabla horizontal y Vanta una vertical.
+                                             * Así una gráfica horizontal de Vanta no recibe por accidente
+                                             * el tratamiento reservado para Olympus.
+                                             */
+                                            $imagenTablaDelDisparo = $Disparos[$celdaDisparo][0] ?? null;
+                                            $esDisparoOlympus = false;
+                                            if (is_string($imagenTablaDelDisparo) && is_file($imagenTablaDelDisparo)) {
+                                                $dimensionesTablaDisparo = @getimagesize($imagenTablaDelDisparo);
+                                                $esDisparoOlympus = is_array($dimensionesTablaDisparo)
+                                                    && !empty($dimensionesTablaDisparo[1])
+                                                    && ($dimensionesTablaDisparo[0] / $dimensionesTablaDisparo[1]) > 1.15;
+                                            }
+                                        @endphp
                                         @foreach ($Disparos[$celdaDisparo] as $indiceImagen => $imagen)
+                                            @php
+                                                /*
+                                                 * La primera imagen siempre es la tabla. Olympus es horizontal,
+                                                 * mientras que la tabla Vanta es vertical; esa diferencia permite
+                                                 * aplicar el ajuste sin cambiar la grafica ni los reportes existentes.
+                                                 */
+                                                $esTablaHorizontal = false;
+                                                $esGraficaHorizontal = false;
+                                                $esTablaHorizontal = $indiceImagen === 0 && $esDisparoOlympus;
+                                                $esGraficaHorizontal = $indiceImagen === 1 && $esDisparoOlympus;
+                                            @endphp
                                             <td class="espacioImagenDisparo {{ $indiceImagen === 0 ? 'espacioImagenDisparoIzquierdo' : 'espacioImagenDisparoDerecho' }}">
                                                 {{-- Marco en tabla: Dompdf conserva mejor los cuatro bordes que con div/img. --}}
-                                                <table class="marcoImagenDisparo {{ $indiceImagen === 0 ? 'marcoImagenDisparoTabla' : '' }}">
+                                                <table class="marcoImagenDisparo {{ $indiceImagen === 0 ? 'marcoImagenDisparoTabla' : '' }} {{ $esTablaHorizontal ? 'marcoImagenDisparoTablaHorizontal' : '' }} {{ $esGraficaHorizontal ? 'marcoImagenDisparoGraficaHorizontal' : '' }}">
                                                     <tr>
                                                         <td>
                                                             <img src="{{ $imagen }}" alt="Imagen {{ $indiceImagen + 1 }} del disparo {{ $celdaDisparo }}">

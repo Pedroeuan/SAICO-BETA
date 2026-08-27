@@ -826,6 +826,8 @@
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 {{-- El patrón comparte la tarjeta, el selector de hoja, la posición y el cuadro de texto de las fotos. --}}
 <script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
+{{-- Editor exclusivo de 06_B/01: integra flechas y texto en la imagen final sin modificar otros formatos. --}}
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 <script>
 
     function verificarYAgregarLongitud() {
@@ -1021,19 +1023,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const observaciones = document.getElementById('normaIMObservaciones');
     const idInicial = @json(old('Norma_IM.idnormas_im'));
     const promediosIniciales = @json(old('Norma_IM.Promedio', []));
+    const promediosPorElemento = new Map();
     let nombreActual = '';
     let registroActual = '';
 
     if (!nombreSelect || !registroSelect || !tbody) return;
 
-    function tienePromedios() {
-        return Array.from(tbody.querySelectorAll('input')).some(input => {
-            const valor = input.value.trim().toUpperCase();
-            return valor !== '' && valor !== 'ND';
+    function claveElemento(elemento) {
+        return String(elemento || '')
+            .trim()
+            .replace(/^%+\s*/, '')
+            .replace(/\s+/g, '')
+            .toUpperCase();
+    }
+
+    function guardarPromediosVisibles() {
+        tbody.querySelectorAll('input[data-elemento]').forEach(input => {
+            const clave = claveElemento(input.dataset.elemento);
+            if (clave) promediosPorElemento.set(clave, input.value);
         });
     }
 
     function limpiarResultados() {
+        guardarPromediosVisibles();
         tbody.innerHTML = '';
         contenedor.classList.add('d-none');
         observaciones.textContent = '';
@@ -1054,6 +1066,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function mostrarNorma(norma, promedios) {
+        guardarPromediosVisibles();
+        (norma.Tabla || []).forEach((fila, index) => {
+            const clave = claveElemento(fila.Elemento);
+            if (clave && promedios?.[index] !== undefined) {
+                promediosPorElemento.set(clave, promedios[index]);
+            }
+        });
         tbody.innerHTML = '';
         (norma.Tabla || []).forEach((fila, index) => {
             const tr = document.createElement('tr');
@@ -1068,7 +1087,10 @@ document.addEventListener('DOMContentLoaded', function () {
             input.className = 'form-control text-center';
             input.name = 'Norma_IM[Promedio][' + index + ']';
             input.dataset.elemento = fila.Elemento || '';
-            const valorPromedio = promedios[index] ?? fila.Promedio ?? '';
+            const clave = claveElemento(fila.Elemento);
+            const valorPromedio = promediosPorElemento.has(clave)
+                ? promediosPorElemento.get(clave)
+                : (fila.Promedio ?? '');
             input.value = String(valorPromedio).trim() || 'ND';
             input.placeholder = 'ND';
             promedio.appendChild(input);
@@ -1082,12 +1104,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     nombreSelect.addEventListener('change', function () {
-        if (nombreActual && this.value !== nombreActual && tienePromedios()
-            && !window.confirm('Al cambiar la norma se eliminaran los promedios capturados. Desea continuar?')) {
-            this.value = nombreActual;
-            return;
-        }
-
+        guardarPromediosVisibles();
         nombreActual = this.value;
         registroActual = '';
         limpiarResultados();
@@ -1100,12 +1117,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     registroSelect.addEventListener('change', function () {
-        if (registroActual && this.value !== registroActual && tienePromedios()
-            && !window.confirm('Al cambiar la tabla se eliminaran los promedios capturados. Desea continuar?')) {
-            this.value = registroActual;
-            return;
-        }
-
+        guardarPromediosVisibles();
         registroActual = this.value;
         const norma = catalogo.find(item => String(item.idnormas_im) === String(this.value));
         norma ? mostrarNorma(norma, []) : limpiarResultados();
