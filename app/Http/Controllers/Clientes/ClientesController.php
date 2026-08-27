@@ -44,7 +44,11 @@ class ClientesController extends Controller
             );
         }
 
-        public function contrato($token, $contrato)
+        public function reportes_clientes($token, $contrato)
+        {
+            dd();
+        }
+        /*public function contrato($token, $contrato)
         {
             $cliente = clientes::where('portal_token', $token)->first();
 
@@ -63,7 +67,7 @@ class ClientesController extends Controller
                 'contrato',
                 'ordenesServicio'
             ));
-        }
+        }*/
 
     /**
      * Display a listing of the resource.

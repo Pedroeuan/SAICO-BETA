@@ -27,14 +27,13 @@
                 url('{{ asset('images/fondo.png') }}');
 
             background-size: cover;
-            background-position: center center;
+            background-position: center 0%;
             background-repeat: no-repeat;
             background-attachment: fixed;
 
             min-height: 100vh;
 
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -435,20 +434,9 @@
                                 @endforeach
                             </ul>
 
-                            <a
-                                href="{{ route(
-                                    'portal.contrato',
-                                    [
-                                        'token' => request()->route('token'),
-                                        'contrato' => $nombreContrato
-                                    ]
-                                ) }}"
-                                class="btn-contrato">
-
-                                Reportes- por realizaar
-
+                            <a href="{{ route('Reportes.Clientes',['token' => request()->route('token'),'reportes_clientes' => $nombreContrato]) }}" class="btn-reportes">
+                                Ver Reportes
                             </a>
-
                         </div>
 
                     @endforeach
