@@ -269,6 +269,7 @@
 
         .fotosExcelLayout {
             width: 100%;
+            margin-top: 6px;
             border-collapse: collapse;
             table-layout: fixed;
         }
@@ -303,7 +304,8 @@
 
         .cuadriculaFotos {
             width: 100%;
-            /*border-collapse: separate;*/
+            margin-top: 6px;
+            border-collapse: collapse;
             table-layout: fixed;
             /*border: 1px solid #eb0b0b;*/
         }
@@ -317,10 +319,22 @@
 
         .cuadriculaFotos td:first-child{
             text-align:left;
+            padding-left: 18px;
         }
 
         .cuadriculaFotos td:last-child{
             text-align:right;
+            padding-right: 18px;
+        }
+
+        .cuadriculaFotos tr {
+            page-break-inside: avoid;
+        }
+
+        /* Acerca visualmente la fila inferior sin alterar la posición elegida. */
+        .cuadriculaFotos tr + tr .fotoCuadrante {
+            position: relative;
+            top: -8px;
         }
         
         .fotoCuadrante {
@@ -328,16 +342,19 @@
             width:300px;
             margin:0;
             padding:0;
+            text-align:center;
             border: 0 !important;  
             overflow:hidden;
         }
 
         .fotoCuadrante img {
-            display: block;
+            display: inline-block;
             max-width: 298px;
+            max-height: 250px;
+            width: auto;
             height: auto;
             object-fit: contain;
-            margin: 0 0 0 0;
+            margin: 0 auto;
             border: 1px solid #000;
         }
 
@@ -375,11 +392,13 @@
         }
 
         .fotoCuadranteComentario {
-            min-height: 20px;
-            padding: 5px 3px 2px;
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 12px;
+            padding: 2px 3px 0;
             border: none !important;
             font-size: 8px;
-            line-height: 9px;
+            line-height: 8px;
             overflow: hidden;
 
             text-align: center;      /* Centrado horizontal */
