@@ -392,7 +392,7 @@
 
 
         <p>
-            Este es el portal de {{ $cliente->Cliente }}.
+            {{-- Este es el portal de {{ $cliente->Cliente }}.  --}}
         </p>
 
         <!-- ==================================

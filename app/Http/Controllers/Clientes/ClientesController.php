@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 use App\Models\Clientes\clientes;
+use App\Models\Formato\formato;
+use App\Models\PruebaAplica\Prueba_Aplica;
+use App\Jobs\Procesamiento\GenerarReportePdfJob;
 
 class ClientesController extends Controller
 {
@@ -88,32 +91,72 @@ class ClientesController extends Controller
                 ->where('li.idOrden_Servicio', $idOrden_Servicio)
                 ->where('li.idReportes', $idReporte)
                 ->where('os.idClientes', $cliente->idClientes)
-                ->select('r.Datos_Equipo')
+                ->select('r.idReportes', 'r.idPrueba_Aplica')
                 ->firstOrFail();
 
-            $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
-            $rutaPdf = $datosEquipo['PDF_UNIFICADO'] ?? null;
-
-            abort_unless($rutaPdf, 404, 'PDF no encontrado');
-
-            $ruta = trim(str_replace('\\', '/', $rutaPdf));
-            $ruta = preg_replace('#^/?(storage|public)/#', '', $ruta);
-            $ruta = ltrim($ruta, '/');
+            $nombreFormato = formato::whereKey(
+                Prueba_Aplica::whereKey($reporte->idPrueba_Aplica)->value('idFormato')
+            )->value('Nombre');
 
             $rutasPdf = [
-                storage_path('app/public/' . $ruta),
-                storage_path($ruta),
-                public_path($ruta),
-                public_path('storage/' . $ruta),
-                public_path('public/' . $ruta),
+                'FOR-PINS-04-01' => 'Reporte_FOR_PINS_04_01.PDF',
+                'FOR-PINS-05-01' => 'Reporte_FOR_PINS_05_01.PDF',
+                'FOR-PINS-06-01' => 'Reporte_FOR_PINS_06_01.PDF',
+                'FOR-PINS-07-01' => 'Reporte_FOR_PINS_07_01.PDF',
+                'FOR-PINS-08-01' => 'Reporte_FOR_PINS_08_01.PDF',
+                'FOR-PINS-09-01' => 'Reporte_FOR_PINS_09_01.PDF',
+                'FOR-PINS-10-01' => 'Reporte_FOR_PINS_10_01.PDF',
+                'FOR-PINS-11-01' => 'Reporte_FOR_PINS_11_01.PDF',
+                'FOR-PINS-12-01' => 'Reporte_FOR_PINS_12_01.PDF',
+                'FOR-PINS-13-01' => 'Reporte_FOR_PINS_13_01.PDF',
+                'FOR-PINS-14-01' => 'Reporte_FOR_PINS_14_01.PDF',
+                'FOR-PINS-15-01' => 'Reporte_FOR_PINS_15_01.PDF',
+                'FOR-PINS-16-01' => 'Reporte_FOR_PINS_16_01.PDF',
+                'FOR-PINS-17-01' => 'Reporte_FOR_PINS_17_01.PDF',
+                'FOR-PINS-18-01' => 'Reporte_FOR_PINS_18_01.PDF',
+                'FOR-PINS-19-01' => 'Reporte_FOR_PINS_19_01.PDF',
+                'FOR-PINS-20-01' => 'Reporte_FOR_PINS_20_01.PDF',
+                'FOR-PINS-21-01' => 'Reporte_FOR_PINS_21_01.PDF',
+                'FOR-PINS-22-01' => 'Reporte_FOR_PINS_22_01.PDF',
+                'FOR-PINS-23-01' => 'Reporte_FOR_PINS_23_01.PDF',
+                'FOR-PINS-24-01' => 'Reporte_FOR_PINS_24_01.PDF',
+                'FOR-PINS-25-01' => 'Reporte_FOR_PINS_25_01.PDF',
+                'FOR-PINS-03-02' => 'Reporte_FOR_PINS_03_02.PDF',
+                'FOR-PINS-05-02' => 'Reporte_FOR_PINS_05_02.PDF',
+                'FOR-PINS-11-02' => 'Reporte_FOR_PINS_11_02.PDF',
+                'FOR-PINS-17-01_01' => 'Reporte_FOR_PINS_17_01_01.PDF',
+                'FOR-03-PRO-INS-15' => 'Reporte_FOR_03_INS_15.PDF',
+                'FOR-PIMP-02_B/03' => 'Reporte_FOR_PIMP_02_B_03.PDF',
+                'FOR-PIMP-02_B/04' => 'Reporte_FOR_PIMP_02_B_04.PDF',
+                'FOR-PIMP-05/01' => 'Reporte_FOR_PIMP_05_01.PDF',
+                'FOR-PIMP-07_B/01' => 'Reporte_FOR_PIMP_07_B_01.PDF',
             ];
 
-            $rutaPdf = collect(array_unique($rutasPdf))
-                ->first(fn ($rutaCandidata) => is_file($rutaCandidata));
+            if (isset($rutasPdf[$nombreFormato])) {
+                $ruta = app('router')->getRoutes()->getByName($rutasPdf[$nombreFormato]);
+                abort_unless($ruta, 404, 'Generador de PDF no encontrado');
 
-            abort_unless($rutaPdf, 404, 'Archivo PDF no encontrado');
+                return app()->call([
+                    $ruta->getController(),
+                    $ruta->getActionMethod(),
+                ], ['id' => (int) $reporte->idReportes]);
+            }
 
-            return response()->file($rutaPdf, ['Content-Type' => 'application/pdf']);
+            $formatosProcesados = [
+                'FOR-PIMP-03_B/01' => '03_B_01',
+                'FOR-PIMP-04/02' => '04_02',
+                'FOR-PIMP-04/03' => '04_03',
+                'FOR-PIMP-05_B/01' => '05_B_01',
+                'FOR-PIMP-06_B/01' => '06_B_01',
+            ];
+            $formatoProcesado = $formatosProcesados[$nombreFormato] ?? null;
+            $generador = $formatoProcesado ? GenerarReportePdfJob::FORMATOS[$formatoProcesado] ?? null : null;
+
+            abort_unless($generador, 404, 'Formato de PDF no disponible');
+
+            return app()->call([app($generador[0]), $generador[1]], [
+                'id' => (int) $reporte->idReportes,
+            ]);
         }
 
     /**
