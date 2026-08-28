@@ -1336,7 +1336,24 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
-        
+
+        // El PDF final se prepara en segundo plano al terminar de guardar. El
+        // tecnico puede continuar usando el sistema sin esperar en esta pagina.
+        try {
+            app(\App\Services\ServicioPdfGenerado::class)->programar(
+                (int) $idReportes,
+                '06_B_01',
+                'es',
+                (int) $request->user()->getAuthIdentifier()
+            );
+        } catch (\Throwable $error) {
+            // La preparacion anticipada es una optimizacion: un fallo de cola no
+            // debe convertir en error un reporte que ya fue guardado correctamente.
+            Log::warning('No fue posible programar anticipadamente el PDF 06_B_01.', [
+                'reporte_id' => (int) $idReportes,
+                'error' => $error->getMessage(),
+            ]);
+        }
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
@@ -2157,6 +2174,22 @@ class FOR_PIMP_06_B_01Controller extends Controller
                     Storage::delete($rutaDisco);
                 }
             }
+        }
+
+        // Cualquier cambio produce una huella distinta y programa una nueva
+        // version; el PDF anterior nunca se entrega como si estuviera vigente.
+        try {
+            app(\App\Services\ServicioPdfGenerado::class)->programar(
+                (int) $id,
+                '06_B_01',
+                'es',
+                (int) $request->user()->getAuthIdentifier()
+            );
+        } catch (\Throwable $error) {
+            Log::warning('No fue posible reprogramar el PDF 06_B_01 actualizado.', [
+                'reporte_id' => (int) $id,
+                'error' => $error->getMessage(),
+            ]);
         }
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
