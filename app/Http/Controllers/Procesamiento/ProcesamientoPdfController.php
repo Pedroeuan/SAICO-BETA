@@ -4,14 +4,18 @@ namespace App\Http\Controllers\Procesamiento;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\Procesamiento\GenerarReportePdfJob;
-use App\Models\Procesamiento\TrabajoProcesamiento;
+use App\Services\ServicioPdfGenerado;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class ProcesamientoPdfController extends Controller
 {
     /** Crea el trabajo y muestra una pagina ligera mientras se genera el reporte. */
-    public function pagina(Request $request, int $reporte, string $formato)
+    public function pagina(
+        Request $request,
+        int $reporte,
+        string $formato,
+        ServicioPdfGenerado $pdfGenerado
+    )
     {
         abort_unless(array_key_exists($formato, GenerarReportePdfJob::FORMATOS), 404);
 
@@ -22,21 +26,32 @@ class ProcesamientoPdfController extends Controller
             ? $idioma
             : 'es';
 
-        $trabajo = TrabajoProcesamiento::create([
-            'id' => (string) Str::uuid(),
-            'usuario_id' => (int) $request->user()->getAuthIdentifier(),
-            'tipo' => 'reporte_pdf',
-            'estado' => TrabajoProcesamiento::ESTADO_PENDIENTE,
-            'mensaje' => 'Generando reporte PDF...',
-            'contexto' => [
-                'reporte_id' => $reporte,
-                'formato' => $formato,
-                'idioma' => $idioma,
-            ],
-            'expira_at' => now()->addHours(8),
-        ]);
+        // Un reporte sin cambios abre el archivo privado ya generado. No se crea
+        // otro trabajo ni se vuelve a ejecutar Dompdf/FPDI.
+        if ($ruta = $pdfGenerado->rutaVigente($reporte, $formato, $idioma)) {
+            return response()->file($ruta, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="reporte.pdf"',
+            ]);
+        }
 
-        GenerarReportePdfJob::dispatch($trabajo->id);
+        $trabajo = $pdfGenerado->programar(
+            $reporte,
+            $formato,
+            $idioma,
+            (int) $request->user()->getAuthIdentifier()
+        );
+
+        // Puede aparecer entre la primera comprobacion y la programacion si
+        // otro worker termino la misma version.
+        if (!$trabajo && ($ruta = $pdfGenerado->rutaVigente($reporte, $formato, $idioma))) {
+            return response()->file($ruta, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="reporte.pdf"',
+            ]);
+        }
+
+        abort_unless($trabajo, 409);
 
         return view('Procesamiento.reporte-pdf', [
             'trabajo' => $trabajo,
