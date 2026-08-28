@@ -8,13 +8,13 @@ use App\Http\Controllers\Reporte\IM\FOR_PIMP_04_03Controller;
 use App\Http\Controllers\Reporte\IM\FOR_PIMP_05_B_01Controller;
 use App\Http\Controllers\Reporte\IM\FOR_PIMP_06_B_01Controller;
 use App\Models\Procesamiento\TrabajoProcesamiento;
+use App\Services\ServicioPdfGenerado;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class GenerarReportePdfJob implements ShouldQueue
@@ -41,22 +41,31 @@ class GenerarReportePdfJob implements ShouldQueue
     }
 
     /** Ejecuta el generador existente y guarda su salida fuera del directorio publico. */
-    public function handle(): void
+    public function handle(ServicioPdfGenerado $pdfGenerado): void
     {
         $trabajo = TrabajoProcesamiento::findOrFail($this->trabajoId);
         $trabajo->marcarProcesando('Generando reporte PDF...');
 
         try {
             $formato = (string) data_get($trabajo->contexto, 'formato');
+            $reporteId = (int) data_get($trabajo->contexto, 'reporte_id');
+            $idioma = strtolower((string) data_get($trabajo->contexto, 'idioma', 'es'));
+
+            // Otro trabajo pudo terminar el mismo PDF mientras este esperaba en
+            // cola. En ese caso se reutiliza sin volver a renderizarlo.
+            if ($rutaExistente = $pdfGenerado->rutaVigente($reporteId, $formato, $idioma)) {
+                $trabajo->marcarCompletado(['ruta_pdf' => $rutaExistente], 'Reporte generado correctamente.');
+                return;
+            }
+
             [$clase, $metodo] = self::FORMATOS[$formato] ?? throw new \RuntimeException('Formato PDF no permitido.');
             $parametros = [
-                'id' => (int) data_get($trabajo->contexto, 'reporte_id'),
+                'id' => $reporteId,
             ];
 
             // El parametro adicional se envia unicamente al generador bilingue;
             // asi no se modifican las firmas de los otros controladores PDF.
             if ($formato === '04_03') {
-                $idioma = strtolower((string) data_get($trabajo->contexto, 'idioma', 'es'));
                 $parametros['idioma'] = in_array($idioma, ['es', 'en'], true) ? $idioma : 'es';
             }
 
@@ -66,11 +75,10 @@ class GenerarReportePdfJob implements ShouldQueue
                 throw new \RuntimeException('El generador no devolvio un documento PDF valido.');
             }
 
-            $ruta = "procesamientos/{$trabajo->usuario_id}/{$trabajo->id}/reporte.pdf";
-            Storage::disk('local')->put($ruta, $contenido);
+            $rutaPdf = $pdfGenerado->guardar($reporteId, $formato, $idioma, $contenido);
             $trabajo->marcarCompletado([
                 // Esta ruta solo se interpreta en servidor; estado() la reemplaza por una URL autorizada.
-                'ruta_pdf' => Storage::disk('local')->path($ruta),
+                'ruta_pdf' => $rutaPdf,
             ], 'Reporte generado correctamente.');
         } catch (Throwable $error) {
             Log::error('Fallo la generacion del reporte PDF en cola.', [
