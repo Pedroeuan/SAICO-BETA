@@ -31,43 +31,90 @@ class ClientesController extends Controller
                 ->where('Contrato', '!=', '')
                 ->select(
                     'Contrato',
-                    'Proyecto_actividad'
+                    'Proyecto_actividad',
+                    'idOrden_Servicio'
                 )
                 ->distinct()
                 ->orderBy('Contrato')
                 ->get()
                 ->groupBy('Contrato');
             //dd($contratos);
-            return view(
-                'Reportes_publicos.index',
-                compact('cliente', 'contratos')
-            );
+            return view('Reportes_publicos.index', compact('cliente', 'contratos'));
         }
 
-        public function reportes_clientes($token, $contrato)
+        public function reportes_clientes($token, $idOrden_Servicio)
         {
-            dd();
-        }
-        /*public function contrato($token, $contrato)
-        {
+            // Buscar el cliente mediante el token
             $cliente = clientes::where('portal_token', $token)->first();
 
+            // Si el token no existe
             if (!$cliente) {
                 abort(404);
             }
 
-            $ordenesServicio = DB::table('orden_servicio')
+            $orden = DB::table('orden_servicio')
+                ->where('idOrden_Servicio', $idOrden_Servicio)
                 ->where('idClientes', $cliente->idClientes)
-                ->where('Contrato', $contrato)
-                ->get();
-                
+                ->first();
 
-            return view('portal.contrato', compact(
-                'cliente',
-                'contrato',
-                'ordenesServicio'
-            ));
-        }*/
+            if (!$orden) {
+                abort(404);
+            }
+
+            $lineal_ideal = DB::table('lineal_ideal')
+                ->where('idOrden_Servicio', $idOrden_Servicio)
+                ->get();
+
+            $reportes = DB::table('lineal_ideal as li')
+                ->join('Reportes as r', 'r.idReportes', '=', 'li.idReportes')
+                ->where('li.idOrden_Servicio', $idOrden_Servicio)
+                ->select('r.idReportes', 'r.Detalles_Generales', 'r.Estatus')
+                ->distinct()
+                ->get()
+                ->each(function ($reporte) {
+                    $reporte->detalles = json_decode($reporte->Detalles_Generales, true) ?: [];
+                });
+
+            return view('Reportes_publicos.Reportes', compact('cliente', 'orden', 'reportes'));
+        }
+
+        public function pdf_reporte($token, $idOrden_Servicio, $idReporte)
+        {
+            $cliente = clientes::where('portal_token', $token)->firstOrFail();
+
+            $reporte = DB::table('lineal_ideal as li')
+                ->join('Reportes as r', 'r.idReportes', '=', 'li.idReportes')
+                ->join('orden_servicio as os', 'os.idOrden_Servicio', '=', 'li.idOrden_Servicio')
+                ->where('li.idOrden_Servicio', $idOrden_Servicio)
+                ->where('li.idReportes', $idReporte)
+                ->where('os.idClientes', $cliente->idClientes)
+                ->select('r.Datos_Equipo')
+                ->firstOrFail();
+
+            $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
+            $rutaPdf = $datosEquipo['PDF_UNIFICADO'] ?? null;
+
+            abort_unless($rutaPdf, 404, 'PDF no encontrado');
+
+            $ruta = trim(str_replace('\\', '/', $rutaPdf));
+            $ruta = preg_replace('#^/?(storage|public)/#', '', $ruta);
+            $ruta = ltrim($ruta, '/');
+
+            $rutasPdf = [
+                storage_path('app/public/' . $ruta),
+                storage_path($ruta),
+                public_path($ruta),
+                public_path('storage/' . $ruta),
+                public_path('public/' . $ruta),
+            ];
+
+            $rutaPdf = collect(array_unique($rutasPdf))
+                ->first(fn ($rutaCandidata) => is_file($rutaCandidata));
+
+            abort_unless($rutaPdf, 404, 'Archivo PDF no encontrado');
+
+            return response()->file($rutaPdf, ['Content-Type' => 'application/pdf']);
+        }
 
     /**
      * Display a listing of the resource.
