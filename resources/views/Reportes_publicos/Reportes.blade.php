@@ -165,7 +165,7 @@
         }
 
  /* ==============================
-           CONTRATOS
+            CONTRATOS
         ============================== */
 
         .contratos-container {
@@ -267,6 +267,18 @@
             background-color: #163a5c;
 
             color: white;
+        }
+
+        .reporte-pdf {
+
+            width: 100%;
+
+            min-height: 600px;
+
+            margin-top: 20px;
+
+            border: 1px solid #e5e5e5;
+
         }
 
         /* ==============================
@@ -392,75 +404,55 @@
 
 
         <p>
-            {{-- Este es el portal de {{ $cliente->Cliente }}.  --}}
+            Este es el portal de {{ $cliente->Cliente }}.
         </p>
 
+        <p>
+            Contrato seleccionado: <strong>{{ $orden->Contrato }}</strong>
+        </p>
         <!-- ==================================
-            CONTRATOS
+            REPORTES
         =================================== -->
 
-        <div class="contratos-container">
+        <div class="reportes-container">
 
             <h2>
-                Mis contratos / Proyectos
+                Mis Reportes
             </h2>
 
-
-            @if($contratos->count() > 0)
-
-                <div class="contratos-grid">
-
-                    @foreach($contratos as $nombreContrato => $proyectos)
-
-                        <div class="contrato-card">
-                            <p>
-                                <strong>Contrato:</strong>
-                            </p>
-                            <h3>
-                                {{ $nombreContrato }}
-                            </h3>
-
-                            <p>
-                                <strong>Proyecto / Actividad:</strong>
-                            </p>
-
-                            <ul>
-                                @foreach($proyectos as $proyecto)
-
-                                    <li>
-                                        {{ $proyecto->Proyecto_actividad }}
-                                    </li>
-
-                                @endforeach
-                                    @php 
-                                        $idOrden_Servicio = $proyecto->idOrden_Servicio;
-                                        //dump($idOrden_Servicio);
-                                    @endphp
-                            </ul>
-                            <a href="{{ route('Reportes.Clientes',['token' => request()->route('token'),'idOrden_Servicio' => $idOrden_Servicio]) }}"class="btn-contrato">
-                                Ver Reportes
-                            </a>
-                        </div>
-
-                    @endforeach
-
-                </div>
-
-            @else
-
-                <div class="sin-contratos">
-
+            @forelse($reportes as $reporte)
+                <div class="contrato-card">
                     <h3>
-                        No hay contratos registrados
+                        {{ $reporte->detalles['No_Reporte'] ?? 'Reporte #' . $reporte->idReportes }}
                     </h3>
-
                     <p>
-                        Actualmente no existen contratos asociados a este cliente.
+                        <strong>Fecha:</strong>
+                        {{ $reporte->detalles['Fecha'] ?? 'Sin fecha' }}
                     </p>
-
+                    <p>
+                        <strong>Proyecto:</strong>
+                        {{ $reporte->detalles['Proyecto'] ?? $orden->Proyecto_actividad }}
+                    </p>
+                    <p>
+                        <strong>Estado:</strong>
+                        {{ $reporte->Estatus ?? 'Sin estado' }}
+                    </p>
+                    <a href="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}" class="btn-contrato" target="_blank" rel="noopener">
+                        Ver PDF
+                    </a>
+                    {{--<iframe
+                        class="reporte-pdf"
+                        src="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}"
+                        title="PDF del reporte {{ $reporte->idReportes }}"
+                    ></iframe>--}}
                 </div>
+            @empty
+                <div class="sin-contratos">
+                    <h3>No hay reportes registrados</h3>
+                    <p>Este contrato todavía no tiene reportes disponibles.</p>
+                </div>
+            @endforelse
 
-            @endif
 
         </div>
     </main>
