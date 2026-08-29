@@ -63,6 +63,21 @@ class ServicioSerieReportesTest extends TestCase
         $servicio->registrarConsecutivo(201, 202);
     }
 
+    public function test_permite_ampliar_una_serie_creada_inicialmente_con_un_reporte(): void
+    {
+        $this->crearReportes(211);
+        $servicio = app(ServicioSerieReportes::class);
+        $servicio->iniciar(211, 1);
+        $servicio->registrarPaginas(211, 2);
+
+        $actualizada = $servicio->actualizarCantidad(211, 3);
+
+        $this->assertSame(3, (int) $actualizada->cantidad_planificada);
+        $this->assertSame(1, (int) $actualizada->pagina_inicial);
+        $this->assertSame(2, (int) $actualizada->pagina_final);
+        $this->assertTrue($servicio->puedeCrearSiguiente(211));
+    }
+
     public function test_eliminar_un_integrante_compacta_la_serie_y_permite_reponerlo(): void
     {
         $this->crearReportes(301, 302, 303, 304);

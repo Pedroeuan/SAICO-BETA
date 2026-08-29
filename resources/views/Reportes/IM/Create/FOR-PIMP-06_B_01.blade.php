@@ -94,13 +94,16 @@
                                             required
                                             class="form-control @error('Serie_Reportes.cantidad_planificada') is-invalid @enderror"
                                             name="Serie_Reportes[cantidad_planificada]"
-                                            value="{{ old('Serie_Reportes.cantidad_planificada', 1) }}"
+                                            value="{{ old('Serie_Reportes.cantidad_planificada') }}"
+                                            placeholder="Ejemplo: 1, 3, 5..."
                                         >
                                         @error('Serie_Reportes.cantidad_planificada')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="col-md-8 text-muted pb-2">
+                                        Debe confirmar cu&aacute;ntos reportes contendr&aacute; la serie, incluso cuando sea solamente uno.
+                                        <br>
                                         El bot&oacute;n <strong>Siguiente reporte &gt; Consecutivo</strong> reutilizar&aacute; los datos generales,
                                         pero solicitar&aacute; disparos, resultados e im&aacute;genes nuevos. La cantidad puede ampliarse despu&eacute;s.
                                     </div>
