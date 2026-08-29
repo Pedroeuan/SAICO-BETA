@@ -558,7 +558,7 @@ class ReporteController extends Controller
 
         //$Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])->get();
         $Solicitudes = Solicitudes::with(['detalles_solicitud.manifiesto.devolucion'])
-        ->where('Estatus', 'MANIFIESTO')
+        //->where('Estatus', 'MANIFIESTO')
         ->get();
 
         // Crear un array para almacenar el último folio encontrado para cada grupo
