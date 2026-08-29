@@ -203,7 +203,11 @@
 
         .contrato-card {
 
-            background: white;
+            background: rgba(255, 255, 255, 0.38);
+
+            backdrop-filter: blur(6px);
+
+            -webkit-backdrop-filter: blur(6px);
 
             border-radius: 12px;
 
@@ -216,7 +220,7 @@
 
             text-align: left;
 
-            border: 1px solid #e5e5e5;
+            border: 1px solid rgba(255, 255, 255, 0.35);
         }
 
         .contrato-card:hover {
@@ -243,11 +247,48 @@
             margin: 8px 0;
         }
 
+        .detalle-item {
+            margin: 8px 0;
+            color: #444;
+        }
+
+        .detalle-label {
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .detalle-valor {
+            color: #0b5a8a;
+            font-weight: 600;
+        }
+
+        .detalle-valor.success {
+            color: #1f7a1f;
+        }
+
+        .detalle-valor.warning {
+            color: #a16207;
+        }
+
+        .detalle-valor.danger {
+            color: #b42318;
+        }
+
+        .reporte-actions {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-top: 15px;
+
+        }
+
         .btn-contrato {
 
             display: inline-block;
-
-            margin-top: 15px;
 
             padding: 10px 18px;
 
@@ -260,6 +301,13 @@
             border-radius: 6px;
 
             transition: 0.2s;
+
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
         }
 
         .btn-contrato:hover {
@@ -267,6 +315,92 @@
             background-color: #163a5c;
 
             color: white;
+        }
+
+        .btn-contrato.secondary {
+
+            background-color: #2e7d32;
+
+        }
+
+        .btn-contrato.secondary:hover {
+
+            background-color: #225d26;
+
+        }
+
+        .btn-contrato:disabled {
+
+            opacity: 0.7;
+
+            cursor: wait;
+
+        }
+
+        .loader-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(15, 23, 42, 0.65);
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            z-index: 9999;
+
+        }
+
+        .loader-overlay.show {
+
+            display: flex;
+
+        }
+
+        .loader-box {
+
+            background: rgba(255,255,255,0.96);
+
+            color: #1f2937;
+
+            border-radius: 16px;
+
+            padding: 24px 30px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+            min-width: 220px;
+
+        }
+
+        .loader-spinner {
+
+            width: 42px;
+
+            height: 42px;
+
+            margin: 0 auto 12px auto;
+
+            border: 4px solid rgba(31, 78, 121, 0.2);
+
+            border-top-color: #1f4e79;
+
+            border-radius: 50%;
+
+            animation: spin 0.9s linear infinite;
+
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .reporte-pdf {
@@ -425,21 +559,44 @@
                     <h3>
                         {{ $reporte->detalles['No_Reporte'] ?? 'Reporte #' . $reporte->idReportes }}
                     </h3>
-                    <p>
-                        <strong>Fecha:</strong>
-                        {{ $reporte->detalles['Fecha'] ?? 'Sin fecha' }}
+                    <p class="detalle-item">
+                        <span class="detalle-label">Fecha:</span>
+                        <span class="detalle-valor success">{{ $reporte->detalles['Fecha'] ?? 'Sin fecha' }}</span>
+
+                        <span class="detalle-label">Número de isométrico:</span>
+                        <span class="detalle-valor warning">{{ $reporte->detalles['No_Isometrico'] ?? 'Sin número' }}</span>
+
+                        <span class="detalle-label">No. Junta:</span>
+                        <span class="detalle-valor danger">{{ $reporte->detalles['No_Junta'] ?? 'Sin número' }}</span>
+
+                        <span class="detalle-label">Nombre de la pieza:</span>
+                        <span class="detalle-valor">{{ $reporte->detalles['Nom_Pieza'] ?? 'Sin nombre' }}</span>
+
+                        <span class="detalle-label">Estado:</span>
+                        <span class="detalle-valor success">{{ $reporte->Estatus ?? 'Sin estado' }}</span>
                     </p>
-                    <p>
-                        <strong>Proyecto:</strong>
-                        {{ $reporte->detalles['Proyecto'] ?? $orden->Proyecto_actividad }}
+                    <p class="detalle-item">
+                        <span class="detalle-label">Proyecto:</span>
+                        <span class="detalle-valor">{{ $reporte->detalles['Proyecto'] ?? $orden->Proyecto_actividad }}</span>
                     </p>
-                    <p>
-                        <strong>Estado:</strong>
-                        {{ $reporte->Estatus ?? 'Sin estado' }}
-                    </p>
-                    <a href="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}" class="btn-contrato" target="_blank" rel="noopener">
-                        Ver PDF
-                    </a>
+
+                    <div class="reporte-actions">
+                        <a href="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}"
+                            class="btn-contrato"
+                            target="_blank"
+                            rel="noopener"
+                            data-pdf-action="view"
+                            data-pdf-url="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}">
+                            Ver PDF
+                        </a>
+                        <a href="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}"
+                            class="btn-contrato secondary"
+                            data-pdf-action="download"
+                            data-pdf-url="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}"
+                            download>
+                            Descargar
+                        </a>
+                    </div>
                     {{--<iframe
                         class="reporte-pdf"
                         src="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}"
@@ -457,6 +614,66 @@
         </div>
     </main>
 
+    <div id="pdf-loader" class="loader-overlay" role="status" aria-live="polite" aria-busy="true">
+        <div class="loader-box">
+            <div class="loader-spinner"></div>
+            <div id="loader-text">Preparando PDF...</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const overlay = document.getElementById('pdf-loader');
+            const loaderText = document.getElementById('loader-text');
+            const pdfLinks = document.querySelectorAll('[data-pdf-action]');
+
+            const showLoader = (message) => {
+                if (!overlay) return;
+                loaderText.textContent = message;
+                overlay.classList.add('show');
+            };
+
+            const hideLoader = () => {
+                if (!overlay) return;
+                overlay.classList.remove('show');
+            };
+
+            pdfLinks.forEach((link) => {
+                link.addEventListener('click', function () {
+                    const action = link.dataset.pdfAction;
+                    const url = link.dataset.pdfUrl;
+
+                    if (!url) return;
+
+                    if (action === 'view') {
+                        showLoader('Cargando PDF...');
+
+                        const popup = window.open(url, '_blank', 'noopener');
+
+                        if (!popup) {
+                            hideLoader();
+                            alert('El navegador bloqueó la ventana emergente. Permite las ventanas para ver el PDF.');
+                            return;
+                        }
+
+                        setTimeout(() => {
+                            hideLoader();
+                        }, 2000);
+                    }
+
+                    if (action === 'download') {
+                        showLoader('Descargando PDF...');
+
+                        setTimeout(() => {
+                            hideLoader();
+                        }, 2500);
+                    }
+                });
+            });
+
+            window.addEventListener('focus', hideLoader);
+        });
+    </script>
 
 </body>
 
