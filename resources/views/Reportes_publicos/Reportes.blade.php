@@ -274,6 +274,56 @@
             color: #b42318;
         }
 
+        .comentarios-box {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(31, 78, 121, 0.18);
+        }
+
+        .comentarios-box label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #1f4e79;
+        }
+
+        .comentarios-box textarea {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            border: 1px solid rgba(31, 78, 121, 0.25);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font: inherit;
+            background: rgba(255,255,255,0.7);
+            box-sizing: border-box;
+        }
+
+        .comentarios-box textarea:focus {
+            outline: 2px solid rgba(31, 78, 121, 0.2);
+            border-color: #1f4e79;
+        }
+
+        .comentarios-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-comentario {
+            background: #1f4e79;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-comentario:hover {
+            background: #163a5c;
+        }
+
         .reporte-actions {
 
             display: flex;
@@ -597,6 +647,14 @@
                             Descargar
                         </a>
                     </div>
+
+                    <div class="comentarios-box">
+                        <label for="comentario-{{ $reporte->idReportes }}">Comentarios</label>
+                        <textarea id="comentario-{{ $reporte->idReportes }}" data-reporte-id="{{ $reporte->idReportes }}" placeholder="Escribe un comentario para este reporte...">{{ old('comentario_' . $reporte->idReportes, $reporte->comentario ?? '') }}</textarea>
+                        <div class="comentarios-actions">
+                            <button type="button" class="btn-comentario" data-save-comment="{{ $reporte->idReportes }}">Guardar comentario</button>
+                        </div>
+                    </div>
                     {{--<iframe
                         class="reporte-pdf"
                         src="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}"
@@ -637,6 +695,46 @@
                 if (!overlay) return;
                 overlay.classList.remove('show');
             };
+
+            const saveComment = (reporteId, value) => {
+                const storageKey = 'reporte_comentario_' + reporteId;
+                localStorage.setItem(storageKey, value);
+            };
+
+            const loadComment = (reporteId) => {
+                const storageKey = 'reporte_comentario_' + reporteId;
+                const value = localStorage.getItem(storageKey);
+                const textarea = document.querySelector('textarea[data-reporte-id="' + reporteId + '"]');
+
+                if (textarea && value !== null) {
+                    textarea.value = value;
+                }
+            };
+
+            document.querySelectorAll('textarea[data-reporte-id]').forEach((textarea) => {
+                const reporteId = textarea.dataset.reporteId;
+                loadComment(reporteId);
+
+                textarea.addEventListener('input', function () {
+                    saveComment(reporteId, textarea.value);
+                });
+            });
+
+            document.querySelectorAll('[data-save-comment]').forEach((button) => {
+                button.addEventListener('click', function () {
+                    const reporteId = button.dataset.saveComment;
+                    const textarea = document.querySelector('textarea[data-reporte-id="' + reporteId + '"]');
+
+                    if (!textarea) return;
+
+                    saveComment(reporteId, textarea.value);
+                    button.textContent = 'Comentario guardado';
+
+                    setTimeout(() => {
+                        button.textContent = 'Guardar comentario';
+                    }, 1200);
+                });
+            });
 
             pdfLinks.forEach((link) => {
                 link.addEventListener('click', function () {
