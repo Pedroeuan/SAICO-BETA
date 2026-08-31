@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 use App\Models\Clientes\clientes;
+use App\Models\Reporte\reporte;
 use App\Models\Formato\formato;
 use App\Models\PruebaAplica\Prueba_Aplica;
 use App\Jobs\Procesamiento\GenerarReportePdfJob;
@@ -159,6 +160,58 @@ class ClientesController extends Controller
             ]);
         }
 
+        public function guardarComentario(Request $request, $idReporte)
+        {
+            $request->validate([
+                'comentario' => 'nullable|string|max:2000',
+                'token' => 'nullable|string',
+            ]);
+
+            $token = $request->input('token');
+
+            // Si viene un token, validar que sea de un cliente válido
+            if ($token) {
+                $cliente = clientes::where('portal_token', $token)->first();
+                if (!$cliente) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Token inválido o expirado.',
+                    ], 401);
+                }
+
+                // Validar que el cliente tiene acceso a este reporte
+                $tieneAcceso = DB::table('lineal_ideal as li')
+                    ->join('orden_servicio as os', 'os.idOrden_Servicio', '=', 'li.idOrden_Servicio')
+                    ->where('li.idReportes', $idReporte)
+                    ->where('os.idClientes', $cliente->idClientes)
+                    ->exists();
+
+                if (!$tieneAcceso) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No tienes acceso a este reporte.',
+                    ], 403);
+                }
+            } else {
+                // Si no hay token, requiere autenticación del sistema
+                if (!auth()->check()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Debes proporcionar un token válido o estar autenticado.',
+                    ], 401);
+                }
+            }
+
+            $reporte = reporte::findOrFail($idReporte);
+            $reporte->comentarios = $request->input('comentario');
+            $reporte->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Comentario guardado correctamente.',
+                'comentario' => $reporte->comentarios,
+            ]);
+        }
     /**
      * Display a listing of the resource.
      */

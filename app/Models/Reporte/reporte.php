@@ -11,12 +11,12 @@ class reporte extends Model
     use HasFactory;
 
     protected $fillable = [
-        // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idReportes',
         'idPrueba_Aplica',
         'Detalles_Generales',
         'Datos_Equipo',
         'Estatus',
+        'comentarios',
     ];
 
     protected $table = 'Reportes';

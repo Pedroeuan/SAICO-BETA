@@ -105,7 +105,10 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     Route::get('/portal/{token}', [ClientesController::class, 'Portal_index'])->name('portal.cliente');
     /*Ruta de los contratos de los Clientes*/
     Route::get('/portal/{token}/reportes_clientes/{idOrden_Servicio}',[ClientesController::class, 'reportes_clientes'])->name('Reportes.Clientes');
+    /*Ruta de los PDF de los contratos de los Clientes*/
     Route::get('/portal/{token}/reportes_clientes/{idOrden_Servicio}/pdf/{idReporte}', [ClientesController::class, 'pdf_reporte'])->name('Reportes.Clientes.Pdf');
+
+    Route::post('/portal/reporte/{idReporte}/comentario', [ClientesController::class, 'guardarComentario'])->name('portal.reporte.comentario');
 
     /*QR de Reportes Publicos*/
     Route::get('/qr/reporte/{token}',[ReporteController::class, 'VerPdfQR'])->name('qr.reporte');

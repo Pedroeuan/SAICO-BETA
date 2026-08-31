@@ -650,7 +650,7 @@
 
                     <div class="comentarios-box">
                         <label for="comentario-{{ $reporte->idReportes }}">Comentarios</label>
-                        <textarea id="comentario-{{ $reporte->idReportes }}" data-reporte-id="{{ $reporte->idReportes }}" placeholder="Escribe un comentario para este reporte...">{{ old('comentario_' . $reporte->idReportes, $reporte->comentario ?? '') }}</textarea>
+                        <textarea id="comentario-{{ $reporte->idReportes }}" data-reporte-id="{{ $reporte->idReportes }}" placeholder="Escribe un comentario para este reporte...">{{ old('comentario_' . $reporte->idReportes, $reporte->comentarios ?? '') }}</textarea>
                         <div class="comentarios-actions">
                             <button type="button" class="btn-comentario" data-save-comment="{{ $reporte->idReportes }}">Guardar comentario</button>
                         </div>
@@ -696,6 +696,85 @@
                 overlay.classList.remove('show');
             };
 
+            document.querySelectorAll('[data-save-comment]').forEach((button) => {
+
+                button.addEventListener('click', function () {
+
+                    const reporteId = button.dataset.saveComment;
+
+                    const textarea = document.querySelector(
+                        'textarea[data-reporte-id="' + reporteId + '"]'
+                    );
+
+                    if (!textarea) return;
+
+                    const comentario = textarea.value;
+
+                    // Deshabilitar botón mientras se guarda
+                    button.disabled = true;
+                    button.textContent = 'Guardando...';
+
+                    fetch("{{ url('/portal/reporte') }}/" + reporteId + "/comentario", {
+
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+
+                        body: JSON.stringify({
+                            comentario: comentario,
+                            token: '{{ request()->route('token') }}'
+                        })
+
+                    })
+                    .then(response => {
+
+                        if (!response.ok) {
+                            throw new Error('Error al guardar el comentario');
+                        }
+
+                        return response.json();
+
+                    })
+                    .then(data => {
+
+                        if (data.success) {
+
+                            button.textContent = '✓ Comentario guardado';
+
+                            setTimeout(() => {
+                                button.textContent = 'Guardar comentario';
+                            }, 1500);
+
+                        }
+
+                    })
+                    .catch(error => {
+
+                        console.error(error);
+
+                        button.textContent = 'Error al guardar';
+
+                        alert('No fue posible guardar el comentario.');
+
+                        setTimeout(() => {
+                            button.textContent = 'Guardar comentario';
+                        }, 1500);
+
+                    })
+                    .finally(() => {
+
+                        button.disabled = false;
+
+                    });
+
+                });
+
+            });
+            /*
             const saveComment = (reporteId, value) => {
                 const storageKey = 'reporte_comentario_' + reporteId;
                 localStorage.setItem(storageKey, value);
@@ -735,7 +814,7 @@
                     }, 1200);
                 });
             });
-
+            */
             pdfLinks.forEach((link) => {
                 link.addEventListener('click', function () {
                     const action = link.dataset.pdfAction;
