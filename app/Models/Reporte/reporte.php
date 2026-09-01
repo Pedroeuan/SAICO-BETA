@@ -40,4 +40,10 @@ class reporte extends Model
     {
         return $this->hasMany(Grupo_Juntas_Detalles_Re::class, 'idReportes', 'idReportes');
     }
+
+    // Relación uno a muchos con Comentarios_Reporte
+    public function comentariosHistorial()
+    {
+        return $this->hasMany(ComentarioReporte::class, 'idReportes', 'idReportes')->orderBy('created_at', 'desc');
+    }
 }

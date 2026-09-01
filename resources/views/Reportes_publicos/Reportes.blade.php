@@ -324,6 +324,64 @@
             background: #163a5c;
         }
 
+        .historial-comentarios {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(31, 78, 121, 0.15);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.5);
+            padding: 12px;
+        }
+
+        .historial-comentarios.vacio {
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .comentario-item {
+            padding: 12px;
+            border-bottom: 1px solid rgba(31, 78, 121, 0.1);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .comentario-item:last-child {
+            border-bottom: none;
+        }
+
+        .comentario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .comentario-autor {
+            font-weight: 600;
+            color: #1f4e79;
+        }
+
+        .comentario-tipo {
+            background: rgba(31, 78, 121, 0.15);
+            color: #1f4e79;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+
+        .comentario-fecha {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .comentario-texto {
+            color: #333;
+            word-break: break-word;
+        }
+
         .reporte-actions {
 
             display: flex;
@@ -650,9 +708,13 @@
 
                     <div class="comentarios-box">
                         <label for="comentario-{{ $reporte->idReportes }}">Comentarios</label>
-                        <textarea id="comentario-{{ $reporte->idReportes }}" data-reporte-id="{{ $reporte->idReportes }}" placeholder="Escribe un comentario para este reporte...">{{ old('comentario_' . $reporte->idReportes, $reporte->comentarios ?? '') }}</textarea>
+                        <textarea id="comentario-{{ $reporte->idReportes }}" data-reporte-id="{{ $reporte->idReportes }}" placeholder="Escribe un comentario para este reporte..."></textarea>
                         <div class="comentarios-actions">
                             <button type="button" class="btn-comentario" data-save-comment="{{ $reporte->idReportes }}">Guardar comentario</button>
+                        </div>
+
+                        <div class="historial-comentarios vacio" id="historial-{{ $reporte->idReportes }}">
+                            <p>No hay comentarios aún</p>
                         </div>
                     </div>
                     {{--<iframe
@@ -710,6 +772,11 @@
 
                     const comentario = textarea.value;
 
+                    if (!comentario.trim()) {
+                        alert('Por favor escribe un comentario');
+                        return;
+                    }
+
                     // Deshabilitar botón mientras se guarda
                     button.disabled = true;
                     button.textContent = 'Guardando...';
@@ -743,7 +810,13 @@
 
                         if (data.success) {
 
+                            // Limpiar textarea
+                            textarea.value = '';
+
                             button.textContent = '✓ Comentario guardado';
+
+                            // Recargar el historial
+                            cargarComentarios(reporteId);
 
                             setTimeout(() => {
                                 button.textContent = 'Guardar comentario';
@@ -773,6 +846,47 @@
 
                 });
 
+            });
+
+            // Función para cargar comentarios
+            function cargarComentarios(reporteId) {
+                fetch("{{ url('/portal/reporte') }}/" + reporteId + "/comentarios", {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const historialDiv = document.getElementById('historial-' + reporteId);
+
+                    if (data.comentarios && data.comentarios.length > 0) {
+                        historialDiv.classList.remove('vacio');
+                        historialDiv.innerHTML = '';
+
+                        data.comentarios.forEach(comentario => {
+                            const comentarioHTML = `
+                                <div class="comentario-item">
+                                    <div class="comentario-header">
+                                        <span class="comentario-autor">${comentario.autor}</span>
+                                        <span class="comentario-tipo">${comentario.tipo_autor === 'cliente' ? 'Cliente' : 'Interno'}</span>
+                                    </div>
+                                    <div class="comentario-fecha">${comentario.fecha}</div>
+                                    <div class="comentario-texto">${comentario.comentario}</div>
+                                </div>
+                            `;
+
+                            historialDiv.insertAdjacentHTML('beforeend', comentarioHTML);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error al cargar comentarios:', error));
+            }
+
+            // Cargar comentarios al cargar la página
+            document.querySelectorAll('[data-reporte-id]').forEach(textarea => {
+                const reporteId = textarea.dataset.reporteId;
+                cargarComentarios(reporteId);
             });
             /*
             const saveComment = (reporteId, value) => {

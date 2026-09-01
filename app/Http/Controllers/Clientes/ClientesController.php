@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 
 use App\Models\Clientes\clientes;
 use App\Models\Reporte\reporte;
+use App\Models\Reporte\ComentarioReporte;
 use App\Models\Formato\formato;
 use App\Models\PruebaAplica\Prueba_Aplica;
 use App\Jobs\Procesamiento\GenerarReportePdfJob;
@@ -168,6 +169,11 @@ class ClientesController extends Controller
             ]);
 
             $token = $request->input('token');
+            $comentario = $request->input('comentario');
+            $idClientes = null;
+            $autor = null;
+            $email = null;
+            $tipoAutor = 'cliente';
 
             // Si viene un token, validar que sea de un cliente válido
             if ($token) {
@@ -192,6 +198,11 @@ class ClientesController extends Controller
                         'message' => 'No tienes acceso a este reporte.',
                     ], 403);
                 }
+
+                // Guardar datos del cliente
+                $idClientes = $cliente->idClientes;
+                $autor = $cliente->Cliente;
+                $email = $cliente->Correo;
             } else {
                 // Si no hay token, requiere autenticación del sistema
                 if (!auth()->check()) {
@@ -200,18 +211,57 @@ class ClientesController extends Controller
                         'message' => 'Debes proporcionar un token válido o estar autenticado.',
                     ], 401);
                 }
+
+                // Guardar datos del usuario autenticado
+                $usuario = auth()->user();
+                $tipoAutor = 'usuario_interno';
+                $autor = $usuario->name;
+                $email = $usuario->email;
             }
 
+            // Guardar el comentario en el historial
+            $comentarioNuevo = ComentarioReporte::create([
+                'idReportes' => $idReporte,
+                'comentario' => $comentario,
+                'autor' => $autor,
+                'email' => $email,
+                'tipo_autor' => $tipoAutor,
+                'idClientes' => $idClientes,
+                'idUsuario' => auth()->check() ? auth()->id() : null,
+            ]);
+
+            // Obtener todos los comentarios del reporte
             $reporte = reporte::findOrFail($idReporte);
-            $reporte->comentarios = $request->input('comentario');
-            $reporte->save();
+            $comentarios = $reporte->comentariosHistorial;
 
             return response()->json([
                 'success' => true,
                 'message' => 'Comentario guardado correctamente.',
-                'comentario' => $reporte->comentarios,
+                'comentario' => $comentarioNuevo,
+                'total_comentarios' => $comentarios->count(),
             ]);
         }
+
+        public function obtenerComentarios($idReporte)
+        {
+            $reporte = reporte::findOrFail($idReporte);
+            $comentarios = $reporte->comentariosHistorial;
+
+            return response()->json([
+                'success' => true,
+                'comentarios' => $comentarios->map(function ($c) {
+                    return [
+                        'idComentario' => $c->idComentario,
+                        'comentario' => $c->comentario,
+                        'autor' => $c->autor,
+                        'tipo_autor' => $c->tipo_autor,
+                        'fecha' => $c->created_at->format('d/m/Y H:i'),
+                        'fecha_raw' => $c->created_at,
+                    ];
+                }),
+            ]);
+        }
+
     /**
      * Display a listing of the resource.
      */
