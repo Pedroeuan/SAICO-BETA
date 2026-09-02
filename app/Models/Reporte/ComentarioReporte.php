@@ -4,13 +4,14 @@ namespace App\Models\Reporte;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Reporte\reporte;
 
 class ComentarioReporte extends Model
 {
     use HasFactory;
 
     protected $table = 'comentarios_reporte';
-    protected $primaryKey = 'idComentario';
+    protected $primaryKey = 'idComentarios';
 
     protected $fillable = [
         'idReportes',

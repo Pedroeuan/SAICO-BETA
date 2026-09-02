@@ -4,6 +4,10 @@ namespace App\Models\Reporte;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Reporte\ComentarioReporte;
+use App\Models\Reporte\Fotos_Reporte;
+use App\Models\Reporte\Firma_Reporte;
+use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 
 class reporte extends Model
 {

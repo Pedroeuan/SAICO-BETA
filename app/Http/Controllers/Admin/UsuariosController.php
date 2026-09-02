@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use App\Models\Admin\Usuario;
+use App\Models\Clientes\clientes;
 
 class UsuariosController extends Controller
 {
@@ -49,11 +51,14 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
         // Obtener el usuario autenticado
         $user = Auth::user();
         // Obtener el nombre del usuario
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
+
+        $EsperaDato = 'ESPERA DE DATO';
         //Registro de Usuarios
         // Validar los datos de entrada
         $request->validate([
@@ -67,7 +72,80 @@ class UsuariosController extends Controller
             ],
             'Estatus' => 'required|string|max:255',
         ]);
-    
+
+        if ($request->input('RolUsuario') === 'Cliente') {
+
+            $Cliente = new clientes;
+            $Cliente->Cliente = $request->input('NombreUsuario');
+            $Cliente->RFC = $EsperaDato;
+            $Cliente->Telefono = $EsperaDato;
+            if ($request->input('CorreoUsuario') == null) {
+
+            $Cliente->Correo = $EsperaDato;
+
+        } else {
+
+            $Cliente->Correo = $request->input('CorreoUsuario');
+
+        }
+
+            
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR TOKEN DEL PORTAL
+        |--------------------------------------------------------------------------
+        */
+
+        $Cliente->portal_token = (string) Str::uuid();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR LOGO
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('logo')) {
+
+            $rutaLogo = $request->file('logo')->store('clientes', 'public');
+
+            $Cliente->logo = $rutaLogo;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR CLIENTE
+        |--------------------------------------------------------------------------
+        */
+
+        $Cliente->save();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESPUESTA PARA AJAX
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->ajax()) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cliente guardado correctamente.',
+                'idCliente' => $Cliente->idClientes,
+            ]);
+
+        }
+        /*
+        |--------------------------------------------------------------------------
+        | RESPUESTA NORMAL
+        |--------------------------------------------------------------------------
+        */
+        //return redirect()->route('clientes.index');
+        }
+
         // Crear una nueva instancia de Usuario
         $Usuario = new Usuario;
         $EsperaDato ='ESPERA DE DATO';

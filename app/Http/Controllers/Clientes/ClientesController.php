@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 use App\Models\Clientes\clientes;
@@ -161,27 +162,34 @@ class ClientesController extends Controller
             ]);
         }
 
-        public function guardarComentario(Request $request, $idReporte)
+        public function guardarComentario(Request $request, $token, $idReporte)
         {
-            $request->validate([
-                'comentario' => 'nullable|string|max:2000',
-                'token' => 'nullable|string',
-            ]);
+            try {
+                if (!Auth::check()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Debes iniciar sesión para comentar.',
+                    ], 401);
+                }
 
-            $token = $request->input('token');
-            $comentario = $request->input('comentario');
-            $idClientes = null;
-            $autor = null;
-            $email = null;
-            $tipoAutor = 'cliente';
+                $request->validate([
+                    'comentario' => 'required|string|max:2000',
+                ]);
 
-            // Si viene un token, validar que sea de un cliente válido
-            if ($token) {
+                $usuario = Auth::user();
+                $comentario = $request->input('comentario');
+                $idClientes = 0;
+                $idUsuario = $usuario->id;
+                $autor = $usuario->name;
+                $email = $usuario->email;
+                $tipoAutor = 'usuario';
+
+                // Validar el token y obtener el cliente
                 $cliente = clientes::where('portal_token', $token)->first();
                 if (!$cliente) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Token inválido o expirado.',
+                        'message' => 'Token inválido o expirado. Token recibido: ' . $token,
                     ], 401);
                 }
 
@@ -195,71 +203,111 @@ class ClientesController extends Controller
                 if (!$tieneAcceso) {
                     return response()->json([
                         'success' => false,
+                        'message' => 'No tienes acceso a este reporte. Cliente: ' . $cliente->idClientes . ', Reporte: ' . $idReporte,
+                    ], 403);
+                }
+
+                // Guardar datos del cliente y del usuario autenticado
+                $idClientes = $cliente->idClientes;
+                $autor = $usuario->name;
+                $email = $usuario->email;
+                $tipoAutor = 'usuario';
+
+                // Guardar el comentario en el historial
+                $comentarioNuevo = ComentarioReporte::create([
+                    'idReportes' => $idReporte,
+                    'comentario' => $comentario,
+                    'autor' => $autor,
+                    'email' => $email,
+                    'tipo_autor' => $tipoAutor,
+                    'idClientes' => $idClientes,
+                    'idUsuario' => $idUsuario,
+                ]);
+
+                // Obtener todos los comentarios del reporte
+                $reporte = reporte::findOrFail($idReporte);
+                $comentarios = $reporte->comentariosHistorial;
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Comentario guardado correctamente.',
+                    'comentario' => $comentarioNuevo,
+                    'total_comentarios' => $comentarios->count(),
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Error al guardar comentario: ' . $e->getMessage(), [
+                    'idReporte' => $idReporte,
+                    'token' => $token,
+                    'exception' => $e
+                ]);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al guardar el comentario: ' . $e->getMessage(),
+                    'debug' => [
+                        'token' => $token,
+                        'idReporte' => $idReporte,
+                        'line' => $e->getLine(),
+                        'file' => $e->getFile()
+                    ]
+                ], 500);
+            }
+        }
+
+        public function obtenerComentarios($token, $idReporte)
+        {
+            try {
+                // Validar el token
+                $cliente = clientes::where('portal_token', $token)->first();
+                if (!$cliente) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Token inválido o expirado.',
+                    ], 401);
+                }
+
+                // Validar acceso al reporte
+                $tieneAcceso = DB::table('lineal_ideal as li')
+                    ->join('orden_servicio as os', 'os.idOrden_Servicio', '=', 'li.idOrden_Servicio')
+                    ->where('li.idReportes', $idReporte)
+                    ->where('os.idClientes', $cliente->idClientes)
+                    ->exists();
+
+                if (!$tieneAcceso) {
+                    return response()->json([
+                        'success' => false,
                         'message' => 'No tienes acceso a este reporte.',
                     ], 403);
                 }
 
-                // Guardar datos del cliente
-                $idClientes = $cliente->idClientes;
-                $autor = $cliente->Cliente;
-                $email = $cliente->Correo;
-            } else {
-                // Si no hay token, requiere autenticación del sistema
-                if (!auth()->check()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Debes proporcionar un token válido o estar autenticado.',
-                    ], 401);
-                }
+                $reporte = reporte::findOrFail($idReporte);
+                $comentarios = $reporte->comentariosHistorial;
 
-                // Guardar datos del usuario autenticado
-                $usuario = auth()->user();
-                $tipoAutor = 'usuario_interno';
-                $autor = $usuario->name;
-                $email = $usuario->email;
+                return response()->json([
+                    'success' => true,
+                    'comentarios' => $comentarios->map(function ($c) {
+                        return [
+                            'idComentario' => $c->idComentarios,
+                            'comentario' => $c->comentario,
+                            'autor' => $c->autor,
+                            'tipo_autor' => $c->tipo_autor,
+                            'fecha' => $c->created_at->format('d/m/Y H:i'),
+                            'fecha_raw' => $c->created_at,
+                        ];
+                    }),
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Error al obtener comentarios: ' . $e->getMessage(), [
+                    'idReporte' => $idReporte,
+                    'token' => $token,
+                    'exception' => $e
+                ]);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al obtener los comentarios.',
+                ], 500);
             }
-
-            // Guardar el comentario en el historial
-            $comentarioNuevo = ComentarioReporte::create([
-                'idReportes' => $idReporte,
-                'comentario' => $comentario,
-                'autor' => $autor,
-                'email' => $email,
-                'tipo_autor' => $tipoAutor,
-                'idClientes' => $idClientes,
-                'idUsuario' => auth()->check() ? auth()->id() : null,
-            ]);
-
-            // Obtener todos los comentarios del reporte
-            $reporte = reporte::findOrFail($idReporte);
-            $comentarios = $reporte->comentariosHistorial;
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Comentario guardado correctamente.',
-                'comentario' => $comentarioNuevo,
-                'total_comentarios' => $comentarios->count(),
-            ]);
-        }
-
-        public function obtenerComentarios($idReporte)
-        {
-            $reporte = reporte::findOrFail($idReporte);
-            $comentarios = $reporte->comentariosHistorial;
-
-            return response()->json([
-                'success' => true,
-                'comentarios' => $comentarios->map(function ($c) {
-                    return [
-                        'idComentario' => $c->idComentario,
-                        'comentario' => $c->comentario,
-                        'autor' => $c->autor,
-                        'tipo_autor' => $c->tipo_autor,
-                        'fecha' => $c->created_at->format('d/m/Y H:i'),
-                        'fecha_raw' => $c->created_at,
-                    ];
-                }),
-            ]);
         }
 
     /**

@@ -280,6 +280,22 @@
             border-top: 1px solid rgba(31, 78, 121, 0.18);
         }
 
+        .comentario-login {
+            margin-top: 14px;
+            padding: 16px;
+            border: 1px solid rgba(31, 78, 121, 0.18);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.65);
+            color: #334155;
+            text-align: center;
+        }
+
+        .comentario-login p {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #475569;
+        }
+
         .comentarios-box label {
             display: block;
             margin-bottom: 8px;
@@ -706,17 +722,26 @@
                         </a>
                     </div>
 
-                    <div class="comentarios-box">
-                        <label for="comentario-{{ $reporte->idReportes }}">Comentarios</label>
-                        <textarea id="comentario-{{ $reporte->idReportes }}" data-reporte-id="{{ $reporte->idReportes }}" placeholder="Escribe un comentario para este reporte..."></textarea>
-                        <div class="comentarios-actions">
-                            <button type="button" class="btn-comentario" data-save-comment="{{ $reporte->idReportes }}">Guardar comentario</button>
-                        </div>
+                    @auth
+                        <div class="comentarios-box">
+                            <label for="comentario-{{ $reporte->idReportes }}">Comentarios</label>
+                            <textarea id="comentario-{{ $reporte->idReportes }}" data-reporte-id="{{ $reporte->idReportes }}" placeholder="Escribe un comentario para este reporte..."></textarea>
+                            <div class="comentarios-actions">
+                                <button type="button" class="btn-comentario" data-save-comment="{{ $reporte->idReportes }}">Guardar comentario</button>
+                            </div>
 
-                        <div class="historial-comentarios vacio" id="historial-{{ $reporte->idReportes }}">
-                            <p>No hay comentarios aún</p>
+                            <div class="historial-comentarios vacio" id="historial-{{ $reporte->idReportes }}">
+                                <p>No hay comentarios aún</p>
+                            </div>
                         </div>
-                    </div>
+                    @endauth
+
+                    @guest
+                        <div class="comentario-login">
+                            <p>Inicia sesión para dejar un comentario sobre este reporte.</p>
+                            <a href="{{ route('login') }}?redirect={{ urlencode(request()->fullUrl()) }}" class="btn-contrato secondary">Iniciar sesión</a>
+                        </div>
+                    @endguest
                     {{--<iframe
                         class="reporte-pdf"
                         src="{{ route('Reportes.Clientes.Pdf', ['token' => request()->route('token'), 'idOrden_Servicio' => $orden->idOrden_Servicio, 'idReporte' => $reporte->idReportes]) }}"
@@ -781,7 +806,7 @@
                     button.disabled = true;
                     button.textContent = 'Guardando...';
 
-                    fetch("{{ url('/portal/reporte') }}/" + reporteId + "/comentario", {
+                    fetch("{{ url('/portal/' . request()->route('token') . '/reporte') }}/" + reporteId + "/comentario", {
 
                         method: 'POST',
 
@@ -792,12 +817,17 @@
                         },
 
                         body: JSON.stringify({
-                            comentario: comentario,
-                            token: '{{ request()->route('token') }}'
+                            comentario: comentario
                         })
 
                     })
-                    .then(response => {
+                    .then(async response => {
+
+                        if (response.status === 401) {
+                            const data = await response.json().catch(() => ({}));
+                            window.location.href = '{{ route('login') }}?redirect=' + encodeURIComponent(window.location.href);
+                            throw new Error(data.message || 'Debes iniciar sesión para comentar.');
+                        }
 
                         if (!response.ok) {
                             throw new Error('Error al guardar el comentario');
@@ -850,7 +880,7 @@
 
             // Función para cargar comentarios
             function cargarComentarios(reporteId) {
-                fetch("{{ url('/portal/reporte') }}/" + reporteId + "/comentarios", {
+                fetch("{{ url('/portal/' . request()->route('token') . '/reporte') }}/" + reporteId + "/comentarios", {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'

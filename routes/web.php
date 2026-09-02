@@ -95,7 +95,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     Route::get('Reporte/FOR_PIMP_03_B/01', [ReporteController::class, 'FOR_PIMP_03_B_01'])->name('Plantilla_FOR_PIMP_03_B_01.PDF');
     Route::get('Reporte/FOR_PIMP_05/01', [ReporteController::class, 'FOR_PIMP_05_01'])->name('Plantilla_FOR_PIMP_05_01.PDF');
     Route::get('Reporte/FOR_PIMP_05_B/01', [ReporteController::class, 'FOR_PIMP_05_B_01'])->name('Plantilla_FOR_PIMP_05_B_01.PDF');
-    Route::get('Reporte/FOR_PIMP_06_B/01', [ReporteController::class, 'FOR_PIMP_06_B_01'])->name('Plantilla_FOR_PIMP_06_B_01.PDF');
+    Route::get('Reporte/FOR_PIMP_06_B/01', [ReporteController::
+    class, 'FOR_PIMP_06_B_01'])->name('Plantilla_FOR_PIMP_06_B_01.PDF');
     Route::get('Reporte/FOR_PIMP_04/02', [ReporteController::class, 'FOR_PIMP_04_02'])->name('Plantilla_FOR_PIMP_04_02.PDF');
     Route::get('Reporte/FOR_PIMP_04/03', [ReporteController::class, 'FOR_PIMP_04_03'])->name('Plantilla_FOR_PIMP_04_03.PDF');*/
 
@@ -108,8 +109,8 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     /*Ruta de los PDF de los contratos de los Clientes*/
     Route::get('/portal/{token}/reportes_clientes/{idOrden_Servicio}/pdf/{idReporte}', [ClientesController::class, 'pdf_reporte'])->name('Reportes.Clientes.Pdf');
 
-    Route::post('/portal/reporte/{idReporte}/comentario', [ClientesController::class, 'guardarComentario'])->name('portal.reporte.comentario');
-    Route::get('/portal/reporte/{idReporte}/comentarios', [ClientesController::class, 'obtenerComentarios'])->name('portal.reporte.comentarios');
+    Route::middleware('auth')->post('/portal/{token}/reporte/{idReporte}/comentario', [ClientesController::class, 'guardarComentario'])->name('portal.reporte.comentario');
+    Route::get('/portal/{token}/reporte/{idReporte}/comentarios', [ClientesController::class, 'obtenerComentarios'])->name('portal.reporte.comentarios');
 
     /*QR de Reportes Publicos*/
     Route::get('/qr/reporte/{token}',[ReporteController::class, 'VerPdfQR'])->name('qr.reporte');
