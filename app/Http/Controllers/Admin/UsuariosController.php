@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 use App\Models\Admin\Usuario;
 use App\Models\Clientes\clientes;
@@ -53,17 +54,29 @@ class UsuariosController extends Controller
     {
         //dd($request->all());
         // Obtener el usuario autenticado
-        $user = Auth::user();
+        /*$user = Auth::user();
         // Obtener el nombre del usuario
         $Nombre = $user->name;
-        $rol = Auth::user()->rol;
+        $rol = Auth::user()->rol;*/
 
         $EsperaDato = 'ESPERA DE DATO';
         //Registro de Usuarios
         // Validar los datos de entrada
         $request->validate([
-            'NombreUsuario' => 'required|string|max:255',
-            'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            'NombreUsuario' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'name'),
+                Rule::unique('clientes', 'Cliente'),
+            ],
+            'CorreoUsuario' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'email'),
+                Rule::unique('clientes', 'Cliente'),
+            ],
             'ContrasenaUsuario' => 'required|string|max:255',
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
@@ -233,11 +246,28 @@ class UsuariosController extends Controller
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
         $EsperaDato ='ESPERA DE DATO';
+
+        $Usuario = Usuario::find($id);
+
+        if (!$Usuario) {
+            return redirect()->back()->with('error', 'Usuario no encontrado.');
+        }
+
         if ($request->filled('ContrasenaUsuario') && $request->filled('RepetirContrasena')) {
         // Validar los datos de entrada
         $request->validate([
-            'NombreUsuario' => 'required|string|max:255',
-            //'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            'NombreUsuario' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'name')->ignore($Usuario->id),
+            ],
+            'CorreoUsuario' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($Usuario->id),
+            ],
             'ContrasenaUsuario' => 'required|string|max:255',
             'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
@@ -246,9 +276,6 @@ class UsuariosController extends Controller
             ],
             'Estatus' => 'required|string|max:255',
         ]);
-        // Obtener el usuario existente
-        $Usuario  = Usuario::find($id);
-
         // ===== CAMPOS LICENCIA =====
         if($request->input('licencia_numero')==null)
         {
@@ -288,8 +315,18 @@ class UsuariosController extends Controller
     else{
         // Validar los datos de entrada
         $request->validate([
-            'NombreUsuario' => 'required|string|max:255',
-            //'CorreoUsuario' => 'required|string|max:255|unique:users,email',
+            'NombreUsuario' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'name')->ignore($Usuario->id),
+            ],
+            'CorreoUsuario' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($Usuario->id),
+            ],
             //'ContrasenaUsuario' => 'required|string|max:255',
             //'RepetirContrasena' => 'required|string|max:255|same:ContrasenaUsuario',
             'RolUsuario' => [
@@ -298,9 +335,6 @@ class UsuariosController extends Controller
             ],
             'Estatus' => 'required|string|max:255',
         ]);
-        // Obtener el usuario existente
-        $Usuario  = Usuario::find($id);
-
         // ===== CAMPOS LICENCIA =====
         if($request->input('licencia_numero')==null)
         {

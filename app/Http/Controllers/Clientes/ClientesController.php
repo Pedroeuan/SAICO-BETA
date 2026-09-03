@@ -337,11 +337,27 @@ class ClientesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'Cliente' => 'required|string|max:255',
+            'Cliente' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('clientes', 'Cliente'),
+                Rule::unique('users', 'name'),
+            ],
             'RFC' => 'nullable|string|max:255',
             'Telefono' => 'nullable|string|max:255',
-            'Correo' => 'nullable|string|max:255',
+            'Correo' => [
+                'required',
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('clientes', 'Correo'),
+                Rule::unique('users', 'email'),
+            ],
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ], [
+            'Cliente.unique' => 'El nombre del cliente ya ha sido registrado.',
+            'Correo.unique' => 'El correo ya ha sido registrado.',
         ]);
 
         $clientes = new clientes;
@@ -489,8 +505,11 @@ class ClientesController extends Controller
                 ->with('error', 'Cliente no encontrado.');
         }
 
-        $usuarioActual = Usuario::where('email', $clientes->Correo)
-            ->where('rol', 'Cliente')
+        $usuarioActual = Usuario::where('rol', 'Cliente')
+            ->where(function ($query) use ($clientes) {
+                $query->where('email', $clientes->Correo)
+                    ->orWhere('name', $clientes->Cliente);
+            })
             ->first();
 
         $request->validate([
@@ -499,7 +518,7 @@ class ClientesController extends Controller
                 'string',
                 'max:255',
                 Rule::unique('clientes', 'Cliente')->ignore($clientes->idClientes, 'idClientes'),
-                Rule::unique('users', 'name')->ignore($usuarioActual?->id),
+               //Rule::unique('users', 'name')->ignore($usuarioActual?->id),
             ],
             'RFC' => 'nullable|string|max:255',
             'Telefono' => 'nullable|string|max:255',
@@ -508,7 +527,7 @@ class ClientesController extends Controller
                 'string',
                 'max:255',
                 Rule::unique('clientes', 'Correo')->ignore($clientes->idClientes, 'idClientes'),
-                Rule::unique('users', 'email')->ignore($usuarioActual?->id),
+                //Rule::unique('users', 'email')->ignore($usuarioActual?->id),
             ],
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 

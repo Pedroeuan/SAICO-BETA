@@ -101,13 +101,19 @@
                                             </label>
 
                                             <input type="text"
-                                                class="form-control inputForm"
-                                                value="{{ $clientes->Cliente }}"
+                                                class="form-control inputForm @error('Cliente') is-invalid @enderror"
+                                                value="{{ old('Cliente', $clientes->Cliente) }}"
                                                 name="Cliente"
                                                 placeholder="Ejemplo: PROTEXA"
                                                 style="text-transform: uppercase;"
                                                 oninput="this.value = this.value.toUpperCase()"
                                                 required>
+
+                                            @error('Cliente')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
 
                                         </div>
 
@@ -169,10 +175,16 @@
                                             </label>
 
                                             <input type="email"
-                                                class="form-control inputForm"
-                                                value="{{ $clientes->Correo }}"
+                                                class="form-control inputForm @error('Correo') is-invalid @enderror"
+                                                value="{{ old('Correo', $clientes->Correo === 'ESPERA DE DATO' ? '' : $clientes->Correo) }}"
                                                 name="Correo"
                                                 placeholder="Ejemplo: hola@protexa.mx">
+
+                                            @error('Correo')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
 
                                         </div>
 
