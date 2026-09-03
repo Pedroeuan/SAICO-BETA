@@ -478,6 +478,7 @@ class ClientesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request->all());
         $request->validate([
             'Cliente' => 'required|string|max:255',
             'RFC' => 'nullable|string|max:255',

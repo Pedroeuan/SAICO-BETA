@@ -284,29 +284,41 @@
 
                                     {{-- REGISTRO AL SISTEMA --}}
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">
-                                                ¿Registrar una cuenta al Cliente?
-                                                <span class="ml-3">
-                                                    <label>
-                                                        <input type="radio" name="CuentaCliente" value="no" checked>
-                                                        No
+                                    <div class="col-sm-12">
+                                        <div class="row align-items-start">
+
+                                            {{-- OPCIÓN DE REGISTRO --}}
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">
+                                                        ¿Registrar una cuenta al Cliente?
                                                     </label>
 
-                                                    <label class="mr-2">
-                                                        <input type="radio" name="CuentaCliente" value="si">
-                                                        Sí
-                                                    </label>
-                                                </span>
-                                            </label>
+                                                    <div>
+                                                        <label class="mr-3">
+                                                            <input type="radio" name="CuentaCliente" value="no" checked>
+                                                            No
+                                                        </label>
+
+                                                        <label>
+                                                            <input type="radio" name="CuentaCliente" value="si">
+                                                            Sí
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             {{-- CONTRASEÑAS --}}
-                                            <div id="camposContrasena" style="display: none;">
-                                                POR FAVOR AGREGA LA CONTRASEÑA DEL CLIENTE PARA QUE PUEDA ACCEDER AL PORTAL DEL CLIENTE.
-                                                <div class="row">
+                                            <div id="camposContrasena" class="col-md-8" style="display: none;">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">
+                                                        Contraseña del portal del cliente
+                                                    </label>
+
+                                                    <div class="row">
 
                                                     {{-- CONTRASEÑA --}}
-                                                    <div class="col-sm-6">
+                                                    <div class="col-md-6">
 
                                                         <div class="form-group">
 
@@ -332,7 +344,7 @@
 
 
                                                     {{-- REPETIR CONTRASEÑA --}}
-                                                    <div class="col-sm-6">
+                                                    <div class="col-md-6">
 
                                                         <div class="form-group">
 
@@ -358,6 +370,7 @@
 
                                                 </div>
 
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
