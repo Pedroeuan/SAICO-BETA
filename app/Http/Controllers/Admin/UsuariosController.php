@@ -98,21 +98,19 @@ class UsuariosController extends Controller
 
         $Cliente->portal_token = (string) Str::uuid();
 
-
         /*
         |--------------------------------------------------------------------------
         | GUARDAR LOGO
         |--------------------------------------------------------------------------
         */
 
-        if ($request->hasFile('logo')) {
+        /*if ($request->hasFile('logo')) {
 
             $rutaLogo = $request->file('logo')->store('clientes', 'public');
 
             $Cliente->logo = $rutaLogo;
 
-        }
-
+        }*/
 
         /*
         |--------------------------------------------------------------------------

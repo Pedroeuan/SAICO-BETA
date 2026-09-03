@@ -8,12 +8,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
-use App\Models\Clientes\clientes;
+use App\Models\Admin\Usuario;
 use App\Models\Reporte\reporte;
-use App\Models\Reporte\ComentarioReporte;
 use App\Models\Formato\formato;
+use App\Models\Clientes\clientes;
+use App\Models\Reporte\ComentarioReporte;
 use App\Models\PruebaAplica\Prueba_Aplica;
 use App\Jobs\Procesamiento\GenerarReportePdfJob;
 
@@ -478,33 +481,46 @@ class ClientesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request->all());
-        $request->validate([
-            'Cliente' => 'required|string|max:255',
-            'RFC' => 'nullable|string|max:255',
-            'Telefono' => 'nullable|string|max:255',
-            'Correo' => 'nullable|string|max:255',
-            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | OBTENER CLIENTE
-        |--------------------------------------------------------------------------
-        */
-
         $clientes = clientes::find($id);
 
-
         if (!$clientes) {
-
             return redirect()
                 ->route('clientes.index')
                 ->with('error', 'Cliente no encontrado.');
-
         }
 
+        $usuarioActual = Usuario::where('email', $clientes->Correo)
+            ->where('rol', 'Cliente')
+            ->first();
+
+        $request->validate([
+            'Cliente' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('clientes', 'Cliente')->ignore($clientes->idClientes, 'idClientes'),
+                Rule::unique('users', 'name')->ignore($usuarioActual?->id),
+            ],
+            'RFC' => 'nullable|string|max:255',
+            'Telefono' => 'nullable|string|max:255',
+            'Correo' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('clientes', 'Correo')->ignore($clientes->idClientes, 'idClientes'),
+                Rule::unique('users', 'email')->ignore($usuarioActual?->id),
+            ],
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+
+            'CuentaCliente' => 'required|string',
+
+            'ContrasenaUsuario' => 'nullable|required_if:CuentaCliente,si|string|max:255',
+
+            'RepetirContrasena' =>
+            'nullable|required_if:CuentaCliente,si|string|max:255|same:ContrasenaUsuario',
+        ]);
+
+        $EsperaDato ='ESPERA DE DATO';
 
         /*
         |--------------------------------------------------------------------------
@@ -536,7 +552,6 @@ class ClientesController extends Controller
 
             }
 
-
             /*
             | Guardar nuevo logo
             */
@@ -566,7 +581,6 @@ class ClientesController extends Controller
 
         }
 
-
         /*
         |--------------------------------------------------------------------------
         | GUARDAR
@@ -575,6 +589,23 @@ class ClientesController extends Controller
 
         $clientes->save();
 
+        if ($request->input('CuentaCliente') === 'si') {
+            $Usuario = $usuarioActual ?? new Usuario;
+            $Usuario->name = $request->input('Cliente');
+            $Usuario->email = $request->input('Correo') ?? $EsperaDato;
+
+            if ($request->filled('ContrasenaUsuario')) {
+                $Usuario->password = Hash::make($request->input('ContrasenaUsuario'));
+            }
+
+            $Usuario->rol = 'Cliente';
+            $Usuario->Estatus = 'ALTA';
+            $Usuario->licencia_numero = $Usuario->licencia_numero ?? $EsperaDato;
+            $Usuario->licencia_vencimiento = $Usuario->licencia_vencimiento ?? '2001-01-01';
+            $Usuario->licencia_pdf = $Usuario->licencia_pdf ?? $EsperaDato;
+            $Usuario->cv_pdf = $Usuario->cv_pdf ?? $EsperaDato;
+            $Usuario->save();
+        }
 
         return redirect()
             ->route('clientes.index')
