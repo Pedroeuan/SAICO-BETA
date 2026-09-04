@@ -806,7 +806,7 @@
                     button.disabled = true;
                     button.textContent = 'Guardando...';
 
-                    fetch("{{ url('/portal/' . request()->route('token') . '/reporte') }}/" + reporteId + "/comentario", {
+                    fetch("{{ route('portal.reporte.comentario', ['token' => request()->route('token'), 'idReporte' => '__REPORTE__'], false) }}".replace('__REPORTE__', reporteId), {
 
                         method: 'POST',
 
@@ -845,7 +845,7 @@
 
                             button.textContent = '✓ Comentario guardado';
 
-                            // Recargar el historial
+                            // Mostrar el comentario guardado inmediatamente.
                             cargarComentarios(reporteId);
 
                             setTimeout(() => {
@@ -878,37 +878,54 @@
 
             });
 
+            function renderComentarios(reporteId, comentarios) {
+                const historialDiv = document.getElementById('historial-' + reporteId);
+
+                if (!historialDiv) return;
+
+                if (!comentarios || comentarios.length === 0) {
+                    historialDiv.classList.add('vacio');
+                    historialDiv.innerHTML = '<p>No hay comentarios todavia</p>';
+                    return;
+                }
+
+                historialDiv.classList.remove('vacio');
+                historialDiv.innerHTML = '';
+
+                comentarios.forEach(comentario => {
+                    const item = document.createElement('div');
+                    item.className = 'comentario-item';
+                    item.innerHTML = `
+                        <div class="comentario-header">
+                            <span class="comentario-autor"></span>
+                            <span class="comentario-tipo">${comentario.tipo_autor === 'cliente' ? 'Cliente' : 'Interno'}</span>
+                        </div>
+                        <div class="comentario-fecha"></div>
+                        <div class="comentario-texto"></div>
+                    `;
+                    item.querySelector('.comentario-autor').textContent = comentario.autor || '';
+                    item.querySelector('.comentario-fecha').textContent = comentario.fecha || '';
+                    item.querySelector('.comentario-texto').textContent = comentario.comentario || '';
+                    historialDiv.appendChild(item);
+                });
+            }
+
             // Función para cargar comentarios
             function cargarComentarios(reporteId) {
-                fetch("{{ url('/portal/' . request()->route('token') . '/reporte') }}/" + reporteId + "/comentarios", {
+                fetch("{{ route('portal.reporte.comentarios', ['token' => request()->route('token'), 'idReporte' => '__REPORTE__'], false) }}".replace('__REPORTE__', reporteId), {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
                     }
                 })
-                .then(response => response.json())
-                .then(data => {
-                    const historialDiv = document.getElementById('historial-' + reporteId);
-
-                    if (data.comentarios && data.comentarios.length > 0) {
-                        historialDiv.classList.remove('vacio');
-                        historialDiv.innerHTML = '';
-
-                        data.comentarios.forEach(comentario => {
-                            const comentarioHTML = `
-                                <div class="comentario-item">
-                                    <div class="comentario-header">
-                                        <span class="comentario-autor">${comentario.autor}</span>
-                                        <span class="comentario-tipo">${comentario.tipo_autor === 'cliente' ? 'Cliente' : 'Interno'}</span>
-                                    </div>
-                                    <div class="comentario-fecha">${comentario.fecha}</div>
-                                    <div class="comentario-texto">${comentario.comentario}</div>
-                                </div>
-                            `;
-
-                            historialDiv.insertAdjacentHTML('beforeend', comentarioHTML);
-                        });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('No fue posible cargar los comentarios (' + response.status + ')');
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    renderComentarios(reporteId, data.comentarios || []);
                 })
                 .catch(error => console.error('Error al cargar comentarios:', error));
             }

@@ -499,11 +499,11 @@ class ClientesController extends Controller
     {
         $clientes = clientes::find($id);
 
-        if (!$clientes) {
+        /*if (!$clientes) {
             return redirect()
                 ->route('clientes.index')
                 ->with('error', 'Cliente no encontrado.');
-        }
+        }*/
 
         $usuarioActual = Usuario::where('rol', 'Cliente')
             ->where(function ($query) use ($clientes) {
@@ -518,7 +518,7 @@ class ClientesController extends Controller
                 'string',
                 'max:255',
                 Rule::unique('clientes', 'Cliente')->ignore($clientes->idClientes, 'idClientes'),
-               //Rule::unique('users', 'name')->ignore($usuarioActual?->id),
+                Rule::unique('users', 'name')->ignore($usuarioActual?->id),
             ],
             'RFC' => 'nullable|string|max:255',
             'Telefono' => 'nullable|string|max:255',
@@ -527,7 +527,7 @@ class ClientesController extends Controller
                 'string',
                 'max:255',
                 Rule::unique('clientes', 'Correo')->ignore($clientes->idClientes, 'idClientes'),
-                //Rule::unique('users', 'email')->ignore($usuarioActual?->id),
+                Rule::unique('users', 'email')->ignore($usuarioActual?->id),
             ],
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
