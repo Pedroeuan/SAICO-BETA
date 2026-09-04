@@ -725,7 +725,11 @@
                     @auth
                         <div class="comentarios-box">
                             <label for="comentario-{{ $reporte->idReportes }}">Comentarios</label>
-                            <textarea id="comentario-{{ $reporte->idReportes }}" data-reporte-id="{{ $reporte->idReportes }}" placeholder="Escribe un comentario para este reporte..."></textarea>
+                            <textarea id="comentario-{{ $reporte->idReportes }}"
+                                data-reporte-id="{{ $reporte->idReportes }}"
+                                data-comentario-url="{{ route('portal.reporte.comentario', ['token' => request()->route('token'), 'idReporte' => $reporte->idReportes], false) }}"
+                                data-comentarios-url="{{ route('portal.reporte.comentarios', ['token' => request()->route('token'), 'idReporte' => $reporte->idReportes], false) }}"
+                                placeholder="Escribe un comentario para este reporte..."></textarea>
                             <div class="comentarios-actions">
                                 <button type="button" class="btn-comentario" data-save-comment="{{ $reporte->idReportes }}">Guardar comentario</button>
                             </div>
@@ -806,7 +810,16 @@
                     button.disabled = true;
                     button.textContent = 'Guardando...';
 
-                    fetch("{{ route('portal.reporte.comentario', ['token' => request()->route('token'), 'idReporte' => '__REPORTE__'], false) }}".replace('__REPORTE__', reporteId), {
+                    const comentarioUrl = textarea.dataset.comentarioUrl;
+
+                    if (!comentarioUrl) {
+                        button.disabled = false;
+                        button.textContent = 'Guardar comentario';
+                        console.error('No se encontró la URL para guardar el comentario.');
+                        return;
+                    }
+
+                    fetch(comentarioUrl, {
 
                         method: 'POST',
 
@@ -912,7 +925,14 @@
 
             // Función para cargar comentarios
             function cargarComentarios(reporteId) {
-                fetch("{{ route('portal.reporte.comentarios', ['token' => request()->route('token'), 'idReporte' => '__REPORTE__'], false) }}".replace('__REPORTE__', reporteId), {
+                const textarea = document.querySelector('textarea[data-reporte-id="' + reporteId + '"]');
+                const comentariosUrl = textarea && textarea.dataset.comentariosUrl;
+
+                if (!comentariosUrl) {
+                    return Promise.reject(new Error('No se encontró la URL de comentarios del reporte.'));
+                }
+
+                fetch(comentariosUrl, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json'
