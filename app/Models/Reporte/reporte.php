@@ -4,6 +4,10 @@ namespace App\Models\Reporte;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Reporte\ComentarioReporte;
+use App\Models\Reporte\Fotos_Reporte;
+use App\Models\Reporte\Firma_Reporte;
+use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 
 class reporte extends Model
 {
@@ -11,12 +15,12 @@ class reporte extends Model
     use HasFactory;
 
     protected $fillable = [
-        // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idReportes',
         'idPrueba_Aplica',
         'Detalles_Generales',
         'Datos_Equipo',
         'Estatus',
+        'comentarios',
     ];
 
     protected $table = 'Reportes';
@@ -39,5 +43,11 @@ class reporte extends Model
     public function grupoJuntasDetalles()
     {
         return $this->hasMany(Grupo_Juntas_Detalles_Re::class, 'idReportes', 'idReportes');
+    }
+
+    // Relación uno a muchos con Comentarios_Reporte
+    public function comentariosHistorial()
+    {
+        return $this->hasMany(ComentarioReporte::class, 'idReportes', 'idReportes')->orderBy('created_at', 'desc');
     }
 }
