@@ -17,7 +17,9 @@
 @section('content')
     @if($user->rol == 'Equipos')
         @include('Equipos.indicadoresEquipos')
-            @else
+    @elseif($user->rol == 'Cliente')
+        @include('Reportes_publicos.index')
+    @else
         @include('Welcome.Welcome')
     @endif
 @stop

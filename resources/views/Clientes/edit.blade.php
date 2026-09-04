@@ -101,13 +101,19 @@
                                             </label>
 
                                             <input type="text"
-                                                class="form-control inputForm"
-                                                value="{{ $clientes->Cliente }}"
+                                                class="form-control inputForm @error('Cliente') is-invalid @enderror"
+                                                value="{{ old('Cliente', $clientes->Cliente) }}"
                                                 name="Cliente"
                                                 placeholder="Ejemplo: PROTEXA"
                                                 style="text-transform: uppercase;"
                                                 oninput="this.value = this.value.toUpperCase()"
                                                 required>
+
+                                            @error('Cliente')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
 
                                         </div>
 
@@ -169,10 +175,16 @@
                                             </label>
 
                                             <input type="email"
-                                                class="form-control inputForm"
-                                                value="{{ $clientes->Correo }}"
+                                                class="form-control inputForm @error('Correo') is-invalid @enderror"
+                                                value="{{ old('Correo', $clientes->Correo === 'ESPERA DE DATO' ? '' : $clientes->Correo) }}"
                                                 name="Correo"
                                                 placeholder="Ejemplo: hola@protexa.mx">
+
+                                            @error('Correo')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
 
                                         </div>
 
@@ -280,6 +292,99 @@
 
                                         </div>
 
+                                    </div>
+
+                                    {{-- REGISTRO AL SISTEMA --}}
+
+                                    <div class="col-sm-12">
+                                        <div class="row align-items-start">
+
+                                            {{-- OPCIÓN DE REGISTRO --}}
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">
+                                                        ¿Registrar una cuenta al Cliente?
+                                                    </label>
+
+                                                    <div>
+                                                        <label class="mr-3">
+                                                            <input type="radio" name="CuentaCliente" value="no" checked>
+                                                            No
+                                                        </label>
+
+                                                        <label>
+                                                            <input type="radio" name="CuentaCliente" value="si">
+                                                            Sí
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- CONTRASEÑAS --}}
+                                            <div id="camposContrasena" class="col-md-8" style="display: none;">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">
+                                                        Contraseña del portal del cliente
+                                                    </label>
+
+                                                    <div class="row">
+
+                                                    {{-- CONTRASEÑA --}}
+                                                    <div class="col-md-6">
+
+                                                        <div class="form-group">
+
+                                                            <label class="col-form-label">
+                                                                Contraseña:
+                                                            </label>
+
+                                                            <input type="password"
+                                                                id="ContrasenaUsuario"
+                                                                class="form-control @error('ContrasenaUsuario') is-invalid @enderror"
+                                                                placeholder="Contraseña"
+                                                                name="ContrasenaUsuario">
+
+                                                            @error('ContrasenaUsuario')
+                                                                <div class="invalid-feedback">
+                                                                    <span>{{ $message }}</span>
+                                                                </div>
+                                                            @enderror
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    {{-- REPETIR CONTRASEÑA --}}
+                                                    <div class="col-md-6">
+
+                                                        <div class="form-group">
+
+                                                            <label class="col-form-label">
+                                                                Repetir contraseña:
+                                                            </label>
+
+                                                            <input type="password"
+                                                                id="RepetirContrasena"
+                                                                class="form-control @error('RepetirContrasena') is-invalid @enderror"
+                                                                placeholder="Repetir contraseña"
+                                                                name="RepetirContrasena">
+
+                                                            @error('RepetirContrasena')
+                                                                <div class="invalid-feedback">
+                                                                    <span>{{ $message }}</span>
+                                                                </div>
+                                                            @enderror
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
 
@@ -449,7 +554,72 @@ function copiarPortal() {
     });
 
 }
+document.addEventListener('DOMContentLoaded', function () {
 
+    const radios = document.querySelectorAll(
+        'input[name="CuentaCliente"]'
+    );
+
+    const camposContrasena = document.getElementById(
+        'camposContrasena'
+    );
+
+    const contrasena = document.getElementById(
+        'ContrasenaUsuario'
+    );
+
+    const repetirContrasena = document.getElementById(
+        'RepetirContrasena'
+    );
+
+
+    function toggleCliente() {
+
+        const radioSeleccionado = document.querySelector(
+            'input[name="CuentaCliente"]:checked'
+        );
+
+        if (!radioSeleccionado) {
+            return;
+        }
+
+        if (radioSeleccionado.value === 'si') {
+
+            // Mostrar campos
+            camposContrasena.style.display = 'block';
+
+            // Hacer obligatorios los campos
+            contrasena.required = true;
+            repetirContrasena.required = true;
+
+        } else {
+
+            // Ocultar campos
+            camposContrasena.style.display = 'none';
+
+            // Quitar obligatoriedad
+            contrasena.required = false;
+            repetirContrasena.required = false;
+
+            // Limpiar contraseñas
+            contrasena.value = '';
+            repetirContrasena.value = '';
+        }
+    }
+
+
+    // Detectar cambio entre Sí / No
+    radios.forEach(function (radio) {
+
+        radio.addEventListener('change', toggleCliente);
+
+    });
+
+
+    // Ejecutar al cargar la página
+    toggleCliente();
+
+});
 </script>
 
 @endsection
