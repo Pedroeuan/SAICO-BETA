@@ -18,6 +18,7 @@ class ProcesamientoPdfController extends Controller
     )
     {
         abort_unless(array_key_exists($formato, GenerarReportePdfJob::FORMATOS), 404);
+        $descargar = $request->boolean('download');
 
         // FOR-PIMP-04/03 permite seleccionar sus plantillas en espanol o ingles.
         // Los demas formatos conservan exactamente su comportamiento anterior.
@@ -31,7 +32,7 @@ class ProcesamientoPdfController extends Controller
         if ($ruta = $pdfGenerado->rutaVigente($reporte, $formato, $idioma)) {
             return response()->file($ruta, [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="reporte.pdf"',
+                'Content-Disposition' => ($descargar ? 'attachment' : 'inline') . '; filename="reporte.pdf"',
             ]);
         }
 
@@ -56,6 +57,7 @@ class ProcesamientoPdfController extends Controller
         return view('Procesamiento.reporte-pdf', [
             'trabajo' => $trabajo,
             'estadoUrl' => route('procesamientos.estado', $trabajo->id),
+            'descargar' => $descargar,
         ]);
     }
 }

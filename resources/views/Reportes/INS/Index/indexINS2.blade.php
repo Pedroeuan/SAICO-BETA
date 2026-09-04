@@ -56,6 +56,8 @@
                             $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
                             $ProyectoReporte = $detalles['Proyecto'] ?? $detalles['Identificacion'] ?? '';
                             $idSolicitud = $detalles['idSolicitud'] ?? '';
+                            $formatoReporte = $formatosPorReporte[$reporte->idReportes] ?? '';
+                            $descargaAsincrona = in_array($formatoReporte, ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-05_B/01', 'FOR-PIMP-06_B/01'], true);
                         @endphp
                         <tr>
                             <td>{{ $detalles['Contrato'] ?? '' }}</td>
@@ -76,6 +78,16 @@
                                 @else
                                     <a class="btn btn-primary" href="{{ route('Obtener.RutaPDF', ['id' => $reporte->idReportes]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                                 @endif
+                            </td>
+                            <td>
+                                <a class="btn btn-success"
+                                    href="{{ route('Obtener.RutaPDF', ['id' => $reporte->idReportes]) }}{{ $descargaAsincrona ? '?download=1' : '' }}"
+                                    @if(!$descargaAsincrona) download @endif
+                                    target="_blank"
+                                    rel="noopener"
+                                    aria-label="Descargar PDF">
+                                    <i class="fas fa-download"></i>
+                                </a>
                             </td>
                             <td>
                                 @if ($Reporte_Firmado == '')
