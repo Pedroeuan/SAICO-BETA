@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\Clientes\clientes;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,6 +28,20 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        $usuario = Auth::user();
+
+        if ($usuario->rol === 'Cliente') {
+            $cliente = clientes::where('Correo', $usuario->email)
+                ->orWhere('Cliente', $usuario->name)
+                ->first();
+
+            if ($cliente?->portal_token) {
+                return redirect()->route('portal.cliente', [
+                    'token' => $cliente->portal_token,
+                ]);
+            }
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

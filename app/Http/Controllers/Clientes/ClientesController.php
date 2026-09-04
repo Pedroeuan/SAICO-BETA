@@ -7,10 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
-use App\Models\Clientes\clientes;
+use App\Models\Admin\Usuario;
+use App\Models\Reporte\reporte;
 use App\Models\Formato\formato;
+use App\Models\Clientes\clientes;
+use App\Models\Reporte\ComentarioReporte;
 use App\Models\PruebaAplica\Prueba_Aplica;
 use App\Jobs\Procesamiento\GenerarReportePdfJob;
 
@@ -159,6 +165,154 @@ class ClientesController extends Controller
             ]);
         }
 
+        public function guardarComentario(Request $request, $token, $idReporte)
+        {
+            try {
+                if (!Auth::check()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Debes iniciar sesión para comentar.',
+                    ], 401);
+                }
+
+                $request->validate([
+                    'comentario' => 'required|string|max:2000',
+                ]);
+
+                $usuario = Auth::user();
+                $comentario = $request->input('comentario');
+                $idClientes = 0;
+                $idUsuario = $usuario->id;
+                $autor = $usuario->name;
+                $email = $usuario->email;
+                $tipoAutor = 'usuario';
+
+                // Validar el token y obtener el cliente
+                $cliente = clientes::where('portal_token', $token)->first();
+                if (!$cliente) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Token inválido o expirado. Token recibido: ' . $token,
+                    ], 401);
+                }
+
+                // Validar que el cliente tiene acceso a este reporte
+                $tieneAcceso = DB::table('lineal_ideal as li')
+                    ->join('orden_servicio as os', 'os.idOrden_Servicio', '=', 'li.idOrden_Servicio')
+                    ->where('li.idReportes', $idReporte)
+                    ->where('os.idClientes', $cliente->idClientes)
+                    ->exists();
+
+                if (!$tieneAcceso) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No tienes acceso a este reporte. Cliente: ' . $cliente->idClientes . ', Reporte: ' . $idReporte,
+                    ], 403);
+                }
+
+                // Guardar datos del cliente y del usuario autenticado
+                $idClientes = $cliente->idClientes;
+                $autor = $usuario->name;
+                $email = $usuario->email;
+                $tipoAutor = 'usuario';
+
+                // Guardar el comentario en el historial
+                $comentarioNuevo = ComentarioReporte::create([
+                    'idReportes' => $idReporte,
+                    'comentario' => $comentario,
+                    'autor' => $autor,
+                    'email' => $email,
+                    'tipo_autor' => $tipoAutor,
+                    'idClientes' => $idClientes,
+                    'idUsuario' => $idUsuario,
+                ]);
+
+                // Obtener todos los comentarios del reporte
+                $reporte = reporte::findOrFail($idReporte);
+                $comentarios = $reporte->comentariosHistorial;
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Comentario guardado correctamente.',
+                    'comentario' => $comentarioNuevo,
+                    'total_comentarios' => $comentarios->count(),
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Error al guardar comentario: ' . $e->getMessage(), [
+                    'idReporte' => $idReporte,
+                    'token' => $token,
+                    'exception' => $e
+                ]);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al guardar el comentario: ' . $e->getMessage(),
+                    'debug' => [
+                        'token' => $token,
+                        'idReporte' => $idReporte,
+                        'line' => $e->getLine(),
+                        'file' => $e->getFile()
+                    ]
+                ], 500);
+            }
+        }
+
+        public function obtenerComentarios($token, $idReporte)
+        {
+            try {
+                // Validar el token
+                $cliente = clientes::where('portal_token', $token)->first();
+                if (!$cliente) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Token inválido o expirado.',
+                    ], 401);
+                }
+
+                // Validar acceso al reporte
+                $tieneAcceso = DB::table('lineal_ideal as li')
+                    ->join('orden_servicio as os', 'os.idOrden_Servicio', '=', 'li.idOrden_Servicio')
+                    ->where('li.idReportes', $idReporte)
+                    ->where('os.idClientes', $cliente->idClientes)
+                    ->exists();
+
+                if (!$tieneAcceso) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No tienes acceso a este reporte.',
+                    ], 403);
+                }
+
+                $reporte = reporte::findOrFail($idReporte);
+                $comentarios = $reporte->comentariosHistorial;
+
+                return response()->json([
+                    'success' => true,
+                    'comentarios' => $comentarios->map(function ($c) {
+                        return [
+                            'idComentario' => $c->idComentarios,
+                            'comentario' => $c->comentario,
+                            'autor' => $c->autor,
+                            'tipo_autor' => $c->tipo_autor,
+                            'fecha' => $c->created_at->format('d/m/Y H:i'),
+                            'fecha_raw' => $c->created_at,
+                        ];
+                    }),
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Error al obtener comentarios: ' . $e->getMessage(), [
+                    'idReporte' => $idReporte,
+                    'token' => $token,
+                    'exception' => $e
+                ]);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al obtener los comentarios.',
+                ], 500);
+            }
+        }
+
     /**
      * Display a listing of the resource.
      */
@@ -183,11 +337,27 @@ class ClientesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'Cliente' => 'required|string|max:255',
+            'Cliente' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('clientes', 'Cliente'),
+                Rule::unique('users', 'name'),
+            ],
             'RFC' => 'nullable|string|max:255',
             'Telefono' => 'nullable|string|max:255',
-            'Correo' => 'nullable|string|max:255',
+            'Correo' => [
+                'required',
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('clientes', 'Correo'),
+                Rule::unique('users', 'email'),
+            ],
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ], [
+            'Cliente.unique' => 'El nombre del cliente ya ha sido registrado.',
+            'Correo.unique' => 'El correo ya ha sido registrado.',
         ]);
 
         $clientes = new clientes;
@@ -327,32 +497,49 @@ class ClientesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'Cliente' => 'required|string|max:255',
-            'RFC' => 'nullable|string|max:255',
-            'Telefono' => 'nullable|string|max:255',
-            'Correo' => 'nullable|string|max:255',
-            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | OBTENER CLIENTE
-        |--------------------------------------------------------------------------
-        */
-
         $clientes = clientes::find($id);
 
-
-        if (!$clientes) {
-
+        /*if (!$clientes) {
             return redirect()
                 ->route('clientes.index')
                 ->with('error', 'Cliente no encontrado.');
+        }*/
 
-        }
+        $usuarioActual = Usuario::where('rol', 'Cliente')
+            ->where(function ($query) use ($clientes) {
+                $query->where('email', $clientes->Correo)
+                    ->orWhere('name', $clientes->Cliente);
+            })
+            ->first();
 
+        $request->validate([
+            'Cliente' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('clientes', 'Cliente')->ignore($clientes->idClientes, 'idClientes'),
+                Rule::unique('users', 'name')->ignore($usuarioActual?->id),
+            ],
+            'RFC' => 'nullable|string|max:255',
+            'Telefono' => 'nullable|string|max:255',
+            'Correo' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('clientes', 'Correo')->ignore($clientes->idClientes, 'idClientes'),
+                Rule::unique('users', 'email')->ignore($usuarioActual?->id),
+            ],
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+
+            'CuentaCliente' => 'required|string',
+
+            'ContrasenaUsuario' => 'nullable|required_if:CuentaCliente,si|string|max:255',
+
+            'RepetirContrasena' =>
+            'nullable|required_if:CuentaCliente,si|string|max:255|same:ContrasenaUsuario',
+        ]);
+
+        $EsperaDato ='ESPERA DE DATO';
 
         /*
         |--------------------------------------------------------------------------
@@ -384,7 +571,6 @@ class ClientesController extends Controller
 
             }
 
-
             /*
             | Guardar nuevo logo
             */
@@ -414,7 +600,6 @@ class ClientesController extends Controller
 
         }
 
-
         /*
         |--------------------------------------------------------------------------
         | GUARDAR
@@ -423,6 +608,23 @@ class ClientesController extends Controller
 
         $clientes->save();
 
+        if ($request->input('CuentaCliente') === 'si') {
+            $Usuario = $usuarioActual ?? new Usuario;
+            $Usuario->name = $request->input('Cliente');
+            $Usuario->email = $request->input('Correo') ?? $EsperaDato;
+
+            if ($request->filled('ContrasenaUsuario')) {
+                $Usuario->password = Hash::make($request->input('ContrasenaUsuario'));
+            }
+
+            $Usuario->rol = 'Cliente';
+            $Usuario->Estatus = 'ALTA';
+            $Usuario->licencia_numero = $Usuario->licencia_numero ?? $EsperaDato;
+            $Usuario->licencia_vencimiento = $Usuario->licencia_vencimiento ?? '2001-01-01';
+            $Usuario->licencia_pdf = $Usuario->licencia_pdf ?? $EsperaDato;
+            $Usuario->cv_pdf = $Usuario->cv_pdf ?? $EsperaDato;
+            $Usuario->save();
+        }
 
         return redirect()
             ->route('clientes.index')

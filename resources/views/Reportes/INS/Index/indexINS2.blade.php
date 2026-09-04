@@ -42,6 +42,7 @@
                         <th>No. Reporte</th>
                         <th>Fecha</th>
                         <th>PDF GENERADO</th>
+                        <th>DESCARGAR PDF</th>
                         <th>PDF FIRMADO</th>
                         <th>Editar</th>
                         <th>Siguiente Reporte</th>
