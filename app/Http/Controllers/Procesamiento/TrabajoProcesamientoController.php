@@ -47,7 +47,7 @@ class TrabajoProcesamientoController extends Controller
 
         return response()->file($ruta, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="reporte.pdf"',
+            'Content-Disposition' => ($request->boolean('download') ? 'attachment' : 'inline') . '; filename="reporte.pdf"',
         ]);
     }
 
