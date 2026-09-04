@@ -26,7 +26,11 @@
             }
         }).then(function (trabajo) {
             document.getElementById('mensaje').textContent = 'Reporte generado correctamente.';
-            window.location.replace(trabajo.resultado.descarga_url);
+            const descargaUrl = new URL(trabajo.resultado.descarga_url, window.location.origin);
+            @if($descargar)
+                descargaUrl.searchParams.set('download', '1');
+            @endif
+            window.location.replace(descargaUrl.toString());
         }).catch(function (error) {
             document.getElementById('cargador').style.display = 'none';
             const mensaje = document.getElementById('mensaje');
