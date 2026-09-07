@@ -911,7 +911,7 @@
                     item.innerHTML = `
                         <div class="comentario-header">
                             <span class="comentario-autor"></span>
-                            <span class="comentario-tipo">${comentario.tipo_autor === 'cliente' ? 'Cliente' : 'Interno'}</span>
+                            <span class="comentario-tipo">${comentario.tipo_autor}</span>
                         </div>
                         <div class="comentario-fecha"></div>
                         <div class="comentario-texto"></div>

@@ -214,7 +214,8 @@ class ClientesController extends Controller
                 $idClientes = $cliente->idClientes;
                 $autor = $usuario->name;
                 $email = $usuario->email;
-                $tipoAutor = 'usuario';
+                $tipoAutor = $usuario->rol;
+                //$tipoAutor = 'usuario';
 
                 // Guardar el comentario en el historial
                 $comentarioNuevo = ComentarioReporte::create([
