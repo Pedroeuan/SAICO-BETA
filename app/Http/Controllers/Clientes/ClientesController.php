@@ -241,6 +241,7 @@ class ClientesController extends Controller
                     'idOrden_Servicio' => $relacionReporte->idOrden_Servicio,
                 ]);
                 $asunto = 'Nuevo comentario en el reporte #' . $numeroReporte;
+                $asunto_interno = 'Comen. Rep. #' . $numeroReporte;
                 $mensaje = "{$autor} agregó un comentario en el reporte #{$numeroReporte}:\n\n{$comentario}";
                 $mensaje_email = "<span style='color: #E01A22;'>El autor: $autor, </span> <br> Agregó un comentario en el reporte <span style='color: #E01A22;'>#".$numeroReporte.":</span><br> <br>Comentario:<br>  <span style='color: #003b80;'>$comentario</span>";
 
@@ -253,7 +254,7 @@ class ClientesController extends Controller
                 foreach ($destinatarios as $destinatario) {
                     Notificacion::create([
                         'users_id' => $destinatario->id,
-                        'Mensaje_Corto' => $asunto,
+                        'Mensaje_Corto' => $asunto_interno,
                         'Mensaje_Largo' => $mensaje,
                         'url' => $urlReporte,
                         'leida' => false,
