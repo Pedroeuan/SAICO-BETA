@@ -147,7 +147,7 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     });
 
     Route::middleware('auth')->group(function () {
-    Route::middleware('can:equipos-lab-access')->group(function () {
+    Route::middleware('can:tecnicos-equipos-lab-access')->group(function () {
         /*Creación de Notificaciones*/
         Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
         /*Obtener Notificaciones*/

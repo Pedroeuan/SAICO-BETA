@@ -18,7 +18,10 @@ use App\Models\Formato\formato;
 use App\Models\Clientes\clientes;
 use App\Models\Reporte\ComentarioReporte;
 use App\Models\PruebaAplica\Prueba_Aplica;
+use App\Models\Notificacion\Notificacion;
+use App\Models\User;
 use App\Jobs\Procesamiento\GenerarReportePdfJob;
+use App\Notifications\ComentarioReporteNotification;
 
 class ClientesController extends Controller
 {
@@ -196,14 +199,15 @@ class ClientesController extends Controller
                     ], 401);
                 }
 
-                // Validar que el cliente tiene acceso a este reporte
-                $tieneAcceso = DB::table('lineal_ideal as li')
+                // Validar que el cliente tiene acceso y obtener el contrato del reporte.
+                $relacionReporte = DB::table('lineal_ideal as li')
                     ->join('orden_servicio as os', 'os.idOrden_Servicio', '=', 'li.idOrden_Servicio')
                     ->where('li.idReportes', $idReporte)
                     ->where('os.idClientes', $cliente->idClientes)
-                    ->exists();
+                    ->select('os.idOrden_Servicio')
+                    ->first();
 
-                if (!$tieneAcceso) {
+                if (!$relacionReporte) {
                     return response()->json([
                         'success' => false,
                         'message' => 'No tienes acceso a este reporte. Cliente: ' . $cliente->idClientes . ', Reporte: ' . $idReporte,
@@ -227,6 +231,64 @@ class ClientesController extends Controller
                     'idClientes' => $idClientes,
                     'idUsuario' => $idUsuario,
                 ]);
+
+                $urlReporte = route('Reportes.Clientes', [
+                    'token' => $token,
+                    'idOrden_Servicio' => $relacionReporte->idOrden_Servicio,
+                ]);
+                $asunto = 'Nuevo comentario en el reporte #' . $idReporte;
+                $mensaje = "{$autor} agregó un comentario en el reporte #{$idReporte}:\n\n{$comentario}";
+
+                $destinatarios = User::where('Estatus', 'ALTA')
+                    ->whereIn('rol', ['Técnicos', 'Super Administrador', 'Administrador'])
+                    ->whereNotNull('email')
+                    ->where('email', '!=', '')
+                    ->get();
+
+                foreach ($destinatarios as $destinatario) {
+                    Notificacion::create([
+                        'users_id' => $destinatario->id,
+                        'Mensaje_Corto' => $asunto,
+                        'Mensaje_Largo' => $mensaje,
+                        'url' => $urlReporte,
+                        'leida' => false,
+                    ]);
+
+                    try {
+                        $destinatario->notify(new ComentarioReporteNotification(
+                            $asunto,
+                            $mensaje,
+                            $urlReporte,
+                            $destinatario->name
+                        ));
+                    } catch (\Throwable $e) {
+                        Log::error('Error enviando notificación de comentario a usuario.', [
+                            'email' => $destinatario->email,
+                            'idReporte' => $idReporte,
+                            'exception' => $e,
+                        ]);
+                    }
+                }
+
+                $correoCliente = trim((string) $cliente->Correo);
+                if (filter_var($correoCliente, FILTER_VALIDATE_EMAIL)) {
+                    try {
+                        \Illuminate\Support\Facades\Notification::route('mail', $correoCliente)
+                            ->notify(new ComentarioReporteNotification(
+                                $asunto,
+                                $mensaje,
+                                $urlReporte,
+                                $cliente->Cliente
+                            ));
+                    } catch (\Throwable $e) {
+                        Log::error('Error enviando notificación de comentario al cliente.', [
+                            'email' => $correoCliente,
+                            'idCliente' => $cliente->idClientes,
+                            'idReporte' => $idReporte,
+                            'exception' => $e,
+                        ]);
+                    }
+                }
 
                 // Obtener todos los comentarios del reporte
                 $reporte = reporte::findOrFail($idReporte);
