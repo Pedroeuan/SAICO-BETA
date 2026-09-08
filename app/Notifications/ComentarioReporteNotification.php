@@ -13,6 +13,7 @@ class ComentarioReporteNotification extends Notification
     public function __construct(
         public string $asunto,
         public string $mensaje,
+        public string $mensajeEmail,
         public string $url,
         public string $nombreDestinatario = 'usuario',
     ) {
@@ -30,6 +31,7 @@ class ComentarioReporteNotification extends Notification
             ->view('emails.comentario-reporte', [
                 'asunto' => $this->asunto,
                 'mensaje' => $this->mensaje,
+                'mensaje_email' => $this->mensajeEmail,
                 'url' => $this->url,
                 'nombreDestinatario' => $this->nombreDestinatario,
                 'logoPath' => public_path('images/saico3.png'),

@@ -232,12 +232,17 @@ class ClientesController extends Controller
                     'idUsuario' => $idUsuario,
                 ]);
 
+                $reporte = reporte::findOrFail($idReporte);
+                $detallesReporte = json_decode($reporte->Detalles_Generales, true) ?: [];
+                $numeroReporte = trim((string) ($detallesReporte['No_Reporte'] ?? '')) ?: $idReporte;
+
                 $urlReporte = route('Reportes.Clientes', [
                     'token' => $token,
                     'idOrden_Servicio' => $relacionReporte->idOrden_Servicio,
                 ]);
-                $asunto = 'Nuevo comentario en el reporte #' . $idReporte;
-                $mensaje = "{$autor} agregó un comentario en el reporte #{$idReporte}:\n\n{$comentario}";
+                $asunto = 'Nuevo comentario en el reporte #' . $numeroReporte;
+                $mensaje = "{$autor} agregó un comentario en el reporte #{$numeroReporte}:\n\n{$comentario}";
+                $mensaje_email = "<span style='color: #E01A22;'>El autor: $autor, </span> <br> Agregó un comentario en el reporte <span style='color: #E01A22;'>#".$numeroReporte.":</span><br> <br>Comentario:<br>  <span style='color: #003b80;'>$comentario</span>";
 
                 $destinatarios = User::where('Estatus', 'ALTA')
                     ->whereIn('rol', ['Técnicos', 'Super Administrador', 'Administrador'])
@@ -258,6 +263,7 @@ class ClientesController extends Controller
                         $destinatario->notify(new ComentarioReporteNotification(
                             $asunto,
                             $mensaje,
+                            $mensaje_email,
                             $urlReporte,
                             $destinatario->name
                         ));
@@ -277,6 +283,7 @@ class ClientesController extends Controller
                             ->notify(new ComentarioReporteNotification(
                                 $asunto,
                                 $mensaje,
+                                $mensaje_email,
                                 $urlReporte,
                                 $cliente->Cliente
                             ));
@@ -291,7 +298,6 @@ class ClientesController extends Controller
                 }
 
                 // Obtener todos los comentarios del reporte
-                $reporte = reporte::findOrFail($idReporte);
                 $comentarios = $reporte->comentariosHistorial;
 
                 return response()->json([

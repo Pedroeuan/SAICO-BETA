@@ -102,6 +102,19 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
 
     /*Vista Clientes Publicos*/
     Route::get('/reportes-publicos', function () {return view('reportes_publicos.index');})->name('reportes.publicos');
+
+    // Vista de prueba local del correo de comentarios, sin enviarlo.
+    Route::get('/preview/email/comentario-reporte', function () {
+        return view('emails.comentario-reporte', [
+            'asunto' => 'Nuevo comentario en el reporte #001-DIAVAZ-T-26',
+            'mensaje' => "Cliente de prueba agregó un comentario en el reporte #001-DIAVAZ-T-26:\n\nEste es un comentario de prueba.",
+            'mensaje_email' => "<span style='color: #E01A22;'>Cliente de prueba</span><br>agregó un comentario en el reporte <span style='color: #E01A22;'>#001-DIAVAZ-T-26:</span><br><span style='color: #003b80;'>Este es un comentario de prueba.</span>",
+            'url' => url('/'),
+            'nombreDestinatario' => 'Usuario de prueba',
+            'logoPath' => public_path('images/saico3.png'),
+        ]);
+    })->middleware('auth')->name('preview.email.comentario-reporte');
+
     /*Ruta del portal de los Clientes*/
     Route::get('/portal/{token}', [ClientesController::class, 'Portal_index'])->name('portal.cliente');
     /*Ruta de los contratos de los Clientes*/
