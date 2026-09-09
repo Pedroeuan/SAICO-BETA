@@ -585,6 +585,18 @@ return [
                         'url' => '/Page_In_Construction',
                     ],
                     [
+                        'text' => 'Clientes',
+                        'icon' => 'fas fa-users',
+                        'url' => 'clientes/index',
+                        'can' => 'ventas-equipos-tecnicos-access',
+                    ],
+                    [
+                        'text' => 'Registro Clientes',
+                        'icon' => 'fas fa-user-plus',
+                        'url' => 'registro/create',
+                        'can' => 'ventas-equipos-tecnicos-access',
+                    ],
+                    [
                         'text' => 'Crear Reportes',
                         'icon' => 'far fa-file',
                         'url' => '/Menu/Servicios',
@@ -640,7 +652,7 @@ return [
             ],
 
 
-                // Sidebar Clientes:
+                // Sidebar Ventas:
                 [
                     'text' => 'Ventas',
                     'icon' => 'fas fa-money-bill-wave',
@@ -657,7 +669,18 @@ return [
                             'icon' => 'fas fa-clipboard-list',
                             'url' => '/OC/indexOC',
                         ],
-                        
+                        [
+                            'text' => 'Clientes',
+                            'icon' => 'fas fa-users',
+                            'url' => 'clientes/index',
+                            'can' => 'ventas-equipos-tecnicos-access',
+                        ],
+                        [
+                            'text' => 'Registro Clientes',
+                            'icon' => 'fas fa-user-plus',
+                            'url' => 'registro/create',
+                            'can' => 'ventas-equipos-tecnicos-access',
+                        ],
                     ],
                 ],
 
@@ -703,13 +726,13 @@ return [
                             'text' => 'Clientes',
                             'icon' => 'fas fa-users',
                             'url' => 'clientes/index',
-                            'can' => 'equipos-access',
+                            'can' => 'ventas-equipos-tecnicos-access',
                         ],
                         [
                             'text' => 'Registro Clientes',
                             'icon' => 'fas fa-user-plus',
                             'url' => 'registro/create',
-                            'can' => 'equipos-access',
+                            'can' => 'ventas-equipos-tecnicos-access',
                         ],
                         [
                             'text' => 'Registro de altas',
