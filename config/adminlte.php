@@ -580,9 +580,14 @@ return [
                 //'topnav' => true,
                 'submenu' => [
                     [
-                        'text' => 'Orden de Trabajo/Servicio',
+                        'text' => 'Registrar Orden de Trabajo/Servicio',
+                        'icon' => 'fas fa-chalkboard-teacher',
+                        'url' => '/OT_S/create',
+                    ],
+                    [
+                        'text' => 'Lista Orden de Trabajo/Servicio',
                         'icon' => 'far fa-file-alt',
-                        'url' => '/Page_In_Construction',
+                        'url' => '/OT_S/index',
                     ],
                     [
                         'text' => 'Clientes',
@@ -604,7 +609,6 @@ return [
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-
                         'url' => '/index/ContratoProyecto',
                     ],
                     [
@@ -614,7 +618,7 @@ return [
                     ],
                     [
                         'text' => 'Lista de Procedimientos PND/IM',
-                        'icon' => 'far fa-list-alt',
+                        'icon' => 'fas fa-list-ul',
                         'url' => '/index/Procedimientos',
                     ],
                     [

@@ -18,7 +18,10 @@ class OrdenServicioController extends Controller
      */
     public function index()
     {
-        //
+        // Obtén todas las órdenes de servicio desde la base de datos
+        $ordenesServicio = Orden_Servicio::all();
+
+        return view('OT_S.index', compact('ordenesServicio'));
     }
 
     /**

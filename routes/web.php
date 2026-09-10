@@ -83,6 +83,7 @@ use App\Http\Controllers\Vehiculos\SalidaChecklistController; //accesso a checkl
 use App\Http\Controllers\Vehiculos\RendimientoExportController; //exportes rendimiento vehiculos
 use App\Http\Controllers\Vehiculos\MantenimientoController;// Controlador de mantenimientos
 use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
+use App\Http\Controllers\OrdenServicio\OrdenServicioController;
 
 
     require __DIR__.'/auth.php';
@@ -747,6 +748,19 @@ use App\Http\Controllers\Vehiculos\PagoVehiculoController; // controlador pago
     /*Ruta de botón Eliminación-index-Clientes*/
     Route::delete('/Clientes/eliminar/{id}', [ClientesController::class, 'destroy'])->name('Clientes.destroy');
     
+    /*Orden de Trabajo/Servicio*/
+    /*Rutas de Vistas de Tabla de Orden de Trabajo/Servicio*/
+    Route::get('/OT_S/index', [OrdenServicioController::class, 'index'])->name('OT_S.index');
+    /*Rutas de Vista para crear ORDENES DE TRABAJO/SERVICIO*/
+    Route::get('/OT_S/create', [OrdenServicioController::class, 'create'])->name('OT_S.create');
+    /*Rutas de Vistas Ordenes de Trabajo/Servicio-Edición*/
+    Route::get('/edicion/editOT_S/{id}', [OrdenServicioController::class, 'edit'])->name('edicion.editOT_S');
+    /*Ruta de Guardado Orden de Trabajo/Servicio*/
+    Route::post('/OT_S/store', [OrdenServicioController::class, 'store'])->name('OT_S.store');
+    /*Ruta de Actualizar Orden de Trabajo/Servicio*/
+    Route::post('/edicion/updateOT_S/{id}', [OrdenServicioController::class, 'update'])->name('edicion.updateOT_S');
+    /*Ruta de botón Eliminación-index-Ordenes de Trabajo/Servicio*/
+    Route::delete('/OT_S/eliminar/{id}', [OrdenServicioController::class, 'destroy'])->name('OT_S.destroy');
     });
 
     /*admin */
