@@ -754,11 +754,11 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     /*Rutas de Vista para crear ORDENES DE TRABAJO/SERVICIO*/
     Route::get('/OT_S/create', [OrdenServicioController::class, 'create'])->name('OT_S.create');
     /*Rutas de Vistas Ordenes de Trabajo/Servicio-Edición*/
-    Route::get('/edicion/editOT_S/{id}', [OrdenServicioController::class, 'edit'])->name('edicion.editOT_S');
+    Route::get('/edicion/editOT_S/{id}', [OrdenServicioController::class, 'edit'])->name('editOT_S.edit');
     /*Ruta de Guardado Orden de Trabajo/Servicio*/
     Route::post('/OT_S/store', [OrdenServicioController::class, 'store'])->name('OT_S.store');
     /*Ruta de Actualizar Orden de Trabajo/Servicio*/
-    Route::post('/edicion/updateOT_S/{id}', [OrdenServicioController::class, 'update'])->name('edicion.updateOT_S');
+    Route::post('/edicion/updateOT_S/{id}', [OrdenServicioController::class, 'update'])->name('editOT_S.update');
     /*Ruta de botón Eliminación-index-Ordenes de Trabajo/Servicio*/
     Route::delete('/OT_S/eliminar/{id}', [OrdenServicioController::class, 'destroy'])->name('OT_S.destroy');
     });
@@ -795,7 +795,8 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
-
+    /*Ruta del PDF de OT_S*/
+    Route::get('OT_S/OT_S_PDF/{id}', [PDFController::class, 'OT_S_PDF'])->name('OT_S.PDF');
     });
     
     /* VEHÍCULOS (SOLO ADMIN) 

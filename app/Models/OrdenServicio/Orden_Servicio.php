@@ -4,6 +4,7 @@ namespace App\Models\OrdenServicio;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Clientes\clientes;
 
 class Orden_Servicio extends Model
 {
@@ -19,6 +20,7 @@ class Orden_Servicio extends Model
         'Proyecto_actividad',
         'Material',
         'Plano_isometrico',
+        'OT_archivo',
     ];
 
     protected $table = 'Orden_Servicio';
@@ -41,5 +43,15 @@ class Orden_Servicio extends Model
         public function Firmantes_OS()
         {
             return $this->hasMany(Firmantes_OS::class, 'idOrden_Servicio');
+        }
+
+        public function getFormattedDateAttribute()
+        {
+            return \Carbon\Carbon::parse($this->attributes['Fecha'])->format('d-m-Y');
+        }
+
+        public function cliente()
+        {
+            return $this->belongsTo(Clientes::class, 'idClientes', 'idClientes');
         }
 }

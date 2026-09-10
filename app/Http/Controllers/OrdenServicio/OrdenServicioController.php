@@ -19,9 +19,9 @@ class OrdenServicioController extends Controller
     public function index()
     {
         // Obtén todas las órdenes de servicio desde la base de datos
-        $ordenesServicio = Orden_Servicio::all();
+        $OS = Orden_Servicio::with('cliente')->get();
 
-        return view('OT_S.index', compact('ordenesServicio'));
+        return view('OT_S.index', compact('OS'));
     }
 
     /**
@@ -51,7 +51,7 @@ class OrdenServicioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Orden_Servicio $orden_Servicio)
+    public function edit($id)
     {
         //
     }
