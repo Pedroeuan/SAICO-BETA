@@ -77,7 +77,7 @@
                                             <!-- SELECT -->
                                             <select class="form-control inputForm" name="Cliente" id="cliente_select" required>
                                                 <option value="">Seleccione un cliente</option>
-                                                @foreach ($clientes as $cliente)
+                                                @foreach ($Clientes as $cliente)
                                                     <option value="{{ $cliente->Cliente }}">
                                                         {{ $cliente->Cliente }}
                                                     </option>
@@ -97,6 +97,7 @@
 
                                         </div>
                                     </div>
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha</label>
@@ -107,7 +108,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Lugar</label>
-                                            <input type="text" class="form-control inputForm @error('Lugar') is-invalid @enderror" name="Lugar"  placeholder="Ejemplo: 76810" value="{{old('Lugar')}}">
+                                            <input type="text" class="form-control inputForm @error('Lugar') is-invalid @enderror" name="Lugar"  placeholder="Ejemplo: Patio de fabricación" value="{{old('Lugar')}}">
                                             @error('Lugar')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -116,18 +117,36 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Requisición</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Requisicion" placeholder="Ejemplo: 107068-2" value="{{old('Requisicion')}}">
-                                            @error('Requisicion')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                            <label class="col-form-label">
+                                                ¿Contrato existente?
+                                            </label>
 
+                                            <div class="ml-3">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="TieneContrato" id="contrato_si" value="si" checked>
+                                                    <label class="form-check-label" for="contrato_si">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="TieneContrato" id="contrato_no" value="no">
+                                                    <label class="form-check-label" for="contrato_no">No</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Input visible solo si es "SI" -->
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Contrato"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Contrato') }}"
+                                                required>
+                                        </div>
+
+                                    </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Proyecto" placeholder="Ejemplo: PER-04-23 DUCTO ATOYATL-1" value="{{old('Proyecto')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -136,32 +155,27 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
-                                            <input type="text" class="form-control inputForm @error('Lugar_trabajo') is-invalid @enderror" name="Lugar_trabajo" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . " value="{{old('Lugar_trabajo')}}">
-                                            @error('Lugar_trabajo')
+                                            <label class="col-form-label" for="inputSuccess">Material</label>
+                                            <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material')}}">
+                                            @error('Material')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ old('Fecha_solicitud') }}">
+                                            <label class="col-form-label" for="inputSuccess">Plano/Isometrico</label>
+                                            <input type="text" class="form-control inputForm @error('Plano_isometrico') is-invalid @enderror" name="Detalles_Generales[Plano_isometrico]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . " value="{{old('Detalles_Generales.Plando_isometrico')}}">
+                                            @error('Plano_isometrico')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Tipo de Servicio</label>
-                                            <input type="text" class="form-control inputForm" name="Tipo_servicio" placeholder="Ejemplo: PT, R.G., MT, UT, DUREZA " value="{{old('Tipo_servicio')}}">
-                                            </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Orden de Compra Original</label>
+                                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo Original</label>
                                             <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
                                             @if ($errors->any())
                                                 <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
@@ -235,6 +249,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/OT_S.js') }}"></script>
 <script>
 
     /*Prevenir el Enter*/
@@ -272,7 +287,7 @@
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
+    /*document.addEventListener('DOMContentLoaded', function() {
 
         const form = document.getElementById('OT_SForm');
 
@@ -284,7 +299,7 @@
         /* ==============================
         MOSTRAR / OCULTAR SELECT O INPUT
         ============================== */
-        function toggleCliente() {
+        /*function toggleCliente() {
 
             if (radioSi.checked) {
                 selectCliente.classList.remove('d-none');
@@ -322,7 +337,7 @@
         /* ==============================
         VALIDACIÓN AL ENVIAR
         ============================== */
-        form.addEventListener('submit', function(event) {
+        /*form.addEventListener('submit', function(event) {
 
             let clienteFinal = '';
 
@@ -342,7 +357,7 @@
         /* ==============================
         PREVENIR ENTER
         ============================== */
-        form.addEventListener('keydown', function(event) {
+        /*form.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
@@ -352,7 +367,7 @@
         /* ==============================
         LOCAL STORAGE
         ============================== */
-        document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
+        /*document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
 
             input.addEventListener('input', function() {
                 localStorage.setItem('OT_SForm' + input.name, input.value);
@@ -370,9 +385,8 @@
             });
         });
 
-    });
+    });*/
+
 
     </script>
 @endsection
-
-
