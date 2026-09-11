@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\Clientes\clientes;
+
 class OrdenServicioController extends Controller
 {
     /**
@@ -29,7 +31,9 @@ class OrdenServicioController extends Controller
      */
     public function create()
     {
-        //
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
+        return view('OT_S.create', compact('clientes'));
     }
 
     /**

@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Orden de Compra')
+@section('title', 'Orden de Trabajo/Servicio/Compra')
 
 @section('css')
 <!--datatable -->
@@ -174,6 +174,69 @@ let table = new DataTable('#tablaJs', {
                 });
             } else if (result.isDenied) {
                 Swal.fire("Cancelado", "", "error");
+            }
+        });
+    });
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const form = document.getElementById('manifiestoForm');
+
+        const radioSi = document.getElementById('cliente_si');
+        const radioNo = document.getElementById('cliente_no');
+        const selectCliente = document.getElementById('cliente_select');
+        const inputCliente = document.getElementById('cliente_input');
+        const folioInput = document.getElementById('folio');
+
+        /* ==============================
+        MOSTRAR / OCULTAR SELECT O INPUT
+        ============================== */
+        function toggleCliente() {
+
+            if (radioSi.checked) {
+                selectCliente.classList.remove('d-none');
+                inputCliente.classList.add('d-none');
+                selectCliente.setAttribute('required', true);
+                inputCliente.removeAttribute('required');
+            } else {
+                selectCliente.classList.add('d-none');
+                inputCliente.classList.remove('d-none');
+                inputCliente.setAttribute('required', true);
+                selectCliente.removeAttribute('required');
+            }
+        }
+
+        radioSi.addEventListener('change', toggleCliente);
+        radioNo.addEventListener('change', toggleCliente);
+        toggleCliente();
+
+            /* ==============================
+        VALIDACIÓN AL ENVIAR
+        ============================== */
+        form.addEventListener('submit', function(event) {
+
+            let clienteFinal = '';
+
+            if (radioSi.checked) {
+                clienteFinal = selectCliente.value;
+            } else {
+                clienteFinal = inputCliente.value.trim();
+            }
+
+            if (clienteFinal === '') {
+                event.preventDefault();
+                alert("Por favor, ingresa o selecciona un cliente.");
+                return;
+            }
+        });
+
+        /* ==============================
+        PREVENIR ENTER
+        ============================== */
+        form.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
             }
         });
     });
