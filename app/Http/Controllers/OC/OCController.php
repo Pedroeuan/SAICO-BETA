@@ -4,6 +4,7 @@ namespace App\Http\Controllers\OC;
 
 use App\Models\detallesOC\detallesOC;
 use App\Models\OC\OC;
+use App\Models\Reporte\reporte;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -48,11 +49,42 @@ class OCController extends Controller
         $OC = new OC;
         $EsperaDato ='ESPERA DE DATO';
 
-        if($request->input('Contrato')==null)
-        {
-            $OC->Contrato = $EsperaDato;
-        }else{
-            $OC->Contrato = $request->input('Contrato');
+        // ==========================
+        // Lógica para manejar Contrato
+        // ==========================
+        // Lógica para manejar el campo Contrato
+        if ($request->input('TieneContrato') === "no") {
+
+            // Si el usuario alteró el valor o no llegó, se recalcula en backend
+            $actual = $request->input('Contrato');
+
+            // Verificar que realmente tenga el formato correcto
+            if (!$actual || !preg_match('/^AICO-INT-[0-9]{4}$/', $actual)) {
+
+                // Seguridad: volver a calcular el consecutivo
+                $registros = reporte::orderBy('idReportes', 'DESC')->get();
+                $ultimoNumero = 0;
+
+                foreach ($registros as $r) {
+                    $json = json_decode($r->Detalles_Generales, true);
+
+                    if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
+                        $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
+                        if ($n > $ultimoNumero) $ultimoNumero = $n;
+                        break;
+                    }
+                }
+
+                $nuevo = "AICO-INT-" . str_pad($ultimoNumero + 1, 4, '0', STR_PAD_LEFT);
+
+                $OC->Contrato = $nuevo;
+
+            } else {
+                // Si el frontend envió un contrato válido, se utiliza ese
+                $OC->Contrato = $actual;
+            }
+        } else {
+            $OC->Contrato = $request->input('Contrato', $EsperaDato);
         }
 
         if($request->input('Numero_OC')==null)

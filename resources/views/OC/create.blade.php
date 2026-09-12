@@ -61,8 +61,29 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{old('Contrato')}}">
+                                            <label class="col-form-label">
+                                                ¿Contrato existente?
+                                            </label>
+
+                                            <div class="ml-3">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="TieneContrato" id="contrato_si" value="si" checked>
+                                                    <label class="form-check-label" for="contrato_si">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="TieneContrato" id="contrato_no" value="no">
+                                                    <label class="form-check-label" for="contrato_no">No</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Input visible solo si es "SI" -->
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Contrato"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
 
@@ -123,7 +144,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Orden de Compra Original</label>
+                                            <label class="col-form-label" for="inputSuccess">Cargar Orden de Compra Original</label>
                                             <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
                                             @if ($errors->any())
                                                 <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
@@ -197,6 +218,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/OC.js') }}"></script>
 <script>
 
     /*Prevenir el Enter*/

@@ -50,51 +50,48 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Orden de Trabajo/Servicio/Compra </h3>
+<h3 align="center">Registro de Orden de Trabajo/Servicio </h3>
 <br>
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="OT_SForm" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
+                            <form id="OT_SForm" action="{{route('OT_S.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label">
+                                                ¿Cliente existente?
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneCliente" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
 
-                                            <label class="col-form-label">¿Cliente registrado?</label>
-
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="cliente_tipo" id="cliente_si" value="si" checked>
-                                                <label class="form-check-label" for="cliente_si">Sí</label>
-                                            </div>
-
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="cliente_tipo" id="cliente_no" value="no">
-                                                <label class="form-check-label" for="cliente_no">No</label>
-                                            </div>
-
-                                            <!-- SELECT -->
-                                            <select class="form-control inputForm" name="Cliente" id="cliente_select" required>
-                                                <option value="">Seleccione un cliente</option>
-                                                @foreach ($Clientes as $cliente)
-                                                    <option value="{{ $cliente->Cliente }}">
-                                                        {{ $cliente->Cliente }}
+                                            <!-- SELECT cuando es SI -->
+                                            <select id="campoClienteSelect"
+                                                    class="form-select"
+                                                    name="ClienteSelect">
+                                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                                @foreach($Clientes as $Cliente)
+                                                    <option value="{{ $Cliente->Cliente }}">
+                                                        {{ $Cliente->Cliente }}
                                                     </option>
                                                 @endforeach
                                             </select>
 
-                                            <!-- INPUT MANUAL -->
-                                            <input type="text" 
-                                                class="form-control inputForm mt-2 d-none" 
-                                                id="cliente_input"
-                                                name="Cliente_manual"
-                                                placeholder="Escriba el nombre del cliente">
-
-                                            @error('Cliente')
-                                                <div class="alert alert-danger"><span>*{{ $message }}</span></div>
-                                            @enderror
-
+                                            <!-- INPUT cuando es NO -->
+                                            <input type="text"
+                                                id="campoClienteInput"
+                                                class="form-control inputForm mt-2"
+                                                name="ClienteInput"
+                                                placeholder="Ingrese nombre del cliente"
+                                                style="display:none;">
                                         </div>
                                     </div>
                                     
@@ -108,7 +105,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Lugar</label>
-                                            <input type="text" class="form-control inputForm @error('Lugar') is-invalid @enderror" name="Lugar"  placeholder="Ejemplo: Patio de fabricación" value="{{old('Lugar')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Lugar" placeholder="Ejemplo: Patio de fabricación">{{old('Lugar')}}</textarea>
                                             @error('Lugar')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -141,8 +138,8 @@
                                                 value="{{ old('Contrato') }}"
                                                 required>
                                         </div>
-
                                     </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
@@ -165,8 +162,8 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Plano/Isometrico</label>
-                                            <input type="text" class="form-control inputForm @error('Plano_isometrico') is-invalid @enderror" name="Detalles_Generales[Plano_isometrico]" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . " value="{{old('Detalles_Generales.Plando_isometrico')}}">
+                                            <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Plano_isometrico" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Plano_isometrico')}}</textarea>
                                             @error('Plano_isometrico')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -175,18 +172,28 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo Original</label>
-                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
+                                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo Cliente/AICO</label>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OT_archivo" placeholder="">
                                             @if ($errors->any())
                                                 <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
 
+                                    <!--<div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo AICO</label>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
+                                            @if ($errors->any())
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
+                                        </div>
+                                    </div>-->
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                        <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
-                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Estatus" value="OC">
+                                        <!--<label class="col-form-label" for="inputSuccess">Tipo</label>
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Estatus" value="OC">-->
                                         </div>
                                     </div>
 
@@ -198,9 +205,10 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Unidad/Medida</th>
+                                                <th>Descrpción/Actividades</th>
+                                                <th>Unidad</th>
                                                 <th>Cantidad</th>
-                                                <th>Descripción</th>
+                                                <th>Procesos</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
@@ -273,9 +281,10 @@
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td><textarea class="form-control" name="Descripcion[]" placeholder="Descripción/Actividades"></textarea></td>
+                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad"></td>
                 <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
-                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td><textarea class="form-control" name="procesos[]" placeholder="Procesos"></textarea></td>
                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>`;
             $('#dynamicTable tbody').append(newRow);
@@ -286,107 +295,6 @@
             updateRowNumbers();
         });
     });
-
-    /*document.addEventListener('DOMContentLoaded', function() {
-
-        const form = document.getElementById('OT_SForm');
-
-        const radioSi = document.getElementById('cliente_si');
-        const radioNo = document.getElementById('cliente_no');
-        const selectCliente = document.getElementById('cliente_select');
-        const inputCliente = document.getElementById('cliente_input');
-
-        /* ==============================
-        MOSTRAR / OCULTAR SELECT O INPUT
-        ============================== */
-        /*function toggleCliente() {
-
-            if (radioSi.checked) {
-                selectCliente.classList.remove('d-none');
-                inputCliente.classList.add('d-none');
-                selectCliente.setAttribute('required', true);
-                inputCliente.removeAttribute('required');
-            } else {
-                selectCliente.classList.add('d-none');
-                inputCliente.classList.remove('d-none');
-                inputCliente.setAttribute('required', true);
-                selectCliente.removeAttribute('required');
-            }
-        }
-
-        radioSi.addEventListener('change', toggleCliente);
-        radioNo.addEventListener('change', toggleCliente);
-        toggleCliente();
-
-
-        // SELECT
-        selectCliente.addEventListener('change', function() {
-            if (radioSi.checked) {
-                generarFolio(selectCliente.value);
-            }
-        });
-
-        // INPUT manual
-        inputCliente.addEventListener('input', function() {
-            if (radioNo.checked) {
-                generarFolio(inputCliente.value);
-            }
-        });
-
-
-        /* ==============================
-        VALIDACIÓN AL ENVIAR
-        ============================== */
-        /*form.addEventListener('submit', function(event) {
-
-            let clienteFinal = '';
-
-            if (radioSi.checked) {
-                clienteFinal = selectCliente.value;
-            } else {
-                clienteFinal = inputCliente.value.trim();
-            }
-
-            if (clienteFinal === '') {
-                event.preventDefault();
-                alert("Por favor, ingresa o selecciona un cliente.");
-                return;
-            }
-        });
-
-        /* ==============================
-        PREVENIR ENTER
-        ============================== */
-        /*form.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-
-
-        /* ==============================
-        LOCAL STORAGE
-        ============================== */
-        /*document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
-
-            input.addEventListener('input', function() {
-                localStorage.setItem('OT_SForm' + input.name, input.value);
-            });
-
-            let value = localStorage.getItem('OT_SForm' + input.name);
-            if (value !== null && input.type !== 'file') {
-                input.value = value;
-            }
-        });
-
-        form.addEventListener('submit', function() {
-            document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
-                localStorage.removeItem('OT_SForm' + input.name);
-            });
-        });
-
-    });*/
-
 
     </script>
 @endsection
