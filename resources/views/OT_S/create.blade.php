@@ -295,6 +295,50 @@
             updateRowNumbers();
         });
     });
+        document.getElementById('OC').addEventListener('submit', function(e) {
+            const tableBody = document.querySelector("#dynamicTable tbody");
+            const rows = tableBody.querySelectorAll("tr");
+            const tableData = [];
 
+            rows.forEach(row => {
+                const descripcion = row.querySelector("textarea[placeholder='Descripción/Actividades']").value;
+                const unidad = row.querySelector('td:nth-child(2) input').value;
+                const cantidad = row.querySelector('td:nth-child(3) input').value;
+                const procesos = row.querySelector("textarea[placeholder='Procesos']").value; // Capturar el valor del textarea
+
+                // Añadir los datos de la fila al array
+                tableData.push({
+                    descripcion: descripcion,
+                    unidad: unidad,
+                    cantidad: cantidad,
+                    procesos: procesos
+                });
+            });
+
+        // Convertir el array a JSON y asignarlo al campo oculto
+            document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
+        });
+
+        // Guardar datos en localStorage al escribir
+    document.querySelectorAll('#OT_S input, #OT_S textarea, #OT_S select').forEach(function(input) {
+        input.addEventListener('input', function() {
+            localStorage.setItem('OT_S_' + input.name, input.value);
+        });
+    });
+    // Restaurar datos al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#OT_S input, #OT_S textarea, #OT_S select').forEach(function(input) {
+            let value = localStorage.getItem('OT_S_' + input.name);
+            if (value !== null && input.type !== 'file') {
+                input.value = value;
+            }
+        });
+    });
+    // Limpiar localStorage al enviar el formulario
+    document.getElementById('OT_S').addEventListener('submit', function() {
+        document.querySelectorAll('#OT_S input, #OT_S textarea, #OT_S select').forEach(function(input) {
+            localStorage.removeItem('OT_S_' + input.name);
+        });
+    });
     </script>
 @endsection
