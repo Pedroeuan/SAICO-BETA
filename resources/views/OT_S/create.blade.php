@@ -319,26 +319,7 @@
             document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
         });
 
-        // Guardar datos en localStorage al escribir
-    document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
-        input.addEventListener('input', function() {
-            localStorage.setItem('OT_S_' + input.name, input.value);
-        });
-    });
-    // Restaurar datos al cargar la página
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
-            let value = localStorage.getItem('OT_S_' + input.name);
-            if (value !== null && input.type !== 'file') {
-                input.value = value;
-            }
-        });
-    });
-    // Limpiar localStorage al enviar el formulario
-    document.getElementById('OT_SForm').addEventListener('submit', function() {
-        document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
-            localStorage.removeItem('OT_S_' + input.name);
-        });
-    });
+        //AGREGAR LOCALSTORAGE
+
     </script>
 @endsection
