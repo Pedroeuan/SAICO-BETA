@@ -295,16 +295,16 @@
             updateRowNumbers();
         });
     });
-        document.getElementById('OC').addEventListener('submit', function(e) {
+        document.getElementById('OT_SForm').addEventListener('submit', function(e) {
             const tableBody = document.querySelector("#dynamicTable tbody");
             const rows = tableBody.querySelectorAll("tr");
             const tableData = [];
 
             rows.forEach(row => {
-                const descripcion = row.querySelector("textarea[placeholder='Descripción/Actividades']").value;
-                const unidad = row.querySelector('td:nth-child(2) input').value;
-                const cantidad = row.querySelector('td:nth-child(3) input').value;
-                const procesos = row.querySelector("textarea[placeholder='Procesos']").value; // Capturar el valor del textarea
+                const descripcion = row.querySelector("textarea[name='Descripcion[]']").value;
+                const unidad = row.querySelector("input[name='unidad[]']").value;
+                const cantidad = row.querySelector("input[name='cantidad[]']").value;
+                const procesos = row.querySelector("textarea[name='procesos[]']").value;
 
                 // Añadir los datos de la fila al array
                 tableData.push({
@@ -320,14 +320,14 @@
         });
 
         // Guardar datos en localStorage al escribir
-    document.querySelectorAll('#OT_S input, #OT_S textarea, #OT_S select').forEach(function(input) {
+    document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
         input.addEventListener('input', function() {
             localStorage.setItem('OT_S_' + input.name, input.value);
         });
     });
     // Restaurar datos al cargar la página
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('#OT_S input, #OT_S textarea, #OT_S select').forEach(function(input) {
+        document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
             let value = localStorage.getItem('OT_S_' + input.name);
             if (value !== null && input.type !== 'file') {
                 input.value = value;
@@ -335,8 +335,8 @@
         });
     });
     // Limpiar localStorage al enviar el formulario
-    document.getElementById('OT_S').addEventListener('submit', function() {
-        document.querySelectorAll('#OT_S input, #OT_S textarea, #OT_S select').forEach(function(input) {
+    document.getElementById('OT_SForm').addEventListener('submit', function() {
+        document.querySelectorAll('#OT_SForm input, #OT_SForm textarea, #OT_SForm select').forEach(function(input) {
             localStorage.removeItem('OT_S_' + input.name);
         });
     });

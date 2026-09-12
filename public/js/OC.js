@@ -1,4 +1,4 @@
-    /*check del contrato, si y no */
+/*check del contrato, si y no */
 document.addEventListener("DOMContentLoaded", function () {
 
     const radios = document.getElementsByName("TieneContrato");
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             sessionStorage.setItem("TieneContrato", this.value);
 
             if (this.value === "si") {
+                console.log("Seleccionado: si");
                 campoContrato.readOnly = false;
                 campoContrato.required = true;
                 campoContrato.value = "";
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             if (this.value === "no") {
+                console.log("Seleccionado: no");
                 campoContrato.readOnly = true;
                 campoContrato.required = false;
                 campoContrato.placeholder = "Generando contrato interno...";
