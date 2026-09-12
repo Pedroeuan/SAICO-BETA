@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\Clientes\clientes;
+
 class OCController extends Controller
 {
     /**
@@ -30,7 +32,9 @@ class OCController extends Controller
      */
     public function create()
     {
-        return view('OC.create');
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
+        return view('OC.create', compact('Clientes'));
     }
 
     /**

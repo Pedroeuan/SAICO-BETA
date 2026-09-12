@@ -58,7 +58,6 @@
                             <form id="OC" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">

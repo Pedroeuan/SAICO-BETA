@@ -1,4 +1,4 @@
-/*check del contrato, si y no */
+    /*check del contrato, si y no */
 document.addEventListener("DOMContentLoaded", function () {
 
     const radios = document.getElementsByName("TieneContrato");
