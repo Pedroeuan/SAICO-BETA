@@ -9,6 +9,9 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('notificaciones:crear-certificados')->dailyAt('04:00');
+Schedule::command('notificaciones:vehiculos-vencimientos')
+    ->dailyAt('04:10')
+    ->withoutOverlapping();
 // Los UUID permanecen el tiempo suficiente para recuperar una recarga y luego se depuran.
 Schedule::command('procesamientos:limpiar-vencidos')->dailyAt('03:30')->withoutOverlapping();
 //Schedule::command('notificaciones:crear-certificados')->daily();

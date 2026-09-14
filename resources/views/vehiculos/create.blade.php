@@ -163,4 +163,3 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 @endsection
 
-
