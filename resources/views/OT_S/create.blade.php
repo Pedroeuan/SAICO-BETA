@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Orden de Compra')
+@section('title', 'Orden de Trabajo/Servicio/Compra')
 
 @section('css')
 <!--datatable -->
@@ -50,14 +50,68 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Orden de Compra</h3>
+<h3 align="center">Registro de Orden de Trabajo/Servicio </h3>
 <br>
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="OC" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
+                            <form id="OT_SForm" action="{{route('OT_S.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
+
                                 <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">
+                                                ¿Cliente existente?
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneCliente" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
+
+                                            <!-- SELECT cuando es SI -->
+                                            <select id="campoClienteSelect"
+                                                    class="form-select"
+                                                    name="ClienteSelect">
+                                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                                @foreach($Clientes as $Cliente)
+                                                    <option value="{{ $Cliente->Cliente }}">
+                                                        {{ $Cliente->Cliente }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
+                                            <!-- INPUT cuando es NO -->
+                                            <input type="text"
+                                                id="campoClienteInput"
+                                                class="form-control inputForm mt-2"
+                                                name="ClienteInput"
+                                                placeholder="Ingrese nombre del cliente"
+                                                style="display:none;">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
+                                            <input type="date" class="form-control inputForm" name="Fecha" placeholder="Ejemplo: 640853841" value="{{old('Fecha')}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Lugar</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Lugar" placeholder="Ejemplo: Patio de fabricación">{{old('Lugar')}}</textarea>
+                                            @error('Lugar')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
@@ -88,28 +142,8 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Número de Orden de Compra</label>
-                                            <input type="text" class="form-control inputForm @error('Numero_OC') is-invalid @enderror" name="Numero_OC"  placeholder="Ejemplo: 76810" value="{{old('Numero_OC')}}">
-                                            @error('Numero_OC')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Requisición</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Requisicion" placeholder="Ejemplo: 107068-2" value="{{old('Requisicion')}}">
-                                            @error('Requisicion')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Proyecto" placeholder="Ejemplo: PER-04-23 DUCTO ATOYATL-1" value="{{old('Proyecto')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -118,43 +152,48 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
-                                            <input type="text" class="form-control inputForm @error('Lugar_trabajo') is-invalid @enderror" name="Lugar_trabajo" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . " value="{{old('Lugar_trabajo')}}">
-                                            @error('Lugar_trabajo')
+                                            <label class="col-form-label" for="inputSuccess">Material</label>
+                                            <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material')}}">
+                                            @error('Material')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
-                                            <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ old('Fecha_solicitud') }}">
+                                            <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Plano_isometrico" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Plano_isometrico')}}</textarea>
+                                            @error('Plano_isometrico')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Tipo de Servicio</label>
-                                            <input type="text" class="form-control inputForm" name="Tipo_servicio" placeholder="Ejemplo: PT, R.G., MT, UT, DUREZA " value="{{old('Tipo_servicio')}}">
-                                            </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Cargar Orden de Compra Original</label>
-                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
+                                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo Cliente/AICO</label>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OT_archivo" placeholder="">
                                             @if ($errors->any())
                                                 <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
                                         </div>
                                     </div>
 
+                                    <!--<div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Orden de Trabajo AICO</label>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
+                                            @if ($errors->any())
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
+                                        </div>
+                                    </div>-->
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                        <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
-                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Estatus" value="OC">
+                                        <!--<label class="col-form-label" for="inputSuccess">Tipo</label>
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Estatus" value="OC">-->
                                         </div>
                                     </div>
 
@@ -166,9 +205,10 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Unidad/Medida</th>
+                                                <th>Descrpción/Actividades</th>
+                                                <th>Unidad</th>
                                                 <th>Cantidad</th>
-                                                <th>Descripción</th>
+                                                <th>Procesos</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
@@ -217,11 +257,11 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/OC.js') }}"></script>
+<script src="{{ asset('js/OT_S.js') }}"></script>
 <script>
 
     /*Prevenir el Enter*/
-    document.getElementById('OC').addEventListener('keydown', function(event) {
+    document.getElementById('OT_SForm').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
@@ -241,9 +281,10 @@
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td><textarea class="form-control" name="Descripcion[]" placeholder="Descripción/Actividades"></textarea></td>
+                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad"></td>
                 <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
-                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td><textarea class="form-control" name="procesos[]" placeholder="Procesos"></textarea></td>
                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>`;
             $('#dynamicTable tbody').append(newRow);
@@ -254,26 +295,27 @@
             updateRowNumbers();
         });
     });
-
-        document.getElementById('OC').addEventListener('submit', function(e) {
+        document.getElementById('OT_SForm').addEventListener('submit', function(e) {
             const tableBody = document.querySelector("#dynamicTable tbody");
             const rows = tableBody.querySelectorAll("tr");
             const tableData = [];
 
             rows.forEach(row => {
-                const unidad = row.querySelector('td:nth-child(2) input').value;
-                const cantidad = row.querySelector('td:nth-child(3) input').value;
-                const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
+                const descripcion = row.querySelector("textarea[name='Descripcion[]']").value;
+                const unidad = row.querySelector("input[name='unidad[]']").value;
+                const cantidad = row.querySelector("input[name='cantidad[]']").value;
+                const procesos = row.querySelector("textarea[name='procesos[]']").value;
 
                 // Añadir los datos de la fila al array
                 tableData.push({
+                    descripcion: descripcion,
                     unidad: unidad,
                     cantidad: cantidad,
-                    descripcion: descripcion
+                    procesos: procesos
                 });
             });
 
-            // Convertir el array a JSON y asignarlo al campo oculto
+        // Convertir el array a JSON y asignarlo al campo oculto
             document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
         });
 
@@ -281,5 +323,3 @@
 
     </script>
 @endsection
-
-

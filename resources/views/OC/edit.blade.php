@@ -62,7 +62,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OC->Contrato}}">
+                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OC->Contrato}}" readonly>
                                         </div>
                                     </div>
 
@@ -127,7 +127,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Orden de Compra Actual</label>
+                                            <label class="col-form-label" for="inputSuccess">Actualizar Orden de Compra Actual</label>
                                             <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
                                             @if ($errors->any())
                                                 <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
@@ -135,25 +135,21 @@
                                         </div>
                                     </div>
 
-                                    @if ($OC->OC_archivo != 'ESPERA DE DATO')
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
-                                            <label class="col-form-label" for="inputSuccess">Ver Orden de Compra Actual</label>  
-                                            <div>                                            
-                                                <a href="{{ asset('storage/' . $OC->OC_archivo) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                                                                     
-                                            </div> 
-                                        </div>
-                                    </div>
-                                    @elseif($OC->OC_archivo == 'ESPERA DE DATO')
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit -->   
+                                            @if ($OC->OC_archivo === 'ESPERA DE DATOS' || $OC->OC_archivo === 'ESPERA DE DATO')
                                             <label class="col-form-label" for="inputSuccess">No se encontraron Certificados</label>                                              
                                                 <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                                 
+                                            @else
+                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                                <label class="col-form-label" for="inputSuccess">Ver Orden de Compra Actual</label>  
+                                                <div>                                            
+                                                    <a href="{{ asset('storage/' . $OC->OC_archivo) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                                                                     
+                                                </div>
+                                            @endif 
                                         </div>
                                     </div>
-                                    @endif
                                     
                                     <div class="col-sm-4">
                                         <div class="form-group">
