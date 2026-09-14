@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Hash;    
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+
+use App\Models\Clientes\clientes;
 
 class OrdenServicioController extends Controller
 {
@@ -18,7 +20,10 @@ class OrdenServicioController extends Controller
      */
     public function index()
     {
-        //
+        // Obtén todas las órdenes de servicio desde la base de datos
+        $OS = Orden_Servicio::with('cliente')->get();
+
+        return view('OT_S.index', compact('OS'));
     }
 
     /**
@@ -26,7 +31,9 @@ class OrdenServicioController extends Controller
      */
     public function create()
     {
-        //
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
+        return view('OT_S.create', compact('Clientes'));
     }
 
     /**
@@ -35,6 +42,7 @@ class OrdenServicioController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request->all());
     }
 
     /**
@@ -48,7 +56,7 @@ class OrdenServicioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Orden_Servicio $orden_Servicio)
+    public function edit($id)
     {
         //
     }
