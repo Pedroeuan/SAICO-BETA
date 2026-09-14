@@ -41,13 +41,13 @@ class PanelController extends Controller
 
         // ALERTAS DE DOCUMENTACIÓN (DASHBOARD)
         $documentosVencidos = Vehiculo::query()
-            ->select(['id', 'placa', 'marca', 'poliza_seguro_vencimiento', 'tarjeta_circulacion_vencimiento'])
+            ->select(['id', 'placa', 'marca', 'modelo', 'poliza_seguro_vencimiento', 'tarjeta_circulacion_vencimiento'])
             ->where('documentacion_estatus', 'vencida')
             ->get();
         
         $proximo15dias = Carbon::today()->addDays(15);
         $documentosProximoVencer = Vehiculo::query()
-            ->select(['id', 'placa', 'marca', 'poliza_seguro_vencimiento', 'tarjeta_circulacion_vencimiento'])
+            ->select(['id', 'placa', 'marca', 'modelo', 'poliza_seguro_vencimiento', 'tarjeta_circulacion_vencimiento'])
             ->where('documentacion_estatus', 'completa')
             ->where(function($q) use ($hoy, $proximo15dias) {
                 $q->whereBetween('poliza_seguro_vencimiento', [$hoy->toDateString(), $proximo15dias->toDateString()])
@@ -320,10 +320,11 @@ class PanelController extends Controller
                 continue;
             }
 
+            $nombreVehiculo = trim("{$vehiculo->marca} {$vehiculo->modelo}");
             $mensajeCorto = $diasMinimo === 0
-                ? "Vehículo {$vehiculo->placa} vence hoy"
-                : "Vehículo {$vehiculo->placa} vence en {$diasMinimo} días";
-            $mensajeLargo = "La documentación del vehículo {$vehiculo->placa} ({$vehiculo->marca}) está próxima a vencer.";
+                ? "Vehículo {$nombreVehiculo} vence hoy"
+                : "Vehículo {$nombreVehiculo} vence en {$diasMinimo} días";
+            $mensajeLargo = "La documentación del vehículo {$nombreVehiculo} está próxima a vencer.";
 
             $existe = Notificacion::where('users_id', $userId)
                 ->where('Mensaje_Corto', $mensajeCorto)
@@ -342,8 +343,9 @@ class PanelController extends Controller
         }
 
         foreach ($documentosVencidos as $vehiculo) {
-            $mensajeCorto = "Vehículo {$vehiculo->placa} con doc. vencida";
-            $mensajeLargo = "La documentación del vehículo {$vehiculo->placa} ({$vehiculo->marca}) está vencida.";
+            $nombreVehiculo = trim("{$vehiculo->marca} {$vehiculo->modelo}");
+            $mensajeCorto = "Vehículo {$nombreVehiculo} con doc. vencida";
+            $mensajeLargo = "La documentación del vehículo {$nombreVehiculo} está vencida.";
 
             $existe = Notificacion::where('users_id', $userId)
                 ->where('Mensaje_Corto', $mensajeCorto)
