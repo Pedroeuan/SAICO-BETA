@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 
@@ -435,6 +436,8 @@ class ManifiestoController extends Controller
             $NewCliente->RFC = $EsperaDato;
             $NewCliente->Telefono = $EsperaDato;
             $NewCliente->Correo = $EsperaDato;
+            $NewCliente->Logo = $EsperaDato;
+            $NewCliente->portal_token = (string) Str::uuid();
             $NewCliente->save();
         }
 

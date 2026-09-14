@@ -1565,6 +1565,11 @@ class FOR_PIMP_06_B_01Controller extends Controller
             }
         }
 
+        // actualizarCantidad() guarda SERIE_REPORTES directamente en la base.
+        // Este modelo fue consultado antes de esa operacion; se refresca para
+        // impedir que el guardado general posterior restaure el total anterior.
+        $Reporte->refresh();
+
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
