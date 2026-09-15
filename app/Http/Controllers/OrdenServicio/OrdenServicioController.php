@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\OrdenServicio;
 
-use App\Models\OrdenServicio\Orden_Servicio;
+use App\Models\OrdenServicio\Orden_Servicio; 
+use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Reporte\reporte;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -162,6 +163,30 @@ class OrdenServicioController extends Controller
         }
 
         $OS->save();
+
+        // Decodificar el input JSON en un arreglo
+        $detallesOT = json_decode($request->input('dynamicTableData'), true);
+
+        // Comprobar si el arreglo tiene elementos antes de continuar
+        if (!empty($detallesOT)) {
+
+            // Convertir el arreglo en una cadena JSON
+            $detallesJSON = json_encode($detallesOT); 
+
+            // Crear un nuevo registro en la tabla detallesOC
+            $detallesOTModel = new Grupo_Juntas_Detalles_OS;
+
+            // Asignar el idOT
+            $detallesOTModel->idOrden_Servicio = $OS->idOrden_Servicio;
+
+            // Guardar el JSON en la columna 'Detalles'
+            $detallesOTModel->Detalles = $detallesJSON;
+
+            // Guardar el objeto en la base de datos
+            $detallesOTModel->save();
+        } else {
+            //Log::warning('No se han enviado detalles para guardar');
+        }
 
         return redirect()->route('OT_S.index')->with('success', 'Orden de servicio guardada correctamente.');
     }
