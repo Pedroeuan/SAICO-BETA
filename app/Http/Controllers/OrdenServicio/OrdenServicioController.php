@@ -78,6 +78,8 @@ class OrdenServicioController extends Controller
                 $NewCliente->Logo = $EsperaDato;
                 $NewCliente->portal_token = (string) Str::uuid();
                 $NewCliente->save();
+
+                $OS->idClientes = $NewCliente->idClientes;
             }
         }
 
