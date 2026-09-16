@@ -4,8 +4,11 @@ namespace App\Http\Controllers\OrdenServicio;
 
 use App\Models\OrdenServicio\Orden_Servicio; 
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
+use App\Models\OrdenServicio\Firmantes_OS;
+use App\Models\Clientes\clientes;
 use App\Models\Reporte\reporte;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +16,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-use App\Models\Clientes\clientes;
 
 class OrdenServicioController extends Controller
 {
@@ -62,16 +64,20 @@ class OrdenServicioController extends Controller
             ? $request->input('ClienteSelect')
             : $request->input('ClienteInput');
 
-            Log::info('***********************');
-            Log::info('clienteNombre: ', ['clienteNombre' => $clienteNombre]);
-
-
         if (!empty($clienteNombre)) {
             $cliente = clientes::where('Cliente', trim($clienteNombre))->first();
             Log::info('cliente: ', ['cliente' => $cliente]);
             if ($cliente) {
                 $OS->idClientes = $cliente->idClientes;
-                Log::info('$cliente->idClientes: ', ['$cliente->idClientes' => $cliente->idClientes]);
+            }else {
+                $NewCliente = new clientes();
+                $NewCliente->Cliente = $clienteNombre;
+                $NewCliente->RFC = $EsperaDato;
+                $NewCliente->Telefono = $EsperaDato;
+                $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
+                $NewCliente->save();
             }
         }
 
@@ -199,6 +205,29 @@ class OrdenServicioController extends Controller
         } else {
             //Log::warning('No se han enviado detalles para guardar');
         }
+
+        // Crear un nuevo registro en la firmantes_OS
+        $firmantes_OS = new Firmantes_OS;
+
+        /*Firmas */
+        // Guardar las firmas
+        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
+        
+        if ($numFirmas == 1) {
+            $firmantes_OS->Firmas = json_encode(['Firmas_Reportes1']);
+        }
+        else if ($numFirmas == 2) {
+            $firmantes_OS->Firmas = json_encode(['Firmas_Reportes2']);
+        }
+        else if ($numFirmas == 3) {
+            $firmantes_OS->Firmas = json_encode(['Firmas_Reportes3']);
+        }
+        else{
+            $firmantes_OS->Firmas = json_encode(['Firmas_Reportes4']);
+        }
+
+        $firmantes_OS->idOrden_Servicio = $OS->idOrden_Servicio;
+        $firmantes_OS->save();
 
         return redirect()->route('OT_S.index')->with('success', 'Orden de servicio guardada correctamente.');
     }
