@@ -44,9 +44,9 @@ class OrdenServicioController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-        
+
         $request->validate([
-            'Cliente' => 'required|integer',
+            'TieneCliente' => 'required|in:si,no',
             'Contrato' => 'required|string',
             'Proyecto' => 'required|string',
             'Lugar' => 'required|string',
@@ -54,13 +54,25 @@ class OrdenServicioController extends Controller
 
         $OS = new Orden_Servicio;
         $EsperaDato ='ESPERA DE DATO';
+
         // ==========================
         // Lógica para manejar Cliente
         // ==========================
-        if ($request->TieneCliente === 'si') {
-            $validatedData['Cliente'] = $request->ClienteSelect;
-        } else {
-            $validatedData['Cliente'] = $request->ClienteInput;
+        $clienteNombre = $request->input('TieneCliente') === 'si'
+            ? $request->input('ClienteSelect')
+            : $request->input('ClienteInput');
+
+            Log::info('***********************');
+            Log::info('clienteNombre: ', ['clienteNombre' => $clienteNombre]);
+
+
+        if (!empty($clienteNombre)) {
+            $cliente = clientes::where('Cliente', trim($clienteNombre))->first();
+            Log::info('cliente: ', ['cliente' => $cliente]);
+            if ($cliente) {
+                $OS->idClientes = $cliente->idClientes;
+                Log::info('$cliente->idClientes: ', ['$cliente->idClientes' => $cliente->idClientes]);
+            }
         }
 
         if($request->input('Fecha')==null)
@@ -117,9 +129,9 @@ class OrdenServicioController extends Controller
 
         if($request->input('Proyecto')==null)
         {
-            $OS->Proyecto = $EsperaDato;
+            $OS->Proyecto_actividad = $EsperaDato;
         }else{
-            $OS->Proyecto = $request->input('Proyecto');
+            $OS->Proyecto_actividad = $request->input('Proyecto');
         }
 
         if($request->input('Material')==null)
@@ -179,8 +191,8 @@ class OrdenServicioController extends Controller
             // Asignar el idOT
             $detallesOTModel->idOrden_Servicio = $OS->idOrden_Servicio;
 
-            // Guardar el JSON en la columna 'Detalles'
-            $detallesOTModel->Detalles = $detallesJSON;
+            // Guardar el JSON en la columna real del modelo
+            $detallesOTModel->Juntas_grupo = $detallesJSON;
 
             // Guardar el objeto en la base de datos
             $detallesOTModel->save();
