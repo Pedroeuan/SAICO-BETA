@@ -211,23 +211,18 @@ class OrdenServicioController extends Controller
         // Crear un nuevo registro en la firmantes_OS
         $firmantes_OS = new Firmantes_OS;
 
-        /*Firmas */
-        // Guardar las firmas
-        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
-        
-        if ($numFirmas == 1) {
-            $firmantes_OS->Firmas = json_encode(['Firmas_Reportes1']);
-        }
-        else if ($numFirmas == 2) {
-            $firmantes_OS->Firmas = json_encode(['Firmas_Reportes2']);
-        }
-        else if ($numFirmas == 3) {
-            $firmantes_OS->Firmas = json_encode(['Firmas_Reportes3']);
-        }
-        else{
-            $firmantes_OS->Firmas = json_encode(['Firmas_Reportes4']);
-        }
+        /* Firmas */
+        $numFirmas = (int) $request->input('numFirmas', 1);
+        $firmasPorCantidad = [
+            1 => $request->input('Firmas_Reportes1', []),
+            2 => $request->input('Firmas_Reportes2', []),
+            3 => $request->input('Firmas_Reportes3', []),
+            4 => $request->input('Firmas_Reportes4', []),
+        ];
 
+        $datosFirmas = $firmasPorCantidad[$numFirmas] ?? [];
+        $datosFirmas['numFirmas'] = $numFirmas;
+        $firmantes_OS->Firmas = json_encode($datosFirmas);
         $firmantes_OS->idOrden_Servicio = $OS->idOrden_Servicio;
         $firmantes_OS->save();
 
