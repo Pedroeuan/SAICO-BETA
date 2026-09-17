@@ -1288,7 +1288,7 @@ class FOR_PINS_03_02Controller extends Controller
             /*Titulos Juntas */
             //'titulos' => 'nullable|array',  // Asegura que sea un array
             //'titulos.*' => 'string',  // Cada título debe ser un string válido
-    
+
             /* Resultados Juntas */
             'titulos_data' => 'nullable|string', // JSON con [{id,text},...]
             'no' => 'nullable|array',
