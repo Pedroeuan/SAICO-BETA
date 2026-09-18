@@ -246,10 +246,12 @@ class OrdenServicioController extends Controller
         $OT = Orden_Servicio::where('idOrden_Servicio', $id)->first();
         $detallesOS = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio',$OT->idOrden_Servicio)->first(); 
 
+        $idCliente = $OT->idClientes;
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
-        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
+        $Cliente = clientes::where('idClientes', $idCliente)->first(); 
+        $Nombre_Cliente = $Cliente->Cliente;
 
-        return view('OT_S.edit', compact('id','OT','detallesOS','Clientes'));
+        return view('OT_S.edit', compact('id','OT','detallesOS','Cliente','idCliente','Nombre_Cliente'));
 
     }
 

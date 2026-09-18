@@ -62,17 +62,17 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">¿Cliente existente?</label>
-                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OT->Contrato}}" readonly>
+                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $Nombre_Cliente}}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha</label>
-                                                @if($OT->Fecha_solicitud == '2001-01-01')
-                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud">
+                                                @if($OT->Fecha == '2001-01-01')
+                                                    <input type="date" class="form-control inputForm" name="Fecha">
                                                 @else
-                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ $OT->Fecha_solicitud }}">
+                                                    <input type="date" class="form-control inputForm" name="Fecha" value="{{ $OT->Fecha }}">
                                             @endif
                                         </div>
                                     </div>
@@ -97,7 +97,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Proyecto" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Proyecto')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Proyecto" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{ $OT->Proyecto_actividad }}</textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -107,7 +107,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Material</label>
-                                            <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Material"  placeholder="Ejemplo:  " value="{{old('Material')}}">
+                                            <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Material"  placeholder="Ejemplo:  " value="{{ $OT->Material }}">
                                             @error('Material')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -117,7 +117,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Isometrico/Plano</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Plano_isometrico" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{old('Plano_isometrico')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Plano_isometrico" placeholder="Ejemplo: D-7205-TENTOK-A-Q-200 / D-7205-TENTOK-A-Q-201 / D-7205-TENTOK-A-Q-202 / D-7205-TENTOK-A-Q-203 / D-7205-TENTOK-A-Q-204 / D-7205-TENTOK-A-Q-205 /D-7205-TENTOK-A-Q-206 / D-7205-TENTOK-A-Q-207 / D-7205-TENTOK-A-Q-208 / D-7205-TENTOK-A-Q-209 . . . .">{{ $OT->Plano_isometrico }}</textarea>
                                             @error('Plano_isometrico')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -131,6 +131,21 @@
                                             @if ($errors->any())
                                                 <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
                                             @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @if ($OT->OT_archivo === 'ESPERA DE DATOS' || $OT->OT_archivo === 'ESPERA DE DATO')
+                                            <label class="col-form-label" for="inputSuccess">No se encontro Orden de Trabajo</label>                                              
+                                                <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                                 
+                                            @else
+                                            
+                                                <label class="col-form-label" for="inputSuccess">Ver Orden de Trabajo Actual</label>  
+                                                <div>                                            
+                                                    <a href="{{ asset('storage/' . $OT->OT_archivo) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                                                                     
+                                                </div>
+                                            @endif 
                                         </div>
                                     </div>
 

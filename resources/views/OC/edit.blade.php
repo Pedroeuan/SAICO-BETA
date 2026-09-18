@@ -106,7 +106,6 @@
                                         </div>
                                     </div>
 
-                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha</label>
@@ -139,10 +138,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             @if ($OC->OC_archivo === 'ESPERA DE DATOS' || $OC->OC_archivo === 'ESPERA DE DATO')
-                                            <label class="col-form-label" for="inputSuccess">No se encontraron Certificados</label>                                              
+                                            <label class="col-form-label" for="inputSuccess">No se encontro Orden de Compra</label>                                              
                                                 <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                                 
                                             @else
-                                            <!-- Agrega esto en tu archivo de vista Equipos.edit --> 
+                                            
                                                 <label class="col-form-label" for="inputSuccess">Ver Orden de Compra Actual</label>  
                                                 <div>                                            
                                                     <a href="{{ asset('storage/' . $OC->OC_archivo) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                                                                     
