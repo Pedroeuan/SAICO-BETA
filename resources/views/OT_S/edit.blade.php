@@ -65,7 +65,7 @@
                                             <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OT->Contrato}}" readonly>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha</label>
@@ -91,6 +91,7 @@
                                         <div class="form-group">
                                             <label class="col-form-label">¿Contrato existente?</label>
                                         <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OT->Contrato}}" readonly>
+                                        </div>
                                     </div>
 
                                     <div class="col-sm-4">
