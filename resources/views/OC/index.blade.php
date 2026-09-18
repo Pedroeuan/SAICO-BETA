@@ -62,7 +62,7 @@
                         @endif
                         <td>{{ $OCS->Tipo_servicio }}</td>
                         <td>{{ $OCS->Estatus }}</td>
-                        @if($OCS->OC_archivo == 'ESPERA DE DATO')
+                        @if($OCS->OC_archivo == 'ESPERA DE DATO' || $OCS->OC_archivo == 'ESPERA DE DATOS')
                                 <td>
                                     <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                 </td>

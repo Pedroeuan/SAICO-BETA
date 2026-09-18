@@ -133,7 +133,6 @@
                                             @endif
                                         </div>
                                     </div>
-
                                     
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -171,7 +170,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
+                                            @foreach($detallesOC as $indice => $detalle)
+                                                <tr>
+                                                    <td>{{ $indice + 1 }}</td>
+                                                    <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
+                                                    <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad" value="{{ $detalle['cantidad'] ?? '' }}"></td>
+                                                    <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion">{{ $detalle['descripcion'] ?? '' }}</textarea></td>
+                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                     
@@ -215,141 +222,9 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/OC_edit.js') }}"></script>
 <script>
-    /*Prevenir el Enter*/
-    document.getElementById('OC').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
 
-    /*TRAE LOS DATOS DE DETALLES_OC*/
-       const detallesOC = @json($detallesOC); // Convertir en un arreglo JSON para JavaScript
-    //console.log(detallesOC); // Verifica la estructura aquí
-
-    document.addEventListener('DOMContentLoaded', function () {
-    const tableBody = document.querySelector("#dynamicTable tbody");
-
-    // Iterar sobre cada detalle y agregarlo a la tabla
-    detallesOC.forEach((detalle, index) => {
-            const newRow = document.createElement("tr");
-
-            // Celda 1: Número de fila
-            const cell1 = document.createElement("td");
-            cell1.textContent = index + 1; // Índice basado en 1
-            newRow.appendChild(cell1);
-
-            const cell2 = document.createElement("td");
-            const unidadInput = document.createElement("input");
-            unidadInput.type = "text";
-            unidadInput.value = detalle.unidad; // Obtiene 'unidad' del JSON
-            unidadInput.className = "form-control"; // Añadir clase de Bootstrap
-            unidadInput.name = "unidad[]"; // Añadir nombre para el input
-            unidadInput.placeholder = "Unidad/Medida"; // Añadir placeholder
-            cell2.appendChild(unidadInput);
-            newRow.appendChild(cell2);
-
-            const cell3 = document.createElement("td");
-            const cantidadInput = document.createElement("input");
-            cantidadInput.type = "number";
-            cantidadInput.value = detalle.cantidad; // Obtiene 'cantidad' del JSON
-            cantidadInput.className = "form-control"; // Añadir clase de Bootstrap
-            cantidadInput.name = "cantidad[]"; // Añadir nombre para el input
-            cantidadInput.placeholder = "Cantidad"; // Añadir placeholder
-            cell3.appendChild(cantidadInput);
-            newRow.appendChild(cell3);
-
-
-            const cell4 = document.createElement("td");
-            const descripcionInput = document.createElement("textarea");
-            descripcionInput.value = detalle.descripcion; // Obtiene 'descripcion' del JSON
-            descripcionInput.className = "form-control"; // Añadir clase de Bootstrap
-            descripcionInput.name = "descripcion[]"; // Añadir nombre para el textarea
-            descripcionInput.placeholder = "Descripcion"; // Añadir placeholder
-            cell4.appendChild(descripcionInput);
-            newRow.appendChild(cell4);
-
-
-            const cell5 = document.createElement("td");
-            const deleteBtn = document.createElement("button");
-            deleteBtn.type = "button";
-            deleteBtn.className = "btn btn-danger btnEliminar";
-            deleteBtn.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>';
-
-            deleteBtn.addEventListener("click", function () {
-                tableBody.removeChild(newRow);
-            });
-
-            cell5.appendChild(deleteBtn);
-            newRow.appendChild(cell5);
-
-            // Agregar la fila al cuerpo de la tabla
-            tableBody.appendChild(newRow);
-        });
-        
-        let rowCount = tableBody.rows.length; // Inicializar con el número de filas existentes
-        //console.log(rowCount);
-
-        $(document).ready(function() {
-            var rowCount = $('#dynamicTable tbody tr').length; // Inicializar con el número de filas existentes
-            //console.log(rowCount);
-
-            function updateRowNumbers() {
-                $('#dynamicTable tbody tr').each(function(index) {
-                    $(this).find('td:first').text(index + 1);
-                });
-                rowCount = $('#dynamicTable tbody tr').length; // Actualizar rowCount
-            }
-
-            $('#addRowBtn').click(function() {
-            rowCount++;
-            var newRow = `<tr>
-                <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
-                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
-                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
-                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-            </tr>`;
-            $('#dynamicTable tbody').append(newRow);
-        });
-
-            $('#dynamicTable').on('click', '.btnEliminar', function() {
-                $(this).closest('tr').remove();
-                updateRowNumbers();
-            });
-        });
-    });
-
-    
-
-
-    document.getElementById('OC').addEventListener('submit', function(e) {
-            const tableBody = document.querySelector("#dynamicTable tbody");
-            const rows = tableBody.querySelectorAll("tr");
-            const tableData = [];
-
-            rows.forEach(row => {
-                const unidadElement = row.querySelector('td:nth-child(2) input');
-                const cantidadElement = row.querySelector('td:nth-child(3) input');
-                const descripcionElement = row.querySelector('td:nth-child(4) textarea');
-
-
-                const unidad = unidadElement ? unidadElement.value : 'ESPERA DE DATO';
-                const cantidad = cantidadElement ? cantidadElement.value : 'ESPERA DE DATO';
-                const descripcion = descripcionElement ? descripcionElement.value : 'ESPERA DE DATO';
-
-                // Añadir los datos de la fila al array
-                tableData.push({
-                    unidad: unidad,
-                    cantidad: cantidad,
-                    descripcion: descripcion
-                });
-                
-            });
-
-            // Convertir el array a JSON y asignarlo al campo oculto
-            document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
-        });
 
     </script>
 @endsection
