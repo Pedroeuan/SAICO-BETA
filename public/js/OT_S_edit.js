@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $(document).ready(function() {
-        var rowCount = 0;
+        var rowCount = $('#dynamicTable tbody tr').length;
 
         function updateRowNumbers() {
             $('#dynamicTable tbody tr').each(function(index) {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
-                <td><textarea class="form-control" name="Descripcion[]" placeholder="Descripción/Actividades"></textarea></td>
+                <td><input type="text" class="form-control" name="descripcion[]" placeholder="Descripción/Actividades"></td>
                 <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad"></td>
                 <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
                 <td><textarea class="form-control" name="procesos[]" placeholder="Procesos"></textarea></td>
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const tableData = [];
 
             rows.forEach(row => {
-                const descripcion = row.querySelector("textarea[name='Descripcion[]']").value;
+                const descripcion = row.querySelector("[name='descripcion[]']").value;
                 const unidad = row.querySelector("input[name='unidad[]']").value;
                 const cantidad = row.querySelector("input[name='cantidad[]']").value;
                 const procesos = row.querySelector("textarea[name='procesos[]']").value;

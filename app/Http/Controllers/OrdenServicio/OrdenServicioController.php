@@ -317,27 +317,13 @@ class OrdenServicioController extends Controller
             $OS->save();
         }
 
-        // Decodificar el input JSON en un arreglo
-        $detallesOT = json_decode($request->input('dynamicTableData'), true);
-
-        // Comprobar si el arreglo tiene elementos antes de continuar
-        if (!empty($detallesOT)) {
-
-            // Convertir el arreglo en una cadena JSON
-            $detallesJSON = json_encode($detallesOT); 
-
-            // Crear un nuevo registro en la tabla detallesOC
-            $detallesOTModel = new Grupo_Juntas_Detalles_OS;
-
-            // Asignar el idOC
-            $detallesOTModel = Grupo_Juntas_Detalles_OS::find($id);
-
-            $detallesOTModel->update([
-                'Detalles' =>  $detallesJSON,
-            ]);
-        } else {
-            //Log::warning('No se han enviado detalles para guardar');
-        }
+        // Reemplazar todos los detalles de la orden, incluso cuando se eliminaron todas las filas.
+        $detallesOT = json_decode($request->input('dynamicTableData', '[]'), true) ?: [];
+        $detallesOTModel = Grupo_Juntas_Detalles_OS::firstOrNew([
+            'idOrden_Servicio' => $OS->idOrden_Servicio,
+        ]);
+        $detallesOTModel->Juntas_grupo = json_encode($detallesOT);
+        $detallesOTModel->save();
 
         // Buscar las firmas por la orden de servicio; $id no es la clave primaria de Firmantes_OS.
         $firmantes_OS = Firmantes_OS::firstOrNew([
