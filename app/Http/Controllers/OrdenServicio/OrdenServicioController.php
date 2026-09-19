@@ -349,8 +349,51 @@ class OrdenServicioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Orden_Servicio $orden_Servicio)
+    public function destroy($id)
     {
-        //
+        // Encontrar la OT
+        $OT = Orden_Servicio::find($id);    
+        if (!$OT) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Orden de Servicio no encontrada',
+            ], 404);
+        }
+
+        // Encontrar las Firmas de la OT
+        $FirmasOT = Firmantes_OS::where('idOrden_Servicio', $OT->idOrden_Servicio)->first();
+        // Encontrar los detalles de la OT
+        $detallesOT = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $OT->idOrden_Servicio)->first();
+
+        // Eliminar el archivo asociado desde storage/app/public/Ventas/OC.
+        if ($OT->OT_archivo && Storage::disk('public')->exists($OT->OT_archivo)) {
+            Storage::disk('public')->delete($OT->OT_archivo);
+        }
+        
+        if($FirmasOT)
+        {
+            $FirmasOT->delete();
+        }
+
+        if($detallesOT)
+        {
+            $detallesOT->delete();
+        }
+
+        if($OT)
+        {
+            $OT->delete();
+        }
+        
+         // Responder con éxito
+        return response()->json(['success' => true, 'message' => 'Orden de Servicio eliminada exitosamente']);
+    }
+
+    /**
+     * PDF de la orden de servicio de AICO
+     */
+    public function OT_S_PDF($id)
+    {
+
     }
 }

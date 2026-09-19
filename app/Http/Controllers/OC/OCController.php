@@ -300,11 +300,25 @@ class OCController extends Controller
     public function destroy($id)
     {
         $OC = OC::find($id);
-        // Eliminar los detalles de la OC
-        $detallesOC = detallesOC::where('idOC', $OC->idOC)->get();
-        foreach ($detallesOC as $detalle) {
-            $detalle->delete();  // Eliminar cada detalle individualmente
+
+        if (!$OC) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Orden de compra no encontrada',
+            ], 404);
         }
+
+        // Eliminar el archivo asociado desde storage/app/public/Ventas/OC.
+        if ($OC->OC_archivo && Storage::disk('public')->exists($OC->OC_archivo)) {
+            Storage::disk('public')->delete($OC->OC_archivo);
+        }
+
+        // Eliminar los detalles de la OC
+        $detallesOC = detallesOC::where('idOC', $OC->idOC)->first();
+        if($detallesOC)
+            {
+                $detallesOC->delete();
+            }
         $OC->delete();
          // Responder con éxito
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);

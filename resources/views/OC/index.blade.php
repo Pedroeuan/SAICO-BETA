@@ -168,7 +168,7 @@ let table = new DataTable('#tablaJs', {
                         }
                     },
                     error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo eliminar la OC puede que este relacionado a un registro, consultar al Administrador.", "error");
                     }
                 });
             } else if (result.isDenied) {
