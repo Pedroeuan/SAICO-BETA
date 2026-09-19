@@ -48,6 +48,6 @@ class reporte extends Model
     // Relación uno a muchos con Comentarios_Reporte
     public function comentariosHistorial()
     {
-        return $this->hasMany(ComentarioReporte::class, 'idReportes', 'idReportes')->orderBy('created_at', 'desc');
+        return $this->hasMany(ComentarioReporte::class, 'idReportes', 'idReportes')->orderBy('created_at');
     }
 }

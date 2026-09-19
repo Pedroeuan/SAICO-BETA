@@ -18,6 +18,8 @@ class Notificacion extends Model
         'created_at',
         'updated_at',
         'leida',
+        'preview_shown_at',
+        'prioridad',
     ];
     protected $table = 'notificaciones';
     protected $primaryKey = 'idNotificaciones';
