@@ -55,14 +55,14 @@
                 <section class="content">
                     <div class="card">
                         <div class="card-body row">
-                            <form id="OT_SForm" action="{{route('OT_S.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="OT_SForm" action="{{ route('editOT_S.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
 
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label">¿Cliente existente?</label>
-                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $Nombre_Cliente}}" readonly>
+                                            <label class="col-form-label">Cliente</label>
+                                            <input type="text" class="form-control inputForm" name="Cliente" placeholder="Ejemplo: 640853841" value="{{ $Nombre_Cliente}}" readonly>
                                         </div>
                                     </div>
 
@@ -89,7 +89,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label">¿Contrato existente?</label>
+                                            <label class="col-form-label">Contrato</label>
                                         <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OT->Contrato}}" readonly>
                                         </div>
                                     </div>
@@ -174,7 +174,7 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Descrpción/Actividades</th>
+                                                <th>Descripción/Actividades</th>
                                                 <th>Unidad</th>
                                                 <th>Cantidad</th>
                                                 <th>Procesos</th>
@@ -182,7 +182,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Filas dinámicas aparecerán aquí -->
+                                            @foreach($detallesOT as $indice => $detalle)
+                                                <tr>
+                                                    <td>{{ $indice + 1 }}</td>
+                                                    <td><input type="text" class="form-control" name="descripcion[]" placeholder="Descripción/Actividades" value="{{ $detalle['descripcion'] ?? '' }}"></td>
+                                                    <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
+                                                    <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad" value="{{ $detalle['cantidad'] ?? '' }}"></td>
+                                                    <td><textarea class="form-control" name="procesos[]" placeholder="Procesos">{{ $detalle['procesos'] ?? '' }}</textarea></td>
+                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                     <p>
@@ -191,11 +200,14 @@
                                         <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
                                         <div class="col-sm-12">
                                             <div class="form-group">
+                                                @php
+                                                    //dd($numFirmas);
+                                                @endphp
                                                 <select class="form-select text-center" id="numFirmas" name="numFirmas">
-                                                    <option value="1">1 Firma</option>
-                                                    <option value="2">2 Firmas</option>
-                                                    <option value="3">3 Firmas</option>
-                                                    <option value="4">4 Firmas</option>
+                                                    <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
+                                                    <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
+                                                    <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
+                                                    <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -205,7 +217,7 @@
                                             <table class="table table-bordered table-striped dt-responsive tablas">
                                                 <thead>
                                                     <tr>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="{{ $Firmas['Realizo'] ?? '' }}"></th>
                                                     </tr>
 
                                                     <tr>
@@ -213,11 +225,11 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO1')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO1'] ?? '' }}"></td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[CARGO1]" placeholder="Ejemplo: CARGO" value="{{old('CARGO1')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[CARGO1]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO1'] ?? '' }}"></td>
                                                     </tr>
 
                                                     {{--<tr>
@@ -233,9 +245,9 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="{{ $Firmas['Realizo'] ?? '' }}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo1'] ?? '' }}"></th>
 
                                                     </tr>
 
@@ -248,16 +260,16 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="ING. JORGE ROGELIO MOO OROPEZA"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO1'] ?? 'ING. JORGE ROGELIO MOO OROPEZA' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO2]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="ING. CESAR E. GARDUÑO ACOSTA"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO2]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO2'] ?? 'ING. CESAR E. GARDUÑO ACOSTA' }}"></td>
                                                     </tr>
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO1]" placeholder="Ejemplo: CARGO" value="Responsable del Proceso de Ventas"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO1]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO1'] ?? 'Responsable del Proceso de Ventas' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO2]" placeholder="Ejemplo: CARGO" value="Director General"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO2]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO2'] ?? 'Director General' }}"></td>
                                                     </tr>
 
                                                     {{--<tr>
@@ -276,11 +288,11 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="{{ $Firmas['Realizo'] ?? '' }}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo1'] ?? '' }}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo2'] ?? '' }}"></th>
 
                                                     </tr>
 
@@ -296,21 +308,21 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO1')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO1'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO2]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO2')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO2]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO2'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO3]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_ENCARGADO3')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO3]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO3'] ?? '' }}"></td>
 
                                                     </tr>
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO1]" placeholder="Ejemplo: CARGO" value="{{old('CARGO1')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO1]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO1'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO2]" placeholder="Ejemplo: CARGO" value="{{old('CARGO2')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO2]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO2'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO3]" placeholder="Ejemplo: CARGO" value="{{old('CARGO3')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO3]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO3'] ?? '' }}"></td>
 
                                                     </tr>
 
@@ -332,13 +344,13 @@
                                                 <thead>
                                                     <tr>
 
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="{{ $Firmas['Realizo'] ?? '' }}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo1'] ?? '' }}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vo.Bo." value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo2'] ?? '' }}"></th>
                                                         <td style="width: 30px;"></td>
-                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vo.Bo." value=""></th>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo3'] ?? '' }}"></th>
 
                                                     </tr>
 
@@ -356,25 +368,25 @@
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO1')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO1'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO2]" placeholder="NOMBRE DEL ENCARGADO" value="{{old('NOMBRE_ENCARGADO2')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO2]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO2'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO3]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{old('NOMBRE_ENCARGADO3')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO3]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO3'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO4]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{old('NOMBRE_ENCARGADO4')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO4]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO4'] ?? '' }}"></td>
 
                                                     </tr>
 
                                                     <tr>
 
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO1]" placeholder="CARGO" value="{{old('CARGO1')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO1]" placeholder="CARGO" value="{{ $Firmas['CARGO1'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO2]" placeholder="CARGO" value="{{old('CARGO2')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO2]" placeholder="CARGO" value="{{ $Firmas['CARGO2'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO3]" placeholder="CARGO" value="{{old('CARGO3')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO3]" placeholder="CARGO" value="{{ $Firmas['CARGO3'] ?? '' }}"></td>
                                                         <td></td>
-                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO4]" placeholder="CARGO" value="{{old('CARGO4')}}"></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO4]" placeholder="CARGO" value="{{ $Firmas['CARGO4'] ?? '' }}"></td>
 
                                                     </tr>
 
@@ -433,134 +445,5 @@
 <script src="{{ asset('js/notificaciones.js') }}"></script>
 <script src="{{ asset('js/OT_S_edit.js') }}"></script>
 <script>
-
-    /*Prevenir el Enter*/
-    document.getElementById('OT_SForm').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
-
-    $(document).ready(function() {
-        var rowCount = 0;
-
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
-        }
-
-        $('#addRowBtn').click(function() {
-            rowCount++;
-            var newRow = `<tr>
-                <td>${rowCount}</td>
-                <td><textarea class="form-control" name="Descripcion[]" placeholder="Descripción/Actividades"></textarea></td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad"></td>
-                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
-                <td><textarea class="form-control" name="procesos[]" placeholder="Procesos"></textarea></td>
-                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-            </tr>`;
-            $('#dynamicTable tbody').append(newRow);
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-    });
-        document.getElementById('OT_SForm').addEventListener('submit', function(e) {
-            const tableBody = document.querySelector("#dynamicTable tbody");
-            const rows = tableBody.querySelectorAll("tr");
-            const tableData = [];
-
-            rows.forEach(row => {
-                const descripcion = row.querySelector("textarea[name='Descripcion[]']").value;
-                const unidad = row.querySelector("input[name='unidad[]']").value;
-                const cantidad = row.querySelector("input[name='cantidad[]']").value;
-                const procesos = row.querySelector("textarea[name='procesos[]']").value;
-
-                // Añadir los datos de la fila al array
-                tableData.push({
-                    descripcion: descripcion,
-                    unidad: unidad,
-                    cantidad: cantidad,
-                    procesos: procesos
-                });
-            });
-
-        // Convertir el array a JSON y asignarlo al campo oculto
-            document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
-        });
-
-
-    /*Selección de Firmas */
-    document.addEventListener('DOMContentLoaded', function() {
-    const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
-    const numFirmasSelect = document.getElementById('numFirmas');
-    const firmas1 = document.getElementById('firmas1');
-    const firmas2 = document.getElementById('firmas2');
-    const firmas3 = document.getElementById('firmas3');
-    const firmas4 = document.getElementById('firmas4');
-
-
-    //numFirmasSelect.value = numFirmasLocal;
-
-    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
-    
-    numFirmasSelect.addEventListener('change', function() {
-        if (this.value == '1') {
-            firmas1.style.display = 'block';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        }
-        else if (this.value == '2') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'block';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'none';
-        }
-        else if (this.value == '3') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'block';
-            firmas4.style.display = 'none';
-        } else if (this.value == '4') {
-            firmas1.style.display = 'none';
-            firmas2.style.display = 'none';
-            firmas3.style.display = 'none';
-            firmas4.style.display = 'block';
-        }
-    });
-
-    // Inicializar la visibilidad de las secciones de firmas
-    if (numFirmasSelect.value == '1') {
-        firmas1.style.display = 'block';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'none';
-    }
-    else if (numFirmasSelect.value == '2') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'block';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'none';
-    }
-    else if (numFirmasSelect.value == '3') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'block';
-        firmas4.style.display = 'none';
-    } else if (numFirmasSelect.value == '4') {
-        firmas1.style.display = 'none';
-        firmas2.style.display = 'none';
-        firmas3.style.display = 'none';
-        firmas4.style.display = 'block';
-    }
-    });
-
-        //AGREGAR LOCALSTORAGE
-
-    </script>
+</script>
 @endsection

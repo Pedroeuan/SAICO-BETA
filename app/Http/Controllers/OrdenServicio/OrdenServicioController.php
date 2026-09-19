@@ -46,7 +46,6 @@ class OrdenServicioController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-
         $request->validate([
             'TieneCliente' => 'required|in:si,no',
             'Contrato' => 'required|string',
@@ -251,16 +250,114 @@ class OrdenServicioController extends Controller
         $Cliente = clientes::where('idClientes', $idCliente)->first(); 
         $Nombre_Cliente = $Cliente->Cliente;
 
-        return view('OT_S.edit', compact('id','OT','detallesOS','Cliente','idCliente','Nombre_Cliente'));
+        $detallesOT = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio',$OT->idOrden_Servicio)->first();
+
+        // Decodificar JSON de la columna 'Detalles'
+        $detallesOT = $detallesOT ? json_decode($detallesOT->Juntas_grupo, true) : [];
+
+        $Firmantes = Firmantes_OS::where('idOrden_Servicio',$OT->idOrden_Servicio)->first();
+
+        // Decodificar JSON de la columna 'Detalles'
+        $Firmas = $Firmantes ? json_decode($Firmantes->Firmas, true) : [];
+        // Obtener el numero de firmas
+        $numFirmas = $Firmas['numFirmas'] ?? 1;
+
+        //dd($numFirmas);
+
+        return view('OT_S.edit', compact('id','OT','detallesOS','Cliente','idCliente','Nombre_Cliente','detallesOT','numFirmas','Firmas'));
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Orden_Servicio $orden_Servicio)
+    public function update(Request $request, $id)
     {
-        //
+
+        $OS = Orden_Servicio::find($id);
+        //$EsperaDato ='ESPERA DE DATO';
+
+        $OS->update([
+            'Fecha' => $request->input('Fecha'),
+            'Lugar' => $request->input('Lugar'),
+            'Proyecto_actividad' => $request->input('Proyecto'),
+            'Material' => $request->input('Material'),
+            'Plano_isometrico' => $request->input('Plano_isometrico'),
+        ]);
+
+
+        // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
+        if ($request->hasFile('OT_archivo') && $request->file('OT_archivo')->isValid()) {
+            // Obtener la ruta del archivo anterior desde la base de datos
+            $rutaAnterior = $OS->OT_archivo;
+            // Verificar si existe una ruta anterior y eliminar el archivo correspondiente
+            if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                Storage::disk('public')->delete($rutaAnterior);
+            }
+            // Guardar el nuevo archivo PDF
+            $pdf = $request->file('OT_archivo');
+            // Obtener el último número consecutivo
+            $lastFile = collect(Storage::disk('public')->files('Operativo/OT'))
+                ->filter(function ($file) {
+                    return preg_match('/^\d+_/', basename($file));
+                })
+                ->sort()
+                ->last();
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int)explode('_', basename($lastFile))[0];
+            }
+            // Incrementar el número consecutivo
+            $newNumber = $lastNumber + 1;
+            $newFileNameOT = $newNumber . '_' . $pdf->getClientOriginalName();
+            
+            $pdfPath = $pdf->storeAs('Operativo/OT', $newFileNameOT, 'public');
+            // Actualizar la ruta de la OT_archivo en la base de datos
+            $OS->OT_archivo = $pdfPath;
+            $OS->save();
+        }
+
+        // Decodificar el input JSON en un arreglo
+        $detallesOT = json_decode($request->input('dynamicTableData'), true);
+
+        // Comprobar si el arreglo tiene elementos antes de continuar
+        if (!empty($detallesOT)) {
+
+            // Convertir el arreglo en una cadena JSON
+            $detallesJSON = json_encode($detallesOT); 
+
+            // Crear un nuevo registro en la tabla detallesOC
+            $detallesOTModel = new Grupo_Juntas_Detalles_OS;
+
+            // Asignar el idOC
+            $detallesOTModel = Grupo_Juntas_Detalles_OS::find($id);
+
+            $detallesOTModel->update([
+                'Detalles' =>  $detallesJSON,
+            ]);
+        } else {
+            //Log::warning('No se han enviado detalles para guardar');
+        }
+
+        // Buscar las firmas por la orden de servicio; $id no es la clave primaria de Firmantes_OS.
+        $firmantes_OS = Firmantes_OS::firstOrNew([
+            'idOrden_Servicio' => $OS->idOrden_Servicio,
+        ]);
+        /* Firmas */
+        $numFirmas = (int) $request->input('numFirmas', 1);
+        $firmasPorCantidad = [
+            1 => $request->input('Firmas_Reportes1', []),
+            2 => $request->input('Firmas_Reportes2', []),
+            3 => $request->input('Firmas_Reportes3', []),
+            4 => $request->input('Firmas_Reportes4', []),
+        ];
+
+        $datosFirmas = $firmasPorCantidad[$numFirmas] ?? [];
+        $datosFirmas['numFirmas'] = $numFirmas;
+        $firmantes_OS->Firmas = json_encode($datosFirmas);
+        $firmantes_OS->save();
+
+        return redirect()->route('OT_S.index')->with('success', 'Orden de servicio guardada correctamente.');
     }
 
     /**

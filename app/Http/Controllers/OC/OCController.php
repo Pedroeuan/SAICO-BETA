@@ -272,10 +272,24 @@ class OCController extends Controller
         // Decodificar el input JSON en un arreglo
         $detallesOC = json_decode($request->input('dynamicTableData'), true);
 
-        // Guardar también una tabla vacía para eliminar detalles anteriores.
-        $detallesOCModel = detallesOC::firstOrNew(['idOC' => $OC->idOC]);
-        $detallesOCModel->Detalles = json_encode($detallesOC ?: []);
-        $detallesOCModel->save();
+        // Comprobar si el arreglo tiene elementos antes de continuar
+        if (!empty($detallesOC)) {
+
+            // Convertir el arreglo en una cadena JSON
+            $detallesJSON = json_encode($detallesOC); 
+
+            // Crear un nuevo registro en la tabla detallesOC
+            $detallesOCModel = new detallesOC;
+
+            // Asignar el idOC
+            $detallesOCModel = detallesOC::find($id);
+
+            $detallesOCModel->update([
+                'Detalles' =>  $detallesJSON,
+            ]);
+        } else {
+            //Log::warning('No se han enviado detalles para guardar');
+        }
 
         return redirect()->route('OC.indexOC');
     }
