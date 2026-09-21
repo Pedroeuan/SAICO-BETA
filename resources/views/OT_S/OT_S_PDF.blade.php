@@ -240,9 +240,9 @@
             <header>
                 <table class="tablaheader">
                         <tr>
-                            <th rowspan="3" style="width: 500%; font-size: 18pt;">MANIFIESTO / RESGUARDO DE EQUIPAMIENTO</th>
+                            <th rowspan="3" style="width: 500%; font-size: 15pt;">ORDEN DE SERVICIO/TRABAJO/COMPRA</th>
                             <th style="width: 90%;">Código:</th>
-                            <th style="width: 100%;">FOR-05-PRO-EQ-01</th>
+                            <th style="width: 100%;">FOR-PVEN-02</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
                         </tr>
 
@@ -511,11 +511,13 @@
 
             </footer>
 
+
             @php
-                //$porPagina = 20; // número de filas por página
-                //$chunks = $DetallesSolicitud->chunk($porPagina);
+                $porPagina = 20; // número de filas por página
+                $chunks = $detallesOT->chunk($porPagina);
+                //dd($detallesOT);
             @endphp
-            {{-- @foreach ($chunks as $pagina)
+            @foreach ($chunks as $pagina)
             <div class="content">
                 <div style="margin-bottom: 0px;"></div>
                 
@@ -523,21 +525,21 @@
                     <tbody>
                         <tr>
                             <td style="width: 10%;">Cliente:</td>
-                            <td class="lineaInferior"><label>{{ $Manifiesto->Cliente }}</label></td>
+                            <td class="lineaInferior"><label>{{ $OT->idCliente }}</label></td>
                             <td style="width: 20%;"></td>
                             <td style="width: 10%;">Folio:</td>
-                            <td class="lineaInferior">{{ $Manifiesto->Folio }}</td>
+                            <td class="lineaInferior"></td>
                         </tr>
                         <tr>
                             <td>Sitio de Trabajo:</td>
-                            <td class="lineaInferior">{{ $Manifiesto->Destino }}</td>
+                            <td class="lineaInferior"></td>
                             <td style="width: 20%;"></td>
                             <td></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Servicio: </td>
-                            <td class="lineaInferior">{{ $Manifiesto->Trabajo }}</td>
+                            <td class="lineaInferior"></td>
                             <td style="width: 20%;"></td>
                             <td></td>
                             <td></td>
@@ -549,36 +551,16 @@
 
                 <table class="datosresultados">
                     <thead>
-                            @if($Manifiesto->SATBMPRO == 'SI')
                                 <tr class="celdaAzul">
                                     <th class="" style="width: 4%;">No.</th>
-                                    <th class="" style="width: 4%;">Cantidad</th>
-                                    <th class="" style="width: 4%;">Unidad</th>
-                                    <th class="" style="width: 20%;">Descripción</th>
-                                    <th class="" style="width: 10%;">No / ID</th>
-                                    <th class="">No. De Serie</th>
-                                    <th class="">Marca</th>
-                                    <th class="">Modelo</th>
-                                    <th class="">SAT</th>
-                                    <th class="">BMPRO</th>
-                                    <th class="">NOTA</th>
+                                    <th class="" style="width: 4%;">DESCRIPCIÓN/ACTIVIDADES</th>
+                                    <th class="" style="width: 4%;">UNIDAD</th>
+                                    <th class="" style="width: 20%;">CANTIDAD</th>
+                                    <th class="" style="width: 10%;">PROCESOS</th>
                                 </tr>
-                            @else
-                                <tr class="celdaAzul">
-                                    <th class="" style="width: 4%;">No.</th>
-                                    <th class="" style="width: 4%;">Cantidad</th>
-                                    <th class="" style="width: 4%;">Unidad</th>
-                                    <th class="" style="width: 25%;">Descripción</th>
-                                    <th class="" style="width: 10%;">No. ECO</th>
-                                    <th class="">No. De Serie</th>
-                                    <th class="">Marca</th>
-                                    <th class="">Modelo</th>
-                                </tr>
-                        @endif         
                     </thead>
                 <tbody>
                         @foreach ($pagina as $detalle)
-                                            @if($Manifiesto->SATBMPRO == 'SI')
                                                 <tr>
                                                     <td>{{ $loop->iteration + ($loop->parent->index * $porPagina) }}</td>
                                                     <td class="">{{ $detalle->Cantidad ?? 'N/A' }}</td>
@@ -592,18 +574,6 @@
                                                     <td class="">{{ $detalle->generalEyc->BMPRO ?? 'N/A' }}</td>
                                                     <td class="">{{ $detalle->generalEyc->Comentario ?? 'N/A' }}</td>
                                                 </tr>
-                                            @else
-                                                <tr>
-                                                    <td>{{ $loop->iteration + ($loop->parent->index * $porPagina) }}</td>
-                                                    <td class="">{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->No_economico ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Serie ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Marca ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Modelo ?? 'N/A' }}</td>
-                                                </tr>
-                                            @endif
                                         {{ $loop->iteration + ($loop->parent->index * $porPagina) }}  
                                         <!-- Número de fila global 
                                             Cuenta correctamente, 
@@ -613,7 +583,6 @@
                         @endforeach
                         @for ($i = $pagina->count(); $i < $porPagina; $i++)
                             <tr>
-                                @if($Manifiesto->SATBMPRO == 'SI')
                                     <td>----</td>
                                     <td>----</td>
                                     <td>----</td>
@@ -625,16 +594,6 @@
                                     <td>----</td>
                                     <td>----</td>
                                     <td>----</td>
-                                @else
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                @endif
                             </tr>
                         @endfor
                     </tbody>
@@ -644,6 +603,6 @@
                 @if (!$loop->last)
                     <div style="page-break-after: always;"></div>
                 @endif
-            @endforeach--}}
+            @endforeach
         </body>
     </html>

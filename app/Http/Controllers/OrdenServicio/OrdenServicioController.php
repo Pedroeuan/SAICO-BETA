@@ -395,24 +395,17 @@ class OrdenServicioController extends Controller
      */
     public function OT_S_PDF($id)
     {
-        $user = Auth::user();
-        /*$nombre = $user->name;
-        $Solicitud = Solicitudes::findOrFail($id);
-        $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $id)->get();
-        $Manifiesto = manifiesto::where('idSolicitud', $id)->first();
-        $Devolucion = devolucion::where('idSolicitud', $id)->first();
-        $generalEyC = general_eyc::all();*/
+        $OT  = Orden_Servicio::find($id);
+        $detallesOT = Grupo_Juntas_Detalles_OS::with('Orden_Servicio')->where('idOrden_Servicio', $id)->get();
+        //$Grupo_Juntas_Detalles_OS = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $id)->first(); 
+        //$detallesOT = json_decode($Grupo_Juntas_Detalles_OS->Juntas_grupo, true);
     
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
         $data = [
-            /*'title' => 'Manifiesto PDF',
-            'Manifiesto' => $Manifiesto,
-            'DetallesSolicitud' => $DetallesSolicitud,
-            'Solicitud' => $Solicitud,
-            'generalEyC' => $generalEyC,
-            'nombre' => $nombre,
-            'Devolucion' => $Devolucion,*/
+            'title' => 'Manifiesto PDF',
+            'OT' => $OT,
+            'detallesOT' => $detallesOT,
             'Logo' => $Logo,
             
         ];
