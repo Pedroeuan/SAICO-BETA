@@ -75,7 +75,7 @@
                         </td>
 
                         <td>
-                            <button type="button" class="btn btn-danger btnEliminarOC" idOC="{{$OSS->idOrden_Serivicio}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btnEliminarOT" idOT="{{$OSS->idOrden_Servicio}}"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -137,7 +137,7 @@ let table = new DataTable('#tablaJs', {
 });
 
 
-    $(document).on("click", ".btnEliminarOC", function() {
+    $(document).on("click", ".btnEliminarOT", function() {
         var idOT = $(this).attr("idOT");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
@@ -148,7 +148,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/OT_S/eliminar/' + idOT,
+                    url: '/OT_S/eliminar/'+idOT,
 
                     type: 'DELETE',
                     data: {
@@ -178,68 +178,6 @@ let table = new DataTable('#tablaJs', {
         });
     });
 
-    
-    document.addEventListener('DOMContentLoaded', function() {
-
-        const form = document.getElementById('manifiestoForm');
-
-        const radioSi = document.getElementById('cliente_si');
-        const radioNo = document.getElementById('cliente_no');
-        const selectCliente = document.getElementById('cliente_select');
-        const inputCliente = document.getElementById('cliente_input');
-        const folioInput = document.getElementById('folio');
-
-        /* ==============================
-        MOSTRAR / OCULTAR SELECT O INPUT
-        ============================== */
-        function toggleCliente() {
-
-            if (radioSi.checked) {
-                selectCliente.classList.remove('d-none');
-                inputCliente.classList.add('d-none');
-                selectCliente.setAttribute('required', true);
-                inputCliente.removeAttribute('required');
-            } else {
-                selectCliente.classList.add('d-none');
-                inputCliente.classList.remove('d-none');
-                inputCliente.setAttribute('required', true);
-                selectCliente.removeAttribute('required');
-            }
-        }
-
-        radioSi.addEventListener('change', toggleCliente);
-        radioNo.addEventListener('change', toggleCliente);
-        toggleCliente();
-
-            /* ==============================
-        VALIDACIÓN AL ENVIAR
-        ============================== */
-        form.addEventListener('submit', function(event) {
-
-            let clienteFinal = '';
-
-            if (radioSi.checked) {
-                clienteFinal = selectCliente.value;
-            } else {
-                clienteFinal = inputCliente.value.trim();
-            }
-
-            if (clienteFinal === '') {
-                event.preventDefault();
-                alert("Por favor, ingresa o selecciona un cliente.");
-                return;
-            }
-        });
-
-        /* ==============================
-        PREVENIR ENTER
-        ============================== */
-        form.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-    });
 </script>
 
 @endsection
