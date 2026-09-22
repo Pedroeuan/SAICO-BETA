@@ -4,6 +4,7 @@ namespace App\Http\Controllers\OC;
 
 use App\Models\detallesOC\detallesOC;
 use App\Models\OC\OC;
+use App\Models\Reporte\reporte;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+
+use App\Models\Clientes\clientes;
 
 class OCController extends Controller
 {
@@ -29,7 +32,9 @@ class OCController extends Controller
      */
     public function create()
     {
-        return view('OC.create');
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
+        return view('OC.create', compact('Clientes'));
     }
 
     /**
@@ -48,11 +53,42 @@ class OCController extends Controller
         $OC = new OC;
         $EsperaDato ='ESPERA DE DATO';
 
-        if($request->input('Contrato')==null)
-        {
-            $OC->Contrato = $EsperaDato;
-        }else{
-            $OC->Contrato = $request->input('Contrato');
+        // ==========================
+        // Lógica para manejar Contrato
+        // ==========================
+        // Lógica para manejar el campo Contrato
+        if ($request->input('TieneContrato') === "no") {
+
+            // Si el usuario alteró el valor o no llegó, se recalcula en backend
+            $actual = $request->input('Contrato');
+
+            // Verificar que realmente tenga el formato correcto
+            if (!$actual || !preg_match('/^AICO-INT-[0-9]{4}$/', $actual)) {
+
+                // Seguridad: volver a calcular el consecutivo
+                $registros = reporte::orderBy('idReportes', 'DESC')->get();
+                $ultimoNumero = 0;
+
+                foreach ($registros as $r) {
+                    $json = json_decode($r->Detalles_Generales, true);
+
+                    if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
+                        $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
+                        if ($n > $ultimoNumero) $ultimoNumero = $n;
+                        break;
+                    }
+                }
+
+                $nuevo = "AICO-INT-" . str_pad($ultimoNumero + 1, 4, '0', STR_PAD_LEFT);
+
+                $OC->Contrato = $nuevo;
+
+            } else {
+                // Si el frontend envió un contrato válido, se utiliza ese
+                $OC->Contrato = $actual;
+            }
+        } else {
+            $OC->Contrato = $request->input('Contrato', $EsperaDato);
         }
 
         if($request->input('Numero_OC')==null)
@@ -264,11 +300,25 @@ class OCController extends Controller
     public function destroy($id)
     {
         $OC = OC::find($id);
-        // Eliminar los detalles de la OC
-        $detallesOC = detallesOC::where('idOC', $OC->idOC)->get();
-        foreach ($detallesOC as $detalle) {
-            $detalle->delete();  // Eliminar cada detalle individualmente
+
+        if (!$OC) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Orden de compra no encontrada',
+            ], 404);
         }
+
+        // Eliminar el archivo asociado desde storage/app/public/Ventas/OC.
+        if ($OC->OC_archivo && Storage::disk('public')->exists($OC->OC_archivo)) {
+            Storage::disk('public')->delete($OC->OC_archivo);
+        }
+
+        // Eliminar los detalles de la OC
+        $detallesOC = detallesOC::where('idOC', $OC->idOC)->first();
+        if($detallesOC)
+            {
+                $detallesOC->delete();
+            }
         $OC->delete();
          // Responder con éxito
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
