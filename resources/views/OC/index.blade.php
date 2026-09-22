@@ -62,7 +62,7 @@
                         @endif
                         <td>{{ $OCS->Tipo_servicio }}</td>
                         <td>{{ $OCS->Estatus }}</td>
-                        @if($OCS->OC_archivo == 'ESPERA DE DATO')
+                        @if($OCS->OC_archivo == 'ESPERA DE DATO' || $OCS->OC_archivo == 'ESPERA DE DATOS')
                                 <td>
                                     <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                 </td>
@@ -168,7 +168,7 @@ let table = new DataTable('#tablaJs', {
                         }
                     },
                     error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo eliminar la OC puede que este relacionado a un registro, consultar al Administrador.", "error");
                     }
                 });
             } else if (result.isDenied) {
