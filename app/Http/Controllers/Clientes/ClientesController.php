@@ -188,7 +188,9 @@ class ClientesController extends Controller
                 $idUsuario = $usuario->id;
                 $autor = $usuario->name;
                 $email = $usuario->email;
-                $tipoAutor = 'usuario';
+                $rolesTecnicos = ['Técnicos', 'Tecnicos', 'Super Administrador', 'Administrador'];
+                $esTecnico = in_array($usuario->rol, $rolesTecnicos, true);
+                $tipoAutor = $esTecnico ? 'tecnico' : 'cliente';
 
                 // Validar el token y obtener el cliente
                 $cliente = clientes::where('portal_token', $token)->first();
@@ -218,8 +220,6 @@ class ClientesController extends Controller
                 $idClientes = $cliente->idClientes;
                 $autor = $usuario->name;
                 $email = $usuario->email;
-                $tipoAutor = $usuario->rol;
-                //$tipoAutor = 'usuario';
 
                 // Guardar el comentario en el historial
                 $comentarioNuevo = ComentarioReporte::create([
@@ -243,7 +243,18 @@ class ClientesController extends Controller
                 $asunto = 'Nuevo comentario en el reporte #' . $numeroReporte;
                 $asunto_interno = 'Comen. Rep. #' . $numeroReporte;
                 $mensaje = "{$autor} agregó un comentario en el reporte #{$numeroReporte}:\n\n{$comentario}";
-                $mensaje_email = "<span style='color: #E01A22;'>El autor: $autor, </span> <br> Agregó un comentario en el reporte <span style='color: #E01A22;'>#".$numeroReporte.":</span><br> <br>Comentario:<br>  <span style='color: #003b80;'>$comentario</span>";
+                $mensaje_email = '<strong>' . e($autor) . '</strong><br>'
+                    . 'agregó un comentario en el reporte <strong>#' . e($numeroReporte) . '</strong><br><br>'
+                    . nl2br(e($comentario));
+
+                if ($esTecnico) {
+                    $asunto = 'Respuesta de SAICO en el reporte #' . $numeroReporte;
+                    $asunto_interno = 'Resp. Rep. #' . $numeroReporte;
+                    $mensaje = "SAICO respondió tu comentario en el reporte #{$numeroReporte}:\n\n{$comentario}";
+                    $mensaje_email = '<strong>SAICO respondió tu comentario</strong><br>'
+                        . 'Reporte <strong>#' . e($numeroReporte) . '</strong><br><br>'
+                        . nl2br(e($comentario));
+                }
 
                 $destinatarios = User::where('Estatus', 'ALTA')
                     ->whereIn('rol', ['Técnicos', 'Super Administrador', 'Administrador'])
@@ -258,6 +269,7 @@ class ClientesController extends Controller
                         'Mensaje_Largo' => $mensaje,
                         'url' => $urlReporte,
                         'leida' => false,
+                        'prioridad' => 'alta',
                     ]);
 
                     try {
@@ -360,10 +372,11 @@ class ClientesController extends Controller
                     'success' => true,
                     'comentarios' => $comentarios->map(function ($c) {
                         return [
-                            'idComentario' => $c->idComentarios,
+                            'idComentario' => $c->idComentario,
                             'comentario' => $c->comentario,
                             'autor' => $c->autor,
                             'tipo_autor' => $c->tipo_autor,
+                            'es_tecnico' => in_array($c->tipo_autor, ['tecnico', 'Técnicos', 'Tecnicos', 'Super Administrador', 'Administrador'], true),
                             'fecha' => $c->created_at->format('d/m/Y H:i'),
                             'fecha_raw' => $c->created_at,
                         ];

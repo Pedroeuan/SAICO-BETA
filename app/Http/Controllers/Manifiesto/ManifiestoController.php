@@ -688,6 +688,8 @@ class ManifiestoController extends Controller
                         $NewCliente->RFC = $EsperaDato;
                         $NewCliente->Telefono = $EsperaDato;
                         $NewCliente->Correo = $EsperaDato;
+                        $NewCliente->Logo = $EsperaDato;
+                        $NewCliente->portal_token = (string) Str::uuid();
                         $NewCliente->save();
                     }
                     

@@ -138,7 +138,7 @@ let table = new DataTable('#tablaJs', {
 
 
     $(document).on("click", ".btnEliminarOC", function() {
-        var idOC = $(this).attr("idOC");
+        var idOT = $(this).attr("idOT");
         Swal.fire({
             title: "¿Seguro de eliminar este elemento?",
             showDenyButton: true,
@@ -148,7 +148,7 @@ let table = new DataTable('#tablaJs', {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/OC/eliminar/' + idOC,
+                    url: '/OT_S/eliminar/' + idOT,
 
                     type: 'DELETE',
                     data: {
@@ -169,7 +169,7 @@ let table = new DataTable('#tablaJs', {
                         }
                     },
                     error: function() {
-                        Swal.fire("Error!", "No se pudo eliminar el elemento.", "error");
+                        Swal.fire("Error!", "No se pudo eliminar la OT puede que este relacionado a un registro, consultar al Administrador.", "error");
                     }
                 });
             } else if (result.isDenied) {

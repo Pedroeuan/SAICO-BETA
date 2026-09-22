@@ -94,6 +94,7 @@ class EnviarNotificacionesVehiculos extends Command
             $mensajeLargoEmail = "La {$documento} del vehículo <strong>{$nombreVehiculo}</strong><br>está próximo a <span style='color: #E01A22;'>VENCER en {$diasRestantes} días</span><br>(Fecha de vencimiento: <span style='color: #E01A22;'>{$fechaFormateada}</span>)";
         }
         $url = url('/vehiculos');
+        $prioridad = $diasRestantes <= 0 ? 'critica' : ($diasRestantes <= 5 ? 'alta' : 'normal');
 
         foreach ($destinatarios as $usuario) {
             $notificacionExiste = Notificacion::query()
@@ -112,6 +113,7 @@ class EnviarNotificacionesVehiculos extends Command
                 'Mensaje_Largo' => $mensajeLargo,
                 'url' => $url,
                 'leida' => false,
+                'prioridad' => $prioridad,
             ]);
 
             try {

@@ -761,6 +761,8 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::post('/edicion/updateOT_S/{id}', [OrdenServicioController::class, 'update'])->name('editOT_S.update');
     /*Ruta de botón Eliminación-index-Ordenes de Trabajo/Servicio*/
     Route::delete('/OT_S/eliminar/{id}', [OrdenServicioController::class, 'destroy'])->name('OT_S.destroy');
+    /*Formato PDF Ruta para ver el PDF*/
+    Route::get('OT_S/PDF/{id}', [OrdenServicioController::class, 'OT_S_PDF'])->name('OT_S.PDF');
     });
 
     /*admin */
@@ -795,8 +797,6 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
-    /*Ruta del PDF de OT_S*/
-    Route::get('OT_S/OT_S_PDF/{id}', [PDFController::class, 'OT_S_PDF'])->name('OT_S.PDF');
     });
     
     /* VEHÍCULOS (SOLO ADMIN) 

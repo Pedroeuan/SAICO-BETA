@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     $(document).ready(function() {
-        var rowCount = 0;
+        var rowCount = $('#dynamicTable tbody tr').length;
 
         function updateRowNumbers() {
             $('#dynamicTable tbody tr').each(function(index) {

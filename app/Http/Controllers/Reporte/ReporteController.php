@@ -267,39 +267,106 @@ class ReporteController extends Controller
     
     public function obtenerSiguienteContratoInterno()
     {
-    // Obtener TODOS los registros asegurando el orden correcto
-        $registros = reporte::orderBy('idReportes', 'DESC')->get();
-
         $ultimoNumero = 0;
 
-        foreach ($registros as $r) {
+            /*
+            |--------------------------------------------------------------------------
+            | 1. Buscar contratos en REPORTE
+            |    El contrato está dentro de Detalles_Generales -> Contrato
+            |--------------------------------------------------------------------------
+            */
 
-            // Decodificar JSON de la columna
-            $json = json_decode($r->Detalles_Generales, true);
+            $registrosReporte = reporte::get();
 
-            if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
+            foreach ($registrosReporte as $r) {
 
-                // Extraer el número final
-                $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
+                $json = json_decode($r->Detalles_Generales, true);
 
-                if ($n > $ultimoNumero) {
-                    $ultimoNumero = $n;
+                if (!empty($json['Contrato'])) {
+
+                    $contrato = trim($json['Contrato']);
+
+                    if (str_starts_with($contrato, 'AICO-INT-')) {
+
+                        $n = intval(str_replace('AICO-INT-', '', $contrato));
+
+                        if ($n > $ultimoNumero) {
+                            $ultimoNumero = $n;
+                        }
+                    }
                 }
-
-                break; // Ya encontramos el más reciente
             }
-        }
 
-        // Nuevo número consecutivo
-        $nuevoNumero = $ultimoNumero + 1;
 
-        // Crear contrato con padding de 4 dígitos
-        $siguiente = "AICO-INT-" . str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+            /*
+            |--------------------------------------------------------------------------
+            | 2. Buscar contratos en ORDEN_SERVICIO
+            |--------------------------------------------------------------------------
+            */
 
-        return response()->json([
-            'siguiente' => $siguiente
-        ]);
+            $contratosOrdenServicio = orden_servicio::pluck('Contrato');
+
+            foreach ($contratosOrdenServicio as $contrato) {
+
+                if (!empty($contrato)) {
+
+                    $contrato = trim($contrato);
+
+                    if (str_starts_with($contrato, 'AICO-INT-')) {
+
+                        $n = intval(str_replace('AICO-INT-', '', $contrato));
+
+                        if ($n > $ultimoNumero) {
+                            $ultimoNumero = $n;
+                        }
+                    }
+                }
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | 3. Buscar contratos en OC
+            |--------------------------------------------------------------------------
+            */
+
+            $contratosOC = OC::pluck('Contrato');
+
+            foreach ($contratosOC as $contrato) {
+
+                if (!empty($contrato)) {
+
+                    $contrato = trim($contrato);
+
+                    if (str_starts_with($contrato, 'AICO-INT-')) {
+
+                        $n = intval(str_replace('AICO-INT-', '', $contrato));
+
+                        if ($n > $ultimoNumero) {
+                            $ultimoNumero = $n;
+                        }
+                    }
+                }
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | 4. Generar siguiente contrato
+            |--------------------------------------------------------------------------
+            */
+
+            $nuevoNumero = $ultimoNumero + 1;
+
+            $siguiente = 'AICO-INT-' .
+                str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+
+
+            return response()->json([
+                'siguiente' => $siguiente
+            ]);
     }
+
     /*Para evitar el reenvio de formulario*/
     public function indexContratoProyecto()
     {

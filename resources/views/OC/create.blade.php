@@ -194,8 +194,7 @@
                         </div>
                     </div>
                 </section>
-@stop
-
+            @stop
 
 @section('js')
 <!-- Incluye jQuery -->
@@ -220,66 +219,7 @@
 <script src="{{ asset('js/OC.js') }}"></script>
 <script>
 
-    /*Prevenir el Enter*/
-    document.getElementById('OC').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
-
-    $(document).ready(function() {
-        var rowCount = 0;
-
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
-        }
-
-        $('#addRowBtn').click(function() {
-            rowCount++;
-            var newRow = `<tr>
-                <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
-                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
-                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
-                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-            </tr>`;
-            $('#dynamicTable tbody').append(newRow);
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-    });
-
-        document.getElementById('OC').addEventListener('submit', function(e) {
-            const tableBody = document.querySelector("#dynamicTable tbody");
-            const rows = tableBody.querySelectorAll("tr");
-            const tableData = [];
-
-            rows.forEach(row => {
-                const unidad = row.querySelector('td:nth-child(2) input').value;
-                const cantidad = row.querySelector('td:nth-child(3) input').value;
-                const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
-
-                // Añadir los datos de la fila al array
-                tableData.push({
-                    unidad: unidad,
-                    cantidad: cantidad,
-                    descripcion: descripcion
-                });
-            });
-
-            // Convertir el array a JSON y asignarlo al campo oculto
-            document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
-        });
-
-        //AGREGAR LOCALSTORAGE
-
-    </script>
+</script>
 @endsection
 
 
