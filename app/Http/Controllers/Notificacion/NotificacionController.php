@@ -190,6 +190,7 @@ class NotificacionController extends Controller
                             $notificacion->Mensaje_Largo = $mensajeLargo;
                             $notificacion->url = $url;
                             $notificacion->leida = false;
+                            $notificacion->prioridad = $this->prioridadPorVencimiento($diasRestantesC);
                             $notificacion->save();
                             Log::info('Enviando correo a: ' . $usuario->email);
                             //📧 Enviar correo (capturar excepciones para diagnóstico)
@@ -232,6 +233,7 @@ class NotificacionController extends Controller
                             $notificacion->Mensaje_Largo = $mensajeLargo;
                             $notificacion->url = $url;
                             $notificacion->leida = false;
+                            $notificacion->prioridad = $this->prioridadPorVencimiento($diasRestantesM);
                             $notificacion->save();
                             //📧 Enviar correo
                             Log::info('Enviando correo a: ' . $usuario->email);
@@ -274,6 +276,7 @@ class NotificacionController extends Controller
                             $notificacion->Mensaje_Largo = $mensajeLargo;
                             $notificacion->url = $url;
                             $notificacion->leida = false;
+                            $notificacion->prioridad = $this->prioridadPorVencimiento($diasRestantesV);
                             $notificacion->save();
                             //📧 Enviar correo
                             Log::info('Enviando correo a: ' . $usuario->email);
@@ -432,6 +435,7 @@ class NotificacionController extends Controller
                             $notificacion->Mensaje_Largo = $mensajeLargo;
                             $notificacion->url = $url;
                             $notificacion->leida = false;
+                            $notificacion->prioridad = $this->prioridadPorVencimiento($diasRestantesC);
                             $notificacion->save();
                             //Log::info('Enviando correo a: ' . $usuario->email);
                             //📧 Enviar correo
@@ -469,6 +473,7 @@ class NotificacionController extends Controller
                             $notificacion->Mensaje_Largo = $mensajeLargo;
                             $notificacion->url = $url;
                             $notificacion->leida = false;
+                            $notificacion->prioridad = $this->prioridadPorVencimiento($diasRestantesM);
                             $notificacion->save();
                             //📧 Enviar correo
                             //Log::info('Enviando correo a: ' . $usuario->email);
@@ -506,6 +511,7 @@ class NotificacionController extends Controller
                             $notificacion->Mensaje_Largo = $mensajeLargo;
                             $notificacion->url = $url;
                             $notificacion->leida = false;
+                            $notificacion->prioridad = $this->prioridadPorVencimiento($diasRestantesV);
                             $notificacion->save();
                             //📧 Enviar correo
                             //Log::info('Enviando correo a: ' . $usuario->email);
@@ -519,7 +525,7 @@ class NotificacionController extends Controller
         Log::info('***********************');
     }
 
-    public function getNotificaciones()
+    public function getNotificaciones(Request $request)
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
@@ -535,17 +541,25 @@ class NotificacionController extends Controller
             return [
                 'id' => $notificacion->idNotificaciones,
                 'message' => $notificacion->Mensaje_Corto,
-                'url' => $notificacion->url ?? '#', // usa la URL de la tabla, fallback si es null
+                'url' => $this->urlNotificacionSegura($notificacion->url),
             ];
         });
-    
-        // Retornar las notificaciones en formato JSON
-        return response()->json($formattedNotifications);
+
+        // El preview se reclama en esta misma actualización de la campana. No usa
+        // "leida": una notificación puede seguir sin leer después de mostrarse.
+        return response()->json([
+            'notifications' => $formattedNotifications,
+            'preview' => $this->reclamarPreview($user, $request->query('preview_since')),
+        ]);
     }
     
     public function marcarComoLeida($id)
     {
-        $notificacion = Notificacion::find($id);
+        // Nunca se toma el usuario desde el navegador: sólo puede marcarse una
+        // notificación que pertenezca a la sesión autenticada.
+        $notificacion = Notificacion::where('idNotificaciones', $id)
+            ->where('users_id', Auth::id())
+            ->first();
 
         if ($notificacion) {
             $notificacion->leida = true;
@@ -554,6 +568,116 @@ class NotificacionController extends Controller
         }
 
         return response()->json(['success' => false], 404);
+    }
+
+    /**
+     * Reclama una sola notificación para preview. El UPDATE condicional es la
+     * operación que resuelve la concurrencia entre pestañas, dispositivos y
+     * peticiones simultáneas.
+     */
+    private function reclamarPreview(User $user, ?string $previewSince): ?array
+    {
+        // La marca nace en sessionStorage al abrir el sistema. Así, las
+        // notificaciones históricas siguen en la campana/listado, pero nunca
+        // se convierten en previews al navegar por los módulos.
+        try {
+            $desde = $previewSince !== null ? Carbon::parse($previewSince) : now();
+        } catch (\Throwable $e) {
+            $desde = now();
+        }
+
+        $reintentos = [
+            'normal' => null,
+            'alta' => null,
+            // Una alerta crítica no leída se recuerda como máximo una vez al día.
+            'critica' => now()->subDay(),
+        ];
+
+        $candidatas = Notificacion::query()
+            ->where('users_id', $user->id)
+            ->where('leida', false)
+            ->where('created_at', '>=', $desde)
+            ->where(function ($query) use ($reintentos) {
+                $query->whereNull('preview_shown_at')
+                    ->orWhere(function ($reintento) use ($reintentos) {
+                        $reintento->where('prioridad', 'critica')
+                            ->where('preview_shown_at', '<=', $reintentos['critica']);
+                    });
+            })
+            ->orderByRaw("CASE prioridad WHEN 'critica' THEN 0 ELSE 1 END")
+            ->orderByDesc('created_at')
+            ->limit(5)
+            ->get(['idNotificaciones', 'Mensaje_Corto', 'Mensaje_Largo', 'url', 'prioridad']);
+
+        foreach ($candidatas as $notificacion) {
+            $reclamo = Notificacion::query()
+                ->where('idNotificaciones', $notificacion->idNotificaciones)
+                ->where('users_id', $user->id)
+                ->where('prioridad', $notificacion->prioridad)
+                ->where('created_at', '>=', $desde)
+                ->where(function ($query) use ($notificacion, $reintentos) {
+                    $query->whereNull('preview_shown_at');
+
+                    if ($reintentos[$notificacion->prioridad] !== null) {
+                        $query->orWhere('preview_shown_at', '<=', $reintentos[$notificacion->prioridad]);
+                    }
+                });
+            $reclamada = $reclamo->update(['preview_shown_at' => now()]);
+
+            if ($reclamada !== 1) {
+                continue;
+            }
+
+            return [
+                'id' => $notificacion->idNotificaciones,
+                'title' => $notificacion->Mensaje_Corto,
+                'message' => $notificacion->Mensaje_Largo,
+                'url' => $this->urlNotificacionSegura($notificacion->url),
+                'priority' => $notificacion->prioridad,
+            ];
+        }
+
+        return null;
+    }
+
+    /**
+     * Sólo se entregan destinos internos o relativos. Esto conserva los enlaces
+     * actuales del sistema y evita que una URL almacenada apunte a otro origen.
+     */
+    private function urlNotificacionSegura(?string $url): string
+    {
+        $url = trim((string) $url);
+
+        if ($url === '' || $url === '#') {
+            return route('notifications.index');
+        }
+
+        $partes = parse_url($url);
+        if ($partes === false) {
+            return route('notifications.index');
+        }
+
+        if (!isset($partes['host'])) {
+            return str_starts_with($url, '/') ? $url : route('notifications.index');
+        }
+
+        $hostActual = parse_url(config('app.url'), PHP_URL_HOST);
+        if (($partes['scheme'] ?? '') === 'https' || ($partes['scheme'] ?? '') === 'http') {
+            return $hostActual !== null && strcasecmp($partes['host'], $hostActual) === 0
+                ? $url
+                : route('notifications.index');
+        }
+
+        return route('notifications.index');
+    }
+
+    private function prioridadPorVencimiento(int $diasRestantes): string
+    {
+        if ($diasRestantes <= 0) {
+            return 'critica';
+        }
+
+        return $diasRestantes <= 5 ? 'alta' : 'normal';
     }
 
 }

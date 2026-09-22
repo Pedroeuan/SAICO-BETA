@@ -1,3 +1,7 @@
+@php
+    $esTecnicoComentarios = auth()->check()
+        && in_array(auth()->user()->rol, ['Técnicos', 'Tecnicos', 'Super Administrador', 'Administrador'], true);
+@endphp
 <!DOCTYPE html>
 <html lang="es">
 
@@ -368,6 +372,32 @@
             border-bottom: none;
         }
 
+        .comentario-item.comentario-tecnico {
+            margin-left: 28px;
+            border-left: 4px solid #1f4e79;
+            background: rgba(31, 78, 121, 0.06);
+            border-radius: 6px;
+        }
+
+        .comentario-item.comentario-cliente {
+            margin-right: 28px;
+            border-left: 4px solid #0d9488;
+            background: rgba(13, 148, 136, 0.06);
+            border-radius: 6px;
+        }
+
+        .btn-responder-comentario {
+            margin-top: 8px;
+            padding: 5px 9px;
+            border: 1px solid #1f4e79;
+            border-radius: 5px;
+            color: #1f4e79;
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
         .comentario-header {
             display: flex;
             justify-content: space-between;
@@ -724,14 +754,14 @@
 
                     @auth
                         <div class="comentarios-box">
-                            <label for="comentario-{{ $reporte->idReportes }}">Comentarios</label>
+                            <label for="comentario-{{ $reporte->idReportes }}">Conversación del reporte</label>
                             <textarea id="comentario-{{ $reporte->idReportes }}"
                                 data-reporte-id="{{ $reporte->idReportes }}"
                                 data-comentario-url="{{ route('portal.reporte.comentario', ['token' => request()->route('token'), 'idReporte' => $reporte->idReportes], false) }}"
                                 data-comentarios-url="{{ route('portal.reporte.comentarios', ['token' => request()->route('token'), 'idReporte' => $reporte->idReportes], false) }}"
-                                placeholder="Escribe un comentario para este reporte..."></textarea>
+                                placeholder="{{ $esTecnicoComentarios ? 'Escribe una respuesta para el cliente...' : 'Escribe una respuesta para SAICO...' }}"></textarea>
                             <div class="comentarios-actions">
-                                <button type="button" class="btn-comentario" data-save-comment="{{ $reporte->idReportes }}">Guardar comentario</button>
+                                <button type="button" class="btn-comentario" data-save-comment="{{ $reporte->idReportes }}" data-default-text="Enviar respuesta">Enviar respuesta</button>
                             </div>
 
                             <div class="historial-comentarios vacio" id="historial-{{ $reporte->idReportes }}">
@@ -772,6 +802,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const esTecnicoComentarios = @json($esTecnicoComentarios);
+            const nombreClienteComentarios = @json($cliente->Cliente);
             const overlay = document.getElementById('pdf-loader');
             const loaderText = document.getElementById('loader-text');
             const pdfLinks = document.querySelectorAll('[data-pdf-action]');
@@ -814,7 +846,7 @@
 
                     if (!comentarioUrl) {
                         button.disabled = false;
-                        button.textContent = 'Guardar comentario';
+                        button.textContent = button.dataset.defaultText;
                         console.error('No se encontró la URL para guardar el comentario.');
                         return;
                     }
@@ -862,7 +894,7 @@
                             cargarComentarios(reporteId);
 
                             setTimeout(() => {
-                                button.textContent = 'Guardar comentario';
+                                button.textContent = button.dataset.defaultText;
                             }, 1500);
 
                         }
@@ -877,7 +909,7 @@
                         alert('No fue posible guardar el comentario.');
 
                         setTimeout(() => {
-                            button.textContent = 'Guardar comentario';
+                            button.textContent = button.dataset.defaultText;
                         }, 1500);
 
                     })
@@ -907,7 +939,7 @@
 
                 comentarios.forEach(comentario => {
                     const item = document.createElement('div');
-                    item.className = 'comentario-item';
+                    item.className = 'comentario-item ' + (comentario.es_tecnico ? 'comentario-tecnico' : 'comentario-cliente');
                     item.innerHTML = `
                         <div class="comentario-header">
                             <span class="comentario-autor"></span>
@@ -919,6 +951,21 @@
                     item.querySelector('.comentario-autor').textContent = comentario.autor || '';
                     item.querySelector('.comentario-fecha').textContent = comentario.fecha || '';
                     item.querySelector('.comentario-texto').textContent = comentario.comentario || '';
+                    if (comentario.es_tecnico !== esTecnicoComentarios) {
+                        const responder = document.createElement('button');
+                        responder.type = 'button';
+                        responder.className = 'btn-responder-comentario';
+                        responder.textContent = comentario.es_tecnico
+                            ? 'Responder a ' + (comentario.autor || 'técnico')
+                            : 'Responder a ' + nombreClienteComentarios;
+                        responder.addEventListener('click', () => {
+                            const textarea = document.querySelector('textarea[data-reporte-id="' + reporteId + '"]');
+                            if (!textarea) return;
+                            textarea.focus();
+                            textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        });
+                        item.appendChild(responder);
+                    }
                     historialDiv.appendChild(item);
                 });
             }

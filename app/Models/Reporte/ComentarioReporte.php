@@ -11,7 +11,7 @@ class ComentarioReporte extends Model
     use HasFactory;
 
     protected $table = 'comentarios_reporte';
-    protected $primaryKey = 'idComentarios';
+    protected $primaryKey = 'idComentario';
 
     protected $fillable = [
         'idReportes',
