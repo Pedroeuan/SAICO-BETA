@@ -16,7 +16,7 @@ class Orden_Servicio_Prueba extends Model
     ];
 
     protected $table = 'Orden_Servicio_Prueba';
-    //protected $primaryKey = 'idOrden_Servicio';
+    protected $primaryKey = 'idOrden_Servicio';
     public $timestamps = false;
 
     public function ordenServicio()

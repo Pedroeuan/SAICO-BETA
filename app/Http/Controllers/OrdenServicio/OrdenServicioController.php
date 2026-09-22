@@ -8,6 +8,7 @@ use App\Models\OrdenServicio\Firmantes_OS;
 use App\Models\Clientes\clientes;
 use App\Models\Reporte\reporte;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
@@ -360,7 +361,8 @@ class OrdenServicioController extends Controller
                 'message' => 'Orden de Servicio no encontrada',
             ], 404);
         }
-
+        // Encontrar las relaciones de orde_servicio_prueba
+        $OT_P = Orden_Servicio_Prueba::where('idOrden_Servicio', $OT->idOrden_Servicio)->first();
         // Encontrar las Firmas de la OT
         $FirmasOT = Firmantes_OS::where('idOrden_Servicio', $OT->idOrden_Servicio)->first();
         // Encontrar los detalles de la OT
@@ -370,7 +372,10 @@ class OrdenServicioController extends Controller
         if ($OT->OT_archivo && Storage::disk('public')->exists($OT->OT_archivo)) {
             Storage::disk('public')->delete($OT->OT_archivo);
         }
-        
+        if($OT_P)
+        {
+            $OT_P->delete();
+        }
         if($FirmasOT)
         {
             $FirmasOT->delete();
