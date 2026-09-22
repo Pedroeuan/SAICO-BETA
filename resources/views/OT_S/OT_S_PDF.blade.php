@@ -455,23 +455,20 @@
                 <table class="datosgenerales">
                     <tbody>
                         <tr>
-                            <td style="width: 10%;">Cliente:</td>
-                            <td class="lineaInferior"><label>{{ $OT->cliente->Cliente ?? 'N/A' }}</label></td>
+                            <td class="lineaInferior"><label>CLIENTE: <br>{{ $OT->cliente->Cliente ?? 'N/A' }}</label></td>
                             <td style="width: 20%;"></td>
-                            <td style="width: 10%;">Proyecto:</td>
-                            <td class="lineaInferior">{{ $OT->Proyecto_actividad }}</td>
+                            <td class="lineaInferior"><label>PROYECTO:<br>{{ $OT->Proyecto_actividad ?? 'N/A' }}</label></td>
                         </tr>
+
                         <tr>
-                            <td>Contrato:</td>
-                            <td class="lineaInferior">{{ $OT->Contrato }}</td>
+                            <td class="lineaInferior"><label>CONTRATO:<br>{{ $OT->Contrato ?? 'N/A'  }}</label></td>
                             <td style="width: 20%;"></td>
-                            <td>Fecha:</td>
-                            <td class="lineaInferior">{{ $OT->getFormattedDateAttribute(); }}</td>
+                            <td class="lineaInferior"><label>FECHA:<br>{{ $OT->getFormattedDateAttribute() ?? 'N/A' }}</label></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <div style="margin-bottom: 5px;"></div>
+                <div style="margin-bottom: 15px;"></div>
 
                 <table class="datosresultados">
                     <thead>
