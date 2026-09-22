@@ -185,7 +185,7 @@
                                             @foreach($detallesOT as $indice => $detalle)
                                                 <tr>
                                                     <td>{{ $indice + 1 }}</td>
-                                                    <td><input type="text" class="form-control" name="descripcion[]" placeholder="Descripción/Actividades" value="{{ $detalle['descripcion'] ?? '' }}"></td>
+                                                    <td><textarea class="form-control" name="descripcion[]" placeholder="Descripción/Actividades">{{ $detalle['descripcion'] ?? '' }}</textarea></td>
                                                     <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
                                                     <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad" value="{{ $detalle['cantidad'] ?? '' }}"></td>
                                                     <td><textarea class="form-control" name="procesos[]" placeholder="Procesos">{{ $detalle['procesos'] ?? '' }}</textarea></td>

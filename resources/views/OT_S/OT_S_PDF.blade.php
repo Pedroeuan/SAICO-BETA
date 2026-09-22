@@ -247,13 +247,13 @@
                         </tr>
 
                         <tr>
-                            <th>Versión</th>
-                            <th>3</th>
+                            <th>Versión:</th>
+                            <th>0</th>
                         </tr>
 
                         <tr>
-                            <th>Fecha de emisión:</th>
-                            <th>29-nov-24</th>
+                            <th>Página:</th>
+                            <th></th>
                         </tr>
                 </table>
 
@@ -263,252 +263,183 @@
 
             <footer>
                     <div style="margin-bottom: 5px;"></div>
-                    <table class="Comentarios">
-                        <tr>
-                            <td >Comentarios:
-                                {{--@if (isset($Manifiesto) && $Manifiesto->Observaciones != null)
-                                        Salida: {{$Manifiesto->Observaciones}}
-                                    @else
-                                    <tr>
-                                        <td><br></td>
-                                    </tr>
-                                @endif
+                    <table class="datosgenerales">
+                        <thead>
+                            @if( $numFirmas == 1)
+                            <!-- 1 Firmas -->
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                </tr>
 
-                                @if (isset($Devolucion) && $Devolucion->Observaciones != null)
-                                        Devolución: {{ $Devolucion->Observaciones }}
-                                    @else
-                                    <tr>
-                                        <td><br></td>
-                                    </tr>
-                                @endif--}}
-                            </td>
-                        </tr>     
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 30px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] }}</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] }}</strong></td>
+                                </tr>
+
+                                {{-- <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                </tr>--}}
+                            @elseif( $numFirmas == 2)
+                            <!-- 2 Firmas -->
+                                <tr>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                                    <td style="width: 30px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] }}</strong></td>
+                                </tr>
+
+                                {{--<tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                                </tr>--}}
+                            @elseif( $numFirmas == 3)
+                            <!-- 3 Firmas -->
+                                <tr>
+                                    <td style="width: 20px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 20px;"></td>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                                    <td style="width: 20px;"></td>
+                                    <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
+                                    <td style="width: 20px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 200px; height:20px" class="lineaInferior"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO3'] }}</strong></td>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO3'] }}</strong></td>
+                                </tr>
+
+                                {{-- <tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
+                                </tr>--}}
+                            @elseif( $numFirmas == 4)
+                            <!-- 4 Firmas -->
+                                <tr>
+                                    <td style="width: 15px;"></td>
+                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <td style="width: 15px;"></td>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                                    <td style="width: 15px;"></td>
+                                    <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
+                                    <td style="width: 15px;"></td>
+                                    <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
+                                    <td style="width: 15px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <td></td>
+                                    <td style="width: 150px; height:40px" class="lineaInferior"></td>
+                                    <th></th>
+                                </tr>
+
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO3'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO4'] }}</strong></td>
+                                    <th></th>
+                                </tr>
+                                                                    
+                                <tr>
+                                    <th></th>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO3'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO4'] }}</strong></td>
+                                    <th></th>
+                                </tr>
+
+                                {{--<tr>
+                                    <th></th>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_2DO_ENCARGADO'] }}</strong></td>
+                                    <td></td>
+                                    <td><strong>{{ $Firmas_Reportes['EMPRESA_3RO_ENCARGADO'] }}</strong></td>
+                                    <th></th>
+                                </tr> --}}
+                            @endif
+                        </thead>                            
                     </table>
-
-                <table class="notas">
-                    <tr>
-                        <td class="" colspan="4">Nota a): Los Equipos se entregan en las siguientes condiciones: limpios,  operables para su uso.<br>
-                        y quedan al resguardo del firmante, siendo su responsabilidad de cada uno de los equipos aquí mencionados, excepto de los consumibles. Se deberá mantener en buen estado y que NO sea deteriorado por condiciones ajenas a su fin establecido. En caso de extravío o daño injustificado se tendrá que justificar el percance ocurrido a través de un reporte  dirigido al  PCVE, para determinar  la Reposición  del Equipo/ y/o accesorio.<br>
-                        Nota b): El responsable y/o la persona que recibe el equipo y adicionales de este manifiesto se compromete con el cuidado del mismo.<br>
-                        Nota c): Si se requiere adjuntar más información en el campo de obsevaciones se puede agregar otra página adicional o escribir en la parte de atrás del formato.
-                        </td>
-                    </tr>
-                </table>
-
-                <div style="margin-bottom: 5px;"></div>
-
-                    <table class="Firmas">
-                        <tr>
-                            <td style="width: 7%;">
-
-                                <table class="">
-                                    <tr class="" >
-                                        <td COLSPAN=2 class=""></td>
-                                    </tr>
-                                        
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-
-                            </td>
-
-                            <td>
-
-                                <table class="DentroFirmas">
-                                    <tr class="celdaAzul">
-                                        <td COLSPAN=2 class="letraNegra">Entrega</td>
-                                    </tr>
-                                        
-                                    <tr class="celdaAzul">
-                                        <td class="letraNegra">Nombre</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="celdaAzul">
-                                        <td class="letraNegra">Firma</td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-
-                            </td>
-
-                            <td>
-
-                                <table class="" style="width: 10%;">
-                                    <tr class="" >
-                                        <td COLSPAN=2 class=""></td>
-                                    </tr>
-                                        
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-
-                            </td>
-
-
-                            <td>
-                                
-                                <table class="DentroFirmas">
-                                        <tr class="celdaAzul">
-                                            <td COLSPAN=2 class="letraNegra">Autoriza</td>
-                                        </tr>
-                                        <tr class="celdaAzul">
-                                            <td class="letraNegra">Nombre</td>
-                                            <td> </td>
-                                        </tr>
-                                        <tr class="celdaAzul">
-                                            <td class="letraNegra">Firma</td>
-                                            <td></td>
-                                        </tr>
-                                </table>
-
-                            </td>
-
-                            <td style="width: 7%;">
-
-                                <table class="">
-                                    <tr class="" >
-                                        <td COLSPAN=2 class=""></td>
-                                    </tr>
-                                        
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-
-                            </td>
-                        </tr>
-
-                        <br>
-
-                        <tr>
-                            <td style="width: 7%;">
-
-                                <table class="">
-                                    <tr class="" >
-                                        <td COLSPAN=2 class=""></td>
-                                    </tr>
-                                        
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-
-                            </td>
-                                <td>
-
-                                    <table class="DentroFirmas">
-                                        <tr class="celdaCrema">
-                                            <td COLSPAN=2 class="letraNegra">Fecha de Recepción</td>
-                                            <td> </td>
-                                        </tr>
-                                        <tr class="celdaCrema">
-                                            <td class="letraNegra">Nombre</td>
-                                            <td COLSPAN=2></td>
-                                        </tr>
-                                        <tr class="celdaCrema">
-                                            <td class="letraNegra">Firma</td>
-                                            <td COLSPAN=2></td>
-                                        </tr>
-                                    </table>
-                                    
-                                </td>
-
-                            <td style="width: 10%;">
-
-                                <table class="">
-                                    <tr class="" >
-                                        <td COLSPAN=2 class=""></td>
-                                    </tr>
-                                        
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="">
-                                        <td class=""></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-
-                            </td>
-
-                                <td>
-
-                                    <table class="DentroFirmas">
-                                        <tr class="celdaCrema">
-                                            <td COLSPAN=2 class="letraNegra">Fecha Devolución</td>
-                                                <td>
-                                                    {{-- @if (isset($Devolucion->formatted_date) && $Devolucion->formatted_date == null)
-                                                        {{ $Devolucion->formatted_date }}
-                                                        @else
-                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-                                                    @endif--}}
-                                                </td>
-                                        </tr>
-
-                                        <tr class="celdaCrema">
-                                            <td class="letraNegra">Nombre</td>
-                                                <td COLSPAN=2>
-                                                    @if (isset($Devolucion->Recibe) && $Devolucion->Recibe == null)
-                                                        {{ $Devolucion->Recibe }}
-                                                    @endif
-                                                </td>
-                                        </tr>
-                                        <tr class="celdaCrema">
-                                            <td class="letraNegra">Firma</td>
-                                            <td COLSPAN=2></td>
-                                        </tr>
-                                    </table>
-
-                                </td>
-
-                                <td style="width: 7%;">
-
-                                    <table class="">
-                                        <tr class="" >
-                                            <td COLSPAN=2 class=""></td>
-                                        </tr>
-                                            
-                                        <tr class="">
-                                            <td class=""></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr class="">
-                                            <td class=""></td>
-                                            <td></td>
-                                        </tr>
-                                    </table>
-
-                                </td>                                
-                        </tr>
-                    </table>
-                    <br>
-                    <br>
-                    Documento Controlado, prohibida su reproducción parcial o total sin autorización. Propiedad de AICO S.C.,<br>
-                    Documento Confidencial. La impresión de este documento se considera un Documento No Controlado.
-
             </footer>
 
 
@@ -525,24 +456,17 @@
                     <tbody>
                         <tr>
                             <td style="width: 10%;">Cliente:</td>
-                            <td class="lineaInferior"><label>{{ $OT->idCliente }}</label></td>
+                            <td class="lineaInferior"><label>{{ $OT->cliente->Cliente ?? 'N/A' }}</label></td>
                             <td style="width: 20%;"></td>
-                            <td style="width: 10%;">Folio:</td>
-                            <td class="lineaInferior"></td>
+                            <td style="width: 10%;">Proyecto:</td>
+                            <td class="lineaInferior">{{ $OT->Proyecto_actividad }}</td>
                         </tr>
                         <tr>
-                            <td>Sitio de Trabajo:</td>
-                            <td class="lineaInferior"></td>
+                            <td>Contrato:</td>
+                            <td class="lineaInferior">{{ $OT->Contrato }}</td>
                             <td style="width: 20%;"></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Servicio: </td>
-                            <td class="lineaInferior"></td>
-                            <td style="width: 20%;"></td>
-                            <td></td>
-                            <td></td>
+                            <td>Fecha:</td>
+                            <td class="lineaInferior">{{ $OT->getFormattedDateAttribute(); }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -553,26 +477,20 @@
                     <thead>
                                 <tr class="celdaAzul">
                                     <th class="" style="width: 4%;">No.</th>
-                                    <th class="" style="width: 4%;">DESCRIPCIÓN/ACTIVIDADES</th>
-                                    <th class="" style="width: 4%;">UNIDAD</th>
-                                    <th class="" style="width: 20%;">CANTIDAD</th>
-                                    <th class="" style="width: 10%;">PROCESOS</th>
+                                    <th class="" style="width: 40%;">DESCRIPCIÓN/ACTIVIDADES</th>
+                                    <th class="" style="width: 6%;">UNIDAD</th>
+                                    <th class="" style="width: 6%;">CANTIDAD</th>
+                                    <th class="" style="width: 40%;">PROCESOS</th>
                                 </tr>
                     </thead>
                 <tbody>
                         @foreach ($pagina as $detalle)
                                                 <tr>
                                                     <td>{{ $loop->iteration + ($loop->parent->index * $porPagina) }}</td>
-                                                    <td class="">{{ $detalle->Cantidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->Unidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Nombre_E_P_BP ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->No_economico ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Serie ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Marca ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Modelo ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->SAT ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->BMPRO ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->generalEyc->Comentario ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->descripcion ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->unidad ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->cantidad ?? 'N/A' }}</td>
+                                                    <td class="">{{ $detalle->procesos ?? 'N/A' }}</td>
                                                 </tr>
                                         {{ $loop->iteration + ($loop->parent->index * $porPagina) }}  
                                         <!-- Número de fila global 
@@ -583,12 +501,6 @@
                         @endforeach
                         @for ($i = $pagina->count(); $i < $porPagina; $i++)
                             <tr>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
                                     <td>----</td>
                                     <td>----</td>
                                     <td>----</td>

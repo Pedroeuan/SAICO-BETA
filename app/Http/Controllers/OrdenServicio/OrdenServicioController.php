@@ -396,7 +396,17 @@ class OrdenServicioController extends Controller
     public function OT_S_PDF($id)
     {
         $OT  = Orden_Servicio::find($id);
-        $detallesOT = Grupo_Juntas_Detalles_OS::with('Orden_Servicio')->where('idOrden_Servicio', $id)->get();
+        $cliente = clientes::find($OT->idClientes);
+        $OT->cliente = $cliente; // Agregar el cliente al objeto OT
+        $detallesRegistro = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $id)->first();
+        $detallesOT = collect($detallesRegistro
+            ? json_decode($detallesRegistro->Juntas_grupo, true)
+            : []
+        )->map(fn ($detalle) => (object) $detalle);
+        $firmantes = Firmantes_OS::where('idOrden_Servicio', $id)->first();
+        $Firmas_Reportes = $firmantes ? json_decode($firmantes->Firmas, true) : [];
+        $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
+        
         //$Grupo_Juntas_Detalles_OS = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $id)->first(); 
         //$detallesOT = json_decode($Grupo_Juntas_Detalles_OS->Juntas_grupo, true);
     
@@ -406,6 +416,8 @@ class OrdenServicioController extends Controller
             'title' => 'Manifiesto PDF',
             'OT' => $OT,
             'detallesOT' => $detallesOT,
+            'numFirmas' => $numFirmas,
+            'Firmas_Reportes' => $Firmas_Reportes,
             'Logo' => $Logo,
             
         ];
@@ -421,11 +433,11 @@ class OrdenServicioController extends Controller
         $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
             $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 10;
+            $size = 8;
     
             // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 424; // Ajusta esta posición X según sea necesario
-            $y = 72;  // Ajusta esta posición Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 57;  // Ajusta esta posición Y según sea necesario
     
             // Evitar problemas con valores no válidos para coordenadas
             if (is_numeric($x) && is_numeric($y)) {

@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="descripcion[]" placeholder="Descripción/Actividades"></td>
+                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripción/Actividades"></textarea></td>
                 <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad"></td>
                 <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
                 <td><textarea class="form-control" name="procesos[]" placeholder="Procesos"></textarea></td>
