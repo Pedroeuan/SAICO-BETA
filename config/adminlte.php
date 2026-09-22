@@ -580,9 +580,26 @@ return [
                 //'topnav' => true,
                 'submenu' => [
                     [
-                        'text' => 'Orden de Trabajo/Servicio',
+                        'text' => 'Registrar Orden de Trabajo/Servicio',
+                        'icon' => 'fas fa-chalkboard-teacher',
+                        'url' => '/OT_S/create',
+                    ],
+                    [
+                        'text' => 'Lista Orden de Trabajo/Servicio',
                         'icon' => 'far fa-file-alt',
-                        'url' => '/Page_In_Construction',
+                        'url' => '/OT_S/index',
+                    ],
+                    [
+                        'text' => 'Clientes',
+                        'icon' => 'fas fa-users',
+                        'url' => 'clientes/index',
+                        'can' => 'ventas-equipos-tecnicos-access',
+                    ],
+                    [
+                        'text' => 'Registro Clientes',
+                        'icon' => 'fas fa-user-plus',
+                        'url' => 'registro/create',
+                        'can' => 'ventas-equipos-tecnicos-access',
                     ],
                     [
                         'text' => 'Crear Reportes',
@@ -592,7 +609,6 @@ return [
                     [
                         'text' => 'Reportes',
                         'icon' => 'fab fa-wpforms',
-
                         'url' => '/index/ContratoProyecto',
                     ],
                     [
@@ -602,7 +618,7 @@ return [
                     ],
                     [
                         'text' => 'Lista de Procedimientos PND/IM',
-                        'icon' => 'far fa-list-alt',
+                        'icon' => 'fas fa-list-ul',
                         'url' => '/index/Procedimientos',
                     ],
                     [
@@ -640,7 +656,7 @@ return [
             ],
 
 
-                // Sidebar Clientes:
+                // Sidebar Ventas:
                 [
                     'text' => 'Ventas',
                     'icon' => 'fas fa-money-bill-wave',
@@ -657,7 +673,18 @@ return [
                             'icon' => 'fas fa-clipboard-list',
                             'url' => '/OC/indexOC',
                         ],
-                        
+                        [
+                            'text' => 'Clientes',
+                            'icon' => 'fas fa-users',
+                            'url' => 'clientes/index',
+                            'can' => 'ventas-equipos-tecnicos-access',
+                        ],
+                        [
+                            'text' => 'Registro Clientes',
+                            'icon' => 'fas fa-user-plus',
+                            'url' => 'registro/create',
+                            'can' => 'ventas-equipos-tecnicos-access',
+                        ],
                     ],
                 ],
 
@@ -703,13 +730,13 @@ return [
                             'text' => 'Clientes',
                             'icon' => 'fas fa-users',
                             'url' => 'clientes/index',
-                            'can' => 'equipos-access',
+                            'can' => 'ventas-equipos-tecnicos-access',
                         ],
                         [
                             'text' => 'Registro Clientes',
                             'icon' => 'fas fa-user-plus',
                             'url' => 'registro/create',
-                            'can' => 'equipos-access',
+                            'can' => 'ventas-equipos-tecnicos-access',
                         ],
                         [
                             'text' => 'Registro de altas',

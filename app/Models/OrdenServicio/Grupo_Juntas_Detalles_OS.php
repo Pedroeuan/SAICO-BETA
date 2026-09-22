@@ -18,4 +18,9 @@ class Grupo_Juntas_Detalles_OS extends Model
     protected $table = 'Grupo_Juntas_Detalles_OS';
     protected $primaryKey = 'idGrupo_Juntas_Detalles_OS';
     public $timestamps = false;
+
+    public function Orden_Servicio()
+    {
+        return $this->belongsTo(Orden_Servicio::class, 'idOrden_Servicio', 'idOrden_Servicio');
+    }
 }

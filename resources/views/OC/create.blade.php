@@ -58,11 +58,31 @@
                             <form id="OC" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
-
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{old('Contrato')}}">
+                                            <label class="col-form-label">
+                                                ¿Contrato existente?
+                                            </label>
+
+                                            <div class="ml-3">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="TieneContrato" id="contrato_si" value="si" checked>
+                                                    <label class="form-check-label" for="contrato_si">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="TieneContrato" id="contrato_no" value="no">
+                                                    <label class="form-check-label" for="contrato_no">No</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Input visible solo si es "SI" -->
+                                            <input type="text"
+                                                id="campoContrato"
+                                                class="form-control inputForm"
+                                                name="Contrato"
+                                                placeholder="Ejemplo: 640853841"
+                                                value="{{ old('Contrato') }}"
+                                                required>
                                         </div>
                                     </div>
 
@@ -123,7 +143,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Orden de Compra Original</label>
+                                            <label class="col-form-label" for="inputSuccess">Cargar Orden de Compra Original</label>
                                             <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
                                             @if ($errors->any())
                                                 <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
@@ -174,8 +194,7 @@
                         </div>
                     </div>
                 </section>
-@stop
-
+            @stop
 
 @section('js')
 <!-- Incluye jQuery -->
@@ -197,87 +216,10 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/OC.js') }}"></script>
 <script>
 
-    /*Prevenir el Enter*/
-    document.getElementById('OC').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-    });
-
-    $(document).ready(function() {
-        var rowCount = 0;
-
-        function updateRowNumbers() {
-            $('#dynamicTable tbody tr').each(function(index) {
-                $(this).find('td:first').text(index + 1);
-            });
-            rowCount = $('#dynamicTable tbody tr').length;
-        }
-
-        $('#addRowBtn').click(function() {
-            rowCount++;
-            var newRow = `<tr>
-                <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
-                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
-                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
-                <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
-            </tr>`;
-            $('#dynamicTable tbody').append(newRow);
-        });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-    });
-
-        document.getElementById('OC').addEventListener('submit', function(e) {
-            const tableBody = document.querySelector("#dynamicTable tbody");
-            const rows = tableBody.querySelectorAll("tr");
-            const tableData = [];
-
-            rows.forEach(row => {
-                const unidad = row.querySelector('td:nth-child(2) input').value;
-                const cantidad = row.querySelector('td:nth-child(3) input').value;
-                const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
-
-                // Añadir los datos de la fila al array
-                tableData.push({
-                    unidad: unidad,
-                    cantidad: cantidad,
-                    descripcion: descripcion
-                });
-            });
-
-            // Convertir el array a JSON y asignarlo al campo oculto
-            document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
-        });
-
-    // Guardar datos en localStorage al escribir
-    document.querySelectorAll('#OC input, #OC textarea, #OC select').forEach(function(input) {
-        input.addEventListener('input', function() {
-            localStorage.setItem('OC_' + input.name, input.value);
-        });
-    });
-    // Restaurar datos al cargar la página
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('#OC input, #OC textarea, #OC select').forEach(function(input) {
-            let value = localStorage.getItem('OC_' + input.name);
-            if (value !== null && input.type !== 'file') {
-                input.value = value;
-            }
-        });
-    });
-    // Limpiar localStorage al enviar el formulario
-    document.getElementById('OC').addEventListener('submit', function() {
-        document.querySelectorAll('#OC input, #OC textarea, #OC select').forEach(function(input) {
-            localStorage.removeItem('OC_' + input.name);
-        });
-    });
-    </script>
+</script>
 @endsection
 
 
