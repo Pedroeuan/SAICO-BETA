@@ -172,7 +172,7 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     
 
     Route::middleware('auth')->group(function () {
-        Route::middleware('can:tecnicos-access')->group(function () {
+        Route::middleware('can:ventas-equipos-tecnicos-access')->group(function () {
         /* Análisis reutilizable de imágenes: histograma exacto y medición final con Fiji/ImageJ. */
         Route::post('/analisis-imagen/histograma', [AnalisisImagenController::class, 'histograma'])
             // El histograma inicia Fiji; este límite evita saturación accidental por usuario autenticado.
