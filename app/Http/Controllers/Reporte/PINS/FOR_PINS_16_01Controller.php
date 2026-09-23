@@ -251,14 +251,16 @@ class FOR_PINS_16_01Controller extends Controller
         } else {
             // Cliente no encontrado
             //$Cliente = "POR DEFINIR";
-            //$NewCliente = clientes::where('Cliente', $Cliente)->first();
+            //$Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
             // Si no existe, crea el cliente "POR DEFINIR"
-            //if (!$NewCliente) {
+            //if (!$Busqueda2Cliente) {
                 $NewCliente = new clientes();
                 $NewCliente->Cliente = $Cliente;
                 $NewCliente->RFC = $EsperaDato;
                 $NewCliente->Telefono = $EsperaDato;
                 $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
                 $NewCliente->save();
             //}
 

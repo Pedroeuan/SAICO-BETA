@@ -717,6 +717,8 @@ class FOR_PINS_07_01Controller extends Controller
                 $NewCliente->RFC = $EsperaDato;
                 $NewCliente->Telefono = $EsperaDato;
                 $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
                 $NewCliente->save();
 
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();

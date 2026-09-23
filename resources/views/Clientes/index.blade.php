@@ -81,7 +81,7 @@
 
                             <td>
 
-                                @if($cliente->logo)
+                                @if($cliente->logo && $cliente->logo !== 'ESPERA DE DATOS')
 
                                     <img src="{{ asset('storage/' . $cliente->logo) }}"
                                         alt="Logo {{ $cliente->Cliente }}"
@@ -148,7 +148,7 @@
 
                             <td>
 
-                                @if($cliente->portal_token)
+                                @if($cliente->portal_token && $cliente->portal_token !== 'ESPERA DE DATOS')
 
                                     <a href="{{ route('portal.cliente', ['token' => $cliente->portal_token]) }}"
                                     target="_blank"
