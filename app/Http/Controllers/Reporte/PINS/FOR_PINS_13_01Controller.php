@@ -591,13 +591,20 @@ class FOR_PINS_13_01Controller extends Controller
             $Lineal_Ideal->save();
 
         } else {
-            $NewCliente = new clientes();
-            $NewCliente->Cliente = $Cliente;
-            $NewCliente->RFC = $EsperaDato;
-            $NewCliente->Telefono = $EsperaDato;
-            $NewCliente->Correo = $EsperaDato;
-            $NewCliente->save();
-        //}
+            // Cliente no encontrado
+            //$Cliente = "POR DEFINIR";
+            //$Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
+            // Si no existe, crea el cliente "POR DEFINIR"
+            //if (!$Busqueda2Cliente) {
+                $NewCliente = new clientes();
+                $NewCliente->Cliente = $Cliente;
+                $NewCliente->RFC = $EsperaDato;
+                $NewCliente->Telefono = $EsperaDato;
+                $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
+                $NewCliente->save();
+            //}
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
             if($BusquedaContratoOS)
