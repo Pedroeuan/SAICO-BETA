@@ -13,7 +13,6 @@ class Firmantes_OS extends Model
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idFirmantes_OS',
         'idOrden_Servicio',
-        'Firmas',
         'Nombre_Cargo',
     ];
 
