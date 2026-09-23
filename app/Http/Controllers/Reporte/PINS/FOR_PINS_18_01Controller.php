@@ -556,11 +556,18 @@ class FOR_PINS_18_01Controller extends Controller
             $Lineal_Ideal->save();
 
         } else {
+            // Cliente no encontrado
+            //$Cliente = "POR DEFINIR";
+            //$Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
+            // Si no existe, crea el cliente "POR DEFINIR"
+            //if (!$Busqueda2Cliente) {
                 $NewCliente = new clientes();
                 $NewCliente->Cliente = $Cliente;
                 $NewCliente->RFC = $EsperaDato;
                 $NewCliente->Telefono = $EsperaDato;
                 $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
                 $NewCliente->save();
             //}
 
