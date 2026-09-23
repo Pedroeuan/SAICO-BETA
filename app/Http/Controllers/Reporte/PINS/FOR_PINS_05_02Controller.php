@@ -583,7 +583,6 @@ class FOR_PINS_05_02Controller extends Controller
             {
                 $idOC = $BusquedaContratoOC->idOC;
             } else{
-            $EsperaDato = "ESPERA DE DATOS";
             $OC->Contrato = $Contrato;
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
@@ -616,9 +615,11 @@ class FOR_PINS_05_02Controller extends Controller
             //if (!$Busqueda2Cliente) {
                 $NewCliente = new clientes();
                 $NewCliente->Cliente = $Cliente;
-                $NewCliente->RFC = 'N/A';
-                $NewCliente->Telefono = 'N/A';
-                $NewCliente->Correo = 'N/A';
+                $NewCliente->RFC = $EsperaDato;
+                $NewCliente->Telefono = $EsperaDato;
+                $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
                 $NewCliente->save();
             //}
 
