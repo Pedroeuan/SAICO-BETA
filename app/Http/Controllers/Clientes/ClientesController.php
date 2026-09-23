@@ -677,7 +677,7 @@ class ClientesController extends Controller
         |
         */
 
-        if (empty($clientes->portal_token)) {
+        if (empty($clientes->portal_token || $clientes->portal_token === 'ESPERA DE DATOS') || $clientes->portal_token === null || $clientes->portal_token === '') {
 
             $clientes->portal_token = (string) Str::uuid();
 

@@ -709,20 +709,19 @@ class FOR_PINS_22_01Controller extends Controller
             $Lineal_Ideal->save();
 
         } else {
-            // // Cliente no encontrado
+            // Cliente no encontrado
             //$Cliente = "POR DEFINIR";
-            //$NewCliente = clientes::where('Cliente', $Cliente)->first();
+            //$Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
             // Si no existe, crea el cliente "POR DEFINIR"
-            //if (!$NewCliente) {
-                
+            //if (!$Busqueda2Cliente) {
                 $NewCliente = new clientes();
                 $NewCliente->Cliente = $Cliente;
                 $NewCliente->RFC = $EsperaDato;
                 $NewCliente->Telefono = $EsperaDato;
                 $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
                 $NewCliente->save();
-                // Obtén el ID del registro recién creado
-                //$idNewCliente = $NewCliente->idClientes;
             //}
 
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
