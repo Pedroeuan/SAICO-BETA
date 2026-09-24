@@ -89,7 +89,7 @@ class EncuestaSatisfaccionController extends Controller
                 $preguntas = $validated['Preguntas'];
                 $promedio = round(array_sum($preguntas) / count($preguntas), 2);
 
-                Encuesta::create([
+                $encuesta = Encuesta::create([
                     'idOrden_Servicio' => $orden->idOrden_Servicio,
                     'idClientes' => $cliente->idClientes,
                     'Detalles_Generales' => json_encode([
@@ -105,6 +105,10 @@ class EncuestaSatisfaccionController extends Controller
                     'Firmas' => json_encode(['CLIENTE' => $firmaCliente], JSON_UNESCAPED_UNICODE),
                     'Estatus' => 'CONTESTADA',
                 ]);
+
+                DB::table('lineal_ideal')
+                    ->where('idOrden_Servicio', $orden->idOrden_Servicio)
+                    ->update(['idEncuesta' => $encuesta->idEncuesta]);
             });
         } catch (\Illuminate\Database\QueryException $exception) {
             if ((int) $exception->errorInfo[1] === 1062) {
