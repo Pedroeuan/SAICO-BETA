@@ -15,6 +15,7 @@ use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
+use App\Http\Controllers\Clientes\EncuestaSatisfaccionController;
 use App\Http\Controllers\Normas_IM\NormasIMController;
 use App\Http\Controllers\Normas_IM\PatronesGranoIMController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
@@ -118,6 +119,10 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
 
     /*Ruta del portal de los Clientes*/
     Route::get('/portal/{token}', [ClientesController::class, 'Portal_index'])->name('portal.cliente');
+    Route::post('/portal/{token}/encuesta', [EncuestaSatisfaccionController::class, 'store'])->name('portal.encuesta.store');
+    Route::get('/portal/{token}/encuesta/{idEncuesta}/pdf', [EncuestaSatisfaccionController::class, 'descargarPdf'])->name('portal.encuesta.pdf');
+    Route::post('/portal/{token}/encuesta/{idEncuesta}/firmada', [EncuestaSatisfaccionController::class, 'subirFirmada'])
+    ->name('portal.encuesta.firmada');
     /*Ruta de los contratos de los Clientes*/
     Route::get('/portal/{token}/reportes_clientes/{idOrden_Servicio}',[ClientesController::class, 'reportes_clientes'])->name('Reportes.Clientes');
     /*Ruta de los PDF de los contratos de los Clientes*/
