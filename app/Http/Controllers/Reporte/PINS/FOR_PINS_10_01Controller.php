@@ -595,6 +595,7 @@ class FOR_PINS_10_01Controller extends Controller
             $Lineal_Ideal->idOrden_Servicio = $idOrdenServicio;
             $Lineal_Ideal->idSolicitud = $idSolicitud;
             $Lineal_Ideal->idReportes = $idReportes;
+            $Lineal_Ideal->idEncuesta = null;
             $Lineal_Ideal->Estatus = 'CREADO';
             $Lineal_Ideal->save();
 
@@ -676,6 +677,7 @@ class FOR_PINS_10_01Controller extends Controller
             $Lineal_Ideal->idOrden_Servicio = $idOrdenServicio;
             $Lineal_Ideal->idSolicitud = $idSolicitud;
             $Lineal_Ideal->idReportes = $idReportes;
+            $Lineal_Ideal->idEncuesta = null;
             $Lineal_Ideal->Estatus = 'CREADO';
             $Lineal_Ideal->save();
         }

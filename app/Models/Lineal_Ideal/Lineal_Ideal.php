@@ -16,6 +16,7 @@ class Lineal_Ideal extends Model
         'idOrden_Servicio',
         'idSolicitud',
         'idReportes',
+        'idEncuesta',
         'Estatus',
     ];
     protected $table = 'Lineal_Ideal';
