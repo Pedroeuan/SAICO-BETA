@@ -611,8 +611,26 @@
                 padding: 20px;
 
             }
-
         }
+            .content .reportes-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .content .reportes-cabecera {
+            display: block !important;
+            text-align: center !important;
+            margin-bottom: 30px;
+        }
+
+        .content .reportes-cabecera .reportes-titulo {
+            display: block;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center !important;
+        }
+
 
     </style>
 
@@ -703,10 +721,10 @@
         =================================== -->
 
         <div class="reportes-container">
-
-            <h2>
-                Mis Reportes
-            </h2>
+            <div class="reportes-cabecera">
+            <h2 class="reportes-titulo">Mis Reportes</h2>
+            @include('Reportes_publicos.partials.encuesta-servicio')
+        </div>
 
             @forelse($reportes as $reporte)
                 <div class="contrato-card">
