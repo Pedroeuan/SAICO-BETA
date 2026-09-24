@@ -620,7 +620,7 @@
 
         <div class="logo-cliente">
 
-            @if($cliente->logo)
+            @if($cliente->logo && file_exists(public_path('storage/' . $cliente->logo)))
 
                 <img src="{{ asset('storage/' . $cliente->logo) }}"
                     alt="{{ $cliente->Cliente }}">

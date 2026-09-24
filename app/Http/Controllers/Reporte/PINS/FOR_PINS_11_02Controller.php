@@ -590,17 +590,19 @@ class FOR_PINS_11_02Controller extends Controller
 
         } else {
             // Cliente no encontrado
-            $Cliente = "POR DEFINIR";
-            $Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
+            //$Cliente = "POR DEFINIR";
+            //$Busqueda2Cliente = clientes::where('Cliente', $Cliente)->first();
             // Si no existe, crea el cliente "POR DEFINIR"
-            if (!$Busqueda2Cliente) {
-                $Busqueda2Cliente = new clientes();
-                $Busqueda2Cliente->Cliente = $Cliente;
-                $Busqueda2Cliente->RFC = 'N/A';
-                $Busqueda2Cliente->Telefono = 'N/A';
-                $Busqueda2Cliente->Correo = 'N/A';
-                $Busqueda2Cliente->save();
-            }
+            //if (!$Busqueda2Cliente) {
+                $NewCliente = new clientes();
+                $NewCliente->Cliente = $Cliente;
+                $NewCliente->RFC = $EsperaDato;
+                $NewCliente->Telefono = $EsperaDato;
+                $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
+                $NewCliente->save();
+            //}
 
             $BusquedaContratoOS = Orden_Servicio::where('Contrato', $Contrato)->first();
 
@@ -609,7 +611,7 @@ class FOR_PINS_11_02Controller extends Controller
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
             // Obtén el ID del cliente "POR DEFINIR"
-            $idClientes = $Busqueda2Cliente->idClientes;
+            $idClientes = $NewCliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
             $Orden_Servicio->Fecha = '2001/01/01';
             $Orden_Servicio->Lugar = $Lugar;

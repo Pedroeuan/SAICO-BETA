@@ -170,7 +170,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($detallesOC as $indice => $detalle)
+                                            @foreach($detallesOC ?? [] as $indice => $detalle)
                                                 <tr>
                                                     <td>{{ $indice + 1 }}</td>
                                                     <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>

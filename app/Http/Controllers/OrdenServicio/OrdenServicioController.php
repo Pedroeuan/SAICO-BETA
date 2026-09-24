@@ -8,6 +8,7 @@ use App\Models\OrdenServicio\Firmantes_OS;
 use App\Models\Clientes\clientes;
 use App\Models\Reporte\reporte;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
@@ -222,7 +223,7 @@ class OrdenServicioController extends Controller
 
         $datosFirmas = $firmasPorCantidad[$numFirmas] ?? [];
         $datosFirmas['numFirmas'] = $numFirmas;
-        $firmantes_OS->Firmas = json_encode($datosFirmas);
+        $firmantes_OS->Nombre_Cargo = json_encode($datosFirmas);
         $firmantes_OS->idOrden_Servicio = $OS->idOrden_Servicio;
         $firmantes_OS->save();
 
@@ -259,7 +260,7 @@ class OrdenServicioController extends Controller
         $Firmantes = Firmantes_OS::where('idOrden_Servicio',$OT->idOrden_Servicio)->first();
 
         // Decodificar JSON de la columna 'Detalles'
-        $Firmas = $Firmantes ? json_decode($Firmantes->Firmas, true) : [];
+        $Firmas = $Firmantes ? json_decode($Firmantes->Nombre_Cargo, true) : [];
         // Obtener el numero de firmas
         $numFirmas = $Firmas['numFirmas'] ?? 1;
 
@@ -341,7 +342,7 @@ class OrdenServicioController extends Controller
 
         $datosFirmas = $firmasPorCantidad[$numFirmas] ?? [];
         $datosFirmas['numFirmas'] = $numFirmas;
-        $firmantes_OS->Firmas = json_encode($datosFirmas);
+        $firmantes_OS->Nombre_Cargo = json_encode($datosFirmas);
         $firmantes_OS->save();
 
         return redirect()->route('OT_S.index')->with('success', 'Orden de servicio guardada correctamente.');
@@ -360,7 +361,8 @@ class OrdenServicioController extends Controller
                 'message' => 'Orden de Servicio no encontrada',
             ], 404);
         }
-
+        // Encontrar las relaciones de orde_servicio_prueba
+        $OT_P = Orden_Servicio_Prueba::where('idOrden_Servicio', $OT->idOrden_Servicio)->first();
         // Encontrar las Firmas de la OT
         $FirmasOT = Firmantes_OS::where('idOrden_Servicio', $OT->idOrden_Servicio)->first();
         // Encontrar los detalles de la OT
@@ -370,7 +372,10 @@ class OrdenServicioController extends Controller
         if ($OT->OT_archivo && Storage::disk('public')->exists($OT->OT_archivo)) {
             Storage::disk('public')->delete($OT->OT_archivo);
         }
-        
+        if($OT_P)
+        {
+            $OT_P->delete();
+        }
         if($FirmasOT)
         {
             $FirmasOT->delete();
@@ -404,7 +409,7 @@ class OrdenServicioController extends Controller
             : []
         )->map(fn ($detalle) => (object) $detalle);
         $firmantes = Firmantes_OS::where('idOrden_Servicio', $id)->first();
-        $Firmas_Reportes = $firmantes ? json_decode($firmantes->Firmas, true) : [];
+        $Firmas_Reportes = $firmantes ? json_decode($firmantes->Nombre_Cargo, true) : [];
         $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
         
         //$Grupo_Juntas_Detalles_OS = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $id)->first(); 

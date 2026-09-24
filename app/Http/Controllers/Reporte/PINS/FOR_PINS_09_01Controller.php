@@ -714,12 +714,13 @@ class FOR_PINS_09_01Controller extends Controller
             //$NewCliente = clientes::where('Cliente', $Cliente)->first();
             // Si no existe, crea el cliente "POR DEFINIR"
             //if (!$NewCliente) {
-                
                 $NewCliente = new clientes();
                 $NewCliente->Cliente = $Cliente;
                 $NewCliente->RFC = $EsperaDato;
                 $NewCliente->Telefono = $EsperaDato;
                 $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
                 $NewCliente->save();
                 // Obtén el ID del registro recién creado
                 //$idNewCliente = $NewCliente->idClientes;
