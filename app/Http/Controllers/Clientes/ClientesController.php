@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-
 use App\Models\Admin\Usuario;
 use App\Models\Reporte\reporte;
 use App\Models\Formato\formato;
@@ -19,6 +18,7 @@ use App\Models\Clientes\clientes;
 use App\Models\Reporte\ComentarioReporte;
 use App\Models\PruebaAplica\Prueba_Aplica;
 use App\Models\Notificacion\Notificacion;
+use App\Models\Encuesta\Encuesta;
 use App\Models\User;
 use App\Jobs\Procesamiento\GenerarReportePdfJob;
 use App\Notifications\ComentarioReporteNotification;
@@ -51,7 +51,50 @@ class ClientesController extends Controller
                 ->get()
                 ->groupBy('Contrato');
             //dd($contratos);
-            return view('Reportes_publicos.index', compact('cliente', 'contratos'));
+            // La encuesta se muestra dentro del detalle del servicio, no en el panel principal.
+            $encuestaPendiente = null;
+            $encuestasPorOrden = collect();
+            return view('Reportes_publicos.index', compact('cliente', 'contratos', 'encuestaPendiente', 'encuestasPorOrden'));
+        }
+
+        /**
+         * Una encuesta se habilita sólo cuando todos los reportes del servicio
+         * están firmados. Se muestra una sola encuesta pendiente por visita.
+         */
+        private function obtenerEncuestaPendiente(int $idCliente)
+        {
+            $ordenes = DB::table('orden_servicio as os')
+                ->where('os.idClientes', $idCliente)
+                ->whereNotExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('encuesta as e')
+                        ->whereColumn('e.idOrden_Servicio', 'os.idOrden_Servicio');
+                })
+                ->select('os.idOrden_Servicio', 'os.Contrato', 'os.Proyecto_actividad')
+                ->orderBy('os.idOrden_Servicio')
+                ->get();
+
+            foreach ($ordenes as $orden) {
+                if ($this->servicioTieneReportesFirmados((int) $orden->idOrden_Servicio)) {
+                    return $orden;
+                }
+            }
+
+            return null;
+        }
+
+        private function servicioTieneReportesFirmados(int $idOrdenServicio): bool
+        {
+            $reportes = DB::table('lineal_ideal as li')
+                ->join('reportes as r', 'r.idReportes', '=', 'li.idReportes')
+                ->where('li.idOrden_Servicio', $idOrdenServicio)
+                ->pluck('r.Detalles_Generales');
+
+            return $reportes->isNotEmpty() && $reportes->every(function ($detalles): bool {
+                $datos = json_decode($detalles, true) ?: [];
+
+                return !empty($datos['Reporte_Firmado']);
+            });
         }
 
         public function reportes_clientes($token, $idOrden_Servicio)
@@ -87,7 +130,10 @@ class ClientesController extends Controller
                     $reporte->detalles = json_decode($reporte->Detalles_Generales, true) ?: [];
                 });
 
-            return view('Reportes_publicos.Reportes', compact('cliente', 'orden', 'reportes'));
+            $encuesta = Encuesta::where('idOrden_Servicio', $orden->idOrden_Servicio)->first();
+            $encuestaPendiente = !$encuesta && $this->servicioTieneReportesFirmados((int) $orden->idOrden_Servicio);
+
+            return view('Reportes_publicos.Reportes', compact('cliente', 'orden', 'reportes', 'encuesta', 'encuestaPendiente'));
         }
 
         public function pdf_reporte($token, $idOrden_Servicio, $idReporte)
