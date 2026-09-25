@@ -301,6 +301,7 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
         Route::post('/Nuevo/Reporte/DesdeModal/{id}', [ReporteController::class, 'CrearNuevoReporteDesdeModal'])->name('Nuevo.Reporte.DesdeModal');
         /*Ruta Para pasar las variables al reporte*/
         Route::get('/Editar/Reporte/{id}', [ReporteController::class, 'Edicion_Reportes'])->name('Editar.Reporte');
+        Route::post('/Reportes/{id}/reporte-firmado', [ReporteController::class, 'subirReporteFirmado'])->name('Reportes.subirReporteFirmado');
         /*Ruta del botón del eliminar del index de indexINS2 */
         Route::delete('/Eliminar/Reporte/Tabla/{id}', [ReporteController::class, 'destroyReportes'])->name('Eliminar.Reporte.Tabla');
 
