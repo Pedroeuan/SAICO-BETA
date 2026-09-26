@@ -52,10 +52,6 @@
                 </thead>
                 <tbody>
                     @foreach($reportesEncontrados as $reporte)
-                    @php
-                        @dd($reportesEncontrados);
-                    @endphp
-                    
                         @php
                             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
                             $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
