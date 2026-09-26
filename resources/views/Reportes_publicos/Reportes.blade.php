@@ -841,6 +841,10 @@
 
                 button.addEventListener('click', function () {
 
+                    if (button.disabled || button.dataset.saving === 'true') {
+                        return;
+                    }
+
                     const reporteId = button.dataset.saveComment;
 
                     const textarea = document.querySelector(
@@ -858,12 +862,16 @@
 
                     // Deshabilitar botón mientras se guarda
                     button.disabled = true;
+                    button.dataset.saving = 'true';
+                    button.setAttribute('aria-busy', 'true');
                     button.textContent = 'Guardando...';
 
                     const comentarioUrl = textarea.dataset.comentarioUrl;
 
                     if (!comentarioUrl) {
                         button.disabled = false;
+                        button.dataset.saving = 'false';
+                        button.removeAttribute('aria-busy');
                         button.textContent = button.dataset.defaultText;
                         console.error('No se encontró la URL para guardar el comentario.');
                         return;
@@ -934,6 +942,8 @@
                     .finally(() => {
 
                         button.disabled = false;
+                        button.dataset.saving = 'false';
+                        button.removeAttribute('aria-busy');
 
                     });
 
