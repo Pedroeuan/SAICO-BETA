@@ -44,13 +44,18 @@
                         <th>PDF GENERADO</th>
                         <th>DESCARGAR PDF</th>
                         <th>PDF FIRMADO</th>
-                        <th>Editar</th>
                         <th>Siguiente Reporte</th>
+                        <th>SUBIR REPORTE</th>
+                        <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($reportesEncontrados as $reporte)
+                    @php
+                        @dd($reportesEncontrados);
+                    @endphp
+                    
                         @php
                             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
                             $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
@@ -100,9 +105,6 @@
                                             <i class="far fa-file-pdf"></i>
                                     </a>
                                 @endif
-                            </td> 
-                            <td>
-                                <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             <td>
                                 {{-- <a href=" route('Next.Reporte', ['id' => $reporte->idReportes])  }}"  class="btn btn-success btnSiguienteReporte" role="button"><i class="fas ffas fa-file-export"></i></a> --}}
@@ -120,6 +122,17 @@
                                     data-serie-total="{{ $serieFila->cantidad_planificada ?? '' }}">
                                     <i class="fas ffas fa-file-export" aria-hidden="true"></i>
                                 </button>
+                            </td>
+                            <td>
+                                <input type="file"
+                                    class="form-control-file inputForm reporte-firmado-input"
+                                    name="Reporte_Firmado"
+                                    accept="application/pdf"
+                                    data-reporte-id="{{ $reporte->idReportes }}"
+                                    data-upload-url="{{ route('Reportes.subirReporteFirmado', ['id' => $reporte->idReportes]) }}">
+                            </td>
+                            <td>
+                                <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger btnEliminarReportes" idReporte="{{$reporte->idReportes}}"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -194,6 +207,49 @@ let table = new DataTable('#tablaJs', {
                         "sortDescending": ": activar para ordenar la columna descendente"
                     }
                 }
+});
+
+$(document).on('change', '.reporte-firmado-input', function () {
+    const input = this;
+    const archivo = input.files[0];
+    const url = input.dataset.uploadUrl;
+
+    if (!archivo || !url) {
+        return;
+    }
+
+    if (archivo.type !== 'application/pdf') {
+        Swal.fire('Archivo no válido', 'Seleccione un archivo PDF.', 'error');
+        input.value = '';
+        return;
+    }
+
+    const datos = new FormData();
+    datos.append('Reporte_Firmado', archivo);
+    datos.append('_token', @json(csrf_token()));
+    input.disabled = true;
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: datos,
+        processData: false,
+        contentType: false,
+        success: function (respuesta) {
+            Swal.fire('Actualizado', respuesta.mensaje, 'success');
+            input.value = '';
+            const celda = input.closest('tr').querySelector('td:nth-child(7)');
+            celda.innerHTML = `<a href="/${respuesta.ruta}" class="btn btn-primary" target="_blank"><i class="far fa-file-pdf"></i></a>`;
+        },
+        error: function (xhr) {
+            const mensaje = xhr.responseJSON?.message || 'No fue posible subir el reporte firmado.';
+            Swal.fire('Error', mensaje, 'error');
+            input.value = '';
+        },
+        complete: function () {
+            input.disabled = false;
+        }
+    });
 });
 
 // Solicita el idioma solo para FOR-PIMP-04/03 y conserva la apertura en otra pestana.
