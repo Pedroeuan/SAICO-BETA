@@ -133,7 +133,7 @@
                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                     $fechaCalibracion = $general->Certificados->Fecha_calibracion;
                     $stockDisponible = $detalle->stockDisponible; // Ahora tienes el stock aquí
-                    dump($stockDisponible);
+                    //dump($stockDisponible);
                 @endphp
                 <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
                     <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
