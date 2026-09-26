@@ -133,6 +133,7 @@
                     $general = $generalEyC->firstWhere('idGeneral_EyC', $detalle->idGeneral_EyC);
                     $fechaCalibracion = $general->Certificados->Fecha_calibracion;
                     $stockDisponible = $detalle->stockDisponible; // Ahora tienes el stock aquí
+                    //dump($stockDisponible);
                 @endphp
                 <tr id="row-{{ $detalle->idDetalles_Solicitud }}">
                     <td>{{ $general->Nombre_E_P_BP ?? 'N/A' }}</td>
@@ -152,7 +153,7 @@
 
                         <td scope="row">
                             <div class="input-group">
-                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" min="1" data-stock="{{ $stockDisponible }}">
+                                <input type="number" class="form-control input-cantidad" name="Cantidad[{{ $detalle->idDetalles_Solicitud }}]" value="{{ $detalle->Cantidad ?? '1' }}" min="1" max="{{ $stockDisponible }}" data-stock="{{ $stockDisponible }}" @if($stockDisponible == 0) readonly @else required @endif>
                             </div>
                         </td>
                         <td scope="row">
@@ -336,7 +337,8 @@
         $(document).ready(function() {
             // Validar la cantidad ingresada en los inputs de cantidad
             $('#TablaSolicitud').on('input', '.input-cantidad', function() {
-                let maxCantidad = $(this).data('stock'); // Obtener el stock máximo desde data-stock
+                const stock = Number($(this).data('stock'));
+                const maxCantidad = stock === 0 ? 1 : stock;
                 let cantidadIngresada = $(this).val();
 
                 if (cantidadIngresada > maxCantidad) {
