@@ -606,7 +606,7 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     });
     
     /*EQUIPOS INVENTARIO-REGISTRO*/
-    Route::middleware('can:ventas-equipos-tecnicos-access')->group(function () {
+    Route::middleware('can:ventas-equipos-tecnicos-tics-access')->group(function () {
     /*DEVOLUCIONES*/
     /*Rutas de Devolución para listar y devolver*/
     Route::get('/devolucion/EyC/{id}', [DevolucionController::class, 'editDevolucionListado'])->name('devolucion.EyC');
