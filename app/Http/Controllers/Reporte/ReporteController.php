@@ -839,6 +839,64 @@ class ReporteController extends Controller
         }
     }
 
+    public function subirReporteFirmado(Request $request, int $id)
+    {
+        $request->validate([
+            'Reporte_Firmado' => ['required', 'file', 'mimes:pdf', 'max:20480'],
+        ]);
+
+        $reporte = reporte::findOrFail($id);
+        $detalles = json_decode($reporte->Detalles_Generales, true) ?: [];
+        $contrato = $detalles['Contrato'] ?? 'sin-contrato';
+        $noReporte = $detalles['No_Reporte'] ?? (string) $id;
+        $directorioFormato = $this->directorioReporteFirmado($reporte);
+
+        if (!empty($detalles['Reporte_Firmado'])) {
+            $rutaAnterior = ltrim(str_replace(['storage/', 'public/'], '', $detalles['Reporte_Firmado']), '/');
+
+            if (Storage::disk('public')->exists($rutaAnterior)) {
+                Storage::disk('public')->delete($rutaAnterior);
+            }
+        }
+
+        $directorio = 'Reportes/' . $directorioFormato . '/' . $contrato . '/' . $noReporte . '/Reporte_Firmado';
+        $nombreArchivo = 'Reporte_Firmado_' . $noReporte . '_' . time() . '.pdf';
+        $ruta = $request->file('Reporte_Firmado')->storeAs($directorio, $nombreArchivo, 'public');
+
+        $detalles['Reporte_Firmado'] = 'storage/' . $ruta;
+        $reporte->update([
+            'Detalles_Generales' => json_encode($detalles, JSON_UNESCAPED_UNICODE),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'ruta' => $detalles['Reporte_Firmado'],
+            'mensaje' => 'Reporte firmado actualizado correctamente.',
+        ]);
+    }
+
+    private function directorioReporteFirmado(reporte $reporte): string
+    {
+        $idFormato = Prueba_Aplica::where('idPrueba_Aplica', $reporte->idPrueba_Aplica)
+            ->value('idFormato');
+
+        $nombreFormato = $idFormato
+            ? formato::where('idFormato', $idFormato)->value('Nombre')
+            : null;
+
+        return match ($nombreFormato) {
+            'FOR-PINS-03-02' => 'FOR_PINS_03_02',
+            'FOR-PINS-04-01' => 'FOR_PINS_04_01',
+            'FOR-PINS-05-01' => 'FOR_PINS_05_01',
+            'FOR-PINS-05-02' => 'FOR_PINS_05_02',
+            'FOR-PINS-06-01' => 'FOR_PINS_06_01',
+            'FOR-PINS-07-01' => 'FOR_PINS_07_01',
+            'FOR-PIMP-02_B/03' => 'FOR_PIMP_02_B_03',
+            'FOR-PIMP-02_B/04' => 'FOR_PIMP_02_B_04',
+            default => str_replace(['-', '/'], '_', (string) $nombreFormato ?: 'SIN_FORMATO'),
+        };
+    }
+
     public function VerPdfQR($token)
     {
         // Buscar todos los reportes
