@@ -520,7 +520,9 @@ class VehiculoController extends Controller
      */
     public function update(VehiculoRequest $request, $id)
     {
+        //dd($request->all());
         $vehiculo = Vehiculo::findOrFail($id);
+        $NombreVehiculo = $vehiculo->id;
         $data = $request->validated();
         // 1) actualizar solo campos que no son docs/fechas de docs
         $vehiculo->fill(collect($data)->except([
