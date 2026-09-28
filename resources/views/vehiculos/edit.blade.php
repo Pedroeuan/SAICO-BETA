@@ -129,7 +129,7 @@
 
                         <div class="mb-3">
                             <label class="fw-bold">Vencimiento Póliza</label>
-                            <input type="date" name="poliza_seguro_vencimiento" class="form-control" value="@if($vehiculo->poliza_seguro_vencimiento == '2001-01-01') {{ '' }} @else {{ old('poliza_seguro_vencimiento', optional($vehiculo->poliza_seguro_vencimiento)->format('Y-m-d')) }}@endif">
+                            <input type="date" name="poliza_seguro_vencimiento" class="form-control" value="{{ old('poliza_seguro_vencimiento',$vehiculo->poliza_seguro_vencimiento?->format('Y-m-d') === '2001-01-01'? '': $vehiculo->poliza_seguro_vencimiento?->format('Y-m-d')) }}">
                         </div>
 
                         <div class="mb-3">
@@ -148,7 +148,7 @@
 
                         <div class="mb-3">
                             <label class="fw-bold">Vencimiento Tarjeta</label>
-                            <input type="date" name="tarjeta_circulacion_vencimiento" class="form-control" value="@if($vehiculo->tarjeta_circulacion_vencimiento == '2001-01-01') {{ '' }} @else {{ old('tarjeta_circulacion_vencimiento', optional($vehiculo->tarjeta_circulacion_vencimiento)->format('Y-m-d')) }}@endif">
+                            <input type="date" name="tarjeta_circulacion_vencimiento" class="form-control" value="{{ old('tarjeta_circulacion_vencimiento',$vehiculo->tarjeta_circulacion_vencimiento?->format('Y-m-d') === '2001-01-01'? '': $vehiculo->tarjeta_circulacion_vencimiento?->format('Y-m-d')) }}">
                         </div>
                         <div class="mb-3">
                             <label class="fw-bold">Foto principal del vehículo</label>
@@ -162,8 +162,7 @@
 
                         <div class="mb-3">
                             <label class="fw-bold">Vencimiento tenencia</label>
-                            <input type="date" name="tenencia_vencimiento" class="form-control"
-                                value="{{ old('tenencia_vencimiento', optional($vehiculo->tenencia_vencimiento)->format('Y-m-d')) }}">
+                            <input type="date" name="tenencia_vencimiento" class="form-control" value="{{ old('tenencia_vencimiento',$vehiculo->tenencia_vencimiento?->format('Y-m-d') === '2001-01-01'? '': $vehiculo->tenencia_vencimiento?->format('Y-m-d')) }}">
                         </div>
 
                         <div class="mb-3">
