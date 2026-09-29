@@ -37,14 +37,12 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Contrato</th>
                         <th>Nombre del Proyecto</th>
-                        <th>No. Reporte</th>
-                        <th>Fecha</th>
-                        <th>PDF GENERADO</th>
+                        <th>Detalles del Reporte</th>
+                        <th>REPORTE PDF</th>
                         <th>DESCARGAR PDF</th>
                         <th>PDF FIRMADO</th>
-                        <th>Siguiente Reporte</th>
+                        <th>SIGUIENTE REPORTE</th>
                         <th>SUBIR REPORTE</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
@@ -54,6 +52,13 @@
                     @foreach($reportesEncontrados as $reporte)
                         @php
                             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
+                            //dd($detalles);
+                            $Contrato = $detalles['Contrato'] ?? '';
+                            $Fecha = $detalles['Fecha'] ?? '';
+                            $No_Reporte = $detalles['No_Reporte'] ?? '';
+                            $No_Isometrico = $detalles['No_Isometrico'] ?? '';
+                            $No_Junta = $detalles['No_Junta'] ?? '';
+                            $Nom_Pieza = $detalles['Nom_Pieza'] ?? '';
                             $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
                             $ProyectoReporte = $detalles['Proyecto'] ?? $detalles['Identificacion'] ?? '';
                             $idSolicitud = $detalles['idSolicitud'] ?? '';
@@ -61,10 +66,8 @@
                             $descargaAsincrona = in_array($formatoReporte, ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-05_B/01', 'FOR-PIMP-06_B/01'], true);
                         @endphp
                         <tr>
-                            <td>{{ $detalles['Contrato'] ?? '' }}</td>
                             <td>{{ $ProyectoReporte }}</td>
-                            <td>{{ $detalles['No_Reporte'] ?? '' }}</td>
-                            <td>{{ $detalles['Fecha'] ?? '' }}</td>
+                            <td><b>Contrato: </b>{{$Contrato}}, <b>Numero de Reporte: </b>{{$No_Reporte}}, <b>Fecha: </b>{{$Fecha}}, <b>No Isometrico: </b>{{$No_Isometrico}}, <b>No Junta: </b>{{$No_Junta}}, <b>No Pieza: </b>{{$Nom_Pieza}}</td>
                             <td>
                                 @if(($formatosPorReporte[$reporte->idReportes] ?? '') === 'FOR-PIMP-04/03')
                                     {{-- FOR-PIMP-04/03 dispone de dos juegos completos de plantillas. --}}
@@ -120,12 +123,21 @@
                                 </button>
                             </td>
                             <td>
+                                <label for="reporteFirmado_{{ $reporte->idReportes }}"
+                                    class="btn btn-info mb-0"
+                                    title="Subir reporte firmado">
+                                    <i class="fas fa-file-upload"></i>
+                                </label>
+
                                 <input type="file"
-                                    class="form-control-file inputForm reporte-firmado-input"
+                                    id="reporteFirmado_{{ $reporte->idReportes }}"
+                                    class="reporte-firmado-input"
                                     name="Reporte_Firmado"
-                                    accept="application/pdf"
+                                    accept=".pdf"
                                     data-reporte-id="{{ $reporte->idReportes }}"
-                                    data-upload-url="{{ route('Reportes.subirReporteFirmado', ['id' => $reporte->idReportes]) }}">
+                                    data-upload-url="{{ route('Reportes.subirReporteFirmado', ['id' => $reporte->idReportes]) }}"
+                                    hidden>
+                            </td>
                             </td>
                             <td>
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
@@ -234,7 +246,7 @@ $(document).on('change', '.reporte-firmado-input', function () {
         success: function (respuesta) {
             Swal.fire('Actualizado', respuesta.mensaje, 'success');
             input.value = '';
-            const celda = input.closest('tr').querySelector('td:nth-child(7)');
+            const celda = input.closest('tr').querySelector('td:nth-child(4)');
             celda.innerHTML = `<a href="/${respuesta.ruta}" class="btn btn-primary" target="_blank"><i class="far fa-file-pdf"></i></a>`;
         },
         error: function (xhr) {
