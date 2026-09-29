@@ -37,10 +37,8 @@
             <table id="tablaJs" class="table table-bordered table-striped dt-responsive tablas">
                 <thead>
                     <tr>
-                        <th>Contrato</th>
                         <th>Nombre del Proyecto</th>
-                        <th>No. Reporte</th>
-                        <th>Fecha</th>
+                        <th>Detalles del Reporte</th>
                         <th>PDF GENERADO</th>
                         <th>DESCARGAR PDF</th>
                         <th>PDF FIRMADO</th>
@@ -54,6 +52,13 @@
                     @foreach($reportesEncontrados as $reporte)
                         @php
                             $detalles = json_decode($reporte->Detalles_Generales, true) ?? [];
+                            //dd($detalles);
+                            $Contrato = $detalles['Contrato'] ?? '';
+                            $Fecha = $detalles['Fecha'] ?? '';
+                            $No_Reporte = $detalles['No_Reporte'] ?? '';
+                            $No_Isometrico = $detalles['No_Isometrico'] ?? '';
+                            $No_Junta = $detalles['No_Junta'] ?? '';
+                            $Nom_Pieza = $detalles['Nom_Pieza'] ?? '';
                             $Reporte_Firmado = $detalles['Reporte_Firmado'] ?? '';
                             $ProyectoReporte = $detalles['Proyecto'] ?? $detalles['Identificacion'] ?? '';
                             $idSolicitud = $detalles['idSolicitud'] ?? '';
@@ -61,10 +66,8 @@
                             $descargaAsincrona = in_array($formatoReporte, ['FOR-PIMP-03_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-05_B/01', 'FOR-PIMP-06_B/01'], true);
                         @endphp
                         <tr>
-                            <td>{{ $detalles['Contrato'] ?? '' }}</td>
                             <td>{{ $ProyectoReporte }}</td>
-                            <td>{{ $detalles['No_Reporte'] ?? '' }}</td>
-                            <td>{{ $detalles['Fecha'] ?? '' }}</td>
+                            <td><b>Contrato: </b>{{$Contrato}}<br><b>Numero de Reporte: </b>{{$No_Reporte}}<br> <b>Fecha: </b>{{$Fecha}}<br><b>No Isometrico: </b>{{$No_Isometrico}}<br> <b>No Junta: </b>{{$No_Junta}}<br> <b>No Pieza: </b>{{$Nom_Pieza}}</td>
                             <td>
                                 @if(($formatosPorReporte[$reporte->idReportes] ?? '') === 'FOR-PIMP-04/03')
                                     {{-- FOR-PIMP-04/03 dispone de dos juegos completos de plantillas. --}}
