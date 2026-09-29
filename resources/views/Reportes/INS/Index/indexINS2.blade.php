@@ -39,10 +39,10 @@
                     <tr>
                         <th>Nombre del Proyecto</th>
                         <th>Detalles del Reporte</th>
-                        <th>PDF GENERADO</th>
+                        <th>REPORTE PDF</th>
                         <th>DESCARGAR PDF</th>
                         <th>PDF FIRMADO</th>
-                        <th>Siguiente Reporte</th>
+                        <th>SIGUIENTE REPORTE</th>
                         <th>SUBIR REPORTE</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
@@ -67,7 +67,7 @@
                         @endphp
                         <tr>
                             <td>{{ $ProyectoReporte }}</td>
-                            <td><b>Contrato: </b>{{$Contrato}}<br><b>Numero de Reporte: </b>{{$No_Reporte}}<br> <b>Fecha: </b>{{$Fecha}}<br><b>No Isometrico: </b>{{$No_Isometrico}}<br> <b>No Junta: </b>{{$No_Junta}}<br> <b>No Pieza: </b>{{$Nom_Pieza}}</td>
+                            <td><b>Contrato: </b>{{$Contrato}}, <b>Numero de Reporte: </b>{{$No_Reporte}}, <b>Fecha: </b>{{$Fecha}}, <b>No Isometrico: </b>{{$No_Isometrico}}, <b>No Junta: </b>{{$No_Junta}}, <b>No Pieza: </b>{{$Nom_Pieza}}</td>
                             <td>
                                 @if(($formatosPorReporte[$reporte->idReportes] ?? '') === 'FOR-PIMP-04/03')
                                     {{-- FOR-PIMP-04/03 dispone de dos juegos completos de plantillas. --}}
@@ -123,12 +123,21 @@
                                 </button>
                             </td>
                             <td>
+                                <label for="reporteFirmado_{{ $reporte->idReportes }}"
+                                    class="btn btn-info mb-0"
+                                    title="Subir reporte firmado">
+                                    <i class="fas fa-file-upload"></i>
+                                </label>
+
                                 <input type="file"
-                                    class="form-control-file inputForm reporte-firmado-input"
+                                    id="reporteFirmado_{{ $reporte->idReportes }}"
+                                    class="reporte-firmado-input"
                                     name="Reporte_Firmado"
-                                    accept="application/pdf"
+                                    accept=".pdf"
                                     data-reporte-id="{{ $reporte->idReportes }}"
-                                    data-upload-url="{{ route('Reportes.subirReporteFirmado', ['id' => $reporte->idReportes]) }}">
+                                    data-upload-url="{{ route('Reportes.subirReporteFirmado', ['id' => $reporte->idReportes]) }}"
+                                    hidden>
+                            </td>
                             </td>
                             <td>
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
@@ -237,7 +246,7 @@ $(document).on('change', '.reporte-firmado-input', function () {
         success: function (respuesta) {
             Swal.fire('Actualizado', respuesta.mensaje, 'success');
             input.value = '';
-            const celda = input.closest('tr').querySelector('td:nth-child(7)');
+            const celda = input.closest('tr').querySelector('td:nth-child(4)');
             celda.innerHTML = `<a href="/${respuesta.ruta}" class="btn btn-primary" target="_blank"><i class="far fa-file-pdf"></i></a>`;
         },
         error: function (xhr) {
