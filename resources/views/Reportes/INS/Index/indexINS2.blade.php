@@ -138,7 +138,6 @@
                                     data-upload-url="{{ route('Reportes.subirReporteFirmado', ['id' => $reporte->idReportes]) }}"
                                     hidden>
                             </td>
-                            </td>
                             <td>
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                             </td>
