@@ -182,7 +182,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($detallesOT as $indice => $detalle)
+                                            @forelse($detallesOT ?? [] as $indice => $detalle)
                                                 <tr>
                                                     <td>{{ $indice + 1 }}</td>
                                                     <td><textarea class="form-control" name="descripcion[]" placeholder="Descripción/Actividades">{{ $detalle['descripcion'] ?? '' }}</textarea></td>
@@ -191,7 +191,16 @@
                                                     <td><textarea class="form-control" name="procesos[]" placeholder="Procesos">{{ $detalle['procesos'] ?? '' }}</textarea></td>
                                                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                 </tr>
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td><textarea class="form-control" name="descripcion[]" placeholder="Descripción/Actividades"></textarea></td>
+                                                    <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
+                                                    <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
+                                                    <td><textarea class="form-control" name="procesos[]" placeholder="Procesos"></textarea></td>
+                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                     <p>

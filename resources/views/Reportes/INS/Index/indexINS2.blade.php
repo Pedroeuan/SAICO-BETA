@@ -16,8 +16,64 @@
         text-align: center; /* Centra el texto del encabezado horizontalmente */
     }
     #my-notification .dropdown-menu {
-    max-height: 200px; /* Ajusta la altura según sea necesario */
-    overflow-y: auto;
+        max-height: 200px; /* Ajusta la altura según sea necesario */
+        overflow-y: auto;
+    }
+    /* Ancho personalizado para cada columna */
+    /* Columna 1: Nombre del Proyecto */
+    #tablaJs th:nth-child(1),
+    #tablaJs td:nth-child(1) {
+        min-width: 150px;
+        width: 15%;
+    }
+    /* Columna 2: Detalles del Reporte */
+    #tablaJs th:nth-child(2),
+    #tablaJs td:nth-child(2) {
+        min-width: 200px;
+        max-width: 400px;
+        width: 15%;
+    }
+    /* Columna 3: REPORTE PDF */
+    #tablaJs th:nth-child(3),
+    #tablaJs td:nth-child(3) {
+        min-width: 80px;
+        width: 8%;
+    }
+    /* Columna 4: DESCARGAR PDF */
+    #tablaJs th:nth-child(4),
+    #tablaJs td:nth-child(4) {
+        min-width: 80px;
+        width: 8%;
+    }
+    /* Columna 5: SUBIR REPORTE */
+    #tablaJs th:nth-child(5),
+    #tablaJs td:nth-child(5) {
+        min-width: 80px;
+        width: 8%;
+    }
+    /* Columna 6: PDF FIRMADO */
+    #tablaJs th:nth-child(6),
+    #tablaJs td:nth-child(6) {
+        min-width: 80px;
+        width: 8%;
+    }
+    /* Columna 7: SIGUIENTE REPORTE */
+    #tablaJs th:nth-child(7),
+    #tablaJs td:nth-child(7) {
+        min-width: 80px;
+        width: 8%;
+    }
+    /* Columna 8: Editar */
+    #tablaJs th:nth-child(8),
+    #tablaJs td:nth-child(8) {
+        min-width: 60px;
+        width: 5%;
+    }
+    /* Columna 9: Eliminar */
+    #tablaJs th:nth-child(9),
+    #tablaJs td:nth-child(9) {
+        min-width: 60px;
+        width: 5%;
     }
 
 </style>
@@ -39,11 +95,11 @@
                     <tr>
                         <th>Nombre del Proyecto</th>
                         <th>Detalles del Reporte</th>
-                        <th>REPORTE PDF</th>
-                        <th>DESCARGAR PDF</th>
-                        <th>PDF FIRMADO</th>
-                        <th>SIGUIENTE REPORTE</th>
-                        <th>SUBIR REPORTE</th>
+                        <th>Ver PDF</th>
+                        <th>Descargar PDF</th>
+                        <th>Subir Reporte</th>
+                        <th>PDF Firmado</th>
+                        <th>Nuevo Reporte</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
@@ -67,7 +123,27 @@
                         @endphp
                         <tr>
                             <td>{{ $ProyectoReporte }}</td>
-                            <td><b>Contrato: </b>{{$Contrato}}, <b>Numero de Reporte: </b>{{$No_Reporte}}, <b>Fecha: </b>{{$Fecha}}, <b>No Isometrico: </b>{{$No_Isometrico}}, <b>No Junta: </b>{{$No_Junta}}, <b>No Pieza: </b>{{$Nom_Pieza}}</td>
+                            <td>
+                                <b>Contrato: </b>{{$Contrato}}, <b>Numero de Reporte: </b>{{$No_Reporte}}, <b>Fecha: </b>{{$Fecha}}, <b>No Isometrico: </b>{{$No_Isometrico}}, <b>No Junta: </b>{{$No_Junta}}, <b>No Pieza: </b>{{$Nom_Pieza}}
+                                @if($detalles['Cliente'] ?? '')<br><b>Cliente: </b>{{$detalles['Cliente']}}@endif
+                                @if($detalles['Material'] ?? '')<br><b>Material: </b>{{$detalles['Material']}}@endif
+                                @if($detalles['Trazabilidad'] ?? '')<br><b>Trazabilidad: </b>{{$detalles['Trazabilidad']}}@endif
+                                @if($detalles['Espesores'] ?? '')<br><b>Espesores: </b>{{$detalles['Espesores']}}@endif
+                                @if($detalles['Diam_Nominal'] ?? '')<br><b>Diam. Nominal: </b>{{$detalles['Diam_Nominal']}}@endif
+                                @if($detalles['Metodo'] ?? '')<br><b>Método: </b>{{$detalles['Metodo']}}@endif
+                                @if($detalles['Procedimiento'] ?? '')<br><b>Procedimiento: </b>{{$detalles['Procedimiento']}}@endif
+                                @if($detalles['Codigo_Diseño'] ?? '')<br><b>Código Diseño: </b>{{$detalles['Codigo_Diseño']}}@endif
+                                @if($detalles['Orden_Trabajo'] ?? '')<br><b>Orden Trabajo: </b>{{$detalles['Orden_Trabajo']}}@endif
+                                @if($detalles['Folio'] ?? '')<br><b>Folio: </b>{{$detalles['Folio']}}@endif
+                                @if($detalles['Partida'] ?? '')<br><b>Partida: </b>{{$detalles['Partida']}}@endif
+                                @if($detalles['Instalacion'] ?? '')<br><b>Instalación: </b>{{$detalles['Instalacion']}}@endif
+                                @if($detalles['Accesorio'] ?? '')<br><b>Accesorio: </b>{{$detalles['Accesorio']}}@endif
+                                @if($detalles['Tuberia'] ?? '')<br><b>Tubería: </b>{{$detalles['Tuberia']}}@endif
+                                @if($detalles['Estructural'] ?? '')<br><b>Estructural: </b>{{$detalles['Estructural']}}@endif
+                                @if($detalles['Temp_Pieza'] ?? '')<br><b>Temp. Pieza: </b>{{$detalles['Temp_Pieza']}}@endif
+                                @if($detalles['Esp_Ced'] ?? '')<br><b>Esp. Ced: </b>{{$detalles['Esp_Ced']}}@endif
+                                @if($detalles['Elementos_Soldados'] ?? '')<br><b>Elementos Soldados: </b>{{$detalles['Elementos_Soldados']}}@endif
+                            </td>
                             <td>
                                 @if(($formatosPorReporte[$reporte->idReportes] ?? '') === 'FOR-PIMP-04/03')
                                     {{-- FOR-PIMP-04/03 dispone de dos juegos completos de plantillas. --}}
@@ -92,6 +168,22 @@
                                     aria-label="Descargar PDF">
                                     <i class="fas fa-download"></i>
                                 </a>
+                            </td>
+                            <td>
+                                <label for="reporteFirmado_{{ $reporte->idReportes }}"
+                                    class="btn btn-info mb-0"
+                                    title="Subir reporte firmado">
+                                    <i class="fas fa-file-upload"></i>
+                                </label>
+
+                                <input type="file"
+                                    id="reporteFirmado_{{ $reporte->idReportes }}"
+                                    class="reporte-firmado-input"
+                                    name="Reporte_Firmado"
+                                    accept=".pdf"
+                                    data-reporte-id="{{ $reporte->idReportes }}"
+                                    data-upload-url="{{ route('Reportes.subirReporteFirmado', ['id' => $reporte->idReportes]) }}"
+                                    hidden>
                             </td>
                             <td>
                                 @if ($Reporte_Firmado == '')
@@ -121,22 +213,6 @@
                                     data-serie-total="{{ $serieFila->cantidad_planificada ?? '' }}">
                                     <i class="fas ffas fa-file-export" aria-hidden="true"></i>
                                 </button>
-                            </td>
-                            <td>
-                                <label for="reporteFirmado_{{ $reporte->idReportes }}"
-                                    class="btn btn-info mb-0"
-                                    title="Subir reporte firmado">
-                                    <i class="fas fa-file-upload"></i>
-                                </label>
-
-                                <input type="file"
-                                    id="reporteFirmado_{{ $reporte->idReportes }}"
-                                    class="reporte-firmado-input"
-                                    name="Reporte_Firmado"
-                                    accept=".pdf"
-                                    data-reporte-id="{{ $reporte->idReportes }}"
-                                    data-upload-url="{{ route('Reportes.subirReporteFirmado', ['id' => $reporte->idReportes]) }}"
-                                    hidden>
                             </td>
                             <td>
                                 <a href="{{ route('Editar.Reporte', ['id' => $reporte->idReportes]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
@@ -245,7 +321,7 @@ $(document).on('change', '.reporte-firmado-input', function () {
         success: function (respuesta) {
             Swal.fire('Actualizado', respuesta.mensaje, 'success');
             input.value = '';
-            const celda = input.closest('tr').querySelector('td:nth-child(4)');
+            const celda = input.closest('tr').querySelector('td:nth-child(6)');
             celda.innerHTML = `<a href="/${respuesta.ruta}" class="btn btn-primary" target="_blank"><i class="far fa-file-pdf"></i></a>`;
         },
         error: function (xhr) {
