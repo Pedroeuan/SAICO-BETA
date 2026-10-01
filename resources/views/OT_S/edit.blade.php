@@ -136,7 +136,7 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            @if ($OT->OT_archivo === 'ESPERA DE DATOS' || $OT->OT_archivo === 'ESPERA DE DATO')
+                                            @if ($OT->OT_archivo === 'ESPERA DE DATOS' || $OT->OT_archivo === 'ESPERA DE DATO' || $OT->OT_archivo == null)
                                             <label class="col-form-label" for="inputSuccess">No se encontro Orden de Trabajo</label>                                              
                                                 <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                                 
                                             @else
