@@ -8,6 +8,7 @@ use App\Http\Controllers\Procesamiento\TrabajoProcesamientoController;
 use App\Http\Controllers\Procesamiento\ProcesamientoXrfController;
 use App\Http\Controllers\Procesamiento\ProcesamientoPdfController;
 
+use App\Http\Controllers\OC\CatalogoOCController;
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\TICS\TICSController;
 use App\Http\Controllers\DashboardController;
@@ -803,6 +804,10 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
+    /*Ruta de Vista del catálogo de OC*/
+    Route::get('/OC/catalogo', [CatalogoOCController::class, 'create'])->name('OC.catalogo');
+    /*Ruta de Guardado*/
+    Route::post('/OC/storeCatalogo', [CatalogoOCController::class, 'store'])->name('OC.storeCatalogo'); 
     });
     
     /* VEHÍCULOS (SOLO ADMIN) 

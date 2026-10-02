@@ -12,6 +12,7 @@ class OC extends Model
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idOC',
+        'idClientes',
         'Contrato',
         'Num_OC',
         'Requisicion',
@@ -29,6 +30,11 @@ class OC extends Model
     public function detalles_OC()
     {
         return $this->hasMany(detallesOC::class, 'idOC', 'idOC');
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(clientes::class, 'idClientes', 'idClientes');
     }
 
     public function getFormattedDateAttribute()

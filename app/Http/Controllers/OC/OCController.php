@@ -323,4 +323,5 @@ class OCController extends Controller
          // Responder con éxito
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
     }
+
 }

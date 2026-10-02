@@ -664,6 +664,11 @@ return [
                     //'topnav' => true,
                     'submenu' => [
                         [
+                            'text' => 'Catalogo de Servicios',
+                            'icon' => 'fas fa-book-open',
+                            'url' => '/OC/catalogo',
+                        ],
+                        [
                             'text' => 'Registro OC',
                             'icon' => 'fas fa-chart-line',
                             'url' => '/OC/createOC',
