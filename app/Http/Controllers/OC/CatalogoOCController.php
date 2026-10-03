@@ -19,7 +19,8 @@ class CatalogoOCController extends Controller
      */
     public function index()
     {
-        //
+        $Catalogo_OC = Catalogo_OC::all();
+        return view('Catalogo_OC.index', compact('Catalogo_OC'));
     }
 
     /**
@@ -36,8 +37,7 @@ class CatalogoOCController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        dd($request->all());
+        //dd($request->all());
           //
         $request->validate([
             'Nombre' => 'required|string',
@@ -69,8 +69,33 @@ class CatalogoOCController extends Controller
             $Catalogo_OC->Unidad = $request->input('Unidad');
         }
 
+        // Validar que se ha enviado el archivo de factura
+        if ($request->hasFile('Imagen') && $request->file('Imagen')->isValid()) {
+            $pdf = $request->file('Imagen');
+            // Obtener el último número consecutivo
+            $lastFile = collect(Storage::disk('public')->files('Ventas/OC/Catalogo'))
+                ->filter(function ($file) {
+                    return preg_match('/^\d+_/', basename($file));
+                })
+                ->sort()
+                ->last();
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int)explode('_', basename($lastFile))[0];
+            }
+            // Incrementar el número consecutivo
+            $newNumber = $lastNumber + 1;
+            $newFileNameOC = $newNumber . '_' . $pdf->getClientOriginalName();
+            // Guardar el archivo PDF en la carpeta "public/Ventas/OC/Catalogo"
+            $pdfPath = $pdf->storeAs('Ventas/OC/Catalogo', $newFileNameOC, 'public');
+            // Guardar la ruta en la base de datos
+            $Catalogo_OC->Imagen = $pdfPath;
+        } else {
+            $Catalogo_OC->Imagen = $EsperaDato;
+        }
         $Catalogo_OC->save();
 
+        return redirect()->route('OC.indexCatalogo');
     }
 
     /**

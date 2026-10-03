@@ -29,6 +29,13 @@
         display: none;
     }
 
+    /* Centrar texto de la tabla */
+    #tablaJs th,
+    #tablaJs td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
 </style>
 
 @endsection
@@ -69,18 +76,38 @@
 
                 <tbody>
 
-                    @foreach($clientes as $cliente)
+                    @foreach($Catalogo_OC as $catalogos)
 
                         <tr>
 
-                            {{-- LOGO --}}
+                            {{-- Nombre --}}
+
+                            <td>
+                                {{ $catalogos->Nombre }}
+                            </td>
+
+
+                            {{-- Descripción --}}
+
+                            <td>
+                                {{ $catalogos->Descripcion }}
+                            </td>
+
+
+                            {{-- Unidad --}}
+
+                            <td>
+                                {{ $catalogos->Unidad }}
+                            </td>
+                            
+                            {{-- Imagen --}}
 
                             <td>
 
-                                @if($cliente->logo && $cliente->logo !== 'ESPERA DE DATOS')
+                                @if($catalogos->Imagen && $catalogos->Imagen !== 'ESPERA DE DATOS')
 
-                                    <img src="{{ asset('storage/' . $cliente->logo) }}"
-                                        alt="Logo {{ $cliente->Cliente }}"
+                                    <img src="{{ asset('storage/' . $catalogos->Imagen) }}"
+                                        alt="Logo {{ $catalogos->Nombre }}"
                                         style="
                                             width: 60px;
                                             height: 60px;
@@ -111,70 +138,15 @@
 
                             </td>
 
-
-                            {{-- CLIENTE --}}
-
-                            <td>
-                                {{ $cliente->Cliente }}
-                            </td>
-
-
-                            {{-- RFC --}}
-
-                            <td>
-                                {{ $cliente->RFC }}
-                            </td>
-
-
-                            {{-- TELEFONO --}}
-
-                            <td>
-                                {{ $cliente->Telefono }}
-                            </td>
-
-
-                            {{-- CORREO --}}
-
-                            <td>
-                                {{ $cliente->Correo }}
-                            </td>
-
-
-                            {{-- PORTAL --}}
-
-                            <td>
-
-                                @if($cliente->portal_token && $cliente->portal_token !== 'ESPERA DE DATOS')
-
-                                    <a href="{{ route('portal.cliente', ['token' => $cliente->portal_token]) }}"
-                                    target="_blank"
-                                    class="btn btn-primary"
-                                    title="Abrir portal">
-
-                                        <i class="fas fa-globe"></i>
-
-                                    </a>
-
-                                @else
-
-                                    <span class="badge badge-warning">
-                                        Sin portal
-                                    </span>
-
-                                @endif
-
-                            </td>
-
-
                             {{-- EDITAR --}}
 
                             <td>
 
                                 <div class="btn-group">
 
-                                    <a href="{{ route('edicion.editClientes', ['id' => $cliente->idClientes]) }}"
-                                    class="btn btn-warning"
-                                    role="button">
+                                    <a href="{{ route('OC.editCatalogo', ['id' => $catalogos->idCatalogo_OC]) }}"
+                                        class="btn btn-warning"
+                                        role="button">
 
                                         <i class="fas fa-pencil-alt"></i>
 
@@ -193,7 +165,7 @@
 
                                     <button type="button"
                                             class="btn btn-danger btnEliminarSolicitud"
-                                            idCliente="{{ $cliente->idClientes }}">
+                                            idCatalogo_OC="{{ $catalogos->idCatalogo_OC }}">
 
                                         <i class="fa fa-times"></i>
 
@@ -265,7 +237,7 @@
     });
 
 $(document).on("click", ".btnEliminarSolicitud", function() {
-    var idCliente = $(this).attr("idCliente");
+    var idCatalogo_OC = $(this).attr("idCatalogo_OC");
     Swal.fire({
         title: "¿Seguro de eliminar este elemento?",
         showDenyButton: true,
@@ -275,7 +247,7 @@ $(document).on("click", ".btnEliminarSolicitud", function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/Clientes/eliminar/' + idCliente,
+                url: '/Catalogo_OC/eliminar/' + idCatalogo_OC,
                 type: 'DELETE',
                 data: {
                     _token: '{{ csrf_token() }}'

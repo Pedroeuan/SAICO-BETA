@@ -666,6 +666,11 @@ return [
                         [
                             'text' => 'Catalogo de Servicios',
                             'icon' => 'fas fa-book-open',
+                            'url' => '/OC/indexCatalogo',
+                        ],
+                        [
+                            'text' => 'Registro de Catalogo de Servicios',
+                            'icon' => 'fa fa-plus-square',
                             'url' => '/OC/catalogo',
                         ],
                         [
