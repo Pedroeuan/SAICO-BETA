@@ -487,7 +487,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? ($datosEquipoActuales['QR_PDF'] ?? null);
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? ($datosEquipoActuales['PDF_UNIFICADO'] ?? null);
 
-        // La norma y el patron tienen una sola copia tecnica en Juntas_Grupo_Re.
+        // Norma y patron se guardan en Juntas_Grupo_Re; elimina las copias antiguas.
         unset($validatedData['Detalles_Generales']['Norma_IM'], $validatedData['Detalles_Generales']['PATRON_GRANO']);
 
         // Actualiza los detalles generales como JSON en la base de datos
@@ -786,8 +786,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
         $NormaIM = is_array($juntas['Norma_IM'] ?? null) ? $juntas['Norma_IM'] : [];
 
-        // El servicio del patrón y la vista leen estas claves de Detalles_Generales.
-        $Detalles_Generales['Norma_IM'] = $NormaIM;
+        // El servicio del patron necesita esta clave solo en memoria para el PDF.
         if ($juntas['Patron_Grano'] !== null) {
             $Detalles_Generales['PATRON_GRANO'] = $juntas['Patron_Grano'];
         } else {
