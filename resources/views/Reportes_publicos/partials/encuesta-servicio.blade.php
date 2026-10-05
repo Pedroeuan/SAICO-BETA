@@ -396,32 +396,197 @@
         color: #64748b; 
         font-size: 12px; 
         }
+    .encuesta-recordatorio[hidden] { display: none; }
+    .encuesta-recordatorio {
+        position: fixed;
+        inset: 0;
+        z-index: 1001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(0,35,75,.72);
+    }
+    .encuesta-recordatorio > div {
+        width: min(420px, 100%);
+        padding: 24px;
+        border-radius: 12px;
+        background: #fff;
+    }
+    .firma-encuesta input.firma-nombre {
+        font-family: 'Segoe Script', 'Bradley Hand', 'Brush Script MT', cursive;
+        font-size: 26px;
+    }
+    .lienzo-firma.firma-nombre { cursor: default; touch-action: auto; }
+    /* Presentacion del portal SAICO: azul institucional y rojo para la accion final. */
+    [data-modal-encuesta] .encuesta-panel {
+        padding: 30px;
+        border-top: 5px solid #003b80;
+        border-radius: 14px;
+        color: #26323f;
+        font-family: Arial, sans-serif;
+    }
+    [data-modal-encuesta] .encuesta-panel h2 { padding-right: 32px; font-size: 24px; }
+    [data-modal-encuesta] .encuesta-contexto {
+        padding: 12px 14px;
+        margin: 14px 0 20px;
+        border-left: 3px solid #003b80;
+        border-radius: 0 8px 8px 0;
+        background: #f1f5fa;
+        font-size: 13px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+    [data-modal-encuesta] .etiqueta-progreso { margin-top: 8px; font-size: 12px; }
+    [data-modal-encuesta] .bloque-comentario,
+    [data-modal-encuesta] .firma-encuesta {
+        padding: 20px;
+        border: 1px solid #dce3ec;
+        border-radius: 10px;
+        background: #fff;
+    }
+    [data-modal-encuesta] .firma-encuesta { 
+        margin-top: 16px; 
+    }
+    [data-modal-encuesta] .titulo-seccion-encuesta {
+        margin: 0 0 8px;
+        color: #003b80;
+        font-size: 16px;
+    }
+    [data-modal-encuesta] .ayuda-encuesta { 
+        margin: 0 0 14px; 
+        color: #64748b; 
+        font-size: 13px; 
+        line-height: 1.5; 
+    }
+    [data-modal-encuesta] .comentario-encuesta { 
+        margin-top: 10px; 
+        min-height: 90px; 
+        resize: vertical; 
+    }
+    [data-modal-encuesta] .comentario-encuesta:focus,
+    [data-modal-encuesta] #nombre-firma:focus { 
+        outline: 2px solid #003b80; 
+        outline-offset: 2px; 
+    }
+    [data-modal-encuesta] .opciones-firma { 
+        display: grid; 
+        grid-template-columns: repeat(3, minmax(0, 1fr)); 
+        gap: 8px; 
+        margin: 12px 0 18px; 
+    }
+    [data-modal-encuesta] .opcion-firma { 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center; 
+        gap: 8px; 
+        min-height: 76px; 
+        padding: 12px 8px; 
+        line-height: 1.35; 
+    }
+    [data-modal-encuesta] .opcion-firma i { 
+        font-size: 18px; 
+    }
+    [data-modal-encuesta] .opcion-firma:hover { 
+        border-color: #003b80; 
+    }
+    [data-modal-encuesta] button:focus-visible { 
+        outline: 2px solid #003b80; 
+        outline-offset: 3px; 
+    }
+    [data-modal-encuesta] [data-instruccion-firma] { 
+        display: block; 
+        margin-bottom: 10px; 
+        color: #64748b; 
+        line-height: 1.5; 
+    }
+    [data-modal-encuesta] .lienzo-firma { 
+        height: 150px; 
+        border: 1px dashed #8ea4bf; 
+        background: #f5f8fc; 
+    }
+    [data-modal-encuesta] [data-estado-firma] { 
+        color: #003b80; 
+        font-size: 12px; 
+    }
+    [data-modal-encuesta] .confirmacion-firma { 
+        display: flex; 
+        align-items: flex-start; 
+        gap: 10px; 
+        padding: 14px; 
+        border-radius: 8px; 
+        background: #f1f5fa; 
+        line-height: 1.5; 
+    }
+    [data-modal-encuesta] .confirmacion-firma input { 
+        margin: 3px 0 0; 
+        flex-shrink: 0; 
+        accent-color: #003b80; 
+    }
+    [data-modal-encuesta] [data-error-firma]:not(:empty) { 
+        display: block; 
+        margin-top: 10px; 
+    }
+    [data-modal-encuesta] .acciones-envio-encuesta { 
+        display: flex; 
+        justify-content: flex-end; 
+    }
+    [data-modal-encuesta] .btn-enviar-encuesta { 
+        min-height: 44px; 
+        box-shadow: 0 3px 8px rgba(224,26,34,.15); 
+    }
+    [data-modal-encuesta] .btn-enviar-encuesta:hover { 
+        background: #bd141c; 
+    }
+    [data-modal-encuesta] .navegacion-encuesta { 
+        display: flex; 
+        justify-content: space-between; 
+        gap: 12px; 
+        padding-top: 16px; 
+        border-top: 1px solid #dce3ec; 
+    }
+    [data-modal-encuesta] .navegacion-encuesta button { 
+        min-height: 40px; 
+    }
+    [data-modal-encuesta] .navegacion-encuesta [data-cerrar-encuesta] { 
+        margin-left: auto; 
+        color: #64748b; 
+        font-weight: 400; 
+    }
+    @media (max-width: 540px) {
+        [data-modal-encuesta] { 
+            padding: 10px; 
+        }
+        [data-modal-encuesta] .encuesta-panel { 
+            padding: 20px 14px; 
+            max-height: calc(100dvh - 20px); }
+        [data-modal-encuesta] .encuesta-panel h2 { 
+            font-size: 20px; 
+        }
+        [data-modal-encuesta] .bloque-comentario, [data-modal-encuesta] .firma-encuesta { 
+            padding: 15px; 
+        }
+        [data-modal-encuesta] .opciones-firma { 
+            grid-template-columns: repeat(2, minmax(0, 1fr)); 
+        }
+        [data-modal-encuesta] .btn-enviar-encuesta { 
+            width: 100%; 
+        }
+    }
 </style>
 
-@php
-    $firmaCliente = $encuesta ? (json_decode($encuesta->Firmas, true)['CLIENTE'] ?? []) : [];
-    $pendienteFirma = $encuesta
-        && ($firmaCliente['Metodo'] ?? null) === 'documento'
-        && empty($firmaCliente['Archivo']);
-@endphp
-
-<div class="encuesta-servicio {{ $encuesta && !$pendienteFirma ? 'realizada' : '' }}">
+<div class="encuesta-servicio {{ $encuesta ? 'realizada' : '' }}"
+    data-tarjeta-encuesta data-encuesta-completada="{{ $encuesta ? '1' : '0' }}"
+    data-borrador-clave="saico:encuesta:v1:{{ hash('sha256', (string) request()->route('token')) }}:{{ $orden->idOrden_Servicio }}">
     <h3>Encuesta de satisfacción</h3>
-    @if($pendienteFirma)
-        <p>Encuesta guardada. Descárguela, fírmela a mano y súbala aquí para completarla.</p>
-        <a class="btn-encuesta" href="{{ route('portal.encuesta.pdf', ['token' => request()->route('token'), 'idEncuesta' => $encuesta->idEncuesta]) }}">1. Descargar para firmar</a>
-        <form method="POST" enctype="multipart/form-data" action="{{ route('portal.encuesta.firmada', ['token' => request()->route('token'), 'idEncuesta' => $encuesta->idEncuesta]) }}">
-            @csrf
-            <input type="file" name="archivo" accept="application/pdf,image/png,image/jpeg" required style="display:block;margin-top:12px;width:100%">
-            @error('archivo')<p style="color:#991b1b;margin-top:6px">{{ $message }}</p>@enderror
-            <button class="btn-encuesta" type="submit">2. Subir encuesta firmada</button>
-        </form>
-    @elseif($encuesta)
+    @if($encuesta)
         <p>Encuesta contestada.<br>Promedio: <strong>{{ number_format($encuesta->Promedio, 2) }} / 5</strong></p>
         <a class="btn-encuesta realizada" href="{{ route('portal.encuesta.pdf', ['token' => request()->route('token'), 'idEncuesta' => $encuesta->idEncuesta]) }}">Descargar PDF firmado</a>
     @elseif($encuestaPendiente)
-        <p>Todos los reportes del servicio están firmados. Tu opinión nos ayuda a mejorar.</p>
+        <p>Todos los reportes del servicio han sido verificados y liberados. Tu opinión nos ayuda a mejorar</p>
         <button class="btn-encuesta" type="button" data-abrir-encuesta>Contestar encuesta</button>
+        <p class="nota-firma" data-avance-encuesta hidden aria-live="polite"></p>
     @else
         <p>La encuesta se habilitará cuando se entreguen y firmen todos los reportes de este servicio.</p>
     @endif
@@ -445,7 +610,7 @@
         $caritasSatisfaccion = [1 => '⭐', 2 => '⭐⭐', 3 => '⭐⭐⭐', 4 => '⭐⭐⭐⭐', 5 => '⭐⭐⭐⭐⭐'];
     @endphp
     <div class="encuesta-modal" data-modal-encuesta role="dialog" aria-modal="true" aria-labelledby="titulo-encuesta">
-        <form class="encuesta-panel" method="POST" enctype="multipart/form-data" action="{{ route('portal.encuesta.store', ['token' => request()->route('token')]) }}">
+        <form class="encuesta-panel" method="POST" enctype="multipart/form-data" data-respuestas-servidor="{{ $errors->any() ? '1' : '0' }}" action="{{ route('portal.encuesta.store', ['token' => request()->route('token')]) }}">
             @csrf
             <button class="cerrar-encuesta" type="button" data-cerrar-encuesta aria-label="Cerrar encuesta">×</button>
             <input type="hidden" name="idOrden_Servicio" value="{{ $orden->idOrden_Servicio }}">
@@ -486,9 +651,14 @@
 
             {{-- Paso final: comentario + firma + enviar --}}
             <div class="paso-encuesta" data-paso data-paso-final>
+                <section class="bloque-comentario" aria-labelledby="titulo-comentario-encuesta">
+                <h3 class="titulo-seccion-encuesta" id="titulo-comentario-encuesta">Tu opinión sobre el servicio</h3>
                 <label for="Comentario"><strong>¿Desea realizar algún comentario adicional?</strong></label>
-                <textarea class="comentario-encuesta" id="Comentario" name="Comentario" maxlength="2000">{{ old('Comentario') }}</textarea>
+                <textarea class="comentario-encuesta" id="Comentario" name="Comentario" maxlength="2000" placeholder="Escribe tu comentario (opcional)">{{ old('Comentario') }}</textarea>
+                </section>
                 <section class="firma-encuesta" data-firma>
+                    <h3 class="titulo-seccion-encuesta">Firma de conformidad</h3>
+                    <p class="nota-firma" data-nota-borrador hidden></p>
                     <label for="nombre-firma"><strong>Nombre de quien firma</strong></label>
                     <input id="nombre-firma" type="text" name="Firma[nombre]" maxlength="200" value="{{ old('Firma.nombre') }}" required>
 
@@ -496,25 +666,19 @@
 
                     <p><strong>Elija cómo desea firmar</strong></p>
                     <div class="opciones-firma">
+                        <button type="button" class="opcion-firma" data-opcion="nombre"><i class="fas fa-signature" aria-hidden="true"></i>Usar mi nombre</button>
                         <button type="button" class="opcion-firma" data-opcion="dibujar">
-    <i class="fas fa-pen"></i>
-    Firmar aquí
-</button>
-
-<button type="button" class="opcion-firma" data-opcion="imagen">
-    <i class="fas fa-image"></i>
-    Subir imagen de mi firma
-</button>
-
-<button type="button" class="opcion-firma" data-opcion="documento">
-    <i class="fas fa-file-signature"></i>
-    Subir encuesta firmada
-</button>
+                            <i class="fas fa-pen"></i>
+                            Firmar aquí
+                        </button>
+                        <button type="button" class="opcion-firma" data-opcion="imagen">
+                            <i class="fas fa-image"></i>
+                            Subir imagen de mi firma
+                        </button>
                     </div>
 
                     {{-- Opción 1: dibujar --}}
                     <div class="panel-firma" data-panel="dibujar">
-                        <small>Firme dentro del recuadro con el mouse o con el dedo.</small>
                         <canvas class="lienzo-firma" data-lienzo-firma></canvas>
                         <input type="hidden" name="Firma[imagen]" value="{{ old('Firma.imagen') }}" data-imagen-firma>
                         <div class="acciones-firma">
@@ -533,33 +697,131 @@
                         </div>
                     </div>
 
-                    {{-- Opción 3: firmar a mano y subir después --}}
-                    <div class="panel-firma" data-panel="documento" hidden>
-                        <div class="subida-firma">
-                            <strong>Firmar a mano</strong>
-                            <p class="nota-firma">Al enviar, su encuesta se guardará y podrá descargarla en PDF. Fírmela a mano y súbala desde esta misma pantalla.</p>
-                        </div>
-                    </div>
-
                     <label class="confirmacion-firma">
                         <input type="checkbox" name="Firma[confirmacion]" value="1" required @checked(old('Firma.confirmacion'))>
                         Confirmo que la información y esta firma son correctas.
                     </label>
                     <small data-error-firma style="color:#991b1b"></small>
                 </section>
-                <button class="btn-enviar-encuesta" type="submit">Enviar encuesta</button>
+                <div class="acciones-envio-encuesta">
+                    <button class="btn-enviar-encuesta" type="submit">Enviar encuesta <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
             </div>
 
             <div class="navegacion-encuesta">
                 <button type="button" class="btn-atras" data-atras hidden>← Atrás</button>
+                <button type="button" class="btn-atras" data-cerrar-encuesta>En otro momento</button>
+            </div>
+            <div class="encuesta-recordatorio" data-recordatorio-encuesta hidden role="alertdialog" aria-modal="true" aria-labelledby="titulo-recordatorio-encuesta" aria-describedby="texto-recordatorio-encuesta">
+                <div>
+                    <h3 id="titulo-recordatorio-encuesta">Nos gustaría conocer tu opinión</h3>
+                    <p id="texto-recordatorio-encuesta">Tu respuesta sobre el servicio nos ayuda a mejorar. ¿Deseas continuar con la encuesta?</p>
+                    <button class="btn-encuesta" type="button" data-continuar-encuesta>Continuar encuesta</button>
+                    <button class="btn-atras" type="button" data-posponer-encuesta>En otro momento</button>
+                </div>
             </div>
         </form>
     </div>
 @endif
 
 <script>
-document.querySelectorAll('[data-cerrar-encuesta]').forEach(b => b.addEventListener('click', () => b.closest('[data-modal-encuesta]').style.display = 'none'));
-document.querySelectorAll('[data-abrir-encuesta]').forEach(b => b.addEventListener('click', () => document.querySelector('[data-modal-encuesta]').style.display = 'flex'));
+// Borrador local por cliente y servicio: no realiza solicitudes ni modifica la BD.
+(() => {
+    const tarjeta = document.querySelector('[data-tarjeta-encuesta]');
+    if (!tarjeta) return;
+    const clave = tarjeta.dataset.borradorClave;
+    if (tarjeta.dataset.encuestaCompletada === '1') {
+        try { localStorage.removeItem(clave); } catch (_) {}
+        return;
+    }
+    const modal = document.querySelector('[data-modal-encuesta]');
+    const form = modal?.querySelector('form');
+    if (!form) return;
+    const radios = [...form.querySelectorAll('input[type="radio"]')];
+    const comentario = form.querySelector('#Comentario');
+    const nombre = form.querySelector('#nombre-firma');
+    const aviso = tarjeta.querySelector('[data-avance-encuesta]');
+    const boton = tarjeta.querySelector('[data-abrir-encuesta]');
+    let borrador;
+    try { borrador = JSON.parse(localStorage.getItem(clave)); } catch (_) {}
+    if (borrador?.version === 1 && form.dataset.respuestasServidor !== '1') {
+        radios.forEach(radio => {
+            const valor = borrador.respuestas?.[radio.name];
+            if (['1', '2', '3', '4', '5'].includes(String(valor))) radio.checked = radio.value === String(valor);
+        });
+        if (typeof borrador.comentario === 'string') comentario.value = borrador.comentario.slice(0, 2000);
+        if (typeof borrador.nombre === 'string') nombre.value = borrador.nombre.slice(0, 200);
+        form.querySelector('[data-nota-borrador]').hidden = false;
+        modal.style.display = 'none';
+    }
+    const guardar = () => {
+        const respuestas = {};
+        radios.filter(radio => radio.checked).forEach(radio => respuestas[radio.name] = radio.value);
+        const cantidad = Object.keys(respuestas).length;
+        const hayAvance = cantidad > 0 || comentario.value.trim() !== '' || nombre.value.trim() !== '';
+        try {
+            if (hayAvance) localStorage.setItem(clave, JSON.stringify({
+                version: 1, respuestas, comentario: comentario.value, nombre: nombre.value,
+            }));
+            else localStorage.removeItem(clave);
+            aviso.hidden = !hayAvance;
+            aviso.textContent = cantidad === 10
+                ? ''
+                : 'Continuar: ' + cantidad + ' de 10 preguntas contestadas.';
+            boton.textContent = hayAvance ? (cantidad === 10 ? 'Terminar encuesta' : 'Continuar encuesta') : 'Contestar encuesta';
+        } catch (_) {
+            aviso.hidden = false;
+            aviso.textContent = 'Este navegador no permite guardar el avance. Puedes continuar mientras mantengas esta página abierta.';
+        }
+    };
+    form.addEventListener('input', guardar);
+    form.addEventListener('change', guardar);
+    form.addEventListener('encuesta:pausar', guardar);
+    window.addEventListener('pagehide', guardar);
+    guardar();
+})();
+document.querySelectorAll('[data-modal-encuesta]').forEach(modal => {
+    const recordatorio = modal.querySelector('[data-recordatorio-encuesta]');
+    let origen;
+    const continuar = () => {
+        recordatorio.hidden = true;
+        origen?.focus();
+        modal.querySelector('form').dispatchEvent(new Event('encuesta:reanudar'));
+    };
+    const preguntar = boton => {
+        origen = boton;
+        modal.querySelector('form').dispatchEvent(new Event('encuesta:pausar'));
+        recordatorio.hidden = false;
+        recordatorio.querySelector('[data-continuar-encuesta]').focus();
+    };
+    modal.querySelectorAll('[data-cerrar-encuesta]').forEach(b => b.addEventListener('click', () => preguntar(b)));
+    recordatorio.querySelector('[data-continuar-encuesta]').addEventListener('click', continuar);
+    recordatorio.querySelector('[data-posponer-encuesta]').addEventListener('click', () => {
+        recordatorio.hidden = true;
+        modal.style.display = 'none';
+        document.querySelector('[data-abrir-encuesta]')?.focus();
+    });
+    modal.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            if (!recordatorio.hidden) continuar();
+            else preguntar(modal.querySelector('[data-cerrar-encuesta]'));
+        }
+        if (!recordatorio.hidden && e.key === 'Tab') {
+            const botones = [...recordatorio.querySelectorAll('button')];
+            const destino = e.shiftKey ? botones[botones.length - 1] : botones[0];
+            const extremo = e.shiftKey ? botones[0] : botones[botones.length - 1];
+            if (document.activeElement === extremo) { e.preventDefault(); destino.focus(); }
+        }
+    });
+});
+document.querySelectorAll('[data-abrir-encuesta]').forEach(b => b.addEventListener('click', () => {
+    const modal = document.querySelector('[data-modal-encuesta]');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    modal.querySelector('[data-paso]:not([hidden]) [data-firma]')?.dispatchEvent(new Event('mostrar'));
+    modal.querySelector('[data-paso]:not([hidden]) input, [data-paso]:not([hidden]) textarea')?.focus();
+}));
 
 // Encuesta por pasos: una pregunta por pantalla, avance automático y logo AICO deslizante
 document.querySelectorAll('[data-modal-encuesta] form').forEach(form => {
@@ -569,6 +831,7 @@ document.querySelectorAll('[data-modal-encuesta] form').forEach(form => {
     const etiqueta = form.querySelector('[data-etiqueta-paso]');
     const atras = form.querySelector('[data-atras]');
     let actual = 0, temporizador;
+    form.addEventListener('encuesta:pausar', () => clearTimeout(temporizador));
 
     // Mueve el logo AICO y la barra del riel hasta el valor elegido
     const marcar = (paso, valor) => {
@@ -588,6 +851,9 @@ document.querySelectorAll('[data-modal-encuesta] form').forEach(form => {
         atras.hidden = actual === 0;
         if (actual === total) form.querySelector('[data-firma]')?.dispatchEvent(new Event('mostrar'));
     };
+    form.addEventListener('encuesta:reanudar', () => {
+        if (actual < total && pasos[actual].querySelector('input[type="radio"]:checked')) ir(actual + 1);
+    });
 
     // Al tocar una calificación: el logo se desliza y luego avanza solo
     pasos.forEach((paso, k) => paso.querySelectorAll('input[type="radio"]').forEach(radio =>
@@ -623,6 +889,9 @@ document.querySelectorAll('[data-firma]').forEach(seccion => {
     const error = seccion.querySelector('[data-error-firma]');
     const campoMetodo = seccion.querySelector('[data-metodo-firma]');
     const vistaPrevia = seccion.querySelector('[data-vista-previa]');
+    const nombre = seccion.querySelector('#nombre-firma');
+    const instruccion = seccion.querySelector('[data-instruccion-firma]');
+    let usarNombre = false;
     let dibujando = false, tieneFirma = false;
 
     // El canvas necesita medirse con el panel visible
@@ -637,26 +906,63 @@ document.querySelectorAll('[data-firma]').forEach(seccion => {
         contexto.lineWidth = 2; contexto.lineCap = 'round'; contexto.strokeStyle = '#003b80';
     };
 
+    const generarFirmaNombre = () => {
+        if (!usarNombre) return;
+        tieneFirma = false;
+        ajustarLienzo();
+        const r = lienzo.getBoundingClientRect();
+        if (!r.width) return;
+        contexto.clearRect(0, 0, lienzo.width, lienzo.height);
+        const texto = nombre.value.trim();
+        if (texto) {
+            contexto.font = '44px "Segoe Script", "Bradley Hand", "Brush Script MT", cursive';
+            contexto.fillStyle = '#003b80';
+            contexto.textAlign = 'center';
+            contexto.textBaseline = 'middle';
+            contexto.fillText(texto, r.width / 2, r.height / 2, Math.max(1, r.width - 32));
+            tieneFirma = true;
+        }
+        imagen.value = tieneFirma ? lienzo.toDataURL('image/png') : '';
+        estado.textContent = tieneFirma ? 'Firma generada con su nombre' : 'Escriba su nombre para generar la firma';
+    };
     const seleccionar = metodo => {
-        campoMetodo.value = metodo;
+        usarNombre = metodo === 'nombre';
+        campoMetodo.value = usarNombre ? 'dibujar' : metodo;
         error.textContent = '';
         seccion.querySelectorAll('[data-opcion]').forEach(b => b.classList.toggle('activa', b.dataset.opcion === metodo));
-        seccion.querySelectorAll('[data-panel]').forEach(p => p.hidden = p.dataset.panel !== metodo);
-        if (metodo === 'dibujar') ajustarLienzo();
+        seccion.querySelectorAll('[data-panel]').forEach(p => p.hidden = p.dataset.panel !== campoMetodo.value);
+        nombre.classList.toggle('firma-nombre', usarNombre);
+        lienzo.classList.toggle('firma-nombre', usarNombre);
+        if (instruccion) instruccion.textContent = usarNombre
+            ? 'Su nombre se convierte en una firma con estilo manuscrito. Revísela antes de confirmar.'
+            : 'Firme dentro del recuadro con el mouse o con el dedo.';
+        if (campoMetodo.value === 'dibujar') {
+            contexto.clearRect(0, 0, lienzo.width, lienzo.height);
+            tieneFirma = false;
+            imagen.value = '';
+            estado.textContent = 'Firma pendiente';
+            ajustarLienzo();
+            generarFirmaNombre();
+        }
     };
     seccion.querySelectorAll('[data-opcion]').forEach(b => b.addEventListener('click', () => seleccionar(b.dataset.opcion)));
 
     // El paso final empieza oculto: medir el lienzo cuando se hace visible
-    seccion.addEventListener('mostrar', () => { if (campoMetodo.value === 'dibujar') ajustarLienzo(); });
+    seccion.addEventListener('mostrar', () => {
+        if (campoMetodo.value === 'dibujar') { ajustarLienzo(); generarFirmaNombre(); }
+    });
+    nombre.addEventListener('input', generarFirmaNombre);
+    window.addEventListener('resize', () => { if (usarNombre) generarFirmaNombre(); });
 
     // Dibujo
     const punto = e => { const r = lienzo.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
-    lienzo.addEventListener('pointerdown', e => { dibujando = true; lienzo.setPointerCapture(e.pointerId); const p = punto(e); contexto.beginPath(); contexto.moveTo(p.x, p.y); });
+    lienzo.addEventListener('pointerdown', e => { if (usarNombre) return; dibujando = true; lienzo.setPointerCapture(e.pointerId); const p = punto(e); contexto.beginPath(); contexto.moveTo(p.x, p.y); });
     lienzo.addEventListener('pointermove', e => { if (!dibujando) return; const p = punto(e); contexto.lineTo(p.x, p.y); contexto.stroke(); tieneFirma = true; estado.textContent = 'Firma capturada'; });
     ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => lienzo.addEventListener(ev, () => dibujando = false));
     seccion.querySelector('[data-limpiar-firma]').addEventListener('click', () => {
         contexto.clearRect(0, 0, lienzo.width, lienzo.height);
         imagen.value = ''; tieneFirma = false; estado.textContent = 'Firma pendiente';
+        if (usarNombre) { nombre.value = ''; nombre.focus(); }
     });
 
     // Archivos: validar tamaño y mostrar vista previa
@@ -681,6 +987,7 @@ document.querySelectorAll('[data-firma]').forEach(seccion => {
         const bloquear = msg => { e.preventDefault(); error.textContent = msg; };
 
         if (metodo === 'dibujar') {
+            generarFirmaNombre();
             if (!tieneFirma) return bloquear('La firma es obligatoria.');
             imagen.value = lienzo.toDataURL('image/png');
         } else if (metodo === 'imagen') {
@@ -688,10 +995,10 @@ document.querySelectorAll('[data-firma]').forEach(seccion => {
             const input = seccion.querySelector('[data-archivo="imagen"]');
             if (!input.files.length) return bloquear('Seleccione la imagen de su firma.');
         } else {
-            imagen.value = ''; // documento: no se requiere firma ahora
+            return bloquear('Seleccione una opción de firma válida.');
         }
     });
 
-    seleccionar(campoMetodo.value || 'dibujar');
+    seleccionar(campoMetodo.value === 'imagen' ? 'imagen' : 'nombre');
 });
 </script>

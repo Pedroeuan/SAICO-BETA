@@ -148,6 +148,12 @@
             border: none !important;
             border-bottom: 0.5pt solid #000 !important;
         }
+        .datos-servicio td {
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.3;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -195,23 +201,26 @@
         <!-- =============================================================
             FILA 6 — CLIENTE / PROYECTO / TELÉFONO
         ============================================================= -->
-        <tr style="height:20.7pt;">
+        <tr class="datos-servicio" style="height:20.7pt;">
             <td class="izquierda" colspan="7">
                 <span class="negrita">CLIENTE:</span>
-                {{ $detalles['Cliente'] ?? '' }}
+                {{ filled($detalles['Cliente'] ?? null) ? $detalles['Cliente'] : 'No registrado' }}
             </td>
 
             <td class="centro" colspan="6">
                 <span class="negrita">PROYECTO / CONTRATO:</span>
                 {{ $detalles['Proyecto'] ?? '' }}
                 @if(!empty($detalles['Contrato']))
-                    / {{ $detalles['Contrato'] }}
+                    @if(filled($detalles['Proyecto'] ?? null))<br>@endif
+                    {{ $detalles['Contrato'] }}
+                @elseif(blank($detalles['Proyecto'] ?? null))
+                    No registrado
                 @endif
             </td>
 
             <td class="centro" colspan="6">
                 <span class="negrita"> TELÉFONO:</span>
-                {{ $detalles['Telefono'] ?? '' }}
+                {{ filled($detalles['Telefono'] ?? null) ? $detalles['Telefono'] : 'No registrado' }}
             </td>
         </tr>
         <!-- =============================================================
