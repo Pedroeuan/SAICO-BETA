@@ -31,6 +31,7 @@ use App\Models\Admin\Usuario;
 use App\Services\ServicioRegistrosFotos;
 use App\Services\ServicioPatronGranoReporte;
 use App\Services\ServicioSerieReportes;
+use App\Services\ServicioJuntasReporteIM;
 
 
 use Illuminate\Http\Request;
@@ -553,6 +554,52 @@ class ReporteController extends Controller
         $SerieReporte = $Nombre_Formato === ServicioSerieReportes::FORMATO_06_B_01
             ? app(ServicioSerieReportes::class)->obtener((int) $id)
             : null;
+        
+        // 02_B/04 guarda la tabla de juntas y los resultados de dureza en el mismo grupo. Las
+        // vistas y el formulario siguen leyéndolos de Datos_Equipo, asi que se reinyectan.
+        if ($Nombre_Formato === ServicioSerieReportes::FORMATO_02_B_04) {
+            $juntasDureza = app(ServicioJuntasReporteIM::class)->normalizarDureza(
+                $Grupo_Juntas_Detalles_Re?->Juntas_Grupo_Re,
+                is_array($Datos_Equipo) ? $Datos_Equipo : []
+            );
+
+            foreach (ServicioJuntasReporteIM::CLAVES_DUREZA as $clave) {
+                if ($juntasDureza[$clave] !== null) {
+                    $Datos_Equipo[$clave] = $juntasDureza[$clave];
+                }
+            }
+
+            $Grupo_Juntas_Re = $juntasDureza['bloques'];
+        }
+
+        // Norma_IM, Patron_Grano y bloques viven en Juntas_Grupo_Re (o en Detalles_Generales si el
+        // reporte es anterior). Se reinyectan para que las vistas no cambien. Los formatos 04_02 y
+        // 04_03 suman ademas el analisis de Fiji y el conteo lineal, propios de esos modulos.
+        if (in_array($Nombre_Formato, ServicioSerieReportes::FORMATOS_TECNICA_EN_JUNTAS, true)) {
+            $juntasIM = app(ServicioJuntasReporteIM::class)->normalizar(
+                $Grupo_Juntas_Detalles_Re?->Juntas_Grupo_Re,
+                is_array($Detalles_Generales) ? $Detalles_Generales : []
+            );
+
+            $clavesTecnicas = ['Norma_IM', 'Patron_Grano'];
+            if ($Nombre_Formato !== ServicioSerieReportes::FORMATO_06_B_01) {
+                $clavesTecnicas[] = 'ANALISIS_IMAGEN';
+                $clavesTecnicas[] = 'CONTEO_GRANOS';
+            }
+
+            foreach ($clavesTecnicas as $clave) {
+                $destino = $clave === 'Patron_Grano' ? 'PATRON_GRANO' : $clave;
+
+                if ($juntasIM[$clave] !== null) {
+                    $Detalles_Generales[$destino] = $juntasIM[$clave];
+                } else {
+                    unset($Detalles_Generales[$destino]);
+                }
+            }
+
+            // Misma forma que antes: lista de bloques.
+            $Grupo_Juntas_Re = $juntasIM['bloques'];
+        }
 
         return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM','SerieReporte'));
 
@@ -596,7 +643,7 @@ class ReporteController extends Controller
             "FOR-PIMP-04/03"=> "INFORME DE CARACTERIZACIÓN DE MATERIALES MEDIANTE LA TÉCNICA DE FLUORESCENCIA DE RX (XRF)",
             "FOR-PIMP-05/01"=> "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE ESPECTROMETRÍA DE EMISIÓN ÓPTICA (OES)",
             "FOR-PIMP-05_B/01"=> "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE ESPECTROMETRÍA DE EMISIÓN ÓPTICA (OES)/CHEMICAL ANALYSIS REPORT USING THE OPTICAL EMISSION SPECTROMETRY TECHNIQUE (OES)",
-            "FOR-PIMP-06_B/01"=> "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE FLUORESCENCIA DE RAYOS X (XRF)/CHEMICALS ANALYSIS REPORT USING THE X-RAY FLUORESCENSE TECHNIQUE (XRF",
+            "FOR-PIMP-06_B/01"=> "INFORME DE ANÁLISIS QUÍMICO MEDIANTE LA TÉCNICA DE FLUORESCENCIA DE RAYOS X (XRF)/CHEMICALS ANALYSIS REPORT USING THE X-RAY FLUORESCENSE TECHNIQUE (XRF)",
         ];
     
         return $nombresPersonalizados[$Nombre_Formato] ?? $Nombre_Formato;
@@ -1232,6 +1279,49 @@ class ReporteController extends Controller
 
     }
 
+    /** Resuelve el nombre del formato asociado al reporte para decidir cómo clonar su grupo. */
+    protected function formatoDelReporte(int $idReporte): ?string
+    {
+        $idPruebaAplica = reporte::where('idReportes', $idReporte)->value('idPrueba_Aplica');
+
+        if (!$idPruebaAplica) {
+            return null;
+        }
+
+        $idFormato = Prueba_Aplica::where('idPrueba_Aplica', $idPruebaAplica)->value('idFormato');
+
+        return $idFormato ? formato::where('idFormato', $idFormato)->value('Nombre') : null;
+    }
+
+    /**
+     * Copia el grupo de juntas de un reporte a otro conservando la técnica elegida y
+     * descartando las evidencias que deben volver a cargarse: disparos XRF, promedios,
+     * micrografía de Fiji, conteo lineal y patrón de grano.
+     * El reporte de origen puede ser anterior a la separación y traer la técnica en
+     * Detalles_Generales, por eso se pasa como respaldo.
+     */
+    protected function clonarJuntasParaNuevoReporte(?string $juntasJson, array $detallesGenerales): string
+    {
+        $servicioJuntas = app(ServicioJuntasReporteIM::class);
+        $juntas = $servicioJuntas->normalizar($juntasJson, $detallesGenerales);
+
+        $norma = $juntas['Norma_IM'];
+        if (is_array($norma)) {
+            $norma['Analisis_PDF'] = [];
+
+            foreach (($norma['Tabla'] ?? []) as $indice => $filaNorma) {
+                if (is_array($filaNorma)) {
+                    $norma['Tabla'][$indice]['Promedio'] = '';
+                }
+            }
+        }
+
+        return $servicioJuntas->armar($juntas['bloques'], $norma, null, [
+            'ANALISIS_IMAGEN' => null,
+            'CONTEO_GRANOS' => null,
+        ]);
+    }
+
     protected function generarNuevoNoReporte($numeroActual)
     {
         if (empty($numeroActual)) {
@@ -1312,9 +1402,40 @@ class ReporteController extends Controller
                 'Fotos_Reportes' => json_encode([]),
             ]);
 
+            $nuevoId = $NuevoReporte->idReportes;
+
+            $grupoOriginal = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
+            $formatoOriginal = $this->formatoDelReporte((int) $id);
+
+            if ($formatoOriginal === ServicioSerieReportes::FORMATO_02_B_04) {
+                // El duplicado conserva su captura de dureza, pero ya dentro del grupo.
+                $servicioJuntas = app(ServicioJuntasReporteIM::class);
+                $datosEquipoCopia = json_decode($NuevoReporte->Datos_Equipo, true) ?? [];
+                $durezaCopia = $servicioJuntas->normalizarDureza($grupoOriginal?->Juntas_Grupo_Re, $datosEquipoCopia);
+                $durezaParaGrupo = [];
+
+                foreach (ServicioJuntasReporteIM::CLAVES_DUREZA as $clave) {
+                    $durezaParaGrupo[$clave] = $durezaCopia[$clave];
+                    unset($datosEquipoCopia[$clave]);
+                }
+
+                $NuevoReporte->Datos_Equipo = json_encode($datosEquipoCopia);
+                $NuevoReporte->save();
+
+                Grupo_Juntas_Detalles_Re::create([
+                    'idReportes' => $nuevoId,
+                    'Juntas_Grupo_Re' => $servicioJuntas->armarDureza($durezaCopia['bloques'], $durezaParaGrupo),
+                ]);
+
+                return redirect()->route('Editar.Reporte', ['id' => $nuevoId]);
+            }
+
             Grupo_Juntas_Detalles_Re::create([
                 'idReportes' => $nuevoId,
-                'Juntas_Grupo_Re' => json_encode([]),
+                // La técnica se hereda del grupo original; en el resto basta la lista vacía.
+                'Juntas_Grupo_Re' => in_array($formatoOriginal, ServicioSerieReportes::FORMATOS_TECNICA_EN_JUNTAS, true)
+                    ? $this->clonarJuntasParaNuevoReporte($grupoOriginal?->Juntas_Grupo_Re, $Detalles_Generales)
+                    : json_encode([]),
             ]);
         });
 
@@ -1353,6 +1474,7 @@ class ReporteController extends Controller
                 : null;
 
             $servicioSeries = app(ServicioSerieReportes::class);
+            $juntasSiguiente = null;
             if ($nombreFormato === ServicioSerieReportes::FORMATO_06_B_01) {
                 $serie = $servicioSeries->obtener((int) $id);
                 if (!$serie) {
@@ -1364,25 +1486,26 @@ class ReporteController extends Controller
                 if (!$servicioSeries->puedeCrearSiguiente((int) $id)) {
                     throw new \RuntimeException('La serie ya alcanzo la cantidad planificada. Amplie la cantidad desde Editar para continuar.');
                 }
+            }
 
-                // Conserva la norma elegida, pero obliga a cargar disparos, promedios,
-                // micrografia y patron de grano nuevos para el siguiente reporte.
-                if (is_array($Detalles_Generales['Norma_IM'] ?? null)) {
-                    $Detalles_Generales['Norma_IM']['Analisis_PDF'] = [];
-                    foreach (($Detalles_Generales['Norma_IM']['Tabla'] ?? []) as &$filaNorma) {
-                        if (is_array($filaNorma)) {
-                            $filaNorma['Promedio'] = '';
-                        }
-                    }
-                    unset($filaNorma);
-                }
+            // Los formatos con técnica en el grupo la heredan sin las evidencias ya procesadas.
+            if (in_array($nombreFormato, ServicioSerieReportes::FORMATOS_TECNICA_EN_JUNTAS, true)) {
+                $juntasSiguiente = $this->clonarJuntasParaNuevoReporte(
+                    Grupo_Juntas_Detalles_Re::where('idReportes', $id)->value('Juntas_Grupo_Re'),
+                    $Detalles_Generales
+                );
                 unset(
-                    $Detalles_Generales['SERIE_REPORTES'],
+                    $Detalles_Generales['Norma_IM'],
                     $Detalles_Generales['ANALISIS_IMAGEN'],
                     $Detalles_Generales['CONTEO_GRANOS'],
-                    $Detalles_Generales['PATRON_GRANO'],
-                    $Detalles_Generales['Reporte_Firmado']
+                    $Detalles_Generales['PATRON_GRANO']
                 );
+                // La copia no debe conservar la copia anterior de la técnica.
+                $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
+            }
+
+            if ($nombreFormato === ServicioSerieReportes::FORMATO_06_B_01) {
+                unset($Detalles_Generales['SERIE_REPORTES'], $Detalles_Generales['Reporte_Firmado']);
                 $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
 
                 $datosEquipo = json_decode($ReporteOriginal->Datos_Equipo, true) ?? [];
@@ -1390,21 +1513,28 @@ class ReporteController extends Controller
                 $NuevoReporte->Datos_Equipo = json_encode($datosEquipo);
             }
 
-            if ($nombreFormato === 'FOR-PIMP-02_B/04') {
+            if ($nombreFormato === ServicioSerieReportes::FORMATO_02_B_04) {
+                // Los resultados de dureza ahora viven en el grupo, no en Datos_Equipo.
+                $servicioJuntas = app(ServicioJuntasReporteIM::class);
+                $grupoOriginal = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->value('Juntas_Grupo_Re');
                 $datosEquipo = json_decode($ReporteOriginal->Datos_Equipo, true) ?? [];
-                $promedios = is_array($datosEquipo['DUREZA_PROMEDIO'] ?? null)
-                    ? $datosEquipo['DUREZA_PROMEDIO']
-                    : [];
+                $durezaGrupo = $servicioJuntas->normalizarDureza($grupoOriginal, $datosEquipo);
 
-                foreach (['DESPUES_A', 'DESPUES_B', 'DESPUES_C', 'DESPUES_B1', 'DESPUES_BM'] as $campo) {
-                    // La segunda etapa inicia pendiente, pero nunca deja celdas vacias en el PDF.
-                    $promedios[$campo] = '---';
+                $juntasSiguiente = $servicioJuntas->armarDureza(
+                    $durezaGrupo['bloques'],
+                    [
+                        'DUREZA_PROMEDIO' => $servicioJuntas->reiniciarDurezaSegundaEtapa(
+                            $durezaGrupo['DUREZA_PROMEDIO'] ?? null
+                        ),
+                        'DUREZA_ROWS' => [],
+                        'DUREZA_MERGE_CONFIG' => [],
+                        'DUREZA_ETAPA' => 'DESPUES',
+                    ]
+                );
+
+                foreach (ServicioJuntasReporteIM::CLAVES_DUREZA as $clave) {
+                    unset($datosEquipo[$clave]);
                 }
-
-                $datosEquipo['DUREZA_PROMEDIO'] = $promedios;
-                $datosEquipo['DUREZA_ROWS'] = [];
-                $datosEquipo['DUREZA_MERGE_CONFIG'] = [];
-                $datosEquipo['DUREZA_ETAPA'] = 'DESPUES';
                 $NuevoReporte->Datos_Equipo = json_encode($datosEquipo);
             }
 
@@ -1462,7 +1592,7 @@ class ReporteController extends Controller
 
             Grupo_Juntas_Detalles_Re::create([
                 'idReportes' => $nuevoId,
-                'Juntas_Grupo_Re' => json_encode([]),
+                'Juntas_Grupo_Re' => $juntasSiguiente ?? json_encode([]),
             ]);
             });
         } catch (\RuntimeException $exception) {

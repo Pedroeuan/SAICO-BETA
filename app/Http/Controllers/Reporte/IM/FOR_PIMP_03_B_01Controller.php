@@ -27,6 +27,7 @@ use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Services\ServicioAnalisisImagenImageJ;
+use App\Services\ServicioJuntasReporteIM;
 use App\Services\ServicioMetalografiaReporte;
 use App\Services\ServicioPatronGranoReporte;
 use App\Models\Procedimientos\Procedimiento;
@@ -678,6 +679,20 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
     }
 
+    /**
+     * Detalles_Generales conserva solo lo administrativo. La técnica de 03_B/01 (patrón de grano,
+     * micrografía de Fiji y conteo lineal) viaja en Juntas_Grupo_Re, igual que en el 06.
+     */
+    private function quitarTecnicaDeDetalles(array &$detalles): void
+    {
+        unset(
+            $detalles['Norma_IM'],
+            $detalles['PATRON_GRANO'],
+            $detalles['ANALISIS_IMAGEN'],
+            $detalles['CONTEO_GRANOS']
+        );
+    }
+
     public function FOR_PIMP_03_B_01_store(Request $request, ServicioAnalisisImagenImageJ $servicioImagen)
     {
         $Estatus = "CREADO";
@@ -742,18 +757,6 @@ class FOR_PIMP_03_B_01Controller extends Controller
             'Datos_Equipo.NS_EQUIPO1' => 'nullable|string',
             'Datos_Equipo.ID_EQUIPO1' => 'nullable|string',
 
-            'Datos_Equipo.TEMPERATURA_INICIAL' => 'nullable|string',
-            'Datos_Equipo.HORA_INICIO' => 'nullable|string',
-            'Datos_Equipo.VELOCIDAD_CALENTAMIENTO' => 'nullable|string',
-            'Datos_Equipo.HORA_FINAL' => 'nullable|string',
-            'Datos_Equipo.TEMPERATURA_SOSTENIMIENTO' => 'nullable|string',
-            'Datos_Equipo.DIA_INICIO' => 'nullable|string',
-            'Datos_Equipo.TIEMPO_SOSTENIMIENTO' => 'nullable|string',
-            'Datos_Equipo.DIA_FINAL' => 'nullable|string',
-            'Datos_Equipo.VEL_ENFRIAMIENTO' => 'nullable|string',
-            'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
-            'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
-            'Datos_Equipo.Observaciones' => 'nullable|string',
             'Datos_Equipo.MATERIAL_PANO' => 'nullable|string',
             'Datos_Equipo.LIJAS_DESBASTE' => 'nullable|array|max:6',
             'Datos_Equipo.LIJAS_DESBASTE.*' => 'nullable|string|max:50',
@@ -906,33 +909,32 @@ class FOR_PIMP_03_B_01Controller extends Controller
             (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
         );
-        if ($patronGrano !== null) {
-            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
-        }
 
         $servicioMetalografia = app(ServicioMetalografiaReporte::class);
         // El token evita aceptar rutas manipuladas: el servidor recupera el resultado perteneciente al usuario.
+        $analisisImagen = null;
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->obtenerPorToken(
                 $validatedData['Analisis_Imagen_Token'],
                 (int) Auth::id()
             );
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+            $analisisImagen['usar_en_reporte'] =
                 !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+            $analisisImagen['comentario_imagen_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+            $analisisImagen['descripcion_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
+            $analisisImagen['layout_reporte'] =
                 $servicioMetalografia->normalizarLayoutAnalisis($validatedData['Analisis_Reporte_Layout'] ?? []);
         }
         // Los totales del conteo se recalculan en backend antes de formar parte del reporte.
         $conteoGranos = $servicioMetalografia->normalizarConteoGranos(
             $validatedData['Conteo_Granos_JSON'] ?? null
         );
-        if ($conteoGranos !== null) {
-            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
-        }
+
+        // La técnica no vive en Detalles_Generales: viaja en Juntas_Grupo_Re igual que en el 06.
+        $this->quitarTecnicaDeDetalles($validatedData['Detalles_Generales']);
+
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -1143,6 +1145,20 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
     }
+
+        // El grupo es la casa de la técnica del reporte (patrón de grano, micrografía de
+        // Fiji y conteo lineal). Debe existir antes de OS_OC porque la orden de servicio
+        // copia su contenido.
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = app(ServicioJuntasReporteIM::class)->armar(
+            $bloques ?? [],
+            null,
+            $patronGrano,
+            [
+                'ANALISIS_IMAGEN' => $analisisImagen,
+                'CONTEO_GRANOS' => $conteoGranos,
+            ]
+        );
+        $Grupo_Juntas_Detalles_Re->save();
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Instalacion = $validatedData['Detalles_Generales']['Instalacion'];
@@ -1372,6 +1388,17 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
+        // La técnica guardada vive en Juntas_Grupo_Re; Detalles_Generales solo sirve de respaldo
+        // para los reportes anteriores a la separación.
+        $servicioJuntas = app(ServicioJuntasReporteIM::class);
+        $juntasActuales = $servicioJuntas->normalizar(
+            $Grupo_Juntas_Detalles_Re?->Juntas_Grupo_Re,
+            $detallesActuales
+        );
+        $patronHistorico = $juntasActuales['Patron_Grano'];
+        $analisisImagen = $juntasActuales['ANALISIS_IMAGEN'];
+        $conteoGranos = $juntasActuales['CONTEO_GRANOS'];
+
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
             // 1. ELIMINAR ARCHIVO ANTERIOR (si existe)
@@ -1402,47 +1429,40 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
 
-        $rutaPatronAnterior = (string) ($detallesActuales['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $rutaPatronAnterior = (string) ($patronHistorico['ruta_imagen'] ?? '');
         $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
         $patronGrano = $servicioPatronGrano->construirHistorico(
             $request,
             'FOR_PIMP_03_B_01',
             (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? ''),
-            is_array($detallesActuales['PATRON_GRANO'] ?? null)
-                ? $detallesActuales['PATRON_GRANO']
-                : null
-        );
-        if ($patronGrano === null) {
-            unset($validatedData['Detalles_Generales']['PATRON_GRANO']);
-        } else {
-            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
-        }
+            $patronHistorico
+        ) ?? $patronHistorico;
 
         $servicioMetalografia = app(ServicioMetalografiaReporte::class);
         // Un token nuevo reemplaza el análisis; sin token se conserva el histórico ya guardado.
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->obtenerPorToken(
                 $validatedData['Analisis_Imagen_Token'],
                 (int) Auth::id()
             );
         }
-        if (is_array($validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] ?? null)) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+        if (is_array($analisisImagen)) {
+            $analisisImagen['usar_en_reporte'] =
                 !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+            $analisisImagen['comentario_imagen_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+            $analisisImagen['descripcion_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
+            $analisisImagen['layout_reporte'] =
                 $servicioMetalografia->normalizarLayoutAnalisis($validatedData['Analisis_Reporte_Layout'] ?? []);
         }
         $conteoGranos = $servicioMetalografia->normalizarConteoGranos(
             $validatedData['Conteo_Granos_JSON'] ?? null
-        );
-        if ($conteoGranos !== null) {
-            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
-        }
+        ) ?? $conteoGranos;
+
+        // array_merge reinyectó la técnica del reporte anterior: vuelve a salir de Detalles_Generales.
+        $this->quitarTecnicaDeDetalles($validatedData['Detalles_Generales']);
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_EQUIPO1'] = $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? ($datosEquipoActuales['ID_EQUIPO1'] ?? null);
@@ -1475,7 +1495,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
         ]);
 
         // Solo después de confirmar el update se elimina la copia histórica sustituida.
-        $rutaPatronNueva = (string) ($validatedData['Detalles_Generales']['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $rutaPatronNueva = (string) ($patronGrano['ruta_imagen'] ?? '');
         $servicioPatronGrano->eliminarCopiaSustituida($rutaPatronAnterior, $rutaPatronNueva);
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -1641,15 +1661,24 @@ class FOR_PIMP_03_B_01Controller extends Controller
         | 4. GUARDAR
         |--------------------------------------------------------------------------
         */
-        // Actualizar o crear el campo en la base de datos
+        // Actualizar o crear el campo en la base de datos. El grupo es la casa de la técnica:
+        // patrón de grano, micrografía de Fiji y conteo lineal.
+        $Juntas_Grupo_Re = $servicioJuntas->armar(
+            $bloques,
+            null,
+            $patronGrano,
+            [
+                'ANALISIS_IMAGEN' => $analisisImagen,
+                'CONTEO_GRANOS' => $conteoGranos,
+            ]
+        );
+
         if ($Grupo_Juntas_Detalles_Re) {
-            $Grupo_Juntas_Detalles_Re->update([
-                'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
-            ]);
+            $Grupo_Juntas_Detalles_Re->update(['Juntas_Grupo_Re' => $Juntas_Grupo_Re]);
         } else {
             $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
             $Grupo_Juntas_Detalles_Re->idReportes = $id;
-            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
+            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $Juntas_Grupo_Re;
             $Grupo_Juntas_Detalles_Re->save();
         }
 
@@ -1967,17 +1996,20 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $Fotos_Reportes = Fotos_Reporte::where('idReportes', $id)->first();
 
         // Decodificar el campo Detalles_Generales para obtener el nombre del proyecto
-        $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
+        $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true) ?: [];
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
-        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
-        $Grupo_Juntas_Detalles_Re = $Grupo_Juntas_Detalles_Re_Model
-            ? json_decode($Grupo_Juntas_Detalles_Re_Model->Juntas_Grupo_Re, true)
-            : [];
 
-        if (!is_array($Grupo_Juntas_Detalles_Re)) {
-            $Grupo_Juntas_Detalles_Re = [];
-        }
+        // La técnica vive en Juntas_Grupo_Re; se reinyecta aquí para que las vistas no cambien.
+        $juntasIM = app(ServicioJuntasReporteIM::class)->normalizar(
+            $Grupo_Juntas_Detalles_Re_Model?->Juntas_Grupo_Re,
+            $Detalles_Generales
+        );
+        $Detalles_Generales['PATRON_GRANO'] = $juntasIM['Patron_Grano'];
+        $Detalles_Generales['ANALISIS_IMAGEN'] = $juntasIM['ANALISIS_IMAGEN'];
+        $Detalles_Generales['CONTEO_GRANOS'] = $juntasIM['CONTEO_GRANOS'];
+        // Las vistas y el PDF siguen recibiendo la lista de bloques como antes.
+        $Grupo_Juntas_Detalles_Re = $juntasIM['bloques'];
 
         $totalTitulos = 0;
         $totalFilas = 0;
