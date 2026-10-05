@@ -17,6 +17,17 @@ use RuntimeException;
 class ServicioSerieReportes
 {
     public const FORMATO_06_B_01 = 'FOR-PIMP-06_B/01';
+
+    /** Formato de dureza: su tabla de juntas y sus resultados viven en Juntas_Grupo_Re. */
+    public const FORMATO_02_B_04 = 'FOR-PIMP-02_B/04';
+
+    /** Formatos IM que guardan norma, patron, analisis y conteo dentro de Juntas_Grupo_Re. */
+    public const FORMATOS_TECNICA_EN_JUNTAS = [
+        'FOR-PIMP-06_B/01',
+        'FOR-PIMP-03_B/01',
+        'FOR-PIMP-04/02',
+        'FOR-PIMP-04/03',
+    ];
     private const CLAVE = 'SERIE_REPORTES';
 
     public function iniciar(int $idReporte, int $cantidadPlanificada): Fluent

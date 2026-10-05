@@ -1771,7 +1771,10 @@ class FOR_PIMP_02_B_03Controller extends Controller
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
-        $Grupo_Juntas_Detalles_Re = json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true);
+        $juntasGuardadas = $Grupo_Juntas_Detalles_Re
+            ? json_decode($Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re, true)
+            : [];
+        $Grupo_Juntas_Detalles_Re = is_array($juntasGuardadas) ? $juntasGuardadas : [];
 
 
         $totalTitulos = 0;
