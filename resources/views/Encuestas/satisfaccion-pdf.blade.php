@@ -324,7 +324,7 @@
             <td class="sin-borde" colspan="1"></td>
             <td class="sin-borde centro" colspan="6" style="padding-top:4px;">
                 <span class="negrita">FECHA:</span>
-                {{ $detalles['Fecha'] ?? '' }}
+                {{ filled($detalles['Fecha'] ?? null) ? $detalles['Fecha'] : 'No registrada' }}
             </td>
             <td class="sin-borde" colspan="12"></td>
         </tr>

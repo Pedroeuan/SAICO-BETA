@@ -149,6 +149,18 @@ class EncuestaSatisfaccionController extends Controller
         // Genera el PDF con los datos y la firma de la encuesta.
         $detalles = json_decode($encuesta->Detalles_Generales, true);
         $detalles = is_array($detalles) ? $detalles : [];
+        if (blank($detalles['Fecha'] ?? null)) {
+            $fecha = filled($firma['Fecha'] ?? null)
+                ? $firma['Fecha']
+                : $encuesta->created_at?->format('Y-m-d');
+            $detalles['Fecha'] = filled($fecha) ? substr($fecha, 0, 10) : null;
+        }
+        if (blank($detalles['Fecha'] ?? null)) {
+            $fecha = filled($firma['Fecha'] ?? null)
+                ? $firma['Fecha']
+                : $encuesta->created_at?->format('Y-m-d');
+            $detalles['Fecha'] = filled($fecha) ? substr($fecha, 0, 10) : null;
+        }
         $orden = DB::table('orden_servicio')
             ->where('idOrden_Servicio', $encuesta->idOrden_Servicio)
             ->where('idClientes', $cliente->idClientes)

@@ -54,7 +54,100 @@ class ClientesController extends Controller
             // La encuesta se muestra dentro del detalle del servicio, no en el panel principal.
             $encuestaPendiente = null;
             $encuestasPorOrden = collect();
-            return view('Reportes_publicos.index', compact('cliente', 'contratos', 'encuestaPendiente', 'encuestasPorOrden'));
+            if (request()->query('vista') !== 'estadisticas') {
+                return view('Reportes_publicos.index', compact('cliente', 'contratos', 'encuestaPendiente', 'encuestasPorOrden'));
+            }
+            $contratoSeleccionado = request()->query('contrato', '');
+            $contratoSeleccionado = is_string($contratoSeleccionado) && $contratos->has($contratoSeleccionado)
+                ? $contratoSeleccionado : '';
+            $ordenesEstadistica = ($contratoSeleccionado !== ''
+                ? $contratos->get($contratoSeleccionado) : $contratos->flatten(1));
+            $reportesEstadistica = DB::table('lineal_ideal as li')
+                ->join('Reportes as r', 'r.idReportes', '=', 'li.idReportes')
+                ->leftJoin('Prueba_Aplica as pa', 'pa.idPrueba_Aplica', '=', 'r.idPrueba_Aplica')
+                ->leftJoin('Prueba as p', 'p.idPrueba', '=', 'pa.idPrueba')
+                ->whereIn('li.idOrden_Servicio', $ordenesEstadistica->pluck('idOrden_Servicio'))
+                ->select('li.idOrden_Servicio', 'r.idReportes', 'r.Detalles_Generales', 'p.Nombre as ensayo')
+                ->distinct()->get()
+                ->each(function ($reporte) {
+                    $detalles = json_decode($reporte->Detalles_Generales, true) ?: [];
+                    $reporte->firmado = !empty($detalles['Reporte_Firmado']);
+                    $reporte->numero = $detalles['No_Reporte'] ?? null;
+                    $reporte->ensayo = $reporte->ensayo ?: 'Sin tipo registrado';
+                    $fecha = $detalles['Fecha'] ?? null;
+                    $reporte->fecha = is_string($fecha) && preg_match('/^\d{4}-\d{2}-\d{2}$/D', $fecha)
+                        && validator(['fecha' => $fecha], ['fecha' => 'date_format:Y-m-d'])->passes() ? $fecha : null;
+                });
+            $estadosDocumentacion = [
+                'sin_reportes' => 'Sin reportes',
+                'pendientes' => 'Pendiente de liberación',
+                'firmados' => 'Reportes liberados',
+            ];
+            $reportesPorOrden = $reportesEstadistica->groupBy('idOrden_Servicio');
+            $ordenesEstadistica->each(function ($orden) use ($reportesPorOrden) {
+                $reportes = $reportesPorOrden->get($orden->idOrden_Servicio, collect())->unique('idReportes');
+                $orden->estado_documentacion = \App\Services\EstadoDocumentacion::calcular($reportes);
+                $orden->total_reportes = $reportes->count();
+                $orden->reportes_firmados = $reportes->where('firmado', true)->count();
+            });
+            $prioridadDocumentacion = ['pendientes' => 0, 'sin_reportes' => 1, 'firmados' => 2];
+            $ordenesEstadistica = $ordenesEstadistica->sortBy(fn ($orden) => $prioridadDocumentacion[$orden->estado_documentacion]);
+            $reportesUnicos = $reportesEstadistica->unique('idReportes');
+            $liberacionPorContrato = $ordenesEstadistica->groupBy('Contrato')->map(function ($ordenes) use ($reportesEstadistica) {
+                $reportes = $reportesEstadistica->whereIn('idOrden_Servicio', $ordenes->pluck('idOrden_Servicio'))->unique('idReportes');
+                return ['total' => $reportes->count(), 'liberados' => $reportes->where('firmado', true)->count(),
+                    'pendientes' => $reportes->where('firmado', false)->count()];
+            })->sortByDesc('pendientes');
+            $mensuales = $reportesUnicos->filter(fn ($reporte) => $reporte->fecha !== null)
+                ->groupBy(fn ($reporte) => substr($reporte->fecha, 0, 7))->map->count()->sortKeys();
+            if ($mensuales->isNotEmpty()) {
+                $inicio = \Carbon\CarbonImmutable::parse(($mensuales->keys()->first() . '-01'))->startOfMonth();
+                $fin = \Carbon\CarbonImmutable::parse(($mensuales->keys()->last() . '-01'))->startOfMonth();
+                // Completar los meses sin actividad dentro del periodo consultado.
+                for ($mes = $inicio; $mes <= $fin; $mes = $mes->addMonth()) {
+                    $clave = $mes->format('Y-m');
+                    if (!$mensuales->has($clave)) $mensuales->put($clave, 0);
+                }
+                $mensuales = $mensuales->sortKeys();
+            }
+            $estadisticas = [
+                'contratos' => $ordenesEstadistica->pluck('Contrato')->unique()->count(),
+                'ordenes' => $ordenesEstadistica->count(),
+                'reportes' => $reportesUnicos->count(),
+                'firmados' => $reportesUnicos->where('firmado', true)->count(),
+                'ensayos' => $reportesUnicos->groupBy(fn ($reporte) => $reporte->ensayo ?: 'Sin tipo registrado')
+                    ->map->count()->sortDesc(),
+                'mensuales' => $mensuales,
+                'sin_fecha' => $reportesUnicos->whereNull('fecha')->count(),
+            ];
+            $busqueda = request()->query('buscar', '');
+            $seccionEstadisticas = request()->query('seccion', 'resumen');
+            $seccionEstadisticas = in_array($seccionEstadisticas, ['resumen', 'graficas', 'pendientes'], true) ? $seccionEstadisticas : 'resumen';
+            $busqueda = is_string($busqueda) ? mb_substr(trim($busqueda), 0, 150) : '';
+            $coincide = fn ($texto) => $busqueda === '' || mb_stripos((string) $texto, $busqueda) !== false;
+            $ordenesBusqueda = $ordenesEstadistica->filter(function ($orden) use ($coincide, $reportesPorOrden) {
+                return $coincide($orden->Contrato) || $coincide($orden->Proyecto_actividad)
+                    || $reportesPorOrden->get($orden->idOrden_Servicio, collect())->contains(fn ($r) => $coincide($r->numero ?: 'Reporte #' . $r->idReportes));
+            });
+            $pendientesBusqueda = $reportesUnicos->where('firmado', false)->filter(function ($r) use ($coincide, $ordenesEstadistica) {
+                $orden = $ordenesEstadistica->firstWhere('idOrden_Servicio', $r->idOrden_Servicio);
+                return $coincide($r->numero ?: 'Reporte #' . $r->idReportes) || $coincide($orden->Contrato) || $coincide($orden->Proyecto_actividad);
+            });
+            $paginar = function ($items, $nombre, $fragmento) use ($busqueda, $contratoSeleccionado) {
+                $pagina = request()->query($nombre, 1);
+                $pagina = is_scalar($pagina) && ctype_digit((string) $pagina) ? max(1, (int) $pagina) : 1;
+                $pagina = min($pagina, max(1, (int) ceil($items->count() / 10)));
+                return (new \Illuminate\Pagination\LengthAwarePaginator($items->values()->forPage($pagina, 10), $items->count(), 10, $pagina,
+                    ['path' => request()->url(), 'pageName' => $nombre]))
+                    ->appends(['vista' => 'estadisticas', 'contrato' => $contratoSeleccionado, 'buscar' => $busqueda])->fragment($fragmento);
+            };
+            $ordenesPaginadas = $paginar($ordenesBusqueda, 'pagina_ordenes', 'tabla-ordenes');
+            $pendientesPaginados = $paginar($pendientesBusqueda, 'pagina_pendientes', 'detalle-pendientes');
+            $contextoEstadisticas = ['origen' => 'estadisticas', 'contrato' => $contratoSeleccionado, 'buscar' => $busqueda,
+                'pagina_ordenes' => $ordenesPaginadas->currentPage(), 'pagina_pendientes' => $pendientesPaginados->currentPage(), 'seccion' => 'resumen'];
+            return view('Reportes_publicos.index', compact('cliente', 'contratos', 'encuestaPendiente', 'encuestasPorOrden',
+                'contratoSeleccionado', 'ordenesEstadistica', 'reportesEstadistica', 'estadisticas',
+                'estadosDocumentacion', 'busqueda', 'ordenesPaginadas', 'pendientesPaginados', 'contextoEstadisticas', 'seccionEstadisticas', 'liberacionPorContrato'));
         }
 
         /**

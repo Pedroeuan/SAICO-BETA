@@ -149,6 +149,24 @@
         font-weight: 700; 
     }
 
+    [data-modal-encuesta] .categoria-pregunta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: fit-content;
+        max-width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        padding: 6px 12px;
+        border: 1px solid #bfd2ec;
+        border-radius: 20px;
+        background: #edf3fb;
+        color: #003b80;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
     /* Riel con el logo AICO que se desliza a la calificación elegida */
     .control-calificacion { 
         max-width: 620px; 
@@ -200,12 +218,13 @@
     }
     .opciones-calificacion { 
         display: grid; 
-        grid-template-columns: repeat(5, 1fr); 
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 10px; 
         margin-top: 6px; 
     }
     .opcion-calificacion { 
         position: relative; 
+        min-width: 0;
         cursor: pointer; 
     }
     .opcion-calificacion input { 
@@ -218,33 +237,49 @@
         display: flex; 
         flex-direction: column; 
         align-items: center; 
-        gap: 4px; 
+        justify-content: center;
+        gap: 8px;
+        min-height: 112px;
+        height: 100%;
+        box-sizing: border-box;
         padding: 14px 4px; 
         border: 2px solid #cbd5e1; 
         border-radius: 12px; 
         background: #fff; 
-        transition: transform .15s, border-color .15s, background .15s; 
+        transition: border-color .15s, background .15s, box-shadow .15s;
     }
     .opcion-calificacion .carita { 
-        font-size: 30px; 
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        gap: 2px;
+        min-height: 32px;
+        max-width: 100%;
+        color: #f4c542;
+        font-size: 17px;
         line-height: 1; 
     }
     .opcion-calificacion .numero { 
         color: #003b80; 
+        font-size: 20px;
         font-weight: 800; 
     }
     .opcion-calificacion .texto { 
         color: #64748b; 
-        font-size: 11px; 
+        font-size: 13px;
+        line-height: 1.3;
+        text-align: center;
+        overflow-wrap: anywhere;
     }
     .opcion-calificacion:hover .tarjeta { 
-        transform: translateY(-3px); 
         border-color: #003b80; 
+        box-shadow: 0 3px 10px rgba(0, 59, 128, .12);
     }
     .opcion-calificacion input:checked + .tarjeta { 
         border-color: #003b80; 
         background: #003b80; 
-        transform: scale(1.06); 
+        box-shadow: 0 3px 10px rgba(0, 59, 128, .22);
     }
     .opcion-calificacion input:checked + .tarjeta .numero, 
     .opcion-calificacion input:checked + .tarjeta .texto { 
@@ -346,8 +381,9 @@
     { 
         .encuesta-panel { padding: 20px 16px; }
         .opciones-calificacion { gap: 6px; }
-        .opcion-calificacion .texto { display: none; }
-        .opcion-calificacion .carita { font-size: 26px; }
+        .opcion-calificacion .tarjeta { min-height: 104px; padding: 12px 3px; gap: 6px; }
+        .opcion-calificacion .texto { font-size: 11px; }
+        .opcion-calificacion .carita { font-size: 11px; min-height: 28px; }
     }
     .opciones-firma { 
         display: flex; 
@@ -595,19 +631,26 @@
 @if($encuestaPendiente)
     @php
         $preguntasEncuesta = [
-            '¿Cómo califica el servicio de AICO S.C.?',
-            '¿Cómo califica la atención de ventas?',
-            '¿Cómo califica el trato y atención del personal?',
-            '¿El personal está capacitado para realizar los servicios?',
-            '¿Cómo califica las instalaciones y equipos utilizados?',
-            '¿Se utiliza correctamente el equipo de protección?',
-            '¿Cómo califica la entrega de los reportes?',
-            '¿Cómo califica el profesionalismo del servicio?',
-            '¿Recomendaría los servicios de AICO S.C.?',
+            '¿Cómo califica el servicio recibido?',
+            '¿Cómo califica la atención del personal de ventas?',
+            '¿Cómo califica la amabilidad del personal en sitio?',
+            '¿El personal demostró estar capacitado para el trabajo?',
+            '¿Cómo califica la calidad de los equipos utilizados?',
+            '¿El personal usó correctamente su equipo de protección?',
+            '¿Los reportes se entregaron a tiempo?',
+            '¿Cómo califica el profesionalismo del equipo?',
+            '¿Recomendaría nuestros servicios?',
             '¿El servicio cumplió con sus expectativas?',
         ];
+        $categoriasEncuesta = [
+            'Servicio general', 'Ventas', 'Amabilidad', 'Capacitación', 'Equipos',
+            'Seguridad', 'Tiempos', 'Profesionalismo', 'Recomendación', 'Expectativas',
+        ];
+        $iconosCategoriasEncuesta = [
+            'fa-star', 'fa-handshake', 'fa-face-smile', 'fa-graduation-cap', 'fa-screwdriver-wrench',
+            'fa-shield-halved', 'fa-clock', 'fa-user-tie', 'fa-thumbs-up', 'fa-bullseye',
+        ];
         $nivelesSatisfaccion = [1 => 'Malo', 2 => 'Regular', 3 => 'Aceptable', 4 => 'Bueno', 5 => 'Excelente'];
-        $caritasSatisfaccion = [1 => '⭐', 2 => '⭐⭐', 3 => '⭐⭐⭐', 4 => '⭐⭐⭐⭐', 5 => '⭐⭐⭐⭐⭐'];
     @endphp
     <div class="encuesta-modal" data-modal-encuesta role="dialog" aria-modal="true" aria-labelledby="titulo-encuesta">
         <form class="encuesta-panel" method="POST" enctype="multipart/form-data" data-respuestas-servidor="{{ $errors->any() ? '1' : '0' }}" action="{{ route('portal.encuesta.store', ['token' => request()->route('token')]) }}">
@@ -626,7 +669,13 @@
             @foreach($preguntasEncuesta as $indice => $pregunta)
                 @php $campo = 'PREGUNTA_' . ($indice + 1); $valorAnterior = old('Preguntas.' . $campo); @endphp
                 <fieldset class="pregunta-encuesta paso-encuesta" data-paso>
-                    <legend>{{ $indice + 1 }}. {{ $pregunta }}</legend>
+                    <legend>
+                        <span class="categoria-pregunta">
+                            <i class="fa-solid {{ $iconosCategoriasEncuesta[$indice] }}" aria-hidden="true"></i>
+                            {{ $categoriasEncuesta[$indice] }}
+                        </span>
+                        {{ $indice + 1 }}. {{ $pregunta }}
+                    </legend>
                     <div class="control-calificacion">
                         {{-- Riel: el logo AICO se desliza hasta la calificación elegida --}}
                         <div class="riel-calificacion" aria-hidden="true">
@@ -638,7 +687,11 @@
                                 <label class="opcion-calificacion">
                                     <input type="radio" name="Preguntas[{{ $campo }}]" value="{{ $valor }}" @checked((string) $valorAnterior === (string) $valor) aria-label="{{ $valor }} · {{ $nivel }}">
                                     <span class="tarjeta">
-                                        <span class="carita">{{ $caritasSatisfaccion[$valor] }}</span>
+                                        <span class="carita" aria-hidden="true">
+                                            @for($estrella = 0; $estrella < $valor; $estrella++)
+                                                <i class="fa-solid fa-star"></i>
+                                            @endfor
+                                        </span>
                                         <span class="numero">{{ $valor }}</span>
                                         <span class="texto">{{ $nivel }}</span>
                                     </span>
