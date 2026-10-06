@@ -100,10 +100,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>
                     <select class="form-control catalogo-select">
                         <option value="">-- Seleccionar --</option>
-                        ${catalogoData.map(item => `<option value="${item.idCatalogo_OC}" data-descripcion="${item.Descripcion}" data-unidad="${item.Unidad}">${item.Nombre}</option>`).join('')}
+                        ${catalogoData.map(item => `<option value="${item.idCatalogo_OC}" data-descripcion="${item.Descripcion}" data-unidad="${item.Unidad}" data-imagen="${item.Imagen || ''}">${item.Nombre}</option>`).join('')}
                     </select>
                 </td>
                 <td><textarea class="form-control descripcion-input" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td class="text-center">
+                    <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                    <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
+                </td>
                 <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
                 <td><input type="text" class="form-control unidad-input" name="unidad[]" placeholder="Unidad/Medida"></td>
                 <td><input type="number" class="form-control" name="valor_unitario[]" placeholder="Valor Unitario"></td>
@@ -113,14 +117,27 @@ document.addEventListener("DOMContentLoaded", function () {
             $('#dynamicTable tbody').append(newRow);
         });
 
-        // Autocompletar descripción y unidad al seleccionar del catálogo
+        // Autocompletar descripción, unidad e imagen al seleccionar del catálogo
         $('#dynamicTable').on('change', '.catalogo-select', function() {
             var selectedOption = $(this).find('option:selected');
             var descripcion = selectedOption.data('descripcion') || '';
             var unidad = selectedOption.data('unidad') || '';
+            var imagen = selectedOption.data('imagen') || '';
             var row = $(this).closest('tr');
+            var img = row.find('.catalogo-preview-img');
+            var placeholder = row.find('.catalogo-preview-placeholder');
+
             row.find('.descripcion-input').val(descripcion);
             row.find('.unidad-input').val(unidad);
+
+            if (imagen) {
+                var imagePath = '/storage/' + imagen.replace(/^\/+/, '');
+                img.attr('src', imagePath).show();
+                placeholder.hide();
+            } else {
+                img.hide().removeAttr('src');
+                placeholder.show();
+            }
         });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
@@ -135,25 +152,21 @@ document.addEventListener("DOMContentLoaded", function () {
             const tableData = [];
 
             rows.forEach(row => {
-                const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
-                const cantidad = row.querySelector('td:nth-child(2) input').value;
-                const unidad = row.querySelector('td:nth-child(3) input').value;
-                const valor_unitario = row.querySelector('td:nth-child(4) input').value;
-                const valor_total = row.querySelector('td:nth-child(5) input').value;
-                
+                const descripcion = row.querySelector('.descripcion-input')?.value || '';
+                const cantidad = row.querySelector('input[name="cantidad[]"]')?.value || '';
+                const unidad = row.querySelector('input[name="unidad[]"]')?.value || '';
+                const valor_unitario = row.querySelector('input[name="valor_unitario[]"]')?.value || '';
+                const valor_total = row.querySelector('input[name="valor_total[]"]')?.value || '';
 
-                // Añadir los datos de la fila al array
                 tableData.push({
                     descripcion: descripcion,
                     cantidad: cantidad,
                     unidad: unidad,
                     valor_unitario: valor_unitario,
-                    valor_total: valor_total,   
-                    
+                    valor_total: valor_total,
                 });
             });
 
-            // Convertir el array a JSON y asignarlo al campo oculto
             document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
         });
 
