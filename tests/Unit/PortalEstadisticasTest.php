@@ -83,7 +83,7 @@ class PortalEstadisticasTest extends TestCase
         [$datos, $html] = $this->consultar('B');
         $this->assertSame(2, $datos['estadisticas']['reportes']);
         $this->assertSame(0, $datos['estadisticas']['firmados']);
-        $this->assertStringContainsString('Quedan 2 reportes por liberar en este contrato.', $html);
+        $this->assertStringContainsString('Hay 2 reportes en proceso en este contrato.', $html);
     }
 
     public function test_contrato_sin_reportes(): void
