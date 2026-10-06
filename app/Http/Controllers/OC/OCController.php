@@ -34,7 +34,8 @@ class OCController extends Controller
     {
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
-        return view('OC.create', compact('Clientes'));
+        $catalogo = \App\Models\Catalogo_OC\Catalogo_OC::all();
+        return view('OC.create', compact('Clientes', 'catalogo'));
     }
 
     /**
@@ -205,12 +206,12 @@ class OCController extends Controller
     {
         $OC = OC::where('idOC', $id)->first();
         $detallesOCM = detallesOC::where('idOC',$OC->idOC)->first();
+        $catalogo = DB::table('catalogo')->get();
 
         // Decodificar JSON de la columna 'Detalles'
         $detallesOC = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
 
-
-        return view('OC.edit', compact('id','OC','detallesOC'));
+        return view('OC.edit', compact('id','OC','detallesOC','catalogo'));
     }
 
     /**

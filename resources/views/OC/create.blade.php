@@ -320,7 +320,9 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>Catalogo</th>
                                                 <th>Descripción</th>
+                                                <th>Imagen</th>
                                                 <th>Cantidad</th>
                                                 <th>Unidad/Medida</th>
                                                 <th>Valor Unitario</th>
@@ -401,6 +403,9 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script>
+    var catalogo = @json($catalogo ?? []);
+</script>
 <script src="{{ asset('js/OC.js') }}"></script>
 <script>
 
