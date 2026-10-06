@@ -93,9 +93,11 @@ document.addEventListener("DOMContentLoaded", function () {
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
-                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
                 <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
+                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td><input type="number" class="form-control" name="valor_unitario[]" placeholder="Valor Unitario"></td>
+                <td><input type="number" class="form-control" name="valor_total[]" placeholder="Valor Total"></td>
                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>`;
             $('#dynamicTable tbody').append(newRow);
@@ -113,15 +115,21 @@ document.addEventListener("DOMContentLoaded", function () {
             const tableData = [];
 
             rows.forEach(row => {
-                const unidad = row.querySelector('td:nth-child(2) input').value;
-                const cantidad = row.querySelector('td:nth-child(3) input').value;
                 const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
+                const cantidad = row.querySelector('td:nth-child(2) input').value;
+                const unidad = row.querySelector('td:nth-child(3) input').value;
+                const valor_unitario = row.querySelector('td:nth-child(4) input').value;
+                const valor_total = row.querySelector('td:nth-child(5) input').value;
+                
 
                 // Añadir los datos de la fila al array
                 tableData.push({
-                    unidad: unidad,
+                    descripcion: descripcion,
                     cantidad: cantidad,
-                    descripcion: descripcion
+                    unidad: unidad,
+                    valor_unitario: valor_unitario,
+                    valor_total: valor_total,   
+                    
                 });
             });
 
