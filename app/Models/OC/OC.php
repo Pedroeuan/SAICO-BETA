@@ -12,14 +12,14 @@ class OC extends Model
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idOC',
-        'idClientes',
         'Contrato',
+        'Tipo_servicio',
+        'idClientes',
+        'Fecha_solicitud',
+        'Lugar_trabajo',
         'Num_OC',
         'Requisicion',
         'Proyecto',
-        'Lugar_trabajo',
-        'Fecha_solicitud',
-        'Tipo_servicio',
         'Estatus',
         'OC_archivo',
     ];

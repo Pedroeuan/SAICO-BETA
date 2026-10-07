@@ -5,6 +5,8 @@ namespace App\Http\Controllers\OC;
 use App\Models\detallesOC\detallesOC;
 use App\Models\OC\OC;
 use App\Models\Reporte\reporte;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -45,15 +47,18 @@ class OCController extends Controller
     {
         //
         $request->validate([
+            'TieneCliente' => 'required|in:si,no',
             'Numero_OC' => 'required|integer',
             'Requisicion' => 'required|string',
             'Proyecto' => 'required|string',
             'Lugar_trabajo' => 'required|string',
         ]);
 
+        /*Modelos para registro*/
         $OC = new OC;
-        $EsperaDato ='ESPERA DE DATO';
+        $detallesOCModel = new detallesOC;
 
+        $EsperaDato ='ESPERA DE DATO';
         // ==========================
         // Lógica para manejar Contrato
         // ==========================
@@ -92,6 +97,115 @@ class OCController extends Controller
             $OC->Contrato = $request->input('Contrato', $EsperaDato);
         }
 
+        /* NumCotizacion*/
+        if($request->input('NumCotizacion')==null)
+        {
+            $detallesOCModel->NumCotizacion = $EsperaDato;
+        }else{
+            $detallesOCModel->NumCotizacion = $request->input('NumCotizacion');
+        }
+        /* SolicitudCliente*/
+        if($request->input('SolicitudCliente')==null)
+        {
+            $detallesOCModel->SolicitudCliente = $EsperaDato;
+        }else{
+            $detallesOCModel->SolicitudCliente = $request->input('SolicitudCliente');
+        }
+        /* Tipo_servicio*/
+        if($request->input('Tipo_servicio')==null)
+        {
+            $OC->Tipo_servicio = $EsperaDato;
+        }else{
+            $OC->Tipo_servicio = $request->input('Tipo_servicio');
+        }
+         // ==========================
+        // Lógica para manejar Cliente
+        // ==========================
+        $clienteNombre = $request->input('TieneCliente') === 'si'
+            ? $request->input('ClienteSelect')
+            : $request->input('ClienteInput');
+
+        if (!empty($clienteNombre)) {
+            $cliente = clientes::where('Cliente', trim($clienteNombre))->first();
+            Log::info('cliente: ', ['cliente' => $cliente]);
+            if ($cliente) {
+                $OC->idClientes = $cliente->idClientes;
+            }else {
+                $NewCliente = new clientes();
+                $NewCliente->Cliente = $clienteNombre;
+                $NewCliente->RFC = $EsperaDato;
+                $NewCliente->Telefono = $EsperaDato;
+                $NewCliente->Correo = $EsperaDato;
+                $NewCliente->Logo = $EsperaDato;
+                $NewCliente->portal_token = (string) Str::uuid();
+                $NewCliente->save();
+
+                $OC->idClientes = $NewCliente->idClientes;
+            }
+        }
+
+        /* Tipo_servicio*/
+        if($request->input('Contacto')==null)
+        {
+            $detallesOCModel->Contacto = $EsperaDato;
+        }else{
+            $detallesOCModel->Contacto = $request->input('Contacto');
+        }
+
+        /* Puesto*/
+        if($request->input('Puesto')==null)
+        {
+            $detallesOCModel->Puesto = $EsperaDato;
+        }else{
+            $detallesOCModel->Puesto = $request->input('Puesto');
+        }
+        /* Fecha_solicitud*/
+        if($request->input('Fecha_solicitud')==null)
+        {
+            $OC->Fecha_solicitud = '2001-01-01';
+        }else{
+            $OC->Fecha_solicitud = $request->input('Fecha_solicitud');
+        }
+
+        /* Ciudad*/
+        if($request->input('Ciudad')==null)
+        {
+            $detallesOCModel->Ciudad = $EsperaDato;
+        }else{
+            $detallesOCModel->Ciudad = $request->input('Ciudad');
+        }
+
+        /* Telefono*/
+        if($request->input('Telefono')==null)
+        {
+            $detallesOCModel->Telefono = $EsperaDato;
+        }else{
+            $detallesOCModel->Telefono = $request->input('Telefono');
+        }
+
+        /* Correo*/
+        if($request->input('Correo')==null)
+        {
+            $detallesOCModel->Correo = $EsperaDato;
+        }else{
+            $detallesOCModel->Correo = $request->input('Correo');
+        }
+        /* Lugar_trabajo*/
+        if($request->input('Lugar_trabajo')==null)
+        {
+            $OC->Lugar_trabajo = $EsperaDato;
+        }else{
+            $OC->Lugar_trabajo = $request->input('Lugar_trabajo');
+        }
+
+        /* Vigencia*/
+        if($request->input('Vigencia')==null)
+        {
+            $detallesOCModel->Vigencia = $EsperaDato;
+        }else{
+            $detallesOCModel->Vigencia = $request->input('Vigencia');
+        }
+        /* Numero_OC*/
         if($request->input('Numero_OC')==null)
         {
             $OC->Num_OC = $EsperaDato;
@@ -99,6 +213,7 @@ class OCController extends Controller
             $OC->Num_OC = $request->input('Numero_OC');
         }
 
+        /* Requisicion*/
         if($request->input('Requisicion')==null)
         {
             $OC->Requisicion = $EsperaDato;
@@ -111,27 +226,6 @@ class OCController extends Controller
             $OC->Proyecto = $EsperaDato;
         }else{
             $OC->Proyecto = $request->input('Proyecto');
-        }
-
-        if($request->input('Lugar_trabajo')==null)
-        {
-            $OC->Lugar_trabajo = $EsperaDato;
-        }else{
-            $OC->Lugar_trabajo = $request->input('Lugar_trabajo');
-        }
-
-        if($request->input('Fecha_solicitud')==null)
-        {
-            $OC->Fecha_solicitud = '2001-01-01';
-        }else{
-            $OC->Fecha_solicitud = $request->input('Fecha_solicitud');
-        }
-
-        if($request->input('Tipo_servicio')==null)
-        {
-            $OC->Tipo_servicio = $EsperaDato;
-        }else{
-            $OC->Tipo_servicio = $request->input('Tipo_servicio');
         }
 
         $OC->Estatus = $request->input('Estatus');
@@ -172,9 +266,6 @@ class OCController extends Controller
 
             // Convertir el arreglo en una cadena JSON
             $detallesJSON = json_encode($detallesOC); 
-
-            // Crear un nuevo registro en la tabla detallesOC
-            $detallesOCModel = new detallesOC;
 
             // Asignar el idOC
             $detallesOCModel->idOC = $OC->idOC;
