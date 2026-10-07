@@ -232,7 +232,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Lugar_trabajo" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen">{{old('Lugar_trabajo')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Lugar_trabajo" placeholder="Ejemplo: Patio de fabricación" value="">{{old('Lugar_trabajo', 'Muelle, Ciudad del Carmen')}}</textarea>
                                             @error('Lugar_trabajo')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -242,7 +242,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Vigencia</label>
-                                            <input type="text" class="form-control inputForm @error('Vigencia') is-invalid @enderror" name="Vigencia"  placeholder="Ejemplo: 1 año" value="{{old('Vigencia')}}">
+                                            <input type="text" class="form-control inputForm @error('Vigencia') is-invalid @enderror" name="Vigencia"  placeholder="Ejemplo: 1 año" value="{{old('Vigencia', '15 Dias')}}">
                                             @error('Vigencia')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
