@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleCliente(); // ejecutar al cargar
 });
 
-vbnbnvbnvbnvbnvbnvbnvbnvbnnv/*check del contrato, si y no */
+/*check del contrato, si y no */
 document.addEventListener("DOMContentLoaded", function () {
 
-    const radios = document.getElementsByName("TieneContrato");xcfgvxcfgdfg
+    const radios = document.getElementsByName("TieneContrato");
     const campoContrato = document.getElementById("campoContrato");
 
     radios.forEach(radio => {

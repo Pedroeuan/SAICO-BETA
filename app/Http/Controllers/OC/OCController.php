@@ -47,11 +47,12 @@ class OCController extends Controller
     {
         //
         $request->validate([
+            'Contrato' => 'required|string',
             'TieneCliente' => 'required|in:si,no',
             'Numero_OC' => 'required|integer',
             'Requisicion' => 'required|string',
-            'Proyecto' => 'required|string',
-            'Lugar_trabajo' => 'required|string',
+            //'Proyecto' => 'required|string',
+            //'Lugar_trabajo' => 'required|string',
         ]);
 
         /*Modelos para registro*/
@@ -72,10 +73,10 @@ class OCController extends Controller
             if (!$actual || !preg_match('/^AICO-INT-[0-9]{4}$/', $actual)) {
 
                 // Seguridad: volver a calcular el consecutivo
-                $registros = reporte::orderBy('idReportes', 'DESC')->get();
+                /*$registros = reporte::orderBy('idReportes', 'DESC')->get();
                 $ultimoNumero = 0;
-
-                foreach ($registros as $r) {
+                
+                /*foreach ($registros as $r) {
                     $json = json_decode($r->Detalles_Generales, true);
 
                     if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
@@ -84,7 +85,12 @@ class OCController extends Controller
                         break;
                     }
                 }
+                //$nuevo = "AICO-INT-" . str_pad($ultimoNumero + 1, 4, '0', STR_PAD_LEFT);*/
 
+                $registros = OC::where('Contrato', 'LIKE', 'AICO-INT-%')
+                            ->orderBy('Contrato', 'DESC')
+                            ->value('Contrato');
+                $ultimoNumero = $registros ? intval(substr($registros, strrpos($registros, '-') + 1)) : 0;
                 $nuevo = "AICO-INT-" . str_pad($ultimoNumero + 1, 4, '0', STR_PAD_LEFT);
 
                 $OC->Contrato = $nuevo;
@@ -230,7 +236,6 @@ class OCController extends Controller
 
         $OC->Estatus = $request->input('Estatus');
 
-        $OC->save();
 
         // Validar que se ha enviado el archivo de factura
         if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
