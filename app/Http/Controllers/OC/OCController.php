@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\OC;
 
 use App\Models\detallesOC\detallesOC;
+use App\Models\Catalogo_OC\Catalogo_OC;
 use App\Models\OC\OC;
+use App\Models\Clientes\clientes;
 use App\Models\Reporte\reporte;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
@@ -14,8 +16,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
-
-use App\Models\Clientes\clientes;
 
 class OCController extends Controller
 {
@@ -36,7 +36,7 @@ class OCController extends Controller
     {
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
-        $catalogo = \App\Models\Catalogo_OC\Catalogo_OC::all();
+        $catalogo = DB::table('Catalogo_OC')->get();
         return view('OC.create', compact('Clientes', 'catalogo'));
     }
 
@@ -66,7 +66,7 @@ class OCController extends Controller
         // Lógica para manejar el campo Contrato
         if ($request->input('TieneContrato') === "no") {
 
-            // Si el usuario alteró el valor o no llegó, se recalcula en backend
+            // Si el usuario alteró el value o no llegó, se recalcula en backend
             $actual = $request->input('Contrato');
 
             // Verificar que realmente tenga el formato correcto
@@ -302,12 +302,16 @@ class OCController extends Controller
     {
         $OC = OC::where('idOC', $id)->first();
         $detallesOCM = detallesOC::where('idOC',$OC->idOC)->first();
-        $catalogo = DB::table('catalogo')->get();
+        $catalogo = DB::table('Catalogo_OC')->get();
 
-        // Decodificar JSON de la columna 'Detalles'
+        $idCliente = $OC->idClientes;
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Cliente = clientes::where('idClientes', $idCliente)->first(); 
+        $Nombre_Cliente = $Cliente->Cliente;
+        //Decodificar JSON de la columna 'Detalles'
         $detallesOC = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
 
-        return view('OC.edit', compact('id','OC','detallesOC','catalogo'));
+        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente'));
     }
 
     /**

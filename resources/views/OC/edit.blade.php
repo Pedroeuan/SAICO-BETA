@@ -62,7 +62,138 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Contrato</label>
-                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OC->Contrato}}" readonly>
+                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OC->Contrato}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Num. De Cotizacion</label>
+                                            <input type="text" class="form-control inputForm @error('NumCotizacion') is-invalid @enderror" name="NumCotizacion"  placeholder="Ejemplo: 12345" value="{{ $detallesOCM->NumCotizacion}}">
+                                            @error('NumCotizacion')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Solicitud del cliente</label>
+                                            <input type="text" class="form-control inputForm @error('SolicitudCliente') is-invalid @enderror" name="SolicitudCliente"  placeholder="Ejemplo: 12345" value="{{ $detallesOCM->SolicitudCliente }}">
+                                            @error('SolicitudCliente')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Objetivo del servicio:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Tipo_servicio" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen">{{old('Tipo_servicio', $OC->Tipo_servicio)}}</textarea>
+                                            @error('Tipo_servicio')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Cliente</label>
+                                            <input type="text" class="form-control inputForm" name="Cliente" placeholder="Ejemplo: 640853841" value="{{ $Nombre_Cliente}}" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contacto</label>
+                                            <input type="text" class="form-control inputForm @error('Contacto') is-invalid @enderror" name="Contacto"  placeholder="Ejemplo: Juan Pérez" value="{{$detallesOCM->Contacto}}">
+                                            @error('Contacto')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Puesto</label>
+                                            <input type="text" class="form-control inputForm @error('Puesto') is-invalid @enderror" name="Puesto"  placeholder="Ejemplo: Ingeniero de Software" value="{{ $detallesOCM->Puesto }}">
+                                            @error('Puesto')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
+                                            @if($OC->Fecha_solicitud == '2001-01-01')
+                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud">
+                                                @else
+                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ $OC->Fecha_solicitud }}">
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Ciudad</label>
+                                            <input type="text" class="form-control inputForm @error('Ciudad') is-invalid @enderror" name="Ciudad"  placeholder="Ejemplo: Ciudad de México" value="{{ $detallesOCM->Ciudad }}">
+                                            @error('Ciudad')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Teléfono</label>
+                                            <input type="text" class="form-control inputForm @error('Telefono') is-invalid @enderror" name="Telefono"  placeholder="Ejemplo: 555-1234" value="{{ $detallesOCM->Telefono }}">
+                                            @error('Telefono')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+
+                                            <label class="col-form-label">
+                                                Correo
+                                            </label>
+
+                                            <input type="email"
+                                                class="form-control inputForm @error('Correo') is-invalid @enderror"
+                                                value="{{ $detallesOCM->Correo }}"
+                                                name="Correo"
+                                                placeholder="Ejemplo: hola@protexa.mx">
+
+                                            @error('Correo')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
+                                            <input type="text" class="form-control inputForm @error('Lugar_trabajo') is-invalid @enderror" name="Lugar_trabajo" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . " value="{{ $OC->Lugar_trabajo }}">
+                                            @error('Lugar_trabajo')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Vigencia</label>
+                                            <input type="text" class="form-control inputForm @error('Vigencia') is-invalid @enderror" name="Vigencia"  placeholder="Ejemplo: 1 año" value="{{ $detallesOCM->Vigencia }}">
+                                            @error('Vigencia')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -89,39 +220,11 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Proyecto" placeholder="Ejemplo: PER-04-23 DUCTO ATOYATL-1" value="{{ $OC->Proyecto }}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Proyecto" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen">{{$OC->Proyecto}}</textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
-                                            <input type="text" class="form-control inputForm @error('Lugar_trabajo') is-invalid @enderror" name="Lugar_trabajo" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . " value="{{ $OC->Lugar_trabajo }}">
-                                            @error('Lugar_trabajo')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
-                                            @if($OC->Fecha_solicitud == '2001-01-01')
-                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud">
-                                                @else
-                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ $OC->Fecha_solicitud }}">
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Tipo de Servicio</label>
-                                            <input type="text" class="form-control inputForm" name="Tipo_servicio" placeholder="Ejemplo: PT, R.G., MT, UT, DUREZA " value="{{ $OC->Tipo_servicio }}">
-                                            </div>
                                     </div>
 
                                     <div class="col-sm-4">
@@ -163,18 +266,35 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Unidad/Medida</th>
-                                                <th>Cantidad</th>
+                                                <th>Catalogo</th>
                                                 <th>Descripción</th>
-                                                <th>Acción</th>
+                                                <th>Imagen</th>
+                                                <th>Cantidad</th>
+                                                <th>Unidad/Medida</th>
+                                                <th>Valor Unitario</th>
+                                                <th>Valor Total</th>
+                                                <th>Eliminar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($detallesOC ?? [] as $indice => $detalle)
                                                 <tr>
                                                     <td>{{ $indice + 1 }}</td>
-                                                    <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
+                                                    <td>
+                                                        <select class="form-control catalogo-select">
+                                                            <option value="">-- Seleccionar --</option>
+                                                            ${catalogoData.map(item => `<option value="${item.idCatalogo_OC}" data-descripcion="${item.Descripcion}" data-unidad="${item.Unidad}" data-imagen="${item.Imagen || ''}">${item.Nombre}</option>`).join('')}
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" name="descripcion[]" placeholder="Descripción" value="{{ $detalle['descripcion'] ?? '' }}"></td>
+                                                    <td class="text-center">
+                                                        <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                                                        <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
+                                                    </td>
                                                     <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad" value="{{ $detalle['cantidad'] ?? '' }}"></td>
+                                                    <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
+                                                    <td><input type="number" class="form-control" name="valor_unitario[]" placeholder="Valor Unitario" value="{{ $detalle['valor_unitario'] ?? '' }}"></td>
+                                                    <td><input type="number" class="form-control" name="valor_total[]" placeholder="Valor Total" value="{{ $detalle['valor_total'] ?? '' }}"></td>
                                                     <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion">{{ $detalle['descripcion'] ?? '' }}</textarea></td>
                                                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                 </tr>
