@@ -304,6 +304,35 @@
                                     
                                     <p>
                                     <p>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">NOTAS:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Notas" placeholder="Ejemplo: Notas" value="Muelle, Ciudad del Carmen">{{old('Notas')}}</textarea>
+                                            @error('Notas')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">CONDICIONES DE PAGO:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago" value="Muelle, Ciudad del Carmen">{{old('Condiciones_pago')}}</textarea>
+                                            @error('Condiciones_pago')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">CONDICIONES DE GENERALES:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales" value="Muelle, Ciudad del Carmen">{{old('Condiciones_generales')}}</textarea>
+                                            @error('Condiciones_generales')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                     <div class="container">
                                         <div class="float-right">
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>

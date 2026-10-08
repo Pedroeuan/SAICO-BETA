@@ -263,6 +263,27 @@ class OCController extends Controller
         }
         $OC->save();
 
+        /*Notas */
+        if($request->input('Notas')==null)
+        {
+            $detallesOCModel->Notas = $EsperaDato;
+        }else{
+            $detallesOCModel->Notas = $request->input('Notas');
+        }
+        /*Condiciones_pago */
+        if($request->input('Condiciones_pago')==null)
+        {
+            $detallesOCModel->Condiciones_pago = $EsperaDato;
+        }else{
+            $detallesOCModel->Condiciones_pago = $request->input('Condiciones_pago');
+        }
+        /*Condiciones_generales */
+        if($request->input('Condiciones_generales')==null)
+        {
+            $detallesOCModel->Condiciones_generales = $EsperaDato;
+        }else{
+            $detallesOCModel->Condiciones_generales = $request->input('Condiciones_generales');
+        }
         // Decodificar el input JSON en un arreglo
         $detallesOC = json_decode($request->input('dynamicTableData'), true);
 
