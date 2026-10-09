@@ -8,6 +8,7 @@ use App\Http\Controllers\Procesamiento\TrabajoProcesamientoController;
 use App\Http\Controllers\Procesamiento\ProcesamientoXrfController;
 use App\Http\Controllers\Procesamiento\ProcesamientoPdfController;
 
+use App\Http\Controllers\OC\CatalogoOCController;
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\TICS\TICSController;
 use App\Http\Controllers\DashboardController;
@@ -796,11 +797,23 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::post('/OC/storeOC', [OCController::class, 'storeOC'])->name('OC.storeOC'); 
     /*Ruta de Actualizar OC*/
     Route::post('/OC/updateOC/{id}', [OCController::class, 'updateOC'])->name('OC.updateOC');
-
     /*Rutas de Vista de Edición-index*/
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
+
+    /*Ruta de Vista del catálogo de OC*/
+    Route::get('/OC/catalogo', [CatalogoOCController::class, 'create'])->name('OC.catalogo');
+    /*Ruta de Guardado*/
+    Route::post('/OC/storeCatalogo', [CatalogoOCController::class, 'store'])->name('OC.storeCatalogo');
+    /*Ruta de Vista de Catalogo_OC-index*/
+    Route::get('/OC/indexCatalogo', [CatalogoOCController::class, 'index'])->name('OC.indexCatalogo'); 
+    /*Rutas de Vista de Edición-index*/
+    Route::get('/OC/editCatalogo/{id}', [CatalogoOCController::class, 'edit'])->name('OC.editCatalogo');
+    /*Ruta de Actualizar OC*/
+    Route::post('/OC/updateCatalogo/{id}', [CatalogoOCController::class, 'update'])->name('OC.updateCatalogo');
+    /*Ruta de botón Eliminación-index-Usuarios*/
+    Route::delete('/Catalogo_OC/eliminar/{id}', [CatalogoOCController::class, 'destroy'])->name('OC.destroyCatalogo');
     });
     
     /* VEHÍCULOS (SOLO ADMIN) 
