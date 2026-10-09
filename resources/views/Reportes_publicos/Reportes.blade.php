@@ -707,6 +707,16 @@
         <h1>
             Bienvenido, {{ $cliente->Cliente }}
         </h1>
+        @if(request()->query('origen') === 'estadisticas')
+            @php
+                $retorno = ['token' => request()->route('token'), 'vista' => 'estadisticas'];
+                foreach (['contrato', 'buscar', 'pagina_ordenes', 'pagina_pendientes', 'seccion'] as $campo) {
+                    $valor = request()->query($campo);
+                    if (is_string($valor)) $retorno[$campo] = mb_substr($valor, 0, 150);
+                }
+            @endphp
+            <p><a class="btn-contrato" href="{{ route('portal.cliente', $retorno) }}">← Volver a estadísticas</a></p>
+        @endif
 
 
         <p>
@@ -727,7 +737,7 @@
         </div>
 
             @forelse($reportes as $reporte)
-                <div class="contrato-card">
+                <div class="contrato-card" id="reporte-{{ $reporte->idReportes }}" tabindex="-1" style="scroll-margin-top:24px">
                     <h3>
                         {{ $reporte->detalles['No_Reporte'] ?? 'Reporte #' . $reporte->idReportes }}
                     </h3>

@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class EncuestaSatisfaccionController extends Controller
 {
@@ -40,18 +39,17 @@ class EncuestaSatisfaccionController extends Controller
             'Comentario' => ['nullable', 'string', 'max:2000'],
             'Firma.nombre' => ['required', 'string', 'max:200'],
             'Firma.confirmacion' => ['accepted'],
-            'Firma.metodo' => ['required', 'in:dibujar,imagen,documento'],
+            'Firma.metodo' => ['required', 'in:dibujar,imagen'],
             'Firma.imagen' => ['required_if:Firma.metodo,dibujar', 'nullable', 'string', 'max:500000'],
             'Firma.archivo_imagen' => ['required_if:Firma.metodo,imagen', 'nullable', 'file', 'mimes:png,jpg,jpeg', 'max:2048'],
         ]);
 
         $metodo = $validated['Firma']['metodo'];
 
-        // dibujar e imagen quedan como PNG base64; documento queda sin firma hasta que suban el archivo.
+        // Ambas opciones guardan la firma como imagen PNG base64.
         $firmaImagen = match ($metodo) {
             'dibujar' => $this->validarFirma($validated['Firma']['imagen']),
             'imagen'  => $this->procesarImagenSubida($request->file('Firma.archivo_imagen')),
-            default   => null,
         };
 
         $orden = DB::table('orden_servicio')
@@ -127,9 +125,7 @@ class EncuestaSatisfaccionController extends Controller
                 'token' => $token,
                 'idOrden_Servicio' => $orden->idOrden_Servicio,
             ])
-            ->with('encuesta_guardada', $metodo === 'documento'
-                ? 'Encuesta guardada. Descárguela, fírmela a mano y súbala.'
-                : 'Gracias. Tu encuesta de satisfacción fue registrada.')
+            ->with('encuesta_guardada', 'Gracias. Tu encuesta de satisfacción fue registrada.')
             ->with('encuesta_id_descarga', $encuesta->idEncuesta);
     }
     public function descargarPdf(string $token, int $idEncuesta)
@@ -150,8 +146,37 @@ class EncuestaSatisfaccionController extends Controller
             return Storage::disk('local')->download($firma['Archivo'], "Encuesta_firmada_{$encuesta->idEncuesta}.{$extension}");
         }
 
-        // Firma dibujada/imagen, o encuesta pendiente de firma manual (PDF sin firma para imprimir).
-        $detalles = json_decode($encuesta->Detalles_Generales, true) ?: [];
+        // Genera el PDF con los datos y la firma de la encuesta.
+        $detalles = json_decode($encuesta->Detalles_Generales, true);
+        $detalles = is_array($detalles) ? $detalles : [];
+        if (blank($detalles['Fecha'] ?? null)) {
+            $fecha = filled($firma['Fecha'] ?? null)
+                ? $firma['Fecha']
+                : $encuesta->created_at?->format('Y-m-d');
+            $detalles['Fecha'] = filled($fecha) ? substr($fecha, 0, 10) : null;
+        }
+        if (blank($detalles['Fecha'] ?? null)) {
+            $fecha = filled($firma['Fecha'] ?? null)
+                ? $firma['Fecha']
+                : $encuesta->created_at?->format('Y-m-d');
+            $detalles['Fecha'] = filled($fecha) ? substr($fecha, 0, 10) : null;
+        }
+        $orden = DB::table('orden_servicio')
+            ->where('idOrden_Servicio', $encuesta->idOrden_Servicio)
+            ->where('idClientes', $cliente->idClientes)
+            ->first();
+
+        // Conserva la informacion historica; recupera solo campos ausentes o vacios.
+        foreach ([
+            'Cliente' => $cliente->Cliente,
+            'Proyecto' => $orden?->Proyecto_actividad,
+            'Contrato' => $orden?->Contrato,
+            'Telefono' => $cliente->Telefono,
+        ] as $campo => $valor) {
+            if (blank($detalles[$campo] ?? null)) {
+                $detalles[$campo] = $valor;
+            }
+        }
         $preguntas = json_decode($encuesta->Preguntas, true) ?: [];
 
         $textosPreguntas = $this->textosPreguntas();
@@ -274,37 +299,5 @@ class EncuestaSatisfaccionController extends Controller
         }
 
         return 'data:image/png;base64,' . base64_encode($png);
-    }
-    public function subirFirmada(Request $request, string $token, int $idEncuesta): RedirectResponse
-    {
-        $cliente = clientes::where('portal_token', $token)->firstOrFail();
-        $encuesta = Encuesta::where('idEncuesta', $idEncuesta)
-            ->where('idClientes', $cliente->idClientes)
-            ->firstOrFail();
-
-        $request->validate([
-            'archivo' => ['required', 'file', 'mimes:pdf,png,jpg,jpeg', 'max:5120'],
-        ], [
-            'archivo.required' => 'Seleccione la encuesta firmada.',
-            'archivo.mimes' => 'El archivo debe ser PDF, PNG o JPG.',
-            'archivo.max' => 'El archivo no debe superar 5 MB.',
-        ]);
-
-        $firmas = json_decode($encuesta->Firmas, true) ?: [];
-        $firmaCliente = $firmas['CLIENTE'] ?? [];
-
-        if (($firmaCliente['Metodo'] ?? null) !== 'documento' || !empty($firmaCliente['Archivo'])) {
-            throw ValidationException::withMessages([
-                'archivo' => 'Esta encuesta no admite subir un archivo firmado.',
-            ]);
-        }
-
-        $firmaCliente['Archivo'] = $request->file('archivo')->store('encuestas/firmadas', 'local');
-        $firmaCliente['Fecha_firmada'] = now()->format('Y-m-d H:i:s');
-        $firmas['CLIENTE'] = $firmaCliente;
-
-        $encuesta->update(['Firmas' => json_encode($firmas, JSON_UNESCAPED_UNICODE)]);
-
-        return back()->with('encuesta_guardada', 'Encuesta firmada recibida correctamente.');
     }
 }
