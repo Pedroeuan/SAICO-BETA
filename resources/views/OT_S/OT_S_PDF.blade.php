@@ -269,7 +269,7 @@
                             <!-- 1 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Realizo'] ?? '' }}</th>
                                     <td style="width: 30px;"></td>
                                 </tr>
 
@@ -280,12 +280,12 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] ?? '' }}</strong></td>
                                 </tr>
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] ?? '' }}</strong></td>
                                 </tr>
 
                                 {{-- <tr>
@@ -296,9 +296,9 @@
                             <!-- 2 Firmas -->
                                 <tr>
                                     <td style="width: 30px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Realizo'] ?? '' }}</th>
                                     <td style="width: 30px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] ?? '' }}</th>
                                     <td style="width: 30px;"></td>
                                 </tr>
 
@@ -311,16 +311,16 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] ?? '' }}</strong></td>
                                 </tr>
-                                                                    
+
                                 <tr>
                                     <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] ?? '' }}</strong></td>
                                 </tr>
 
                                 {{--<tr>
@@ -333,11 +333,11 @@
                             <!-- 3 Firmas -->
                                 <tr>
                                     <td style="width: 20px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Realizo'] ?? '' }}</th>
                                     <td style="width: 20px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] ?? '' }}</th>
                                     <td style="width: 20px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Vobo2'] ?? '' }}</th>
                                     <td style="width: 20px;"></td>
                                 </tr>
 
@@ -352,20 +352,20 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO3'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO3'] ?? '' }}</strong></td>
                                 </tr>
                                                                     
                                 <tr>
                                     <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO3'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO3'] ?? '' }}</strong></td>
                                 </tr>
 
                                 {{-- <tr>
@@ -380,13 +380,13 @@
                             <!-- 4 Firmas -->
                                 <tr>
                                     <td style="width: 15px;"></td>
-                                    <th>{{ $Firmas_Reportes['Realizo'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Realizo'] ?? '' }}</th>
                                     <td style="width: 15px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo1'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Vobo1'] ?? '' }}</th>
                                     <td style="width: 15px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo2'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Vobo2'] ?? '' }}</th>
                                     <td style="width: 15px;"></td>
-                                    <th>{{ $Firmas_Reportes['Vobo3'] }}</th>
+                                    <th>{{ $Firmas_Reportes['Vobo3'] ?? '' }}</th>
                                     <td style="width: 15px;"></td>
                                 </tr>
 
@@ -404,25 +404,25 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO1'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO2'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO3'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO3'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO4'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['NOMBRE_ENCARGADO4'] ?? '' }}</strong></td>
                                     <th></th>
                                 </tr>
                                                                     
                                 <tr>
                                     <th></th>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO1'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO2'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO3'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO3'] ?? '' }}</strong></td>
                                     <td></td>
-                                    <td><strong>{{ $Firmas_Reportes['CARGO4'] }}</strong></td>
+                                    <td><strong>{{ $Firmas_Reportes['CARGO4'] ?? '' }}</strong></td>
                                     <th></th>
                                 </tr>
 

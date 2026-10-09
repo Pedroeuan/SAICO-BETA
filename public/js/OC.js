@@ -1,3 +1,39 @@
+/*CLIENTE */
+/*check del cliente, si y no */
+document.addEventListener('DOMContentLoaded', function () {
+
+    const radios = document.querySelectorAll('input[name="TieneCliente"]');
+    const select = document.getElementById('campoClienteSelect');
+    const input  = document.getElementById('campoClienteInput');
+
+    function toggleCliente() {
+        const valor = document.querySelector('input[name="TieneCliente"]:checked').value;
+
+        if (valor === 'si') {
+            // Mostrar select
+            select.style.display = 'block';
+            input.style.display  = 'none';
+
+            input.value = '';   // limpiar input
+
+        } else {
+            // Mostrar input vacío
+            select.style.display = 'none';
+            input.style.display  = 'block';
+
+            select.value = '';  // limpiar select
+            input.value  = '';  // aseguramos vacío
+            input.focus();      // cursor automático
+        }
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', toggleCliente);
+    });
+
+    toggleCliente(); // ejecutar al cargar
+});
+
 /*check del contrato, si y no */
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -11,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
             sessionStorage.setItem("TieneContrato", this.value);
 
             if (this.value === "si") {
-                console.log("Seleccionado: si");
+                //console.log("Seleccionado: si");
                 campoContrato.readOnly = false;
                 campoContrato.required = true;
                 campoContrato.value = "";
@@ -20,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             if (this.value === "no") {
-                console.log("Seleccionado: no");
+                //console.log("Seleccionado: no");
                 campoContrato.readOnly = true;
                 campoContrato.required = false;
                 campoContrato.placeholder = "Generando contrato interno...";
@@ -89,16 +125,55 @@ document.addEventListener("DOMContentLoaded", function () {
             rowCount = $('#dynamicTable tbody tr').length;
         }
 
+        // Datos del catálogo pasados desde la vista Blade
+        var catalogoData = (typeof catalogo !== 'undefined') ? catalogo : [];
+        //console.log("Datos del catálogo:", catalogoData); // Verificar los datos del catálogo   
+
         $('#addRowBtn').click(function() {
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td>
+                    <select class="form-control catalogo-select">
+                        <option value="">-- Seleccionar --</option>
+                        ${catalogoData.map(item => `<option value="${item.idCatalogo_OC}" data-descripcion="${item.Descripcion}" data-unidad="${item.Unidad}" data-imagen="${item.Imagen || ''}">${item.Nombre}</option>`).join('')}
+                    </select>
+                </td>
+                <td><textarea class="form-control descripcion-input" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td class="text-center">
+                    <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                    <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
+                </td>
                 <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
-                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td><input type="text" class="form-control unidad-input" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td><input type="number" class="form-control" name="valor_unitario[]" placeholder="Valor Unitario"></td>
+                <td><input type="number" class="form-control" name="valor_total[]" placeholder="Valor Total"></td>
                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>`;
             $('#dynamicTable tbody').append(newRow);
+        });
+
+        // Autocompletar descripción, unidad e imagen al seleccionar del catálogo
+        $('#dynamicTable').on('change', '.catalogo-select', function() {
+            var selectedOption = $(this).find('option:selected');
+            var descripcion = selectedOption.data('descripcion') || '';
+            var unidad = selectedOption.data('unidad') || '';
+            var imagen = selectedOption.data('imagen') || '';
+            var row = $(this).closest('tr');
+            var img = row.find('.catalogo-preview-img');
+            var placeholder = row.find('.catalogo-preview-placeholder');
+
+            row.find('.descripcion-input').val(descripcion);
+            row.find('.unidad-input').val(unidad);
+
+            if (imagen) {
+                var imagePath = '/storage/' + imagen.replace(/^\/+/, '');
+                img.attr('src', imagePath).show();
+                placeholder.hide();
+            } else {
+                img.hide().removeAttr('src');
+                placeholder.show();
+            }
         });
 
         $('#dynamicTable').on('click', '.btnEliminar', function() {
@@ -113,19 +188,21 @@ document.addEventListener("DOMContentLoaded", function () {
             const tableData = [];
 
             rows.forEach(row => {
-                const unidad = row.querySelector('td:nth-child(2) input').value;
-                const cantidad = row.querySelector('td:nth-child(3) input').value;
-                const descripcion = row.querySelector("textarea[placeholder='Descripcion']").value; // Capturar el valor del textarea
+                const descripcion = row.querySelector('.descripcion-input')?.value || '';
+                const cantidad = row.querySelector('input[name="cantidad[]"]')?.value || '';
+                const unidad = row.querySelector('input[name="unidad[]"]')?.value || '';
+                const valor_unitario = row.querySelector('input[name="valor_unitario[]"]')?.value || '';
+                const valor_total = row.querySelector('input[name="valor_total[]"]')?.value || '';
 
-                // Añadir los datos de la fila al array
                 tableData.push({
-                    unidad: unidad,
+                    descripcion: descripcion,
                     cantidad: cantidad,
-                    descripcion: descripcion
+                    unidad: unidad,
+                    valor_unitario: valor_unitario,
+                    valor_total: valor_total,
                 });
             });
 
-            // Convertir el array a JSON y asignarlo al campo oculto
             document.getElementById('dynamicTableData').value = JSON.stringify(tableData);
         });
 

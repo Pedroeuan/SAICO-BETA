@@ -58,6 +58,8 @@
                             <form id="OC" action="{{route('OC.storeOC')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
+
+                                    
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label">
@@ -88,6 +90,167 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Num. De Cotizacion</label>
+                                            <input type="text" class="form-control inputForm @error('NumCotizacion') is-invalid @enderror" name="NumCotizacion"  placeholder="Ejemplo: 12345" value="{{old('NumCotizacion')}}">
+                                            @error('NumCotizacion')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Solicitud del cliente</label>
+                                            <input type="text" class="form-control inputForm @error('SolicitudCliente') is-invalid @enderror" name="SolicitudCliente"  placeholder="Ejemplo: 12345" value="{{old('SolicitudCliente')}}">
+                                            @error('SolicitudCliente')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Objetivo del servicio:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Tipo_servicio" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen">{{old('Tipo_servicio')}}</textarea>
+                                            @error('Tipo_servicio')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">
+                                                ¿Cliente existente?
+                                                <span class="ml-3">
+                                                    <label class="mr-2">
+                                                        <input type="radio" name="TieneCliente" value="si" checked> Sí
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="TieneCliente" value="no"> No
+                                                    </label>
+                                                </span>
+                                            </label>
+
+                                            <!-- SELECT cuando es SI -->
+                                            <select id="campoClienteSelect"
+                                                    class="form-select"
+                                                    name="ClienteSelect">
+                                                <option value="" selected disabled>Seleccione un Cliente</option>
+                                                @foreach($Clientes as $Cliente)
+                                                    <option value="{{ $Cliente->Cliente }}">
+                                                        {{ $Cliente->Cliente }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
+                                            <!-- INPUT cuando es NO -->
+                                            <input type="text"
+                                                id="campoClienteInput"
+                                                class="form-control inputForm mt-2"
+                                                name="ClienteInput"
+                                                placeholder="Ingrese nombre del cliente"
+                                                style="display:none;">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contacto</label>
+                                            <input type="text" class="form-control inputForm @error('Contacto') is-invalid @enderror" name="Contacto"  placeholder="Ejemplo: Juan Pérez" value="{{old('Contacto')}}">
+                                            @error('Contacto')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Puesto</label>
+                                            <input type="text" class="form-control inputForm @error('Puesto') is-invalid @enderror" name="Puesto"  placeholder="Ejemplo: Ingeniero de Software" value="{{old('Puesto')}}">
+                                            @error('Puesto')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Fecha:</label>
+                                            <input type="date" class="form-control inputForm @error('Fecha_solicitud') is-invalid @enderror" name="Fecha_solicitud" value="{{ old('Fecha_solicitud', now()->format('Y-m-d')) }}">
+                                            @error('Fecha_solicitud')
+                                                <div class="invalid-feedback">
+                                                    <span>{{ $message }}</span>
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Ciudad</label>
+                                            <input type="text" class="form-control inputForm @error('Ciudad') is-invalid @enderror" name="Ciudad"  placeholder="Ejemplo: Ciudad de México" value="Cd del Carmen">
+                                            @error('Ciudad')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Teléfono</label>
+                                            <input type="text" class="form-control inputForm @error('Telefono') is-invalid @enderror" name="Telefono"  placeholder="Ejemplo: 555-1234" value="{{ old('Telefono') }}">
+                                            @error('Telefono')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+
+                                            <label class="col-form-label">
+                                                Correo
+                                            </label>
+
+                                            <input type="email"
+                                                class="form-control inputForm @error('Correo') is-invalid @enderror"
+                                                value="{{ old('Correo') }}"
+                                                name="Correo"
+                                                placeholder="Ejemplo: hola@protexa.mx">
+
+                                            @error('Correo')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Lugar_trabajo" placeholder="Ejemplo: Patio de fabricación" value="">{{old('Lugar_trabajo', 'Muelle, Ciudad del Carmen')}}</textarea>
+                                            @error('Lugar_trabajo')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Vigencia</label>
+                                            <input type="text" class="form-control inputForm @error('Vigencia') is-invalid @enderror" name="Vigencia"  placeholder="Ejemplo: 1 año" value="{{old('Vigencia', '15 Dias')}}">
+                                            @error('Vigencia')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Número de Orden de Compra</label>
                                             <input type="text" class="form-control inputForm @error('Numero_OC') is-invalid @enderror" name="Numero_OC"  placeholder="Ejemplo: 76810" value="{{old('Numero_OC')}}">
                                             @error('Numero_OC')
@@ -99,7 +262,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Requisición</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Requisicion" placeholder="Ejemplo: 107068-2" value="{{old('Requisicion')}}">
+                                            <input type="text" class="form-control inputForm @error('Requisicion') is-invalid @enderror" name="Requisicion" placeholder="Ejemplo: 107068-2" value="{{old('Requisicion')}}">
                                             @error('Requisicion')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -109,25 +272,16 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Proyecto</label>
-                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Proyecto" placeholder="Ejemplo: PER-04-23 DUCTO ATOYATL-1" value="{{old('Proyecto')}}">
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Proyecto" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen">{{old('Proyecto')}}</textarea>
                                             @error('Proyecto')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
-                                            <input type="text" class="form-control inputForm @error('Lugar_trabajo') is-invalid @enderror" name="Lugar_trabajo" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . " value="{{old('Lugar_trabajo')}}">
-                                            @error('Lugar_trabajo')
-                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                                            @enderror
-                                        </div>
-                                    </div>
 
-                                    
-                                    <div class="col-sm-4">
+
+                                    {{--<div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Fecha</label>
                                             <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ old('Fecha_solicitud') }}">
@@ -139,7 +293,7 @@
                                             <label class="col-form-label" for="inputSuccess">Tipo de Servicio</label>
                                             <input type="text" class="form-control inputForm" name="Tipo_servicio" placeholder="Ejemplo: PT, R.G., MT, UT, DUREZA " value="{{old('Tipo_servicio')}}">
                                             </div>
-                                    </div>
+                                    </div>--}}
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -150,7 +304,7 @@
                                             @endif
                                         </div>
                                     </div>
-
+|
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
@@ -166,9 +320,13 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Unidad/Medida</th>
-                                                <th>Cantidad</th>
+                                                <th>Catalogo</th>
                                                 <th>Descripción</th>
+                                                <th>Imagen</th>
+                                                <th>Cantidad</th>
+                                                <th>Unidad/Medida</th>
+                                                <th>Valor Unitario</th>
+                                                <th>Valor Total</th>
                                                 <th>Eliminar</th>
                                             </tr>
                                         </thead>
@@ -179,6 +337,35 @@
                                     
                                     <p>
                                     <p>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">NOTAS:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Notas" placeholder="Ejemplo: Notas" value="Muelle, Ciudad del Carmen">{{old('Notas')}}</textarea>
+                                            @error('Notas')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">CONDICIONES DE PAGO:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago" value="Muelle, Ciudad del Carmen">{{old('Condiciones_pago')}}</textarea>
+                                            @error('Condiciones_pago')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">CONDICIONES DE GENERALES:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales" value="Muelle, Ciudad del Carmen">{{old('Condiciones_generales')}}</textarea>
+                                            @error('Condiciones_generales')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                     <div class="container">
                                         <div class="float-right">
                                             <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
@@ -216,6 +403,9 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script>
+    var catalogo = @json($catalogo ?? []);
+</script>
 <script src="{{ asset('js/OC.js') }}"></script>
 <script>
 

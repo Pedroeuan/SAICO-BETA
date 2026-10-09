@@ -13,7 +13,18 @@ class detallesOC extends Model
     protected $fillable = [
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idOC',
+        'NumCotizacion',
+        'SolicitudCliente',
+        'Contacto',
+        'Puesto',
+        'Ciudad',
+        'Telefono',
+        'Correo',
+        'Vigencia',
         'Detalles',
+        'Notas',
+        'Condiciones_pago',
+        'Condiciones_generales',
     ];
     protected $table = 'Detalles_OC';
     protected $primaryKey = 'idDetalles_OC';
