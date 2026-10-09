@@ -33,6 +33,7 @@ use App\Services\ServicioAnalisisPdfXrf;
 use App\Services\ServicioImagenesPdfXrf;
 use App\Services\ServicioAnalisisColumnasPdfXrf;
 use App\Services\ServicioCapturaColumnasPdfXrf;
+use App\Services\ServicioJuntasReporteIM;
 use App\Services\ServicioRegistrosFotos;
 use App\Services\ServicioAnalisisImagenImageJ;
 use App\Services\ServicioPatronGranoReporte;
@@ -784,6 +785,21 @@ class FOR_PIMP_04_02Controller extends Controller
     }
 
     /** Valida hasta diez lecturas y recalcula el promedio en servidor para no confiar en JavaScript. */
+    /**
+     * Detalles_Generales conserva solo lo administrativo. La técnica de 04_02 (norma con su PDF
+     * único y recorte por columnas, patrón de grano, micrografía de Fiji y conteo lineal) viaja
+     * en Juntas_Grupo_Re, igual que en el 06.
+     */
+    private function quitarTecnicaDeDetalles(array &$detalles): void
+    {
+        unset(
+            $detalles['Norma_IM'],
+            $detalles['PATRON_GRANO'],
+            $detalles['ANALISIS_IMAGEN'],
+            $detalles['CONTEO_GRANOS']
+        );
+    }
+
     private function guardarPromedioDureza(Request $request, array &$datosEquipo): void
     {
         $valoresRecibidos = $request->input('Datos_Equipo.VALORES_DUREZA', []);
@@ -1117,6 +1133,7 @@ class FOR_PIMP_04_02Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idCliente;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001/01/01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -1126,8 +1143,19 @@ class FOR_PIMP_04_02Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
             }
             
             $Lineal_Ideal->idOC = $idOC;
@@ -1160,7 +1188,7 @@ class FOR_PIMP_04_02Controller extends Controller
             {
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
-            // Obtén el ID del cliente "POR DEFINIR"
+            // Obtén el ID del cliente que se creo recientemente
             $idClientes = $NewCliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
             $Orden_Servicio->Fecha = '2001/01/01';
@@ -1198,6 +1226,7 @@ class FOR_PIMP_04_02Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idClientes;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001/01/01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -1207,8 +1236,19 @@ class FOR_PIMP_04_02Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
             }
 
             $Lineal_Ideal->idOC = $idOC;
@@ -1467,6 +1507,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         $normaIM = $this->construirNormaIM($request);
         if ($normaIM !== null) {
+            // El PDF único alimenta el recorte por columnas elegido por el técnico.
             if ($request->hasFile('Analisis_PDF')) {
                 $this->guardarArchivosColumnasXrf(
                     $request->file('Analisis_PDF'),
@@ -1475,7 +1516,6 @@ class FOR_PIMP_04_02Controller extends Controller
                     (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
                 );
             }
-            $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
 
         // La imagen 3 se copia al expediente antes de guardar para aislarla de futuras ediciones del catálogo.
@@ -1486,36 +1526,35 @@ class FOR_PIMP_04_02Controller extends Controller
             (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
         );
-        if ($patronGrano !== null) {
-            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
-        }
 
         // Adjunta únicamente un análisis previamente generado por el mismo usuario autenticado.
+        $analisisImagen = null;
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->obtenerPorToken(
                 $validatedData['Analisis_Imagen_Token'],
                 (int) Auth::id()
             );
             // La decisión de incluirlo en el PDF pertenece al reporte, no al resultado global de Fiji.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+            $analisisImagen['usar_en_reporte'] =
                 !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
             // Guarda el pie de fotografía de la Imagen 1 sin mezclarlo con los resultados de la Imagen 2.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+            $analisisImagen['comentario_imagen_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
             // Se conserva exactamente el texto que el técnico revisó en la sección FOTOS.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+            $analisisImagen['descripcion_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
             // Imagen 1 e Imagen 2 conservan la celda que el técnico eligió en FOTOS.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
+            $analisisImagen['layout_reporte'] =
                 app(ServicioMetalografiaReporte::class)->normalizarLayoutAnalisis(
                     $validatedData['Analisis_Reporte_Layout'] ?? []
                 );
         }
-        // Guarda líneas, cruces y resumen recalculado dentro de Detalles_Generales.
+
+        // Líneas, cruces y resumen recalculado por el servidor.
         $conteoGranos = $this->normalizarConteoGranos($validatedData['Conteo_Granos_JSON'] ?? null);
-        if ($conteoGranos !== null) {
-            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
-        }
+
+        // La técnica no vive en Detalles_Generales: viaja en Juntas_Grupo_Re igual que en el 06.
+        $this->quitarTecnicaDeDetalles($validatedData['Detalles_Generales']);
 
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
@@ -1735,6 +1774,20 @@ class FOR_PIMP_04_02Controller extends Controller
         $Fotos_Reportes->Fotos_Reportes = $Fotos;
         $Fotos_Reportes->save();
     }
+
+        // El grupo es la casa de la técnica del reporte (norma con su PDF único y recorte
+        // por columnas, patrón de grano, micrografía y conteo). Debe existir antes de OS_OC
+        // porque la orden de servicio copia su contenido.
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = app(ServicioJuntasReporteIM::class)->armar(
+            $bloques,
+            $normaIM,
+            $patronGrano,
+            [
+                'ANALISIS_IMAGEN' => $analisisImagen,
+                'CONTEO_GRANOS' => $conteoGranos,
+            ]
+        );
+        $Grupo_Juntas_Detalles_Re->save();
 
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Instalacion = $validatedData['Detalles_Generales']['Instalacion'];
@@ -1966,15 +2019,27 @@ class FOR_PIMP_04_02Controller extends Controller
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
+        // La técnica guardada vive en Juntas_Grupo_Re; Detalles_Generales solo sirve de respaldo
+        // para los reportes anteriores a la separación.
+        $servicioJuntas = app(ServicioJuntasReporteIM::class);
+        $juntasActuales = $servicioJuntas->normalizar(
+            $Grupo_Juntas_Detalles_Re?->Juntas_Grupo_Re,
+            $detallesActuales
+        );
+        $normaHistorica = $juntasActuales['Norma_IM'];
+        $patronHistorico = $juntasActuales['Patron_Grano'];
+        $analisisImagen = $juntasActuales['ANALISIS_IMAGEN'];
+        $conteoGranos = $juntasActuales['CONTEO_GRANOS'];
+
         // Se conservan las rutas para retirar los PDF anteriores solo después de guardar los nuevos.
         $rutasPdfsXrfAnteriores = [];
-        foreach (($detallesActuales['Norma_IM']['Analisis_PDF'] ?? []) as $analisisAnterior) {
+        foreach (($normaHistorica['Analisis_PDF'] ?? []) as $analisisAnterior) {
             if (is_array($analisisAnterior) && !empty($analisisAnterior['ruta'])) {
                 $rutasPdfsXrfAnteriores[] = (string) $analisisAnterior['ruta'];
             }
         }
-        if (!empty($detallesActuales['Norma_IM']['Captura_XRF']['ruta'])) {
-            $rutasPdfsXrfAnteriores[] = (string) $detallesActuales['Norma_IM']['Captura_XRF']['ruta'];
+        if (!empty($normaHistorica['Captura_XRF']['ruta'])) {
+            $rutasPdfsXrfAnteriores[] = (string) $normaHistorica['Captura_XRF']['ruta'];
         }
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
@@ -2010,7 +2075,7 @@ class FOR_PIMP_04_02Controller extends Controller
         // Recalcula valores derivados y actualiza la copia histórica seleccionada por el usuario.
         $this->guardarPromedioDureza($request, $validatedData['Datos_Equipo']);
 
-        $normaIM = $this->construirNormaIM($request, $detallesActuales['Norma_IM'] ?? null);
+        $normaIM = $this->construirNormaIM($request, $normaHistorica) ?? $normaHistorica;
         if ($normaIM !== null) {
             if ($request->hasFile('Analisis_PDF')) {
                 $this->guardarArchivosColumnasXrf(
@@ -2020,10 +2085,9 @@ class FOR_PIMP_04_02Controller extends Controller
                     (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
                 );
             }
-            $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
 
-        $rutaPatronAnterior = (string) ($detallesActuales['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $rutaPatronAnterior = (string) ($patronHistorico['ruta_imagen'] ?? '');
         // Mantiene la copia anterior si el usuario no cambia de patrón; una selección diferente genera otra copia.
         $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
         $patronGrano = $servicioPatronGrano->construirHistorico(
@@ -2031,44 +2095,38 @@ class FOR_PIMP_04_02Controller extends Controller
             'FOR_PIMP_04_02',
             (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? ''),
-            is_array($detallesActuales['PATRON_GRANO'] ?? null)
-                ? $detallesActuales['PATRON_GRANO']
-                : null
-        );
-        if ($patronGrano === null) {
-            unset($validatedData['Detalles_Generales']['PATRON_GRANO']);
-        } else {
-            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
-        }
+            $patronHistorico
+        ) ?? $patronHistorico;
 
-        // Un token nuevo reemplaza el análisis anterior; si no llega, array_merge conserva el existente.
+        // Un token nuevo reemplaza el análisis anterior; si no llega, se conserva el histórico.
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->obtenerPorToken(
                 $validatedData['Analisis_Imagen_Token'],
                 (int) Auth::id()
             );
         }
         // En Edit también se permite activar o retirar del PDF el análisis previamente guardado.
-        if (is_array($validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] ?? null)) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
+        if (is_array($analisisImagen)) {
+            $analisisImagen['usar_en_reporte'] =
                 !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
             // Edit conserva o corrige el pie de fotografía sin volver a ejecutar Fiji.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+            $analisisImagen['comentario_imagen_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
             // Edit permite corregir la redacción sin volver a ejecutar Fiji ni subir la micrografía.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+            $analisisImagen['descripcion_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
             // Edit actualiza solamente la distribución seleccionada, sin volver a ejecutar Fiji.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
+            $analisisImagen['layout_reporte'] =
                 app(ServicioMetalografiaReporte::class)->normalizarLayoutAnalisis(
                     $validatedData['Analisis_Reporte_Layout'] ?? []
                 );
         }
         // Recalcula y sustituye el conteo solamente cuando el componente envía JSON válido.
-        $conteoGranos = $this->normalizarConteoGranos($validatedData['Conteo_Granos_JSON'] ?? null);
-        if ($conteoGranos !== null) {
-            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
-        }
+        $conteoGranos = $this->normalizarConteoGranos($validatedData['Conteo_Granos_JSON'] ?? null)
+            ?? $conteoGranos;
+
+        // array_merge reinyectó la técnica del reporte anterior: vuelve a salir de Detalles_Generales.
+        $this->quitarTecnicaDeDetalles($validatedData['Detalles_Generales']);
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_EQUIPO1'] = $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? ($datosEquipoActuales['ID_EQUIPO1'] ?? null);
@@ -2103,7 +2161,7 @@ class FOR_PIMP_04_02Controller extends Controller
         ]);
 
         // La baja de la copia sustituida ocurre después de confirmar la actualización del reporte.
-        $rutaPatronNueva = (string) ($validatedData['Detalles_Generales']['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $rutaPatronNueva = (string) ($patronGrano['ruta_imagen'] ?? '');
         $servicioPatronGrano->eliminarCopiaSustituida($rutaPatronAnterior, $rutaPatronNueva);
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -2269,15 +2327,24 @@ class FOR_PIMP_04_02Controller extends Controller
         | 4. GUARDAR
         |--------------------------------------------------------------------------
         */
-        // Actualizar o crear el campo en la base de datos
+        // Actualizar o crear el campo en la base de datos. El grupo es la casa de la técnica:
+        // norma con su PDF único y recorte por columnas, patrón, micrografía y conteo.
+        $Juntas_Grupo_Re = $servicioJuntas->armar(
+            $bloques,
+            $normaIM,
+            $patronGrano,
+            [
+                'ANALISIS_IMAGEN' => $analisisImagen,
+                'CONTEO_GRANOS' => $conteoGranos,
+            ]
+        );
+
         if ($Grupo_Juntas_Detalles_Re) {
-            $Grupo_Juntas_Detalles_Re->update([
-                'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
-            ]);
+            $Grupo_Juntas_Detalles_Re->update(['Juntas_Grupo_Re' => $Juntas_Grupo_Re]);
         } else {
             $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
             $Grupo_Juntas_Detalles_Re->idReportes = $id;
-            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
+            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $Juntas_Grupo_Re;
             $Grupo_Juntas_Detalles_Re->save();
         }
 
@@ -2623,16 +2690,19 @@ class FOR_PIMP_04_02Controller extends Controller
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true) ?? [];
-        $NormaIM = $Detalles_Generales['Norma_IM'] ?? [];
-        $NormaIM = is_array($NormaIM) ? $NormaIM : [];
-        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
-        $Grupo_Juntas_Detalles_Re = $Grupo_Juntas_Detalles_Re_Model
-            ? json_decode($Grupo_Juntas_Detalles_Re_Model->Juntas_Grupo_Re, true)
-            : [];
 
-        if (!is_array($Grupo_Juntas_Detalles_Re)) {
-            $Grupo_Juntas_Detalles_Re = [];
-        }
+        // La técnica vive en Juntas_Grupo_Re; se reinyecta aquí para que las vistas no cambien.
+        $juntasIM = app(ServicioJuntasReporteIM::class)->normalizar(
+            $Grupo_Juntas_Detalles_Re_Model?->Juntas_Grupo_Re,
+            $Detalles_Generales
+        );
+        $NormaIM = is_array($juntasIM['Norma_IM']) ? $juntasIM['Norma_IM'] : [];
+        $Detalles_Generales['Norma_IM'] = $juntasIM['Norma_IM'];
+        $Detalles_Generales['PATRON_GRANO'] = $juntasIM['Patron_Grano'];
+        $Detalles_Generales['ANALISIS_IMAGEN'] = $juntasIM['ANALISIS_IMAGEN'];
+        $Detalles_Generales['CONTEO_GRANOS'] = $juntasIM['CONTEO_GRANOS'];
+        // Las vistas y el PDF siguen recibiendo la lista de bloques como antes.
+        $Grupo_Juntas_Detalles_Re = $juntasIM['bloques'];
 
         $totalTitulos = 0;
         $totalFilas = 0;

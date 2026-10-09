@@ -32,6 +32,7 @@ use App\Services\ServicioImagenesPdfXrf;
 use App\Services\ServicioAnalisisColumnasPdfXrf;
 use App\Services\ServicioCapturaColumnasPdfXrf;
 use App\Services\ServicioRegistrosFotos;
+use App\Services\ServicioJuntasReporteIM;
 use Illuminate\Http\UploadedFile;
 use App\Models\Procedimientos\Procedimiento;
 
@@ -492,6 +493,115 @@ class FOR_PIMP_05_B_01Controller extends Controller
         ];
     }
 
+    /**
+     * Construye los bloques (filas, títulos y longitudes) a partir del request.
+     * No toca BD ni archivos: solo lee el request.
+     */
+    private function construirBloquesJuntas(Request $request): array
+    {
+        $maxFilasPorBloque = 21; // 1 más que la vista para que la longitud entre en el mismo bloque
+        $filasPorLongitud  = 20; // Debe coincidir con verificarYAgregarLongitud() del JS
+        $sinTituloKey      = 'sin_titulo';
+        $campos = ['no', 'junta', 'lado', 'no_ind', 'tipo_ind', 'long', 'prof', 'NR', 'dnr', 'evaluacion', 'archivo', 'long_ins'];
+
+        $bloques = [];
+        $bloqueActual = [];
+        $contador = 0;
+
+        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
+            if (!empty($bloqueActual)) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+        };
+
+        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
+            if ($contador >= $maxFilasPorBloque) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+
+            $bloqueActual[] = $elemento;
+            $contador++;
+        };
+
+        // Una sola definición de fila (antes estaba copiada en varios lugares).
+        $construirFila = function (string $grupo, int $i) use ($request, $campos) {
+            $data = [];
+            foreach ($campos as $campo) {
+                $data[$campo] = $request->input("{$campo}.{$grupo}.{$i}");
+            }
+
+            return ['tipo' => 'fila', 'grupo' => $grupo, 'data' => $data];
+        };
+
+        // 1. Filas SIN título (con longitud intercalada cada $filasPorLongitud filas)
+        $numFilasSin = count((array) $request->input("no.{$sinTituloKey}", []));
+        $longitudesSin = (array) $request->input("Long_Inspecc.{$sinTituloKey}", []);
+
+        for ($i = 0; $i < $numFilasSin; $i++) {
+            $agregarElemento($construirFila($sinTituloKey, $i));
+
+            if (($i + 1) % $filasPorLongitud === 0) {
+                $idxLong = intdiv($i, $filasPorLongitud);
+                if (isset($longitudesSin[$idxLong])) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $sinTituloKey,
+                        'valor' => $longitudesSin[$idxLong],
+                    ]);
+                    $cerrarBloque();
+                }
+            }
+        }
+
+        // Longitudes restantes (manuales extra o último bloque incompleto)
+        $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+        for ($j = $longsUsadas; $j < count($longitudesSin); $j++) {
+            $agregarElemento([
+                'tipo' => 'longitud',
+                'grupo' => $sinTituloKey,
+                'valor' => $longitudesSin[$j],
+            ]);
+            $cerrarBloque();
+        }
+
+        // 2. Títulos + sus filas + sus longitudes
+        $titulos = json_decode($request->input('titulos_data', '[]'), true);
+        $titulos = is_array($titulos) ? $titulos : [];
+
+        foreach ($titulos as $tituloObj) {
+            $tituloKey = $tituloObj['id'];
+
+            $agregarElemento([
+                'tipo' => 'titulo',
+                'grupo' => $tituloKey,
+                'texto' => $tituloObj['text'],
+            ]);
+
+            $numFilas = count((array) $request->input("no.{$tituloKey}", []));
+            for ($i = 0; $i < $numFilas; $i++) {
+                $agregarElemento($construirFila($tituloKey, $i));
+            }
+
+            foreach ((array) $request->input("Long_Inspecc.{$tituloKey}", []) as $long) {
+                $agregarElemento([
+                    'tipo' => 'longitud',
+                    'grupo' => $tituloKey,
+                    'valor' => $long,
+                ]);
+                $cerrarBloque();
+            }
+        }
+
+        // 3. Cerrar si quedan elementos
+        $cerrarBloque();
+
+        return $bloques;
+    }
+
     /** Valida hasta diez lecturas de dureza y calcula su promedio en el servidor. */
     private function guardarPromedioDureza(Request $request, array &$datosEquipo): void
     {
@@ -819,6 +929,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idCliente;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001/01/01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -828,8 +939,19 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
             }
             
             $Lineal_Ideal->idOC = $idOC;
@@ -862,7 +984,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
             {
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
-            // Obtén el ID del cliente "POR DEFINIR"
+            // Obtén el ID del cliente que se creo recientemente
             $idClientes = $NewCliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
             $Orden_Servicio->Fecha = '2001/01/01';
@@ -900,6 +1022,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idClientes;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001/01/01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -909,8 +1032,19 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
             }
 
             $Lineal_Ideal->idOC = $idOC;
@@ -1117,6 +1251,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
         // El servidor recalcula dureza y congela la norma/XRF dentro del JSON del reporte.
         $this->guardarPromedioDureza($request, $validatedData['Datos_Equipo']);
 
+        // La norma ya no se guarda en Detalles_Generales: se guarda en Juntas_Grupo_Re.
         $normaIM = $this->construirNormaIM($request);
         if ($normaIM !== null) {
             if ($request->hasFile('Analisis_PDF')) {
@@ -1127,7 +1262,6 @@ class FOR_PIMP_05_B_01Controller extends Controller
                     (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
                 );
             }
-            $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
 
         // Guardar Detalles_Generales como JSON en la base de datos
@@ -1183,48 +1317,13 @@ class FOR_PIMP_05_B_01Controller extends Controller
         
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
+
+        // Bloques + Norma_IM se guardan juntos en Grupo_Juntas_Detalles_Re (este formato no usa patrón de grano).
+        $bloques = $this->construirBloquesJuntas($request);
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
-
-        $titulos_json = $request->input('titulos_data', '[]');
-        $titulos = json_decode($titulos_json, true); // array asociativo
-        $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no.$sinTituloKey", []);
-        //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-        $numFilasSin = count($filasSinTitulo);//agregar
-
-        // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
-
-        $bloques = []; //agregar
-        $bloqueActual = [];//agregar
-        $contador = 0;//agregar
-        /*//agregar
-        |--------------------------------------------------------------------------
-        | FUNCIONES AUXILIARES
-        |--------------------------------------------------------------------------
-        */
-        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
-            if (!empty($bloqueActual)) {
-                $bloques[] = $bloqueActual;
-                $bloqueActual = [];
-                $contador = 0;
-            }
-        };
-
-        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
-            if ($contador >= $maxFilasPorBloque) {
-                $bloques[] = $bloqueActual;
-                $bloqueActual = [];
-                $contador = 0;
-            }
-
-            $bloqueActual[] = $elemento;
-            $contador++;
-        };
-
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = app(ServicioJuntasReporteIM::class)
+            ->armar($bloques, $normaIM, null);
+        $Grupo_Juntas_Detalles_Re->save();
 
         /*Firmas */
         // Guardar las firmas
@@ -1364,7 +1463,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
             'Proyecto' => $Proyecto,
             'Material' => $Material,
             'Isometrico_Plano' => $No_Isometrico,
-            'ResultadosJuntas' => $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re,
+            'ResultadosJuntas' => !empty($bloques) ? json_encode($bloques, JSON_UNESCAPED_UNICODE) : null,
             'idSolicitud' => $idSolicitud,
             'idReportes' => $idReportes,
             
@@ -1533,15 +1632,23 @@ class FOR_PIMP_05_B_01Controller extends Controller
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
+        // Estado actual de Juntas (bloques y Norma_IM). Si el reporte es anterior a este
+        // cambio, la norma se toma de Detalles_Generales.
+        $servicioJuntas = app(ServicioJuntasReporteIM::class);
+        $juntasActuales = $servicioJuntas->normalizar(
+            $Grupo_Juntas_Detalles_Re?->Juntas_Grupo_Re,
+            $detallesActuales
+        );
+
         // Se conservan las rutas para retirar los PDF anteriores solo después de guardar los nuevos.
         $rutasPdfsXrfAnteriores = [];
-        foreach (($detallesActuales['Norma_IM']['Analisis_PDF'] ?? []) as $analisisAnterior) {
+        foreach (($juntasActuales['Norma_IM']['Analisis_PDF'] ?? []) as $analisisAnterior) {
             if (is_array($analisisAnterior) && !empty($analisisAnterior['ruta'])) {
                 $rutasPdfsXrfAnteriores[] = (string) $analisisAnterior['ruta'];
             }
         }
-        if (!empty($detallesActuales['Norma_IM']['Captura_XRF']['ruta'])) {
-            $rutasPdfsXrfAnteriores[] = (string) $detallesActuales['Norma_IM']['Captura_XRF']['ruta'];
+        if (!empty($juntasActuales['Norma_IM']['Captura_XRF']['ruta'])) {
+            $rutasPdfsXrfAnteriores[] = (string) $juntasActuales['Norma_IM']['Captura_XRF']['ruta'];
         }
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
@@ -1577,7 +1684,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
         // Recalcula valores derivados y actualiza la copia histórica seleccionada por el usuario.
         $this->guardarPromedioDureza($request, $validatedData['Datos_Equipo']);
 
-        $normaIM = $this->construirNormaIM($request, $detallesActuales['Norma_IM'] ?? null);
+        // La norma se guarda en Juntas_Grupo_Re (ya no en Detalles_Generales).
+        $normaIM = $this->construirNormaIM($request, $juntasActuales['Norma_IM']);
         if ($normaIM !== null) {
             if ($request->hasFile('Analisis_PDF')) {
                 $this->guardarArchivosColumnasXrf(
@@ -1587,7 +1695,9 @@ class FOR_PIMP_05_B_01Controller extends Controller
                     (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
                 );
             }
-            $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
+        } else {
+            // Sin norma en este envío: se conserva la guardada.
+            $normaIM = $juntasActuales['Norma_IM'];
         }
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
@@ -1616,178 +1726,23 @@ class FOR_PIMP_05_B_01Controller extends Controller
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
         ]);
 
-        $titulos_json = $request->input('titulos_data', '[]');
-        //dd($titulos_json);
-        $titulos = json_decode($titulos_json, true); // array asociativo
-        $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no.$sinTituloKey", []);
-        //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-        $numFilasSin = count($filasSinTitulo);//agregar
+        // Bloques reconstruidos desde el formulario (misma lógica que en store()).
+        $bloques = $this->construirBloquesJuntas($request);
 
-        // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
-
-        $bloques = []; //agregar
-        $bloqueActual = [];//agregar
-        $contador = 0;//agregar
-        /*//agregar
-        |--------------------------------------------------------------------------
-        | FUNCIONES AUXILIARES
-        |--------------------------------------------------------------------------
-        */
-        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
-            if (!empty($bloqueActual)) {
-                $bloques[] = $bloqueActual;
-                $bloqueActual = [];
-                $contador = 0;
-            }
-        };
-
-        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
-            if ($contador >= $maxFilasPorBloque) {
-                $bloques[] = $bloqueActual;
-                $bloqueActual = [];
-                $contador = 0;
-            }
-
-            $bloqueActual[] = $elemento;
-            $contador++;
-        };
-
-        /*
-        |--------------------------------------------------------------------------
-        | 1. BLOQUE SIN TITULO
-        |--------------------------------------------------------------------------
-        */
-                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
-                $filasPorLongitud = 20;
-                for ($i = 0; $i < $numFilasSin; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $sinTituloKey,
-                    'data' => [
-                        'no' => $request->input("no.$sinTituloKey.$i"),
-                        'junta' => $request->input("junta.$sinTituloKey.$i"),
-                        'lado' => $request->input("lado.$sinTituloKey.$i"),
-                        'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                        'tipo_ind' => $request->input("tipo_ind.$sinTituloKey.$i"),
-                        'long' => $request->input("long.$sinTituloKey.$i"),
-                        'prof' => $request->input("prof.$sinTituloKey.$i"),
-                        'NR' => $request->input("NR.$sinTituloKey.$i"),
-                        'dnr' => $request->input("dnr.$sinTituloKey.$i"),
-                        'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                        'archivo' => $request->input("archivo.$sinTituloKey.$i"),
-                        'long_ins' => $request->input("long_ins.$sinTituloKey.$i"),
-                    ]
-                    ]);
-
-                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
-                    if (($i + 1) % $filasPorLongitud === 0) {
-                        $idxLong = intdiv($i, $filasPorLongitud);
-                        if (isset($longitudesSin[$idxLong])) {
-                            $agregarElemento([
-                                'tipo' => 'longitud',
-                                'grupo' => $sinTituloKey,
-                                'valor' => $longitudesSin[$idxLong]
-                            ]);
-                            $cerrarBloque();
-                        }
-                    }
-                }
-
-                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
-                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
-                $totalLongs = count($longitudesSin);
-                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
-                    $agregarElemento([
-                        'tipo' => 'longitud',
-                        'grupo' => $sinTituloKey,
-                        'valor' => $longitudesSin[$j]
-                    ]);
-                    $cerrarBloque();
-                }
-
-        /*
-        |--------------------------------------------------------------------------
-        | 2. TITULOS + FILAS + LONGITUDES
-        |--------------------------------------------------------------------------
-        */
-
-        foreach ($titulos as $tituloObj) {
-            $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
-            $tituloText = $tituloObj['text']; // texto real
-
-            // agregar título
-            $agregarElemento([
-                'tipo' => 'titulo',
-                'grupo' => $tituloKey,
-                'texto' => $tituloText
-            ]);
-
-            $filas = $request->input("no.$tituloKey", []);
-            $numFilas = count($filas);
-        
-            //$resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $tituloKey,
-                    'data' => [
-                    'no' => $request->input("no.$tituloKey.$i"),
-                    'junta' => $request->input("junta.$tituloKey.$i"),
-                    'lado' => $request->input("lado.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_ind' => $request->input("tipo_ind.$tituloKey.$i"),
-                    'long' => $request->input("long.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'NR' => $request->input("NR.$tituloKey.$i"),
-                    'dnr' => $request->input("dnr.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'archivo' => $request->input("archivo.$tituloKey.$i"),
-                    'long_ins' => $request->input("long_ins.$tituloKey.$i"),
-                    ]
-                ]);
-            }
-
-            // Obtener longitud inspeccionada asociada a este título (si existe)
-            $longitudes = $request->input("Long_Inspecc.$tituloKey", []); //Agregar
-
-                foreach ($longitudes as $long) {
-                    $agregarElemento([
-                        'tipo' => 'longitud',
-                        'grupo' => $tituloKey,
-                        'valor' => $long
-                    ]);
-
-                    // cerrar bloque al encontrar longitud
-                    $cerrarBloque();
-                }
+        // Si el request no trae ningún campo de filas, no se borran los bloques guardados.
+        if (!$request->has('titulos_data') && !$request->has('no') && !$request->has('Long_Inspecc')) {
+            $bloques = $juntasActuales['bloques'];
         }
-        /*
-        |--------------------------------------------------------------------------
-        | 3. CERRAR SI QUEDAN ELEMENTOS
-        |--------------------------------------------------------------------------
-        */
-        $cerrarBloque();
-        /*
-        |--------------------------------------------------------------------------
-        | 4. GUARDAR
-        |--------------------------------------------------------------------------
-        */
+
+        $juntasJson = $servicioJuntas->armar($bloques, $normaIM, null);
+
         // Actualizar o crear el campo en la base de datos
         if ($Grupo_Juntas_Detalles_Re) {
-            $Grupo_Juntas_Detalles_Re->update([
-                'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
-            ]);
+            $Grupo_Juntas_Detalles_Re->update(['Juntas_Grupo_Re' => $juntasJson]);
         } else {
             $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
             $Grupo_Juntas_Detalles_Re->idReportes = $id;
-            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
+            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $juntasJson;
             $Grupo_Juntas_Detalles_Re->save();
         }
 
@@ -2126,16 +2081,19 @@ class FOR_PIMP_05_B_01Controller extends Controller
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
-        $NormaIM = $Detalles_Generales['Norma_IM'] ?? [];
-        $NormaIM = is_array($NormaIM) ? $NormaIM : [];
-        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
-        $Grupo_Juntas_Detalles_Re = $Grupo_Juntas_Detalles_Re_Model
-            ? json_decode($Grupo_Juntas_Detalles_Re_Model->Juntas_Grupo_Re, true)
-            : [];
 
-        if (!is_array($Grupo_Juntas_Detalles_Re)) {
-            $Grupo_Juntas_Detalles_Re = [];
-        }
+        // Bloques y Norma_IM se leen de Juntas (con compatibilidad para reportes
+        // anteriores que los tenían en Detalles_Generales).
+        $juntas = app(ServicioJuntasReporteIM::class)->normalizar(
+            $Grupo_Juntas_Detalles_Re_Model?->Juntas_Grupo_Re,
+            is_array($Detalles_Generales) ? $Detalles_Generales : []
+        );
+
+        $NormaIM = is_array($juntas['Norma_IM'] ?? null) ? $juntas['Norma_IM'] : [];
+        $Grupo_Juntas_Detalles_Re = $juntas['bloques']; // misma forma que antes: lista de bloques
+
+        // La vista puede leer la norma desde Detalles_Generales: se la entregamos desde Juntas.
+        $Detalles_Generales['Norma_IM'] = $NormaIM;
 
         $totalTitulos = 0;
         $totalFilas = 0;

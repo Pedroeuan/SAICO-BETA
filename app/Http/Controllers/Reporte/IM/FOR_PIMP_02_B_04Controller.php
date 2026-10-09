@@ -27,6 +27,7 @@ use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 use App\Models\Procedimientos\Procedimiento;
+use App\Services\ServicioJuntasReporteIM;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -768,6 +769,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idCliente;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001/01/01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -777,8 +779,20 @@ class FOR_PIMP_02_B_04Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
+
             }
             
             $Lineal_Ideal->idOC = $idOC;
@@ -811,7 +825,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             {
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
-            // Obtén el ID del cliente "POR DEFINIR"
+            // Obtén el ID del cliente que se creo recientemente
             $idClientes = $NewCliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
             $Orden_Servicio->Fecha = '2001/01/01';
@@ -849,6 +863,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idClientes;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001/01/01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -858,8 +873,20 @@ class FOR_PIMP_02_B_04Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
+
             }
 
             $Lineal_Ideal->idOC = $idOC;
@@ -914,17 +941,6 @@ class FOR_PIMP_02_B_04Controller extends Controller
             'Datos_Equipo.NS_EQUIPO1' => 'nullable|string',
             'Datos_Equipo.ID_EQUIPO1' => 'nullable|string',
 
-            'Datos_Equipo.TEMPERATURA_INICIAL' => 'nullable|string',
-            'Datos_Equipo.HORA_INICIO' => 'nullable|string',
-            'Datos_Equipo.VELOCIDAD_CALENTAMIENTO' => 'nullable|string',
-            'Datos_Equipo.HORA_FINAL' => 'nullable|string',
-            'Datos_Equipo.TEMPERATURA_SOSTENIMIENTO' => 'nullable|string',
-            'Datos_Equipo.DIA_INICIO' => 'nullable|string',
-            'Datos_Equipo.TIEMPO_SOSTENIMIENTO' => 'nullable|string',
-            'Datos_Equipo.DIA_FINAL' => 'nullable|string',
-            'Datos_Equipo.VEL_ENFRIAMIENTO' => 'nullable|string',
-            'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
-            'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
@@ -1071,18 +1087,27 @@ class FOR_PIMP_02_B_04Controller extends Controller
 
         // La primera captura inicia en ANTES; el select permite conservar la etapa de forma explicita.
         $etapaDureza = $this->normalizarEtapaDureza($validatedData['Datos_Equipo']['DUREZA_ETAPA'] ?? 'ANTES');
-        $validatedData['Datos_Equipo']['DUREZA_ETAPA'] = $etapaDureza;
         $validatedData['Datos_Equipo']['ESCALA_DUREZA'] = trim((string) $validatedData['Datos_Equipo']['ESCALA_DUREZA']);
         $validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A'] = trim((string) ($validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A'] ?? '')) ?: 'Base Metal';
         $validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A1'] = trim((string) ($validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A1'] ?? '')) ?: 'Base Metal';
-        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->completarPromediosDureza(
-            $this->calculateDurezaPromedio($request->input('Dureza', []), $etapaDureza)
-        );
-        $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
-        $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(
-            $request->input('Dureza_MergeConfig', '[]'),
-            count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
-        );
+
+        // Lo medido y lo calculado de dureza no es un equipo: viaja en el grupo de juntas.
+        $durezaFilas = $this->sanitizeDurezaRows($request->input('Dureza', []));
+        $dureza = [
+            'DUREZA_ETAPA' => $etapaDureza,
+            'DUREZA_PROMEDIO' => $this->completarPromediosDureza(
+                $this->calculateDurezaPromedio($request->input('Dureza', []), $etapaDureza)
+            ),
+            'DUREZA_ROWS' => $durezaFilas,
+            'DUREZA_MERGE_CONFIG' => $this->sanitizeDurezaMergeConfig(
+                $request->input('Dureza_MergeConfig', '[]'),
+                count($durezaFilas)
+            ),
+        ];
+        foreach (ServicioJuntasReporteIM::CLAVES_DUREZA as $clave) {
+            unset($validatedData['Datos_Equipo'][$clave]);
+        }
+
         Log::info('Dureza_MergeConfig recibido', [
             'raw' => $request->input('Dureza_MergeConfig')
         ]);
@@ -1290,6 +1315,12 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $Fotos_Reportes->save();
     }
 
+        // La tabla de juntas y los resultados de dureza deben quedar guardados antes de OS_OC porque
+        // la orden de servicio copia su contenido. Antes solo se guardaba al editar, nunca al crear.
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = app(ServicioJuntasReporteIM::class)
+            ->armarDureza($bloques, $dureza);
+        $Grupo_Juntas_Detalles_Re->save();
+
         $Cliente = $validatedData['Detalles_Generales']['Cliente'];
         $Instalacion = $validatedData['Detalles_Generales']['Instalacion'];
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
@@ -1496,27 +1527,39 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
 
+        // La etapa y los resultados de dureza pueden venir en el grupo (formato actual) o
+        // todavia en Datos_Equipo (reportes anteriores a la separacion).
+        $grupoActual = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->value('Juntas_Grupo_Re');
+        $durezaActual = app(ServicioJuntasReporteIM::class)->normalizarDureza($grupoActual, $datosEquipoActuales);
+
         $etapaDureza = $this->normalizarEtapaDureza(
-            $validatedData['Datos_Equipo']['DUREZA_ETAPA'] ?? ($datosEquipoActuales['DUREZA_ETAPA'] ?? 'ANTES')
+            $validatedData['Datos_Equipo']['DUREZA_ETAPA'] ?? ($durezaActual['DUREZA_ETAPA'] ?? 'ANTES')
         );
-        $validatedData['Datos_Equipo']['DUREZA_ETAPA'] = $etapaDureza;
         $validatedData['Datos_Equipo']['ESCALA_DUREZA'] = trim((string) $validatedData['Datos_Equipo']['ESCALA_DUREZA']);
         $validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A'] = trim((string) ($validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A'] ?? '')) ?: 'Base Metal';
         $validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A1'] = trim((string) ($validatedData['Datos_Equipo']['ETIQUETA_MATERIAL_A1'] ?? '')) ?: 'Base Metal';
 
         // El consecutivo conserva los promedios ANTES y calcula solo la etapa seleccionada.
         $promediosBase = array_replace(
-            is_array($datosEquipoActuales['DUREZA_PROMEDIO'] ?? null) ? $datosEquipoActuales['DUREZA_PROMEDIO'] : [],
+            is_array($durezaActual['DUREZA_PROMEDIO'] ?? null) ? $durezaActual['DUREZA_PROMEDIO'] : [],
             $request->input('Dureza', [])
         );
-        $validatedData['Datos_Equipo']['DUREZA_PROMEDIO'] = $this->completarPromediosDureza(
-            $this->calculateDurezaPromedio($promediosBase, $etapaDureza)
-        );
-        $validatedData['Datos_Equipo']['DUREZA_ROWS'] = $this->sanitizeDurezaRows($request->input('Dureza', []));
-        $validatedData['Datos_Equipo']['DUREZA_MERGE_CONFIG'] = $this->sanitizeDurezaMergeConfig(
-            $request->input('Dureza_MergeConfig', '[]'),
-            count($validatedData['Datos_Equipo']['DUREZA_ROWS'])
-        );
+        $durezaFilas = $this->sanitizeDurezaRows($request->input('Dureza', []));
+        $dureza = [
+            'DUREZA_ETAPA' => $etapaDureza,
+            'DUREZA_PROMEDIO' => $this->completarPromediosDureza(
+                $this->calculateDurezaPromedio($promediosBase, $etapaDureza)
+            ),
+            'DUREZA_ROWS' => $durezaFilas,
+            'DUREZA_MERGE_CONFIG' => $this->sanitizeDurezaMergeConfig(
+                $request->input('Dureza_MergeConfig', '[]'),
+                count($durezaFilas)
+            ),
+        ];
+        foreach (ServicioJuntasReporteIM::CLAVES_DUREZA as $clave) {
+            unset($validatedData['Datos_Equipo'][$clave], $datosEquipoActuales[$clave]);
+        }
+
         Log::info('Dureza_MergeConfig recibido', [
             'raw' => $request->input('Dureza_MergeConfig')
         ]);
@@ -1715,14 +1758,15 @@ class FOR_PIMP_02_B_04Controller extends Controller
         |--------------------------------------------------------------------------
         */
         // Actualizar o crear el campo en la base de datos
+        $grupoJuntas = app(ServicioJuntasReporteIM::class)->armarDureza($bloques, $dureza);
         if ($Grupo_Juntas_Detalles_Re) {
             $Grupo_Juntas_Detalles_Re->update([
-                'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
+                'Juntas_Grupo_Re' => $grupoJuntas
             ]);
         } else {
             $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
             $Grupo_Juntas_Detalles_Re->idReportes = $id;
-            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
+            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $grupoJuntas;
             $Grupo_Juntas_Detalles_Re->save();
         }
 
@@ -1998,21 +2042,31 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
-        $mergeConfigRaw = $Reporte->dureza_merge_config ?? ($Datos_Equipo['DUREZA_MERGE_CONFIG'] ?? '[]');
+        // Los resultados de dureza y la tabla de juntas viven en el grupo; en los reportes
+        // anteriores siguen dentro de Datos_Equipo, de ahi el respaldo.
+        $durezaGrupo = app(ServicioJuntasReporteIM::class)->normalizarDureza(
+            $Grupo_Juntas_Detalles_Re_Model?->Juntas_Grupo_Re,
+            is_array($Datos_Equipo) ? $Datos_Equipo : []
+        );
+        $mergeConfigRaw = $durezaGrupo['DUREZA_MERGE_CONFIG'] ?? '[]';
         $mergeConfig = $this->normalizarMergeConfig($mergeConfigRaw);
-        $durezaPromedio = $this->sanitizeDurezaPromedio($Datos_Equipo['DUREZA_PROMEDIO'] ?? []);
-        $durezaPages = $this->buildDurezaPages($Datos_Equipo['DUREZA_ROWS'] ?? [], $mergeConfig, 20);
+        $durezaPromedio = $this->sanitizeDurezaPromedio($durezaGrupo['DUREZA_PROMEDIO'] ?? []);
+        $durezaPages = $this->buildDurezaPages($durezaGrupo['DUREZA_ROWS'] ?? [], $mergeConfig, 20);
+
+        // Las dos plantillas del PDF (la del reporte y la de fotos) siguen leyendo la etapa
+        // desde Datos_Equipo, asi que se reinyecta sin volver a guardarla en la base.
+        if (is_array($Datos_Equipo)) {
+            foreach (ServicioJuntasReporteIM::CLAVES_DUREZA as $clave) {
+                if ($durezaGrupo[$clave] !== null) {
+                    $Datos_Equipo[$clave] = $durezaGrupo[$clave];
+                }
+            }
+        }
                 $croquisPath = public_path('img/reportes/for-pimp-02-b-04-croquis.png');
         $croquisExiste = file_exists($croquisPath);
 
         // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
-        $Grupo_Juntas_Detalles_Re = $Grupo_Juntas_Detalles_Re_Model
-            ? json_decode($Grupo_Juntas_Detalles_Re_Model->Juntas_Grupo_Re, true)
-            : [];
-
-        if (!is_array($Grupo_Juntas_Detalles_Re)) {
-            $Grupo_Juntas_Detalles_Re = [];
-        }
+        $Grupo_Juntas_Detalles_Re = $durezaGrupo['bloques'];
 
         $totalTitulos = 0;
         $totalFilas = 0;

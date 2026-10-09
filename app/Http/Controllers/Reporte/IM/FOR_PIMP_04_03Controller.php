@@ -35,6 +35,7 @@ use App\Services\ServicioRegistrosFotos;
 use App\Services\ServicioAnalisisImagenImageJ;
 use App\Services\ServicioMetalografiaReporte;
 use App\Services\ServicioPatronGranoReporte;
+use App\Services\ServicioJuntasReporteIM;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -494,6 +495,20 @@ class FOR_PIMP_04_03Controller extends Controller
         }
     }
 
+    /**
+     * Detalles_Generales conserva solo lo administrativo. La técnica de 04_03 (norma, patrón de
+     * grano, micrografía de Fiji y conteo lineal) viaja en Juntas_Grupo_Re, igual que en el 06.
+     */
+    private function quitarTecnicaDeDetalles(array &$detalles): void
+    {
+        unset(
+            $detalles['Norma_IM'],
+            $detalles['PATRON_GRANO'],
+            $detalles['ANALISIS_IMAGEN'],
+            $detalles['CONTEO_GRANOS']
+        );
+    }
+
     /** Construye la copia histórica de norma, composición, promedios y PDF que conserva el reporte. */
     private function construirNormaIM(Request $request, ?array $normaHistorica = null): ?array
     {
@@ -579,6 +594,136 @@ class FOR_PIMP_04_03Controller extends Controller
             'Tabla' => $filas,
             'Analisis_PDF' => $analisisPdf,
         ];
+    }
+
+    /**
+     * Traduce la tabla de juntas del formulario al bloque de dos niveles que consume el PDF.
+     * Devuelve null cuando el reporte no trae esa tabla para que Edit conserve lo ya guardado.
+     */
+    private function construirBloquesJuntas(Request $request): ?array
+    {
+        $filasSinTitulo = $request->input('no.sin_titulo', []);
+        $titulosCrudos = $request->input('titulos_data');
+        $longitudesSin = $request->input('Long_Inspecc.sin_titulo', []);
+
+        $filasSinTitulo = is_array($filasSinTitulo) ? $filasSinTitulo : [];
+        $longitudesSin = is_array($longitudesSin) ? $longitudesSin : [];
+        $titulos = is_string($titulosCrudos) && trim($titulosCrudos) !== ''
+            ? json_decode($titulosCrudos, true)
+            : $titulosCrudos;
+        $titulos = is_array($titulos) ? $titulos : [];
+
+        if (!$filasSinTitulo && !$titulos) {
+            return null;
+        }
+
+        $sinTituloKey = 'sin_titulo';
+        $numFilasSin = count($filasSinTitulo);
+        // La longitud se intercala cada veinte filas para que quepa en el mismo bloque.
+        $filasPorLongitud = 20;
+        $bloques = [];
+        $bloqueActual = [];
+        $contador = 0;
+        // Cada bloque admite 21 elementos para que la longitud compartida cierre junto a sus filas.
+        $maxFilasPorBloque = 21;
+
+        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
+            if (!empty($bloqueActual)) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+        };
+
+        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
+            if ($contador >= $maxFilasPorBloque) {
+                $bloques[] = $bloqueActual;
+                $bloqueActual = [];
+                $contador = 0;
+            }
+
+            $bloqueActual[] = $elemento;
+            $contador++;
+        };
+
+        $camposFila = ['no', 'junta', 'lado', 'no_ind', 'tipo_ind', 'long', 'prof', 'NR', 'dnr', 'evaluacion', 'archivo', 'long_ins'];
+        $leerFila = function (string $grupo, int $indice) use ($request, $camposFila): array {
+            $data = [];
+            foreach ($camposFila as $campo) {
+                $data[$campo] = $request->input("{$campo}.{$grupo}.{$indice}");
+            }
+
+            return $data;
+        };
+
+        for ($i = 0; $i < $numFilasSin; $i++) {
+            $agregarElemento([
+                'tipo' => 'fila',
+                'grupo' => $sinTituloKey,
+                'data' => $leerFila($sinTituloKey, $i),
+            ]);
+
+            // Cada veinte filas se intercala la longitud correspondiente al orden del DOM.
+            if (($i + 1) % $filasPorLongitud === 0) {
+                $idxLong = intdiv($i, $filasPorLongitud);
+                if (isset($longitudesSin[$idxLong])) {
+                    $agregarElemento([
+                        'tipo' => 'longitud',
+                        'grupo' => $sinTituloKey,
+                        'valor' => $longitudesSin[$idxLong],
+                    ]);
+                    $cerrarBloque();
+                }
+            }
+        }
+
+        // Longitudes manuales adicionales o el remanente del último bloque incompleto.
+        $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
+        for ($j = $longsUsadas; $j < count($longitudesSin); $j++) {
+            $agregarElemento([
+                'tipo' => 'longitud',
+                'grupo' => $sinTituloKey,
+                'valor' => $longitudesSin[$j],
+            ]);
+            $cerrarBloque();
+        }
+
+        foreach ($titulos as $tituloObj) {
+            if (!is_array($tituloObj) || !isset($tituloObj['id'])) {
+                continue;
+            }
+
+            $tituloKey = $tituloObj['id'];
+            $agregarElemento([
+                'tipo' => 'titulo',
+                'grupo' => $tituloKey,
+                'texto' => $tituloObj['text'] ?? '',
+            ]);
+
+            $filas = $request->input("no.{$tituloKey}", []);
+            $filas = is_array($filas) ? $filas : [];
+            foreach (array_keys($filas) as $indice) {
+                $agregarElemento([
+                    'tipo' => 'fila',
+                    'grupo' => $tituloKey,
+                    'data' => $leerFila($tituloKey, (int) $indice),
+                ]);
+            }
+
+            $longitudes = $request->input("Long_Inspecc.{$tituloKey}", []);
+            foreach (is_array($longitudes) ? $longitudes : [] as $long) {
+                $agregarElemento([
+                    'tipo' => 'longitud',
+                    'grupo' => $tituloKey,
+                    'valor' => $long,
+                ]);
+                $cerrarBloque();
+            }
+        }
+
+        $cerrarBloque();
+
+        return $bloques;
     }
 
     /** Valida hasta diez lecturas y recalcula el promedio en servidor para no confiar en JavaScript. */
@@ -915,6 +1060,7 @@ class FOR_PIMP_04_03Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idCliente;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001/01/01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -924,8 +1070,19 @@ class FOR_PIMP_04_03Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
             }
             
             $Lineal_Ideal->idOC = $idOC;
@@ -958,7 +1115,7 @@ class FOR_PIMP_04_03Controller extends Controller
             {
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
-            // Obtén el ID del cliente "POR DEFINIR"
+            // Obtén el ID del cliente que se creo recientemente
             $idClientes = $NewCliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
             $Orden_Servicio->Fecha = '2001/01/01';
@@ -996,6 +1153,7 @@ class FOR_PIMP_04_03Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idClientes;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001/01/01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -1005,8 +1163,19 @@ class FOR_PIMP_04_03Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
             }
 
             $Lineal_Ideal->idOC = $idOC;
@@ -1044,29 +1213,23 @@ class FOR_PIMP_04_03Controller extends Controller
             'Detalles_Generales.Instalacion' => 'nullable|string',
             'Detalles_Generales.No_Isometrico' => 'nullable|string',
             'Detalles_Generales.Nombre_Pieza' => 'nullable|string',
-            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
-            'Detalles_Generales.Accesorio' => 'nullable|string',
-            'Detalles_Generales.Tuberia' => 'nullable|string',
-            'Detalles_Generales.Estructural' => 'nullable|string',
-            'Detalles_Generales.No_Isometrico_Plano' => 'nullable|string',
-            'Detalles_Generales.Observaciones_Notas' => 'nullable|string',
-            'Detalles_Generales.Elementos_Soldados' => 'nullable|string',
             'Detalles_Generales.Material' => 'nullable|string',
-            'Detalles_Generales.No_Junta' => 'nullable|string',
             'Detalles_Generales.Trazabilidad' => 'nullable|string',
-            'Detalles_Generales.Espesores' => 'nullable|string',
             'Detalles_Generales.Procedimiento' => 'nullable|string',
             'Detalles_Generales.idProcedimiento' => 'nullable|integer',
-            'Detalles_Generales.Codigo_Diseno' => 'nullable|string',
-            'Detalles_Generales.Diam_Nominal' => 'nullable|string',
-            'Detalles_Generales.Reporte_Antes_Relevado' => 'nullable|string',
-            'Detalles_Generales.Reporte_Despues_Relevado' => 'nullable|string',
+            'Detalles_Generales.Criterio_Evaluacion' => 'nullable|string',
+            'Detalles_Generales.Accesorio' => 'nullable|string',
+            'Detalles_Generales.No_Isometrico_Plano' => 'nullable|string',
+            'Detalles_Generales.Tuberia' => 'nullable|string',
+            'Detalles_Generales.Estructural' => 'nullable|string',
+            'Detalles_Generales.Observaciones_Notas' => 'nullable|string',
             'Detalles_Generales.idSolicitud' => 'nullable|string',
             'Detalles_Generales.Reporte_Firmado' => 'nullable|file|mimes:pdf|max:20480',
             'TieneCliente' => 'required|in:si,no',
             'ClienteSelect' => 'nullable|required_if:TieneCliente,si|string|max:255',
             'ClienteInput' => 'nullable|required_if:TieneCliente,no|string|max:255',
             'TieneContrato' => 'required|in:si,no',
+
             // Datos generados por Fiji y por el contador lineal de granos.
             'Analisis_Imagen_Token' => 'nullable|uuid',
             'Analisis_Imagen_Usar_Reporte' => 'nullable|boolean',
@@ -1089,18 +1252,6 @@ class FOR_PIMP_04_03Controller extends Controller
             'Datos_Equipo.NS_EQUIPO1' => 'nullable|string',
             'Datos_Equipo.ID_EQUIPO1' => 'nullable|string',
 
-            'Datos_Equipo.TEMPERATURA_INICIAL' => 'nullable|string',
-            'Datos_Equipo.HORA_INICIO' => 'nullable|string',
-            'Datos_Equipo.VELOCIDAD_CALENTAMIENTO' => 'nullable|string',
-            'Datos_Equipo.HORA_FINAL' => 'nullable|string',
-            'Datos_Equipo.TEMPERATURA_SOSTENIMIENTO' => 'nullable|string',
-            'Datos_Equipo.DIA_INICIO' => 'nullable|string',
-            'Datos_Equipo.TIEMPO_SOSTENIMIENTO' => 'nullable|string',
-            'Datos_Equipo.DIA_FINAL' => 'nullable|string',
-            'Datos_Equipo.VEL_ENFRIAMIENTO' => 'nullable|string',
-            'Datos_Equipo.NO_GRAFICA' => 'nullable|string',
-            'Datos_Equipo.VEL_GRAFICADOR' => 'nullable|string',
-            'Datos_Equipo.Observaciones' => 'nullable|string',
             'Datos_Equipo.ESCALA_DUREZA' => 'nullable|string|max:50',
             'Datos_Equipo.VALORES_DUREZA' => 'nullable|array|max:10',
             'Datos_Equipo.VALORES_DUREZA.*' => 'nullable|string|max:30',
@@ -1296,7 +1447,6 @@ class FOR_PIMP_04_03Controller extends Controller
                     (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
                 );
             }
-            $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
         }
 
         // Congela la imagen maestra seleccionada para que el histórico no cambie al editar el catálogo.
@@ -1307,38 +1457,39 @@ class FOR_PIMP_04_03Controller extends Controller
             (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
         );
-        if ($patronGrano !== null) {
-            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
-        }
 
         // Solo permite adjuntar un análisis Fiji generado por el usuario autenticado.
+        $analisisImagen = null;
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->obtenerPorToken(
                 $validatedData['Analisis_Imagen_Token'],
                 (int) Auth::id()
             );
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
-                !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
-            // Guarda el comentario visible debajo de la micrografía como dato independiente.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
-                trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
-                trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
-            // La distribución elegida se guarda junto con el análisis para reconstruir el PDF y Edit.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
-                $servicioMetalografia->normalizarLayoutAnalisis(
-                    $validatedData['Analisis_Reporte_Layout'] ?? []
-                );
+            if (is_array($analisisImagen)) {
+                $analisisImagen['usar_en_reporte'] =
+                    !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
+                $analisisImagen['comentario_imagen_reporte'] =
+                    trim((string) (
+                        $validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''
+                    ));
+                $analisisImagen['descripcion_reporte'] =
+                    trim((string) (
+                        $validatedData['Analisis_Reporte_Descripcion'] ?? ''
+                    ));
+                $analisisImagen['layout_reporte'] =
+                    $servicioMetalografia->normalizarLayoutAnalisis(
+                        $validatedData['Analisis_Reporte_Layout'] ?? []
+                    );
+            }
         }
-
         // El servidor vuelve a calcular el conteo y el promedio antes de guardarlos.
         $conteoGranos = $servicioMetalografia->normalizarConteoGranos(
             $validatedData['Conteo_Granos_JSON'] ?? null
         );
-        if ($conteoGranos !== null) {
-            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
-        }
 
+        // La técnica no vive en Detalles_Generales: viaja en Juntas_Grupo_Re igual que en el 06.
+        $this->quitarTecnicaDeDetalles($validatedData['Detalles_Generales']);
+        
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
@@ -1394,47 +1545,20 @@ class FOR_PIMP_04_03Controller extends Controller
         
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
+
+        // El grupo se persiste antes de OS_OC porque la orden de servicio copia sus resultados de juntas.
+        $bloquesJuntas = $this->construirBloquesJuntas($request) ?? [];
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
-
-        $titulos_json = $request->input('titulos_data', '[]');
-        $titulos = json_decode($titulos_json, true); // array asociativo
-        $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no.$sinTituloKey", []);
-        //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-        $numFilasSin = count($filasSinTitulo);//agregar
-
-        //cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
-
-        $bloques = []; //agregar
-        $bloqueActual = [];//agregar
-        $contador = 0;//agregar
-        /*//agregar
-        |--------------------------------------------------------------------------
-        | FUNCIONES AUXILIARES
-        |--------------------------------------------------------------------------
-        */
-        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
-            if (!empty($bloqueActual)) {
-                $bloques[] = $bloqueActual;
-                $bloqueActual = [];
-                $contador = 0;
-            }
-        };
-
-        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
-            if ($contador >= $maxFilasPorBloque) {
-                $bloques[] = $bloqueActual;
-                $bloqueActual = [];
-                $contador = 0;
-            }
-
-            $bloqueActual[] = $elemento;
-            $contador++;
-        };
+        $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = app(ServicioJuntasReporteIM::class)->armar(
+            $bloquesJuntas,
+            $normaIM,
+            $patronGrano,
+            [
+                'ANALISIS_IMAGEN' => $analisisImagen,
+                'CONTEO_GRANOS' => $conteoGranos,
+            ]
+        );
+        $Grupo_Juntas_Detalles_Re->save();
 
 
         /*Firmas */
@@ -1681,6 +1805,7 @@ class FOR_PIMP_04_03Controller extends Controller
             'Datos_Equipo.RESISTENCIA_TENSION_MIN' => 'nullable|string|max:100',
             'Datos_Equipo.RESISTENCIA_CEDENCIA_ESPECIFICADA' => 'nullable|string|max:100',
             'Datos_Equipo.RESISTENCIA_TENSION_MAX' => 'nullable|string|max:100',
+
             'Datos_Equipo.MATERIAL_PANO' => 'nullable|string|max:255',
             'Datos_Equipo.LIJAS_DESBASTE' => 'nullable|array|max:6',
             'Datos_Equipo.LIJAS_DESBASTE.*' => 'nullable|string|max:50',
@@ -1849,67 +1974,71 @@ class FOR_PIMP_04_03Controller extends Controller
         $validatedData['Detalles_Generales'] = array_merge($detallesActuales, $validatedData['Detalles_Generales']);
         $validatedData['Datos_Equipo'] = array_merge($datosEquipoActuales, $validatedData['Datos_Equipo']);
 
+        // El histórico técnico se hereda del grupo; si el reporte es anterior cae a Detalles_Generales.
+        $servicioJuntas = app(ServicioJuntasReporteIM::class);
+        $juntasActuales = $servicioJuntas->normalizar(
+            $Grupo_Juntas_Detalles_Re?->Juntas_Grupo_Re,
+            $detallesActuales
+        );
+        $normaHistorica = $juntasActuales['Norma_IM'];
+        $patronHistorico = $juntasActuales['Patron_Grano'];
+        $analisisImagen = $juntasActuales['ANALISIS_IMAGEN'];
+        $conteoGranos = $juntasActuales['CONTEO_GRANOS'];
+
         // Recalcula valores derivados y actualiza la copia histórica seleccionada por el usuario.
         $this->guardarPromedioDureza($request, $validatedData['Datos_Equipo']);
 
-        $normaIM = $this->construirNormaIM($request, $detallesActuales['Norma_IM'] ?? null);
-        if ($normaIM !== null) {
-            if ($request->hasFile('Analisis_PDF')) {
-                $this->guardarPdfsXrf(
-                    $request->file('Analisis_PDF', []),
-                    $normaIM['Analisis_PDF'],
-                    (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
-                    (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
-                );
-            }
-            $validatedData['Detalles_Generales']['Norma_IM'] = $normaIM;
+        // Sin norma enviada se conserva la ya congelada en el grupo.
+        $normaIM = $this->construirNormaIM($request, $normaHistorica) ?? $normaHistorica;
+        if ($normaIM !== null && $request->hasFile('Analisis_PDF')) {
+            $this->guardarPdfsXrf(
+                $request->file('Analisis_PDF', []),
+                $normaIM['Analisis_PDF'],
+                (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
+                (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
+            );
         }
 
-        $rutaPatronAnterior = (string) ($detallesActuales['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $rutaPatronAnterior = (string) ($patronHistorico['ruta_imagen'] ?? '');
         $servicioPatronGrano = app(ServicioPatronGranoReporte::class);
         $patronGrano = $servicioPatronGrano->construirHistorico(
             $request,
             'FOR_PIMP_04_03',
             (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? ''),
-            is_array($detallesActuales['PATRON_GRANO'] ?? null)
-                ? $detallesActuales['PATRON_GRANO']
-                : null
+            $patronHistorico
         );
-        if ($patronGrano === null) {
-            unset($validatedData['Detalles_Generales']['PATRON_GRANO']);
-        } else {
-            $validatedData['Detalles_Generales']['PATRON_GRANO'] = $patronGrano;
-        }
 
-        // Un token nuevo reemplaza el análisis; sin token se conserva el histórico existente.
-        if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] = $servicioImagen->obtenerPorToken(
-                $validatedData['Analisis_Imagen_Token'],
+        // Solo un token distinto al histórico reemplaza el análisis: el token guardado vuelve a enviarse
+        // en cada edición y releerlo exigiría que el reporte perteneciera al usuario que edita.
+        $tokenEnviado = trim((string) ($validatedData['Analisis_Imagen_Token'] ?? ''));
+        $tokenHistorico = (string) ($analisisImagen['token'] ?? '');
+
+        if ($tokenEnviado !== '' && $tokenEnviado !== $tokenHistorico) {
+            $analisisImagen = $servicioImagen->obtenerPorToken(
+                $tokenEnviado,
                 (int) Auth::id()
             );
         }
-        if (is_array($validatedData['Detalles_Generales']['ANALISIS_IMAGEN'] ?? null)) {
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['usar_en_reporte'] =
-                !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
+        if (is_array($analisisImagen)) {
+            $analisisImagen['usar_en_reporte'] = !empty($validatedData['Analisis_Imagen_Usar_Reporte']);
             // Edit modifica el pie de fotografía guardado sin alterar la imagen histórica.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['comentario_imagen_reporte'] =
+            $analisisImagen['comentario_imagen_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Comentario_Imagen'] ?? ''));
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['descripcion_reporte'] =
+            $analisisImagen['descripcion_reporte'] =
                 trim((string) ($validatedData['Analisis_Reporte_Descripcion'] ?? ''));
             // Edit conserva la imagen original y permite cambiar únicamente su distribución en el anexo.
-            $validatedData['Detalles_Generales']['ANALISIS_IMAGEN']['layout_reporte'] =
-                $servicioMetalografia->normalizarLayoutAnalisis(
-                    $validatedData['Analisis_Reporte_Layout'] ?? []
-                );
+            $analisisImagen['layout_reporte'] = $servicioMetalografia->normalizarLayoutAnalisis(
+                $validatedData['Analisis_Reporte_Layout'] ?? []
+            );
         }
 
         $conteoGranos = $servicioMetalografia->normalizarConteoGranos(
             $validatedData['Conteo_Granos_JSON'] ?? null
-        );
-        if ($conteoGranos !== null) {
-            $validatedData['Detalles_Generales']['CONTEO_GRANOS'] = $conteoGranos;
-        }
+        ) ?? $conteoGranos;
+
+        // Detalles_Generales conserva solo lo administrativo; la técnica vive en Juntas_Grupo_Re.
+        $this->quitarTecnicaDeDetalles($validatedData['Detalles_Generales']);
         
         $validatedData['Datos_Equipo']['ID_EQUIPO'] = $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? ($datosEquipoActuales['ID_EQUIPO'] ?? null);
         $validatedData['Datos_Equipo']['ID_EQUIPO1'] = $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? ($datosEquipoActuales['ID_EQUIPO1'] ?? null);
@@ -1944,181 +2073,27 @@ class FOR_PIMP_04_03Controller extends Controller
         ]);
 
         // Elimina únicamente la copia anterior que fue sustituida por otra dentro del mismo reporte.
-        $rutaPatronNueva = (string) ($validatedData['Detalles_Generales']['PATRON_GRANO']['ruta_imagen'] ?? '');
+        $rutaPatronNueva = (string) ($patronGrano['ruta_imagen'] ?? '');
         $servicioPatronGrano->eliminarCopiaSustituida($rutaPatronAnterior, $rutaPatronNueva);
 
-        $titulos_json = $request->input('titulos_data', '[]');
-        //dd($titulos_json);
-        $titulos = json_decode($titulos_json, true); // array asociativo
-        $datosAgrupados = [];
-        
-        // 1. Procesar filas SIN título (si existen)
-        $sinTituloKey = 'sin_titulo';
-        $filasSinTitulo = $request->input("no.$sinTituloKey", []);
-        //$longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-        $numFilasSin = count($filasSinTitulo);//agregar
+        // El grupo conserva los bloques guardados cuando la vista no incluye la tabla de juntas.
+        $bloquesJuntas = $this->construirBloquesJuntas($request) ?? $juntasActuales['bloques'];
+        $Juntas_Grupo_Re = $servicioJuntas->armar(
+            $bloquesJuntas,
+            $normaIM,
+            $patronGrano,
+            [
+                'ANALISIS_IMAGEN' => $analisisImagen,
+                'CONTEO_GRANOS' => $conteoGranos,
+            ]
+        );
 
-        //cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 21; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
-
-        $bloques = []; //agregar
-        $bloqueActual = [];//agregar
-        $contador = 0;//agregar
-        /*//agregar
-        |--------------------------------------------------------------------------
-        | FUNCIONES AUXILIARES
-        |--------------------------------------------------------------------------
-        */
-        $cerrarBloque = function () use (&$bloques, &$bloqueActual, &$contador) {
-            if (!empty($bloqueActual)) {
-                $bloques[] = $bloqueActual;
-                $bloqueActual = [];
-                $contador = 0;
-            }
-        };
-
-        $agregarElemento = function ($elemento) use (&$bloques, &$bloqueActual, &$contador, $maxFilasPorBloque) {
-            if ($contador >= $maxFilasPorBloque) {
-                $bloques[] = $bloqueActual;
-                $bloqueActual = [];
-                $contador = 0;
-            }
-
-            $bloqueActual[] = $elemento;
-            $contador++;
-        };
-
-        /*
-        |--------------------------------------------------------------------------
-        | 1. BLOQUE SIN TITULO
-        |--------------------------------------------------------------------------
-        */
-                $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
-                // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
-                $filasPorLongitud = 20;
-                for ($i = 0; $i < $numFilasSin; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $sinTituloKey,
-                    'data' => [
-                        'no' => $request->input("no.$sinTituloKey.$i"),
-                        'junta' => $request->input("junta.$sinTituloKey.$i"),
-                        'lado' => $request->input("lado.$sinTituloKey.$i"),
-                        'no_ind' => $request->input("no_ind.$sinTituloKey.$i"),
-                        'tipo_ind' => $request->input("tipo_ind.$sinTituloKey.$i"),
-                        'long' => $request->input("long.$sinTituloKey.$i"),
-                        'prof' => $request->input("prof.$sinTituloKey.$i"),
-                        'NR' => $request->input("NR.$sinTituloKey.$i"),
-                        'dnr' => $request->input("dnr.$sinTituloKey.$i"),
-                        'evaluacion' => $request->input("evaluacion.$sinTituloKey.$i"),
-                        'archivo' => $request->input("archivo.$sinTituloKey.$i"),
-                        'long_ins' => $request->input("long_ins.$sinTituloKey.$i"),
-                    ]
-                    ]);
-
-                    // Cada 15 filas, intercalar la longitud correspondiente (replica el orden del DOM)
-                    if (($i + 1) % $filasPorLongitud === 0) {
-                        $idxLong = intdiv($i, $filasPorLongitud);
-                        if (isset($longitudesSin[$idxLong])) {
-                            $agregarElemento([
-                                'tipo' => 'longitud',
-                                'grupo' => $sinTituloKey,
-                                'valor' => $longitudesSin[$idxLong]
-                            ]);
-                            $cerrarBloque();
-                        }
-                    }
-                }
-
-                // Longitudes restantes (si el usuario agregó longitudes manuales extra o el último bloque tiene <15 filas)
-                $longsUsadas = intdiv($numFilasSin, $filasPorLongitud);
-                $totalLongs = count($longitudesSin);
-                for ($j = $longsUsadas; $j < $totalLongs; $j++) {
-                    $agregarElemento([
-                        'tipo' => 'longitud',
-                        'grupo' => $sinTituloKey,
-                        'valor' => $longitudesSin[$j]
-                    ]);
-                    $cerrarBloque();
-                }
-
-        /*
-        |--------------------------------------------------------------------------
-        | 2. TITULOS + FILAS + LONGITUDES
-        |--------------------------------------------------------------------------
-        */
-
-        foreach ($titulos as $tituloObj) {
-            $tituloKey = $tituloObj['id'];   // ej. "titulo_1"
-            $tituloText = $tituloObj['text']; // texto real
-
-            // agregar título
-            $agregarElemento([
-                'tipo' => 'titulo',
-                'grupo' => $tituloKey,
-                'texto' => $tituloText
-            ]);
-
-            $filas = $request->input("no.$tituloKey", []);
-            $numFilas = count($filas);
-        
-            //$resultados = [];
-        
-            for ($i = 0; $i < $numFilas; $i++) {
-                $agregarElemento([
-                    'tipo' => 'fila',
-                    'grupo' => $tituloKey,
-                    'data' => [
-                    'no' => $request->input("no.$tituloKey.$i"),
-                    'junta' => $request->input("junta.$tituloKey.$i"),
-                    'lado' => $request->input("lado.$tituloKey.$i"),
-                    'no_ind' => $request->input("no_ind.$tituloKey.$i"),
-                    'tipo_ind' => $request->input("tipo_ind.$tituloKey.$i"),
-                    'long' => $request->input("long.$tituloKey.$i"),
-                    'prof' => $request->input("prof.$tituloKey.$i"),
-                    'NR' => $request->input("NR.$tituloKey.$i"),
-                    'dnr' => $request->input("dnr.$tituloKey.$i"),
-                    'evaluacion' => $request->input("evaluacion.$tituloKey.$i"),
-                    'archivo' => $request->input("archivo.$tituloKey.$i"),
-                    'long_ins' => $request->input("long_ins.$tituloKey.$i"),
-                    ]
-                ]);
-            }
-
-            // Obtener longitud inspeccionada asociada a este título (si existe)
-            $longitudes = $request->input("Long_Inspecc.$tituloKey", []); //Agregar
-
-                foreach ($longitudes as $long) {
-                    $agregarElemento([
-                        'tipo' => 'longitud',
-                        'grupo' => $tituloKey,
-                        'valor' => $long
-                    ]);
-
-                    // cerrar bloque al encontrar longitud
-                    $cerrarBloque();
-                }
-        }
-        /*
-        |--------------------------------------------------------------------------
-        | 3. CERRAR SI QUEDAN ELEMENTOS
-        |--------------------------------------------------------------------------
-        */
-        $cerrarBloque();
-        /*
-        |--------------------------------------------------------------------------
-        | 4. GUARDAR
-        |--------------------------------------------------------------------------
-        */
-        // Actualizar o crear el campo en la base de datos
         if ($Grupo_Juntas_Detalles_Re) {
-            $Grupo_Juntas_Detalles_Re->update([
-                'Juntas_Grupo_Re' => json_encode($bloques, JSON_UNESCAPED_UNICODE)
-            ]);
+            $Grupo_Juntas_Detalles_Re->update(['Juntas_Grupo_Re' => $Juntas_Grupo_Re]);
         } else {
             $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();
             $Grupo_Juntas_Detalles_Re->idReportes = $id;
-            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = json_encode($bloques, JSON_UNESCAPED_UNICODE);
+            $Grupo_Juntas_Detalles_Re->Juntas_Grupo_Re = $Juntas_Grupo_Re;
             $Grupo_Juntas_Detalles_Re->save();
         }
 
@@ -2313,6 +2288,7 @@ class FOR_PIMP_04_03Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 0,
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2341,6 +2317,7 @@ class FOR_PIMP_04_03Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 0,
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2360,6 +2337,7 @@ class FOR_PIMP_04_03Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $ruta,
                     'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 0,
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2400,6 +2378,7 @@ class FOR_PIMP_04_03Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                    'es_cuadro_texto' => 0,
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2466,19 +2445,22 @@ class FOR_PIMP_04_03Controller extends Controller
         $Fotos_Reportes = Fotos_Reporte::where('idReportes', $id)->first();
 
         // Decodificar el campo Detalles_Generales para obtener el nombre del proyecto
-        $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true);
+        $Detalles_Generales = json_decode($Reporte->Detalles_Generales, true) ?: [];
         // Decodificar el campo Datos_Equipo para obtener el nombre del proyecto
         $Datos_Equipo = json_decode($Reporte->Datos_Equipo, true);
-        $NormaIM = $Detalles_Generales['Norma_IM'] ?? [];
-        $NormaIM = is_array($NormaIM) ? $NormaIM : [];
-        // Decodificar el campo Grupo_Juntas_Detalles_Re para obtener el nombre del proyecto
-        $Grupo_Juntas_Detalles_Re = $Grupo_Juntas_Detalles_Re_Model
-            ? json_decode($Grupo_Juntas_Detalles_Re_Model->Juntas_Grupo_Re, true)
-            : [];
 
-        if (!is_array($Grupo_Juntas_Detalles_Re)) {
-            $Grupo_Juntas_Detalles_Re = [];
-        }
+        // La técnica vive en Juntas_Grupo_Re; se reinyecta aquí para que las vistas no cambien.
+        $juntasIM = app(ServicioJuntasReporteIM::class)->normalizar(
+            $Grupo_Juntas_Detalles_Re_Model?->Juntas_Grupo_Re,
+            $Detalles_Generales
+        );
+        $NormaIM = is_array($juntasIM['Norma_IM']) ? $juntasIM['Norma_IM'] : [];
+        $Detalles_Generales['Norma_IM'] = $juntasIM['Norma_IM'];
+        $Detalles_Generales['PATRON_GRANO'] = $juntasIM['Patron_Grano'];
+        $Detalles_Generales['ANALISIS_IMAGEN'] = $juntasIM['ANALISIS_IMAGEN'];
+        $Detalles_Generales['CONTEO_GRANOS'] = $juntasIM['CONTEO_GRANOS'];
+        // Las vistas y el PDF siguen recibiendo la lista de bloques como antes.
+        $Grupo_Juntas_Detalles_Re = $juntasIM['bloques'];
 
         $totalTitulos = 0;
         $totalFilas = 0;
@@ -2499,8 +2481,13 @@ class FOR_PIMP_04_03Controller extends Controller
 
         $totalTitulosYFilas = $totalTitulos + $totalFilas;
 
-        $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
-        $numFirmas = $Firmas_Reportes['numFirmas'];
+        // Un reporte sin fila de firmas o sin JSON debe generar el PDF con la firma única por omisión.
+        $Firmas_Reportes = $Firmas_Reportes ? json_decode($Firmas_Reportes->Firmas, true) : null;
+        $Firmas_Reportes = is_array($Firmas_Reportes) ? $Firmas_Reportes : [];
+        $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
+        if ($numFirmas < 1 || $numFirmas > 4) {
+            $numFirmas = 1;
+        }
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
         $qrPdf = !empty($Datos_Equipo['QR_PDF']) ? public_path(str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])) : null;

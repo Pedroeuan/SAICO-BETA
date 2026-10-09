@@ -21,4 +21,9 @@ class clientes extends Model
     public $timestamps = false;
 
     use HasFactory;
+
+    public function oc()
+    {
+        return $this->hasOne(OC::class, 'idClientes', 'idClientes');
+    }
 }
