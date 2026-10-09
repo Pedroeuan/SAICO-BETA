@@ -12,6 +12,11 @@
 
 
     <style>
+        .portal-pestanas { display:flex; justify-content:center; gap:8px; margin:24px auto; flex-wrap:wrap; }
+        .portal-pestanas a { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:8px; text-decoration:none; color:#214f79; background:#edf3f8; font-weight:600; }
+        .portal-pestanas svg { width:20px; height:20px; flex-shrink:0; }
+        .portal-pestanas a:focus-visible { outline:2px solid #214f79; outline-offset:3px; }
+        .portal-pestanas a[aria-current] { background:#214f79; color:white; }
 
         body {
 
@@ -137,7 +142,7 @@
 
         .logo-cliente img {
 
-            max-width: 300px;
+            max-width: min(300px, 100%);
 
             max-height: 120px;
 
@@ -195,7 +200,7 @@
             display: grid;
 
             grid-template-columns:
-                repeat(auto-fit, minmax(280px, 1fr));
+                repeat(auto-fit, minmax(min(280px, 100%), 1fr));
 
             gap: 20px;
 
@@ -651,6 +656,20 @@
             CONTRATOS
         =================================== -->
 
+        @php $mostrarEstadisticas = request()->query('vista') === 'estadisticas'; @endphp
+        <nav class="portal-pestanas" aria-label="Secciones del portal">
+            <a href="{{ request()->url() }}" @if(!$mostrarEstadisticas) aria-current="page" @endif>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></svg>
+                <span>Mis contratos / Proyectos</span>
+            </a>
+            <a href="{{ request()->url() }}?vista=estadisticas" @if($mostrarEstadisticas) aria-current="page" @endif>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18M7 16v-5m5 5V7m5 9V4"/></svg>
+                <span>Estadísticas</span>
+            </a>
+        </nav>
+        @if($mostrarEstadisticas)
+            @include('Reportes_publicos.partials.estadisticas')
+        @else
         <div class="contratos-container">
 
             <h2>
@@ -701,6 +720,7 @@
             @endif
 
         </div>
+        @endif
     </main>
 
     @if(session('encuesta_guardada'))
