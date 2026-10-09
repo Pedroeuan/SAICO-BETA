@@ -13,12 +13,13 @@ class OC extends Model
         // Agrega aquí otros campos que necesites permitir en asignación masiva
         'idOC',
         'Contrato',
+        'Tipo_servicio',
+        'idClientes',
+        'Fecha_solicitud',
+        'Lugar_trabajo',
         'Num_OC',
         'Requisicion',
         'Proyecto',
-        'Lugar_trabajo',
-        'Fecha_solicitud',
-        'Tipo_servicio',
         'Estatus',
         'OC_archivo',
     ];
@@ -29,6 +30,11 @@ class OC extends Model
     public function detalles_OC()
     {
         return $this->hasMany(detallesOC::class, 'idOC', 'idOC');
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(clientes::class, 'idClientes', 'idClientes');
     }
 
     public function getFormattedDateAttribute()
