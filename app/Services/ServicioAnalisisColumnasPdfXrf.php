@@ -69,7 +69,7 @@ class ServicioAnalisisColumnasPdfXrf
         };
 
         foreach ($lines as $line) {
-            $headerMatch = preg_match('/^((?:\d+\s+){1,19}\d+)(?:\s+WarnMin(?:\s+.*)?)?$/iu', $line, $match)
+            $headerMatch = preg_match('/^((?:\d+\s+){1,19}\d+)(?:\s+(?:WarnMin|<X>)(?:\s+.*)?)?$/iu', $line, $match)
                 || preg_match('/^(\d+)\s+WarnMin(?:\s+.*)?$/iu', $line, $match);
             if ($headerMatch) {
                 preg_match_all('/\d+/', $match[1], $numbers);

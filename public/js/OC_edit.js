@@ -93,19 +93,25 @@ document.addEventListener("DOMContentLoaded", function () {
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
-                <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td>
+                    <select class="form-control catalogo-select">
+                        <option value="">-- Seleccionar --</option>
+                        ${catalogoData.map(item => `<option value="${item.idCatalogo_OC}" data-descripcion="${item.Descripcion}" data-unidad="${item.Unidad}" data-imagen="${item.Imagen || ''}">${item.Nombre}</option>`).join('')}
+                    </select>
+                </td>
+                <td><textarea class="form-control descripcion-input" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td class="text-center">
+                    <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                    <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
+                </td>
                 <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
-                <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion"></textarea></td>
+                <td><input type="text" class="form-control unidad-input" name="unidad[]" placeholder="Unidad/Medida"></td>
+                <td><input type="number" class="form-control" name="valor_unitario[]" placeholder="Valor Unitario"></td>
+                <td><input type="number" class="form-control" name="valor_total[]" placeholder="Valor Total"></td>
                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>`;
             $('#dynamicTable tbody').append(newRow);
         });
-
-        $('#dynamicTable').on('click', '.btnEliminar', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
-        });
-    });
 
         document.getElementById('OC').addEventListener('submit', function(e) {
             const tableBody = document.querySelector("#dynamicTable tbody");

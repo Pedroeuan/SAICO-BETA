@@ -80,7 +80,7 @@ class ClientesController extends Controller
                 });
             $estadosDocumentacion = [
                 'sin_reportes' => 'Sin reportes',
-                'pendientes' => 'Pendiente de liberación',
+                'pendientes' => 'En proceso',
                 'firmados' => 'Reportes liberados',
             ];
             $reportesPorOrden = $reportesEstadistica->groupBy('idOrden_Servicio');
