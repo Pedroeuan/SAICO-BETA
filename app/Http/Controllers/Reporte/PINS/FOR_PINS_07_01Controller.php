@@ -687,7 +687,9 @@ class FOR_PINS_07_01Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idCliente;
             $OC->Lugar_trabajo = $EsperaDato;
+            $OC->idClientes = $idCliente;
             $OC->Fecha_Solicitud = '2001-01-01';
             $OC->Tipo_Servicio = $EsperaDato;
             $OC->Estatus = 'OC';
@@ -696,8 +698,19 @@ class FOR_PINS_07_01Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
             }
             
             $Lineal_Ideal->idOC = $idOC;
@@ -728,7 +741,7 @@ class FOR_PINS_07_01Controller extends Controller
             {
                 $idOrdenServicio = $BusquedaContratoOS->idOrden_Servicio;
             } else{
-            // Obtén el ID del cliente "POR DEFINIR"
+            // Obtén el ID del cliente que se creo recientemente
             $idClientes = $NewCliente->idClientes;
             $Orden_Servicio->idClientes = $idClientes;
             $Orden_Servicio->Fecha = '2001/01/01';
@@ -767,6 +780,7 @@ class FOR_PINS_07_01Controller extends Controller
             $OC->Num_OC = $EsperaDato;
             $OC->Requisicion = $EsperaDato;
             $OC->Proyecto = $Proyecto;
+            $OC->idClientes = $idClientes;
             $OC->Lugar_trabajo = $EsperaDato;
             $OC->Fecha_Solicitud = '2001-01-01';
             $OC->Tipo_Servicio = $EsperaDato;
@@ -776,8 +790,19 @@ class FOR_PINS_07_01Controller extends Controller
 
             $idOC = $OC->idOC;
             $Detalles_OC->idOC = $idOC;
-            $Detalles_OC->Detalles = $EsperaDato;
-            $Detalles_OC->save();
+            $Detalles_OC->Detalles = '[]';
+            $Detalles_OC->NumCotizacion = $EsperaDato;
+            $Detalles_OC->SolicitudCliente = $EsperaDato;
+            $Detalles_OC->Contacto = $EsperaDato;
+            $Detalles_OC->Puesto = $EsperaDato;
+            $Detalles_OC->Ciudad = $EsperaDato;
+            $Detalles_OC->Telefono = $EsperaDato;
+            $Detalles_OC->Correo = $EsperaDato;
+            $Detalles_OC->Vigencia = $EsperaDato;
+            $Detalles_OC->Notas = $EsperaDato;
+            $Detalles_OC->Condiciones_pago = $EsperaDato;
+            $Detalles_OC->Condiciones_generales = $EsperaDato;
+ 	        $Detalles_OC->save();
             }
 
             $Lineal_Ideal->idOC = $idOC;

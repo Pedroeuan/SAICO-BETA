@@ -22,6 +22,9 @@ class detallesOC extends Model
         'Correo',
         'Vigencia',
         'Detalles',
+        'Notas',
+        'Condiciones_pago',
+        'Condiciones_generales',
     ];
     protected $table = 'Detalles_OC';
     protected $primaryKey = 'idDetalles_OC';

@@ -304,7 +304,7 @@
                                             @endif
                                         </div>
                                     </div>
-
+|
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
