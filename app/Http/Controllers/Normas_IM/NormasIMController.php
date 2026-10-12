@@ -14,9 +14,11 @@ class NormasIMController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexNormasIM()
+    public function index()
     {
         //
+        $Normas_IM = Normas_IM::all();
+        return view('Normas_IM.Index', compact('Normas_IM'));
     }
 
     /**
