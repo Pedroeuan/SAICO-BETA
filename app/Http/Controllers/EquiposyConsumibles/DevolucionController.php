@@ -127,13 +127,13 @@ class DevolucionController extends Controller
                     ->where('Tipo', 'DEVOLUCIÓN')
                     ->exists(); // Si existe el registro con "DEVOLUCIÓN"
                 //Log::info('historialAlmacenExistente: ', ['historialAlmacenExistente' => $historialAlmacenExistente]);
-                Log::info([
+                /*Log::info([
                     'idGeneral_EyC' => $detalle->idGeneral_EyC,
                     'general_encontrado' => $general ? true : false,
                     'estado' => $general->Disponibilidad_Estado ?? 'NO EXISTE',
                     'historial' => $historialAlmacenExistente,
                     'folio' => $folio
-                ]);
+                ]);*/
                 // Solo incluir en $datosManifiesto si no está en Historial_Almacen
                 if (!$historialAlmacenExistente && $general) {
                     $datosManifiesto[] = [
