@@ -72,21 +72,6 @@ class OCController extends Controller
             // Verificar que realmente tenga el formato correcto
             if (!$actual || !preg_match('/^AICO-INT-[0-9]{4}$/', $actual)) {
 
-                // Seguridad: volver a calcular el consecutivo
-                /*$registros = reporte::orderBy('idReportes', 'DESC')->get();
-                $ultimoNumero = 0;
-                
-                /*foreach ($registros as $r) {
-                    $json = json_decode($r->Detalles_Generales, true);
-
-                    if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
-                        $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
-                        if ($n > $ultimoNumero) $ultimoNumero = $n;
-                        break;
-                    }
-                }
-                //$nuevo = "AICO-INT-" . str_pad($ultimoNumero + 1, 4, '0', STR_PAD_LEFT);*/
-
                 $registros = OC::where('Contrato', 'LIKE', 'AICO-INT-%')
                             ->orderBy('Contrato', 'DESC')
                             ->value('Contrato');
@@ -288,7 +273,7 @@ class OCController extends Controller
         $detallesOC = json_decode($request->input('dynamicTableData'), true);
 
         // Comprobar si el arreglo tiene elementos antes de continuar
-        if (!empty($detallesOC)) {
+        if (!empty($detallesOC)) { 
 
             // Convertir el arreglo en una cadena JSON
             $detallesJSON = json_encode($detallesOC); 
@@ -299,12 +284,36 @@ class OCController extends Controller
             // Guardar el JSON en la columna 'Detalles'
             $detallesOCModel->Detalles = $detallesJSON;
 
+            //$items = json_decode($request->input('dynamicTableData'), true);
+
+            $subtotalCentavos = 0;
+
+            foreach ($detallesOC as $detalle) {
+                $cantidad = (float) ($detalle['cantidad'] ?? 0);
+                $valorUnitario = (float) ($detalle['valor_unitario'] ?? 0);
+
+                $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+            }
+
+            $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+
+            $datosOrden = [
+                'detallesOC' => $detallesOC,
+                'totales' => [
+                    'subtotal' => $subtotalCentavos / 100,
+                    'iva' => $ivaCentavos / 100,
+                    'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+                ],
+            ];
+
+            $detallesJSON = json_encode($datosOrden, JSON_THROW_ON_ERROR);
+            $detallesOCModel->Detalles = $detallesJSON;
             // Guardar el objeto en la base de datos
             $detallesOCModel->save();
         } else {
             //Log::warning('No se han enviado detalles para guardar');
         }
-
+            
         return redirect()->route('OC.indexOC');
     }
 

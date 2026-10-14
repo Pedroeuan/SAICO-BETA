@@ -334,7 +334,39 @@
                                             <!-- Filas dinámicas aparecerán aquí -->
                                         </tbody>
                                     </table>
+
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Cuenta</div>
                                     
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Subtotal</label>
+                                            <input type="text" class="form-control inputForm @error('Subtotal') is-invalid @enderror" name="Subtotal" placeholder="Ejemplo: 1000" value="{{old('Subtotal')}}" readonly>
+                                            @error('Subtotal')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">IVA (16%)</label>
+                                            <input type="text" class="form-control inputForm @error('IVA') is-invalid @enderror" name="IVA" placeholder="Ejemplo: 160" value="{{old('IVA')}}" readonly>
+                                            @error('IVA')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Total</label>
+                                            <input type="text" class="form-control inputForm @error('Total') is-invalid @enderror" name="Total" placeholder="Ejemplo: 1160" value="{{old('Total')}}" readonly>
+                                            @error('Total')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
                                     <p>
                                     <p>
                                     <div class="col-sm-12">
@@ -411,5 +443,3 @@
 
 </script>
 @endsection
-
-

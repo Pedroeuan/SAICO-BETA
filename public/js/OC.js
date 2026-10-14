@@ -125,6 +125,26 @@ document.addEventListener("DOMContentLoaded", function () {
             rowCount = $('#dynamicTable tbody tr').length;
         }
 
+        function calculateTotals() {
+            var subtotalCents = 0;
+
+            $('#dynamicTable tbody tr').each(function() {
+                var quantity = Number($(this).find('.cantidad-input').val());
+                var unitPrice = Number($(this).find('.valor-unitario-input').val());
+                var lineCents = Number.isFinite(quantity) && Number.isFinite(unitPrice)
+                    ? Math.round(quantity * unitPrice * 100)
+                    : 0;
+
+                $(this).find('.valor-total-input').val((lineCents / 100).toFixed(2));
+                subtotalCents += lineCents;
+            });
+
+            var taxCents = Math.round(subtotalCents * 0.16);
+            $('input[name="Subtotal"]').val((subtotalCents / 100).toFixed(2));
+            $('input[name="IVA"]').val((taxCents / 100).toFixed(2));
+            $('input[name="Total"]').val(((subtotalCents + taxCents) / 100).toFixed(2));
+        }
+
         // Datos del catálogo pasados desde la vista Blade
         var catalogoData = (typeof catalogo !== 'undefined') ? catalogo : [];
         //console.log("Datos del catálogo:", catalogoData); // Verificar los datos del catálogo   
@@ -144,14 +164,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
                     <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
                 </td>
-                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
+                <td><input type="number" class="form-control cantidad-input" name="cantidad[]" placeholder="Cantidad" min="0" step="any"></td>
                 <td><input type="text" class="form-control unidad-input" name="unidad[]" placeholder="Unidad/Medida"></td>
-                <td><input type="number" class="form-control" name="valor_unitario[]" placeholder="Valor Unitario"></td>
-                <td><input type="number" class="form-control" name="valor_total[]" placeholder="Valor Total"></td>
+                <td><input type="number" class="form-control valor-unitario-input" name="valor_unitario[]" placeholder="Valor Unitario" min="0" step="0.01"></td>
+                <td><input type="number" class="form-control valor-total-input" name="valor_total[]" placeholder="Valor Total" step="0.01" readonly></td>
                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>`;
             $('#dynamicTable tbody').append(newRow);
+            calculateTotals();
         });
+
+        $('#dynamicTable').on('input', '.cantidad-input, .valor-unitario-input', calculateTotals);
 
         // Autocompletar descripción, unidad e imagen al seleccionar del catálogo
         $('#dynamicTable').on('change', '.catalogo-select', function() {
@@ -179,7 +202,10 @@ document.addEventListener("DOMContentLoaded", function () {
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
+            calculateTotals();
         });
+
+        calculateTotals();
     });
 
         document.getElementById('OC').addEventListener('submit', function(e) {
