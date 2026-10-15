@@ -338,10 +338,36 @@ class OCController extends Controller
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Cliente = clientes::where('idClientes', $idCliente)->first(); 
         $Nombre_Cliente = $Cliente->Cliente;
-        //Decodificar JSON de la columna 'Detalles'
-        $detallesOC = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
+        // Soporta tanto el formato anterior (lista de detalles) como el formato
+        // actual que guarda los detalles junto con sus totales.
+        $datosGuardados = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
+        $detallesOC = $datosGuardados['detallesOC'] ?? $datosGuardados;
+        $detallesOC = is_array($detallesOC) ? array_values($detallesOC) : [];
+        $totales = $datosGuardados['totales'] ?? [];
 
-        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente'));
+        if (empty($totales) && !empty($detallesOC)) {
+            $subtotalCentavos = 0;
+            foreach ($detallesOC as $detalle) {
+                $cantidad = (float) ($detalle['cantidad'] ?? 0);
+                $valorUnitario = (float) ($detalle['valor_unitario'] ?? 0);
+                $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+            }
+
+            $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+            $totales = [
+                'subtotal' => $subtotalCentavos / 100,
+                'iva' => $ivaCentavos / 100,
+                'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+            ];
+        }
+
+        $totales = array_merge([
+            'subtotal' => 0,
+            'iva' => 0,
+            'total' => 0,
+        ], is_array($totales) ? $totales : []);
+
+        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales'));
     }
 
     /**
@@ -401,26 +427,42 @@ class OCController extends Controller
         }
 
         // Decodificar el input JSON en un arreglo
-        $detallesOC = json_decode($request->input('dynamicTableData'), true);
+        $request->validate([
+            'dynamicTableData' => 'required|json',
+        ]);
 
-        // Comprobar si el arreglo tiene elementos antes de continuar
-        if (!empty($detallesOC)) {
-
-            // Convertir el arreglo en una cadena JSON
-            $detallesJSON = json_encode($detallesOC); 
-
-            // Crear un nuevo registro en la tabla detallesOC
-            $detallesOCModel = new detallesOC;
-
-            // Asignar el idOC
-            $detallesOCModel = detallesOC::find($id);
-
-            $detallesOCModel->update([
-                'Detalles' =>  $detallesJSON,
-            ]);
-        } else {
-            //Log::warning('No se han enviado detalles para guardar');
+        $detallesOC = json_decode($request->input('dynamicTableData'), true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($detallesOC) || !array_is_list($detallesOC)) {
+            return back()->withErrors([
+                'dynamicTableData' => 'Los detalles de la orden tienen un formato inválido.',
+            ])->withInput();
         }
+
+        $subtotalCentavos = 0;
+        foreach ($detallesOC as $detalle) {
+            $cantidad = is_array($detalle) && is_numeric($detalle['cantidad'] ?? null)
+                ? (float) $detalle['cantidad']
+                : 0;
+            $valorUnitario = is_array($detalle) && is_numeric($detalle['valor_unitario'] ?? null)
+                ? (float) $detalle['valor_unitario']
+                : 0;
+
+            $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+        }
+
+        $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+        $detallesJSON = json_encode([
+            'detallesOC' => $detallesOC,
+            'totales' => [
+                'subtotal' => $subtotalCentavos / 100,
+                'iva' => $ivaCentavos / 100,
+                'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+            ],
+        ], JSON_THROW_ON_ERROR);
+
+        $detallesOCModel = detallesOC::firstOrNew(['idOC' => $OC->idOC]);
+        $detallesOCModel->Detalles = $detallesJSON;
+        $detallesOCModel->save();
 
         return redirect()->route('OC.indexOC');
     }
