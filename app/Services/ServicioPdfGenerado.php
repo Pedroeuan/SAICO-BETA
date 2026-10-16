@@ -30,6 +30,7 @@ class ServicioPdfGenerado
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_03_B_01_PDF.blade.php',
         ],
         '04_02' => [
+            'app/Services/ServicioSerieReportes.php',
             'app/Http/Controllers/Reporte/IM/FOR_PIMP_04_02Controller.php',
             'resources/views/Reportes/ReportesPDFIM/Reporte_FOR_PIMP_04_02_PDF.blade.php',
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_04_02_PDF.blade.php',
@@ -89,7 +90,7 @@ class ServicioPdfGenerado
             'fotos' => $fotos,
             // La numeracion visible del 06_B_01 depende tambien de cuantos
             // integrantes/paginas tenga el resto de su serie.
-            'serie' => $formato === '06_B_01' ? $this->estadoSerie($reporte) : null,
+            'serie' => in_array($formato, ['06_B_01', '04_02'], true) ? $this->estadoSerie($reporte) : null,
             'archivos_reporte' => $this->metadatosArchivos([$reporte->getAttributes(), $fotos]),
             'generador' => $this->huellasGenerador($formato, $idioma),
         ];

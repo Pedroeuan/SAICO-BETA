@@ -524,6 +524,7 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
         
         /*Ruta de Guardado Reportes/IM FOR_PIMP_04_02*/
         Route::post('/Reportes_FOR_PIMP_04_02/store', [FOR_PIMP_04_02Controller::class, 'FOR_PIMP_04_02_store'])->name('Reportes_FOR_PIMP_04_02.store');
+        Route::post('/Reportes_FOR_PIMP_04_02/coincidencias-mecanicas', [FOR_PIMP_04_02Controller::class, 'coincidenciasMecanicas'])->name('Reportes_FOR_PIMP_04_02.coincidencias_mecanicas');
         /*Vista previa: valida norma, extrae lecturas y devuelve recortes sin guardar el reporte.*/
         Route::post('/Reportes_FOR_PIMP_04_02/extraer-analisis', [ProcesamientoXrfController::class, 'encolarColumnas'])->name('Reportes_FOR_PIMP_04_02.extraer_analisis');
         /*Ruta de Actualización Reportes/IM FOR_PIMP_04_02*/

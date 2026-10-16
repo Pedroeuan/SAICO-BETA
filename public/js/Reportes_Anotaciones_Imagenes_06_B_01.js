@@ -2,11 +2,11 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function () {
-        const formulario = document.getElementById('FOR-PIMP-06_B_01');
+        const formulario = document.getElementById('FOR-PIMP-06_B_01') || document.getElementById('FOR-PIMP-04_02');
         const modal = document.getElementById('cropperModal');
         const imagenCropper = document.getElementById('cropperImage');
 
-        // Este editor se activa exclusivamente en FOR-PIMP-06_B/01.
+        // Ambos formatos comparten las mismas herramientas y guardan las marcas en la imagen.
         if (!formulario || !modal || !imagenCropper || modal.dataset.anotadorInicializado === '1') return;
         modal.dataset.anotadorInicializado = '1';
 
@@ -120,7 +120,8 @@
                 boton.setAttribute('data-anotar-imagen-guardada', '1');
                 boton.textContent = 'Marcar imagen guardada';
                 boton.addEventListener('click', function () {
-                    cargarImagenGuardada(imagen, input, boton);
+                    if (tarjeta.querySelector('[data-sin-fotografia]:checked')) return;
+                    cargarImagenGuardada(vistaPrevia.querySelector('img') || imagen, input, boton);
                 });
                 vistaPrevia.insertAdjacentElement('afterend', boton);
             });
