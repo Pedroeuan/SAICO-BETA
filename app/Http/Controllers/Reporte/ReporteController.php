@@ -1602,6 +1602,8 @@ class ReporteController extends Controller
                         $grupoLimpio['Norma_IM']['Captura_XRF'] = [];
                         $grupoLimpio['Norma_IM']['Columnas_Seleccionadas'] = [];
                         $grupoLimpio['Norma_IM']['Resultados_XRF'] = [];
+                        $grupoLimpio['Norma_IM']['Valores_Elementos'] = [];
+                        $grupoLimpio['Norma_IM']['Sumas_Manuales'] = [];
                         foreach ($grupoLimpio['Norma_IM']['Tabla'] ?? [] as $indice => $fila) {
                             unset($grupoLimpio['Norma_IM']['Tabla'][$indice]['Origen'], $grupoLimpio['Norma_IM']['Tabla'][$indice]['Valores_Seleccionados']);
                         }

@@ -100,7 +100,7 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-04_02" action="{{route('Reportes_FOR_PIMP_04_02.store')}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-04_02" data-modo="create" action="{{route('Reportes_FOR_PIMP_04_02.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @if ($errors->any())
                     <div class="alert alert-danger" role="alert">
@@ -620,7 +620,7 @@
                                 <thead><tr>
                                     <th>Elemento químico / Chemical element</th>
                                     <th>Promedio de la pieza analizada / Average</th>
-                                    <th>Composición química teórica / Theoretical composition</th>
+                                    <th>Composición química teórica máxima / Maximum theoretical chemical composition</th>
                                 </tr></thead>
                                 <tbody></tbody>
                             </table>
@@ -1224,4 +1224,5 @@ $(document).ready(function() {
 <script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
 <script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
 <script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 @endsection

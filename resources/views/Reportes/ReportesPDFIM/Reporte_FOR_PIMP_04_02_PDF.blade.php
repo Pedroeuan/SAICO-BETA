@@ -1128,10 +1128,10 @@
                         <th
                             class="tituloComparacion" colspan="3">
                             <span class="label-es">
-                                COMPOSICIÓN QUÍMICA TEÓRICA VS PROMEDIO DE VALORES EN LA PIEZA ANALIZADA
+                                COMPOSICIÓN QUÍMICA TEÓRICA MÁXIMA VS PROMEDIO DE VALORES EN LA PIEZA ANALIZADA
                             </span>
                             <span class="label-en">
-                                Theoretical Chemical Composition vs Average Values of the Analyzed Piece
+                                Maximum Theoretical Chemical Composition vs Average Values of the Analyzed Piece
                             </span>
                         </th>
                     </tr>
@@ -1155,10 +1155,10 @@
                         </th>
                         <th>
                             <span class="label-es">
-                                COMPOSICIÓN QUÍMICA TEÓRICA
+                                COMPOSICIÓN QUÍMICA TEÓRICA MÁXIMA
                             </span>
                             <span class="label-en">
-                                Theoretical Chemical Composition
+                                Maximum Theoretical Chemical Composition
                             </span>
                         </th>
                     </tr>

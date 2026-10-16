@@ -3,6 +3,18 @@
 use App\Services\ServicioAnalisisColumnasPdfXrf;
 use Smalot\PdfParser\Parser;
 
+it('propone un promedio numerico editable para disparos mixtos con C menor', function () {
+    $service = new ServicioAnalisisColumnasPdfXrf(new Parser());
+    $analysis = $service->parseText("1 2 3\nS % Conc 0.0063 [C<]0.0020 [C<]0.0020\nP % Conc 0.0063 -- [C<]0.0020");
+    $results = $service->calculateForColumns($analysis, [1, 2, 3]);
+    expect($results['S']['calculable'])->toBeFalse()
+        ->and($results['S']['valor_sugerido'])->toBe('0.0034')
+        ->and($results['S']['valores'][2])->toBe('[C<]0.0020')
+        ->and($service->resolveAverage($results['S'], ''))->toBe(['promedio' => '0.0034', 'origen' => 'manual'])
+        ->and($service->resolveAverage($results['S'], '0.0040'))->toBe(['promedio' => '0.0040', 'origen' => 'manual'])
+        ->and($results['P']['valor_sugerido'])->toBeNull();
+});
+
 it('propone el limite calificado repetido sin promediarlo y respeta la edicion del tecnico', function () {
     $service = new ServicioAnalisisColumnasPdfXrf(new Parser());
     $analysis = $service->parseText("7 8 9\nV % Conc [C<]0.0040 [C<]0.0040 [C<]0.0040\nS % Conc [C<]0.0020 0.0028 [C<]0.0020\nC % Conc -- -- --");

@@ -709,6 +709,10 @@ class FOR_PIMP_04_02Controller extends Controller
             $filasCatalogo = \App\Services\ComposicionesReferencias0402::filas($referenciasQuimicas);
         }
         $filasCatalogo = is_array($filasCatalogo) ? $filasCatalogo : [];
+        $request->validate(['Norma_IM.Valores_Elementos' => 'nullable|array|max:200', 'Norma_IM.Valores_Elementos.*' => 'nullable|string|max:255']);
+        $request->validate(['Norma_IM.Sumas_Manuales' => 'nullable|array|max:200', 'Norma_IM.Sumas_Manuales.*' => 'boolean']);
+        $sumasManuales = (array) $request->input('Norma_IM.Sumas_Manuales', $normaHistorica['Sumas_Manuales'] ?? []);
+        $valoresElementos = array_change_key_case((array) $request->input('Norma_IM.Valores_Elementos', $normaHistorica['Valores_Elementos'] ?? []), CASE_LOWER);
         $promedios = $request->input('Norma_IM.Promedio', []);
         $mismaNormaHistorica = is_array($normaHistorica)
             && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma;
@@ -768,7 +772,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 $resuelto = $serviceColumnas->resolveAverage($resultado, (string) ($promedios[$indice] ?? $historica['Promedio'] ?? ''));
                 $promedio = $resuelto['promedio'];
                 $origen = $resuelto['origen'];
-            } elseif (($historica['Origen'] ?? '') === 'calculado') {
+            } elseif (($historica['Origen'] ?? '') === 'calculado' && empty($sumasManuales[trim($elemento)])) {
                 $promedio = (string) ($historica['Promedio'] ?? '');
                 $origen = 'calculado';
             } else {
@@ -785,6 +789,11 @@ class FOR_PIMP_04_02Controller extends Controller
             ];
         }
 
+        $filas = \App\Services\SumaElementos0402::completar($filas, $resultadosExtraidos, $valoresElementos, $sumasManuales);
+        foreach ($filas as $fila) {
+            if (preg_match('/^[A-Za-z]{1,2}$/', trim($fila['Elemento']))) $valoresElementos[strtolower(trim($fila['Elemento']))] = $fila['Promedio'];
+        }
+
         return [
             'idnormas_im' => $idNorma,
             'configuracion' => $request->input('Norma_IM.configuracion') !== null && $request->input('Norma_IM.configuracion') !== '' ? (int) $request->input('Norma_IM.configuracion') : null,
@@ -795,6 +804,8 @@ class FOR_PIMP_04_02Controller extends Controller
                 ? \App\Services\ComposicionesReferencias0402::notas($referenciasQuimicas) : ($normaHistorica['Notas_Composicion'] ?? []),
             'Tabla' => $filas,
             'Resultados_XRF' => $resultadosExtraidos,
+            'Valores_Elementos' => $valoresElementos,
+            'Sumas_Manuales' => $sumasManuales,
             'Analisis_PDF' => $analisisPdf,
             'Columnas_Seleccionadas' => array_values(array_map('intval', $columnasSeleccionadas)),
             'Captura_XRF' => is_array($capturaXrf) ? $capturaXrf : [],

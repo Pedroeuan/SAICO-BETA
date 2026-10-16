@@ -1,5 +1,7 @@
 (() => {
     const url = document.currentScript.dataset.coincidenciasUrl;
+    const crearNormaUrl = document.currentScript.dataset.crearNormaUrl;
+    const editarNormaUrl = document.currentScript.dataset.editarNormaUrl;
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById('FOR-PIMP-04_02');
         if (!form) return;
@@ -27,9 +29,23 @@
         const seleccionadas = new Set(seleccionInicial);
         let candidatas = []; let consultando = false;
         const clave = fila => `${fila.idnormas_im}:${fila.fila}`;
-        const panelSeleccion = document.createElement('div'); panelSeleccion.className = 'referencias-seleccion-0402 mb-3';
+        const panelSeleccion = document.createElement('details'); panelSeleccion.className = 'referencias-seleccion-0402 mb-3';
+        const resumenCatalogo = document.createElement('summary'); resumenCatalogo.className = 'referencias-desplegable';
+        const tituloCatalogo = document.createElement('span'); tituloCatalogo.innerHTML = '<i class="fas fa-book mr-2" aria-hidden="true"></i>Normas de referencia';
+        const cuentaCatalogo = document.createElement('span'); cuentaCatalogo.className = 'referencias-cuenta'; cuentaCatalogo.textContent = `${seleccionadas.size} seleccionadas`;
+        const flechaCatalogo = document.createElement('i'); flechaCatalogo.className = 'fas fa-chevron-down referencias-flecha'; flechaCatalogo.setAttribute('aria-hidden', 'true');
+        resumenCatalogo.append(tituloCatalogo, cuentaCatalogo, flechaCatalogo);
         const tituloSeleccion = document.createElement('h6'); tituloSeleccion.innerHTML = '<i class="fas fa-tasks mr-2" aria-hidden="true"></i>Marca las normas que deseas incluir';
         const ayudaSeleccion = document.createElement('p'); ayudaSeleccion.className = 'text-muted small mb-2'; ayudaSeleccion.textContent = 'Marca las referencias que incluirás en el reporte.';
+        const cabecera = document.createElement('div'); cabecera.className = 'referencias-cabecera';
+        const accionesNormas = document.createElement('div'); accionesNormas.className = 'd-flex'; accionesNormas.style.gap = '8px';
+        if (crearNormaUrl) {
+            const crearNorma = document.createElement('a'); crearNorma.href = crearNormaUrl; crearNorma.target = '_blank'; crearNorma.rel = 'noopener'; crearNorma.className = 'btn btn-success btn-sm';
+            crearNorma.innerHTML = '<i class="fas fa-plus-circle mr-1" aria-hidden="true"></i>Crear norma'; accionesNormas.append(crearNorma);
+        }
+        const actualizarCatalogo = document.createElement('button'); actualizarCatalogo.type = 'button'; actualizarCatalogo.className = 'btn btn-outline-secondary btn-sm'; actualizarCatalogo.title = 'Actualizar catálogo después de guardar una norma'; actualizarCatalogo.setAttribute('aria-label', actualizarCatalogo.title);
+        actualizarCatalogo.innerHTML = '<i class="fas fa-sync-alt" aria-hidden="true"></i>'; accionesNormas.append(actualizarCatalogo);
+        cabecera.append(tituloSeleccion, accionesNormas);
         const tarjetas = document.createElement('div'); tarjetas.className = 'referencias-tarjetas';
         let pagina = 1;
         let soloSeleccionadas = false;
@@ -71,10 +87,21 @@
         anterior.addEventListener('click', () => { pagina--; aplicarFiltros(); });
         siguiente.addEventListener('click', () => { pagina++; aplicarFiltros(); });
         const contador = document.createElement('small'); contador.className = 'd-block mt-2 font-weight-bold'; contador.setAttribute('aria-live', 'polite');
-        panelSeleccion.append(tituloSeleccion, ayudaSeleccion, filtros, tarjetas, vacio, paginacion, contador, seleccionPayload); tabla.before(panelSeleccion);
+        const contenidoCatalogo = document.createElement('div'); contenidoCatalogo.className = 'referencias-contenido';
+        contenidoCatalogo.append(cabecera, ayudaSeleccion, filtros, tarjetas, vacio, paginacion, contador, seleccionPayload);
+        panelSeleccion.append(resumenCatalogo, contenidoCatalogo); tabla.before(panelSeleccion);
         const estilo = document.createElement('style'); estilo.textContent = `
             .referencias-seleccion-0402{background:#f8fafc;border:1px solid #dbe3ee;border-radius:10px;padding:10px}
             .referencias-seleccion-0402 h6{margin-bottom:4px}
+            .referencias-desplegable{display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;font-weight:600;color:#244b73;padding:4px;flex-wrap:wrap}
+            .referencias-desplegable::-webkit-details-marker{display:none}
+            .referencias-desplegable:focus-visible{outline:2px solid #2563eb;outline-offset:3px;border-radius:4px}
+            .referencias-cuenta{font-size:12px;font-weight:500;background:#e3edfc;color:#245b98;padding:3px 9px;border-radius:12px}
+            .referencias-flecha{margin-left:auto;transition:transform .15s}
+            .referencias-seleccion-0402[open]>.referencias-desplegable .referencias-flecha{transform:rotate(180deg)}
+            .referencias-contenido{border-top:1px solid #dbe3ee;margin-top:10px;padding-top:12px}
+            .referencias-cabecera{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+            .referencia-cabecera{display:flex;align-items:flex-start;gap:6px}.referencia-cabecera>label{flex:1;min-width:0}.referencia-cabecera>a{flex-shrink:0;padding:2px 5px;color:#2563eb;border-radius:4px}.referencia-cabecera>a:hover{background:#dbeafe}
             .referencias-filtros{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:10px;align-items:end;margin:12px 0}
             .referencias-filtros label{margin:0;font-size:12px;color:#475569;min-width:0}.referencias-filtros label .form-control{margin-top:4px}
             .referencias-paginacion{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px}
@@ -84,7 +111,7 @@
             .referencia-opcion{position:relative;background:#fff;border:1px solid #dbe3ee;border-left:3px solid #cbd5e1;border-radius:7px;padding:9px;transition:border-color .15s}
             .referencia-opcion.marcada{background:#f0f7ff;border-color:#2563eb;border-left-color:#2563eb}
             .referencia-opcion:focus-within{outline:2px solid #60a5fa;outline-offset:2px}
-            .referencia-opcion>label{display:flex;align-items:flex-start;gap:7px;cursor:pointer;margin:0 0 7px;font-weight:700;font-size:13px;line-height:1.3;color:#172b4d}
+            .referencia-opcion .referencia-cabecera>label{display:flex;align-items:flex-start;gap:7px;cursor:pointer;margin:0 0 7px;font-weight:700;font-size:13px;line-height:1.3;color:#172b4d}
             .referencia-opcion input[type=checkbox]{width:16px;height:16px;flex-shrink:0;margin-top:1px;accent-color:#2563eb}
             .referencia-estado{display:none}
             .marcada .referencia-estado{display:inline-block;margin-left:auto;color:#1d4ed8;background:#dbeafe;border-radius:4px;padding:1px 4px;font-size:11px;flex-shrink:0}
@@ -120,6 +147,7 @@
             window.referenciasQuimicas0402 = filas;
             document.dispatchEvent(new CustomEvent('referencias-0402:cambio', { detail: filas }));
             contador.textContent = `${filas.length} seleccionada(s) de ${candidatas.length} del catálogo`;
+            cuentaCatalogo.textContent = `${filas.length} seleccionadas`;
             aplicarFiltros();
         };
         const dibujarCandidatas = () => {
@@ -129,7 +157,13 @@
                 card.dataset.clave = clave(fila); card.dataset.norma = nombreNorma(fila); card.dataset.busqueda = normalizar(fila.norma);
                 const label = document.createElement('label'); const check = document.createElement('input'); check.type = 'checkbox'; check.checked = seleccionadas.has(clave(fila));
                 card.classList.toggle('marcada', check.checked);
-                const nombre = document.createElement('span'); nombre.textContent = fila.norma; label.append(check, nombre); card.append(label);
+                const nombre = document.createElement('span'); nombre.textContent = fila.norma; label.append(check, nombre);
+                const cabeceraTarjeta = document.createElement('div'); cabeceraTarjeta.className = 'referencia-cabecera'; cabeceraTarjeta.append(label);
+                if (editarNormaUrl) {
+                    const editar = document.createElement('a'); editar.href = editarNormaUrl.replace('__NORMA__', encodeURIComponent(fila.idnormas_im)); editar.target = '_blank'; editar.rel = 'noopener'; editar.title = `Editar norma: ${fila.norma}`; editar.setAttribute('aria-label', editar.title);
+                    editar.innerHTML = '<i class="fas fa-edit" aria-hidden="true"></i>'; cabeceraTarjeta.append(editar);
+                }
+                card.append(cabeceraTarjeta);
                 const identificador = document.createElement('span'); identificador.className = 'referencia-estado';
                 const actualizarEstado = () => { identificador.textContent = check.checked ? '✓' : ''; identificador.title = check.checked ? 'Seleccionada' : ''; };
                 actualizarEstado(); label.append(identificador);
@@ -252,11 +286,12 @@
                 const validas = new Set(candidatas.map(clave));
                 [...seleccionadas].forEach(id => { if (!validas.has(id)) seleccionadas.delete(id); });
                 dibujarCandidatas();
-                estado.textContent = 'El técnico elige las referencias y la escala. No se evalúa el cumplimiento ni se calculan equivalencias.';
+                estado.textContent = '';
             } catch (error) { if (error.name !== 'AbortError' && turno === peticion) estado.textContent = error.message; }
             finally { if (turno === peticion) consultando = false; }
         };
         modo.addEventListener('change', () => { clearTimeout(temporizador); buscar(); });
+        actualizarCatalogo.addEventListener('click', () => { if (!consultando) buscar(); });
         form.addEventListener('submit', event => {
             if (modo.value === 'automatico') {
                 if (consultando) { event.preventDefault(); estado.textContent = 'Espera a que termine la consulta y confirma las normas antes de guardar.'; }
