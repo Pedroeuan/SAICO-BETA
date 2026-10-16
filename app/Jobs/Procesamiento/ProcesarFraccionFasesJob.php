@@ -59,7 +59,10 @@ class ProcesarFraccionFasesJob implements ShouldQueue
                 (int) $contexto['umbral_minimo'],
                 (int) $contexto['umbral_maximo'],
                 (string) $contexto['fase_seleccionada'],
-                (int) $trabajo->usuario_id
+                (int) $trabajo->usuario_id,
+                !empty($contexto['area_temporal'])
+                    ? new UploadedFile(Storage::disk('local')->path(dirname($ruta).'/area-temporal.png'), 'area-temporal.png', 'image/png', null, true)
+                    : null
             );
 
             $trabajo->marcarCompletado(['analisis' => $resultado], 'Imagen procesada correctamente.');

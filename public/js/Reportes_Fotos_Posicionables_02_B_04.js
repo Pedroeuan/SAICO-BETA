@@ -841,6 +841,23 @@
     function inicializarPromedioDureza(formulario) {
         var valores = Array.prototype.slice.call(formulario.querySelectorAll('.valor-dureza-medida'));
         var promedio = formulario.querySelector('#promedioDureza');
+        var es0402 = formulario.id === 'FOR-PIMP-04_02';
+        var brinell = es0402 ? formulario.querySelector('[name="Datos_Equipo[DUREZA_BRINELL]"]') : null;
+        var pieza = es0402 ? formulario.querySelector('[name="Detalles_Generales[Nombre_Pieza]"]') : null;
+        var descripcion = es0402 ? formulario.querySelector('[name="Datos_Equipo[DESCRIPCION_MATERIAL]"]') : null;
+        if (pieza && descripcion) {
+            descripcion.readOnly = true;
+            descripcion.title = 'Se obtiene del nombre de la pieza en Datos generales.';
+            var copiarNombre = function () { descripcion.value = pieza.value; };
+            pieza.addEventListener('input', copiarNombre);
+            pieza.addEventListener('change', copiarNombre);
+            copiarNombre();
+            window.setTimeout(copiarNombre, 0);
+        }
+        if (brinell) {
+            brinell.readOnly = true;
+            brinell.title = 'Se obtiene del promedio de las lecturas HB/HBW.';
+        }
 
         if (!valores.length || !promedio || promedio.dataset.promedioInicializado === '1') {
             return;
@@ -863,6 +880,7 @@
             // tambien debe reportarse como "---" para evitar una celda vacia.
             if (todasSonGuiones) {
                 promedio.value = '---';
+                if (brinell) brinell.value = promedio.value;
                 return;
             }
 
@@ -871,6 +889,7 @@
             promedio.value = numeros.length
                 ? String(Math.round(numeros.reduce(function (total, valor) { return total + valor; }, 0) / numeros.length))
                 : '';
+            if (brinell) brinell.value = promedio.value;
         }
 
         promedio.dataset.promedioInicializado = '1';

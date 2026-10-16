@@ -933,7 +933,7 @@
             {{ $Datos_Equipo['DESCRIPCION_MATERIAL'] ?? '' }}
         </td>
         <td>
-            {{ $Datos_Equipo['DUREZA_BRINELL'] ?? '' }}
+            {{ is_numeric(str_replace(',', '.', (string) ($Datos_Equipo['DUREZA_BRINELL'] ?? ''))) ? (string) round((float) str_replace(',', '.', $Datos_Equipo['DUREZA_BRINELL']), 0, PHP_ROUND_HALF_UP) : ($Datos_Equipo['DUREZA_BRINELL'] ?? '') }}
         </td>
         <td>
             {{ $Datos_Equipo['RESISTENCIA_TENSION'] ?? '' }}
@@ -970,10 +970,10 @@
         </th>
         <th class="label">
             <span class="label-es">
-                DUREZA BRINELL, MAX.
+                DUREZA / ESCALA
             </span>
             <span class="label-en">
-                Brinell Hardness, Max.
+                Hardness / Scale
             </span>
         </th>
         <th class="label">
@@ -1002,6 +1002,24 @@
         </th>
     </tr>
 
+    @if(array_key_exists('NORMAS_REFERENCIA_COINCIDENCIAS', $Datos_Equipo))
+        @php
+            $referencias = array_values($Datos_Equipo['NORMAS_REFERENCIA_COINCIDENCIAS'] ?? []);
+            $coloresReferencias = ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
+        @endphp
+        @if(count($referencias))
+        <tr>
+            @foreach(['norma', 'dureza_max', 'tension_min', 'cedencia_min', 'tension_max'] as $campoReferencia)
+            <td>
+                @foreach($referencias as $indiceReferencia => $referencia)
+                    @if(!$loop->first)<span style="color: #111111;"> / </span>@endif
+                    <span style="color: {{ $coloresReferencias[$indiceReferencia % count($coloresReferencias)] }}; font-weight: bold;">{{ $campoReferencia === 'norma' ? preg_replace('/\s*\/\s*/u', ' ', $referencia['norma'] ?? '') : ($referencia[$campoReferencia] ?? '—') }}</span>
+                @endforeach
+            </td>
+            @endforeach
+        </tr>
+        @endif
+    @else
     <tr>
         <td>
             {{ $Datos_Equipo['NORMA_REFERENCIA'] ?? '' }}
@@ -1019,6 +1037,7 @@
             {{ $Datos_Equipo['RESISTENCIA_TENSION_MAX'] ?? '' }}
         </td>
     </tr>
+    @endif
     </tbody>
 </table>
 <div class="spacer"></div>
@@ -1154,12 +1173,28 @@
                                 {{ $filaNorma['Promedio'] ?? '' }}
                             </td>
                             <td>
-                                {{ $filaNorma['Composicion'] ?? '' }}
+                                @if(!empty($filaNorma['Referencias']))
+                                    @foreach($filaNorma['Referencias'] as $referenciaQuimica)
+                                        @if(!$loop->first) / @endif
+                                        <span style="color: {{ ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'][($referenciaQuimica['indice'] ?? 0) % 6] }}; font-weight: bold;">{{ \App\Services\ComposicionNormaIM::abreviarLimites((string) ($referenciaQuimica['valor'] ?? '—')) }}</span>
+                                    @endforeach
+                                @else
+                                    {{ \App\Services\ComposicionNormaIM::abreviarLimites((string) ($filaNorma['Composicion'] ?? '')) }}
+                                @endif
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+                @if(!empty($NormaIM['Notas_Composicion']))
+                    <div style="margin-top: 8px; font-size: 9px; text-align: left;">
+                        @foreach($NormaIM['Notas_Composicion'] as $notaComposicion)
+                            <div style="margin-top: 4px; color: {{ ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'][($notaComposicion['indice'] ?? 0) % 6] }};">
+                                <span style="white-space: pre-line;">* {{ $notaComposicion['texto'] ?? '' }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </td>
             <td class="capturaComposicion">
                 <div class="bloqueCapturaQuimica">

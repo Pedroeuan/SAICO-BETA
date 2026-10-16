@@ -13,10 +13,16 @@ class Normas_IM extends Model
         'Variable',
         'Tabla',
         'Observaciones',
+        'Tablas_Adicionales',
     ];
+
     protected $table = 'Normas_IM';
+
     protected $primaryKey = 'idnormas_im';
+
     public $timestamps = false;
+
+    protected $casts = ['Tablas_Adicionales' => 'array'];
 
     use HasFactory;
 }
