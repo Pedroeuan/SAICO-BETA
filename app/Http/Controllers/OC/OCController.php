@@ -38,7 +38,9 @@ class OCController extends Controller
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
         $catalogo = DB::table('Catalogo_OC')->get();
-        return view('OC.create', compact('Clientes', 'catalogo'));
+        $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
+        $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
+        return view('OC.create', compact('Clientes', 'catalogo', 'Condiciones_Pago', 'Condiciones_Generales'));
     }
 
     /**

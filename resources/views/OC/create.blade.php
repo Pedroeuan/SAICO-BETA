@@ -381,7 +381,16 @@
 
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">CONDICIONES DE PAGO:</label>
+                                    <label class="col-form-label" for="inputSuccess">CONDICIONES DE PAGO:</label>
+                                        <select id="" class="form-select" name="CP">
+                                            <option value="" selected disabled>Seleccione una Condición de Pago</option>
+                                            @foreach($Condiciones_Pago as $CP)
+                                                <option value="{{ $CP->idCondiciones_Pago }}">
+                                                    {{ $CP->Nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                            <br>
                                             <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago" value="Muelle, Ciudad del Carmen">{{old('Condiciones_pago')}}</textarea>
                                             @error('Condiciones_pago')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
@@ -392,6 +401,15 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">CONDICIONES DE GENERALES:</label>
+                                            <select id="" class="form-select" name="CG">
+                                                <option value="" selected disabled>Seleccione una Condición General</option>
+                                                @foreach($Condiciones_Generales as $CG)
+                                                    <option value="{{ $CG->idCondiciones_Generales }}">
+                                                        {{ $CG->Nombre }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <br>
                                             <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales" value="Muelle, Ciudad del Carmen">{{old('Condiciones_generales')}}</textarea>
                                             @error('Condiciones_generales')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
