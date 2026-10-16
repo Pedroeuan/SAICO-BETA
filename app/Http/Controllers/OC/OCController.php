@@ -55,6 +55,8 @@ class OCController extends Controller
             'TieneCliente' => 'required|in:si,no',
             'Numero_OC' => 'required|integer',
             'Requisicion' => 'required|string',
+            'ClienteSelect' => 'required_if:TieneCliente,si',
+            'ClienteInput' => 'required_if:TieneCliente,no',
             //'Proyecto' => 'required|string',
             //'Lugar_trabajo' => 'required|string',
         ]);
@@ -122,7 +124,7 @@ class OCController extends Controller
 
         if (!empty($clienteNombre)) {
             $cliente = clientes::where('Cliente', trim($clienteNombre))->first();
-            Log::info('cliente: ', ['cliente' => $cliente]);
+            //Log::info('cliente: ', ['cliente' => $cliente]);
             if ($cliente) {
                 $OC->idClientes = $cliente->idClientes;
             }else {
@@ -250,6 +252,13 @@ class OCController extends Controller
         } else {
             $OC->OC_archivo = $EsperaDato;
         }
+
+        // Asignar un cliente por defecto si no se capturó ningún cliente
+        if (empty($OC->idClientes)) {
+            $clientePorDefecto = clientes::first();
+            $OC->idClientes = $clientePorDefecto ? $clientePorDefecto->idClientes : 1;
+        }
+
         $OC->save();
 
         /*Notas */
