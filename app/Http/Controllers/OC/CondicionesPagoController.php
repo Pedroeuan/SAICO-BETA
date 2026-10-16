@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\OC;
 
 use App\Models\Condiciones_Pago\Condiciones_Pago;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 class CondicionesPagoController extends Controller
 {
     /**
