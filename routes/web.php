@@ -8,15 +8,16 @@ use App\Http\Controllers\Procesamiento\TrabajoProcesamientoController;
 use App\Http\Controllers\Procesamiento\ProcesamientoXrfController;
 use App\Http\Controllers\Procesamiento\ProcesamientoPdfController;
 
-use App\Http\Controllers\OC\CatalogoOCController;
+
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\TICS\TICSController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Condiciones_Pago\CondicionesPagoController;
+use App\Http\Controllers\OC\CatalogoOCController;
 use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Manifiesto\PDFController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
-use App\Http\Controllers\Clientes\EncuestaSatisfaccionController;
 use App\Http\Controllers\Normas_IM\NormasIMController;
 use App\Http\Controllers\Normas_IM\PatronesGranoIMController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\Notificacion\NotificacionController;
 use App\Http\Controllers\EquiposyConsumibles\equiposController;
 use App\Http\Controllers\EquiposyConsumibles\AlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\ExcelEyCController;
+use App\Http\Controllers\Clientes\EncuestaSatisfaccionController;
 use App\Http\Controllers\EquiposyConsumibles\DevolucionController;
 use App\Http\Controllers\EquiposyConsumibles\AccesoriosController;
 use App\Http\Controllers\EquiposyConsumibles\IndicadoresController;
@@ -35,6 +37,7 @@ use App\Http\Controllers\EquiposyConsumibles\consumiblesController;
 use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use App\Http\Controllers\EquiposyConsumibles\HerramientasController;
 use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
+use App\Http\Controllers\Condiciones_Generales\CondicionesGeneralesController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
@@ -814,8 +817,28 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::post('/OC/updateCatalogo/{id}', [CatalogoOCController::class, 'update'])->name('OC.updateCatalogo');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/Catalogo_OC/eliminar/{id}', [CatalogoOCController::class, 'destroy'])->name('OC.destroyCatalogo');
+
+    /*Ruta de Vista de Condiciones de Pago*/
+    Route::get('/OC/indexPago', [CondicionesPagoController::class, 'index'])->name('OC.indexPago');
+    /*Ruta de Vista de Registro de Condiciones de Pago*/
+    Route::get('/OC/Pago', [CondicionesPagoController::class, 'create'])->name('OC.Pago');
+    /*Ruta de Guardado*/
+    Route::post('/OC/storePago', [CondicionesPagoController::class, 'store'])->name('OC.storePago');
+    /*Ruta de Actualizar Condiciones de Pago*/
+    Route::post('/OC/updatePago/{id}', [CondicionesPagoController::class, 'update'])->name('OC.updatePago');
+    /*Ruta de botón Eliminación-index-Usuarios*/
+    Route::delete('/Condiciones_Pago/eliminar/{id}', [CondicionesPagoController::class, 'destroy'])->name('OC.destroyPago');
+    /*Ruta de Vista de Condiciones Generales*/
+    Route::get('/OC/indexCondiciones', [CondicionesGeneralesController::class, 'index'])->name('OC.indexCondiciones');
+    /*Ruta de Vista de Registro de Condiciones Generales*/
+    Route::get('/OC/Condiciones', [CondicionesGeneralesController::class, 'create'])->name('OC.Condiciones');
+    /*Ruta de Guardado*/
+    Route::post('/OC/storeCondiciones', [CondicionesGeneralesController::class, 'store'])->name('OC.storeCondiciones');
+    /*Ruta de Actualizar Condiciones Generales*/
+    Route::post('/OC/updateCondiciones/{id}', [CondicionesGeneralesController::class, 'update'])->name('OC.updateCondiciones');
+    /*Ruta de botón Eliminación-index-Usuarios*/
+    Route::delete('/Condiciones_Generales/eliminar/{id}', [CondicionesGeneralesController::class, 'destroy'])->name('OC.destroyCondiciones');
     });
-    
     /* VEHÍCULOS (SOLO ADMIN) 
     Route::middleware('can:vehiculos-admin-access')->group(function(){
 
