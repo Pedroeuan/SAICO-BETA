@@ -118,12 +118,15 @@ class ServicioPdfGeneradoTest extends TestCase
         $servicio = app(ServicioPdfGenerado::class);
         $servicio->guardar(901, '06_B_01', 'es', '%PDF-1.4 serie');
         $this->assertNotNull($servicio->rutaVigente(901, '06_B_01'));
+        $servicio->guardar(901, '04_02', 'es', '%PDF-1.4 serie 04_02');
+        $this->assertNotNull($servicio->rutaVigente(901, '04_02'));
 
         Fotos_Reporte::query()->where('idReportes', 902)->update([
             'Fotos_Reportes' => json_encode([['pagina' => 2, 'posicion' => 'arriba_izquierda']]),
         ]);
 
         $this->assertNull($servicio->rutaVigente(901, '06_B_01'));
+        $this->assertNull($servicio->rutaVigente(901, '04_02'));
     }
 
     public function test_no_programa_dos_trabajos_para_la_misma_version(): void

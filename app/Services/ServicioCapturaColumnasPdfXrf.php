@@ -140,6 +140,12 @@ class ServicioCapturaColumnasPdfXrf
             }
 
             $firstFragments = $columnFragments[$columns[0]];
+            $referenceRows = array_merge(...array_column($firstFragments, 'rows'));
+            foreach ($columnFragments as $column => $fragments) {
+                if (array_merge(...array_column($fragments, 'rows')) !== $referenceRows) {
+                    throw new RuntimeException("Las filas del disparo {$column} no corresponden a los mismos elementos. Revisa la continuación de la tabla del PDF.");
+                }
+            }
             // Cada variante del equipo distribuye las columnas con anchos distintos; se usa la cuadrícula detectada.
             $labelsWidth = (int) $firstFragments[0]['bounds']['labels_width'];
             $columnWidth = (int) $firstFragments[0]['bounds']['column_width'];
