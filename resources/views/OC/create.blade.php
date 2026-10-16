@@ -320,6 +320,7 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>Item</th>
                                                 <th>Catalogo</th>
                                                 <th>Descripción</th>
                                                 <th>Imagen</th>

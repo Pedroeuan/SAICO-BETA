@@ -219,6 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
+                <td><input type="text" class="form-control" name="item[]" placeholder="1,2,2 . . . 5.4" value="${rowCount}"></td>
                 <td>
                     <select class="form-control catalogo-select">
                         <option value="">-- Seleccionar --</option>

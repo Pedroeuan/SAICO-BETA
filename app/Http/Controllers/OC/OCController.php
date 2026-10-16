@@ -55,8 +55,6 @@ class OCController extends Controller
             'TieneCliente' => 'required|in:si,no',
             'Numero_OC' => 'required|integer',
             'Requisicion' => 'required|string',
-            'ClienteSelect' => 'required_if:TieneCliente,si',
-            'ClienteInput' => 'required_if:TieneCliente,no',
             //'Proyecto' => 'required|string',
             //'Lugar_trabajo' => 'required|string',
         ]);
