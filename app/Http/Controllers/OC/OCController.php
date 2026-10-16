@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\OC;
 
 use App\Models\detallesOC\detallesOC;
+use App\Models\Firmantes_OC\Firmantes_OC;
 use App\Models\Catalogo_OC\Catalogo_OC;
 use App\Models\OC\OC;
 use App\Models\Clientes\clientes;
@@ -46,6 +47,7 @@ class OCController extends Controller
     public function storeOC(Request $request)
     {
         //
+        $request->all();
         $request->validate([
             'Contrato' => 'required|string',
             'TieneCliente' => 'required|in:si,no',
@@ -313,7 +315,25 @@ class OCController extends Controller
         } else {
             //Log::warning('No se han enviado detalles para guardar');
         }
-            
+
+        // Crear un nuevo registro en la firmantes_OS
+            $firmantes_OC = new Firmantes_OC;
+
+            /* Firmas */
+            $numFirmas = (int) $request->input('numFirmas', 1);
+            $firmasPorCantidad = [
+                1 => $request->input('Firmas_Reportes1', []),
+                2 => $request->input('Firmas_Reportes2', []),
+                3 => $request->input('Firmas_Reportes3', []),
+                4 => $request->input('Firmas_Reportes4', []),
+            ];
+
+            $datosFirmas = $firmasPorCantidad[$numFirmas] ?? [];
+            $datosFirmas['numFirmas'] = $numFirmas;
+            $firmantes_OC->Nombre_Cargo = json_encode($datosFirmas);
+            $firmantes_OC->idOC = $OC->idOC;
+            $firmantes_OC->save();
+
         return redirect()->route('OC.indexOC');
     }
 
