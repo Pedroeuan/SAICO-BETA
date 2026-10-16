@@ -493,22 +493,72 @@ class ReporteController extends Controller
         $Solicitud = Solicitudes::findOrFail($idSolicitud);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $idSolicitud)->get();
 
+        // ==========================
+        // Obtener todos los folios relacionados a la solicitud
+        // ==========================
+        // El folio vive en la tabla Manifiestos (no en Solicitudes)
+        $manifiesto = manifiesto::where('idSolicitud', $idSolicitud)->first();
+        $folioBase = $manifiesto ? $manifiesto->Folio : null;
+
+        $foliosSimilares = collect();
+        $idsSolicitudRelacionados = [];
+        $foliosManifiestos = collect();
+        $detallesSolicitudAgrupados = collect();
+        $idsGeneralEyC = [];
+
+        if ($folioBase) {
+            // Extraer el patrón del folio (ej: "P-001", "AB-001", "PROP-001")
+            preg_match('/^(.+?\d+)([A-Z]?)\/(\d{2})$/', $folioBase, $matches);
+
+            if (count($matches) > 0) {
+                $folioPattern = $matches[1]; // Ej: "P-001", "AB-001", "PROP-001"
+                $anioPattern = substr($folioBase, -2); // Año como "24"
+
+                // Usar expresión regular para buscar folios similares
+                $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
+
+                // Obtener todos los idSolicitud de los folios similares
+                $idsSolicitudRelacionados = $foliosSimilares->pluck('idSolicitud')->toArray();
+
+                // Obtener los Folios asociados a cada idSolicitud desde la tabla manifiesto
+                $foliosManifiestos = manifiesto::whereIn('idSolicitud', $idsSolicitudRelacionados)
+                    ->get(['idSolicitud', 'Folio'])
+                    ->keyBy('idSolicitud'); // Indexar por idSolicitud para fácil acceso
+
+                // Buscar esos idSolicitud en la tabla detalles_solicitud y contar idGeneral_EyC
+                $detallesSolicitudAgrupados = detalles_solicitud::whereIn('idSolicitud', $idsSolicitudRelacionados)
+                    ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(Cantidad) as cantidad'))
+                    ->groupBy('idGeneral_EyC', 'idSolicitud')
+                    ->get();
+
+                // Obtener los idGeneral_EyC de los resultados obtenidos
+                $idsGeneralEyC = $detallesSolicitudAgrupados->pluck('idGeneral_EyC')->toArray();
+            }
+        }
+
         // Buscar el idGeneral_EyC de cada detalle
         $idGeneral_EyCs = [];
         foreach ($DetallesSolicitud as $detalle) {
             $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
         }
 
+        // ==========================
+        // Combinar los ids de la solicitud actual con los de los folios relacionados
+        // Esto permite que Equipos, Herramientas, etc. incluyan todos los folios similares
+        // Ej: "MICO-040A/26" también incluye los ids de "MICO-040/26"
+        // ==========================
+        $todosLosIdGeneral_EyCs = array_values(array_unique(array_merge($idGeneral_EyCs, $idsGeneralEyC)));
+
         //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
         //Herramientas
-        $idsGeneral_EyCs_Herramientas = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','HERRAMIENTAS')->get();
+        $idsGeneral_EyCs_Herramientas = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','HERRAMIENTAS')->get();
         //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
         //Consumibles
-        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
+        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
 
         /*Obtener id de Prueba_Aplica */
         $idPrueba_Aplica = $Reporte->idPrueba_Aplica;
@@ -602,7 +652,7 @@ class ReporteController extends Controller
             $Grupo_Juntas_Re = $juntasIM['bloques'];
         }
 
-        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM','SerieReporte'));
+        return view("Reportes.Principal.editMaster", compact('id','idSolicitud','Nombre_Formato','Prueba','formatoNombrePersonalizado','idPrueba_Aplica','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles', 'idPrueba_Aplica', 'Detalles_Generales', 'Datos_Equipo','Firmas','Fotos_Comentarios','imagenes','numFirmas','Grupo_Juntas_Re','Clientes','Tecnicos','idProcedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM','SerieReporte','folioBase','foliosSimilares','idsSolicitudRelacionados','foliosManifiestos','detallesSolicitudAgrupados','idsGeneralEyC'));
 
     }
 
@@ -757,22 +807,72 @@ class ReporteController extends Controller
         $Solicitud = Solicitudes::findOrFail($idSolicitud);
         $DetallesSolicitud = detalles_solicitud::where('idSolicitud', $idSolicitud)->get();
 
+        // ==========================
+        // Obtener todos los folios relacionados a la solicitud
+        // ==========================
+        // El folio vive en la tabla Manifiestos (no en Solicitudes)
+        $manifiesto = manifiesto::where('idSolicitud', $idSolicitud)->first();
+        $folioBase = $manifiesto ? $manifiesto->Folio : null;
+
+        $foliosSimilares = collect();
+        $idsSolicitudRelacionados = [];
+        $foliosManifiestos = collect();
+        $detallesSolicitudAgrupados = collect();
+        $idsGeneralEyC = [];
+
+        if ($folioBase) {
+            // Extraer el patrón del folio (ej: "P-001", "AB-001", "PROP-001")
+            preg_match('/^(.+?\d+)([A-Z]?)\/(\d{2})$/', $folioBase, $matches);
+
+            if (count($matches) > 0) {
+                $folioPattern = $matches[1]; // Ej: "P-001", "AB-001", "PROP-001"
+                $anioPattern = substr($folioBase, -2); // Año como "24"
+
+                // Usar expresión regular para buscar folios similares
+                $foliosSimilares = manifiesto::where('Folio', 'REGEXP', '^' . $folioPattern . '[A-Z]?\/' . $anioPattern . '$')->get();
+
+                // Obtener todos los idSolicitud de los folios similares
+                $idsSolicitudRelacionados = $foliosSimilares->pluck('idSolicitud')->toArray();
+
+                // Obtener los Folios asociados a cada idSolicitud desde la tabla manifiesto
+                $foliosManifiestos = manifiesto::whereIn('idSolicitud', $idsSolicitudRelacionados)
+                    ->get(['idSolicitud', 'Folio'])
+                    ->keyBy('idSolicitud'); // Indexar por idSolicitud para fácil acceso
+
+                // Buscar esos idSolicitud en la tabla detalles_solicitud y contar idGeneral_EyC
+                $detallesSolicitudAgrupados = detalles_solicitud::whereIn('idSolicitud', $idsSolicitudRelacionados)
+                    ->select('idSolicitud', 'idGeneral_EyC', DB::raw('SUM(Cantidad) as cantidad'))
+                    ->groupBy('idGeneral_EyC', 'idSolicitud')
+                    ->get();
+
+                // Obtener los idGeneral_EyC de los resultados obtenidos
+                $idsGeneralEyC = $detallesSolicitudAgrupados->pluck('idGeneral_EyC')->toArray();
+            }
+        }
+
         // Buscar el idGeneral_EyC de cada detalle
         $idGeneral_EyCs = [];
         foreach ($DetallesSolicitud as $detalle) {
             $idGeneral_EyCs[] = $detalle->idGeneral_EyC;
         }
 
+        // ==========================
+        // Combinar los ids de la solicitud actual con los de los folios relacionados
+        // Esto permite que Equipos, Herramientas, etc. incluyan todos los folios similares
+        // Ej: "MICO-040A/26" también incluye los ids de "MICO-040/26"
+        // ==========================
+        $todosLosIdGeneral_EyCs = array_values(array_unique(array_merge($idGeneral_EyCs, $idsGeneralEyC)));
+
         //Equipos
-        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
+        $idsGeneral_EyCs_Equipos = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','EQUIPOS')->get();
         //Herramientas
-        $idsGeneral_EyCs_Herramientas = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','HERRAMIENTAS')->get();
+        $idsGeneral_EyCs_Herramientas = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','HERRAMIENTAS')->get();
         //Accesorios
-        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
+        $idsGeneral_EyCs_Accesorios = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','ACCESORIOS')->get();
         //Block y Probeta
-        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
+        $idsGeneral_EyCs_BlockyProbeta = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','BLOCK Y PROBETA')->get();
         //Consumibles
-        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $idGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
+        $idsGeneral_EyCs_Consumibles = general_eyc::with('almacen')->whereIn('idGeneral_EyC', $todosLosIdGeneral_EyCs)->where('Tipo','CONSUMIBLES')->get();
 
         // Verificar si el registro ya existe
         $existeRegistro = Prueba_Aplica::where('idPrueba', $idPrueba)
@@ -832,7 +932,7 @@ class ReporteController extends Controller
 
         // Create inicia una serie nueva; Edit recibe el registro real correspondiente.
         $SerieReporte = null;
-        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM','SerieReporte'));
+        return view("Reportes.Principal.Master", compact('Nombre_Formato','idPrueba_Aplica','Prueba','formatoNombrePersonalizado','idSolicitud','Solicitud','DetallesSolicitud','idsGeneral_EyCs_Equipos','idsGeneral_EyCs_Herramientas','idsGeneral_EyCs_Accesorios','idsGeneral_EyCs_BlockyProbeta','idsGeneral_EyCs_Consumibles','Clientes','Tecnicos','Procedimiento','NormasIM','PatronesGranoIM','MaterialesDureza0204','EscalasDureza0204','CatalogosMetalografiaIM','SerieReporte','folioBase','foliosSimilares','idsSolicitudRelacionados','foliosManifiestos','detallesSolicitudAgrupados','idsGeneralEyC'));
     }
 
     public function indexINS2(Request $request)
