@@ -17,6 +17,7 @@ use RuntimeException;
 class ServicioSerieReportes
 {
     public const FORMATO_06_B_01 = 'FOR-PIMP-06_B/01';
+    public const FORMATO_04_02 = 'FOR-PIMP-04/02';
 
     /** Formato de dureza: su tabla de juntas y sus resultados viven en Juntas_Grupo_Re. */
     public const FORMATO_02_B_04 = 'FOR-PIMP-02_B/04';
@@ -30,9 +31,9 @@ class ServicioSerieReportes
     ];
     private const CLAVE = 'SERIE_REPORTES';
 
-    public function iniciar(int $idReporte, int $cantidadPlanificada): Fluent
+    public function iniciar(int $idReporte, int $cantidadPlanificada, string $formato = self::FORMATO_06_B_01): Fluent
     {
-        return DB::transaction(function () use ($idReporte, $cantidadPlanificada): Fluent {
+        return DB::transaction(function () use ($idReporte, $cantidadPlanificada, $formato): Fluent {
             $reporte = $this->buscarReporte($idReporte, true);
             $existente = $this->leerSerie($reporte);
             if ($existente) {
@@ -43,7 +44,7 @@ class ServicioSerieReportes
             $serie = [
                 'serie_uuid' => (string) Str::uuid(),
                 'id_reporte' => $idReporte,
-                'formato' => self::FORMATO_06_B_01,
+                'formato' => $formato,
                 'numero_orden' => 1,
                 'cantidad_planificada' => $cantidad,
                 'total_paginas' => null,
@@ -126,7 +127,7 @@ class ServicioSerieReportes
             $serieNueva = [
                 'serie_uuid' => (string) $origen->serie_uuid,
                 'id_reporte' => $idReporteNuevo,
-                'formato' => self::FORMATO_06_B_01,
+                'formato' => $origen->formato,
                 'numero_orden' => $ordenNuevo,
                 'cantidad_planificada' => (int) $origen->cantidad_planificada,
                 'total_paginas' => null,
