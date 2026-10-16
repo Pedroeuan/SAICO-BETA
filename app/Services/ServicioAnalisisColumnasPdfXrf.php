@@ -156,12 +156,22 @@ class ServicioAnalisisColumnasPdfXrf
             $calculable = count($numericValues) === count($selectedColumns);
             $unicos = array_values(array_unique($rawValues));
             $repetido = !$calculable && count($unicos) === 1 && preg_match('/^\[C<\]\d+(?:[.,]\d+)?$/', $unicos[0]) ? $unicos[0] : null;
+            $sugerido = null;
+            if (!$calculable && $repetido === null) {
+                $partes = [];
+                foreach ($rawValues as $raw) {
+                    if (!preg_match('/^(?:\[C<\])?(\d+(?:[.,]\d+)?)$/', $raw, $m)) break;
+                    $partes[] = (float) str_replace(',', '.', $m[1]);
+                }
+                if (count($partes) === count($selectedColumns)) $sugerido = number_format(array_sum($partes) / count($partes), 4, '.', '');
+            }
             $results[$element] = [
                 'elemento' => $element,
                 'valores' => $rawValues,
                 'calculable' => $calculable,
                 'promedio' => $calculable ? round(array_sum($numericValues) / count($selectedColumns), 4) : null,
                 'valor_repetido' => $repetido,
+                'valor_sugerido' => $sugerido,
                 'motivo' => $calculable ? null : 'Capture el valor manual únicamente para este elemento.',
             ];
         }
@@ -176,6 +186,7 @@ class ServicioAnalisisColumnasPdfXrf
         }
         $manualValue = trim($manualValue);
         if ($manualValue === '' && !empty($result['valor_repetido'])) $manualValue = $result['valor_repetido'];
+        if ($manualValue === '' && isset($result['valor_sugerido'])) $manualValue = $result['valor_sugerido'];
         return ['promedio' => $manualValue, 'origen' => $manualValue === '' ? 'pendiente_manual' : 'manual'];
     }
 

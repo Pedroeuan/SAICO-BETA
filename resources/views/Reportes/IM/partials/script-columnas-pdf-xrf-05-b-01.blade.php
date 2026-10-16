@@ -176,13 +176,68 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     let ultimaNorma0402 = null;
     const promediosReferencias0402 = new Map();
+    const sumasManualesIniciales0402 = @json(old('Norma_IM.Sumas_Manuales', $Detalles_Generales['Norma_IM']['Sumas_Manuales'] ?? []));
+    const sumasManuales0402 = new Set(Object.keys(sumasManualesIniciales0402 || {}).filter(clave => Boolean(sumasManualesIniciales0402[clave])));
+    const valoresPrevios0402 = @json(old('Norma_IM.Valores_Elementos', $Detalles_Generales['Norma_IM']['Valores_Elementos'] ?? []));
+    Object.entries(valoresPrevios0402 || {}).forEach(([elemento, valor]) => promediosReferencias0402.set(elemento.toLowerCase(), { valor: valor ?? '', origen: 'manual' }));
     let resultadosPdf0402 = historical?.Resultados_XRF || {};
     const valorExtraido0402 = elemento => {
         const resultado = Object.values(resultadosPdf0402).find(fila => String(fila.elemento).trim().toLowerCase() === elemento);
         if (resultado?.calculable) return { valor: Number(resultado.promedio).toFixed(4), origen: 'calculado' };
         if (resultado?.valor_repetido) return { valor: resultado.valor_repetido, origen: 'manual' };
+        if (resultado?.valor_sugerido != null) return { valor: resultado.valor_sugerido, origen: 'manual' };
         return null;
     };
+    function actualizarSumas0402() {
+        if (form.id !== 'FOR-PIMP-04_02') return;
+        const valores = new Map();
+        Object.values(resultadosPdf0402).forEach(resultado => {
+            const valor = valorExtraido0402(String(resultado.elemento).trim().toLowerCase());
+            if (valor) valores.set(String(resultado.elemento).trim().toLowerCase(), valor.valor);
+        });
+        promediosReferencias0402.forEach((dato, elemento) => { if (/^[a-z]{1,2}$/i.test(elemento)) valores.set(elemento, dato.valor); });
+        resultsBody.querySelectorAll('input[data-elemento]').forEach(input => {
+            if (/^[a-z]{1,2}$/i.test(input.dataset.elemento.trim())) valores.set(input.dataset.elemento.trim().toLowerCase(), input.value);
+        });
+        resultsBody.querySelectorAll('input[data-elemento]').forEach(input => {
+            const formula = input.dataset.elemento.trim();
+            if (!/^[a-z]{1,2}(?:\s*\+\s*[a-z]{1,2})+$/i.test(formula)) return;
+            if (sumasManuales0402.has(formula)) {
+                setRowState(input, 'manual');
+                input.parentElement.querySelector('.estado-promedio-xrf').textContent = 'Valor ajustado por el técnico';
+                return;
+            }
+            let total = 0, limite = false;
+            const completa = formula.split(/\s*\+\s*/).every(elemento => {
+                const match = String(valores.get(elemento.toLowerCase()) ?? '').trim().replace(',', '.').match(/^(\[C<\])?(\d+(?:\.\d+)?)$/);
+                if (!match || Number(match[2]) > 100) return false;
+                total += Math.round(Number(match[2]) * 10000); limite ||= Boolean(match[1]); return true;
+            });
+            if (completa) {
+                input.value = (limite ? '[C<]' : '') + (total / 10000).toFixed(4);
+                setRowState(input, 'calculado'); input.dataset.sumaElementos = '1';
+                input.readOnly = false;
+                input.parentElement.querySelector('.estado-promedio-xrf').textContent = limite ? 'Suma de límites: valor inferior al indicado' : 'Suma calculada de los elementos';
+            } else {
+                if (input.dataset.sumaElementos === '1' || input.dataset.autoXrf === '1') input.value = '';
+                setRowState(input, 'manual'); delete input.dataset.sumaElementos;
+            }
+        });
+        form.querySelectorAll('[data-valores-elementos-0402]').forEach(campo => campo.remove());
+        valores.forEach((valor, elemento) => {
+            const hidden = document.createElement('input'); hidden.type = 'hidden'; hidden.dataset.valoresElementos0402 = '1'; hidden.name = `Norma_IM[Valores_Elementos][${elemento}]`; hidden.value = valor; form.append(hidden);
+        });
+        const marcaSumas = document.createElement('input'); marcaSumas.type = 'hidden'; marcaSumas.dataset.valoresElementos0402 = '1'; marcaSumas.name = 'Norma_IM[Sumas_Manuales]'; marcaSumas.value = ''; form.append(marcaSumas);
+        sumasManuales0402.forEach(formula => {
+            const hidden = document.createElement('input'); hidden.type = 'hidden'; hidden.dataset.valoresElementos0402 = '1'; hidden.name = `Norma_IM[Sumas_Manuales][${formula}]`; hidden.value = '1'; form.append(hidden);
+        });
+    }
+    resultsBody.addEventListener('input', event => {
+        if (!event.target.matches('input[data-elemento]')) return;
+        if (event.target.dataset.elemento.includes('+')) sumasManuales0402.add(event.target.dataset.elemento.trim());
+        actualizarSumas0402();
+    });
+    form.addEventListener('submit', actualizarSumas0402, true);
     function renderNorm(norm, averages) {
         ultimaNorma0402 = norm;
         if (form.id === 'FOR-PIMP-04_02' && Array.isArray(window.referenciasQuimicas0402)) {
@@ -232,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
             resultsBody.appendChild(tr);
         });
         observations.textContent = norm.Observaciones || '';
+        actualizarSumas0402();
         observationsBox.classList.toggle('d-none', !norm.Observaciones);
         if (form.id === 'FOR-PIMP-04_02') {
             const notas = Array.isArray(window.referenciasQuimicas0402)
@@ -403,6 +459,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (form.id === 'FOR-PIMP-04_02') {
             resultadosPdf0402 = results || {};
             promediosReferencias0402.clear();
+            sumasManuales0402.clear();
         }
         const extracted = Object.values(results || {});
         resultsBody.querySelectorAll('input[data-elemento]').forEach(input => {
@@ -413,11 +470,16 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (result?.valor_repetido) {
                 input.value = result.valor_repetido;
                 setRowState(input, 'manual');
+            } else if (result?.valor_sugerido != null) {
+                input.value = result.valor_sugerido;
+                setRowState(input, 'manual');
+                input.parentElement.querySelector('.estado-promedio-xrf').textContent = 'Promedio sugerido con valores [C<]. Revise o modifique.';
             } else {
                 if (input.dataset.autoXrf === '1') input.value = '';
                 setRowState(input, 'manual');
             }
         });
+        actualizarSumas0402();
     }
     /** Sincroniza visibilidad, disponibilidad y selección con las columnas confirmadas por el servidor. */
     function syncAvailableColumns(availableColumns, selectedColumnsFromPdf) {
@@ -448,8 +510,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const rows = Object.values(payload.resultados || {});
         previewTable.querySelector('thead').innerHTML = '<tr><th>Elemento</th>' + columns.map(c => '<th>Col. ' + c + '</th>').join('') + '<th>Promedio</th></tr>';
         const escaparXrf = valor => { const span = document.createElement('span'); span.textContent = String(valor ?? ''); return span.innerHTML; };
-        previewTable.querySelector('tbody').innerHTML = rows.map(row => '<tr><th>' + escaparXrf(row.elemento) + '</th>' + columns.map(c => '<td>' + escaparXrf(row.valores[c] || '') + '</td>').join('') + '<td>' + (row.calculable ? Number(row.promedio).toFixed(4) : escaparXrf(row.valor_repetido || 'Manual')) + '</td></tr>').join('');
-        const pending = rows.filter(row => !row.calculable && !row.valor_repetido).length;
+        previewTable.querySelector('tbody').innerHTML = rows.map(row => '<tr><th>' + escaparXrf(row.elemento) + '</th>' + columns.map(c => '<td>' + escaparXrf(row.valores[c] || '') + '</td>').join('') + '<td>' + (row.calculable ? Number(row.promedio).toFixed(4) : escaparXrf(row.valor_repetido ?? row.valor_sugerido ?? 'Manual')) + '</td></tr>').join('');
+        const pending = rows.filter(row => !row.calculable && !row.valor_repetido && row.valor_sugerido == null).length;
         warnings.textContent = pending ? pending + ' elemento(s) requieren captura manual individual.' : '';
         warnings.classList.toggle('d-none', !pending);
         capture.innerHTML = '<h5>Disparo único — columnas ' + columns.join(', ') + '</h5><img class="img-fluid img-thumbnail" src="' + payload.captura.data_url + '">';
