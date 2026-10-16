@@ -382,16 +382,16 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                     <label class="col-form-label" for="inputSuccess">CONDICIONES DE PAGO:</label>
-                                        <select id="" class="form-select" name="CP">
-                                            <option value="" selected disabled>Seleccione una Condición de Pago</option>
+                                        <select id="condicion-pago-select" class="form-select" name="CP">
+                                            <option value="" {{ old('CP') ? '' : 'selected' }} disabled>Seleccione una Condición de Pago</option>
                                             @foreach($Condiciones_Pago as $CP)
-                                                <option value="{{ $CP->idCondiciones_Pago }}">
+                                                <option value="{{ $CP->idCondiciones_Pago }}" data-descripcion="{{ $CP->Descripcion }}" {{ old('CP') == $CP->idCondiciones_Pago ? 'selected' : '' }}>
                                                     {{ $CP->Nombre }}
                                                 </option>
                                             @endforeach
                                         </select>
                                             <br>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago" value="Muelle, Ciudad del Carmen">{{old('Condiciones_pago')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="condiciones-pago-textarea" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago">{{old('Condiciones_pago')}}</textarea>
                                             @error('Condiciones_pago')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -401,16 +401,16 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">CONDICIONES DE GENERALES:</label>
-                                            <select id="" class="form-select" name="CG">
-                                                <option value="" selected disabled>Seleccione una Condición General</option>
+                                            <select id="condicion-general-select" class="form-select" name="CG">
+                                                <option value="" {{ old('CG') ? '' : 'selected' }} disabled>Seleccione una Condición General</option>
                                                 @foreach($Condiciones_Generales as $CG)
-                                                    <option value="{{ $CG->idCondiciones_Generales }}">
+                                                    <option value="{{ $CG->idCondiciones_Generales }}" data-descripcion="{{ $CG->Descripcion }}" {{ old('CG') == $CG->idCondiciones_Generales ? 'selected' : '' }}>
                                                         {{ $CG->Nombre }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                             <br>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales" value="Muelle, Ciudad del Carmen">{{old('Condiciones_generales')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="condiciones-generales-textarea" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales">{{old('Condiciones_generales')}}</textarea>
                                             @error('Condiciones_generales')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -664,6 +664,16 @@
 </script>
 <script src="{{ asset('js/OC.js') }}"></script>
 <script>
+    [
+        ['condicion-pago-select', 'condiciones-pago-textarea'],
+        ['condicion-general-select', 'condiciones-generales-textarea']
+    ].forEach(([selectId, textareaId]) => {
+        const select = document.getElementById(selectId);
+        const textarea = document.getElementById(textareaId);
 
+        select.addEventListener('change', () => {
+            textarea.value = select.selectedOptions[0].dataset.descripcion || '';
+        });
+    });
 </script>
 @endsection
