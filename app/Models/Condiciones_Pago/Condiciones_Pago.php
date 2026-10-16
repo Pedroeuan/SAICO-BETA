@@ -18,4 +18,5 @@ class Condiciones_Pago extends Model
     ];
     protected $table = 'Condiciones_Pago';
     protected $primaryKey = 'idCondiciones_Pago';
+    public $timestamps = false;
 }

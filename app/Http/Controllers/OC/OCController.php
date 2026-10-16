@@ -47,7 +47,7 @@ class OCController extends Controller
     public function storeOC(Request $request)
     {
         //
-        $request->all();
+        //$request->all();
         $request->validate([
             'Contrato' => 'required|string',
             'TieneCliente' => 'required|in:si,no',

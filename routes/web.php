@@ -12,7 +12,7 @@ use App\Http\Controllers\Procesamiento\ProcesamientoPdfController;
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\TICS\TICSController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Condiciones_Pago\OC\CondicionesPagoController;
+use App\Http\Controllers\OC\CondicionesPagoController;
 use App\Http\Controllers\OC\CatalogoOCController;
 use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Manifiesto\PDFController;
@@ -37,7 +37,7 @@ use App\Http\Controllers\EquiposyConsumibles\consumiblesController;
 use App\Http\Controllers\EquiposyConsumibles\general_eycController;
 use App\Http\Controllers\EquiposyConsumibles\HerramientasController;
 use App\Http\Controllers\EquiposyConsumibles\BlockYProbetaController;
-use App\Http\Controllers\Condiciones_Generales\CondicionesGeneralesController;
+use App\Http\Controllers\OC\CondicionesGeneralesController;
 use App\Http\Controllers\EquiposyConsumibles\HistorialAlmacenController;
 use App\Http\Controllers\EquiposyConsumibles\solicitudEquiposController;
 use App\Http\Controllers\EquiposyConsumibles\SolicitudRecursosController;
@@ -824,20 +824,25 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::get('/OC/Pago', [CondicionesPagoController::class, 'create'])->name('OC.Pago');
     /*Ruta de Guardado*/
     Route::post('/OC/storePago', [CondicionesPagoController::class, 'store'])->name('OC.storePago');
+    /*Rutas de Vista de Edición-index*/
+    Route::get('/OC/editPago/{id}', [CondicionesPagoController::class, 'edit'])->name('OC.editPago');
     /*Ruta de Actualizar Condiciones de Pago*/
     Route::post('/OC/updatePago/{id}', [CondicionesPagoController::class, 'update'])->name('OC.updatePago');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/Condiciones_Pago/eliminar/{id}', [CondicionesPagoController::class, 'destroy'])->name('OC.destroyPago');
+
     /*Ruta de Vista de Condiciones Generales*/
-    Route::get('/OC/indexCondiciones', [CondicionesGeneralesController::class, 'index'])->name('OC.indexCondiciones');
+    Route::get('/OC/indexGenerales', [CondicionesGeneralesController::class, 'index'])->name('OC.indexGenerales');
     /*Ruta de Vista de Registro de Condiciones Generales*/
-    Route::get('/OC/Condiciones', [CondicionesGeneralesController::class, 'create'])->name('OC.Condiciones');
+    Route::get('/OC/Generales', [CondicionesGeneralesController::class, 'create'])->name('OC.Generales');
     /*Ruta de Guardado*/
-    Route::post('/OC/storeCondiciones', [CondicionesGeneralesController::class, 'store'])->name('OC.storeCondiciones');
+    Route::post('/OC/storeGenerales', [CondicionesGeneralesController::class, 'store'])->name('OC.storeGenerales');
+    /*Rutas de Vista de Edición-index*/
+    Route::get('/OC/editGenerales/{id}', [CondicionesGeneralesController::class, 'edit'])->name('OC.editGenerales');
     /*Ruta de Actualizar Condiciones Generales*/
-    Route::post('/OC/updateCondiciones/{id}', [CondicionesGeneralesController::class, 'update'])->name('OC.updateCondiciones');
+    Route::post('/OC/updateGenerales/{id}', [CondicionesGeneralesController::class, 'update'])->name('OC.updateGenerales');
     /*Ruta de botón Eliminación-index-Usuarios*/
-    Route::delete('/Condiciones_Generales/eliminar/{id}', [CondicionesGeneralesController::class, 'destroy'])->name('OC.destroyCondiciones');
+    Route::delete('/Condiciones_Generales/eliminar/{id}', [CondicionesGeneralesController::class, 'destroy'])->name('OC.destroyGenerales');
     });
     /* VEHÍCULOS (SOLO ADMIN) 
     Route::middleware('can:vehiculos-admin-access')->group(function(){

@@ -18,4 +18,5 @@ class Condiciones_Generales extends Model
     ];
     protected $table = 'Condiciones_Generales';
     protected $primaryKey = 'idCondiciones_Generales';
+    public $timestamps = false;
 }

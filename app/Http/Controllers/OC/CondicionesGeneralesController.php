@@ -18,6 +18,8 @@ class CondicionesGeneralesController extends Controller
     public function index()
     {
         //
+        $Condiciones_Generales = Condiciones_Generales::all();
+        return view('OC.CondicionesGenerales.index',compact('Condiciones_Generales'));
     }
 
     /**
@@ -35,6 +37,17 @@ class CondicionesGeneralesController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'Nombre' => 'required|string',
+            'Descripcion' => 'required|string',
+        ]);
+
+        $Condiciones_Generales = new Condiciones_Generales;
+        $Condiciones_Generales->Nombre = $request->input('Nombre');
+        $Condiciones_Generales->Descripcion = $request->input('Descripcion');
+        $Condiciones_Generales->save();
+
+        return redirect()->route('OC.indexGenerales');
     }
 
     /**
@@ -48,24 +61,51 @@ class CondicionesGeneralesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Condiciones_Generales $condiciones_Generales)
+    public function edit($id)
     {
         //
+        $Condiciones_Generales = Condiciones_Generales::find($id);
+        if (!$Condiciones_Generales) {
+            return redirect()->route('OC.indexGenerales')->with('error', 'Condiciones Generales no encontrado.');
+        }
+        return view('OC.CondicionesGenerales.edit', compact('Condiciones_Generales', 'id'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Condiciones_Generales $condiciones_Generales)
+    public function update(Request $request, $id)
     {
         //
-    }
+        $request->validate([
+            'Nombre' => 'required|string',
+            'Descripcion' => 'required|string',
+        ]);
 
+        $Condiciones_Generales = Condiciones_Generales::find($id);
+        if (!$Condiciones_Generales) {
+            return redirect()->route('OC.indexGenerales')->with('error', 'Condiciones Generales no encontrado.');
+        }
+
+        $Condiciones_Generales->Nombre = $request->input('Nombre');
+        $Condiciones_Generales->Descripcion = $request->input('Descripcion');
+        $Condiciones_Generales->save();
+
+        return redirect()->route('OC.indexGenerales')->with('success', 'Condiciones Generales actualizado correctamente.');
+    }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Condiciones_Generales $condiciones_Generales)
+    public function destroy($id)
     {
         //
+        $Condiciones_Generales = Condiciones_Generales::find($id);
+        if ($Condiciones_Generales) {
+            $Condiciones_Generales->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Condiciones Generales no encontrado.']);
+        }
+        return redirect()->route('OC.indexGenerales')->with('success', 'Condiciones Generales eliminado correctamente.');
     }
 }
