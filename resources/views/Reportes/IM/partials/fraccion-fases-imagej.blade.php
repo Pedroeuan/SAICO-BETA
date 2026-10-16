@@ -6,6 +6,28 @@
     $rutaVisualAnalisis = $rutasAnalisis['imagen_visual'] ?? $rutasAnalisis['original'] ?? '';
 @endphp
 
+@once
+<style>
+    #FOR-PIMP-04_02 [data-imagej-phase]>.bg-light { border:0!important;background:#f5f7fb!important;padding:14px!important;border-radius:10px!important; }
+    #FOR-PIMP-04_02 .fiji-bloque { padding:16px;margin-bottom:14px;background:#fff;border:1px solid #dce4ef;border-radius:9px; }
+    #FOR-PIMP-04_02 .fiji-bloque-titulo { display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;color:#254b73;margin:0 0 14px; }
+    #FOR-PIMP-04_02 .fiji-bloque-titulo>span { display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#e9f1fc;color:#2463a9;font-size:13px; }
+    #FOR-PIMP-04_02 .fiji-bloque .form-control { border-radius:6px; }
+    #FOR-PIMP-04_02 .fiji-bloque input[type=file] { padding:12px;border:1px dashed #b5c9df;border-radius:7px;background:#f8fbff;width:100%; }
+    #FOR-PIMP-04_02 .fiji-bloque input[type=file]::file-selector-button { border:0;border-radius:5px;padding:6px 10px;background:#e0edfd;color:#245b98;margin-right:10px;cursor:pointer; }
+    #FOR-PIMP-04_02 .fiji-bloque label { font-size:13px;color:#374b63; }
+    #FOR-PIMP-04_02 .fiji-acciones { display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #e3eaf2; }
+    #FOR-PIMP-04_02 .fiji-acciones .btn { margin:0!important;border-radius:6px; }
+    #FOR-PIMP-04_02 .fiji-acciones [data-imagej-status] { flex-basis:100%;margin:0!important;font-size:12px; }
+    #FOR-PIMP-04_02 [data-imagej-results] .card { border-radius:9px;box-shadow:none;border:1px solid #dce4ef!important;margin-bottom:0; }
+    #FOR-PIMP-04_02 [data-imagej-results] .col-md-4:nth-child(2) .card { border-top:3px solid #334155!important;background:#f5f7fa; }
+    #FOR-PIMP-04_02 [data-imagej-results] .col-md-4:nth-child(3) .card { border-top:3px solid #7b9dc5!important; }
+    #FOR-PIMP-04_02 [data-imagej-results] .col-md-4:nth-child(4) .card { border-top:3px solid #238365!important;background:#f0faf6; }
+    #FOR-PIMP-04_02 .fiji-seleccion-pdf { border-left:4px solid #3679c5!important;border-radius:8px!important; }
+    @media(max-width:575px) { #FOR-PIMP-04_02 .fiji-acciones .btn{width:100%} }
+</style>
+@endonce
+
 {{--
     Componente reutilizable de fracción de fases.
     data-process-url ejecuta Measure; data-histogram-url prepara la previsualización exacta de 8 bits.
@@ -30,17 +52,18 @@
         {{-- Permite que JavaScript restaure en Edit la selección sin solicitar otro procesamiento. --}}
         <script type="application/json" data-imagej-existing>@json($analisisImagenActual)</script>
 
-        <div class="form-group">
-            <div class="alert alert-warning alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h5><i class="icon fas fa-info"></i> Importante</h5>
-                <p>Formatos permitidos: JPG, PNG y TIFF. Tamaño máximo: 25 MB. La imagen original se conservará.</p>
-            </div>
+        <section class="fiji-bloque">
+            <h5 class="fiji-bloque-titulo"><span>1</span><i class="fas fa-image" aria-hidden="true"></i> Imagen de la muestra</h5>
+            <p class="small text-muted mb-3">JPG, PNG o TIFF · Máximo 25 MB · Se conserva la imagen original.</p>
+        <div class="form-group mb-0">
             <label><strong>Micrografía o imagen de la muestra</strong></label>
             <input type="file" class="form-control-file" data-imagej-file
                 accept="image/jpeg,image/png,image/tiff,.jpg,.jpeg,.png,.tif,.tiff">
         </div>
+        </section>
 
+        <section class="fiji-bloque">
+        <h5 class="fiji-bloque-titulo"><span>2</span><i class="fas fa-sliders-h" aria-hidden="true"></i> Ajustar y analizar</h5>
         <div class="row">
             <div class="col-md-6">
                 <label><strong>Umbral mínimo (0–255)</strong></label>
@@ -93,7 +116,7 @@
             <canvas data-imagej-preview style="max-width:100%;height:auto;cursor:crosshair"></canvas>
         </div>
 
-        <div class="mt-3">
+        <div class="mt-3 fiji-acciones">
             <button type="button" class="btn btn-success" data-imagej-process disabled>
                 Aplicar y medir con Fiji
             </button>
@@ -102,26 +125,11 @@
             </button>
             <span class="ml-2 text-muted" data-imagej-status></span>
         </div>
-
-        {{-- Selección explícita del resultado que alimentará los espacios 1 y 2 del anexo fotográfico. --}}
-        <div class="border rounded bg-white p-3 mt-3">
-            <button type="button"
-                class="btn {{ !empty($analisisImagenActual['usar_en_reporte']) ? 'btn-primary' : 'btn-outline-primary' }}"
-                data-imagej-use-report-button
-                @disabled(empty($analisisImagenActual))>
-                {{ !empty($analisisImagenActual['usar_en_reporte']) ? 'Análisis seleccionado para el reporte' : 'Usar este análisis en el reporte' }}
-            </button>
-            <small class="d-block mt-2 text-muted" data-imagej-use-report-status>
-                @if(!empty($analisisImagenActual['usar_en_reporte']))
-                    La imagen original y todos los resultados se colocarán automáticamente en el PDF.
-                @else
-                    Primero aplique y mida con Fiji; después seleccione el análisis definitivo.
-                @endif
-            </small>
-        </div>
+        </section>
 
         {{-- Resultados definitivos devueltos por Area Fraction/Measure y evidencias persistidas. --}}
         <div class="row mt-3 {{ empty($analisisImagenActual) ? 'd-none' : '' }}" data-imagej-results>
+            <div class="col-12"><h5 class="fiji-bloque-titulo"><i class="fas fa-chart-pie" aria-hidden="true"></i> Resultados del análisis</h5></div>
             <div class="col-md-4 mb-2">
                 <div class="card h-100 border-dark">
                     <div class="card-body text-center py-3">
@@ -158,5 +166,24 @@
                     src="{{ !empty($rutasAnalisis['imagen_binaria']) ? asset($rutasAnalisis['imagen_binaria']) : '' }}" alt="Resultado binario del análisis">
             </div>
         </div>
+        {{-- Selección explícita del resultado que alimentará los espacios 1 y 2 del anexo fotográfico. --}}
+        <div class="border rounded bg-white p-3 mt-3 fiji-seleccion-pdf">
+            <h5 class="fiji-bloque-titulo"><i class="fas fa-file-pdf" aria-hidden="true"></i> Incluir en el PDF</h5>
+            <button type="button"
+                class="btn {{ !empty($analisisImagenActual['usar_en_reporte']) ? 'btn-primary' : 'btn-outline-primary' }}"
+                data-imagej-use-report-button
+                @disabled(empty($analisisImagenActual))>
+                {{ !empty($analisisImagenActual['usar_en_reporte']) ? 'Análisis seleccionado para el reporte' : 'Usar este análisis en el reporte' }}
+            </button>
+            <small class="d-block mt-2 text-muted" data-imagej-use-report-status>
+                @if(!empty($analisisImagenActual['usar_en_reporte']))
+                    La imagen original y todos los resultados se colocarán automáticamente en el PDF.
+                @else
+                    Primero aplique y mida con Fiji; después seleccione el análisis definitivo.
+                @endif
+            </small>
+        </div>
+
+
     </div>
 </div>

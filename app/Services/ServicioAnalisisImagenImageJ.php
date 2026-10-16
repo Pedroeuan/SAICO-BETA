@@ -99,7 +99,8 @@ IJM);
         int $umbralMinimo,
         int $umbralMaximo,
         string $faseSeleccionada,
-        int $usuarioId
+        int $usuarioId,
+        ?UploadedFile $areaAnalisis = null
     ): array {
         if ($umbralMinimo > $umbralMaximo) {
             throw new RuntimeException('El umbral mínimo no puede ser mayor que el máximo.');
@@ -126,6 +127,11 @@ IJM);
         try {
             // Primero se preparan el original y el macro que reproducirá el flujo manual del técnico.
             $imagen->move($directorioTrabajo, basename($rutaOriginal));
+            $rutaArea = null;
+            if ($areaAnalisis) {
+                $rutaArea = $directorioTrabajo.'/area-temporal.png';
+                $areaAnalisis->move($directorioTrabajo, basename($rutaArea));
+            }
             File::put($rutaMacro, $this->crearMacro(
                 $rutaOriginal,
                 $rutaVisual,
@@ -133,7 +139,8 @@ IJM);
                 $rutaBinaria,
                 $rutaResultado,
                 $umbralMinimo,
-                $umbralMaximo
+                $umbralMaximo,
+                $rutaArea
             ));
 
             // ImageJ se ejecuta en modo batch/headless; no aparece ninguna ventana en el escritorio.
@@ -286,13 +293,16 @@ IJM);
         string $binaria,
         string $resultado,
         int $minimo,
-        int $maximo
+        int $maximo,
+        ?string $area = null
     ): string {
         $original = $this->rutaMacro($original);
         $visual = $this->rutaMacro($visual);
         $grises = $this->rutaMacro($grises);
         $binaria = $this->rutaMacro($binaria);
         $resultado = $this->rutaMacro($resultado);
+        $abrirArea = $area ? 'close(); open("'.$this->rutaMacro($area).'"); run("8-bit");' : '';
+        $restaurarCompleta = $area ? 'close(); open("'.$grises.'"); setThreshold('.$minimo.', '.$maximo.'); setOption("BlackBackground", true); run("Convert to Mask");' : '';
 
         return <<<IJM
 // Reproduce el procedimiento documentado por el técnico sin mostrar ventanas.
@@ -303,6 +313,7 @@ saveAs("PNG", "{$visual}");
 // Image > Type > 8-bit.
 run("8-bit");
 saveAs("PNG", "{$grises}");
+{$abrirArea}
 getDimensions(ancho, alto, canales, cortes, cuadros);
 // Image > Adjust > Threshold y Apply.
 setThreshold({$minimo}, {$maximo});
@@ -312,6 +323,7 @@ run("Convert to Mask");
 run("Set Measurements...", "area area_fraction redirect=None decimal=3");
 run("Measure");
 porcentaje = getResult("%Area", nResults - 1);
+{$restaurarCompleta}
 // Convención de evidencia: fase oscura negra y fase clara blanca.
 run("Invert");
 saveAs("PNG", "{$binaria}");

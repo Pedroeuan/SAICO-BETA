@@ -31,6 +31,13 @@ class ServicioAnalisisColumnasPdfXrf
             $columns = array_values(array_unique(array_merge($columns, $segment['columnas'])));
             foreach ($segment['filas'] as $row) {
                 $element = $row['elemento'];
+                foreach ($row['valores'] as $column => $value) {
+                    $previous = $rows[$element]['valores'][$column] ?? '';
+                    if ($previous !== '' && $value !== '' && $previous !== $value) {
+                        throw new \RuntimeException("El elemento {$element}, disparo {$column}, aparece con valores distintos. Revisa las tablas del PDF.");
+                    }
+                    if ($value === '' && $previous !== '') $row['valores'][$column] = $previous;
+                }
                 $rows[$element] = [
                     'elemento' => $element,
                     'unidad' => '%',
@@ -69,7 +76,7 @@ class ServicioAnalisisColumnasPdfXrf
         };
 
         foreach ($lines as $line) {
-            $headerMatch = preg_match('/^((?:\d+\s+){1,19}\d+)(?:\s+(?:WarnMin|<X>)(?:\s+.*)?)?$/iu', $line, $match)
+            $headerMatch = preg_match('/^((?:\d+\s+){0,19}\d+)(?:\s+(?:WarnMin|<X>)(?:\s+.*)?)?$/iu', $line, $match)
                 || preg_match('/^(\d+)\s+WarnMin(?:\s+.*)?$/iu', $line, $match);
             if ($headerMatch) {
                 preg_match_all('/\d+/', $match[1], $numbers);
@@ -93,14 +100,15 @@ class ServicioAnalisisColumnasPdfXrf
             }
             if ($current === null) continue;
             // SD/RSD pertenece a la tabla estadística y no debe mezclarse con la continuación de los disparos.
-            if (preg_match('/^(?:<X>\s+WarnMax|(?:SD\s+)?RSD(?:\s|$))/iu', $line)) {
+            if (preg_match('/^(?:WarnMin|WarnMax|<X>|SD|RSD)(?:\s|$)/iu', $line)) {
                 $finishCurrent();
                 continue;
             }
             if (!preg_match('/^([A-Z][a-z]?)\s+%\s+Conc\s+(.+)$/u', $line, $match)) continue;
 
             $tokens = preg_split('/\s+/u', trim($match[2])) ?: [];
-            if (count($tokens) < count($current['columnas'])) continue;
+            // Conservar la fila incompleta: los disparos faltantes quedan pendientes,
+            // sin descartar también los valores que sí se pudieron leer.
             $values = [];
             foreach ($current['columnas'] as $position => $column) {
                 $values[$column] = (string) ($tokens[$position] ?? '');
@@ -146,11 +154,24 @@ class ServicioAnalisisColumnasPdfXrf
                 if ($numeric !== null) $numericValues[] = $numeric;
             }
             $calculable = count($numericValues) === count($selectedColumns);
+            $unicos = array_values(array_unique($rawValues));
+            $repetido = !$calculable && count($unicos) === 1 && preg_match('/^\[C<\]\d+(?:[.,]\d+)?$/', $unicos[0]) ? $unicos[0] : null;
+            $sugerido = null;
+            if (!$calculable && $repetido === null) {
+                $partes = [];
+                foreach ($rawValues as $raw) {
+                    if (!preg_match('/^(?:\[C<\])?(\d+(?:[.,]\d+)?)$/', $raw, $m)) break;
+                    $partes[] = (float) str_replace(',', '.', $m[1]);
+                }
+                if (count($partes) === count($selectedColumns)) $sugerido = number_format(array_sum($partes) / count($partes), 4, '.', '');
+            }
             $results[$element] = [
                 'elemento' => $element,
                 'valores' => $rawValues,
                 'calculable' => $calculable,
                 'promedio' => $calculable ? round(array_sum($numericValues) / count($selectedColumns), 4) : null,
+                'valor_repetido' => $repetido,
+                'valor_sugerido' => $sugerido,
                 'motivo' => $calculable ? null : 'Capture el valor manual únicamente para este elemento.',
             ];
         }
@@ -164,6 +185,8 @@ class ServicioAnalisisColumnasPdfXrf
             return ['promedio' => number_format((float) $result['promedio'], 4, '.', ''), 'origen' => 'calculado'];
         }
         $manualValue = trim($manualValue);
+        if ($manualValue === '' && !empty($result['valor_repetido'])) $manualValue = $result['valor_repetido'];
+        if ($manualValue === '' && isset($result['valor_sugerido'])) $manualValue = $result['valor_sugerido'];
         return ['promedio' => $manualValue, 'origen' => $manualValue === '' ? 'pendiente_manual' : 'manual'];
     }
 
