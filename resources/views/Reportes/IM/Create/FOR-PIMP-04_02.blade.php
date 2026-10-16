@@ -87,6 +87,7 @@
 @endsection
 
 @section('content')
+@include('Reportes.IM.partials.errores-guardado-0402')
 <br>
 <br>
 <br>
@@ -112,6 +113,7 @@
                     </div>
                 @endif
                 <div class="row">
+                    @include('Reportes.IM.partials.serie-reportes-0402')
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
@@ -539,7 +541,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 24%;">NORMA DE REFERENCIA</th>
-                                        <th>DUREZA BRINELL, MAX</th>
+                                        <th>DUREZA / ESCALA</th>
                                         <th style="width: 19%;">RESISTENCIA A LA TENSIÓN MÍNIMA ESPECIFICADA (KSI)</th>
                                         <th style="width: 28%;">RESISTENCIA A LA CEDENCIA ESPECIFICADA (KSI)</th>
                                         <th style="width: 20%;">RESISTENCIA A LA TENSIÓN MÁXIMA ESPECIFICADA (KSI)</th>
@@ -573,29 +575,7 @@
                             NORMA Y RESULTADOS DEL ANÁLISIS QUÍMICO
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="normaIMNombre">Norma/Especificación:</label>
-                            <select class="form-control" id="normaIMNombre">
-                                <option value="">Seleccione una norma</option>
-                                @foreach($nombresNormasIM as $nombreNorma)
-                                    <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="normaIMRegistro">Tabla/Variable/Subtítulo:</label>
-                            <select class="form-control @error('Norma_IM.idnormas_im') is-invalid @enderror"
-                                id="normaIMRegistro" name="Norma_IM[idnormas_im]" disabled>
-                                <option value="">Primero seleccione una norma</option>
-                            </select>
-                            @error('Norma_IM.idnormas_im')
-                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
+                    <input type="hidden" id="normaIMRegistro" name="Norma_IM[idnormas_im]" value="{{ old('Norma_IM.idnormas_im', $Detalles_Generales['Norma_IM']['idnormas_im'] ?? '') }}">
                     <div class="col-12">
                         <div class="alert alert-warning alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -1040,6 +1020,7 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/fotos-sin-imagen-0402.js') }}?v={{ filemtime(public_path('js/fotos-sin-imagen-0402.js')) }}"></script>
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 <script>
     // Agrupa el formato en 4 partes grandes para que el usuario no vea toda la captura de golpe.
@@ -1237,6 +1218,7 @@ $(document).ready(function() {
 @php($xrfRequirePreviewBeforeSubmit = false)
 @php($xrfDetectColumnsOnFileChange = true)
 @include('Reportes.IM.partials.script-columnas-pdf-xrf-05-b-01')
+@include('Reportes.IM.partials.referencias-mecanicas-0402')
 {{-- Scripts propios de las herramientas de análisis de imagen; filemtime invalida la caché del navegador. --}}
 <script src="{{ asset('js/analisis-fraccion-fases-imagej.js') }}?v={{ filemtime(public_path('js/analisis-fraccion-fases-imagej.js')) }}"></script>
 <script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>

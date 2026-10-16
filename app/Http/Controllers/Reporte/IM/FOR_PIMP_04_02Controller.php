@@ -677,7 +677,9 @@ class FOR_PIMP_04_02Controller extends Controller
     /** Construye la copia histórica de norma, composición, promedios y PDF que conserva el reporte. */
     private function construirNormaIM(Request $request, ?array $normaHistorica = null): ?array
     {
+        $referenciasQuimicas = $request->attributes->get('referencias_quimicas_0402', []);
         $idNorma = (int) $request->input('Norma_IM.idnormas_im', 0);
+        if ($referenciasQuimicas) $idNorma = (int) $referenciasQuimicas[0]['idnormas_im'];
         if ($idNorma <= 0) {
             return null;
         }
@@ -687,7 +689,10 @@ class FOR_PIMP_04_02Controller extends Controller
             $nombreEspecificacion = $norma->Nombre_Espe;
             $variable = $norma->Variable;
             $observaciones = $norma->Observaciones;
-            $filasCatalogo = json_decode($norma->Tabla, true);
+            $seleccion = \App\Services\SeleccionComposicionIM::resolver($norma, $request, $normaHistorica);
+            $variable = $seleccion['Variable'];
+            $observaciones = $seleccion['Observaciones'];
+            $filasCatalogo = $seleccion['Tabla'];
         } elseif (is_array($normaHistorica)
             && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma) {
             $nombreEspecificacion = $normaHistorica['Nombre_Espe'] ?? '';
@@ -700,6 +705,9 @@ class FOR_PIMP_04_02Controller extends Controller
             ]);
         }
 
+        if ($request->attributes->has('referencias_quimicas_0402')) {
+            $filasCatalogo = \App\Services\ComposicionesReferencias0402::filas($referenciasQuimicas);
+        }
         $filasCatalogo = is_array($filasCatalogo) ? $filasCatalogo : [];
         $promedios = $request->input('Norma_IM.Promedio', []);
         $mismaNormaHistorica = is_array($normaHistorica)
@@ -708,7 +716,7 @@ class FOR_PIMP_04_02Controller extends Controller
             ? $normaHistorica['Analisis_PDF'] : [];
         $columnasSeleccionadas = $mismaNormaHistorica ? ($normaHistorica['Columnas_Seleccionadas'] ?? []) : [];
         $capturaXrf = $mismaNormaHistorica ? ($normaHistorica['Captura_XRF'] ?? []) : [];
-        $resultadosExtraidos = [];
+        $resultadosExtraidos = is_array($normaHistorica['Resultados_XRF'] ?? null) ? $normaHistorica['Resultados_XRF'] : [];
         $nuevoPdf = $request->hasFile('Analisis_PDF');
         $serviceColumnas = app(ServicioAnalisisColumnasPdfXrf::class);
 
@@ -756,6 +764,10 @@ class FOR_PIMP_04_02Controller extends Controller
                 $resuelto = $serviceColumnas->resolveAverage($resultado, (string) ($promedios[$indice] ?? ''));
                 $promedio = $resuelto['promedio'];
                 $origen = $resuelto['origen'];
+            } elseif ($resultado !== null) {
+                $resuelto = $serviceColumnas->resolveAverage($resultado, (string) ($promedios[$indice] ?? $historica['Promedio'] ?? ''));
+                $promedio = $resuelto['promedio'];
+                $origen = $resuelto['origen'];
             } elseif (($historica['Origen'] ?? '') === 'calculado') {
                 $promedio = (string) ($historica['Promedio'] ?? '');
                 $origen = 'calculado';
@@ -767,6 +779,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 'Elemento' => $elemento,
                 'Promedio' => $promedio,
                 'Composicion' => (string) ($filaCatalogo['Composicion'] ?? ''),
+                'Referencias' => $filaCatalogo['Referencias'] ?? [],
                 'Origen' => $origen,
                 'Valores_Seleccionados' => $resultado['valores'] ?? ($historica['Valores_Seleccionados'] ?? []),
             ];
@@ -774,10 +787,14 @@ class FOR_PIMP_04_02Controller extends Controller
 
         return [
             'idnormas_im' => $idNorma,
+            'configuracion' => $request->input('Norma_IM.configuracion') !== null && $request->input('Norma_IM.configuracion') !== '' ? (int) $request->input('Norma_IM.configuracion') : null,
             'Nombre_Espe' => $nombreEspecificacion,
             'Variable' => $variable,
             'Observaciones' => $observaciones,
+            'Notas_Composicion' => $request->attributes->has('referencias_quimicas_0402')
+                ? \App\Services\ComposicionesReferencias0402::notas($referenciasQuimicas) : ($normaHistorica['Notas_Composicion'] ?? []),
             'Tabla' => $filas,
+            'Resultados_XRF' => $resultadosExtraidos,
             'Analisis_PDF' => $analisisPdf,
             'Columnas_Seleccionadas' => array_values(array_map('intval', $columnasSeleccionadas)),
             'Captura_XRF' => is_array($capturaXrf) ? $capturaXrf : [],
@@ -833,12 +850,59 @@ class FOR_PIMP_04_02Controller extends Controller
         $datosEquipo['VALORES_DUREZA'] = $valoresGuardados;
         $datosEquipo['PROMEDIO_DUREZA'] = empty($valoresNumericos)
             ? ($todosSonGuiones ? '---' : '')
-            : number_format(
-                round(array_sum($valoresNumericos) / count($valoresNumericos), 2, PHP_ROUND_HALF_UP),
-                2,
-                '.',
-                ''
-            );
+            : (string) round(array_sum($valoresNumericos) / count($valoresNumericos), 0, PHP_ROUND_HALF_UP);
+        $escala = strtoupper(trim((string) $request->input('Datos_Equipo.ESCALA_DUREZA', 'HBW')));
+        $escala = $escala === '' ? 'HBW' : $escala;
+        if ($valoresNumericos && !in_array($escala, ['HB', 'HBW'], true)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'Datos_Equipo.ESCALA_DUREZA' => 'En el formato 04_02 las lecturas deben estar en HB o HBW. No se convierten automáticamente otras escalas.',
+            ]);
+        }
+        $datosEquipo['ESCALA_DUREZA'] = $escala;
+        $datosEquipo['DUREZA_BRINELL'] = $datosEquipo['PROMEDIO_DUREZA'];
+        $datosEquipo['DESCRIPCION_MATERIAL'] = trim((string) $request->input('Detalles_Generales.Nombre_Pieza', ''));
+    }
+
+    public function coincidenciasMecanicas(Request $request)
+    {
+        return response()->json(['coincidencias' => app(\App\Services\CoincidenciasMecanicas0402::class)->catalogo(Normas_IM::all())]);
+    }
+
+    private function guardarReferenciasMecanicas(Request $request, array &$equipo): void
+    {
+        $request->validate(['Modo_Referencias_0402' => 'nullable|in:automatico,manual']);
+        $equipo['MODO_REFERENCIAS_0402'] = $request->input('Modo_Referencias_0402', 'automatico');
+        if ($equipo['MODO_REFERENCIAS_0402'] === 'manual') {
+            $request->validate(['Referencias_Manuales_0402' => 'required|string|max:100000']);
+            $equipo['NORMAS_REFERENCIA_COINCIDENCIAS'] = app(\App\Services\ReferenciasManuales0402::class)->validar($request->input('Referencias_Manuales_0402'));
+            foreach (['NORMA_REFERENCIA', 'DUREZA_BRINELL_MAX', 'RESISTENCIA_TENSION_MIN', 'RESISTENCIA_CEDENCIA_ESPECIFICADA', 'RESISTENCIA_TENSION_MAX'] as $campo) $equipo[$campo] = '';
+            return;
+        }
+        $request->validate([
+            'Referencias_Seleccionadas_0402' => 'nullable|string|max:10000',
+            'Escalas_Referencias_0402' => 'nullable|array|max:100',
+            'Escalas_Referencias_0402.*' => 'nullable|in:HB,HBW,HRC,HRB,HV',
+            'Composiciones_Referencias_0402' => 'nullable|array|max:100',
+            'Composiciones_Referencias_0402.*' => 'nullable|string|max:30',
+        ]);
+        $equipo['NORMAS_REFERENCIA_COINCIDENCIAS'] = \App\Services\SeleccionReferencias0402::filtrar(
+            app(\App\Services\CoincidenciasMecanicas0402::class)->catalogo(Normas_IM::all()),
+            $request->input('Referencias_Seleccionadas_0402', '[]') ?? '[]'
+        );
+        foreach ($equipo['NORMAS_REFERENCIA_COINCIDENCIAS'] as &$referencia) {
+            $clave = $referencia['idnormas_im'].':'.$referencia['fila'];
+            $escala = $request->input('Escalas_Referencias_0402', [])[$clave] ?? '';
+            $referencia['escala_dureza'] = $escala;
+            if ($escala && ($referencia['dureza_max'] ?? '') !== '') {
+                $referencia['dureza_max'] = trim(preg_replace('/\b(?:HBW|HB|HRC|HRB|HV)\b/i', '', (string) $referencia['dureza_max'])).' '.$escala;
+            }
+        }
+        unset($referencia);
+        $equipo['NORMAS_REFERENCIA_COINCIDENCIAS'] = \App\Services\ComposicionesReferencias0402::seleccionar(
+            $equipo['NORMAS_REFERENCIA_COINCIDENCIAS'], $request->input('Composiciones_Referencias_0402', [])
+        );
+        $request->attributes->set('referencias_quimicas_0402', $equipo['NORMAS_REFERENCIA_COINCIDENCIAS']);
+        foreach (['NORMA_REFERENCIA', 'DUREZA_BRINELL_MAX', 'RESISTENCIA_TENSION_MIN', 'RESISTENCIA_CEDENCIA_ESPECIFICADA', 'RESISTENCIA_TENSION_MAX'] as $campo) $equipo[$campo] = '';
     }
 
     public function Datos_QR($datosParaCrearQR)
@@ -1264,6 +1328,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
     public function FOR_PIMP_04_02_store(Request $request, ServicioAnalisisImagenImageJ $servicioImagen)
     {
+        $request->validate(['Serie_Reportes.cantidad_planificada' => 'required|integer|min:1|max:999']);
         // Restaura el PDF de columnas procesado en cola cuando el FileList se perdio.
         app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)->restaurarXrf($request);
         $Estatus = "CREADO";
@@ -1504,6 +1569,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         // El servidor recalcula dureza y congela la norma/XRF dentro del JSON del reporte.
         $this->guardarPromedioDureza($request, $validatedData['Datos_Equipo']);
+        $this->guardarReferenciasMecanicas($request, $validatedData['Datos_Equipo']);
 
         $normaIM = $this->construirNormaIM($request);
         if ($normaIM !== null) {
@@ -1565,6 +1631,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         // Guardar el registro en la base de datos   
         $Reportes->save();
+        app(\App\Services\ServicioSerieReportes::class)->iniciar((int) $Reportes->idReportes, (int) $request->input('Serie_Reportes.cantidad_planificada'), \App\Services\ServicioSerieReportes::FORMATO_04_02);
 
         /*
         |--------------------------------------------------------------------------
@@ -1746,6 +1813,7 @@ class FOR_PIMP_04_02Controller extends Controller
             $imagenesGuardadas[] = [
                 'ruta' => $rutaPublicaFoto,
                 'comentario' => $comentariosFoto[$index] ?? null,
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index"),
                 'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                 'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                 'pagina' => $distribucionFoto['pagina'],
@@ -2017,6 +2085,17 @@ class FOR_PIMP_04_02Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
+        $request->validate(['Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999', 'Serie_Reportes.nueva_cantidad' => 'nullable|integer|min:1|max:999']);
+        $series = app(\App\Services\ServicioSerieReportes::class);
+        $serie = $series->obtener((int) $id);
+        if (!$serie) {
+            $series->iniciar((int) $id, (int) $request->input('Serie_Reportes.cantidad_planificada', 1), \App\Services\ServicioSerieReportes::FORMATO_04_02);
+        } elseif ($request->filled('Serie_Reportes.nueva_cantidad')) {
+            $cantidad = (int) $request->input('Serie_Reportes.nueva_cantidad');
+            if ($cantidad <= $serie->cantidad_planificada) throw \Illuminate\Validation\ValidationException::withMessages(['Serie_Reportes.nueva_cantidad' => 'El nuevo total debe ser mayor que el actual.']);
+            $series->actualizarCantidad((int) $id, $cantidad);
+        }
+        $Reporte->refresh();
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
         // La técnica guardada vive en Juntas_Grupo_Re; Detalles_Generales solo sirve de respaldo
@@ -2074,6 +2153,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         // Recalcula valores derivados y actualiza la copia histórica seleccionada por el usuario.
         $this->guardarPromedioDureza($request, $validatedData['Datos_Equipo']);
+        $this->guardarReferenciasMecanicas($request, $validatedData['Datos_Equipo']);
 
         $normaIM = $this->construirNormaIM($request, $normaHistorica) ?? $normaHistorica;
         if ($normaIM !== null) {
@@ -2457,6 +2537,7 @@ class FOR_PIMP_04_02Controller extends Controller
         };
         // Construye el registro completo tanto para una imagen como para un cuadro de texto sin archivo.
         $crearRegistroFoto = function ($index, $ruta) use (
+            $request,
             $comments,
             $esDisparo,
             $numeroDisparo,
@@ -2471,6 +2552,7 @@ class FOR_PIMP_04_02Controller extends Controller
             return [
                 'ruta' => $ruta ?: null,
                 'comentario' => $comments[$index] ?? '',
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index"),
                 'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                 'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                 'pagina' => $distribucionFoto['pagina'],
@@ -2545,6 +2627,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index"),
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2573,6 +2656,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index"),
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2592,6 +2676,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $ruta,
                     'comentario' => $comments[$index] ?? '',
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index"),
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2632,6 +2717,7 @@ class FOR_PIMP_04_02Controller extends Controller
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
                     'comentario' => $comments[$index] ?? '',
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index"),
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2841,17 +2927,23 @@ class FOR_PIMP_04_02Controller extends Controller
         // Ahora si­ combinamos
         $combinedPdf = new Fpdi();
         $totalPageCount = $pageCount1 + $pageCount2;
+        $paginacionSerie = app(\App\Services\ServicioSerieReportes::class)->registrarPaginas((int) $id, $totalPageCount);
+        $paginaInicialSerie = $paginacionSerie['pagina_inicial'];
+        $totalSerie = $paginacionSerie['total_estimado'];
 
         // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
         for ($i = 1; $i <= $pageCount1; $i++) {
             $tplId = $combinedPdf->importPage($i);
-            $combinedPdf->AddPage('P');
-            $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-            $combinedPdf->SetFont('Arial', 'B', 8);
+            $tamanoPagina = $combinedPdf->getTemplateSize($tplId);
+            $orientacion = $tamanoPagina['width'] > $tamanoPagina['height'] ? 'L' : 'P';
+            $combinedPdf->AddPage($orientacion, [$tamanoPagina['width'], $tamanoPagina['height']]);
+            $combinedPdf->useTemplate($tplId, 0, 0, $tamanoPagina['width'], $tamanoPagina['height']);
+            $combinedPdf->SetFont('Arial', 'B', 7);
             // El encabezado 04_02 ahora incluye QR; esta coordenada alinea la paginacion con la celda PAGINA.
-            $combinedPdf->SetXY(151.5, 24);
-            $combinedPdf->Cell(24, 3.5, "$i DE $totalPageCount", 0, 0, 'C');
+            $combinedPdf->SetXY(155.5, 21.5);
+            $paginaActualSerie = $paginaInicialSerie + $i - 1;
+            $combinedPdf->MultiCell(24, 2.5, "$paginaActualSerie DE $totalSerie\n$paginaActualSerie of $totalSerie", 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -2860,13 +2952,15 @@ class FOR_PIMP_04_02Controller extends Controller
             $combinedPdf->setSourceFile(StreamReader::createByString($pdf2Content));
             for ($i = 1; $i <= $pageCount2; $i++) {
                 $tplId = $combinedPdf->importPage($i);
-                $combinedPdf->AddPage('P');
-                $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
-                $combinedPdf->SetFont('Arial', 'B', 8);
-                $paginaActual = $i + $pageCount1;
+                $tamanoPagina = $combinedPdf->getTemplateSize($tplId);
+                $orientacion = $tamanoPagina['width'] > $tamanoPagina['height'] ? 'L' : 'P';
+                $combinedPdf->AddPage($orientacion, [$tamanoPagina['width'], $tamanoPagina['height']]);
+                $combinedPdf->useTemplate($tplId, 0, 0, $tamanoPagina['width'], $tamanoPagina['height']);
+                $combinedPdf->SetFont('Arial', 'B', 7);
+                $paginaActual = $paginaInicialSerie + $i + $pageCount1 - 1;
                 // Mantiene la misma posicion de paginacion en las paginas del anexo fotografico.
-                $combinedPdf->SetXY(152, 26);
-                $combinedPdf->Cell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 0, 'C');
+                $combinedPdf->SetXY(156, 23.5);
+                $combinedPdf->MultiCell(24, 2.5, "$paginaActual DE $totalSerie\n$paginaActual of $totalSerie", 0, 'C');
             }
         }
 

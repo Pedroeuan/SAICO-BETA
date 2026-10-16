@@ -1,3 +1,4 @@
+
 <script src="{{ asset('js/procesamiento-asincrono-saico.js') }}?v={{ filemtime(public_path('js/procesamiento-asincrono-saico.js')) }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const historical = @json($Detalles_Generales['Norma_IM'] ?? null);
     const oldNormId = @json(old('Norma_IM.idnormas_im'));
     const oldAverages = @json(old('Norma_IM.Promedio'));
-    const nameSelect = form.querySelector('#normaIMNombre');
+    const nameSelect = form.querySelector('#normaIMNombre') || document.createElement('select');
     const recordSelect = form.querySelector('#normaIMRegistro');
     const resultsBox = form.querySelector('#normaIMResultadosContainer');
     const resultsBody = form.querySelector('#tablaNormaIM tbody');
@@ -173,7 +174,37 @@ document.addEventListener('DOMContentLoaded', function () {
         help.className = 'estado-promedio-xrf d-block ' + (origin === 'calculado' ? 'text-success' : 'text-warning');
         help.textContent = origin === 'calculado' ? 'Calculado automáticamente' : 'Capture manualmente solo este valor';
     }
+    let ultimaNorma0402 = null;
+    const promediosReferencias0402 = new Map();
+    let resultadosPdf0402 = historical?.Resultados_XRF || {};
+    const valorExtraido0402 = elemento => {
+        const resultado = Object.values(resultadosPdf0402).find(fila => String(fila.elemento).trim().toLowerCase() === elemento);
+        if (resultado?.calculable) return { valor: Number(resultado.promedio).toFixed(4), origen: 'calculado' };
+        if (resultado?.valor_repetido) return { valor: resultado.valor_repetido, origen: 'manual' };
+        return null;
+    };
     function renderNorm(norm, averages) {
+        ultimaNorma0402 = norm;
+        if (form.id === 'FOR-PIMP-04_02' && Array.isArray(window.referenciasQuimicas0402)) {
+            resultsBody.querySelectorAll('input[data-elemento]').forEach(input => promediosReferencias0402.set(input.dataset.elemento.trim().toLowerCase(), { valor: input.value, origen: input.dataset.autoXrf === '1' ? 'calculado' : 'manual' }));
+            const filas = new Map();
+            window.referenciasQuimicas0402.forEach((referencia, indice) => {
+                (referencia.composicion_seleccionada?.Tabla || []).forEach(fila => {
+                    const clave = (fila.Elemento || '').trim().toLowerCase();
+                    if (!clave) return;
+                    if (!filas.has(clave)) filas.set(clave, { Elemento: fila.Elemento, Referencias: [] });
+                    filas.get(clave).Referencias.push({ indice, norma: referencia.norma, valor: fila.Composicion || '' });
+                });
+            });
+            const historicas = new Map((norm.Tabla || []).map((fila, indice) => [(fila.Elemento || '').toLowerCase(), { ...fila, Promedio: averages?.[indice] ?? fila.Promedio }]));
+            norm = { ...norm, Tabla: [...filas.entries()].map(([clave, fila]) => {
+                const anterior = promediosReferencias0402.get(clave);
+                const extraido = valorExtraido0402(clave);
+                const valor = anterior && anterior.valor !== '' ? anterior : (extraido || anterior);
+                return { ...fila, Promedio: valor?.valor ?? historicas.get(clave)?.Promedio ?? '', Origen: valor?.origen ?? historicas.get(clave)?.Origen ?? 'manual' };
+            }) };
+            averages = null;
+        }
         resultsBody.innerHTML = '';
         (norm.Tabla || []).forEach((row, index) => {
             const tr = document.createElement('tr');
@@ -189,16 +220,44 @@ document.addEventListener('DOMContentLoaded', function () {
             average.appendChild(input);
             setRowState(input, row.Origen || 'manual');
             const composition = document.createElement('td');
-            composition.textContent = row.Composicion || '';
+            if (form.id === 'FOR-PIMP-04_02' && row.Referencias?.length) {
+                const colores = ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
+                row.Referencias.forEach((referencia, indice) => {
+                    if (indice) composition.append(document.createTextNode(' / '));
+                    const valor = document.createElement('span'); valor.style.color = colores[referencia.indice % colores.length]; valor.style.fontWeight = '600';
+                    valor.textContent = referencia.valor || '—'; valor.title = referencia.norma; composition.append(valor);
+                });
+            } else composition.textContent = row.Composicion || '';
             tr.append(element, average, composition);
             resultsBody.appendChild(tr);
         });
         observations.textContent = norm.Observaciones || '';
         observationsBox.classList.toggle('d-none', !norm.Observaciones);
+        if (form.id === 'FOR-PIMP-04_02') {
+            const notas = Array.isArray(window.referenciasQuimicas0402)
+                ? window.referenciasQuimicas0402.map((referencia, indice) => ({ indice, texto: referencia.composicion_seleccionada?.Notas_Tecnico ?? referencia.composicion_seleccionada?.Observaciones ?? '' })).filter(nota => nota.texto.trim())
+                : (norm.Notas_Composicion || []);
+            if (Array.isArray(window.referenciasQuimicas0402) || notas.length) {
+                observations.replaceChildren();
+                const colores = ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
+                notas.forEach(nota => {
+                    const parrafo = document.createElement('div'); parrafo.className = 'mb-2'; parrafo.style.color = colores[nota.indice % colores.length];
+                    parrafo.textContent = `* ${nota.texto}`; observations.append(parrafo);
+                });
+                observationsBox.classList.toggle('d-none', !notas.length);
+            }
+        }
         resultsBox.classList.remove('d-none');
     }
+    if (form.id === 'FOR-PIMP-04_02') document.addEventListener('referencias-0402:cambio', () => {
+        if (Array.isArray(window.referenciasQuimicas0402)) recordSelect.value = window.referenciasQuimicas0402[0]?.idnormas_im || '';
+        renderNorm(ultimaNorma0402 || { Tabla: [] }, null);
+    });
+    if (form.id !== 'FOR-PIMP-04_02') {
     function loadRecords(name) {
-        recordSelect.innerHTML = '<option value="">Seleccione una tabla o variable</option>';
+        recordSelect.innerHTML = form.id === 'FOR-PIMP-04_02'
+            ? '<option value="">Seleccione un grado o variante</option>'
+            : '<option value="">Seleccione una tabla o variable</option>';
         const options = catalog.filter(item => item.Nombre_Espe === name);
         options.forEach(item => recordSelect.add(new Option(item.Variable || 'Sin variable', item.idnormas_im)));
         recordSelect.disabled = !options.length;
@@ -261,6 +320,10 @@ document.addEventListener('DOMContentLoaded', function () {
             recordSelect.value = initialId;
             renderNorm(norm, oldAverages || (norm.Tabla || []).map(row => row.Promedio || ''));
         }
+    }
+
+    } else if (historical) {
+        renderNorm(historical, oldAverages || (historical.Tabla || []).map(row => row.Promedio || ''));
     }
 
     /**
@@ -337,12 +400,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function applyResults(results) {
+        if (form.id === 'FOR-PIMP-04_02') {
+            resultadosPdf0402 = results || {};
+            promediosReferencias0402.clear();
+        }
         const extracted = Object.values(results || {});
         resultsBody.querySelectorAll('input[data-elemento]').forEach(input => {
             const result = extracted.find(row => String(row.elemento).toLowerCase() === input.dataset.elemento.toLowerCase());
             if (result?.calculable) {
                 input.value = Number(result.promedio).toFixed(4);
                 setRowState(input, 'calculado');
+            } else if (result?.valor_repetido) {
+                input.value = result.valor_repetido;
+                setRowState(input, 'manual');
             } else {
                 if (input.dataset.autoXrf === '1') input.value = '';
                 setRowState(input, 'manual');
@@ -377,8 +447,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const columns = payload.columnas_seleccionadas;
         const rows = Object.values(payload.resultados || {});
         previewTable.querySelector('thead').innerHTML = '<tr><th>Elemento</th>' + columns.map(c => '<th>Col. ' + c + '</th>').join('') + '<th>Promedio</th></tr>';
-        previewTable.querySelector('tbody').innerHTML = rows.map(row => '<tr><th>' + row.elemento + '</th>' + columns.map(c => '<td>' + (row.valores[c] || '') + '</td>').join('') + '<td>' + (row.calculable ? Number(row.promedio).toFixed(4) : 'Manual') + '</td></tr>').join('');
-        const pending = rows.filter(row => !row.calculable).length;
+        const escaparXrf = valor => { const span = document.createElement('span'); span.textContent = String(valor ?? ''); return span.innerHTML; };
+        previewTable.querySelector('tbody').innerHTML = rows.map(row => '<tr><th>' + escaparXrf(row.elemento) + '</th>' + columns.map(c => '<td>' + escaparXrf(row.valores[c] || '') + '</td>').join('') + '<td>' + (row.calculable ? Number(row.promedio).toFixed(4) : escaparXrf(row.valor_repetido || 'Manual')) + '</td></tr>').join('');
+        const pending = rows.filter(row => !row.calculable && !row.valor_repetido).length;
         warnings.textContent = pending ? pending + ' elemento(s) requieren captura manual individual.' : '';
         warnings.classList.toggle('d-none', !pending);
         capture.innerHTML = '<h5>Disparo único — columnas ' + columns.join(', ') + '</h5><img class="img-fluid img-thumbnail" src="' + payload.captura.data_url + '">';
@@ -394,11 +465,12 @@ document.addEventListener('DOMContentLoaded', function () {
         resetColumnAvailability(false);
         preview.classList.add('d-none');
         if (!recordSelect.value) {
-            return setStatus('Seleccione primero la norma y la tabla para detectar los disparos.', true);
+            return setStatus('Marca primero una norma de referencia en el apartado superior.', true);
         }
 
         const data = new FormData();
         data.append('idnormas_im', recordSelect.value);
+        if (form.id === 'FOR-PIMP-04_02') data.append('configuracion', document.getElementById('normaIMConfiguracion')?.value || '');
         data.append('Analisis_PDF', file.files[0]);
         button.disabled = true;
         setStatus('Detectando disparos disponibles...', false);
@@ -434,12 +506,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     button.addEventListener('click', async function () {
         const columns = selectedColumns();
-        if (!recordSelect.value) return setStatus('Seleccione la norma y la tabla.', true);
+        if (!recordSelect.value) return setStatus(form.id === 'FOR-PIMP-04_02' ? 'Marca primero una norma de referencia en el apartado superior.' : 'Seleccione la norma y la tabla.', true);
         if (!file.files.length) return setStatus('Seleccione el PDF.', true);
         // El backend y la interfaz aceptan el mismo intervalo: de uno a tres disparos diferentes.
         if (columns.length < 1 || columns.length > 3) return setStatus('Seleccione entre uno y tres disparos.', true);
         const data = new FormData();
         data.append('idnormas_im', recordSelect.value);
+        if (form.id === 'FOR-PIMP-04_02') data.append('configuracion', document.getElementById('normaIMConfiguracion')?.value || '');
         data.append('Analisis_PDF', file.files[0]);
         columns.forEach(column => data.append('XRF_Columnas[]', column));
         button.disabled = true;
@@ -575,6 +648,13 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <script>
+@if(($xrfFormId ?? 'FOR-PIMP-05_B_01') === 'FOR-PIMP-04_02')
+window.normasIMFormularioUrl = @json(route('Normas_IM.Create'));
+window.normasIMEdicionUrl = @json(route('Normas_IM.Edit', ['id' => '__NORMA__']));
+@else
 window.normasIMAltaRapidaUrl = @json(route('Normas_IM.storeRapida'));
+@endif
 </script>
+@if(($xrfFormId ?? 'FOR-PIMP-05_B_01') !== 'FOR-PIMP-04_02')
 <script src="{{ asset('js/Normas_IM_Alta_Rapida.js') }}?v={{ filemtime(public_path('js/Normas_IM_Alta_Rapida.js')) }}"></script>
+@endif

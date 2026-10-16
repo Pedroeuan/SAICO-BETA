@@ -534,13 +534,14 @@ class ReporteController extends Controller
         // Obtén todos los usuario que tengan el rol Técnico
         $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
 
-        $NormasIM = Normas_IM::orderBy('Nombre_Espe')->orderBy('Variable')->get()->map(function ($norma) {
+        $NormasIM = Normas_IM::orderBy('Nombre_Espe')->orderBy('Variable')->get()->map(function ($norma) use ($Nombre_Formato) {
             return [
                 'idnormas_im' => $norma->idnormas_im,
                 'Nombre_Espe' => $norma->Nombre_Espe,
                 'Variable' => $norma->Variable,
                 'Tabla' => json_decode($norma->Tabla, true) ?: [],
                 'Observaciones' => $norma->Observaciones,
+                'Configuraciones' => $Nombre_Formato === 'FOR-PIMP-04/02' ? \App\Services\SeleccionComposicionIM::opciones($norma) : [],
             ];
         })->values();
 
@@ -551,7 +552,7 @@ class ReporteController extends Controller
         $EscalasDureza0204 = $CatalogosDureza0204['escalas'];
         $CatalogosMetalografiaIM = $this->catalogosMetalografiaIM($Nombre_Formato);
         // Solo 06_B_01 consume este control; los demas formatos reciben null.
-        $SerieReporte = $Nombre_Formato === ServicioSerieReportes::FORMATO_06_B_01
+        $SerieReporte = in_array($Nombre_Formato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02], true)
             ? app(ServicioSerieReportes::class)->obtener((int) $id)
             : null;
         
@@ -811,13 +812,14 @@ class ReporteController extends Controller
         // Obtén todos los usuario que tengan el rol Técnico
         $Tecnicos = Usuario::where('rol', 'Técnicos')->where('Estatus', 'Alta')->get();
         
-        $NormasIM = Normas_IM::orderBy('Nombre_Espe')->orderBy('Variable')->get()->map(function ($norma) {
+        $NormasIM = Normas_IM::orderBy('Nombre_Espe')->orderBy('Variable')->get()->map(function ($norma) use ($Nombre_Formato) {
             return [
                 'idnormas_im' => $norma->idnormas_im,
                 'Nombre_Espe' => $norma->Nombre_Espe,
                 'Variable' => $norma->Variable,
                 'Tabla' => json_decode($norma->Tabla, true) ?: [],
                 'Observaciones' => $norma->Observaciones,
+                'Configuraciones' => $Nombre_Formato === 'FOR-PIMP-04/02' ? \App\Services\SeleccionComposicionIM::opciones($norma) : [],
             ];
         })->values();
 
@@ -1475,7 +1477,7 @@ class ReporteController extends Controller
 
             $servicioSeries = app(ServicioSerieReportes::class);
             $juntasSiguiente = null;
-            if ($nombreFormato === ServicioSerieReportes::FORMATO_06_B_01) {
+            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02], true)) {
                 $serie = $servicioSeries->obtener((int) $id);
                 if (!$serie) {
                     throw new \RuntimeException('Este reporte anterior no tiene una serie configurada. Abra Editar y guarde la cantidad de reportes antes de continuar.');
@@ -1494,6 +1496,18 @@ class ReporteController extends Controller
                     Grupo_Juntas_Detalles_Re::where('idReportes', $id)->value('Juntas_Grupo_Re'),
                     $Detalles_Generales
                 );
+                if ($nombreFormato === ServicioSerieReportes::FORMATO_04_02) {
+                    $grupoLimpio = json_decode($juntasSiguiente, true);
+                    if (is_array($grupoLimpio['Norma_IM'] ?? null)) {
+                        $grupoLimpio['Norma_IM']['Captura_XRF'] = [];
+                        $grupoLimpio['Norma_IM']['Columnas_Seleccionadas'] = [];
+                        $grupoLimpio['Norma_IM']['Resultados_XRF'] = [];
+                        foreach ($grupoLimpio['Norma_IM']['Tabla'] ?? [] as $indice => $fila) {
+                            unset($grupoLimpio['Norma_IM']['Tabla'][$indice]['Origen'], $grupoLimpio['Norma_IM']['Tabla'][$indice]['Valores_Seleccionados']);
+                        }
+                    }
+                    $juntasSiguiente = json_encode($grupoLimpio);
+                }
                 unset(
                     $Detalles_Generales['Norma_IM'],
                     $Detalles_Generales['ANALISIS_IMAGEN'],
@@ -1504,12 +1518,15 @@ class ReporteController extends Controller
                 $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
             }
 
-            if ($nombreFormato === ServicioSerieReportes::FORMATO_06_B_01) {
+            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02], true)) {
                 unset($Detalles_Generales['SERIE_REPORTES'], $Detalles_Generales['Reporte_Firmado']);
                 $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
 
                 $datosEquipo = json_decode($ReporteOriginal->Datos_Equipo, true) ?? [];
                 unset($datosEquipo['QR_TOKEN'], $datosEquipo['QR_PDF'], $datosEquipo['PDF_UNIFICADO']);
+                if ($nombreFormato === ServicioSerieReportes::FORMATO_04_02) {
+                    foreach (['VALORES_DUREZA', 'PROMEDIO_DUREZA', 'DUREZA_BRINELL', 'DESCRIPCION_MATERIAL', 'RESISTENCIA_TENSION', 'RESISTENCIA_CEDENCIA', 'TAMANO_GRANO'] as $campo) unset($datosEquipo[$campo]);
+                }
                 $NuevoReporte->Datos_Equipo = json_encode($datosEquipo);
             }
 
@@ -1545,7 +1562,7 @@ class ReporteController extends Controller
 
             $nuevoId = $NuevoReporte->idReportes;
 
-            if ($nombreFormato === ServicioSerieReportes::FORMATO_06_B_01) {
+            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02], true)) {
                 $servicioSeries->registrarConsecutivo((int) $id, (int) $nuevoId);
             }
 
