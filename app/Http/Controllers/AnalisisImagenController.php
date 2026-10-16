@@ -63,6 +63,7 @@ class AnalisisImagenController extends Controller
     {
         $datos = $request->validate([
             'imagen' => 'required|file|mimes:jpg,jpeg,png,tif,tiff|max:25600',
+            'imagen_analisis' => 'nullable|file|mimes:png|max:25600',
             'umbral_minimo' => 'required|integer|between:0,255|lte:umbral_maximo',
             'umbral_maximo' => 'required|integer|between:0,255|gte:umbral_minimo',
             'fase_seleccionada' => 'required|in:perlita,ferrita',
@@ -80,6 +81,9 @@ class AnalisisImagenController extends Controller
                 $request->file('imagen'),
                 basename($rutaEntrada)
             );
+            if ($request->hasFile('imagen_analisis')) {
+                Storage::disk('local')->putFileAs(dirname($rutaEntrada), $request->file('imagen_analisis'), 'area-temporal.png');
+            }
 
             $trabajo = TrabajoProcesamiento::create([
                 'id' => $trabajoId,
@@ -89,6 +93,7 @@ class AnalisisImagenController extends Controller
                 'mensaje' => 'Procesando imagen con Fiji...',
                 'contexto' => [
                     'ruta_entrada' => $rutaEntrada,
+                    'area_temporal' => $request->hasFile('imagen_analisis'),
                     'nombre_original' => $request->file('imagen')->getClientOriginalName(),
                     'mime' => $request->file('imagen')->getMimeType(),
                     'umbral_minimo' => (int) $datos['umbral_minimo'],
@@ -110,7 +115,7 @@ class AnalisisImagenController extends Controller
             ], 202);
         } catch (Throwable $error) {
             // Si no pudo encolarse, no se conserva una copia privada huerfana.
-            Storage::disk('local')->delete($rutaEntrada);
+            Storage::disk('local')->deleteDirectory(dirname($rutaEntrada));
             TrabajoProcesamiento::find($trabajoId)?->marcarError($error, 'No fue posible iniciar Fiji/ImageJ.');
             Log::error('No fue posible encolar la fraccion de fases con ImageJ.', [
                 'usuario_id' => $usuarioId,
