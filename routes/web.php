@@ -12,7 +12,7 @@ use App\Http\Controllers\Procesamiento\ProcesamientoPdfController;
 use App\Http\Controllers\OC\OCController;
 use App\Http\Controllers\TICS\TICSController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Condiciones_Pago\CondicionesPagoController;
+use App\Http\Condiciones_Pago\OC\CondicionesPagoController;
 use App\Http\Controllers\OC\CatalogoOCController;
 use App\Http\Controllers\Prueba\PruebaController;
 use App\Http\Controllers\Manifiesto\PDFController;
