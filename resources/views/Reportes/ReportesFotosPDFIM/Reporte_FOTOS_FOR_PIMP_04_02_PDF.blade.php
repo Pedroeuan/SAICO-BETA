@@ -92,6 +92,7 @@
             box-sizing: border-box;
             text-align: center;
         }
+        .texto-multilinea-0402 { white-space: normal; overflow-wrap: break-word; word-wrap: break-word; line-height: 12px; padding: 2px 0; }
         .linea-desplazada {
             margin-left: 7mm;
         }
@@ -492,8 +493,8 @@
                 <tr>
                     <th>PROYECTO:<br>Project:</th>
                     <td class="line" colspan="5">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Proyecto'] ?? '' }}
+                        <div class="linea-general texto-multilinea-0402">
+                            {!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Proyecto'] ?? '')))) !!}
                         </div>
                     </td>
                 </tr>
@@ -512,8 +513,8 @@
                 <tr>
                     <th>FOLIO:<br>Reference:</th>
                     <td class="line" colspan="5">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Folio'] ?? '' }}
+                        <div class="linea-general texto-multilinea-0402">
+                            {!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Folio'] ?? '')))) !!}
                         </div>
                     </td>
                 </tr>
@@ -521,8 +522,8 @@
                 <tr>
                     <th>PARTIDA:<br>Item:</th>
                     <td class="line" colspan="5">
-                        <div class="linea-general">
-                            {{ $Detalles_Generales['Partida'] ?? '' }}
+                        <div class="linea-general texto-multilinea-0402">
+                            {!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Partida'] ?? '')))) !!}
                         </div>
                     </td>
                 </tr>
@@ -641,8 +642,8 @@
                         OBSERVACIONES Y NOTAS:<br>Remarks and Notes:
                     </th>
                     <td class="line" colspan="5">
-                        <div class="linea-general linea-desplazada">
-                            {{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}
+                        <div class="linea-general linea-desplazada texto-multilinea-0402">
+                            {!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Observaciones_Notas'] ?? '')))) !!}
                         </div>
                     </td>
                 </tr>

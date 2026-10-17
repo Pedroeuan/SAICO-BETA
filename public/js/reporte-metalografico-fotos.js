@@ -71,10 +71,11 @@
 
         /** Convierte los resultados técnicos en una base editable para la descripción del reporte. */
         function construirDescripcion() {
+            const fases = obtenerDatoEquipo('FASES_PRESENTES', '---').toLocaleLowerCase('es');
             const lineas = [
                 'RESULTADOS DEL ANÁLISIS METALOGRÁFICO',
                 '',
-                'Fases presentes: ' + obtenerDatoEquipo('FASES_PRESENTES', '---'),
+                'Fases presentes: ' + fases.charAt(0).toLocaleUpperCase('es') + fases.slice(1),
                 'Morfología de la microestructura: ---',
                 '% fracción volumétrica Perlita / zonas oscuras: ' + Number(analisisActual.porcentaje_perlita || 0).toFixed(3) + ' %',
                 '% fracción volumétrica Ferrita / zonas claras: ' + Number(analisisActual.porcentaje_ferrita || 0).toFixed(3) + ' %',
@@ -82,6 +83,7 @@
                 'Tamaño de grano: ' + obtenerTamanoGrano(),
                 'Bandeamiento: ---',
                 'Magnificación: 100 X',
+                'Especificación aproximada de la pieza: ' + obtenerDatoEquipo('ESPECIFICACION_MATERIAL', '---'),
                 'Analizador: Fiji',
             ];
             const conteo = obtenerConteo();
