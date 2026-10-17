@@ -537,7 +537,7 @@ class OCController extends Controller
             ? json_decode($detallesRegistro->Detalles, true)
             : []
         )->map(fn ($detalle) => (object) $detalle);
-        $firmantes = Firmantes_OC::where('idOrden_Servicio', $id)->first();
+        $firmantes = Firmantes_OC::where('idOC', $id)->first();
         $Firmas_Reportes = $firmantes ? json_decode($firmantes->Nombre_Cargo, true) : [];
         $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
         
