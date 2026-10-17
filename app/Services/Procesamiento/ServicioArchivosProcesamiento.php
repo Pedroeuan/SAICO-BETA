@@ -9,6 +9,33 @@ use Illuminate\Support\Facades\Storage;
 
 class ServicioArchivosProcesamiento
 {
+    /** Reutiliza la captura del servidor únicamente para el mismo PDF y disparos. */
+    public function capturaColumnasXrf(Request $request, UploadedFile $archivo, array $columnas): ?array
+    {
+        if (!$request->filled('XRF_Trabajo_ID') || !$request->user()) return null;
+        $trabajo = TrabajoProcesamiento::query()
+            ->whereKey((string) $request->input('XRF_Trabajo_ID'))
+            ->where('usuario_id', $request->user()->getAuthIdentifier())
+            ->where('tipo', 'xrf_columnas')
+            ->where('estado', TrabajoProcesamiento::ESTADO_COMPLETADO)
+            ->first();
+        return $trabajo ? $this->capturaVerificada($trabajo, $archivo, $columnas) : null;
+    }
+
+    public function capturaVerificada(TrabajoProcesamiento $trabajo, UploadedFile $archivo, array $columnas): ?array
+    {
+        if ($trabajo->tipo !== 'xrf_columnas' || $trabajo->estado !== TrabajoProcesamiento::ESTADO_COMPLETADO
+            || ($trabajo->expira_at && $trabajo->expira_at->isPast())) return null;
+        $resultado = $trabajo->resultadoArray() ?? [];
+        if (array_map('intval', $resultado['columnas_seleccionadas'] ?? []) !== array_values($columnas)) return null;
+        $ruta = (string) ($trabajo->contexto['entradas'][0]['ruta'] ?? '');
+        if ($ruta === '' || !Storage::disk('local')->exists($ruta)) return null;
+        if (hash_file('sha256', Storage::disk('local')->path($ruta)) !== hash_file('sha256', $archivo->getRealPath())) return null;
+        $captura = $resultado['captura'] ?? null;
+        return is_array($captura) && str_starts_with((string) ($captura['data_url'] ?? ''), 'data:image/png;base64,')
+            && array_map('intval', $captura['columnas'] ?? []) === array_values($columnas) ? $captura : null;
+    }
+
     /**
      * Restaura los PDF privados si el navegador se recargo y perdio el FileList.
      * El UUID, usuario y estado se verifican antes de inyectar cualquier archivo.
