@@ -362,7 +362,8 @@ class OCController extends Controller
         $OC = OC::where('idOC', $id)->first();
         $detallesOCM = detallesOC::where('idOC',$OC->idOC)->first();
         $catalogo = DB::table('Catalogo_OC')->get();
-
+        $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
+        $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
         $idCliente = $OC->idClientes;
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Cliente = clientes::where('idClientes', $idCliente)->first(); 
@@ -396,7 +397,7 @@ class OCController extends Controller
             'total' => 0,
         ], is_array($totales) ? $totales : []);
 
-        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales'));
+        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales'));
     }
 
     /**
