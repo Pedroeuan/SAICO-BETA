@@ -156,6 +156,7 @@
             box-sizing: border-box;
             text-align: center;
         }
+        .texto-multilinea-0402 { white-space: normal; overflow-wrap: break-word; word-wrap: break-word; line-height: 12px; padding: 2px 0; }
         .linea-desplazada {
             margin-left: 7mm;
         }
@@ -513,9 +514,7 @@
             </span>
         </th>
         <td class="line" colspan="5">
-            <div class="linea-general">
-                {{ $Detalles_Generales['Proyecto'] ?? '' }}
-            </div>
+            <div class="linea-general texto-multilinea-0402">{!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Proyecto'] ?? '')))) !!}</div>
         </td>
     </tr>
 
@@ -545,9 +544,7 @@
             </span>
         </th>
         <td class="line" colspan="5">
-            <div class="linea-general">
-                {{ $Detalles_Generales['Folio'] ?? '' }}
-            </div>
+            <div class="linea-general texto-multilinea-0402">{!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Folio'] ?? '')))) !!}</div>
         </td>
     </tr>
 
@@ -561,9 +558,7 @@
             </span>
         </th>
         <td class="line" colspan="5">
-            <div class="linea-general">
-                {{ $Detalles_Generales['Partida'] ?? '' }}
-            </div>
+            <div class="linea-general texto-multilinea-0402">{!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Partida'] ?? '')))) !!}</div>
         </td>
     </tr>
 
@@ -735,9 +730,7 @@
             </span>
         </th>
         <td class="line" colspan="5">
-            <div class="linea-general linea-desplazada">
-                {{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}
-            </div>
+            <div class="linea-general linea-desplazada texto-multilinea-0402">{!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Observaciones_Notas'] ?? '')))) !!}</div>
         </td>
     </tr>
     </tbody>
@@ -837,7 +830,7 @@
     <tr class="section-title">
         <th colspan="7">
             <span class="titulo-azul-es">
-                VALORES DE DUREZA MEDIDOS EN{{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }} / Hardness Values Measured in{{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }}
+                VALORES DE DUREZA MEDIDOS EN {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }} / Hardness Values Measured in {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }}
             </span>
         </th>
     </tr>
