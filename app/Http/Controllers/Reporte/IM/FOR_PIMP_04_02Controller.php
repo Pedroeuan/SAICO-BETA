@@ -1614,7 +1614,7 @@ class FOR_PIMP_04_02Controller extends Controller
         // Adjunta únicamente un análisis previamente generado por el mismo usuario autenticado.
         $analisisImagen = null;
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $analisisImagen = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->resolverParaReporte(
                 $validatedData['Analisis_Imagen_Token'],
                 (int) Auth::id()
             );
@@ -2198,9 +2198,10 @@ class FOR_PIMP_04_02Controller extends Controller
 
         // Un token nuevo reemplaza el análisis anterior; si no llega, se conserva el histórico.
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $analisisImagen = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->resolverParaReporte(
                 $validatedData['Analisis_Imagen_Token'],
-                (int) Auth::id()
+                (int) Auth::id(),
+                is_array($analisisImagen) ? $analisisImagen : null
             );
         }
         // En Edit también se permite activar o retirar del PDF el análisis previamente guardado.
