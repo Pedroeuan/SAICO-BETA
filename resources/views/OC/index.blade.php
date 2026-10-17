@@ -44,6 +44,7 @@
                         <th>Tipo Servicio</th>
                         <th>Estatus</th>
                         <th>OC Original</th>
+                        <th>OC AICO</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
@@ -69,6 +70,10 @@
                             @else
                                 <td><a class="btn btn-primary" href="{{ asset('storage/' . $OCS->OC_archivo) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a></td>
                             @endif
+                        <!--PDF GENERADO-->
+                        <td>
+                            <a class="btn btn-primary" href="{{ route('OC.PDF', ['id' => $OCS->idOC]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                        </td>
                         <td>
                             <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>

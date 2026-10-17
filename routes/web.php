@@ -818,6 +818,8 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::post('/OC/updateCatalogo/{id}', [CatalogoOCController::class, 'update'])->name('OC.updateCatalogo');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/Catalogo_OC/eliminar/{id}', [CatalogoOCController::class, 'destroy'])->name('OC.destroyCatalogo');
+    /*Formato PDF Ruta para ver el PDF*/
+    Route::get('OC/PDF/{id}', [OCController::class, 'OC_PDF'])->name('OC.PDF');
 
     /*Ruta de Vista de Condiciones de Pago*/
     Route::get('/OC/indexPago', [CondicionesPagoController::class, 'index'])->name('OC.indexPago');

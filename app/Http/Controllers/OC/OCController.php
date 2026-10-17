@@ -527,4 +527,59 @@ class OCController extends Controller
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
     }
 
+    public function OC_PDF($id)
+    {
+    $OC  = OC::find($id);
+        $cliente = clientes::find($OC->idClientes);
+        $OC->cliente = $cliente; // Agregar el cliente al objeto OC
+        $detallesRegistro = detallesOC::where('idOC', $id)->first();
+        $detallesOC = collect($detallesRegistro
+            ? json_decode($detallesRegistro->Detalles, true)
+            : []
+        )->map(fn ($detalle) => (object) $detalle);
+        $firmantes = Firmantes_OC::where('idOrden_Servicio', $id)->first();
+        $Firmas_Reportes = $firmantes ? json_decode($firmantes->Nombre_Cargo, true) : [];
+        $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
+        
+        //$Grupo_Juntas_Detalles_OS = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $id)->first(); 
+        //$detallesOT = json_decode($Grupo_Juntas_Detalles_OS->Juntas_grupo, true);
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Manifiesto PDF',
+            'OC' => $OC,
+            'detallesOC' => $detallesOC,
+            'numFirmas' => $numFirmas,
+            'Firmas_Reportes' => $Firmas_Reportes,
+            'Logo' => $Logo,
+            
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('OC.OC_PDF', $data);
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('Arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 57;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('OC.PDF');
+    }
 }
