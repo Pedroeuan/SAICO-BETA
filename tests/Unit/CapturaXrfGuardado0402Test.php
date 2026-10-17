@@ -10,6 +10,39 @@ use Tests\TestCase;
 
 class CapturaXrfGuardado0402Test extends TestCase
 {
+    public function test_guarda_la_captura_en_el_disco_publico_sin_duplicar_la_carpeta(): void
+    {
+        Storage::fake('public');
+        config(['filesystems.default' => 'public']);
+        $archivo = UploadedFile::fake()->create('8.pdf', 1, 'application/pdf');
+        $norma = ['Columnas_Seleccionadas' => [3, 4, 5], 'Captura_XRF' => ['data_url' => 'data:image/png;base64,'.base64_encode('captura-verificada')]];
+        $metodo = new \ReflectionMethod(\App\Http\Controllers\Reporte\IM\FOR_PIMP_04_02Controller::class, 'guardarArchivosColumnasXrf');
+        $metodo->invokeArgs(new \App\Http\Controllers\Reporte\IM\FOR_PIMP_04_02Controller, [$archivo, &$norma, 'contrato', 'reporte']);
+        $ruta = preg_replace('#^storage/#', '', $norma['Captura_XRF']['ruta']);
+        Storage::disk('public')->assertExists($ruta);
+        $this->assertSame('captura-verificada', Storage::disk('public')->get($ruta));
+        Storage::disk('public')->assertMissing('public/'.$ruta);
+    }
+
+    public function test_retirar_las_normas_no_descarta_el_recorte_de_la_pieza(): void
+    {
+        $historica = [
+            'idnormas_im' => 42,
+            'Captura_XRF' => ['ruta' => 'storage/captura.png', 'ancho' => 875, 'alto' => 890],
+            'Columnas_Seleccionadas' => [3, 4, 5],
+            'Analisis_PDF' => [['ruta' => 'storage/original.pdf']],
+            'Resultados_XRF' => ['C' => ['promedio' => '0.1297']],
+            'Tabla' => [['Elemento' => 'C', 'Composicion' => '0.30 max.']],
+        ];
+        $metodo = new \ReflectionMethod(\App\Http\Controllers\Reporte\IM\FOR_PIMP_04_02Controller::class, 'construirNormaIM');
+        $resultado = $metodo->invoke(new \App\Http\Controllers\Reporte\IM\FOR_PIMP_04_02Controller,
+            \Illuminate\Http\Request::create('/', 'POST'), $historica);
+        foreach (['Captura_XRF', 'Columnas_Seleccionadas', 'Analisis_PDF', 'Resultados_XRF'] as $campo) {
+            $this->assertSame($historica[$campo], $resultado[$campo]);
+        }
+        $this->assertSame([], $resultado['Tabla']);
+    }
+
     public function test_reutiliza_solo_la_captura_del_mismo_archivo_y_disparos(): void
     {
         Storage::fake('local');
