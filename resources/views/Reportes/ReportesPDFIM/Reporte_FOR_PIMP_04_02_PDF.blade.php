@@ -156,6 +156,7 @@
             box-sizing: border-box;
             text-align: center;
         }
+        .texto-multilinea-0402 { white-space: normal; overflow-wrap: break-word; word-wrap: break-word; line-height: 12px; padding: 2px 0; }
         .linea-desplazada {
             margin-left: 7mm;
         }
@@ -513,9 +514,7 @@
             </span>
         </th>
         <td class="line" colspan="5">
-            <div class="linea-general">
-                {{ $Detalles_Generales['Proyecto'] ?? '' }}
-            </div>
+            <div class="linea-general texto-multilinea-0402">{!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Proyecto'] ?? '')))) !!}</div>
         </td>
     </tr>
 
@@ -545,9 +544,7 @@
             </span>
         </th>
         <td class="line" colspan="5">
-            <div class="linea-general">
-                {{ $Detalles_Generales['Folio'] ?? '' }}
-            </div>
+            <div class="linea-general texto-multilinea-0402">{!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Folio'] ?? '')))) !!}</div>
         </td>
     </tr>
 
@@ -561,9 +558,7 @@
             </span>
         </th>
         <td class="line" colspan="5">
-            <div class="linea-general">
-                {{ $Detalles_Generales['Partida'] ?? '' }}
-            </div>
+            <div class="linea-general texto-multilinea-0402">{!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Partida'] ?? '')))) !!}</div>
         </td>
     </tr>
 
@@ -735,9 +730,7 @@
             </span>
         </th>
         <td class="line" colspan="5">
-            <div class="linea-general linea-desplazada">
-                {{ $Detalles_Generales['Observaciones_Notas'] ?? '' }}
-            </div>
+            <div class="linea-general linea-desplazada texto-multilinea-0402">{!! nl2br(e(str_replace(["\r\n", "\r"], "\n", (string) ($Detalles_Generales['Observaciones_Notas'] ?? '')))) !!}</div>
         </td>
     </tr>
     </tbody>
@@ -837,7 +830,7 @@
     <tr class="section-title">
         <th colspan="7">
             <span class="titulo-azul-es">
-                VALORES DE DUREZA MEDIDOS EN{{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }} / Hardness Values Measured in{{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }}
+                VALORES DE DUREZA MEDIDOS EN {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }} / Hardness Values Measured in {{ $Datos_Equipo['ESCALA_DUREZA'] ?? 'XXX' }}
             </span>
         </th>
     </tr>
@@ -933,7 +926,7 @@
             {{ $Datos_Equipo['DESCRIPCION_MATERIAL'] ?? '' }}
         </td>
         <td>
-            {{ $Datos_Equipo['DUREZA_BRINELL'] ?? '' }}
+            {{ is_numeric(str_replace(',', '.', (string) ($Datos_Equipo['DUREZA_BRINELL'] ?? ''))) ? (string) round((float) str_replace(',', '.', $Datos_Equipo['DUREZA_BRINELL']), 0, PHP_ROUND_HALF_UP) : ($Datos_Equipo['DUREZA_BRINELL'] ?? '') }}
         </td>
         <td>
             {{ $Datos_Equipo['RESISTENCIA_TENSION'] ?? '' }}
@@ -970,10 +963,10 @@
         </th>
         <th class="label">
             <span class="label-es">
-                DUREZA BRINELL, MAX.
+                DUREZA / ESCALA
             </span>
             <span class="label-en">
-                Brinell Hardness, Max.
+                Hardness / Scale
             </span>
         </th>
         <th class="label">
@@ -1002,6 +995,24 @@
         </th>
     </tr>
 
+    @if(array_key_exists('NORMAS_REFERENCIA_COINCIDENCIAS', $Datos_Equipo))
+        @php
+            $referencias = array_values($Datos_Equipo['NORMAS_REFERENCIA_COINCIDENCIAS'] ?? []);
+            $coloresReferencias = ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
+        @endphp
+        @if(count($referencias))
+        <tr>
+            @foreach(['norma', 'dureza_max', 'tension_min', 'cedencia_min', 'tension_max'] as $campoReferencia)
+            <td>
+                @foreach($referencias as $indiceReferencia => $referencia)
+                    @if(!$loop->first)<span style="color: #111111;"> / </span>@endif
+                    <span style="color: {{ $coloresReferencias[$indiceReferencia % count($coloresReferencias)] }}; font-weight: bold;">{{ $campoReferencia === 'norma' ? preg_replace('/\s*\/\s*/u', ' ', $referencia['norma'] ?? '') : ($referencia[$campoReferencia] ?? '—') }}</span>
+                @endforeach
+            </td>
+            @endforeach
+        </tr>
+        @endif
+    @else
     <tr>
         <td>
             {{ $Datos_Equipo['NORMA_REFERENCIA'] ?? '' }}
@@ -1019,6 +1030,7 @@
             {{ $Datos_Equipo['RESISTENCIA_TENSION_MAX'] ?? '' }}
         </td>
     </tr>
+    @endif
     </tbody>
 </table>
 <div class="spacer"></div>
@@ -1109,10 +1121,10 @@
                         <th
                             class="tituloComparacion" colspan="3">
                             <span class="label-es">
-                                COMPOSICIÓN QUÍMICA TEÓRICA VS PROMEDIO DE VALORES EN LA PIEZA ANALIZADA
+                                COMPOSICIÓN QUÍMICA TEÓRICA MÁXIMA VS PROMEDIO DE VALORES EN LA PIEZA ANALIZADA
                             </span>
                             <span class="label-en">
-                                Theoretical Chemical Composition vs Average Values of the Analyzed Piece
+                                Maximum Theoretical Chemical Composition vs Average Values of the Analyzed Piece
                             </span>
                         </th>
                     </tr>
@@ -1136,10 +1148,10 @@
                         </th>
                         <th>
                             <span class="label-es">
-                                COMPOSICIÓN QUÍMICA TEÓRICA
+                                COMPOSICIÓN QUÍMICA TEÓRICA MÁXIMA
                             </span>
                             <span class="label-en">
-                                Theoretical Chemical Composition
+                                Maximum Theoretical Chemical Composition
                             </span>
                         </th>
                     </tr>
@@ -1154,12 +1166,28 @@
                                 {{ $filaNorma['Promedio'] ?? '' }}
                             </td>
                             <td>
-                                {{ $filaNorma['Composicion'] ?? '' }}
+                                @if(!empty($filaNorma['Referencias']))
+                                    @foreach($filaNorma['Referencias'] as $referenciaQuimica)
+                                        @if(!$loop->first) / @endif
+                                        <span style="color: {{ ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'][($referenciaQuimica['indice'] ?? 0) % 6] }}; font-weight: bold;">{{ \App\Services\ComposicionNormaIM::abreviarLimites((string) ($referenciaQuimica['valor'] ?? '—')) }}</span>
+                                    @endforeach
+                                @else
+                                    {{ \App\Services\ComposicionNormaIM::abreviarLimites((string) ($filaNorma['Composicion'] ?? '')) }}
+                                @endif
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+                @if(!empty($NormaIM['Notas_Composicion']))
+                    <div style="margin-top: 8px; font-size: 9px; text-align: left;">
+                        @foreach($NormaIM['Notas_Composicion'] as $notaComposicion)
+                            <div style="margin-top: 4px; color: {{ ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'][($notaComposicion['indice'] ?? 0) % 6] }};">
+                                <span style="white-space: pre-line;">* {{ $notaComposicion['texto'] ?? '' }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </td>
             <td class="capturaComposicion">
                 <div class="bloqueCapturaQuimica">

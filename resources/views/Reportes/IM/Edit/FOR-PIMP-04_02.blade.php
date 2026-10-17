@@ -87,6 +87,7 @@
 @endsection
 
 @section('content')
+@include('Reportes.IM.partials.errores-guardado-0402')
 <br>
 <br>
 <br>
@@ -99,7 +100,7 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-04_02" action="{{route('Reportes_FOR_PIMP_04_02.update', $id)}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-04_02" data-modo="edit" action="{{route('Reportes_FOR_PIMP_04_02.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @if ($errors->any())
                     <div class="alert alert-danger" role="alert">
@@ -112,6 +113,7 @@
                     </div>
                 @endif
                 <div class="row">
+                    @include('Reportes.IM.partials.serie-reportes-0402')
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">DATOS GENERALES</div>
@@ -161,7 +163,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Proyecto:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto', $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ..." rows="3" style="resize:vertical">{{old('Detalles_Generales.Proyecto', $Detalles_Generales['Proyecto'] ?? '')}}</textarea>
                             @error('Proyecto')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -181,7 +183,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Folio:</label>
-                            <input type="text" class="form-control  inputForm @error('Folio') is-invalid @enderror" name="Detalles_Generales[Folio]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Folio', $Detalles_Generales['Folio'] ?? '')}}">
+                            <textarea class="form-control inputForm @error('Folio') is-invalid @enderror" name="Detalles_Generales[Folio]" placeholder="Ejemplo:" rows="3" style="resize:vertical">{{old('Detalles_Generales.Folio', $Detalles_Generales['Folio'] ?? '')}}</textarea>
                             @error('Folio')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -191,7 +193,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Partida:</label>
-                            <input type="text" class="form-control  inputForm @error('Partida') is-invalid @enderror" name="Detalles_Generales[Partida]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Partida', $Detalles_Generales['Partida'] ?? '')}}">
+                            <textarea class="form-control  inputForm @error('Partida') is-invalid @enderror" name="Detalles_Generales[Partida]"  placeholder="Ejemplo:  " rows="3" style="resize:vertical">{{old('Detalles_Generales.Partida', $Detalles_Generales['Partida'] ?? '')}}</textarea>
                             @error('Partida')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -294,8 +296,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label">Observaciones y Notas:</label>
-                            <input type="text" class="form-control inputForm" name="Detalles_Generales[Observaciones_Notas]" placeholder="Ejemplo:"
-                                value="{{ old('Detalles_Generales.Observaciones_Notas', $Detalles_Generales['Observaciones_Notas'] ?? '') }}">
+                            <textarea class="form-control inputForm" name="Detalles_Generales[Observaciones_Notas]" placeholder="Ejemplo:"
+                                rows="3" style="resize:vertical">{{ old('Detalles_Generales.Observaciones_Notas', $Detalles_Generales['Observaciones_Notas'] ?? '') }}</textarea>
                         </div>
                     </div>
 
@@ -480,7 +482,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 24%;">NORMA DE REFERENCIA</th>
-                                        <th>DUREZA BRINELL, MAX</th>
+                                        <th>DUREZA / ESCALA</th>
                                         <th style="width: 19%;">RESISTENCIA A LA TENSIÓN MÍNIMA ESPECIFICADA (KSI)</th>
                                         <th style="width: 28%;">RESISTENCIA A LA CEDENCIA ESPECIFICADA (KSI)</th>
                                         <th style="width: 20%;">RESISTENCIA A LA TENSIÓN MÁXIMA ESPECIFICADA (KSI)</th>
@@ -516,29 +518,7 @@
                             NORMA Y RESULTADOS DEL ANÁLISIS QUÍMICO
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="normaIMNombre">Norma/Especificación:</label>
-                            <select class="form-control" id="normaIMNombre">
-                                <option value="">Seleccione una norma</option>
-                                @foreach($nombresNormasIM as $nombreNorma)
-                                    <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="normaIMRegistro">Tabla/Variable/Subtítulo:</label>
-                            <select class="form-control @error('Norma_IM.idnormas_im') is-invalid @enderror"
-                                id="normaIMRegistro" name="Norma_IM[idnormas_im]" disabled>
-                                <option value="">Primero seleccione una norma</option>
-                            </select>
-                            @error('Norma_IM.idnormas_im')
-                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
+                    <input type="hidden" id="normaIMRegistro" name="Norma_IM[idnormas_im]" value="{{ old('Norma_IM.idnormas_im', $Detalles_Generales['Norma_IM']['idnormas_im'] ?? '') }}">
                     <div class="col-12">
                         <div class="form-group border rounded p-3 bg-light">
                             <label for="analisisPdfXrf"><strong>PDF del equipo XRF</strong></label>
@@ -593,7 +573,7 @@
                                 <thead><tr>
                                     <th>Elemento químico / Chemical element</th>
                                     <th>Promedio de la pieza analizada / Average</th>
-                                    <th>Composición química teórica / Theoretical composition</th>
+                                    <th>Composición química teórica máxima / Maximum theoretical chemical composition</th>
                                 </tr></thead>
                                 <tbody></tbody>
                             </table>
@@ -941,7 +921,7 @@
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
                                         data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}"
-                                        data-foto-es-texto="{{ !empty($foto['es_cuadro_texto']) ? 1 : 0 }}">
+                                        data-foto-es-texto="{{ !empty($foto['es_cuadro_texto']) ? 1 : 0 }}" data-foto-sin-imagen="{{ !empty($foto['sin_fotografia']) ? 1 : 0 }}">
                                         <div class="form-group">
                                             <label for="replace_image_{{ $index }}">Imagen subida {{ $index + 1 }}:</label>
 
@@ -1093,6 +1073,7 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/fotos-sin-imagen-0402.js') }}?v={{ filemtime(public_path('js/fotos-sin-imagen-0402.js')) }}"></script>
 <script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 <script>
     // Agrupa el formato en 4 partes grandes para que el usuario no vea toda la captura de golpe.
@@ -1348,11 +1329,13 @@ $(document).ready(function() {
 @php($xrfRequirePreviewBeforeSubmit = false)
 @php($xrfDetectColumnsOnFileChange = true)
 @include('Reportes.IM.partials.script-columnas-pdf-xrf-05-b-01')
+@include('Reportes.IM.partials.referencias-mecanicas-0402')
 {{-- Scripts propios de las herramientas de análisis de imagen; filemtime invalida la caché del navegador. --}}
 <script src="{{ asset('js/analisis-fraccion-fases-imagej.js') }}?v={{ filemtime(public_path('js/analisis-fraccion-fases-imagej.js')) }}"></script>
 <script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
 <script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
 <script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 {{-- Control dedicado para que las bajas de fotografías y cuadros de texto persistan en Edit. --}}
 <script src="{{ asset('js/reporte-fotos-edit-04-02.js') }}?v={{ filemtime(public_path('js/reporte-fotos-edit-04-02.js')) }}"></script>
 @endsection

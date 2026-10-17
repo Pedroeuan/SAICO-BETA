@@ -42,6 +42,68 @@
         const binariaWrap = componente.querySelector('[data-imagej-binary-wrap]');
         // Canvas oculto que conserva una copia escalada de la imagen para previsualización rápida.
         const fuente = document.createElement('canvas');
+        let imagenCompleta = null;
+        let area = null;
+        let inicioArea = null;
+        let seleccionandoArea = false;
+        const permiteArea = componente.closest('form')?.id === 'FOR-PIMP-04_02';
+        const herramientasArea = document.createElement('div'); herramientasArea.className = 'd-flex flex-wrap align-items-center mb-2'; herramientasArea.style.gap = '10px';
+        const seleccionarArea = document.createElement('button'); seleccionarArea.type = 'button'; seleccionarArea.className = 'btn btn-outline-primary btn-sm'; seleccionarArea.innerHTML = '<i class="fas fa-crop-alt mr-1" aria-hidden="true"></i>Seleccionar área'; seleccionarArea.setAttribute('aria-pressed', 'false');
+        const usarCompleta = document.createElement('button'); usarCompleta.type = 'button'; usarCompleta.className = 'btn btn-outline-secondary btn-sm'; usarCompleta.innerHTML = '<i class="fas fa-expand mr-1" aria-hidden="true"></i>Usar imagen completa';
+        const estadoArea = document.createElement('span'); estadoArea.className = 'small text-muted'; estadoArea.textContent = 'Análisis de la imagen completa.';
+        if (permiteArea) { herramientasArea.append(seleccionarArea, usarCompleta, estadoArea); contenedorLienzo.prepend(herramientasArea); lienzo.style.touchAction = 'none'; }
+
+        async function archivoParaAnalizar() {
+            if (!area || !imagenCompleta) return imagenSeleccionada;
+            const recorte = document.createElement('canvas');
+            const x = Math.round(area.x * imagenCompleta.naturalWidth / fuente.width);
+            const y = Math.round(area.y * imagenCompleta.naturalHeight / fuente.height);
+            recorte.width = Math.max(1, Math.round(area.width * imagenCompleta.naturalWidth / fuente.width));
+            recorte.height = Math.max(1, Math.round(area.height * imagenCompleta.naturalHeight / fuente.height));
+            recorte.getContext('2d').drawImage(imagenCompleta, x, y, recorte.width, recorte.height, 0, 0, recorte.width, recorte.height);
+            const blob = await new Promise(resolve => recorte.toBlob(resolve, 'image/png'));
+            if (!blob) throw new Error('No fue posible preparar el área seleccionada.');
+            return new File([blob], 'area-temporal.png', { type: 'image/png' });
+        }
+        function confirmarArea() {
+            revisionArchivo++;
+            solicitudHistograma?.abort(); solicitudProcesamiento?.abort();
+            histogramaImageJ = null; localStorage.removeItem(claveTrabajo); marcarPendiente();
+            estadoArea.textContent = area ? 'Solo se analizará el rectángulo marcado.' : 'Análisis de la imagen completa.';
+            boton.disabled = !imagenSeleccionada || !valoresValidos();
+            dibujarPrevisualizacion();
+            const revision = revisionArchivo;
+            archivoParaAnalizar().then(file => { if (revision === revisionArchivo) cargarHistogramaImageJ(file, revision); }).catch(error => { estado.textContent = error.message; });
+        }
+        seleccionarArea.addEventListener('click', () => {
+            seleccionandoArea = !seleccionandoArea;
+            seleccionarArea.setAttribute('aria-pressed', String(seleccionandoArea));
+            seleccionarArea.classList.toggle('active', seleccionandoArea);
+            estadoArea.textContent = seleccionandoArea ? 'Arrastra sobre la imagen para marcar el área.' : (area ? 'Solo se analizará el rectángulo marcado.' : 'Análisis de la imagen completa.');
+        });
+        usarCompleta.addEventListener('click', () => { area = null; inicioArea = null; seleccionandoArea = false; seleccionarArea.setAttribute('aria-pressed', 'false'); seleccionarArea.classList.remove('active'); confirmarArea(); });
+        const puntoArea = event => {
+            const rect = lienzo.getBoundingClientRect();
+            return { x: Math.max(0, Math.min(fuente.width, (event.clientX - rect.left) * fuente.width / rect.width)), y: Math.max(0, Math.min(fuente.height, (event.clientY - rect.top) * fuente.height / rect.height)) };
+        };
+        lienzo.addEventListener('pointerdown', event => {
+            if (!permiteArea || !seleccionandoArea || !imagenCompleta) return;
+            marcarPendiente(); revisionArchivo++; solicitudHistograma?.abort(); solicitudProcesamiento?.abort(); boton.disabled = true;
+            event.preventDefault(); inicioArea = puntoArea(event); lienzo.setPointerCapture(event.pointerId);
+        });
+        lienzo.addEventListener('pointermove', event => {
+            if (!inicioArea) return;
+            const punto = puntoArea(event);
+            area = { x: Math.min(inicioArea.x, punto.x), y: Math.min(inicioArea.y, punto.y), width: Math.abs(punto.x - inicioArea.x), height: Math.abs(punto.y - inicioArea.y) };
+            histogramaImageJ = null; dibujarPrevisualizacion();
+        });
+        lienzo.addEventListener('pointerup', event => {
+            if (!inicioArea) return;
+            inicioArea = null; lienzo.releasePointerCapture(event.pointerId);
+            if (!area || area.width < 2 || area.height < 2) area = null;
+            seleccionandoArea = false; seleccionarArea.setAttribute('aria-pressed', 'false'); seleccionarArea.classList.remove('active'); confirmarArea();
+        });
+        lienzo.addEventListener('pointercancel', () => { if (inicioArea) { inicioArea = null; area = null; confirmarArea(); } });
 
         // Estado local: archivo activo, histograma exacto y validez del último resultado guardable.
         let imagenSeleccionada = null;
@@ -195,7 +257,8 @@
                 );
                 const enRangoOscuro = gris >= desde && gris <= hasta;
                 const seleccionado = tipoFase.value === 'ferrita' ? !enRangoOscuro : enRangoOscuro;
-                histograma[gris]++;
+                const pixel = i / 4, px = pixel % fuente.width, py = Math.floor(pixel / fuente.width);
+                if (!area || (px >= area.x && px < area.x + area.width && py >= area.y && py < area.y + area.height)) histograma[gris]++;
 
                 if (modoVista.value === 'bw') {
                     const binario = enRangoOscuro ? 0 : 255;
@@ -211,6 +274,14 @@
             }
 
             contexto.putImageData(salida, 0, 0);
+            if (area) {
+                contexto.fillStyle = 'rgba(0,0,0,.45)';
+                contexto.fillRect(0, 0, fuente.width, area.y);
+                contexto.fillRect(0, area.y + area.height, fuente.width, fuente.height - area.y - area.height);
+                contexto.fillRect(0, area.y, area.x, area.height);
+                contexto.fillRect(area.x + area.width, area.y, fuente.width - area.x - area.width, area.height);
+                contexto.strokeStyle = '#00e5ff'; contexto.lineWidth = 3; contexto.strokeRect(area.x, area.y, area.width, area.height);
+            }
             // Fiji tiene prioridad; el histograma del navegador solo sirve mientras llega la respuesta exacta.
             const histogramaMedicion = histogramaImageJ || histograma;
             const totalMedicion = histogramaMedicion.reduce(function (total, cantidad) { return total + cantidad; }, 0);
@@ -303,6 +374,7 @@
             const seleccionado = archivo.files && archivo.files[0];
             if (!seleccionado) {
                 imagenSeleccionada = null;
+                imagenCompleta = null; area = null; inicioArea = null;
                 histogramaImageJ = null;
                 boton.disabled = true;
                 contenedorLienzo.classList.add('d-none');
@@ -331,6 +403,8 @@
                 lienzo.height = fuente.height;
                 fuente.getContext('2d').drawImage(imagen, 0, 0, fuente.width, fuente.height);
                 imagenSeleccionada = seleccionado;
+                imagenCompleta = imagen; area = null; inicioArea = null;
+                estadoArea.textContent = 'Análisis de la imagen completa.';
                 resultadoVigente = false;
                 token.value = '';
                 botonUsarReporte.disabled = true;
@@ -404,6 +478,9 @@
             const csrf = componente.closest('form')?.querySelector('input[name="_token"]')?.value;
 
             try {
+                const imagenAnalisis = await archivoParaAnalizar();
+                if (revisionSolicitada !== revisionMedicion) return;
+                if (imagenAnalisis !== imagenSeleccionada) datos.append('imagen_analisis', imagenAnalisis);
                 const respuesta = await fetch(componente.dataset.processUrl, {
                     method: 'POST',
                     headers: csrf ? { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' } : { 'Accept': 'application/json' },

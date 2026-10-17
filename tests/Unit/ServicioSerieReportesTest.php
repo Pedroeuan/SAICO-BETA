@@ -12,6 +12,20 @@ use Tests\TestCase;
 
 class ServicioSerieReportesTest extends TestCase
 {
+    public function test_serie_0402_conserva_su_formato_y_continua_paginas_con_anexos_variables(): void
+    {
+        $this->crearReportes(401, 402);
+        $servicio = app(ServicioSerieReportes::class);
+        $servicio->iniciar(401, 2, ServicioSerieReportes::FORMATO_04_02);
+        $this->assertSame(ServicioSerieReportes::FORMATO_04_02, $servicio->obtener(401)->formato);
+        $servicio->registrarPaginas(401, 4);
+        $servicio->registrarConsecutivo(401, 402);
+        $this->assertSame(ServicioSerieReportes::FORMATO_04_02, $servicio->obtener(402)->formato);
+        $this->assertSame(2, $servicio->obtener(402)->numero_orden);
+        $this->assertSame(['pagina_inicial' => 5, 'pagina_final' => 7, 'total_estimado' => 7], $servicio->registrarPaginas(402, 3));
+        $this->assertFalse($servicio->puedeCrearSiguiente(402));
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
