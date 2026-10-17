@@ -444,74 +444,34 @@
 
 
             @php
-                $porPagina = 20; // número de filas por página
-                $chunks = $detallesOT->chunk($porPagina);
+                //$porPagina = 20; // número de filas por página
+                //$chunks = $detallesOT->chunk($porPagina);
                 //dd($detallesOT);
             @endphp
-            @foreach ($chunks as $pagina)
+
             <div class="content">
                 <div style="margin-bottom: 0px;"></div>
                 
                 <table class="datosgenerales">
                     <tbody>
                         <tr>
-                            <td class="lineaInferior"><label>CLIENTE: <br>{{ $OT->cliente->Cliente ?? 'N/A' }}</label></td>
+                            <td class="lineaInferior"><label>CLIENTE: <br></label></td>
                             <td style="width: 20%;"></td>
-                            <td class="lineaInferior"><label>PROYECTO:<br>{{ $OT->Proyecto_actividad ?? 'N/A' }}</label></td>
+                            <td class="lineaInferior"><label>PROYECTO:<br></label></td>
                         </tr>
 
                         <tr>
-                            <td class="lineaInferior"><label>CONTRATO:<br>{{ $OT->Contrato ?? 'N/A'  }}</label></td>
+                            <td class="lineaInferior"><label>CONTRATO:<br></label></td>
                             <td style="width: 20%;"></td>
-                            <td class="lineaInferior"><label>FECHA:<br>{{ $OT->getFormattedDateAttribute() ?? 'N/A' }}</label></td>
+                            <td class="lineaInferior"><label>FECHA:<br></label></td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 15px;"></div>
 
-                <table class="datosresultados">
-                    <thead>
-                                <tr class="celdaAzul">
-                                    <th class="" style="width: 4%;">No.</th>
-                                    <th class="" style="width: 40%;">DESCRIPCIÓN/ACTIVIDADES</th>
-                                    <th class="" style="width: 6%;">UNIDAD</th>
-                                    <th class="" style="width: 6%;">CANTIDAD</th>
-                                    <th class="" style="width: 40%;">PROCESOS</th>
-                                </tr>
-                    </thead>
-                <tbody>
-                        @foreach ($pagina as $detalle)
-                                                <tr>
-                                                    <td>{{ $loop->iteration + ($loop->parent->index * $porPagina) }}</td>
-                                                    <td class="">{{ $detalle->descripcion ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->unidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->cantidad ?? 'N/A' }}</td>
-                                                    <td class="">{{ $detalle->procesos ?? 'N/A' }}</td>
-                                                </tr>
-                                        {{ $loop->iteration + ($loop->parent->index * $porPagina) }}  
-                                        <!-- Número de fila global 
-                                            Cuenta correctamente, 
-                                            No necesitas variables extra
-                                            Funciona con páginas
-                                        -->
-                        @endforeach
-                        @for ($i = $pagina->count(); $i < $porPagina; $i++)
-                            <tr>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                                    <td>----</td>
-                            </tr>
-                        @endfor
-                    </tbody>
-                </table>  
-
+¿
             </div>
-                @if (!$loop->last)
-                    <div style="page-break-after: always;"></div>
-                @endif
-            @endforeach
+
         </body>
     </html>
