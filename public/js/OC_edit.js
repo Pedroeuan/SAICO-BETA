@@ -125,15 +125,21 @@ $(function () {
     });
 
     form.addEventListener("submit", () => {
-        const detalles = Array.from(tableBody.querySelectorAll("tr"), row => ({
-            item: row.querySelector(".item-input")?.value || "",
-            catalogo_id: row.querySelector(".catalogo-select").value,
-            descripcion: row.querySelector(".descripcion-input").value,
-            cantidad: row.querySelector(".cantidad-input").value,
-            unidad: row.querySelector(".unidad-input").value,
-            valor_unitario: row.querySelector(".valor-unitario-input").value,
-            valor_total: row.querySelector(".valor-total-input").value,
-        }));
+        const detalles = Array.from(tableBody.querySelectorAll("tr"), row => {
+            const catalogoSelect = row.querySelector(".catalogo-select");
+            const catalogoOption = catalogoSelect?.querySelector("option:checked");
+
+            return {
+                item: row.querySelector(".item-input")?.value || "",
+                catalogo_id: catalogoSelect?.value || "",
+                imagen: catalogoOption?.dataset.imagen || "",
+                descripcion: row.querySelector(".descripcion-input").value,
+                cantidad: row.querySelector(".cantidad-input").value,
+                unidad: row.querySelector(".unidad-input").value,
+                valor_unitario: row.querySelector(".valor-unitario-input").value,
+                valor_total: row.querySelector(".valor-total-input").value,
+            };
+        });
 
         document.getElementById("dynamicTableData").value = JSON.stringify(detalles);
     });

@@ -282,7 +282,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             rows.forEach(row => {
                 const item = row.querySelector('input[name="item[]"]')?.value || '';
-                const catalogo = row.querySelector('select[name="catalogo[]"]')?.value || '';
+                const catalogoSelect = row.querySelector('select[name="catalogo[]"]');
+                const catalogo = catalogoSelect?.value || '';
+                // Obtener la ruta de la imagen del catálogo seleccionado
+                const catalogoOption = catalogoSelect?.querySelector('option:checked');
+                const imagen = catalogoOption?.dataset.imagen || '';
                 const descripcion = row.querySelector('.descripcion-input')?.value || '';
                 const cantidad = row.querySelector('input[name="cantidad[]"]')?.value || '';
                 const unidad = row.querySelector('input[name="unidad[]"]')?.value || '';
@@ -292,6 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 tableData.push({
                     item: item,
                     catalogo: catalogo,
+                    imagen: imagen,
                     descripcion: descripcion,
                     cantidad: cantidad,
                     unidad: unidad,
