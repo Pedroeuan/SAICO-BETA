@@ -266,6 +266,7 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>Item</th>
                                                 <th>Catalogo</th>
                                                 <th>Descripción</th>
                                                 <th>Imagen</th>
@@ -280,11 +281,12 @@
                                             @foreach($detallesOC ?? [] as $indice => $detalle)
                                                 <tr>
                                                     <td>{{ $indice + 1 }}</td>
+                                                    <td><input type="text" class="form-control item-input" name="item[]" placeholder="1,2,2 . . . 5.4" value="{{ $detalle['item'] ?? '' }}"></td>
                                                     <td>
-                                                        <select class="form-control catalogo-select">
+                                                        <select class="form-control catalogo-select" name="catalogo[]">
                                                             <option value="">-- Seleccionar --</option>
                                                             @foreach($catalogo as $item)
-                                                                <option value="{{ $item->idCatalogo_OC }}" @selected(($detalle['catalogo_id'] ?? '') == $item->idCatalogo_OC)>{{ $item->Nombre }}</option>
+                                                                <option value="{{ $item->idCatalogo_OC }}" data-descripcion="{{ $item->Descripcion }}" data-unidad="{{ $item->Unidad }}" data-imagen="{{ $item->Imagen ?? '' }}" @selected(($detalle['catalogo_id'] ?? '') == $item->idCatalogo_OC)>{{ $item->Nombre }}</option>
                                                             @endforeach
                                                         </select>
                                                     </td>
@@ -294,7 +296,7 @@
                                                         <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
                                                     </td>
                                                     <td><input type="number" class="form-control cantidad-input" name="cantidad[]" placeholder="Cantidad" min="0" step="any" value="{{ $detalle['cantidad'] ?? '' }}"></td>
-                                                    <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
+                                                    <td><input type="text" class="form-control unidad-input" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
                                                     <td><input type="number" class="form-control valor-unitario-input" name="valor_unitario[]" placeholder="Valor Unitario" min="0" step="0.01" value="{{ $detalle['valor_unitario'] ?? '' }}"></td>
                                                     <td><input type="number" class="form-control valor-total-input" name="valor_total[]" placeholder="Valor Total" step="0.01" value="{{ $detalle['valor_total'] ?? '' }}" readonly></td>
                                                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>

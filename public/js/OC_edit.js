@@ -59,7 +59,8 @@ $(function () {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td></td>
-            <td><select class="form-control catalogo-select">${catalogOptions(detalle.catalogo_id || "")}</select></td>
+            <td><input type="text" class="form-control item-input" name="item[]" placeholder="1,2,2 . . . 5.4"></td>
+            <td><select class="form-control catalogo-select" name="catalogo[]">${catalogOptions(detalle.catalogo_id || "")}</select></td>
             <td><textarea class="form-control descripcion-input" name="descripcion[]" placeholder="Descripción"></textarea></td>
             <td class="text-center">
                 <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
@@ -72,6 +73,7 @@ $(function () {
             <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
         `;
 
+        row.querySelector(".item-input").value = detalle.item || "";
         row.querySelector(".descripcion-input").value = detalle.descripcion || "";
         row.querySelector(".cantidad-input").value = detalle.cantidad || "";
         row.querySelector(".unidad-input").value = detalle.unidad || "";
@@ -124,6 +126,7 @@ $(function () {
 
     form.addEventListener("submit", () => {
         const detalles = Array.from(tableBody.querySelectorAll("tr"), row => ({
+            item: row.querySelector(".item-input")?.value || "",
             catalogo_id: row.querySelector(".catalogo-select").value,
             descripcion: row.querySelector(".descripcion-input").value,
             cantidad: row.querySelector(".cantidad-input").value,
