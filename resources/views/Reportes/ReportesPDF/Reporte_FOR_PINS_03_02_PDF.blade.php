@@ -554,8 +554,8 @@
                         <tr>
                             <th style="width: 10%;">TIPO DE LUZ:</th>
                             <td class="lineaInferior">{{ $Datos_Equipo['TIPO_LUZ'] }}</td>
-                            <th style="width: 10%;">INTENCIDAD:</th>
-                            <td class="lineaInferior">{{ $Datos_Equipo['INTENCIDAD'] }}</td> <th style="text-align: left; width: 5%;"> Lx </th>
+                            <th style="width: 10%;">INTENSIDAD:</th>
+                            <td class="lineaInferior">{{ $Datos_Equipo['INTENSIDAD'] }}</td> <th style="text-align: left; width: 5%;"> Lx </th>
                             <th style="width: 10%;">CONDICIÓN SUPERFICIAL:</th>
                             <td class="lineaInferior">{{ $Datos_Equipo['CONDICION_SUPERFICIAL'] }}</td>
                             <th style="width: 10%;">TEMPERATURA DE PRUEBA:</th>
