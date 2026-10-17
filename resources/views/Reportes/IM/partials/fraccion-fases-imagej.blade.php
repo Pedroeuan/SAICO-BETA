@@ -24,6 +24,20 @@
     #FOR-PIMP-04_02 [data-imagej-results] .col-md-4:nth-child(3) .card { border-top:3px solid #7b9dc5!important; }
     #FOR-PIMP-04_02 [data-imagej-results] .col-md-4:nth-child(4) .card { border-top:3px solid #238365!important;background:#f0faf6; }
     #FOR-PIMP-04_02 .fiji-seleccion-pdf { border-left:4px solid #3679c5!important;border-radius:8px!important; }
+    #FOR-PIMP-04_02 .fiji-editor { display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;align-items:start; }
+    #FOR-PIMP-04_02 .fiji-controles { padding:12px;background:#f5f8fc;border:1px solid #dce4ef;border-radius:8px; }
+    #FOR-PIMP-04_02 .fiji-controles .col-md-6 { flex:0 0 100%;max-width:100%;margin-bottom:12px; }
+    #FOR-PIMP-04_02 .fiji-controles .row.mt-3 { margin-top:0!important; }
+    #FOR-PIMP-04_02 .fiji-controles .alert { font-size:12px;margin-top:0!important; }
+    #FOR-PIMP-04_02 [data-imagej-histogram-wrap] { display:none!important; }
+    #FOR-PIMP-04_02 .fiji-editor [data-imagej-preview-wrap] { min-width:0;position:sticky;top:12px; }
+    #FOR-PIMP-04_02 .fiji-editor [data-imagej-preview] { max-height:65vh;object-fit:contain; }
+    #FOR-PIMP-04_02 .fiji-controles .fiji-acciones .btn { width:100%; }
+    @media(max-width:767px) {
+        #FOR-PIMP-04_02 .fiji-editor { grid-template-columns:minmax(0,1fr); }
+        #FOR-PIMP-04_02 .fiji-controles .col-md-6 { flex:0 0 50%;max-width:50%; }
+        #FOR-PIMP-04_02 .fiji-editor [data-imagej-preview-wrap] { position:static; }
+    }
     @media(max-width:575px) { #FOR-PIMP-04_02 .fiji-acciones .btn{width:100%} }
 </style>
 @endonce
@@ -64,6 +78,8 @@
 
         <section class="fiji-bloque">
         <h5 class="fiji-bloque-titulo"><span>2</span><i class="fas fa-sliders-h" aria-hidden="true"></i> Ajustar y analizar</h5>
+        <div class="fiji-editor">
+        <div class="fiji-controles">
         <div class="row">
             <div class="col-md-6">
                 <label><strong>Umbral mínimo (0–255)</strong></label>
@@ -111,11 +127,6 @@
             <strong>Aplicar y medir con Fiji</strong>.
         </div>
 
-        {{-- Canvas de ajuste manual: rojo para selección y B&W para revisar la máscara. --}}
-        <div class="text-center border rounded bg-white p-2 d-none" data-imagej-preview-wrap>
-            <canvas data-imagej-preview style="max-width:100%;height:auto;cursor:crosshair"></canvas>
-        </div>
-
         <div class="mt-3 fiji-acciones">
             <button type="button" class="btn btn-success" data-imagej-process disabled>
                 Aplicar y medir con Fiji
@@ -124,6 +135,12 @@
                 Restablecer 0–85
             </button>
             <span class="ml-2 text-muted" data-imagej-status></span>
+        </div>
+        </div>
+        {{-- Canvas de ajuste manual: rojo para selección y B&W para revisar la máscara. --}}
+        <div class="text-center border rounded bg-white p-2 d-none" data-imagej-preview-wrap>
+            <canvas data-imagej-preview style="max-width:100%;height:auto;cursor:crosshair"></canvas>
+        </div>
         </div>
         </section>
 

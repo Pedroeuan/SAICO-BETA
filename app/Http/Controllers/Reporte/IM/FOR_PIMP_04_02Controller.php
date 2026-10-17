@@ -736,7 +736,9 @@ class FOR_PIMP_04_02Controller extends Controller
                 $analisis = $serviceColumnas->parseUploadedFile($archivo);
                 $columnasSeleccionadas = $this->normalizarColumnasXrf($analisis, $columnasSolicitadas);
                 $resultadosExtraidos = $serviceColumnas->calculateForColumns($analisis, $columnasSeleccionadas);
-                $capturaXrf = app(ServicioCapturaColumnasPdfXrf::class)->generate(
+                $capturaXrf = app(\App\Services\Procesamiento\ServicioArchivosProcesamiento::class)
+                    ->capturaColumnasXrf($request, $archivo, $columnasSeleccionadas)
+                    ?? app(ServicioCapturaColumnasPdfXrf::class)->generate(
                     $archivo,
                     $columnasSeleccionadas,
                     true

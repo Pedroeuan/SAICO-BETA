@@ -675,7 +675,9 @@ document.addEventListener('DOMContentLoaded', function () {
      * errores de validacion, el borrador permanece para no perder el trabajo.
      */
     const pendingSubmit = sessionStorage.getItem(pendingSubmitKey) === '1';
-    const hasValidationErrors = form.dataset.validationErrors === '1';
+    // Laravel conserva los errores solo para esta respuesta. Una recarga los consume
+    // y oculta el motivo por el que Guardar devolvió al formulario.
+    const hasValidationErrors = @json($errors->any());
     if (pendingSubmit && !hasValidationErrors) {
         localStorage.removeItem(draftKey);
         clearLegacyReportStorage();
@@ -684,6 +686,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
     sessionStorage.removeItem(pendingSubmitKey);
+    if (hasValidationErrors) {
+        const aviso = form.querySelector('.alert-danger');
+        aviso?.scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
 
     const recoveredDraft = readLocalDraft();
     if (recoveredDraft) {
