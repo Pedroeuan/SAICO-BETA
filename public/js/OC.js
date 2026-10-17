@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${rowCount}</td>
                 <td><input type="text" class="form-control" name="item[]" placeholder="1,2,2 . . . 5.4" value="${rowCount}"></td>
                 <td>
-                    <select class="form-control catalogo-select">
+                    <select class="form-control catalogo-select" name="catalogo[]">
                         <option value="">-- Seleccionar --</option>
                         ${catalogoData.map(item => `<option value="${item.idCatalogo_OC}" data-descripcion="${item.Descripcion}" data-unidad="${item.Unidad}" data-imagen="${item.Imagen || ''}">${item.Nombre}</option>`).join('')}
                     </select>
@@ -281,6 +281,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const tableData = [];
 
             rows.forEach(row => {
+                const item = row.querySelector('input[name="item[]"]')?.value || '';
+                const catalogo = row.querySelector('select[name="catalogo[]"]')?.value || '';
                 const descripcion = row.querySelector('.descripcion-input')?.value || '';
                 const cantidad = row.querySelector('input[name="cantidad[]"]')?.value || '';
                 const unidad = row.querySelector('input[name="unidad[]"]')?.value || '';
@@ -288,6 +290,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const valor_total = row.querySelector('input[name="valor_total[]"]')?.value || '';
 
                 tableData.push({
+                    item: item,
+                    catalogo: catalogo,
                     descripcion: descripcion,
                     cantidad: cantidad,
                     unidad: unidad,
