@@ -349,7 +349,7 @@
                                                 @endforeach
                                             </select>
                                             <br>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago" value="Muelle, Ciudad del Carmen">{{ $detallesOCM->Condiciones_pago ?? old('Condiciones_pago') }}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago">{{ $detallesOCM->Condiciones_pago ?? old('Condiciones_pago') }}</textarea>
                                             @error('Condiciones_pago')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -368,7 +368,7 @@
                                                 @endforeach
                                             </select>
                                             <br>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales" value="Muelle, Ciudad del Carmen">{{ $detallesOCM->Condiciones_generales ?? old('Condiciones_generales') }}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales">{{ $detallesOCM->Condiciones_generales ?? old('Condiciones_generales') }}</textarea>
                                             @error('Condiciones_generales')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
