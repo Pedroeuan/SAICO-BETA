@@ -202,7 +202,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Proyecto:</label>
-                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ...">{{old('Detalles_Generales.Proyecto')}}</textarea>
+                            <textarea class="form-control  is-waning" id="inputSuccess" name="Detalles_Generales[Proyecto]" placeholder="Ejemplo: INGENIERÍA, PROCURA, CONSTRUCCIÓN DE DUCTOS MARINOS NUEVOS PARA MANEJO DE PRODUCCIÓN DE PLATAFORMAS GENÉRICAS, A INSTALARSE EN LA SONDA DE CAMPECHE, GOLFO DE MÉXICO ..." rows="3" style="resize:vertical">{{old('Detalles_Generales.Proyecto')}}</textarea>
                             @error('Proyecto')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -222,7 +222,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Folio:</label>
-                            <input type="text" class="form-control  inputForm @error('Folio') is-invalid @enderror" name="Detalles_Generales[Folio]"  placeholder="Ejemplo:" value="{{old('Detalles_Generales.Folio')}}">
+                            <textarea class="form-control inputForm @error('Folio') is-invalid @enderror" name="Detalles_Generales[Folio]" placeholder="Ejemplo:" rows="3" style="resize:vertical">{{old('Detalles_Generales.Folio')}}</textarea>
                             @error('Folio')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -232,7 +232,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Partida:</label>
-                            <input type="text" class="form-control  inputForm @error('Partida') is-invalid @enderror" name="Detalles_Generales[Partida]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Partida')}}">
+                            <textarea class="form-control  inputForm @error('Partida') is-invalid @enderror" name="Detalles_Generales[Partida]"  placeholder="Ejemplo:  " rows="3" style="resize:vertical">{{old('Detalles_Generales.Partida')}}</textarea>
                             @error('Partida')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
@@ -354,7 +354,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Observaciones y Notas:</label>
-                            <input type="text" class="form-control  inputForm @error('Observaciones_Notas') is-invalid @enderror" name="Detalles_Generales[Observaciones_Notas]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Observaciones_Notas')}}">
+                            <textarea class="form-control  inputForm @error('Observaciones_Notas') is-invalid @enderror" name="Detalles_Generales[Observaciones_Notas]"  placeholder="Ejemplo:  " rows="3" style="resize:vertical">{{old('Detalles_Generales.Observaciones_Notas')}}</textarea>
                             @error('Observaciones_Notas')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
