@@ -527,10 +527,14 @@ class FOR_PIMP_04_02Controller extends Controller
             ]);
         }
 
-        $archivo->storeAs($directorio, $nombrePdf);
+        $archivo->storeAs(substr($directorio, strlen('public/')), $nombrePdf, 'public');
         $normaIM['Analisis_PDF'][0]['ruta'] = str_replace('public/', 'storage/', $directorio) . '/' . $nombrePdf;
         $nombreCaptura = 'captura-columnas-' . implode('-', $normaIM['Columnas_Seleccionadas']) . '-' . Str::lower(Str::random(8)) . '.png';
-        Storage::put("{$directorio}/{$nombreCaptura}", $binary);
+        if (!Storage::disk('public')->put(substr($directorio, strlen('public/')) . "/{$nombreCaptura}", $binary)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'Analisis_PDF' => 'No fue posible conservar el recorte XRF en el almacenamiento del reporte.',
+            ]);
+        }
         $normaIM['Captura_XRF']['ruta'] = str_replace('public/', 'storage/', $directorio) . '/' . $nombreCaptura;
         unset($normaIM['Captura_XRF']['data_url']);
     }
@@ -681,7 +685,10 @@ class FOR_PIMP_04_02Controller extends Controller
         $idNorma = (int) $request->input('Norma_IM.idnormas_im', 0);
         if ($referenciasQuimicas) $idNorma = (int) $referenciasQuimicas[0]['idnormas_im'];
         if ($idNorma <= 0) {
-            return null;
+            // La evidencia pertenece a la pieza, aunque se retiren las referencias del catálogo.
+            return $normaHistorica ? array_intersect_key($normaHistorica, array_flip([
+                'Analisis_PDF', 'Columnas_Seleccionadas', 'Captura_XRF', 'Resultados_XRF',
+            ])) + ['Tabla' => []] : null;
         }
 
         $norma = Normas_IM::find($idNorma);
@@ -714,12 +721,10 @@ class FOR_PIMP_04_02Controller extends Controller
         $sumasManuales = (array) $request->input('Norma_IM.Sumas_Manuales', $normaHistorica['Sumas_Manuales'] ?? []);
         $valoresElementos = array_change_key_case((array) $request->input('Norma_IM.Valores_Elementos', $normaHistorica['Valores_Elementos'] ?? []), CASE_LOWER);
         $promedios = $request->input('Norma_IM.Promedio', []);
-        $mismaNormaHistorica = is_array($normaHistorica)
-            && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma;
-        $analisisPdf = $mismaNormaHistorica && is_array($normaHistorica['Analisis_PDF'] ?? null)
+        $analisisPdf = is_array($normaHistorica['Analisis_PDF'] ?? null)
             ? $normaHistorica['Analisis_PDF'] : [];
-        $columnasSeleccionadas = $mismaNormaHistorica ? ($normaHistorica['Columnas_Seleccionadas'] ?? []) : [];
-        $capturaXrf = $mismaNormaHistorica ? ($normaHistorica['Captura_XRF'] ?? []) : [];
+        $columnasSeleccionadas = $normaHistorica['Columnas_Seleccionadas'] ?? [];
+        $capturaXrf = $normaHistorica['Captura_XRF'] ?? [];
         $resultadosExtraidos = is_array($normaHistorica['Resultados_XRF'] ?? null) ? $normaHistorica['Resultados_XRF'] : [];
         $nuevoPdf = $request->hasFile('Analisis_PDF');
         $serviceColumnas = app(ServicioAnalisisColumnasPdfXrf::class);
@@ -2833,6 +2838,10 @@ class FOR_PIMP_04_02Controller extends Controller
         $CapturaXrf = null;
         if (!empty($NormaIM['Captura_XRF']['ruta'])) {
             $rutaCaptura = storage_path('app/public/' . str_replace('storage/', '', $NormaIM['Captura_XRF']['ruta']));
+            // Compatibilidad con archivos antiguos guardados cuando el disco predeterminado era public.
+            if (!File::exists($rutaCaptura)) {
+                $rutaCaptura = storage_path('app/public/public/' . str_replace('storage/', '', $NormaIM['Captura_XRF']['ruta']));
+            }
             $CapturaXrf = File::exists($rutaCaptura) ? $rutaCaptura : null;
         }
         $Fotos = [];
