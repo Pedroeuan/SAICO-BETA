@@ -8,9 +8,18 @@ use Tests\TestCase;
 
 class FORPIMP0402TextoMultilineaTest extends TestCase
 {
-    public function test_pdf_conserva_enter_y_lineas_vacias_en_los_cuatro_campos(): void
+    public static function plantillas(): array
     {
-        $html = view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_02_PDF', [
+        return [
+            'datos' => ['Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_02_PDF'],
+            'fotos' => ['Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_02_PDF'],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('plantillas')]
+    public function test_pdf_conserva_enter_y_lineas_vacias_en_los_cuatro_campos(string $plantilla): void
+    {
+        $html = view($plantilla, [
             'Detalles_Generales' => [
                 'Proyecto' => "PROYECTO_PRIMERO\n\nPROYECTO_SEGUNDO",
                 'Folio' => "FOLIO_PRIMERO\r\n\r\nFOLIO_SEGUNDO",
@@ -20,6 +29,7 @@ class FORPIMP0402TextoMultilineaTest extends TestCase
             'Datos_Equipo' => [], 'NormaIM' => ['Tabla' => []],
             'Logo' => '', 'QR_PDF' => '', 'CapturaXrf' => '',
             'Firmas_Reportes' => [], 'numFirmas' => 0,
+            'Fotos' => [['es_cuadro_texto' => true, 'comment' => 'Foto de prueba']],
         ])->render();
         $this->assertStringContainsString('&lt;marca&gt;', $html);
         $pdf = Pdf::loadHTML($html)->setPaper('letter')->output();

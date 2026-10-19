@@ -19,6 +19,13 @@ class ProcesamientoPdfController extends Controller
     {
         abort_unless(array_key_exists($formato, GenerarReportePdfJob::FORMATOS), 404);
         $descargar = $request->boolean('download');
+        // Impide mostrar un PDF antiguo del navegador. La copia vigente del
+        // servidor sí se reutiliza; estas cabeceras no fuerzan otra generación.
+        $cabeceras = $formato === '04_02' ? [
+            'Cache-Control' => 'private, no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ] : [];
 
         // FOR-PIMP-04/03 permite seleccionar sus plantillas en espanol o ingles.
         // Los demas formatos conservan exactamente su comportamiento anterior.
@@ -30,10 +37,11 @@ class ProcesamientoPdfController extends Controller
         // Un reporte sin cambios abre el archivo privado ya generado. No se crea
         // otro trabajo ni se vuelve a ejecutar Dompdf/FPDI.
         if ($ruta = $pdfGenerado->rutaVigente($reporte, $formato, $idioma)) {
-            return response()->file($ruta, [
+            $respuesta = response()->file($ruta, array_merge($cabeceras, [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => ($descargar ? 'attachment' : 'inline') . '; filename="reporte.pdf"',
-            ]);
+            ]));
+            return $formato === '04_02' ? $respuesta->setPrivate() : $respuesta;
         }
 
         $trabajo = $pdfGenerado->programar(
@@ -46,18 +54,19 @@ class ProcesamientoPdfController extends Controller
         // Puede aparecer entre la primera comprobacion y la programacion si
         // otro worker termino la misma version.
         if (!$trabajo && ($ruta = $pdfGenerado->rutaVigente($reporte, $formato, $idioma))) {
-            return response()->file($ruta, [
+            $respuesta = response()->file($ruta, array_merge($cabeceras, [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'inline; filename="reporte.pdf"',
-            ]);
+            ]));
+            return $formato === '04_02' ? $respuesta->setPrivate() : $respuesta;
         }
 
         abort_unless($trabajo, 409);
 
-        return view('Procesamiento.reporte-pdf', [
+        return response()->view('Procesamiento.reporte-pdf', [
             'trabajo' => $trabajo,
             'estadoUrl' => route('procesamientos.estado', $trabajo->id),
             'descargar' => $descargar,
-        ]);
+        ], 200, $cabeceras);
     }
 }

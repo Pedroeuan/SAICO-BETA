@@ -125,10 +125,12 @@ class ServicioMetalografiaReporte
         array $patronGrano = []
     ): string
     {
+        $fases = mb_strtolower(trim((string) ($datosEquipo['FASES_PRESENTES'] ?? '')) ?: '---', 'UTF-8');
+        $fases = mb_strtoupper(mb_substr($fases, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($fases, 1, null, 'UTF-8');
         $lineas = [
             'RESULTADOS DEL ANÁLISIS METALOGRÁFICO',
             '',
-            'Fases presentes: ' . (trim((string) ($datosEquipo['FASES_PRESENTES'] ?? '')) ?: '---'),
+            'Fases presentes: ' . $fases,
             'Morfología de la microestructura: ---',
             '% fracción volumétrica Perlita / zonas oscuras: ' . number_format((float) ($analisis['porcentaje_perlita'] ?? 0), 3) . ' %',
             '% fracción volumétrica Ferrita / zonas claras: ' . number_format((float) ($analisis['porcentaje_ferrita'] ?? 0), 3) . ' %',
@@ -136,6 +138,7 @@ class ServicioMetalografiaReporte
             'Tamaño de grano: ' . (trim((string) ($patronGrano['valor_grano'] ?? $patronGrano['nombre'] ?? '')) ?: '---'),
             'Bandeamiento: ---',
             'Magnificación: 100 X',
+            'Especificación aproximada de la pieza: ' . (trim((string) ($datosEquipo['ESPECIFICACION_MATERIAL'] ?? '')) ?: '---'),
             'Analizador: Fiji',
         ];
 
