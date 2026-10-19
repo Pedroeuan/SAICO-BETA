@@ -40,6 +40,7 @@
                                 <th>Folio</th>
                                 <th>Fecha de servicio</th>
                                 <th>Estatus</th>
+                                <th>Trabajo</th>
                                 <th>Editar</th>
                                 <th>Eliminar</th>
                                 <th>PDF Generado</th>
@@ -65,6 +66,7 @@
                                 {{ $solicitud->formatted_date }}
                             </td>
                             <td scope="row">{{$solicitud->Estatus}}</td>
+                            <td scope="row">{{ $solicitud->trabajo ?? 'POR DEFINIR' }}</td>
                             @if($rol == 'Equipos' || $rol == 'Super Administrador' || $rol == 'Administrador')
                                 @if($solicitud->Estatus == 'PENDIENTE' || $solicitud->Estatus == 'APROBADO')
                                     <div class="btn-group">
