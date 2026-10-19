@@ -434,12 +434,17 @@
             <td>
                 JEFE DE VENTAS
                 <div class="espacio-firma"></div>
+                <div class="espacio-firma">
+                    Jorge Rogelio Moo Oropeza
+                </div>
             </td>
             <!-- DIRECTOR GENERAL -->
             <td>
                 DIRECTOR GENERAL
                 <div class="espacio-firma"></div>
-                
+                <div class="espacio-firma">
+                    César E. Garduño Acosta
+                </div>
             </td>
         </tr>
     </table>

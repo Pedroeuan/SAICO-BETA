@@ -527,10 +527,14 @@ class FOR_PIMP_04_02Controller extends Controller
             ]);
         }
 
-        $archivo->storeAs($directorio, $nombrePdf);
+        $archivo->storeAs(substr($directorio, strlen('public/')), $nombrePdf, 'public');
         $normaIM['Analisis_PDF'][0]['ruta'] = str_replace('public/', 'storage/', $directorio) . '/' . $nombrePdf;
         $nombreCaptura = 'captura-columnas-' . implode('-', $normaIM['Columnas_Seleccionadas']) . '-' . Str::lower(Str::random(8)) . '.png';
-        Storage::put("{$directorio}/{$nombreCaptura}", $binary);
+        if (!Storage::disk('public')->put(substr($directorio, strlen('public/')) . "/{$nombreCaptura}", $binary)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'Analisis_PDF' => 'No fue posible conservar el recorte XRF en el almacenamiento del reporte.',
+            ]);
+        }
         $normaIM['Captura_XRF']['ruta'] = str_replace('public/', 'storage/', $directorio) . '/' . $nombreCaptura;
         unset($normaIM['Captura_XRF']['data_url']);
     }
@@ -681,7 +685,10 @@ class FOR_PIMP_04_02Controller extends Controller
         $idNorma = (int) $request->input('Norma_IM.idnormas_im', 0);
         if ($referenciasQuimicas) $idNorma = (int) $referenciasQuimicas[0]['idnormas_im'];
         if ($idNorma <= 0) {
-            return null;
+            // La evidencia pertenece a la pieza, aunque se retiren las referencias del catálogo.
+            return $normaHistorica ? array_intersect_key($normaHistorica, array_flip([
+                'Analisis_PDF', 'Columnas_Seleccionadas', 'Captura_XRF', 'Resultados_XRF',
+            ])) + ['Tabla' => []] : null;
         }
 
         $norma = Normas_IM::find($idNorma);
@@ -714,12 +721,10 @@ class FOR_PIMP_04_02Controller extends Controller
         $sumasManuales = (array) $request->input('Norma_IM.Sumas_Manuales', $normaHistorica['Sumas_Manuales'] ?? []);
         $valoresElementos = array_change_key_case((array) $request->input('Norma_IM.Valores_Elementos', $normaHistorica['Valores_Elementos'] ?? []), CASE_LOWER);
         $promedios = $request->input('Norma_IM.Promedio', []);
-        $mismaNormaHistorica = is_array($normaHistorica)
-            && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma;
-        $analisisPdf = $mismaNormaHistorica && is_array($normaHistorica['Analisis_PDF'] ?? null)
+        $analisisPdf = is_array($normaHistorica['Analisis_PDF'] ?? null)
             ? $normaHistorica['Analisis_PDF'] : [];
-        $columnasSeleccionadas = $mismaNormaHistorica ? ($normaHistorica['Columnas_Seleccionadas'] ?? []) : [];
-        $capturaXrf = $mismaNormaHistorica ? ($normaHistorica['Captura_XRF'] ?? []) : [];
+        $columnasSeleccionadas = $normaHistorica['Columnas_Seleccionadas'] ?? [];
+        $capturaXrf = $normaHistorica['Captura_XRF'] ?? [];
         $resultadosExtraidos = is_array($normaHistorica['Resultados_XRF'] ?? null) ? $normaHistorica['Resultados_XRF'] : [];
         $nuevoPdf = $request->hasFile('Analisis_PDF');
         $serviceColumnas = app(ServicioAnalisisColumnasPdfXrf::class);
@@ -1609,7 +1614,7 @@ class FOR_PIMP_04_02Controller extends Controller
         // Adjunta únicamente un análisis previamente generado por el mismo usuario autenticado.
         $analisisImagen = null;
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $analisisImagen = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->resolverParaReporte(
                 $validatedData['Analisis_Imagen_Token'],
                 (int) Auth::id()
             );
@@ -2123,17 +2128,6 @@ class FOR_PIMP_04_02Controller extends Controller
         $analisisImagen = $juntasActuales['ANALISIS_IMAGEN'];
         $conteoGranos = $juntasActuales['CONTEO_GRANOS'];
 
-        // Se conservan las rutas para retirar los PDF anteriores solo después de guardar los nuevos.
-        $rutasPdfsXrfAnteriores = [];
-        foreach (($normaHistorica['Analisis_PDF'] ?? []) as $analisisAnterior) {
-            if (is_array($analisisAnterior) && !empty($analisisAnterior['ruta'])) {
-                $rutasPdfsXrfAnteriores[] = (string) $analisisAnterior['ruta'];
-            }
-        }
-        if (!empty($normaHistorica['Captura_XRF']['ruta'])) {
-            $rutasPdfsXrfAnteriores[] = (string) $normaHistorica['Captura_XRF']['ruta'];
-        }
-
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
             // 1. ELIMINAR ARCHIVO ANTERIOR (si existe)
@@ -2193,9 +2187,10 @@ class FOR_PIMP_04_02Controller extends Controller
 
         // Un token nuevo reemplaza el análisis anterior; si no llega, se conserva el histórico.
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
-            $analisisImagen = $servicioImagen->obtenerPorToken(
+            $analisisImagen = $servicioImagen->resolverParaReporte(
                 $validatedData['Analisis_Imagen_Token'],
-                (int) Auth::id()
+                (int) Auth::id(),
+                is_array($analisisImagen) ? $analisisImagen : null
             );
         }
         // En Edit también se permite activar o retirar del PDF el análisis previamente guardado.
@@ -2764,14 +2759,8 @@ class FOR_PIMP_04_02Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
 
-        if ($request->hasFile('Analisis_PDF')) {
-            foreach (array_unique($rutasPdfsXrfAnteriores) as $rutaAnterior) {
-                $rutaDisco = str_replace('storage/', 'public/', $rutaAnterior);
-                if (Storage::exists($rutaDisco)) {
-                    Storage::delete($rutaDisco);
-                }
-            }
-        }
+        // Conserva los archivos XRF anteriores como evidencia histórica. Una sustitución
+        // guarda archivos con nombres únicos sin borrar el recorte de versiones previas.
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
@@ -2833,6 +2822,10 @@ class FOR_PIMP_04_02Controller extends Controller
         $CapturaXrf = null;
         if (!empty($NormaIM['Captura_XRF']['ruta'])) {
             $rutaCaptura = storage_path('app/public/' . str_replace('storage/', '', $NormaIM['Captura_XRF']['ruta']));
+            // Compatibilidad con archivos antiguos guardados cuando el disco predeterminado era public.
+            if (!File::exists($rutaCaptura)) {
+                $rutaCaptura = storage_path('app/public/public/' . str_replace('storage/', '', $NormaIM['Captura_XRF']['ruta']));
+            }
             $CapturaXrf = File::exists($rutaCaptura) ? $rutaCaptura : null;
         }
         $Fotos = [];
@@ -2913,19 +2906,26 @@ class FOR_PIMP_04_02Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_02_PDF', $data)->setPaper('letter', 'portrait');
+        // Optimización exclusiva del 04_02: reutiliza cada sección si su texto,
+        // estilos e imágenes siguen iguales. Los análisis ya vienen guardados.
+        $secciones = app(\App\Services\PdfSecciones0402::class);
+        $htmlDatos = view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_02_PDF', $data)->render();
+        $pdf1Content = $secciones->obtener((int) $id, 'datos', $htmlDatos,
+            fn () => PDF::loadHTML($htmlDatos)->setPaper('letter', 'portrait')->output());
         $pdf2Content = null;
         $pageCount2 = 0;
 
         if (!empty($Fotos)) {
-            $pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_02_PDF', $data)->setPaper('letter', 'portrait');
-            $pdf2Content = $pdf2->output();
+            // Un cambio exclusivo de datos técnicos puede reutilizar este anexo.
+            // Si cambia un dato general visible en ambos, se regeneran ambos PDFs.
+            $htmlFotos = view('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_02_PDF', $data)->render();
+            $pdf2Content = $secciones->obtener((int) $id, 'fotos', $htmlFotos,
+                fn () => PDF::loadHTML($htmlFotos)->setPaper('letter', 'portrait')->output());
         }
 
         // Generar el PDF adicional en orientación vertical
 
         // Combinar los PDFs
-        $pdf1Content = $pdf1->output();
 
        // Crear objetos FPDI independientes para contar páginas
         $tempPdf1 = new Fpdi();
@@ -2978,7 +2978,10 @@ class FOR_PIMP_04_02Controller extends Controller
         }
 
         return response($combinedPdf->Output('Reporte_FOR_PIMP_04_02.PDF', 'S'), 200)
-            ->header('Content-Type', 'application/pdf');
+            ->header('Content-Type', 'application/pdf')
+            ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     /**

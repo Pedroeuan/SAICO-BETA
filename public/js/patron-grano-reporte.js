@@ -364,6 +364,23 @@
             if (tarjetaActiva && tarjetaActiva.contains(evento.target)) sincronizarLayout(tarjetaActiva);
         });
 
+        if (formulario.id === 'FOR-PIMP-04_02') {
+            formulario.addEventListener('saico:grain-pattern-select', function (evento) {
+                const id = String(evento.detail?.id || '');
+                if (!catalogo.some(item => String(item.id) === id) && String(historico.id || '') !== id) return;
+                if (!tarjetaActiva) {
+                    activoInput.value = '1';
+                    idInput.value = id;
+                    crearTarjetaHistorica();
+                }
+                const selector = tarjetaActiva?.querySelector('[data-grain-card-select]');
+                if (selector) {
+                    selector.value = id;
+                    selector.dispatchEvent(new Event('change', {bubbles: true}));
+                }
+            });
+        }
+
         actualizarTarjetas();
         crearTarjetaHistorica();
         const observador = new MutationObserver(actualizarTarjetas);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\OC;
 
 use App\Models\detallesOC\detallesOC;
+use App\Models\Firmantes_OC\Firmantes_OC;
 use App\Models\Catalogo_OC\Catalogo_OC;
 use App\Models\OC\OC;
 use App\Models\Clientes\clientes;
@@ -37,7 +38,9 @@ class OCController extends Controller
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
         $catalogo = DB::table('Catalogo_OC')->get();
-        return view('OC.create', compact('Clientes', 'catalogo'));
+        $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
+        $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
+        return view('OC.create', compact('Clientes', 'catalogo', 'Condiciones_Pago', 'Condiciones_Generales'));
     }
 
     /**
@@ -46,6 +49,7 @@ class OCController extends Controller
     public function storeOC(Request $request)
     {
         //
+        //$request->all();
         $request->validate([
             'Contrato' => 'required|string',
             'TieneCliente' => 'required|in:si,no',
@@ -71,21 +75,6 @@ class OCController extends Controller
 
             // Verificar que realmente tenga el formato correcto
             if (!$actual || !preg_match('/^AICO-INT-[0-9]{4}$/', $actual)) {
-
-                // Seguridad: volver a calcular el consecutivo
-                /*$registros = reporte::orderBy('idReportes', 'DESC')->get();
-                $ultimoNumero = 0;
-                
-                /*foreach ($registros as $r) {
-                    $json = json_decode($r->Detalles_Generales, true);
-
-                    if (!empty($json['Contrato']) && str_starts_with($json['Contrato'], 'AICO-INT-')) {
-                        $n = intval(str_replace('AICO-INT-', '', $json['Contrato']));
-                        if ($n > $ultimoNumero) $ultimoNumero = $n;
-                        break;
-                    }
-                }
-                //$nuevo = "AICO-INT-" . str_pad($ultimoNumero + 1, 4, '0', STR_PAD_LEFT);*/
 
                 $registros = OC::where('Contrato', 'LIKE', 'AICO-INT-%')
                             ->orderBy('Contrato', 'DESC')
@@ -133,7 +122,7 @@ class OCController extends Controller
 
         if (!empty($clienteNombre)) {
             $cliente = clientes::where('Cliente', trim($clienteNombre))->first();
-            Log::info('cliente: ', ['cliente' => $cliente]);
+            //Log::info('cliente: ', ['cliente' => $cliente]);
             if ($cliente) {
                 $OC->idClientes = $cliente->idClientes;
             }else {
@@ -261,6 +250,13 @@ class OCController extends Controller
         } else {
             $OC->OC_archivo = $EsperaDato;
         }
+
+        // Asignar un cliente por defecto si no se capturó ningún cliente
+        if (empty($OC->idClientes)) {
+            $clientePorDefecto = clientes::first();
+            $OC->idClientes = $clientePorDefecto ? $clientePorDefecto->idClientes : 1;
+        }
+
         $OC->save();
 
         /*Notas */
@@ -288,7 +284,7 @@ class OCController extends Controller
         $detallesOC = json_decode($request->input('dynamicTableData'), true);
 
         // Comprobar si el arreglo tiene elementos antes de continuar
-        if (!empty($detallesOC)) {
+        if (!empty($detallesOC)) { 
 
             // Convertir el arreglo en una cadena JSON
             $detallesJSON = json_encode($detallesOC); 
@@ -299,11 +295,53 @@ class OCController extends Controller
             // Guardar el JSON en la columna 'Detalles'
             $detallesOCModel->Detalles = $detallesJSON;
 
+            //$items = json_decode($request->input('dynamicTableData'), true);
+
+            $subtotalCentavos = 0;
+
+            foreach ($detallesOC as $detalle) {
+                $cantidad = (float) ($detalle['cantidad'] ?? 0);
+                $valorUnitario = (float) ($detalle['valor_unitario'] ?? 0);
+
+                $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+            }
+
+            $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+
+            $datosOrden = [
+                'detallesOC' => $detallesOC,
+                'totales' => [
+                    'subtotal' => $subtotalCentavos / 100,
+                    'iva' => $ivaCentavos / 100,
+                    'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+                ],
+            ];
+
+            $detallesJSON = json_encode($datosOrden, JSON_THROW_ON_ERROR);
+            $detallesOCModel->Detalles = $detallesJSON;
             // Guardar el objeto en la base de datos
             $detallesOCModel->save();
         } else {
             //Log::warning('No se han enviado detalles para guardar');
         }
+
+        // Crear un nuevo registro en la firmantes_OS
+            $firmantes_OC = new Firmantes_OC;
+
+            /* Firmas */
+            $numFirmas = (int) $request->input('numFirmas', 1);
+            $firmasPorCantidad = [
+                1 => $request->input('Firmas_Reportes1', []),
+                2 => $request->input('Firmas_Reportes2', []),
+                3 => $request->input('Firmas_Reportes3', []),
+                4 => $request->input('Firmas_Reportes4', []),
+            ];
+
+            $datosFirmas = $firmasPorCantidad[$numFirmas] ?? [];
+            $datosFirmas['numFirmas'] = $numFirmas;
+            $firmantes_OC->Nombre_Cargo = json_encode($datosFirmas);
+            $firmantes_OC->idOC = $OC->idOC;
+            $firmantes_OC->save();
 
         return redirect()->route('OC.indexOC');
     }
@@ -324,15 +362,42 @@ class OCController extends Controller
         $OC = OC::where('idOC', $id)->first();
         $detallesOCM = detallesOC::where('idOC',$OC->idOC)->first();
         $catalogo = DB::table('Catalogo_OC')->get();
-
+        $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
+        $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
         $idCliente = $OC->idClientes;
         // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Cliente = clientes::where('idClientes', $idCliente)->first(); 
         $Nombre_Cliente = $Cliente->Cliente;
-        //Decodificar JSON de la columna 'Detalles'
-        $detallesOC = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
+        // Soporta tanto el formato anterior (lista de detalles) como el formato
+        // actual que guarda los detalles junto con sus totales.
+        $datosGuardados = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
+        $detallesOC = $datosGuardados['detallesOC'] ?? $datosGuardados;
+        $detallesOC = is_array($detallesOC) ? array_values($detallesOC) : [];
+        $totales = $datosGuardados['totales'] ?? [];
 
-        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente'));
+        if (empty($totales) && !empty($detallesOC)) {
+            $subtotalCentavos = 0;
+            foreach ($detallesOC as $detalle) {
+                $cantidad = (float) ($detalle['cantidad'] ?? 0);
+                $valorUnitario = (float) ($detalle['valor_unitario'] ?? 0);
+                $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+            }
+
+            $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+            $totales = [
+                'subtotal' => $subtotalCentavos / 100,
+                'iva' => $ivaCentavos / 100,
+                'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+            ];
+        }
+
+        $totales = array_merge([
+            'subtotal' => 0,
+            'iva' => 0,
+            'total' => 0,
+        ], is_array($totales) ? $totales : []);
+
+        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales'));
     }
 
     /**
@@ -392,26 +457,42 @@ class OCController extends Controller
         }
 
         // Decodificar el input JSON en un arreglo
-        $detallesOC = json_decode($request->input('dynamicTableData'), true);
+        $request->validate([
+            'dynamicTableData' => 'required|json',
+        ]);
 
-        // Comprobar si el arreglo tiene elementos antes de continuar
-        if (!empty($detallesOC)) {
-
-            // Convertir el arreglo en una cadena JSON
-            $detallesJSON = json_encode($detallesOC); 
-
-            // Crear un nuevo registro en la tabla detallesOC
-            $detallesOCModel = new detallesOC;
-
-            // Asignar el idOC
-            $detallesOCModel = detallesOC::find($id);
-
-            $detallesOCModel->update([
-                'Detalles' =>  $detallesJSON,
-            ]);
-        } else {
-            //Log::warning('No se han enviado detalles para guardar');
+        $detallesOC = json_decode($request->input('dynamicTableData'), true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($detallesOC) || !array_is_list($detallesOC)) {
+            return back()->withErrors([
+                'dynamicTableData' => 'Los detalles de la orden tienen un formato inválido.',
+            ])->withInput();
         }
+
+        $subtotalCentavos = 0;
+        foreach ($detallesOC as $detalle) {
+            $cantidad = is_array($detalle) && is_numeric($detalle['cantidad'] ?? null)
+                ? (float) $detalle['cantidad']
+                : 0;
+            $valorUnitario = is_array($detalle) && is_numeric($detalle['valor_unitario'] ?? null)
+                ? (float) $detalle['valor_unitario']
+                : 0;
+
+            $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+        }
+
+        $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+        $detallesJSON = json_encode([
+            'detallesOC' => $detallesOC,
+            'totales' => [
+                'subtotal' => $subtotalCentavos / 100,
+                'iva' => $ivaCentavos / 100,
+                'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+            ],
+        ], JSON_THROW_ON_ERROR);
+
+        $detallesOCModel = detallesOC::firstOrNew(['idOC' => $OC->idOC]);
+        $detallesOCModel->Detalles = $detallesJSON;
+        $detallesOCModel->save();
 
         return redirect()->route('OC.indexOC');
     }
@@ -446,4 +527,59 @@ class OCController extends Controller
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
     }
 
+    public function OC_PDF($id)
+    {
+    $OC  = OC::find($id);
+        $cliente = clientes::find($OC->idClientes);
+        $OC->cliente = $cliente; // Agregar el cliente al objeto OC
+        $detallesRegistro = detallesOC::where('idOC', $id)->first();
+        $detallesOC = collect($detallesRegistro
+            ? json_decode($detallesRegistro->Detalles, true)
+            : []
+        )->map(fn ($detalle) => (object) $detalle);
+        $firmantes = Firmantes_OC::where('idOC', $id)->first();
+        $Firmas_Reportes = $firmantes ? json_decode($firmantes->Nombre_Cargo, true) : [];
+        $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
+        
+        //$Grupo_Juntas_Detalles_OS = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $id)->first(); 
+        //$detallesOT = json_decode($Grupo_Juntas_Detalles_OS->Juntas_grupo, true);
+    
+        $Logo = public_path('images/Logo_AICO_R.jpg');
+
+        $data = [
+            'title' => 'Manifiesto PDF',
+            'OC' => $OC,
+            'detallesOC' => $detallesOC,
+            'numFirmas' => $numFirmas,
+            'Firmas_Reportes' => $Firmas_Reportes,
+            'Logo' => $Logo,
+            
+        ];
+    
+        // Cargar la vista con los datos
+        $pdf = PDF::loadView('OC.OC_PDF', $data);
+    
+        // Renderizar el PDF antes de obtener el canvas
+        $dompdf = $pdf->getDomPDF();
+        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
+    
+        $canvas = $dompdf->getCanvas();
+        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+            // Usar una fuente válida predefinida en DomPDF
+            $font = $fontMetrics->getFont('Arial', 'normal');
+            $size = 8;
+    
+            // Validar y ajustar las posiciones X e Y según sea necesario
+            $x = 483; // Ajusta esta posición X según sea necesario
+            $y = 57;  // Ajusta esta posición Y según sea necesario
+    
+            // Evitar problemas con valores no válidos para coordenadas
+            if (is_numeric($x) && is_numeric($y)) {
+                $text = "$pageNumber de $pageCount";
+                $canvas->text($x, $y, $text, $font, $size);
+            }
+        });
+    
+        return $pdf->stream('OC.PDF');
+    }
 }

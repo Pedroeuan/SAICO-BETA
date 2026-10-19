@@ -221,6 +221,22 @@ IJM);
         }
     }
 
+    /** El histórico proviene del reporte autorizado, nunca de campos enviados por el navegador. */
+    public function resolverParaReporte(string $token, int $usuarioId, ?array $historico = null): array
+    {
+        if ($token !== '' && ($historico['token'] ?? null) === $token) {
+            return $historico;
+        }
+
+        try {
+            return $this->obtenerPorToken($token, $usuarioId);
+        } catch (RuntimeException $exception) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'Analisis_Imagen_Token' => 'No se pudo recuperar el nuevo análisis de imagen. Vuelve a aplicar y medir con Fiji antes de guardar. El análisis anterior del reporte se conserva.',
+            ]);
+        }
+    }
+
     /** Recupera un análisis persistido y verifica que pertenezca al usuario actual. */
     public function obtenerPorToken(string $token, int $usuarioId): array
     {
