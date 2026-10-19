@@ -663,6 +663,17 @@ return [
                     'can' => 'ventas-access',
                     //'topnav' => true,
                     'submenu' => [
+
+                        [
+                            'text' => 'Registro OC',
+                            'icon' => 'fas fa-chart-line',
+                            'url' => '/OC/createOC',
+                        ],
+                        [
+                            'text' => 'Ordenes de Compras',
+                            'icon' => 'fas fa-clipboard-list',
+                            'url' => '/OC/indexOC',
+                        ],
                         [
                             'text' => 'Catalogo de Servicios',
                             'icon' => 'fas fa-book-open',
@@ -674,14 +685,24 @@ return [
                             'url' => '/OC/catalogo',
                         ],
                         [
-                            'text' => 'Registro OC',
-                            'icon' => 'fas fa-chart-line',
-                            'url' => '/OC/createOC',
+                            'text' => 'index Condiciones de Pago',
+                            'icon' => '	fas fa-file-invoice-dollar',
+                            'url' => '/OC/indexPago',
                         ],
                         [
-                            'text' => 'Ordenes de Compras',
+                            'text' => 'Registro de Condiciones de Pago',
+                            'icon' => 'fas fa-cash-register',
+                            'url' => '/OC/Pago',
+                        ],
+                        [
+                            'text' => 'index Condiciones Generales',
                             'icon' => 'fas fa-clipboard-list',
-                            'url' => '/OC/indexOC',
+                            'url' => '/OC/indexGenerales',
+                        ],
+                        [
+                            'text' => 'Registro de Condiciones Generales',
+                            'icon' => 'fas fa-plus-square',
+                            'url' => '/OC/Generales',
                         ],
                         [
                             'text' => 'Clientes',
