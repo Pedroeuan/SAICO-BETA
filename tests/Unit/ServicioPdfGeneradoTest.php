@@ -69,6 +69,23 @@ class ServicioPdfGeneradoTest extends TestCase
         ]);
     }
 
+    public function test_0402_detecta_el_cambio_del_archivo_de_evidencia_guardado_en_juntas(): void
+    {
+        Storage::disk('local')->put('captura.png', 'original');
+        $ruta = Storage::disk('local')->path('captura.png');
+        DB::table('Grupo_Juntas_Detalles_Re')->insert([
+            'idReportes' => 901,
+            'Juntas_Grupo_Re' => json_encode(['Norma_IM' => ['Captura_XRF' => ['ruta' => $ruta]]]),
+        ]);
+        $servicio = app(ServicioPdfGenerado::class);
+        $firma = $servicio->firma(901, '04_02');
+        $fecha = filemtime($ruta);
+        file_put_contents($ruta, 'cambiada');
+        touch($ruta, $fecha);
+        clearstatcache(true, $ruta);
+        $this->assertNotSame($firma, $servicio->firma(901, '04_02'));
+    }
+
     public function test_reutiliza_el_pdf_mientras_el_reporte_no_cambie(): void
     {
         $servicio = app(ServicioPdfGenerado::class);

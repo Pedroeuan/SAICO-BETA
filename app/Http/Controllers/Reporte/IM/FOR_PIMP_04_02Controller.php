@@ -2128,17 +2128,6 @@ class FOR_PIMP_04_02Controller extends Controller
         $analisisImagen = $juntasActuales['ANALISIS_IMAGEN'];
         $conteoGranos = $juntasActuales['CONTEO_GRANOS'];
 
-        // Se conservan las rutas para retirar los PDF anteriores solo después de guardar los nuevos.
-        $rutasPdfsXrfAnteriores = [];
-        foreach (($normaHistorica['Analisis_PDF'] ?? []) as $analisisAnterior) {
-            if (is_array($analisisAnterior) && !empty($analisisAnterior['ruta'])) {
-                $rutasPdfsXrfAnteriores[] = (string) $analisisAnterior['ruta'];
-            }
-        }
-        if (!empty($normaHistorica['Captura_XRF']['ruta'])) {
-            $rutasPdfsXrfAnteriores[] = (string) $normaHistorica['Captura_XRF']['ruta'];
-        }
-
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
             
             // 1. ELIMINAR ARCHIVO ANTERIOR (si existe)
@@ -2770,14 +2759,8 @@ class FOR_PIMP_04_02Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
 
-        if ($request->hasFile('Analisis_PDF')) {
-            foreach (array_unique($rutasPdfsXrfAnteriores) as $rutaAnterior) {
-                $rutaDisco = str_replace('storage/', 'public/', $rutaAnterior);
-                if (Storage::exists($rutaDisco)) {
-                    Storage::delete($rutaDisco);
-                }
-            }
-        }
+        // Conserva los archivos XRF anteriores como evidencia histórica. Una sustitución
+        // guarda archivos con nombres únicos sin borrar el recorte de versiones previas.
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
@@ -2923,19 +2906,26 @@ class FOR_PIMP_04_02Controller extends Controller
         ];
 
         // Generar el PDF principal en orientación horizontal
-        $pdf1 = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_02_PDF', $data)->setPaper('letter', 'portrait');
+        // Optimización exclusiva del 04_02: reutiliza cada sección si su texto,
+        // estilos e imágenes siguen iguales. Los análisis ya vienen guardados.
+        $secciones = app(\App\Services\PdfSecciones0402::class);
+        $htmlDatos = view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_04_02_PDF', $data)->render();
+        $pdf1Content = $secciones->obtener((int) $id, 'datos', $htmlDatos,
+            fn () => PDF::loadHTML($htmlDatos)->setPaper('letter', 'portrait')->output());
         $pdf2Content = null;
         $pageCount2 = 0;
 
         if (!empty($Fotos)) {
-            $pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_02_PDF', $data)->setPaper('letter', 'portrait');
-            $pdf2Content = $pdf2->output();
+            // Un cambio exclusivo de datos técnicos puede reutilizar este anexo.
+            // Si cambia un dato general visible en ambos, se regeneran ambos PDFs.
+            $htmlFotos = view('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_02_PDF', $data)->render();
+            $pdf2Content = $secciones->obtener((int) $id, 'fotos', $htmlFotos,
+                fn () => PDF::loadHTML($htmlFotos)->setPaper('letter', 'portrait')->output());
         }
 
         // Generar el PDF adicional en orientación vertical
 
         // Combinar los PDFs
-        $pdf1Content = $pdf1->output();
 
        // Crear objetos FPDI independientes para contar páginas
         $tempPdf1 = new Fpdi();
@@ -2988,7 +2978,10 @@ class FOR_PIMP_04_02Controller extends Controller
         }
 
         return response($combinedPdf->Output('Reporte_FOR_PIMP_04_02.PDF', 'S'), 200)
-            ->header('Content-Type', 'application/pdf');
+            ->header('Content-Type', 'application/pdf')
+            ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     /**

@@ -12,6 +12,59 @@
         const botonActualizar = contenedor.querySelector('[data-analysis-report-refresh]');
         const datosExistentes = document.querySelector('[data-analysis-report-existing]');
         const entradaConteo = document.querySelector('[data-grain-json]');
+        const formulario = contenedor.closest('form');
+        if (formulario?.id === 'FOR-PIMP-04_02') {
+            // Comparación visual: no crea campos, fotografías ni posiciones adicionales en el PDF.
+            const columnaTexto = descripcion.closest('.col-md-6');
+            const fila = columnaTexto?.parentElement;
+            if (fila) {
+                columnaTexto.classList.replace('col-md-6', 'col-12');
+                const comparacion = document.createElement('div');
+                comparacion.className = 'col-md-6 mb-3';
+                comparacion.innerHTML = '<div class="card h-100 border-primary">' +
+                    '<div class="card-header"><strong>Patrón de tamaño de grano — Comparación visual</strong></div>' +
+                    '<div class="card-body text-center"><label class="font-weight-bold d-block text-left">Seleccionar tamaño de grano</label>' +
+                    '<select class="form-control mb-3" data-comparison-select aria-label="Seleccionar tamaño de grano"><option value="" disabled>Selecciona un grano</option></select>' +
+                    '<strong class="d-block mb-2" data-comparison-name></strong>' +
+                    '<img class="img-fluid d-none" style="max-height:420px" alt="Patrón de grano para comparación" data-comparison-image>' +
+                    '<p class="text-muted" data-comparison-empty>Selecciona un grano para compararlo con la micrografía.</p></div></div>';
+                fila.insertBefore(comparacion, columnaTexto);
+                const vista = comparacion.querySelector('[data-comparison-image]');
+                const nombre = comparacion.querySelector('[data-comparison-name]');
+                const vacio = comparacion.querySelector('[data-comparison-empty]');
+                const selector = comparacion.querySelector('[data-comparison-select]');
+                const configuracion = formulario.querySelector('[data-grain-pattern-config]');
+                let patrones = [];
+                let historico = {};
+                try {
+                    patrones = JSON.parse(configuracion?.querySelector('[data-grain-pattern-catalog]')?.textContent || '[]');
+                    historico = JSON.parse(configuracion?.querySelector('[data-grain-pattern-historical]')?.textContent || '{}');
+                } catch (error) { patrones = []; }
+                if (historico.id && !patrones.some(item => String(item.id) === String(historico.id))) patrones.push(historico);
+                patrones.forEach(item => selector.add(new Option(item.nombre || ('Grano ' + item.valor_grano), String(item.id))));
+                selector.value = configuracion?.querySelector('[data-grain-pattern-id]')?.value || '';
+                selector.addEventListener('change', function () {
+                    formulario.dispatchEvent(new CustomEvent('saico:grain-pattern-select', {detail: {id: selector.value}}));
+                });
+                function actualizarComparacion() {
+                    const tarjeta = formulario.querySelector('[data-grain-mode="1"]');
+                    const original = tarjeta?.querySelector('[data-grain-card-preview]');
+                    const ruta = original?.getAttribute('src') || '';
+                    if (ruta && vista.getAttribute('src') !== ruta) vista.setAttribute('src', ruta);
+                    if (!ruta && vista.hasAttribute('src')) vista.removeAttribute('src');
+                    vista.classList.toggle('d-none', !ruta);
+                    vacio.classList.toggle('d-none', Boolean(ruta));
+                    const titulo = tarjeta?.querySelector('[data-grain-card-name]')?.textContent || '';
+                    if (nombre.textContent !== titulo) nombre.textContent = titulo;
+                    const id = configuracion?.querySelector('[data-grain-pattern-id]')?.value || '';
+                    if (selector.value !== id) selector.value = id;
+                }
+                new MutationObserver(actualizarComparacion).observe(formulario, {
+                    subtree: true, childList: true, attributes: true, attributeFilter: ['src', 'data-grain-mode'],
+                });
+                actualizarComparacion();
+            }
+        }
         let analisisActual = {};
         let ultimoToken = contenedor.dataset.analysisReportToken || '';
         let descripcionEditada = descripcion.value.trim() !== '';
