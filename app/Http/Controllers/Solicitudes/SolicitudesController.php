@@ -69,6 +69,7 @@ class SolicitudesController extends Controller
                 
                 $solicitud->folio = $manifiesto->Folio;
                 $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
+                $solicitud->trabajo = $manifiesto->Trabajo; // Guardar el trabajo
                 
                 if($devolucion)
                 {
@@ -167,6 +168,7 @@ class SolicitudesController extends Controller
                 
                 $solicitud->folio = $manifiesto->Folio;
                 $solicitud->pdf = $manifiesto->ScanPDF; // Guardar la ruta del PDF
+                $solicitud->trabajo = $manifiesto->Trabajo; // Guardar el trabajo
                 
                 if($devolucion)
                 {

@@ -500,9 +500,9 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">INTENCIDAD:</label>                                            
+                                            <label class="col-form-label" for="inputSuccess">INTENSIDAD:</label>                                            
                                             <div class="input-group">
-                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[INTENCIDAD]" placeholder="" value="{{ old('Datos_Equipo.INTENCIDAD') }}">
+                                                <input type="text" class="form-control  inputForm" name="Datos_Equipo[INTENSIDAD]" placeholder="" value="{{ old('Datos_Equipo.INTENSIDAD') }}">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">Lx</span>
                                                 </div>

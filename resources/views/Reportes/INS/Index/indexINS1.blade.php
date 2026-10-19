@@ -48,6 +48,7 @@
                         <th>Nombre del Proyecto</th>
                         <th>Cliente</th>
                         <th>Fecha</th>
+                        <th>Portal</th>
                         <th>Seleccionar</th>
                     </tr>
                 </thead>
@@ -58,6 +59,22 @@
                             <td>{{ $detalle['Proyecto'] }}</td>
                             <td>{{ $detalle['Cliente'] }}</td>
                             <td>{{ $detalle['Fecha'] }}</td>
+                            <td>
+                                @php
+                                    $cliente = App\Models\Clientes\clientes::where('Cliente', $detalle['Cliente'])->first();
+                                    $portalToken = $cliente ? $cliente->portal_token : null;
+                                @endphp
+                                @if($portalToken && $portalToken !== 'ESPERA DE DATOS')
+                                    <a href="{{ route('portal.cliente', ['token' => $portalToken]) }}"
+                                       target="_blank"
+                                       class="btn btn-primary"
+                                       title="Abrir portal">
+                                        <i class="fas fa-globe"></i>
+                                    </a>
+                                @else
+                                    <span class="badge badge-warning">Sin portal</span>
+                                @endif
+                            </td>
                             <td>
                                 <input type="radio" name="selectedContrato_Proyecto" value="{{ $detalle['Contrato'] }}">
                             </td>

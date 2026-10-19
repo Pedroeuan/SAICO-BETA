@@ -1,3 +1,69 @@
+
+    /*Selección de Firmas */
+    document.addEventListener('DOMContentLoaded', function() {
+    const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
+    const numFirmasSelect = document.getElementById('numFirmas');
+    const firmas1 = document.getElementById('firmas1');
+    const firmas2 = document.getElementById('firmas2');
+    const firmas3 = document.getElementById('firmas3');
+    const firmas4 = document.getElementById('firmas4');
+
+
+    //numFirmasSelect.value = numFirmasLocal;
+
+    numFirmasSelect.value = numFirmasLocal || numFirmasSelect.value || '1';
+    
+    numFirmasSelect.addEventListener('change', function() {
+        if (this.value == '1') {
+            firmas1.style.display = 'block';
+            firmas2.style.display = 'none';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'none';
+        }
+        else if (this.value == '2') {
+            firmas1.style.display = 'none';
+            firmas2.style.display = 'block';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'none';
+        }
+        else if (this.value == '3') {
+            firmas1.style.display = 'none';
+            firmas2.style.display = 'none';
+            firmas3.style.display = 'block';
+            firmas4.style.display = 'none';
+        } else if (this.value == '4') {
+            firmas1.style.display = 'none';
+            firmas2.style.display = 'none';
+            firmas3.style.display = 'none';
+            firmas4.style.display = 'block';
+        }
+    });
+
+    // Inicializar la visibilidad de las secciones de firmas
+    if (numFirmasSelect.value == '1') {
+        firmas1.style.display = 'block';
+        firmas2.style.display = 'none';
+        firmas3.style.display = 'none';
+        firmas4.style.display = 'none';
+    }
+    else if (numFirmasSelect.value == '2') {
+        firmas1.style.display = 'none';
+        firmas2.style.display = 'block';
+        firmas3.style.display = 'none';
+        firmas4.style.display = 'none';
+    }
+    else if (numFirmasSelect.value == '3') {
+        firmas1.style.display = 'none';
+        firmas2.style.display = 'none';
+        firmas3.style.display = 'block';
+        firmas4.style.display = 'none';
+    } else if (numFirmasSelect.value == '4') {
+        firmas1.style.display = 'none';
+        firmas2.style.display = 'none';
+        firmas3.style.display = 'none';
+        firmas4.style.display = 'block';
+    }
+    });
 /*CLIENTE */
 /*check del cliente, si y no */
 document.addEventListener('DOMContentLoaded', function () {
@@ -125,6 +191,26 @@ document.addEventListener("DOMContentLoaded", function () {
             rowCount = $('#dynamicTable tbody tr').length;
         }
 
+        function calculateTotals() {
+            var subtotalCents = 0;
+
+            $('#dynamicTable tbody tr').each(function() {
+                var quantity = Number($(this).find('.cantidad-input').val());
+                var unitPrice = Number($(this).find('.valor-unitario-input').val());
+                var lineCents = Number.isFinite(quantity) && Number.isFinite(unitPrice)
+                    ? Math.round(quantity * unitPrice * 100)
+                    : 0;
+
+                $(this).find('.valor-total-input').val((lineCents / 100).toFixed(2));
+                subtotalCents += lineCents;
+            });
+
+            var taxCents = Math.round(subtotalCents * 0.16);
+            $('input[name="Subtotal"]').val((subtotalCents / 100).toFixed(2));
+            $('input[name="IVA"]').val((taxCents / 100).toFixed(2));
+            $('input[name="Total"]').val(((subtotalCents + taxCents) / 100).toFixed(2));
+        }
+
         // Datos del catálogo pasados desde la vista Blade
         var catalogoData = (typeof catalogo !== 'undefined') ? catalogo : [];
         //console.log("Datos del catálogo:", catalogoData); // Verificar los datos del catálogo   
@@ -133,8 +219,9 @@ document.addEventListener("DOMContentLoaded", function () {
             rowCount++;
             var newRow = `<tr>
                 <td>${rowCount}</td>
+                <td><input type="text" class="form-control" name="item[]" placeholder="1,2,2 . . . 5.4" value="${rowCount}"></td>
                 <td>
-                    <select class="form-control catalogo-select">
+                    <select class="form-control catalogo-select" name="catalogo[]">
                         <option value="">-- Seleccionar --</option>
                         ${catalogoData.map(item => `<option value="${item.idCatalogo_OC}" data-descripcion="${item.Descripcion}" data-unidad="${item.Unidad}" data-imagen="${item.Imagen || ''}">${item.Nombre}</option>`).join('')}
                     </select>
@@ -144,14 +231,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
                     <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
                 </td>
-                <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad"></td>
+                <td><input type="number" class="form-control cantidad-input" name="cantidad[]" placeholder="Cantidad" min="0" step="any"></td>
                 <td><input type="text" class="form-control unidad-input" name="unidad[]" placeholder="Unidad/Medida"></td>
-                <td><input type="number" class="form-control" name="valor_unitario[]" placeholder="Valor Unitario"></td>
-                <td><input type="number" class="form-control" name="valor_total[]" placeholder="Valor Total"></td>
+                <td><input type="number" class="form-control valor-unitario-input" name="valor_unitario[]" placeholder="Valor Unitario" min="0" step="0.01"></td>
+                <td><input type="number" class="form-control valor-total-input" name="valor_total[]" placeholder="Valor Total" step="0.01" readonly></td>
                 <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>`;
             $('#dynamicTable tbody').append(newRow);
+            calculateTotals();
         });
+
+        $('#dynamicTable').on('input', '.cantidad-input, .valor-unitario-input', calculateTotals);
 
         // Autocompletar descripción, unidad e imagen al seleccionar del catálogo
         $('#dynamicTable').on('change', '.catalogo-select', function() {
@@ -179,7 +269,10 @@ document.addEventListener("DOMContentLoaded", function () {
         $('#dynamicTable').on('click', '.btnEliminar', function() {
             $(this).closest('tr').remove();
             updateRowNumbers();
+            calculateTotals();
         });
+
+        calculateTotals();
     });
 
         document.getElementById('OC').addEventListener('submit', function(e) {
@@ -188,6 +281,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const tableData = [];
 
             rows.forEach(row => {
+                const item = row.querySelector('input[name="item[]"]')?.value || '';
+                const catalogoSelect = row.querySelector('select[name="catalogo[]"]');
+                const catalogo = catalogoSelect?.value || '';
+                // Obtener la ruta de la imagen del catálogo seleccionado
+                const catalogoOption = catalogoSelect?.querySelector('option:checked');
+                const imagen = catalogoOption?.dataset.imagen || '';
                 const descripcion = row.querySelector('.descripcion-input')?.value || '';
                 const cantidad = row.querySelector('input[name="cantidad[]"]')?.value || '';
                 const unidad = row.querySelector('input[name="unidad[]"]')?.value || '';
@@ -195,6 +294,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 const valor_total = row.querySelector('input[name="valor_total[]"]')?.value || '';
 
                 tableData.push({
+                    item: item,
+                    catalogo: catalogo,
+                    imagen: imagen,
                     descripcion: descripcion,
                     cantidad: cantidad,
                     unidad: unidad,
