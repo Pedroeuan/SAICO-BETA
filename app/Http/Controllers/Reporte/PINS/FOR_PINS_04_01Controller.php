@@ -863,7 +863,7 @@ class FOR_PINS_04_01Controller extends Controller
             'Datos_Equipo.TIPO_GRUPO_REVELEADOR' => 'nullable|string',
 
             'Datos_Equipo.TIPO_LUZ' => 'nullable|string',
-            'Datos_Equipo.INTENCIDAD' => 'nullable|string',
+            'Datos_Equipo.INTENSIDAD' => 'nullable|string',
             'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string',
             'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',
@@ -1426,7 +1426,7 @@ class FOR_PINS_04_01Controller extends Controller
             'Datos_Equipo.TIPO_GRUPO_REVELEADOR' => 'nullable|string',
 
             'Datos_Equipo.TIPO_LUZ' => 'nullable|string',
-            'Datos_Equipo.INTENCIDAD' => 'nullable|string',
+            'Datos_Equipo.INTENSIDAD' => 'nullable|string',
             'Datos_Equipo.CONDICION_SUPERFICIAL' => 'nullable|string',
             'Datos_Equipo.TEMPERATURA_PRUEBA' => 'nullable|string',
             'Datos_Equipo.Observaciones' => 'nullable|string',

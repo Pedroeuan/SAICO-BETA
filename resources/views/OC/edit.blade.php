@@ -266,6 +266,7 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
+                                                <th>Item</th>
                                                 <th>Catalogo</th>
                                                 <th>Descripción</th>
                                                 <th>Imagen</th>
@@ -280,34 +281,56 @@
                                             @foreach($detallesOC ?? [] as $indice => $detalle)
                                                 <tr>
                                                     <td>{{ $indice + 1 }}</td>
+                                                    <td><input type="text" class="form-control item-input" name="item[]" placeholder="1,2,2 . . . 5.4" value="{{ $detalle['item'] ?? '' }}"></td>
                                                     <td>
-                                                        <select class="form-control catalogo-select">
+                                                        <select class="form-control catalogo-select" name="catalogo[]">
                                                             <option value="">-- Seleccionar --</option>
-                                                            ${catalogoData.map(item => `<option value="${item.idCatalogo_OC}" data-descripcion="${item.Descripcion}" data-unidad="${item.Unidad}" data-imagen="${item.Imagen || ''}">${item.Nombre}</option>`).join('')}
+                                                            @foreach($catalogo as $item)
+                                                                <option value="{{ $item->idCatalogo_OC }}" data-descripcion="{{ $item->Descripcion }}" data-unidad="{{ $item->Unidad }}" data-imagen="{{ $item->Imagen ?? '' }}" @selected(($detalle['catalogo_id'] ?? '') == $item->idCatalogo_OC)>{{ $item->Nombre }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </td>
-                                                    <td><input type="text" class="form-control" name="descripcion[]" placeholder="Descripción" value="{{ $detalle['descripcion'] ?? '' }}"></td>
+                                                    <td><textarea class="form-control descripcion-input" name="descripcion[]" placeholder="Descripción">{{ $detalle['descripcion'] ?? '' }}</textarea></td>
                                                     <td class="text-center">
                                                         <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
                                                         <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
                                                     </td>
-                                                    <td><input type="number" class="form-control" name="cantidad[]" placeholder="Cantidad" value="{{ $detalle['cantidad'] ?? '' }}"></td>
-                                                    <td><input type="text" class="form-control" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
-                                                    <td><input type="number" class="form-control" name="valor_unitario[]" placeholder="Valor Unitario" value="{{ $detalle['valor_unitario'] ?? '' }}"></td>
-                                                    <td><input type="number" class="form-control" name="valor_total[]" placeholder="Valor Total" value="{{ $detalle['valor_total'] ?? '' }}"></td>
-                                                    <td><textarea class="form-control" name="descripcion[]" placeholder="Descripcion">{{ $detalle['descripcion'] ?? '' }}</textarea></td>
+                                                    <td><input type="number" class="form-control cantidad-input" name="cantidad[]" placeholder="Cantidad" min="0" step="any" value="{{ $detalle['cantidad'] ?? '' }}"></td>
+                                                    <td><input type="text" class="form-control unidad-input" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
+                                                    <td><input type="number" class="form-control valor-unitario-input" name="valor_unitario[]" placeholder="Valor Unitario" min="0" step="0.01" value="{{ $detalle['valor_unitario'] ?? '' }}"></td>
+                                                    <td><input type="number" class="form-control valor-total-input" name="valor_total[]" placeholder="Valor Total" step="0.01" value="{{ $detalle['valor_total'] ?? '' }}" readonly></td>
                                                     <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
+
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Cuenta</div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="subtotal">Subtotal</label>
+                                            <input id="subtotal" type="text" class="form-control inputForm" name="Subtotal" value="{{ number_format((float) $totales['subtotal'], 2, '.', '') }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="iva">IVA (16%)</label>
+                                            <input id="iva" type="text" class="form-control inputForm" name="IVA" value="{{ number_format((float) $totales['iva'], 2, '.', '') }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="total">Total</label>
+                                            <input id="total" type="text" class="form-control inputForm" name="Total" value="{{ number_format((float) $totales['total'], 2, '.', '') }}" readonly>
+                                        </div>
+                                    </div>
                                     
                                     <p>
                                     <p>
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">NOTAS:</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Notas" placeholder="Ejemplo: Notas" value="Muelle, Ciudad del Carmen">{{old('Notas')}}</textarea>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Notas" placeholder="Ejemplo: Notas" value="Muelle, Ciudad del Carmen">{{ $detallesOCM->Notas ?? old('Notas') }}</textarea>
                                             @error('Notas')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -317,7 +340,16 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">CONDICIONES DE PAGO:</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago" value="Muelle, Ciudad del Carmen">{{old('Condiciones_pago')}}</textarea>
+                                            <select id="condicion-pago-select" class="form-select" name="CP">
+                                                <option value="" {{ old('CP') ? '' : 'selected' }} disabled>Seleccione una Condición de Pago</option>
+                                                @foreach($Condiciones_Pago as $CP)
+                                                    <option value="{{ $CP->idCondiciones_Pago }}" data-descripcion="{{ $CP->Descripcion }}" {{ old('CP') == $CP->idCondiciones_Pago ? 'selected' : '' }}>
+                                                        {{ $CP->Nombre }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <br>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago">{{ $detallesOCM->Condiciones_pago ?? old('Condiciones_pago') }}</textarea>
                                             @error('Condiciones_pago')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -327,7 +359,16 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">CONDICIONES DE GENERALES:</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales" value="Muelle, Ciudad del Carmen">{{old('Condiciones_generales')}}</textarea>
+                                            <select id="condicion-general-select" class="form-select" name="CG">
+                                                <option value="" {{ old('CG') ? '' : 'selected' }} disabled>Seleccione una Condición General</option>
+                                                @foreach($Condiciones_Generales as $CG)
+                                                    <option value="{{ $CG->idCondiciones_Generales }}" data-descripcion="{{ $CG->Descripcion }}" {{ old('CG') == $CG->idCondiciones_Generales ? 'selected' : '' }}>
+                                                        {{ $CG->Nombre }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <br>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales">{{ $detallesOCM->Condiciones_generales ?? old('Condiciones_generales') }}</textarea>
                                             @error('Condiciones_generales')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -371,11 +412,13 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script>
+    const catalogo = @json($catalogo);
+</script>
 <script src="{{ asset('js/OC_edit.js') }}"></script>
 <script>
 
 
     </script>
 @endsection
-
 
