@@ -30,6 +30,7 @@ class ServicioPdfGenerado
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_03_B_01_PDF.blade.php',
         ],
         '04_02' => [
+            'app/Services/PdfSecciones0402.php',
             'app/Services/ServicioSerieReportes.php',
             'app/Http/Controllers/Reporte/IM/FOR_PIMP_04_02Controller.php',
             'resources/views/Reportes/ReportesPDFIM/Reporte_FOR_PIMP_04_02_PDF.blade.php',
@@ -91,7 +92,11 @@ class ServicioPdfGenerado
             // La numeracion visible del 06_B_01 depende tambien de cuantos
             // integrantes/paginas tenga el resto de su serie.
             'serie' => in_array($formato, ['06_B_01', '04_02'], true) ? $this->estadoSerie($reporte) : null,
-            'archivos_reporte' => $this->metadatosArchivos([$reporte->getAttributes(), $fotos]),
+            // 04_02 también guarda evidencias en Juntas: deben invalidar el PDF
+            // cuando cambien el recorte XRF, la micrografía o el patrón de grano.
+            'archivos_reporte' => $this->metadatosArchivos($formato === '04_02'
+                ? [$reporte->getAttributes(), $fotos, $grupos, $firmas]
+                : [$reporte->getAttributes(), $fotos], $formato === '04_02'),
             'generador' => $this->huellasGenerador($formato, $idioma),
         ];
 
@@ -268,10 +273,15 @@ class ServicioPdfGenerado
      *
      * @return array<string, array{size:int, mtime:int}>
      */
-    private function metadatosArchivos(mixed $valor): array
+    private function metadatosArchivos(mixed $valor, bool $verificarContenido = false): array
     {
         $rutas = [];
         $this->recolectarRutas($valor, $rutas);
+        if ($verificarContenido) {
+            // Solo 04_02 verifica además el contenido; no modifica los archivos.
+            foreach ($rutas as $ruta => &$metadatos) $metadatos['sha256'] = hash_file('sha256', $ruta);
+            unset($metadatos);
+        }
         ksort($rutas);
 
         return $rutas;

@@ -1278,7 +1278,11 @@ class ReporteController extends Controller
         }
         elseif($Nombre_Formato == "FOR-PIMP-04/02")
         {
-            return redirect()->route('procesamientos.pdf.pagina', ['reporte' => $id, 'formato' => '04_02', 'download' => $request->boolean('download') ? 1 : null]);
+            return redirect()->route('procesamientos.pdf.pagina', [
+                'reporte' => $id, 'formato' => '04_02',
+                'v' => app(\App\Services\ServicioPdfGenerado::class)->firma((int) $id, '04_02'),
+                'download' => $request->boolean('download') ? 1 : null,
+            ])->header('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
         }
         elseif($Nombre_Formato == "FOR-PIMP-04/03")
         {

@@ -156,7 +156,7 @@
             box-sizing: border-box;
             text-align: center;
         }
-        .texto-multilinea-0402 { white-space: normal; overflow-wrap: break-word; word-wrap: break-word; line-height: 12px; padding: 2px 0; }
+        .texto-multilinea-0402 { white-space: normal; overflow-wrap: break-word; word-wrap: break-word; line-height: 11.5px; padding: 1px 0; }
         .linea-desplazada {
             margin-left: 7mm;
         }
