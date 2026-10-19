@@ -69,6 +69,7 @@ class GenerarReportePdfJob implements ShouldQueue
                 $parametros['idioma'] = in_array($idioma, ['es', 'en'], true) ? $idioma : 'es';
             }
 
+            $inicioGeneracion = microtime(true);
             $respuesta = app()->call([app($clase), $metodo], $parametros);
             $contenido = method_exists($respuesta, 'getContent') ? $respuesta->getContent() : null;
             if (!is_string($contenido) || !str_starts_with($contenido, '%PDF')) {
@@ -76,6 +77,13 @@ class GenerarReportePdfJob implements ShouldQueue
             }
 
             $rutaPdf = $pdfGenerado->guardar($reporteId, $formato, $idioma, $contenido);
+            if ($formato === '04_02') {
+                Log::info('PDF 04_02: generación terminada', [
+                    'reporte' => $reporteId, 'trabajo' => $trabajo->id,
+                    'duracion_ms' => (int) round((microtime(true) - $inicioGeneracion) * 1000),
+                    'bytes' => strlen($contenido),
+                ]);
+            }
             $trabajo->marcarCompletado([
                 // Esta ruta solo se interpreta en servidor; estado() la reemplaza por una URL autorizada.
                 'ruta_pdf' => $rutaPdf,
