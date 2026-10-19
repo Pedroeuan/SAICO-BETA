@@ -761,7 +761,7 @@ class ClientesController extends Controller
                 'string',
                 'max:255',
                 Rule::unique('clientes', 'Correo')->ignore($clientes->idClientes, 'idClientes'),
-                Rule::unique('users', 'email')->ignore($usuarioActual?->id),
+                Rule::unique('users', 'email')->ignore($usuarioActual?->id ?? 0),
             ],
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 

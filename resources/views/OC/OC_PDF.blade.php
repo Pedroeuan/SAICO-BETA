@@ -2,7 +2,7 @@
         <html lang="es">
         <head>
             <meta charset="UTF-8">
-            <title>FOR-05-PRO-EQ-01</title>
+            <title>OC Cotización</title>
             <style>
                 @page {
                     margin: 90px 30px; /* Margen superior para header y margen inferior para footer */
@@ -240,10 +240,11 @@
             <header>
                 <table class="tablaheader">
                         <tr>
-                            <th rowspan="3" style="width: 500%; font-size: 15pt;">ORDEN DE SERVICIO/TRABAJO/COMPRA</th>
+                            {{--<th rowspan="3" style="width: 500%; font-size: 15pt;">ORDEN DE SERVICIO/TRABAJO/COMPRA</th>
                             <th style="width: 90%;">Código:</th>
                             <th style="width: 100%;">FOR-PVEN-02</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
+                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>--}}
+                            <th rowspan="3" style="width: 500%; font-size: 15pt;">ASESORIA E INSPECCIÓN EN CONSTRUCCIÓN COSTA FUERA                "AICO SC"</th>
                         </tr>
 
                         <tr>
