@@ -45,10 +45,17 @@ class TrabajoProcesamientoController extends Controller
         $ruta = (string) data_get($registro->resultadoArray(), 'ruta_pdf');
         abort_unless($ruta !== '' && is_file($ruta), 404);
 
-        return response()->file($ruta, [
+        // Aplica la misma política al PDF entregado después de finalizar la cola.
+        $cabeceras = ($registro->contexto['formato'] ?? '') === '04_02' ? [
+            'Cache-Control' => 'private, no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ] : [];
+        $respuesta = response()->file($ruta, array_merge($cabeceras, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => ($request->boolean('download') ? 'attachment' : 'inline') . '; filename="reporte.pdf"',
-        ]);
+        ]));
+        return $cabeceras ? $respuesta->setPrivate() : $respuesta;
     }
 
     /** Centraliza la validacion de propiedad para impedir consultar UUID ajenos. */
