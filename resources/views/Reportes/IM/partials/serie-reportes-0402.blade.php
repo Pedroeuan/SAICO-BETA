@@ -1,6 +1,11 @@
+{{--
+    Configuración de series para 04_02 y 04_03; serieFormato cambia el título mostrado.
+    Sin SerieReporte solicita la cantidad inicial; con una serie permite ampliar el total.
+    La numeración de hojas se calcula en el servidor usando las páginas de cada integrante.
+--}}
 <div class="col-12 mb-3">
     <div class="border rounded p-3 bg-light">
-        <h6 class="font-weight-bold text-primary"><i class="fas fa-copy mr-1" aria-hidden="true"></i> Serie de formatos 04_02</h6>
+        <h6 class="font-weight-bold text-primary"><i class="fas fa-copy mr-1" aria-hidden="true"></i> Serie de formatos {{ $serieFormato ?? '04_02' }}</h6>
         @if(!empty($SerieReporte))
             <span class="badge badge-primary p-2">Formato {{ $SerieReporte->numero_orden }} de {{ $SerieReporte->cantidad_planificada }}</span>
             <details class="mt-2" @if($errors->has('Serie_Reportes.nueva_cantidad')) open @endif>

@@ -12,6 +12,23 @@ use Tests\TestCase;
 
 class ServicioSerieReportesTest extends TestCase
 {
+    public function test_serie_0403_numera_tres_piezas_y_recalcula_al_agregar_fotos(): void
+    {
+        $this->crearReportes(501, 502, 503);
+        $servicio = app(ServicioSerieReportes::class);
+        $servicio->iniciar(501, 3, ServicioSerieReportes::FORMATO_04_03);
+        $servicio->registrarPaginas(501, 2);
+        $servicio->registrarConsecutivo(501, 502);
+        $servicio->registrarPaginas(502, 3);
+        $servicio->registrarConsecutivo(502, 503);
+        $this->assertSame(['pagina_inicial' => 6, 'pagina_final' => 7, 'total_estimado' => 7], $servicio->registrarPaginas(503, 2));
+        $this->assertSame(ServicioSerieReportes::FORMATO_04_03, $servicio->obtener(503)->formato);
+        $this->assertSame(['pagina_inicial' => 1, 'pagina_final' => 2, 'total_estimado' => 7], $servicio->registrarPaginas(501, 2));
+        $servicio->registrarPaginas(502, 4);
+        $this->assertSame(['pagina_inicial' => 7, 'pagina_final' => 8, 'total_estimado' => 8], $servicio->registrarPaginas(503, 2));
+        $this->assertFalse($servicio->puedeCrearSiguiente(503));
+    }
+
     public function test_serie_0402_conserva_su_formato_y_continua_paginas_con_anexos_variables(): void
     {
         $this->crearReportes(401, 402);

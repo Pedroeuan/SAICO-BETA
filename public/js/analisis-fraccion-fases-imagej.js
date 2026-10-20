@@ -46,7 +46,7 @@
         let area = null;
         let inicioArea = null;
         let seleccionandoArea = false;
-        const permiteArea = componente.closest('form')?.id === 'FOR-PIMP-04_02';
+        const permiteArea = ['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].includes(componente.closest('form')?.id);
         const herramientasArea = document.createElement('div'); herramientasArea.className = 'd-flex flex-wrap align-items-center mb-2'; herramientasArea.style.gap = '10px';
         const seleccionarArea = document.createElement('button'); seleccionarArea.type = 'button'; seleccionarArea.className = 'btn btn-outline-primary btn-sm'; seleccionarArea.innerHTML = '<i class="fas fa-crop-alt mr-1" aria-hidden="true"></i>Seleccionar área'; seleccionarArea.setAttribute('aria-pressed', 'false');
         const usarCompleta = document.createElement('button'); usarCompleta.type = 'button'; usarCompleta.className = 'btn btn-outline-secondary btn-sm'; usarCompleta.innerHTML = '<i class="fas fa-expand mr-1" aria-hidden="true"></i>Usar imagen completa';

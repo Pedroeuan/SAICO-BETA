@@ -1,3 +1,8 @@
+{{--
+    Alta del 04_03: reúne datos de la pieza, dureza, referencias y evidencias metalográficas.
+    Los parciales y scripts compartidos mantienen el mismo comportamiento que Editar.
+    La cantidad de formatos configura la serie; cada consecutivo captura sus propias evidencias.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'FOR-PIMP-04_03')
@@ -128,6 +133,7 @@
         <div class="card-body w-100">
             <form id="FOR-PIMP-04_03" action="{{route('Reportes_FOR_PIMP_04_03.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
+                @include('Reportes.IM.partials.serie-reportes-0402', ['serieFormato' => '04_03'])
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
@@ -587,29 +593,14 @@
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">
                         NORMA Y RESULTADOS DEL ANÁLISIS QUÍMICO
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="normaIMNombre">Norma/Especificación:</label>
-                            <select class="form-control" id="normaIMNombre">
-                                <option value="">Seleccione una norma</option>
-                                @foreach($nombresNormasIM as $nombreNorma)
-                                    <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="normaIMRegistro">Tabla/Variable/Subtítulo:</label>
-                            <select class="form-control @error('Norma_IM.idnormas_im') is-invalid @enderror"
-                                id="normaIMRegistro" name="Norma_IM[idnormas_im]" disabled>
-                                <option value="">Primero seleccione una norma</option>
-                            </select>
-                            @error('Norma_IM.idnormas_im')
-                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
+                    {{-- La referencia visible se selecciona arriba; estos controles son internos del lector XRF. --}}
+                    <select id="normaIMNombre" hidden aria-hidden="true" tabindex="-1">
+                        <option value=""></option>
+                        @foreach($nombresNormasIM as $nombreNorma)
+                            <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
+                        @endforeach
+                    </select>
+                    <select id="normaIMRegistro" name="Norma_IM[idnormas_im]" hidden aria-hidden="true" tabindex="-1"><option value=""></option></select>
                     <div class="col-12">
                         <div class="form-group border rounded p-3 bg-light">
                             <label for="analisisPdfXrf"><strong>PDF del equipo XRF (1 hoja por archivo)</strong></label>
@@ -1296,4 +1287,7 @@ $(document).ready(function() {
 <script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
 <script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
 <script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
+@include('Reportes.IM.partials.referencias-mecanicas-0402', ['referenciasFormId' => 'FOR-PIMP-04_03'])
+<script src="{{ asset('js/fotos-sin-imagen-0402.js') }}?v={{ filemtime(public_path('js/fotos-sin-imagen-0402.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 @endsection

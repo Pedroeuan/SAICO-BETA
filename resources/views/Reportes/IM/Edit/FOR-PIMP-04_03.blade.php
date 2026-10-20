@@ -1,3 +1,8 @@
+{{--
+    Edición del 04_03: muestra los valores y las fotografías previamente guardados.
+    Los campos ocultos identifican las imágenes existentes y sus reemplazos; deben conservarse.
+    data-modo="edit" permite anotar fotografías guardadas con las herramientas compartidas.
+--}}
 @extends('adminlte::page')
 
 @section('title', 'FOR-PIMP-04_03')
@@ -126,8 +131,9 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-04_03" action="{{route('Reportes_FOR_PIMP_04_03.update', $id)}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-04_03" data-modo="edit" action="{{route('Reportes_FOR_PIMP_04_03.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
+                @include('Reportes.IM.partials.serie-reportes-0402', ['serieFormato' => '04_03'])
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
@@ -237,29 +243,9 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label" for="inputSuccess">Elementos Soldados:</label>
-                            <input type="text" class="form-control  inputForm @error('Elementos_Soldados') is-invalid @enderror" name="Detalles_Generales[Elementos_Soldados]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Elementos_Soldados', $Detalles_Generales['Elementos_Soldados'] ?? '')}}">
-                            @error('Elementos_Soldados')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Material</label>
                             <input type="text" class="form-control  inputForm @error('Material') is-invalid @enderror" name="Detalles_Generales[Material]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Material', $Detalles_Generales['Material'] ?? '')}}">
                             @error('Material')
-                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label" for="noJunta0403Edit">No. Junta:</label>
-                            <input type="text" class="form-control  is-waning" id="noJunta0403Edit" name="Detalles_Generales[No_Junta]" placeholder="Ejemplo:" value="{{old('Detalles_Generales.No_Junta', $Detalles_Generales['No_Junta'] ?? '')}}">
-                            @error('No_Junta')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -365,7 +351,7 @@
                         <p>Puedes Seleccionar un equipo del menu o escribir directamente</p>
                     </div>
 
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
+                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO ENSAYO DE DUREZA</div>
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
@@ -405,7 +391,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO</div>
+                    <div class="d-flex justify-content-center align-items-centerp-3 mb-2 bg-secondary text-white rounded">EQUIPO ANÁLISIS QUÍMICO</div>
 
                     <div class="col-sm-50 d-flex justify-content-center">
                         <div class="form-group text-center">
@@ -556,29 +542,14 @@
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">
                         NORMA Y RESULTADOS DEL ANÁLISIS QUÍMICO
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="normaIMNombre">Norma/Especificación:</label>
-                            <select class="form-control" id="normaIMNombre">
-                                <option value="">Seleccione una norma</option>
-                                @foreach($nombresNormasIM as $nombreNorma)
-                                    <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="normaIMRegistro">Tabla/Variable/Subtítulo:</label>
-                            <select class="form-control @error('Norma_IM.idnormas_im') is-invalid @enderror"
-                                id="normaIMRegistro" name="Norma_IM[idnormas_im]" disabled>
-                                <option value="">Primero seleccione una norma</option>
-                            </select>
-                            @error('Norma_IM.idnormas_im')
-                                <div class="invalid-feedback"><span>{{ $message }}</span></div>
-                            @enderror
-                        </div>
-                    </div>
+                    {{-- La referencia visible se selecciona arriba; estos controles son internos del lector XRF. --}}
+                    <select id="normaIMNombre" hidden aria-hidden="true" tabindex="-1">
+                        <option value=""></option>
+                        @foreach($nombresNormasIM as $nombreNorma)
+                            <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
+                        @endforeach
+                    </select>
+                    <select id="normaIMRegistro" name="Norma_IM[idnormas_im]" hidden aria-hidden="true" tabindex="-1"><option value=""></option></select>
                     <div class="col-12">
                         <div class="form-group border rounded p-3 bg-light">
                             <label for="analisisPdfXrf"><strong>PDF del equipo XRF (1 hoja por archivo)</strong></label>
@@ -983,6 +954,7 @@
                             <div class="row">
                                 @foreach($fotosOrdenadas as $index => $foto)
                                     <div class="col-sm-6" id="image-container-{{ $index }}"
+                                        data-foto-sin-imagen="{{ !empty($foto['sin_fotografia']) ? 1 : 0 }}"
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
                                         data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}"
@@ -1483,4 +1455,7 @@ $(document).ready(function() {
 <script src="{{ asset('js/conteo-granos-lineal.js') }}?v={{ filemtime(public_path('js/conteo-granos-lineal.js')) }}"></script>
 <script src="{{ asset('js/reporte-metalografico-fotos.js') }}?v={{ filemtime(public_path('js/reporte-metalografico-fotos.js')) }}"></script>
 <script src="{{ asset('js/patron-grano-reporte.js') }}?v={{ filemtime(public_path('js/patron-grano-reporte.js')) }}"></script>
+@include('Reportes.IM.partials.referencias-mecanicas-0402', ['referenciasFormId' => 'FOR-PIMP-04_03'])
+<script src="{{ asset('js/fotos-sin-imagen-0402.js') }}?v={{ filemtime(public_path('js/fotos-sin-imagen-0402.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 @endsection

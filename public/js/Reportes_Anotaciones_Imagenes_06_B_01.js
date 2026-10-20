@@ -2,11 +2,13 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function () {
-        const formulario = document.getElementById('FOR-PIMP-06_B_01') || document.getElementById('FOR-PIMP-04_02');
+        const formulario = document.getElementById('FOR-PIMP-06_B_01')
+            || document.getElementById('FOR-PIMP-04_02')
+            || document.getElementById('FOR-PIMP-04_03');
         const modal = document.getElementById('cropperModal');
         const imagenCropper = document.getElementById('cropperImage');
 
-        // Ambos formatos comparten las mismas herramientas y guardan las marcas en la imagen.
+        // Los tres formatos guardan las flechas sobre los píxeles de la foto enviada al reporte.
         if (!formulario || !modal || !imagenCropper || modal.dataset.anotadorInicializado === '1') return;
         modal.dataset.anotadorInicializado = '1';
 
