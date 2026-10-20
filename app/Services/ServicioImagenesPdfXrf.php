@@ -60,6 +60,8 @@ class ServicioImagenesPdfXrf
             try {
                 $pageWidth = imagesx($source);
                 $pageHeight = imagesy($source);
+                $olympusBounds = $profile === self::PROFILE_OLYMPUS
+                    ? $this->olympusTableBounds($file->getRealPath(), $pageWidth, $pageHeight) : null;
                 $results = [];
 
                 $configuredCrops = $profile === self::PROFILE_OLYMPUS
@@ -80,12 +82,7 @@ class ServicioImagenesPdfXrf
                     ];
 
                     if ($profile === self::PROFILE_OLYMPUS && $type === 'tabla_elementos') {
-                        $rectangle = $this->detectOlympusTableRectangle(
-                            $source,
-                            $pageWidth,
-                            $pageHeight,
-                            $rectangle
-                        );
+                        $rectangle = $this->detectOlympusTableRectangle($source, $pageWidth, $pageHeight, $olympusBounds);
                     } elseif ($type === 'tabla_elementos') {
                         $rectangle = $this->detectTableElementsRectangle($source, $pageWidth, $pageHeight, $rectangle);
                     }
@@ -157,76 +154,73 @@ class ServicioImagenesPdfXrf
     }
 
     /**
-     * Olympus no encierra la tabla con bordes. El rectángulo configurado sirve
-     * como zona segura y sus cuatro lados se ajustan al texto realmente impreso.
-     * La búsqueda vertical tolera las filas ND y termina antes de "Espectro".
+     * Olympus no encierra la tabla con bordes. Los encabezados del PDF delimitan
+     * la búsqueda y el número real de filas determina dónde termina el recorte.
+     * Incluye únicamente el encabezado y las filas cuantificadas, antes de ND.
      */
     private function detectOlympusTableRectangle($source, int $pageWidth, int $pageHeight, array $fallback): array
     {
-        $searchLeft = max(0, (int) round($fallback['x'] - ($pageWidth * 0.008)));
-        $searchRight = min(
-            $pageWidth - 1,
-            (int) round($fallback['x'] + $fallback['width'] + ($pageWidth * 0.008))
-        );
-        $searchTop = max(0, (int) round($fallback['y'] - ($pageHeight * 0.012)));
-        $searchBottom = min(
-            $pageHeight - 1,
-            (int) round($fallback['y'] + $fallback['height'] + ($pageHeight * 0.035))
-        );
-        $scanWidth = max(1, $searchRight - $searchLeft + 1);
-        $minimumPixels = max(2, (int) round($scanWidth * 0.004));
-        /*
-         * La separación antes de "No detectado" es mayor que el espacio entre
-         * filas cuantificadas. Un umbral corto cierra el bloque justo en el
-         * último elemento que sí participa en el promedio.
-         */
-        $allowedGap = max(8, (int) round($pageHeight * 0.007));
-        $firstContentY = null;
-        $lastContentY = null;
-        $pendingGap = 0;
-
-        for ($y = $searchTop; $y <= $searchBottom; $y++) {
-            $contentPixels = 0;
-
-            for ($x = $searchLeft; $x <= $searchRight; $x++) {
+        // Los límites vienen de los encabezados del PDF, no de una altura fija.
+        $top = $fallback['y'];
+        $bottom = $top;
+        $left = $pageWidth; $right = 0;
+        $bands = []; $start = null; $last = null;
+        for ($y = $top; $y < $top + $fallback['height']; $y++) {
+            $pixels = 0;
+            for ($x = $fallback['x']; $x < $fallback['x'] + $fallback['width']; $x++) {
                 if ($this->isNonWhitePixel($source, $x, $y)) {
-                    $contentPixels++;
+                    $pixels++;
                 }
             }
-
-            if ($contentPixels >= $minimumPixels) {
-                $firstContentY ??= $y;
-                $lastContentY = $y;
-                $pendingGap = 0;
-            } elseif ($firstContentY !== null) {
-                $pendingGap++;
-                if ($pendingGap > $allowedGap) {
-                    break;
-                }
+            if ($pixels >= 3) {
+                $start ??= $y; $last = $y;
+            } elseif ($start !== null && $y - $last > $fallback['row_gap']) {
+                $bands[] = [$start, $last]; $start = null;
+                if (count($bands) === $fallback['rows']) break;
             }
         }
-
-        if ($firstContentY === null || $lastContentY === null) {
-            return $this->normalizeRectangle($fallback, $pageWidth, $pageHeight);
+        if (count($bands) !== $fallback['rows']) throw new RuntimeException('No se pudieron identificar todas las filas químicas del PDF Olympus.');
+        $top = $bands[0][0]; $bottom = $bands[array_key_last($bands)][1];
+        for ($y = $top; $y <= $bottom; $y++) {
+            for ($x = $fallback['x']; $x < $fallback['x'] + $fallback['width']; $x++) {
+                if ($this->isNonWhitePixel($source, $x, $y)) { $left = min($left, $x); $right = max($right, $x); }
+            }
         }
+        if ($left > $right) throw new RuntimeException('No se encontró contenido en la tabla de elementos Olympus.');
+        $padding = max(3, (int) round($pageWidth * 0.002));
+        return $this->normalizeRectangle(['x' => $left - $padding, 'y' => $top - $padding,
+            'width' => $right - $left + 1 + 2 * $padding, 'height' => $bottom - $top + 1 + 2 * $padding], $pageWidth, $pageHeight);
+    }
 
-        [$left, $right] = $this->detectTableContentBounds(
-            $source,
-            $pageWidth,
-            $firstContentY,
-            $lastContentY,
-            $searchLeft,
-            $searchRight
-        );
-        $paddingX = max(2, (int) round($pageWidth * 0.003));
-        $paddingY = max(2, (int) round($pageHeight * 0.003));
-
-        return $this->normalizeRectangle([
-            'x' => $left - $paddingX,
-            'y' => $firstContentY - $paddingY,
-            'width' => ($right - $left) + ($paddingX * 2) + 1,
-            'height' => ($lastContentY - $firstContentY) + ($paddingY * 2) + 1,
-        ], $pageWidth, $pageHeight);
+    /** Localiza el inicio químico y la sección siguiente en coordenadas de la hoja original. */
+    private function olympusTableBounds(string $archivo, int $ancho, int $alto): array
+    {
+        $page = $this->parser->parseFile($archivo)->getPages()[0];
+        $box = $page->getDetails()['MediaBox'] ?? [0, 0, 612, 792];
+        $width = (float) $box[2] - (float) $box[0];
+        $height = (float) $box[3] - (float) $box[1];
+        $header = null; $espectro = null; $columnaInfo = null;
+        foreach ($page->getDataTm() as [$matrix, $text]) {
+            $text = trim($text);
+            if (preg_match('/^(?:E\.?\s*lig\.?|Elemento|Element)$/iu', $text)) $header = $matrix;
+            if (preg_match('/^(?:Espectro|Spectrum)$/iu', $text)) $espectro = $matrix;
+            if (preg_match('/^(?:Info de ensayo|Test info)$/iu', $text)) $columnaInfo = $matrix;
+        }
+        if (!$header || !$espectro || !$columnaInfo) throw new RuntimeException('No se pudo localizar la tabla completa de elementos Olympus.');
+        $top = (int) floor(($height - (float) $header[5] - abs((float) $header[0]) * 1.3) * $alto / $height);
+        $bottom = (int) floor(($height - (float) $espectro[5] - abs((float) $espectro[0]) * 1.5) * $alto / $height);
+        $right = (int) floor(((float) $columnaInfo[4] - 4) * $ancho / $width);
+        $rows = 1; $inTable = false;
+        foreach (preg_split('/\R/u', $page->getText()) as $line) {
+            $line = trim($line);
+            if (preg_match('/^(?:E\.?\s*lig\.?|Elemento|Element)\s/iu', $line)) { $inTable = true; continue; }
+            if (!$inTable) continue;
+            if (preg_match('/^(?:No detectado|Not detected|Info de ensayo|Test info|Espectro|Spectrum)/iu', $line)) break;
+            if (preg_match('/^[A-Z][a-z]?\s+[<>≤≥]?\s*\d/u', $line)) $rows++;
+        }
+        if ($rows < 2) throw new RuntimeException('No se encontraron filas químicas Olympus.');
+        return $this->normalizeRectangle(['x' => 0, 'y' => $top, 'width' => $right, 'height' => $bottom - $top], $ancho, $alto)
+            + ['rows' => $rows, 'row_gap' => 0];
     }
 
     /**

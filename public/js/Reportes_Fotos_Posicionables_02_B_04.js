@@ -841,7 +841,7 @@
     function inicializarPromedioDureza(formulario) {
         var valores = Array.prototype.slice.call(formulario.querySelectorAll('.valor-dureza-medida'));
         var promedio = formulario.querySelector('#promedioDureza');
-        var es0402 = formulario.id === 'FOR-PIMP-04_02';
+        var es0402 = ['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].includes(formulario.id);
         var brinell = es0402 ? formulario.querySelector('[name="Datos_Equipo[DUREZA_BRINELL]"]') : null;
         var pieza = es0402 ? formulario.querySelector('[name="Detalles_Generales[Nombre_Pieza]"]') : null;
         var descripcion = es0402 ? formulario.querySelector('[name="Datos_Equipo[DESCRIPCION_MATERIAL]"]') : null;

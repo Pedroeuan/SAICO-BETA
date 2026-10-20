@@ -2,8 +2,9 @@
     const url = document.currentScript.dataset.coincidenciasUrl;
     const crearNormaUrl = document.currentScript.dataset.crearNormaUrl;
     const editarNormaUrl = document.currentScript.dataset.editarNormaUrl;
+    const formularioId = document.currentScript.dataset.formId || 'FOR-PIMP-04_02';
     document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('FOR-PIMP-04_02');
+        const form = document.getElementById(formularioId);
         if (!form) return;
         const campo = nombre => form.querySelector(`[name="Datos_Equipo[${nombre}]"]`);
         const tabla = campo('NORMA_REFERENCIA')?.closest('table');
@@ -123,11 +124,32 @@
         `; document.head.append(estilo);
         const campos = ['norma', 'dureza_max', 'tension_min', 'cedencia_min', 'tension_max'];
         const titulos = ['Norma / grado', 'Dureza máxima HB/HBW', 'Tensión mínima (ksi)', 'Cedencia mínima (ksi)', 'Tensión máxima (ksi)'];
+        let especificacionEditada = false;
+        let primeraEspecificacion = true;
+        const entradaEspecificacion = form.id === 'FOR-PIMP-04_03' ? campo('ESPECIFICACION_MATERIAL') : null;
+        entradaEspecificacion?.addEventListener('input', () => { especificacionEditada = true; });
+        const vincularEspecificacion = filas => {
+            if (form.id === 'FOR-PIMP-04_03') {
+                const especificacion = campo('ESPECIFICACION_MATERIAL');
+                if (especificacion) {
+                    especificacion.readOnly = false;
+                    const sugerencia = [...new Set(filas.map(fila => String(fila.norma || '').trim()).filter(Boolean))].join(' / ');
+                    // Edit conserva una redacción distinta de la sugerencia del catálogo.
+                    if (primeraEspecificacion && especificacion.value.trim() && especificacion.value !== sugerencia) especificacionEditada = true;
+                    primeraEspecificacion = false;
+                    if (!especificacionEditada && especificacion.value !== sugerencia) {
+                        especificacion.value = sugerencia;
+                        especificacion.dispatchEvent(new Event('change', {bubbles: true}));
+                    }
+                }
+            }
+        };
         const pintar = filas => {
+            vincularEspecificacion(filas);
             cuerpo.replaceChildren();
             if (!filas.length) return;
             const tr = document.createElement('tr');
-            const colores = ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
+            const colores = form.id === 'FOR-PIMP-04_03' ? ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'] : ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
             campos.forEach(campoReferencia => {
                 const td = document.createElement('td');
                 filas.forEach((fila, indice) => {
@@ -224,6 +246,7 @@
             actualizarSeleccion();
         };
         const actualizarManual = () => {
+            vincularEspecificacion(manuales);
             payload.value = JSON.stringify(manuales);
             estado.textContent = 'Escribe directamente en la tabla. Cada color identifica una referencia y sus límites; el PDF conserva el mismo orden y los separadores /.';
         };
@@ -231,7 +254,7 @@
             cuerpo.replaceChildren();
             if (!manuales.length) { actualizarManual(); return; }
             const row = document.createElement('tr');
-            const colores = ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
+            const colores = form.id === 'FOR-PIMP-04_03' ? ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'] : ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
             campos.forEach((clave, columna) => {
                 const td = document.createElement('td');
                 manuales.forEach((fila, indice) => {

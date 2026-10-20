@@ -1,3 +1,8 @@
+{{--
+    Controles y vista previa del análisis de ferrita/perlita con ImageJ.
+    En 04_02 y 04_03 el diseño acerca los ajustes a la imagen para revisar el umbral.
+    La previsualización no sustituye la medición persistida: se confirma con Aplicar y medir.
+--}}
 @php
     // En Edit se reciben metadatos y rutas del análisis anterior para mostrar sus evidencias.
     $analisisImagenActual = $analisisImagen ?? [];
@@ -8,37 +13,150 @@
 
 @once
 <style>
-    #FOR-PIMP-04_02 [data-imagej-phase]>.bg-light { border:0!important;background:#f5f7fb!important;padding:14px!important;border-radius:10px!important; }
-    #FOR-PIMP-04_02 .fiji-bloque { padding:16px;margin-bottom:14px;background:#fff;border:1px solid #dce4ef;border-radius:9px; }
-    #FOR-PIMP-04_02 .fiji-bloque-titulo { display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;color:#254b73;margin:0 0 14px; }
-    #FOR-PIMP-04_02 .fiji-bloque-titulo>span { display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#e9f1fc;color:#2463a9;font-size:13px; }
-    #FOR-PIMP-04_02 .fiji-bloque .form-control { border-radius:6px; }
-    #FOR-PIMP-04_02 .fiji-bloque input[type=file] { padding:12px;border:1px dashed #b5c9df;border-radius:7px;background:#f8fbff;width:100%; }
-    #FOR-PIMP-04_02 .fiji-bloque input[type=file]::file-selector-button { border:0;border-radius:5px;padding:6px 10px;background:#e0edfd;color:#245b98;margin-right:10px;cursor:pointer; }
-    #FOR-PIMP-04_02 .fiji-bloque label { font-size:13px;color:#374b63; }
-    #FOR-PIMP-04_02 .fiji-acciones { display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #e3eaf2; }
-    #FOR-PIMP-04_02 .fiji-acciones .btn { margin:0!important;border-radius:6px; }
-    #FOR-PIMP-04_02 .fiji-acciones [data-imagej-status] { flex-basis:100%;margin:0!important;font-size:12px; }
-    #FOR-PIMP-04_02 [data-imagej-results] .card { border-radius:9px;box-shadow:none;border:1px solid #dce4ef!important;margin-bottom:0; }
-    #FOR-PIMP-04_02 [data-imagej-results] .col-md-4:nth-child(2) .card { border-top:3px solid #334155!important;background:#f5f7fa; }
-    #FOR-PIMP-04_02 [data-imagej-results] .col-md-4:nth-child(3) .card { border-top:3px solid #7b9dc5!important; }
-    #FOR-PIMP-04_02 [data-imagej-results] .col-md-4:nth-child(4) .card { border-top:3px solid #238365!important;background:#f0faf6; }
-    #FOR-PIMP-04_02 .fiji-seleccion-pdf { border-left:4px solid #3679c5!important;border-radius:8px!important; }
-    #FOR-PIMP-04_02 .fiji-editor { display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;align-items:start; }
-    #FOR-PIMP-04_02 .fiji-controles { padding:12px;background:#f5f8fc;border:1px solid #dce4ef;border-radius:8px; }
-    #FOR-PIMP-04_02 .fiji-controles .col-md-6 { flex:0 0 100%;max-width:100%;margin-bottom:12px; }
-    #FOR-PIMP-04_02 .fiji-controles .row.mt-3 { margin-top:0!important; }
-    #FOR-PIMP-04_02 .fiji-controles .alert { font-size:12px;margin-top:0!important; }
-    #FOR-PIMP-04_02 [data-imagej-histogram-wrap] { display:none!important; }
-    #FOR-PIMP-04_02 .fiji-editor [data-imagej-preview-wrap] { min-width:0;position:sticky;top:12px; }
-    #FOR-PIMP-04_02 .fiji-editor [data-imagej-preview] { max-height:65vh;object-fit:contain; }
-    #FOR-PIMP-04_02 .fiji-controles .fiji-acciones .btn { width:100%; }
-    @media(max-width:767px) {
-        #FOR-PIMP-04_02 .fiji-editor { grid-template-columns:minmax(0,1fr); }
-        #FOR-PIMP-04_02 .fiji-controles .col-md-6 { flex:0 0 50%;max-width:50%; }
-        #FOR-PIMP-04_02 .fiji-editor [data-imagej-preview-wrap] { position:static; }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) [data-imagej-phase]>.bg-light { 
+        border:0!important;
+        background:#f5f7fb!important;
+        padding:14px!important;
+        border-radius:10px!important; 
     }
-    @media(max-width:575px) { #FOR-PIMP-04_02 .fiji-acciones .btn{width:100%} }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-bloque { 
+        padding:16px;
+        margin-bottom:14px;
+        background:#fff;
+        border:1px solid #dce4ef;
+        border-radius:9px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-bloque-titulo { 
+        display:flex;
+        align-items:center;
+        gap:9px;
+        font-size:15px;
+        font-weight:700;
+        color:#254b73;
+        margin:0 0 14px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-bloque-titulo>span { 
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        width:26px;
+        height:26px;
+        border-radius:7px;
+        background:#e9f1fc;
+        color:#2463a9;
+        font-size:13px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-bloque .form-control { 
+        border-radius:6px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-bloque input[type=file] { 
+        padding:12px;
+        border:1px dashed #b5c9df;
+        border-radius:7px;
+        background:#f8fbff;
+        width:100%; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-bloque input[type=file]::file-selector-button { 
+        border:0;
+        border-radius:5px;
+        padding:6px 10px;
+        background:#e0edfd;
+        color:#245b98;
+        margin-right:10px;
+        cursor:pointer; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-bloque label { 
+        font-size:13px;
+        color:#374b63; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-acciones { 
+        display:flex;
+        align-items:center;
+        gap:9px;
+        flex-wrap:wrap;
+        padding-top:14px;
+        border-top:1px solid #e3eaf2; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-acciones .btn { 
+        margin:0!important;
+        border-radius:6px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-acciones [data-imagej-status] { 
+        flex-basis:100%;
+        margin:0!important;
+        font-size:12px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) [data-imagej-results] .card { 
+        border-radius:9px;
+        box-shadow:none;
+        border:1px solid #dce4ef!important;
+        margin-bottom:0; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) [data-imagej-results] .col-md-4:nth-child(2) .card { 
+        border-top:3px solid #334155!important;
+        background:#f5f7fa; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) [data-imagej-results] .col-md-4:nth-child(3) .card { 
+        border-top:3px solid #7b9dc5!important; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) [data-imagej-results] .col-md-4:nth-child(4) .card { 
+        border-top:3px solid #238365!important;background:#f0faf6; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-seleccion-pdf { 
+        border-left:4px solid #3679c5!important;
+        border-radius:8px!important; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-editor { 
+        display:grid;
+        grid-template-columns:250px minmax(0,1fr);
+        gap:16px;
+        align-items:start; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-controles { 
+        padding:12px;
+        background:#f5f8fc;
+        border:1px solid #dce4ef;
+        border-radius:8px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-controles .col-md-6 { 
+        flex:0 0 100%;
+        max-width:100%;
+        margin-bottom:12px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-controles .row.mt-3 { 
+        margin-top:0!important; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-controles .alert { 
+        font-size:12px;
+        margin-top:0!important; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) [data-imagej-histogram-wrap] { 
+        display:none!important; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-editor [data-imagej-preview-wrap] { 
+        min-width:0;
+        position:sticky;top:12px; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-editor [data-imagej-preview] { 
+        max-height:65vh;
+        object-fit:contain; 
+    }
+    :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-controles .fiji-acciones .btn { 
+        width:100%; 
+    }
+    @media(max-width:767px) {
+        :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-editor { 
+            grid-template-columns:minmax(0,1fr); 
+        }
+        :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-controles .col-md-6 { 
+            flex:0 0 50%;
+            max-width:50%; 
+        }
+        :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-editor [data-imagej-preview-wrap] { 
+            position:static; 
+        }
+    }
+    @media(max-width:575px) { :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .fiji-acciones .btn{width:100%} }
 </style>
 @endonce
 
