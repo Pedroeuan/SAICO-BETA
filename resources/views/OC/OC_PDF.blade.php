@@ -71,10 +71,18 @@
                 .simbologia td, .simbologia th {
                     border: .6px solid black; 
                 }
-                .celdaAmarillo{
-                    background-color: #FFF2CC;
+                .simbologia a {
+                    color: #000000;
+                    text-decoration: none;
                 }
-
+                .celdaColor{
+                    background-color: #A53623;
+                    color:white;
+                }
+                .celdaColor2{
+                    background-color: #B96B6B;
+                    color:white;
+                }
                 .tablaheader {
                     border-collapse: collapse; 
                     border-spacing: 0px;        /* Espacio entre celdas */
@@ -285,11 +293,11 @@
                             <table class="simbologia">
                                 <thead>
                                     <tr>
-                                        <th colspan="2" class="celdaAmarillo">DATOS DE PAGO:</th>
+                                        <th colspan="2" class="celdaColor">DATOS DE PAGO:</th>
                                     </tr>
 
                                     <tr>
-                                        <td style="width: 90px;"><strong>RFC:</strong></td>
+                                        <td style="width: 120px;"><strong>RFC:</strong></td>
                                         <td style="width: 120px;">AIC150303461</td>
                                     </tr>
 
@@ -323,15 +331,15 @@
                         </td>
 
                         <td>
-                            <table class="" border="1">
+                            <table class="" border="0">
                                 <thead>
                                     <tr>
                                         <th colspan="2" class="">&nbsp;</th>
                                     </tr>
 
                                     <tr>
-                                        <td style="width: 100px;"><strong>&nbsp;</strong></td>
-                                        <td style="width: 100px;">&nbsp;</td>
+                                        <td style="width: 50px;"><strong>&nbsp;</strong></td>
+                                        <td style="width: 50px;">&nbsp;</td>
                                     </tr>
 
                                     <tr>
@@ -367,12 +375,12 @@
                             <table class="simbologia">
                                 <thead>
                                     <tr>
-                                        <th colspan="2" class="celdaAmarillo">DATOS DE CONTACTO:</th>
+                                        <th colspan="2" class="celdaColor">DATOS DE CONTACTO:</th>
                                     </tr>
 
                                     <tr>
-                                        <td style="width: 90px;"><strong>Tel.:</strong></td>
-                                        <td style="width: -10px;">938-197-8820</td>
+                                        <td style="width: 10%;"><strong>Tel.:</strong></td>
+                                        <td style="width: 20%;">938-197-8820</td>
                                     </tr>
 
                                     <tr>
@@ -387,7 +395,7 @@
 
                                     <tr>
                                         <td><strong>Consulta La Politica de SGI:</strong></td>
-                                        <td>https://aicosc.com/Politica/Politica%20del%20SGI%20y%20Objetivos.pdf</td>
+                                        <td><a href="https://aicosc.com/Politica/Politica%20del%20SGI%20y%20Objetivos.pdf">Politica del SGI</a></td>
                                     </tr>
 
                                     <tr>
@@ -595,7 +603,7 @@
                 <table class="datosinspeccion">
                     <tbody>
                         <tr>
-                            <td style="width: 120px;">Objetivo del servicio:</td>
+                            <td class="celdaColor2" style="width: 120px;">Objetivo del servicio:</td>
                             <td class="sinborde-arriba-lados"></td>
                         </tr>
 
@@ -611,11 +619,11 @@
                 <table class="datosinspeccion">
                     <tbody>
                         <tr>
-                            <td style="width: 120px;">Cliente</td>
-                            <td class="">Contacto</td>
-                            <td class="">Puesto</td>
-                            <td class="">Fecha</td>
-                            <td class="">Ciudad</td>
+                            <td class="celdaColor2" style="width: 120px;">Cliente</td>
+                            <td class="celdaColor2">Contacto</td>
+                            <td class="celdaColor2">Puesto</td>
+                            <td class="celdaColor2">Fecha</td>
+                            <td class="celdaColor2">Ciudad</td>
                         </tr>
 
                         <tr>
@@ -626,10 +634,10 @@
                             <td class="">8</td> 
                         </tr>
                         <tr>
-                            <td style="width: 120px;">Teléfono</td>
-                            <td class="">Email</td>
-                            <td colspan="2" class="">Lugar de Trabajo</td>
-                            <td class="">Vigencia de Cotizacion</td>
+                            <td class="celdaColor2" style="width: 120px;">Teléfono</td>
+                            <td class="celdaColor2">Email</td>
+                            <td class="celdaColor2" colspan="2">Lugar de Trabajo</td>
+                            <td class="celdaColor2">Vigencia de Cotizacion</td>
                         </tr>
 
                         <tr>
@@ -646,12 +654,12 @@
                 <table class="datosresultados">
                     <thead>
                         <tr class="celdaAzul">
-                            <th class="" style="width: 4%;">Ítem</th>
-                            <th class="" style="width: 40%;">Descripción</th>
-                            <th class="" style="width: 6%;">Cantidad</th>
-                            <th class="" style="width: 6%;">Unidad</th>
-                            <th class="" style="width: 40%;">Valor unitario</th>
-                            <th class="" style="width: 40%;">Valor Total</th>
+                            <th class="celdaColor" style="width: 4%;">Ítem</th>
+                            <th class="celdaColor" style="width: 40%;">Descripción</th>
+                            <th class="celdaColor" style="width: 6%;">Cantidad</th>
+                            <th class="celdaColor" style="width: 6%;">Unidad</th>
+                            <th class="celdaColor" style="width: 40%;">Valor unitario</th>
+                            <th class="celdaColor" style="width: 40%;">Valor Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -669,13 +677,13 @@
                 <div style="margin-bottom: 15px;"></div>
                 <table class="datosresultados">
                     <tr>
-                        <td style="width: 120px;">CONDICIONES DE PAGO:</td>
+                        <td class="celdaColor" style="width: 120px;">CONDICIONES DE PAGO:</td>
                     </tr>
                     <tr>
                         <td style="width: 120px;">8</td>
                     </tr>
                     <tr>
-                        <td style="width: 120px;">CONDICIONES DE GENERALES:</td>
+                        <td class="celdaColor" style="width: 120px;">CONDICIONES DE GENERALES:</td>
                     </tr>
                     <tr>
                         <td style="width: 120px;">9</td>
