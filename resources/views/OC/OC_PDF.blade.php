@@ -259,12 +259,12 @@
                             <th style="width: 100%;">FOR-PVEN-02</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>--}}
                             <th rowspan="4" style="width: 500%; font-size: 15pt;">ASESORIA E INSPECCIÓN EN CONSTRUCCIÓN COSTA FUERA                "AICO SC"</th>
-                            <th style="width: 100%;">Num. De Cotizacion</th>
+                            <th class="celdaColor2" style="width: 100%;">Num. De Cotizacion</th>
                         </tr>
                         <tr>
                             <th style="width: 100%;">1</th>
                         <tr>
-                            <th style="width: 100%;">Solicitud del cliente</th>
+                            <th class="celdaColor2" style="width: 100%;">Solicitud del cliente</th>
                         </tr>
                         <tr>
                             <th style="width: 100%;">2</th>
