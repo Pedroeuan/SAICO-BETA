@@ -278,7 +278,131 @@
             </header>
 
             <footer>
+                <table style="margin: auto; border: 0px solid black;">
+                    <tr>
+                        <td>
+
+                            <table class="simbologia">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="celdaAmarillo">DATOS DE PAGO:</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="width: 90px;"><strong>RFC:</strong></td>
+                                        <td style="width: 120px;">AIC150303461</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>FORMA DE PAGO:</strong></td>
+                                        <td>Transferencia</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>BANCO:</strong></td>
+                                        <td>BBVA</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>No. Cuenta:</strong></td>
+                                        <td>019-915-083-8</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>No. Cuenta CLABE:</strong></td>
+                                        <td>012-500-001-991-508-386</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>WhatsApp:</strong></td>
+                                        <td>938-103-4445</td>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </td>
+
+                        <td>
+                            <table class="" border="1">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="">&nbsp;</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="width: 100px;"><strong>&nbsp;</strong></td>
+                                        <td style="width: 100px;">&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>&nbsp;</strong></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>&nbsp;</strong></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>&nbsp;</strong></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>&nbsp;</strong></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>&nbsp;</strong></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </td>
+
+                        <td>
+
+                            <table class="simbologia">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="celdaAmarillo">DATOS DE CONTACTO:</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="width: 90px;"><strong>Tel.:</strong></td>
+                                        <td style="width: -10px;">938-197-8820</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>Correo:</strong></td>
+                                        <td>ventas@aicosc.com</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>Pagina Web:</strong></td>
+                                        <td>www.aicosc.com</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>Consulta La Politica de SGI:</strong></td>
+                                        <td>https://aicosc.com/Politica/Politica%20del%20SGI%20y%20Objetivos.pdf</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><strong>Direccion:</strong></td>
+                                        <td>Av. Concordia S/N esq. Periférica, Casa 13, Col. Camaroneros, C.P. 24169, Cd. del Carmen, Cam.  </td>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+
                     <div style="margin-bottom: 5px;"></div>
+
                     <table class="datosgenerales">
                         <thead>
                             @if( $numFirmas == 1)
