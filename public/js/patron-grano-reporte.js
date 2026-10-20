@@ -364,7 +364,7 @@
             if (tarjetaActiva && tarjetaActiva.contains(evento.target)) sincronizarLayout(tarjetaActiva);
         });
 
-        if (formulario.id === 'FOR-PIMP-04_02') {
+        if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].includes(formulario.id)) {
             formulario.addEventListener('saico:grain-pattern-select', function (evento) {
                 const id = String(evento.detail?.id || '');
                 if (!catalogo.some(item => String(item.id) === id) && String(historico.id || '') !== id) return;

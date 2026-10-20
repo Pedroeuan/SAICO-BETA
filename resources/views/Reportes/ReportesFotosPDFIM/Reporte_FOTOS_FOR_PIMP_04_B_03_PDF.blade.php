@@ -1,3 +1,9 @@
+{{--
+    Anexo fotográfico del 04_03 en inglés; utiliza las evidencias y posiciones guardadas.
+    Mantiene la distribución equivalente al anexo español, incluidos texto y espacios con equis.
+    Las anotaciones forman parte del archivo de imagen; aquí se presenta la evidencia final.
+    El controlador suma estas páginas a las de resultados para numerar toda la serie.
+--}}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,9 +12,9 @@
     <style>
         @page { 
             margin: 
-            2.5cm /* superior */
+            1.7cm /* superior: alineado con la hoja principal */
             1.5cm /* derecho */
-            1.1cm /* inferior */
+            2.0cm /* inferior: espacio reservado para firmas */
             1.5cm; /* izquierdo */
         }
         body { 

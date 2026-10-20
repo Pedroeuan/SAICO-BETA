@@ -1,3 +1,8 @@
+{{--
+    Selector reutilizable de metalografía: recibe nombre, valor y opciones del catálogo.
+    Admite escoger un valor existente o escribir otro; el campo oculto envía el valor final.
+    La flecha identifica visualmente el desplegable en 04_02 y 04_03.
+--}}
 @php
     $opcionesCatalogo = collect($opciones ?? [])
         ->map(fn ($opcion) => trim((string) $opcion))
@@ -31,16 +36,16 @@
 
 @once
     <style>
-        #FOR-PIMP-04_02 .metalografia-selector-control { position:relative; }
-        #FOR-PIMP-04_02 .metalografia-selector-control select {
+        :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .metalografia-selector-control { position:relative; }
+        :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .metalografia-selector-control select {
             appearance:none; -webkit-appearance:none; background-image:none;
             padding-right:27px; padding-left:7px; cursor:pointer; border-radius:5px;
         }
-        #FOR-PIMP-04_02 .metalografia-selector-control .metalografia-selector-icono {
+        :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .metalografia-selector-control .metalografia-selector-icono {
             display:block!important; position:absolute; right:9px; top:50%; transform:translateY(-50%);
             font-size:11px; color:#3674b5; pointer-events:none;
         }
-        #FOR-PIMP-04_02 .metalografia-selector-control:focus-within .metalografia-selector-icono { color:#0056b3; }
+        :is(#FOR-PIMP-04_02, #FOR-PIMP-04_03) .metalografia-selector-control:focus-within .metalografia-selector-icono { color:#0056b3; }
     </style>
 @endonce
 

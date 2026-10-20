@@ -11,7 +11,7 @@ class ServicioAnalisisPdfXrf
     private const ELEMENTS = [
         'Al', 'Si', 'P', 'S', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu',
         'Zn', 'Nb', 'Mo', 'W', 'Pb', 'Bi', 'Sn', 'Mg', 'Ca', 'As', 'Sb', 'Zr',
-        'Ta', 'Hf', 'Re', 'C', 'B', 'N',
+        'Ta', 'Hf', 'Re', 'C', 'B', 'N', 'Pd', 'Ag', 'Cd',
     ];
 
     public function __construct(private readonly Parser $parser)
@@ -53,6 +53,7 @@ class ServicioAnalisisPdfXrf
         $flat = implode("\n", $lines);
 
         $metadata = [
+            'equipo' => preg_match('/E\.?lig\./iu', $flat) && preg_match('/Modo de analizador/iu', $flat) ? 'olympus' : 'vanta',
             'numero_serie' => $this->capture($flat, '/Serial\s*Number\s*:\s*([^\n]+)/iu'),
             'fecha_hora' => $this->capture($flat, '/Time\s*:\s*(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})/iu'),
             'metodo' => $this->capture($flat, '/Method\s*:\s*([^\n]+)/iu'),
@@ -151,6 +152,16 @@ class ServicioAnalisisPdfXrf
     }
 
     /** Conserva la capitalización oficial del símbolo químico para comparar lecturas y normas. */
+    /** En 04_03 conserva ND o la captura manual si no existe un promedio completo. No suma fórmulas. */
+    public function valorParaReporte0403(?array $resultado, string $capturado = ''): string
+    {
+        if ($resultado && ($resultado['cantidad'] ?? 0) === ($resultado['esperados'] ?? 0)
+            && ($resultado['promedio'] ?? null) !== null) {
+            return number_format((float) $resultado['promedio'], 4, '.', '');
+        }
+        return trim($capturado) !== '' ? trim($capturado) : (string) ($resultado['valor_reporte'] ?? 'ND');
+    }
+
     public function canonicalElement(string $element): string
     {
         foreach (self::ELEMENTS as $symbol) {
