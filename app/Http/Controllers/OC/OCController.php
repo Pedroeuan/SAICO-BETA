@@ -564,7 +564,7 @@ class OCController extends Controller
         $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
     
         $canvas = $dompdf->getCanvas();
-        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+        /*$canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
             $font = $fontMetrics->getFont('Arial', 'normal');
             $size = 8;
@@ -578,7 +578,7 @@ class OCController extends Controller
                 $text = "$pageNumber de $pageCount";
                 $canvas->text($x, $y, $text, $font, $size);
             }
-        });
+        });*/
     
         return $pdf->stream('OC.PDF');
     }

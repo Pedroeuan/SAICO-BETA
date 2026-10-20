@@ -233,6 +233,12 @@
             font-size: 12px;
             border: 1px solid black; 
         }
+
+        .sinborde-arriba-lados {
+            border-top: none !important;
+            /*border-left: none !important;*/
+            border-right: none !important;
+        }
             </style>
         </head>
         <body>
@@ -244,10 +250,19 @@
                             <th style="width: 90%;">Código:</th>
                             <th style="width: 100%;">FOR-PVEN-02</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>--}}
-                            <th rowspan="3" style="width: 500%; font-size: 15pt;">ASESORIA E INSPECCIÓN EN CONSTRUCCIÓN COSTA FUERA                "AICO SC"</th>
+                            <th rowspan="4" style="width: 500%; font-size: 15pt;">ASESORIA E INSPECCIÓN EN CONSTRUCCIÓN COSTA FUERA                "AICO SC"</th>
+                            <th style="width: 100%;">Num. De Cotizacion</th>
                         </tr>
-
                         <tr>
+                            <th style="width: 100%;">1</th>
+                        <tr>
+                            <th style="width: 100%;">Solicitud del cliente</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%;">2</th>
+                        </tr>
+                        </tr>
+                        {{--<tr>
                             <th>Versión:</th>
                             <th>0</th>
                         </tr>
@@ -255,7 +270,7 @@
                         <tr>
                             <th>Página:</th>
                             <th></th>
-                        </tr>
+                        </tr>--}}
                 </table>
 
                 <div style="margin-bottom: 10px;"></div>   
@@ -453,25 +468,95 @@
             <div class="content">
                 <div style="margin-bottom: 0px;"></div>
                 
-                <table class="datosgenerales">
+                <table class="datosinspeccion">
                     <tbody>
                         <tr>
-                            <td class="lineaInferior"><label>CLIENTE: <br></label></td>
-                            <td style="width: 20%;"></td>
-                            <td class="lineaInferior"><label>PROYECTO:<br></label></td>
+                            <td style="width: 120px;">Objetivo del servicio:</td>
+                            <td class="sinborde-arriba-lados"></td>
                         </tr>
 
                         <tr>
-                            <td class="lineaInferior"><label>CONTRATO:<br></label></td>
-                            <td style="width: 20%;"></td>
-                            <td class="lineaInferior"><label>FECHA:<br></label></td>
+                            <td colspan="2">3</td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-bottom: 15px;"></div>
+                
+                <table class="datosinspeccion">
+                    <tbody>
+                        <tr>
+                            <td style="width: 120px;">Cliente</td>
+                            <td class="">Contacto</td>
+                            <td class="">Puesto</td>
+                            <td class="">Fecha</td>
+                            <td class="">Ciudad</td>
+                        </tr>
+
+                        <tr>
+                            <td class="">4</td>
+                            <td class="">5</td>
+                            <td class="">6</td>
+                            <td class="">7</td>
+                            <td class="">8</td> 
+                        </tr>
+                        <tr>
+                            <td style="width: 120px;">Teléfono</td>
+                            <td class="">Email</td>
+                            <td colspan="2" class="">Lugar de Trabajo</td>
+                            <td class="">Vigencia de Cotizacion</td>
+                        </tr>
+
+                        <tr>
+                            <td class="">4</td>
+                            <td class="">5</td>
+                            <td colspan="2" class="">6</td>
+                            <td class="">7</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div style="margin-bottom: 15px;"></div>
 
-¿
+                <table class="datosresultados">
+                    <thead>
+                        <tr class="celdaAzul">
+                            <th class="" style="width: 4%;">Ítem</th>
+                            <th class="" style="width: 40%;">Descripción</th>
+                            <th class="" style="width: 6%;">Cantidad</th>
+                            <th class="" style="width: 6%;">Unidad</th>
+                            <th class="" style="width: 40%;">Valor unitario</th>
+                            <th class="" style="width: 40%;">Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>----</td>
+                            <td>----</td>
+                            <td>----</td>
+                            <td>----</td>
+                            <td>----</td>
+                            <td>----</td>
+                        </tr>
+                    </tbody>
+                </table> 
+
+                <div style="margin-bottom: 15px;"></div>
+                <table class="datosresultados">
+                    <tr>
+                        <td style="width: 120px;">CONDICIONES DE PAGO:</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 120px;">8</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 120px;">CONDICIONES DE GENERALES:</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 120px;">9</td>
+                    </tr>
+                </table> 
             </div>
 
         </body>
