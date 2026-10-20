@@ -24,7 +24,7 @@ class FORPIMP0403PromedioDurezaTest extends TestCase
         }
     }  
 
-    /** Comprueba el promedio de las diez lecturas y el formato final con dos decimales. */
+    /** Redondea el promedio final a un entero; 104.5 se convierte en 105. */
     public function test_calcula_el_promedio_de_las_lecturas_numericas(): void
     {
         $request = Request::create('/', 'POST', [
@@ -37,7 +37,7 @@ class FORPIMP0403PromedioDurezaTest extends TestCase
         $this->invocarCalculo($request, $datosEquipo);
 
         $this->assertSame(['100', '101', '102', '103', '104', '105', '106', '107', '108', '109'], $datosEquipo['VALORES_DUREZA']);
-        $this->assertSame('104.50', $datosEquipo['PROMEDIO_DUREZA']);
+        $this->assertSame('105', $datosEquipo['PROMEDIO_DUREZA']);
     }
 
     /** Conserva vacíos y guiones como valores sin medición y deja vacío el promedio. */
@@ -66,7 +66,7 @@ class FORPIMP0403PromedioDurezaTest extends TestCase
 
         $this->invocarCalculo($request, $datosEquipo);
 
-        $this->assertSame('105.00', $datosEquipo['PROMEDIO_DUREZA']);
+        $this->assertSame('105', $datosEquipo['PROMEDIO_DUREZA']);
     }
 
     /** Impide guardar valores no numéricos que producirían un promedio incorrecto. */

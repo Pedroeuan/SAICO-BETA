@@ -1,3 +1,9 @@
+{{--
+    Hoja de resultados del 04_03 en inglés, con los mismos datos que la versión española.
+    Los parciales compartidos mantienen los colores de normas y el ajuste Olympus/Vanta.
+    Se conservan las dimensiones de las celdas y el tamaño de letra para mantener la legibilidad.
+    La numeración definitiva se incorpora en el controlador al combinar datos y fotografías.
+--}}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,9 +12,9 @@
     <style>
         @page {
             margin: 
-            2.5cm /* superior */
+            1.7cm /* superior */
             1.5cm /* derecho */
-            2.4cm /* inferior */
+            2.0cm /* inferior */
             1.5cm; /* izquierdo */
         }
         body {
@@ -33,6 +39,10 @@
             right: 0;
             height: auto;
             text-align: center;
+        }
+        /* Solo el reporte principal */
+        footer .firmas-im { 
+            top: 0; 
         }
         table {
             border-collapse: collapse;
@@ -178,6 +188,28 @@
             width: 100%;
             height: 4.65cm;
             object-fit: contain;
+        }
+        /* Olympus usa una escala propia; Vanta conserva las medidas originales. */
+        /* El borde exterior conserva los 4.7 cm originales para ambos equipos. */
+        .shot-center { 
+            width:100%; 
+            height:4.7cm; 
+            table-layout:fixed; 
+            border:0; 
+        }
+        .shot-center td { 
+            height:4.7cm; 
+            padding:0; 
+            border:0; 
+            text-align:center; 
+            vertical-align:middle; 
+            line-height:0; 
+        }
+        .shot-image.olympus img { 
+            width:auto; 
+            height:auto; 
+            max-width:85%; 
+            max-height:3.2cm; 
         }
         .chemical {
             table-layout: fixed;
@@ -496,13 +528,7 @@
             <th class="label">SPECIFIED YIELD STRENGTH (KSI)</th>
             <th class="label">MAXIMUM TENSILE STRENGTH (KSI)</th>
         </tr>
-        <tr>
-            <td>{{ $Datos_Equipo['NORMA_REFERENCIA'] ?? '' }}</td>
-            <td>{{ $Datos_Equipo['DUREZA_BRINELL_MAX'] ?? '' }}</td>
-            <td>{{ $Datos_Equipo['RESISTENCIA_TENSION_MIN'] ?? '' }}</td>
-            <td>{{ $Datos_Equipo['RESISTENCIA_CEDENCIA_ESPECIFICADA'] ?? '' }}</td>
-            <td>{{ $Datos_Equipo['RESISTENCIA_TENSION_MAX'] ?? '' }}</td>
-        </tr>
+        @include('Reportes.IM.partials.fila-referencias-pdf')
     </tbody>
 </table>
 
@@ -559,7 +585,7 @@
                                     <tr>
                                         <th>{{ $filaNorma['Elemento'] ?? '' }}</th>
                                         <td>{{ $filaNorma['Promedio'] ?? '' }}</td>
-                                        <td>{{ $filaNorma['Composicion'] ?? '' }}</td>
+                                        <td>@include('Reportes.IM.partials.limites-quimicos-0403-pdf')</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -572,10 +598,7 @@
                         <div class="shot-title">{{ $ordinalesDisparoPdf[$celdaDisparo] }} SHOT<br>VALUES OBTAINED FROM THE ANALYZED PART</div>
                         <table class="shot-images"><tr>
                             @for($indiceImagen = 0; $indiceImagen < 2; $indiceImagen++)
-                                <td><div class="shot-image">
-                                    @if(!empty($Disparos[$celdaDisparo][$indiceImagen]))<img src="{{ $Disparos[$celdaDisparo][$indiceImagen] }}" alt="Shot {{ $celdaDisparo }}">@endif
-                                </div>
-                            </td>
+                                <td>@include('Reportes.IM.partials.imagen-disparo-0403-pdf')</td>
                             @endfor
                         </tr>
                     </table>

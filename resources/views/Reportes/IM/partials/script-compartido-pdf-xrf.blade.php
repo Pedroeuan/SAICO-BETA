@@ -1,3 +1,8 @@
+{{--
+    Coordina la extracción XRF, los promedios y las capturas desde la ruta del formato activo.
+    En 04_03 enlaza el selector múltiple de referencias con la tabla química y sus colores.
+    La vista previa prepara los datos; el controlador valida y persiste el resultado al guardar.
+--}}
 <script src="{{ asset('js/procesamiento-asincrono-saico.js') }}?v={{ filemtime(public_path('js/procesamiento-asincrono-saico.js')) }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -60,7 +65,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     const elemento = document.createElement('td');
                     elemento.textContent = fila.Elemento || '';
                     const composicion = document.createElement('td');
-                    composicion.textContent = fila.Composicion || '';
+                    if (fila.Referencias?.length) {
+                        const colores = ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'];
+                        fila.Referencias.forEach((referencia, indice) => {
+                            if (indice) composicion.append(document.createTextNode(' / '));
+                            const limite = document.createElement('span');
+                            limite.style.color = colores[referencia.indice % colores.length];
+                            limite.style.fontWeight = 'bold'; limite.title = referencia.norma;
+                            limite.textContent = referencia.valor;
+                            composicion.append(limite);
+                        });
+                    } else composicion.textContent = fila.Composicion || '';
                     renglon.append(elemento, promedio, composicion);
                     cuerpoNorma.appendChild(renglon);
                 });
@@ -70,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             nombreNormaSelect.addEventListener('change', function () {
-                if (nombreNormaActual && this.value !== nombreNormaActual && tienePromediosNorma()
+                if (!nombreNormaSelect.hidden && nombreNormaActual && this.value !== nombreNormaActual && tienePromediosNorma()
                     && !window.confirm('Al cambiar la norma se eliminarán los promedios capturados. ¿Desea continuar?')) {
                     this.value = nombreNormaActual;
                     return;
@@ -87,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             registroNormaSelect.addEventListener('change', function () {
-                if (registroNormaActual && this.value !== registroNormaActual && tienePromediosNorma()
+                if (!registroNormaSelect.hidden && registroNormaActual && this.value !== registroNormaActual && tienePromediosNorma()
                     && !window.confirm('Al cambiar la tabla se eliminarán los promedios capturados. ¿Desea continuar?')) {
                     this.value = registroNormaActual;
                     return;
@@ -115,6 +130,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 registroNormaSelect.value = norma.idnormas_im;
                 registroNormaActual = String(norma.idnormas_im);
                 mostrarResultadosNorma(norma, []);
+            });
+
+            // El selector múltiple superior es la única fuente visible de normas en 04_03.
+            // Conserva las lecturas por elemento al cambiar una referencia del catálogo.
+            const lecturasGuardadas = new Map();
+            document.addEventListener('referencias-0402:cambio', function (evento) {
+                if (!nombreNormaSelect.hidden || !Array.isArray(evento.detail)) return;
+                cuerpoNorma.querySelectorAll('input[data-elemento]').forEach(input => lecturasGuardadas.set(input.dataset.elemento.toLowerCase(), input.value));
+                const seleccionada = evento.detail[0];
+                if (!seleccionada) {
+                    registroNormaSelect.value = '';
+                    limpiarResultadosNorma();
+                    return;
+                }
+                const norma = catalogoNormas.find(item => String(item.idnormas_im) === String(seleccionada.idnormas_im));
+                if (!norma) return;
+                nombreNormaSelect.value = norma.Nombre_Espe;
+                nombreNormaActual = norma.Nombre_Espe;
+                cargarRegistrosNorma(norma.Nombre_Espe);
+                registroNormaSelect.value = norma.idnormas_im;
+                registroNormaActual = String(norma.idnormas_im);
+                const union = new Map();
+                evento.detail.forEach((referencia, indice) => {
+                    const datos = catalogoNormas.find(item => String(item.idnormas_im) === String(referencia.idnormas_im));
+                    const tabla = referencia.composicion_seleccionada?.Tabla || datos?.Tabla || [];
+                    tabla.forEach(fila => {
+                        const clave = String(fila.Elemento || '').trim().toLowerCase();
+                        if (!clave) return;
+                        if (!union.has(clave)) union.set(clave, {Elemento: fila.Elemento, Referencias: [], Promedio: fila.Promedio || ''});
+                        union.get(clave).Referencias.push({indice, norma: referencia.norma, valor: fila.Composicion || ''});
+                    });
+                });
+                const tabla = [...union.values()];
+                mostrarResultadosNorma({...norma, Tabla: tabla}, tabla.map(fila => lecturasGuardadas.get(String(fila.Elemento || '').toLowerCase()) ?? fila.Promedio ?? ''));
             });
 
             const idNormaInicial = idNormaAnterior || normaHistorica?.idnormas_im;
@@ -249,6 +298,22 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderPreview(payload) {
         const analyses = payload.analisis || [];
         const averages = payload.promedios || {};
+        if (form?.id === 'FOR-PIMP-04_03') {
+            // El worker recibe una norma ancla; completa aquí los elementos exclusivos
+            // de las demás normas usando las mismas lecturas originales de los PDF.
+            form.querySelectorAll('#tablaNormaIM input[data-elemento]').forEach(input => {
+                const elemento = input.dataset.elemento.trim();
+                if (Object.prototype.hasOwnProperty.call(averages, elemento)) return;
+                const valores = analyses.map(analisis => Object.entries(analisis.lecturas || {})
+                    .find(([simbolo]) => simbolo.toLowerCase() === elemento.toLowerCase())?.[1])
+                    .filter(lectura => lectura && !lectura.calificador && Number.isFinite(Number(lectura.valor)))
+                    .map(lectura => Number(lectura.valor));
+                const completo = analyses.length > 0 && valores.length === analyses.length;
+                const promedio = valores.length ? valores.reduce((a, b) => a + b, 0) / valores.length : null;
+                averages[elemento] = {promedio, cantidad: valores.length, esperados: analyses.length,
+                    valor_reporte: completo ? promedio.toFixed(4) : 'ND'};
+            });
+        }
         const warnings = Array.isArray(payload.advertencias) ? [...payload.advertencias] : [];
         if (analyses.length > 3) {
             warnings.push('Solo los primeros tres PDF se asignaron a disparos; todos se utilizaron para calcular los promedios.');
@@ -360,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // En 06_B/01 los recortes y promedios pertenecen a los PDF analizados,
         // no a la norma. Cambiar la norma solo reordena los elementos y actualiza
         // su composicion teorica; por eso se conservan las evidencias ya generadas.
-        if (form?.id === 'FOR-PIMP-06_B_01') {
+        if (['FOR-PIMP-06_B_01', 'FOR-PIMP-04_03'].includes(form?.id)) {
             setStatus('Norma actualizada. Se conservaron los promedios y los recortes de los disparos.');
             return;
         }
