@@ -623,7 +623,7 @@
                     <tbody>
                         <tr>
                             <td class="celdaColor2" style="width: 120px;">Objetivo del servicio:</td>
-                            <td class="sinborde-arriba-lados">{{ $OC->Proyecto ?? '' }}</td>
+                            <td class="sinborde-arriba-lados"></td>
                         </tr>
 
                         <tr>
