@@ -135,7 +135,20 @@
         }
 
         .datosresultados td, .datosresultados th {
-            border: .6px solid black; 
+            border: .6px solid black;
+        }
+        /* Imagen junto a la descripción */
+        .datosresultados .descripcion-con-imagen {
+            text-align: left;
+            vertical-align: middle;
+        }
+        .datosresultados .descripcion-con-imagen img {
+            float: left;
+            margin-right: 6px;
+        }
+        .datosresultados .descripcion-con-imagen span {
+            display: block;
+            overflow: hidden;
         }
         .celdaGris{
             background-color: #DBDBDB;
@@ -604,11 +617,11 @@
                     <tbody>
                         <tr>
                             <td class="celdaColor2" style="width: 120px;">Objetivo del servicio:</td>
-                            <td class="sinborde-arriba-lados"></td>
+                            <td class="sinborde-arriba-lados">{{ $OC->Proyecto ?? '' }}</td>
                         </tr>
 
                         <tr>
-                            <td colspan="2">3</td>
+                            <td colspan="2">{{ $OC->Tipo_servicio ?? '' }}</td>
                             
                         </tr>
                     </tbody>
@@ -627,11 +640,11 @@
                         </tr>
 
                         <tr>
-                            <td class="">4</td>
-                            <td class="">5</td>
-                            <td class="">6</td>
-                            <td class="">7</td>
-                            <td class="">8</td> 
+                            <td class="">{{ $OC->cliente->Cliente ?? '' }}</td>
+                            <td class="">{{ $detallesRegistro?->Contacto ?? '' }}</td>
+                            <td class="">{{ $detallesRegistro?->Puesto ?? '' }}</td>
+                            <td class="">{{ $OC->Fecha_solicitud ?? '' }}</td>
+                            <td class="">{{ $detallesRegistro?->Ciudad ?? '' }}</td>
                         </tr>
                         <tr>
                             <td class="celdaColor2" style="width: 120px;">Teléfono</td>
@@ -641,10 +654,10 @@
                         </tr>
 
                         <tr>
-                            <td class="">4</td>
-                            <td class="">5</td>
-                            <td colspan="2" class="">6</td>
-                            <td class="">7</td>
+                            <td class="">{{ $detallesRegistro?->Telefono ?? '' }}</td>
+                            <td class="">{{ $detallesRegistro?->Correo ?? '' }}</td>
+                            <td colspan="2" class="">{{ $OC->Lugar_trabajo ?? '' }}</td>
+                            <td class="">{{ $detallesRegistro?->Vigencia ?? '' }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -658,19 +671,28 @@
                             <th class="celdaColor" style="width: 40%;">Descripción</th>
                             <th class="celdaColor" style="width: 6%;">Cantidad</th>
                             <th class="celdaColor" style="width: 6%;">Unidad</th>
-                            <th class="celdaColor" style="width: 40%;">Valor unitario</th>
-                            <th class="celdaColor" style="width: 40%;">Valor Total</th>
+                            <th class="celdaColor" style="width: 20%;">Valor unitario</th>
+                            <th class="celdaColor" style="width: 20%;">Valor Total</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                            <td>----</td>
-                        </tr>
+                        @foreach($detallesOC as $detalle)
+                            <tr>
+                                <td>{{ $detalle->item ?? '' }}</td>
+                                <td class="descripcion-con-imagen">
+                                    @if(!empty($detalle->imagen) && $detalle->imagen !== 'ESPERA DE DATO')
+                                        <img src="{{ public_path('storage/' . ltrim($detalle->imagen, '/')) }}"
+                                            alt="Imagen"
+                                            style="width: 45px; height: 45px; object-fit: contain;">
+                                    @endif
+                                    <span>{{ $detalle->descripcion ?? '' }}</span>
+                                </td>
+                                <td>{{ $detalle->cantidad ?? '' }}</td>
+                                <td>{{ $detalle->unidad ?? '' }}</td>
+                                <td>{{ $detalle->valor_unitario ?? '' }}</td>
+                                <td>{{ $detalle->valor_total ?? '' }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table> 
 
@@ -680,15 +702,33 @@
                         <td class="celdaColor" style="width: 120px;">CONDICIONES DE PAGO:</td>
                     </tr>
                     <tr>
-                        <td style="width: 120px;">8</td>
+                        <td style="width: 120px; text-align: left;">{{ $detallesRegistro?->Condiciones_pago ?? '' }}</td>
                     </tr>
                     <tr>
                         <td class="celdaColor" style="width: 120px;">CONDICIONES DE GENERALES:</td>
                     </tr>
                     <tr>
-                        <td style="width: 120px;">9</td>
+                        <td style="width: 120px; text-align: left;">{{ $detallesRegistro?->Condiciones_generales ?? '' }}</td>
                     </tr>
                 </table> 
+
+                <div style="margin-bottom: 15px;"></div>
+                <table class="datosresultados">
+                    <tbody>
+                        <tr>
+                            <td class="celdaColor" style="width: 80%; text-align: right;">Subtotal:</td>
+                            <td style="width: 20%; text-align: right;">${{ number_format((float) ($totales['subtotal'] ?? 0), 2) }}</td>
+                        </tr>
+                        <tr>
+                            <td class="celdaColor" style="width: 80%; text-align: right;">IVA (16%):</td>
+                            <td style="width: 20%; text-align: right;">${{ number_format((float) ($totales['iva'] ?? 0), 2) }}</td>
+                        </tr>
+                        <tr>
+                            <td class="celdaColor" style="width: 80%; text-align: right;">Total:</td>
+                            <td style="width: 20%; text-align: right;">${{ number_format((float) ($totales['total'] ?? 0), 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
         </body>
