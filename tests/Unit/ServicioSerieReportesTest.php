@@ -12,6 +12,27 @@ use Tests\TestCase;
 
 class ServicioSerieReportesTest extends TestCase
 {
+    public function test_0501_continua_hojas_y_no_copia_resultados_al_siguiente(): void
+    {
+        $this->crearReportes(701, 702);
+        $series = app(ServicioSerieReportes::class);
+        $series->iniciar(701, 2, ServicioSerieReportes::FORMATO_05_B_01);
+        $this->assertSame(['pagina_inicial' => 1, 'pagina_final' => 2, 'total_estimado' => 4], $series->registrarPaginas(701, 2));
+        $series->registrarConsecutivo(701, 702);
+        $this->assertSame(['pagina_inicial' => 3, 'pagina_final' => 5, 'total_estimado' => 5], $series->registrarPaginas(702, 3));
+        $this->assertSame(ServicioSerieReportes::FORMATO_05_B_01, $series->obtener(702)->formato);
+        $this->assertSame(5, $series->registrarPaginas(701, 2)['total_estimado']);
+        $this->assertFalse($series->puedeCrearSiguiente(702));
+        $norma = ['Seleccion_Quimica' => ['1:base'], 'Tabla' => [['Elemento' => 'C', 'Promedio' => '0.1234']], 'Analisis_PDF' => [['archivo' => 'anterior.pdf']]];
+        $juntas = app(\App\Services\ServicioJuntasReporteIM::class)->armar([], $norma, null);
+        $metodo = new \ReflectionMethod(\App\Http\Controllers\Reporte\ReporteController::class, 'clonarJuntasParaNuevoReporte');
+        $metodo->setAccessible(true);
+        $nuevo = json_decode($metodo->invoke(new \App\Http\Controllers\Reporte\ReporteController, $juntas, []), true);
+        $this->assertSame(['1:base'], $nuevo['Norma_IM']['Seleccion_Quimica']);
+        $this->assertSame('', $nuevo['Norma_IM']['Tabla'][0]['Promedio']);
+        $this->assertSame([], $nuevo['Norma_IM']['Analisis_PDF']);
+    }
+
     public function test_0301_numera_pdf_con_hojas_reales_y_conserva_datos_previos(): void
     {
         $this->crearReportes(601, 602, 603);

@@ -396,7 +396,12 @@ class FOR_PIMP_05_B_01Controller extends Controller
     /** Construye la copia histórica de norma, composición, promedios y PDF que conserva el reporte. */
     private function construirNormaIM(Request $request, ?array $normaHistorica = null): ?array
     {
+        $request->validate(['Norma_IM.Seleccion_Quimica' => 'nullable|array|max:100', 'Norma_IM.Seleccion_Quimica.*' => 'string|max:80']);
+        $referenciasQuimicas = $request->has('Norma_IM.seleccion_multiple')
+            ? \App\Services\ReferenciasQuimicas0501::resolver($request->input('Norma_IM.Seleccion_Quimica', []), $normaHistorica)
+            : ($normaHistorica['Referencias_Quimicas'] ?? []);
         $idNorma = (int) $request->input('Norma_IM.idnormas_im', 0);
+        if ($referenciasQuimicas) $idNorma = (int) $referenciasQuimicas[0]['idnormas_im'];
         if ($idNorma <= 0) {
             return null;
         }
@@ -420,9 +425,14 @@ class FOR_PIMP_05_B_01Controller extends Controller
         }
 
         $filasCatalogo = is_array($filasCatalogo) ? $filasCatalogo : [];
+        if ($referenciasQuimicas) {
+            $filasCatalogo = \App\Services\ComposicionesReferencias0402::filas($referenciasQuimicas);
+            $nombreEspecificacion = implode(' / ', array_column($referenciasQuimicas, 'norma'));
+            $observaciones = implode("\n", array_column(\App\Services\ComposicionesReferencias0402::notas($referenciasQuimicas), 'texto'));
+        }
         $promedios = $request->input('Norma_IM.Promedio', []);
-        $mismaNormaHistorica = is_array($normaHistorica)
-            && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma;
+        // Las referencias son criterios de comparación: cambiar una no elimina el PDF ni su captura.
+        $mismaNormaHistorica = is_array($normaHistorica);
         $analisisPdf = $mismaNormaHistorica && is_array($normaHistorica['Analisis_PDF'] ?? null)
             ? $normaHistorica['Analisis_PDF'] : [];
         $columnasSeleccionadas = $mismaNormaHistorica ? ($normaHistorica['Columnas_Seleccionadas'] ?? []) : [];
@@ -476,6 +486,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
                 'Elemento' => $elemento,
                 'Promedio' => $promedio,
                 'Composicion' => (string) ($filaCatalogo['Composicion'] ?? ''),
+                'Referencias' => $filaCatalogo['Referencias'] ?? [],
                 'Origen' => $origen,
                 'Valores_Seleccionados' => $resultado['valores'] ?? ($historica['Valores_Seleccionados'] ?? []),
             ];
@@ -484,12 +495,15 @@ class FOR_PIMP_05_B_01Controller extends Controller
         return [
             'idnormas_im' => $idNorma,
             'Nombre_Espe' => $nombreEspecificacion,
+            'Referencias_Quimicas' => $referenciasQuimicas,
+            'Seleccion_Quimica' => array_column($referenciasQuimicas, 'clave'),
             'Variable' => $variable,
             'Observaciones' => $observaciones,
             'Tabla' => $filas,
             'Analisis_PDF' => $analisisPdf,
             'Columnas_Seleccionadas' => array_values(array_map('intval', $columnasSeleccionadas)),
             'Captura_XRF' => is_array($capturaXrf) ? $capturaXrf : [],
+            'Resultados_XRF' => $nuevoPdf ? $resultadosExtraidos : ($normaHistorica['Resultados_XRF'] ?? []),
         ];
     }
 
@@ -1065,6 +1079,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999',
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
@@ -1317,6 +1332,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
         
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
+        // La serie comparte la paginacion; cada pieza mantiene sus mediciones y fotografias.
+        app(\App\Services\ServicioSerieReportes::class)->iniciar((int) $idReportes, (int) $request->input('Serie_Reportes.cantidad_planificada', 1), \App\Services\ServicioSerieReportes::FORMATO_05_B_01);
 
         // Bloques + Norma_IM se guardan juntos en Grupo_Juntas_Detalles_Re (este formato no usa patrón de grano).
         $bloques = $this->construirBloquesJuntas($request);
@@ -1417,7 +1434,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
             $imagenesGuardadas[] = [
                 'ruta' => $rutaPublicaFoto,
-                'comentario' => $comentariosFoto[$index] ?? null,
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
+                    'comentario' => $comentariosFoto[$index] ?? null,
                 'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                 'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                 'pagina' => $distribucionFoto['pagina'],
@@ -1629,6 +1647,17 @@ class FOR_PIMP_05_B_01Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
+        $request->validate(['Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999', 'Serie_Reportes.nueva_cantidad' => 'nullable|integer|min:1|max:999']);
+        $series = app(\App\Services\ServicioSerieReportes::class);
+        $serie = $series->obtener((int) $id);
+        if (!$serie) {
+            $series->iniciar((int) $id, (int) $request->input('Serie_Reportes.cantidad_planificada', 1), \App\Services\ServicioSerieReportes::FORMATO_05_B_01);
+        } elseif ($request->filled('Serie_Reportes.nueva_cantidad')) {
+            $cantidad = (int) $request->input('Serie_Reportes.nueva_cantidad');
+            if ($cantidad <= $serie->cantidad_planificada) throw \Illuminate\Validation\ValidationException::withMessages(['Serie_Reportes.nueva_cantidad' => 'El nuevo total debe ser mayor que el actual.']);
+            $series->actualizarCantidad((int) $id, $cantidad);
+        }
+        $Reporte->refresh();
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
@@ -1854,6 +1883,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
         };
         // Construye el registro completo tanto para una imagen como para un cuadro de texto sin archivo.
         $crearRegistroFoto = function ($index, $ruta) use (
+            $request,
             $comments,
             $esDisparo,
             $numeroDisparo,
@@ -1867,7 +1897,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
             return [
                 'ruta' => $ruta ?: null,
-                'comentario' => $comments[$index] ?? '',
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
+                    'comentario' => $comments[$index] ?? '',
                 'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                 'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                 'pagina' => $distribucionFoto['pagina'],
@@ -1935,6 +1966,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
@@ -1963,6 +1995,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
@@ -1982,6 +2015,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
                 $imagenesGuardadas[] = [
                     'ruta' => $ruta,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
@@ -2022,6 +2056,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => !empty($esDisparo[$index]) ? 0 : $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
@@ -2066,6 +2101,31 @@ class FOR_PIMP_05_B_01Controller extends Controller
         }
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
+    }
+
+    /** Mide el texto sin cargar las fotos y reparte el espacio restante entre las dos filas. */
+    protected function generarAnexoFotos(array $data): string
+    {
+        $vista = 'Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_05_B_01_PDF';
+        $medicion = $data;
+        $medicion['Fotos'] = array_slice($data['Fotos'], 0, 1);
+        $medicion['medirDistribucionFotos'] = true;
+        $finTitulo = null;
+        $pdfMedicion = PDF::loadView($vista, $medicion)->setPaper('letter', 'portrait');
+        $pdfMedicion->getDomPDF()->setCallbacks([['event' => 'end_frame', 'f' => function ($frame) use (&$finTitulo) {
+            $nodo = $frame->get_node();
+            if ($nodo instanceof \DOMElement && $nodo->getAttribute('class') === 'fotoPiezaTitulo') {
+                $caja = $frame->get_border_box();
+                $finTitulo = $caja['y'] + $caja['h'];
+            }
+        }]]);
+        $pdfMedicion->render();
+        if ($finTitulo === null) throw new \RuntimeException('No fue posible medir el espacio de las fotografías.');
+        $altoPagina = $pdfMedicion->getDomPDF()->getCanvas()->get_height();
+        // Puntos a píxeles CSS; reserva el margen inferior y los comentarios de cada fila.
+        $disponible = ($altoPagina - 2.1 * 72 / 2.54 - $finTitulo) * 96 / 72;
+        $data['alturaFotoCuadrante'] = max(40, min(300, (int) floor($disponible / 2 - 38)));
+        return PDF::loadView($vista, $data)->setPaper('letter', 'portrait')->output();
     }
 
     public function FOR_PIMP_05_B_01($id)
@@ -2209,8 +2269,7 @@ class FOR_PIMP_05_B_01Controller extends Controller
         $pageCount2 = 0;
 
         if (!empty($Fotos)) {
-            $pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_05_B_01_PDF', $data)->setPaper('letter', 'portrait');
-            $pdf2Content = $pdf2->output();
+            $pdf2Content = $this->generarAnexoFotos($data);
         }
 
         // Generar el PDF adicional en orientación vertical
@@ -2231,6 +2290,10 @@ class FOR_PIMP_05_B_01Controller extends Controller
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
         $totalPageCount = $pageCount1 + $pageCount2;
+        // Cuenta datos y anexos reales antes de continuar el numero de hoja de la serie.
+        $paginacionSerie = app(\App\Services\ServicioSerieReportes::class)->registrarPaginas((int) $id, $totalPageCount);
+        $paginaInicial = $paginacionSerie['pagina_inicial'];
+        $totalSerie = $paginacionSerie['total_estimado'];
 
         // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
@@ -2240,7 +2303,8 @@ class FOR_PIMP_05_B_01Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(153, 26.5);
-            $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount", 0, 'C');
+            $paginaSerie = $paginaInicial + $i - 1;
+            $combinedPdf->MultiCell(24, 3.5, "$paginaSerie DE $totalSerie", 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -2252,9 +2316,9 @@ class FOR_PIMP_05_B_01Controller extends Controller
                 $combinedPdf->AddPage('P');
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
-                $paginaActual = $i + $pageCount1;
+                $paginaActual = $paginaInicial + $i + $pageCount1 - 1;
                 $combinedPdf->SetXY(153, 29.5);
-                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 'C');
+                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalSerie", 0, 'C');
             }
         }
 

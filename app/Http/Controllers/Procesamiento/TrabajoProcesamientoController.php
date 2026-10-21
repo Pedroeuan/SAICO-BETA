@@ -46,7 +46,7 @@ class TrabajoProcesamientoController extends Controller
         abort_unless($ruta !== '' && is_file($ruta), 404);
 
         // Aplica la misma política al PDF entregado después de finalizar la cola.
-        $cabeceras = ($registro->contexto['formato'] ?? '') === '04_02' ? [
+        $cabeceras = in_array($registro->contexto['formato'] ?? '', ['04_02', '05_B_01'], true) ? [
             'Cache-Control' => 'private, no-store, no-cache, must-revalidate, max-age=0',
             'Pragma' => 'no-cache',
             'Expires' => '0',
