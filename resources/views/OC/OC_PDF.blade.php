@@ -260,6 +260,12 @@
             /*border-left: none !important;*/
             border-right: none !important;
         }
+        .sinborde-arriba-abajo-izquierda {
+            border-top: none !important;
+            border-left: none !important;
+            border-bottom: none !important;
+            /*border-right: none !important;*/
+        }
             </style>
         </head>
         <body>
@@ -667,12 +673,12 @@
                 <table class="datosresultados">
                     <thead>
                         <tr class="celdaAzul">
-                            <th class="celdaColor" style="width: 4%;">Ítem</th>
-                            <th class="celdaColor" style="width: 40%;">Descripción</th>
-                            <th class="celdaColor" style="width: 6%;">Cantidad</th>
-                            <th class="celdaColor" style="width: 6%;">Unidad</th>
+                            <th class="celdaColor" style="width: 40%;">Ítem</th>
+                            <th class="celdaColor" style="width: 200%;">Descripción</th>
+                            <th class="celdaColor" style="width: 40%;">Cantidad</th>
+                            <th class="celdaColor" style="width: 40%;">Unidad</th>
                             <th class="celdaColor" style="width: 20%;">Valor unitario</th>
-                            <th class="celdaColor" style="width: 20%;">Valor Total</th>
+                            <th class="celdaColor" style="width: 60%;">Valor Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -693,6 +699,24 @@
                                 <td>{{ $detalle->valor_total ?? '' }}</td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <td class="sinborde-arriba-abajo-izquierda" colspan="4">
+                            </td>
+                            <td class="celdaColor2" style="width: 80%; text-align: left;">Subtotal:</td>
+                            <td style="width: 50%; text-align: left;">${{ number_format((float) ($totales['subtotal'] ?? 0), 2) }}</td>
+                        </tr>
+                        <tr>
+                            <td class="sinborde-arriba-abajo-izquierda" colspan="4">
+                            </td>
+                            <td class="celdaColor2" style="width: 80%; text-align: left;">IVA (16%):</td>
+                            <td style="width: 50%; text-align: left;">${{ number_format((float) ($totales['iva'] ?? 0), 2) }}</td>
+                        </tr>
+                        <tr>
+                            <td class="sinborde-arriba-abajo-izquierda" colspan="4">
+                            </td>
+                            <td class="celdaColor" style="width: 80%; text-align: left;">Total:</td>
+                            <td style="width: 50%; text-align: left;">${{ number_format((float) ($totales['total'] ?? 0), 2) }}</td>
+                        </tr>
                     </tbody>
                 </table> 
 
@@ -711,24 +735,6 @@
                         <td style="width: 120px; text-align: left;">{{ $detallesRegistro?->Condiciones_generales ?? '' }}</td>
                     </tr>
                 </table> 
-
-                <div style="margin-bottom: 15px;"></div>
-                <table class="datosresultados">
-                    <tbody>
-                        <tr>
-                            <td class="celdaColor" style="width: 80%; text-align: right;">Subtotal:</td>
-                            <td style="width: 20%; text-align: right;">${{ number_format((float) ($totales['subtotal'] ?? 0), 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="celdaColor" style="width: 80%; text-align: right;">IVA (16%):</td>
-                            <td style="width: 20%; text-align: right;">${{ number_format((float) ($totales['iva'] ?? 0), 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="celdaColor" style="width: 80%; text-align: right;">Total:</td>
-                            <td style="width: 20%; text-align: right;">${{ number_format((float) ($totales['total'] ?? 0), 2) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
 
         </body>
