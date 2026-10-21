@@ -4,7 +4,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const formulario = document.getElementById('FOR-PIMP-06_B_01')
             || document.getElementById('FOR-PIMP-04_02')
-            || document.getElementById('FOR-PIMP-04_03');
+            || document.getElementById('FOR-PIMP-04_03') || document.getElementById('FOR-PIMP-03_B_01');
         const modal = document.getElementById('cropperModal');
         const imagenCropper = document.getElementById('cropperImage');
 

@@ -19,6 +19,7 @@ class ServicioSerieReportes
     public const FORMATO_06_B_01 = 'FOR-PIMP-06_B/01';
     public const FORMATO_04_02 = 'FOR-PIMP-04/02';
     public const FORMATO_04_03 = 'FOR-PIMP-04/03';
+    public const FORMATO_03_B_01 = 'FOR-PIMP-03_B/01';
 
     /** Formato de dureza: su tabla de juntas y sus resultados viven en Juntas_Grupo_Re. */
     public const FORMATO_02_B_04 = 'FOR-PIMP-02_B/04';
@@ -177,7 +178,7 @@ class ServicioSerieReportes
             $pagina = 1;
             foreach ($miembros as $indice => $miembro) {
                 $datos = $this->datosSerie($miembro);
-                $paginas = max(1, (int) ($datos['total_paginas'] ?? 2));
+                $paginas = max(1, (int) ($datos['total_paginas'] ?? $this->paginasIniciales($datos)));
                 $datos['numero_orden'] = $indice + 1;
                 $datos['pagina_inicial'] = $pagina;
                 $datos['pagina_final'] = $pagina + $paginas - 1;
@@ -205,7 +206,7 @@ class ServicioSerieReportes
             $pagina = 1;
             foreach ($miembros as $miembro) {
                 $datos = $this->datosSerie($miembro);
-                $paginas = max(1, (int) ($datos['total_paginas'] ?? 2));
+                $paginas = max(1, (int) ($datos['total_paginas'] ?? $this->paginasIniciales($datos)));
                 $datos['pagina_inicial'] = $pagina;
                 $datos['pagina_final'] = $pagina + $paginas - 1;
                 $this->guardarSerie($miembro, $datos);
@@ -215,7 +216,7 @@ class ServicioSerieReportes
             $actualizado = $this->obtener($idReporte)
                 ?? throw new RuntimeException('No fue posible recalcular la paginacion.');
             $faltantes = max(0, (int) $actualizado->cantidad_planificada - $miembros->count());
-            $totalEstimado = ($pagina - 1) + ($faltantes * 2);
+            $totalEstimado = ($pagina - 1) + ($faltantes * $this->paginasIniciales($this->datosSerie($reporteActual)));
 
             return [
                 'pagina_inicial' => (int) $actualizado->pagina_inicial,
@@ -223,6 +224,12 @@ class ServicioSerieReportes
                 'total_estimado' => max((int) $actualizado->pagina_final, $totalEstimado),
             ];
         });
+    }
+
+    /** El 03_01 integra datos y fotos en una hoja; los demás parten de dos hasta conocer su total real. */
+    private function paginasIniciales(array $serie): int
+    {
+        return ($serie['formato'] ?? null) === self::FORMATO_03_B_01 ? 1 : 2;
     }
 
     private function ultimoOrden(string $serieUuid): int

@@ -12,6 +12,29 @@ use Tests\TestCase;
 
 class ServicioSerieReportesTest extends TestCase
 {
+    public function test_0301_numera_pdf_con_hojas_reales_y_conserva_datos_previos(): void
+    {
+        $this->crearReportes(601, 602, 603);
+        $series = app(ServicioSerieReportes::class);
+        $series->iniciar(601, 3, ServicioSerieReportes::FORMATO_03_B_01);
+        $this->assertSame(3, $series->registrarPaginas(601, 1)['total_estimado']);
+        $series->registrarConsecutivo(601, 602);
+        $series->registrarPaginas(602, 2);
+        $series->registrarConsecutivo(602, 603);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadHTML('<html><body><table><tr><th id="numero-pagina-serie" style="width:100px;height:25px">&nbsp;</th></tr></table><p>PIEZA TRES</p></body></html>');
+        $controlador = app(\App\Http\Controllers\Reporte\IM\FOR_PIMP_03_B_01Controller::class);
+        $metodo = new \ReflectionMethod($controlador, 'numerarPdfSerie');
+        $metodo->setAccessible(true);
+        $metodo->invoke($controlador, $pdf, 603);
+        $texto = (new \Smalot\PdfParser\Parser())->parseContent($pdf->output())->getText();
+        $this->assertStringContainsString('4 DE 4', $texto);
+        $this->assertStringContainsString('4 Of 4', $texto);
+        $this->assertStringContainsString('PIEZA TRES', $texto);
+        $this->assertSame('dato conservado', json_decode(reporte::findOrFail(603)->Detalles_Generales, true)['OTRO_DATO']);
+        $this->assertSame(ServicioSerieReportes::FORMATO_03_B_01, $series->obtener(603)->formato);
+    }
+
     public function test_serie_0403_numera_tres_piezas_y_recalcula_al_agregar_fotos(): void
     {
         $this->crearReportes(501, 502, 503);

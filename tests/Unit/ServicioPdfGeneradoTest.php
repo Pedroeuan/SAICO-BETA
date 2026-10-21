@@ -139,6 +139,7 @@ class ServicioPdfGeneradoTest extends TestCase
         $this->assertNotNull($servicio->rutaVigente(901, '04_02'));
         $servicio->guardar(901, '04_03', 'es', '%PDF-1.4 serie 04_03');
         $servicio->guardar(901, '04_03', 'en', '%PDF-1.4 series 04_03');
+        $servicio->guardar(901, '03_B_01', 'es', '%PDF-1.4 serie 03_01');
         $this->assertNotNull($servicio->rutaVigente(901, '04_03', 'es'));
         $this->assertNotNull($servicio->rutaVigente(901, '04_03', 'en'));
 
@@ -150,6 +151,7 @@ class ServicioPdfGeneradoTest extends TestCase
         $this->assertNull($servicio->rutaVigente(901, '04_02'));
         $this->assertNull($servicio->rutaVigente(901, '04_03', 'es'));
         $this->assertNull($servicio->rutaVigente(901, '04_03', 'en'));
+        $this->assertNull($servicio->rutaVigente(901, '03_B_01', 'es'));
     }
 
     public function test_no_programa_dos_trabajos_para_la_misma_version(): void

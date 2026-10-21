@@ -25,6 +25,7 @@ class ServicioPdfGenerado
     /** @var array<string, array<int, string>> */
     private const ARCHIVOS_GENERADOR = [
         '03_B_01' => [
+            'app/Services/ServicioSerieReportes.php',
             'app/Http/Controllers/Reporte/IM/FOR_PIMP_03_B_01Controller.php',
             'resources/views/Reportes/ReportesPDFIM/Reporte_FOR_PIMP_03_B_01_PDF.blade.php',
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_03_B_01_PDF.blade.php',
@@ -93,7 +94,7 @@ class ServicioPdfGenerado
             'fotos' => $fotos,
             // La numeracion visible del 06_B_01 depende tambien de cuantos
             // integrantes/paginas tenga el resto de su serie.
-            'serie' => in_array($formato, ['06_B_01', '04_02', '04_03'], true) ? $this->estadoSerie($reporte) : null,
+            'serie' => in_array($formato, ['06_B_01', '04_02', '04_03', '03_B_01'], true) ? $this->estadoSerie($reporte) : null,
             // 04_02 también guarda evidencias en Juntas: deben invalidar el PDF
             // cuando cambien el recorte XRF, la micrografía o el patrón de grano.
             'archivos_reporte' => $this->metadatosArchivos($formato === '04_02'
