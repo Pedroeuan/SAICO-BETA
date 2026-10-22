@@ -18,6 +18,7 @@ class ServicioSerieReportes
 {
     public const FORMATO_06_B_01 = 'FOR-PIMP-06_B/01';
     public const FORMATO_04_02 = 'FOR-PIMP-04/02';
+    public const FORMATO_04_03 = 'FOR-PIMP-04/03';
 
     /** Formato de dureza: su tabla de juntas y sus resultados viven en Juntas_Grupo_Re. */
     public const FORMATO_02_B_04 = 'FOR-PIMP-02_B/04';

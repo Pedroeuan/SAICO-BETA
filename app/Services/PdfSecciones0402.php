@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use RuntimeException;
 
@@ -16,6 +17,7 @@ class PdfSecciones0402
      */
     public function obtener(int $reporte, string $seccion, string $html, callable $generar): string
     {
+        $inicio = microtime(true);
         if (!in_array($seccion, ['datos', 'fotos'], true)) throw new RuntimeException('Sección PDF no permitida.');
         $imagenes = [];
         // Una imagen puede reemplazarse conservando nombre, tamaño y fecha.
@@ -34,7 +36,11 @@ class PdfSecciones0402
         if ($disco->exists($ruta)) {
             // Evita volver a renderizar con Dompdf una sección sin cambios.
             $contenido = $disco->get($ruta);
-            if (is_string($contenido) && str_starts_with($contenido, '%PDF')) return $contenido;
+            if (is_string($contenido) && str_starts_with($contenido, '%PDF')) {
+                Log::info('PDF 04_02: sección preparada', ['reporte' => $reporte, 'seccion' => $seccion,
+                    'reutilizada' => true, 'duracion_ms' => (int) round((microtime(true) - $inicio) * 1000), 'bytes' => strlen($contenido)]);
+                return $contenido;
+            }
         }
 
         // Genera y valida primero: un fallo deja disponible la copia anterior.
@@ -55,6 +61,9 @@ class PdfSecciones0402
         } finally {
             if ($disco->exists($temporal)) $disco->delete($temporal);
         }
+        // Permite medir en producción qué hoja tarda, sin registrar textos ni imágenes.
+        Log::info('PDF 04_02: sección preparada', ['reporte' => $reporte, 'seccion' => $seccion,
+            'reutilizada' => false, 'duracion_ms' => (int) round((microtime(true) - $inicio) * 1000), 'bytes' => strlen($contenido)]);
         return $contenido;
     }
 }
