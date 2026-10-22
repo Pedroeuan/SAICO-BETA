@@ -1,3 +1,9 @@
+{{--
+    Anexo fotográfico del 04_03 en español. Respeta la hoja y posición guardadas de cada espacio.
+    Los espacios pueden contener fotografías, resultados como texto o la imagen con equis.
+    El encabezado se alinea con la hoja de datos y las firmas mantienen su bloque al pie.
+    Las flechas dibujadas por el técnico llegan incorporadas en la fotografía guardada.
+--}}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,9 +12,9 @@
     <style>
         @page { 
             margin: 
-            2.5cm /* superior */
+            1.7cm /* superior: alineado con la hoja principal */
             1.5cm /* derecho */
-            1.1cm /* inferior */
+            2.0cm /* inferior: espacio reservado para firmas */
             1.5cm; /* izquierdo */
         }
         body { 
@@ -34,6 +40,7 @@
             text-align: center; 
         }
         table { 
+            /* El ajuste de márgenes conserva dimensiones de fotos y tipografía. */
             border-collapse: collapse; 
             width: 100%; 
         }

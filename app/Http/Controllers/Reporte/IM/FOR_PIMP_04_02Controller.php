@@ -923,6 +923,14 @@ class FOR_PIMP_04_02Controller extends Controller
         foreach (['NORMA_REFERENCIA', 'DUREZA_BRINELL_MAX', 'RESISTENCIA_TENSION_MIN', 'RESISTENCIA_CEDENCIA_ESPECIFICADA', 'RESISTENCIA_TENSION_MAX'] as $campo) $equipo[$campo] = '';
     }
 
+    /** El técnico del QR debe coincidir con el bloque de firmas realmente guardado. */
+    private function tecnicoQrSeleccionado(Request $request): ?string
+    {
+        $numero = (int) $request->input('numFirmas', 1);
+        $id = trim((string) $request->input("Firmas_Reportes{$numero}.ID_TECNICO", ''));
+        return $id !== '' ? $id : null;
+    }
+
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
@@ -993,6 +1001,13 @@ class FOR_PIMP_04_02Controller extends Controller
         | DIRECTORIO TEMPORAL
         |--------------------------------------------------------------------------
         */
+
+        // Los anexos del QR se reutilizan al corregir texto. Un cambio de equipo,
+        // técnico, procedimiento o contenido de sus documentos genera otra firma.
+        $cacheQr = app(\App\Services\CacheDocumentosQr0402::class);
+        $documentosQr = array_map(fn ($ruta) => $this->resolvePdfPath($ruta) ?: (string) $ruta, array_values($rutasValidas));
+        $firmaQr = $cacheQr->firma([$datosParaCrearQR, route('qr.reporte', ['token' => $token])], $documentosQr);
+        if ($resultadoAnterior = $cacheQr->obtener($firmaQr)) return $resultadoAnterior;
 
         $directorioTemporal = storage_path("app/temp_pdfs/FOR_PIMP_04_02/{$Contrato}/{$No_Reporte}");
 
@@ -1073,6 +1088,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
         $pdf = new Fpdi();
         $ghostscript = $this->detectGhostscriptBinary();
+        $anexosCompletos = count($pdfsTemporales) === count($rutasValidas);
 
         foreach ($pdfsTemporales as $archivoPdf) {
             try {
@@ -1116,6 +1132,7 @@ class FOR_PIMP_04_02Controller extends Controller
                     $pdf->useTemplate($template);
                 }
             } catch (\Exception $e) {
+                $anexosCompletos = false;
                 Log::error('Error procesando PDF', [
                     'archivo' => $archivoPdf,
                     'error' => $e->getMessage()
@@ -1138,10 +1155,13 @@ class FOR_PIMP_04_02Controller extends Controller
 
         File::deleteDirectory($directorioTemporal);
 
-        return [
+        $resultado = [
             'pdf' => "storage/" . $directorioFinal . $nombreArchivoFinal,
             'qr' => $rutaQrPublica
         ];
+        // No conserva como vigente una unión que haya omitido anexos por error.
+        if ($anexosCompletos) $cacheQr->guardar($firmaQr, $resultado);
+        return $resultado;
     }
 
 
@@ -1200,7 +1220,7 @@ class FOR_PIMP_04_02Controller extends Controller
             $Firmantes_OS->save();
 
             $Grupo_Juntas_Detalles_OS->idOrden_Servicio = $idOrdenServicio;
-            $Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
+            $Grupo_Juntas_Detalles_OS->Juntas_grupo = '[]';
             $Grupo_Juntas_Detalles_OS->save();
 
             }
@@ -1293,7 +1313,7 @@ class FOR_PIMP_04_02Controller extends Controller
             $Firmantes_OS->save();
 
             $Grupo_Juntas_Detalles_OS->idOrden_Servicio = $idOrdenServicio;
-            $Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
+            $Grupo_Juntas_Detalles_OS->Juntas_grupo = '[]';
             $Grupo_Juntas_Detalles_OS->save();
 
             }
@@ -1668,10 +1688,7 @@ class FOR_PIMP_04_02Controller extends Controller
             'idSonda' => $validatedData['Datos_Equipo']['ID_SONDA'] ?? null,
             'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null,
             // El técnico seleccionado permite anexar su CV al QR, igual que en PINS.
-            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
-                ?? $request->input('Firmas_Reportes2.ID_TECNICO')
-                ?? $request->input('Firmas_Reportes3.ID_TECNICO')
-                ?? $request->input('Firmas_Reportes4.ID_TECNICO'),
+            'ID_TECNICO' => $this->tecnicoQrSeleccionado($request),
             'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
         ];
 
@@ -2231,16 +2248,14 @@ class FOR_PIMP_04_02Controller extends Controller
             'idSonda' => $validatedData['Datos_Equipo']['ID_SONDA'] ?? null,
             'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'] ?? null,
             // El técnico seleccionado permite anexar su CV al QR, igual que en PINS.
-            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
-                ?? $request->input('Firmas_Reportes2.ID_TECNICO')
-                ?? $request->input('Firmas_Reportes3.ID_TECNICO')
-                ?? $request->input('Firmas_Reportes4.ID_TECNICO'),
+            'ID_TECNICO' => $this->tecnicoQrSeleccionado($request),
             'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
         ];
 
         $resultadoQR = $this->Datos_QR($datosParaCrearQR);
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? ($datosEquipoActuales['QR_PDF'] ?? null);
-        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? ($datosEquipoActuales['PDF_UNIFICADO'] ?? null);
+        // Un resultado null significa que ya no hay anexos; no debe revivir el PDF anterior.
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([

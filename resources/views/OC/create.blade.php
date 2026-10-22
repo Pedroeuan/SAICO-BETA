@@ -341,7 +341,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Subtotal</label>
-                                            <input type="text" class="form-control inputForm @error('Subtotal') is-invalid @enderror" name="Subtotal" placeholder="Ejemplo: 1000" value="{{old('Subtotal')}}" readonly>
+                                            <input type="text" class="form-control inputForm @error('Subtotal') is-invalid @enderror" name="Subtotal" placeholder="Ejemplo: 1000" value="{{old('Subtotal')}}">
                                             @error('Subtotal')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -351,7 +351,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">IVA (16%)</label>
-                                            <input type="text" class="form-control inputForm @error('IVA') is-invalid @enderror" name="IVA" placeholder="Ejemplo: 160" value="{{old('IVA')}}" readonly>
+                                            <input type="text" class="form-control inputForm @error('IVA') is-invalid @enderror" name="IVA" placeholder="Ejemplo: 160" value="{{old('IVA')}}">
                                             @error('IVA')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -361,7 +361,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Total</label>
-                                            <input type="text" class="form-control inputForm @error('Total') is-invalid @enderror" name="Total" placeholder="Ejemplo: 1160" value="{{old('Total')}}" readonly>
+                                            <input type="text" class="form-control inputForm @error('Total') is-invalid @enderror" name="Total" placeholder="Ejemplo: 1160" value="{{old('Total')}}">
                                             @error('Total')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror

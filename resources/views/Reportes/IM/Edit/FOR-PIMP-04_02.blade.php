@@ -295,6 +295,13 @@
 
                     <div class="col-sm-6">
                         <div class="form-group">
+                            <label class="col-form-label">No. de isométrico y/o plano:</label>
+                            <input type="text" class="form-control inputForm" name="Detalles_Generales[No_Isometrico_Plano]"
+                                value="{{ old('Detalles_Generales.No_Isometrico_Plano', $Detalles_Generales['No_Isometrico_Plano'] ?? '') }}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
                             <label class="col-form-label">Observaciones y Notas:</label>
                             <textarea class="form-control inputForm" name="Detalles_Generales[Observaciones_Notas]" placeholder="Ejemplo:"
                                 rows="3" style="resize:vertical">{{ old('Detalles_Generales.Observaciones_Notas', $Detalles_Generales['Observaciones_Notas'] ?? '') }}</textarea>

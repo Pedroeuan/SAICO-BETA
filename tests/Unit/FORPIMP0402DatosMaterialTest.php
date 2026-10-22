@@ -10,6 +10,23 @@ use Tests\TestCase;
 
 class FORPIMP0402DatosMaterialTest extends TestCase
 {
+    public function test_el_cv_del_qr_corresponde_al_tecnico_del_bloque_de_firmas_activo(): void
+    {
+        $metodo = new ReflectionMethod(FOR_PIMP_04_02Controller::class, 'tecnicoQrSeleccionado');
+        foreach ([1, 2, 3, 4] as $numero) {
+            $request = Request::create('/', 'POST', [
+                'numFirmas' => $numero,
+                'Firmas_Reportes1' => ['ID_TECNICO' => '11'],
+                'Firmas_Reportes2' => ['ID_TECNICO' => '22'],
+                'Firmas_Reportes3' => ['ID_TECNICO' => '33'],
+                'Firmas_Reportes4' => ['ID_TECNICO' => '44'],
+            ]);
+            $this->assertSame((string) ($numero * 11), $metodo->invoke(new FOR_PIMP_04_02Controller, $request));
+        }
+        $request = Request::create('/', 'POST', ['numFirmas' => 2, 'Firmas_Reportes1' => ['ID_TECNICO' => '11'], 'Firmas_Reportes2' => ['ID_TECNICO' => '']]);
+        $this->assertNull($metodo->invoke(new FOR_PIMP_04_02Controller, $request));
+    }
+
     private function calcular(array $datos, array &$equipo): void
     {
         $metodo = new ReflectionMethod(FOR_PIMP_04_02Controller::class, 'guardarPromedioDureza');

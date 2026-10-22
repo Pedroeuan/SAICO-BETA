@@ -13,7 +13,7 @@
         const datosExistentes = document.querySelector('[data-analysis-report-existing]');
         const entradaConteo = document.querySelector('[data-grain-json]');
         const formulario = contenedor.closest('form');
-        if (formulario?.id === 'FOR-PIMP-04_02') {
+        if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].includes(formulario?.id)) {
             // Comparación visual: no crea campos, fotografías ni posiciones adicionales en el PDF.
             const columnaTexto = descripcion.closest('.col-md-6');
             const fila = columnaTexto?.parentElement;

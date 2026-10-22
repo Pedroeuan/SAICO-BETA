@@ -13,7 +13,7 @@
             'Co', 'Nb', 'Ti', 'W', 'Pb', 'Sn', 'Mg', 'As', 'Zr', 'B', 'Fe'
         ];
 
-        if (!nombreSelect || !url || document.getElementById('abrirAltaRapidaNormaIM')) {
+        if (!nombreSelect || nombreSelect.hidden || !url || document.getElementById('abrirAltaRapidaNormaIM')) {
             return;
         }
 
