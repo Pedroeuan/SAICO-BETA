@@ -143,12 +143,11 @@
             vertical-align: middle;
         }
         .datosresultados .descripcion-con-imagen img {
-            float: left;
-            margin-right: 6px;
+            float: right;
+            margin-left: 6px;
         }
         .datosresultados .descripcion-con-imagen span {
-            display: block;
-            overflow: hidden;
+            /* Permitir que el texto fluya alrededor de la imagen flotante */
         }
         .celdaGris{
             background-color: #DBDBDB;
@@ -689,7 +688,7 @@
                                     @if(!empty($detalle->imagen) && $detalle->imagen !== 'ESPERA DE DATO')
                                         <img src="{{ public_path('storage/' . ltrim($detalle->imagen, '/')) }}"
                                             alt="Imagen"
-                                            style="width: 45px; height: 45px; object-fit: contain;">
+                                            style="width: 45px; height: 55px; object-fit: contain;">
                                     @endif
                                     <span>{{ $detalle->descripcion ?? '' }}</span>
                                 </td>
