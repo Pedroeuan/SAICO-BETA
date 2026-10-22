@@ -441,7 +441,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
             $Firmantes_OS->save();
 
             $Grupo_Juntas_Detalles_OS->idOrden_Servicio = $idOrdenServicio;
-            $Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
+            $Grupo_Juntas_Detalles_OS->Juntas_grupo = '[]';
             $Grupo_Juntas_Detalles_OS->save();
 
             }
@@ -534,7 +534,7 @@ class FOR_PIMP_07_B_01Controller extends Controller
             $Firmantes_OS->save();
 
             $Grupo_Juntas_Detalles_OS->idOrden_Servicio = $idOrdenServicio;
-            $Grupo_Juntas_Detalles_OS->Juntas_grupo = $ResultadosJuntas;
+            $Grupo_Juntas_Detalles_OS->Juntas_grupo = '[]';
             $Grupo_Juntas_Detalles_OS->save();
 
             }

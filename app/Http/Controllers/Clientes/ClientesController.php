@@ -727,12 +727,24 @@ class ClientesController extends Controller
                 ->with('error', 'Cliente no encontrado.');
         }*/
 
+        // Buscar el usuario asociado a este cliente por correo o nombre original
         $usuarioActual = Usuario::where('rol', 'Cliente')
             ->where(function ($query) use ($clientes) {
                 $query->where('email', $clientes->Correo)
                     ->orWhere('name', $clientes->Cliente);
             })
             ->first();
+
+        // Si no se encontró por los valores originales, buscar por cualquier coincidencia
+        // con el correo o nombre que se está enviando en el request
+        if (!$usuarioActual) {
+            $usuarioActual = Usuario::where('rol', 'Cliente')
+                ->where(function ($query) use ($request) {
+                    $query->where('email', $request->input('Correo'))
+                        ->orWhere('name', $request->input('Cliente'));
+                })
+                ->first();
+        }
 
         $request->validate([
             'Cliente' => [
@@ -749,7 +761,7 @@ class ClientesController extends Controller
                 'string',
                 'max:255',
                 Rule::unique('clientes', 'Correo')->ignore($clientes->idClientes, 'idClientes'),
-                Rule::unique('users', 'email')->ignore($usuarioActual?->id),
+                Rule::unique('users', 'email')->ignore($usuarioActual?->id ?? 0),
             ],
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
