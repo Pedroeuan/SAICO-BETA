@@ -60,6 +60,9 @@ class ServicioPdfGenerado
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_05_B_01_PDF.blade.php',
         ],
         '06_B_01' => [
+            'app/Services/ReferenciasQuimicas0501.php',
+            'app/Services/ComposicionesReferencias0402.php',
+            'resources/views/Reportes/IM/partials/limites-quimicos-0403-pdf.blade.php',
             'app/Http/Controllers/Reporte/IM/FOR_PIMP_06_B_01Controller.php',
             'resources/views/Reportes/ReportesPDFIM/Reporte_FOR_PIMP_06_B_01_PDF.blade.php',
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_06_B_01_PDF.blade.php',

@@ -57,6 +57,34 @@ class ReferenciasQuimicas0501Test extends TestCase
         ReferenciasQuimicas0501::resolver(['999:base'], null);
     }
 
+    public function test_06_reutiliza_varias_normas_con_limites_colores_y_pdf_historico(): void
+    {
+        $request = Request::create('/', 'POST', ['Norma_IM' => ['seleccion_multiple' => '1',
+            'Seleccion_Quimica' => ['1:base', '2:base'], 'Promedio' => ['0.1234', '0.5217']]]);
+        $historica = ['idnormas_im' => 2, 'Tabla' => [['Elemento' => 'C', 'Composicion' => '0.25'], ['Elemento' => 'Mn', 'Composicion' => '1.60']],
+            'Analisis_PDF' => [['archivo' => 'disparo-guardado.pdf']]];
+        $metodo = new \ReflectionMethod(\App\Http\Controllers\Reporte\IM\FOR_PIMP_06_B_01Controller::class, 'construirNormaIM');
+        $metodo->setAccessible(true);
+        $resultado = $metodo->invoke(new \App\Http\Controllers\Reporte\IM\FOR_PIMP_06_B_01Controller, $request, $historica);
+        $this->assertSame(['1:base', '2:base'], $resultado['Seleccion_Quimica']);
+        $this->assertSame(['C', 'Mn'], array_column($resultado['Tabla'], 'Elemento'));
+        $this->assertSame('0.1234', $resultado['Tabla'][0]['Promedio']);
+        $this->assertSame($historica['Analisis_PDF'], $resultado['Analisis_PDF']);
+        $html = view('Reportes.IM.partials.limites-quimicos-0403-pdf', ['filaNorma' => $resultado['Tabla'][0]])->render();
+        $this->assertStringContainsString('#111111', $html);
+        $this->assertStringContainsString('#1565c0', $html);
+        $this->assertStringContainsString('0.30', $html);
+        $this->assertStringContainsString('0.25', $html);
+        $pdfHtml = view('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_06_B_01_PDF', [
+            'NormaIM' => $resultado, 'Detalles_Generales' => [], 'Datos_Equipo' => [],
+            'Logo' => public_path('images/Logo_AICO_R.jpg'), 'QR_PDF' => null,
+            'Firmas_Reportes' => [], 'numFirmas' => 1, 'Fotos' => [], 'Disparos' => [],
+            'Grupo_Juntas_Detalles_Re' => [], 'totalFotos' => 0, 'totalTitulosYFilas' => 0,
+        ])->render();
+        $this->assertStringContainsString('color: #111111', $pdfHtml);
+        $this->assertStringContainsString('color: #1565c0', $pdfHtml);
+    }
+
     public function test_editar_recupera_desde_juntas_las_referencias_promedios_y_captura(): void
     {
         $norma = [

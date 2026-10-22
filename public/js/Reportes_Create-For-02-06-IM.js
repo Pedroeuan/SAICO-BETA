@@ -69,6 +69,8 @@
         const checkboxes = form.querySelectorAll('input[type="checkbox"]');
 
         checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+            // El selector de normas mantiene su propio estado y orden, sin borradores por casilla.
+            if (checkbox.closest('[data-referencias-quimicas-0501]')) return;
             const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
 
             const stored = localStorage.getItem(key);
@@ -87,6 +89,8 @@
             textareas.forEach(textarea => localStorage.removeItem(`${formId}_${textarea.name}`));
             
             checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+            // El selector de normas mantiene su propio estado y orden, sin borradores por casilla.
+            if (checkbox.closest('[data-referencias-quimicas-0501]')) return;
                 const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
                 localStorage.removeItem(key);
             }) : null;
@@ -843,6 +847,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const checkboxes = form.querySelectorAll('input[type="checkbox"]');
 
         checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+            // El selector de normas mantiene su propio estado y orden, sin borradores por casilla.
+            if (checkbox.closest('[data-referencias-quimicas-0501]')) return;
             const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
 
             const stored = localStorage.getItem(key);
@@ -865,6 +871,8 @@ document.addEventListener("DOMContentLoaded", function () {
             textareas.forEach(textarea => localStorage.removeItem(`${formId}_${textarea.name}`));
             
             checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
+            // El selector de normas mantiene su propio estado y orden, sin borradores por casilla.
+            if (checkbox.closest('[data-referencias-quimicas-0501]')) return;
                 const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
                 localStorage.removeItem(key);
             }) : null;

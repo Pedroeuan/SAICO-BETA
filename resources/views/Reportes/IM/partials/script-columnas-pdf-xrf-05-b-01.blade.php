@@ -692,41 +692,10 @@ document.addEventListener('DOMContentLoaded', function () {
         aviso?.scrollIntoView({behavior: 'smooth', block: 'center'});
     }
 
-    // El 05_01 selecciona composiciones químicas directamente, sin catálogo mecánico.
-    const panelQuimico = form.querySelector('[data-referencias-quimicas-0501]');
-    let restaurarQuimicas = null;
-    if (panelQuimico) {
-        const configuracion = JSON.parse(panelQuimico.querySelector('[data-quimica-config]').textContent);
-        const opciones = configuracion.opciones || [];
-        let seleccion = [...(configuracion.seleccion || [])];
-        const lista = panelQuimico.querySelector('[data-quimica-opciones]');
-        const marcadas = panelQuimico.querySelector('[data-quimica-seleccionadas]');
-        const colores = ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'];
-        // Un solo valor estable permite recuperar el orden exacto del borrador local.
-        const orden = document.createElement('input'); orden.type = 'hidden';
-        orden.name = 'Norma_IM[Seleccion_Quimica_Orden]'; panelQuimico.append(orden);
-        function sincronizarQuimicas() {
-            orden.value = JSON.stringify(seleccion);
-            referenciasQuimicas0501 = seleccion.map(clave => opciones.find(item => item.clave === clave)).filter(Boolean);
-            marcadas.replaceChildren();
-            panelQuimico.querySelector('[data-quimica-total]').textContent = referenciasQuimicas0501.length;
-            lista.querySelectorAll('[data-clave-quimica]').forEach(check => {
-                check.closest('label').classList.toggle('is-selected', seleccion.includes(check.dataset.claveQuimica));
-            });
-            if (!referenciasQuimicas0501.length) {
-                const ayuda = document.createElement('small'); ayuda.className = 'text-muted';
-                ayuda.textContent = 'Marca una norma de la lista para comenzar.'; marcadas.append(ayuda);
-            }
-            referenciasQuimicas0501.forEach((item, indice) => {
-                const etiqueta = document.createElement('div');
-                etiqueta.style.color = colores[indice % colores.length];
-                etiqueta.className = 'quimica-etiqueta';
-                etiqueta.textContent = (indice + 1) + '. ' + item.norma;
-                const campo = document.createElement('input');
-                campo.type = 'hidden'; campo.name = 'Norma_IM[Seleccion_Quimica][]'; campo.value = item.clave;
-                marcadas.append(etiqueta, campo);
-            });
-            const primera = referenciasQuimicas0501[0];
+    const restaurarQuimicas = window.iniciarReferenciasQuimicasIM?.(form, function (referencias) {
+            const colores = ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'];
+            referenciasQuimicas0501 = referencias;
+            const primera = referencias[0];
             recordSelect.replaceChildren(new Option(primera?.norma || '', primera?.idnormas_im || ''));
             recordSelect.disabled = false;
             renderNorm(historical || {Tabla: []}, null);
@@ -738,33 +707,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 nota.textContent = item.norma + ': ' + texto; observations.append(nota);
             });
             observationsBox.classList.toggle('d-none', !observations.childElementCount);
-        }
-        opciones.forEach(item => {
-            const etiqueta = document.createElement('label'); etiqueta.className = 'quimica-opcion';
-            const check = document.createElement('input'); check.type = 'checkbox';
-            check.dataset.claveQuimica = item.clave;
-            check.checked = seleccion.includes(item.clave);
-            check.addEventListener('change', () => {
-                seleccion = seleccion.filter(clave => clave !== item.clave);
-                if (check.checked) seleccion.push(item.clave);
-                sincronizarQuimicas(); scheduleDraftSave();
-            });
-            etiqueta.append(check, document.createTextNode(item.norma)); lista.append(etiqueta);
-        });
-        if (!opciones.length) lista.textContent = 'No hay normas con composición química registrada.';
-        panelQuimico.querySelector('input[type="search"]').addEventListener('input', function () {
-            const texto = this.value.trim().toLocaleLowerCase();
-            Array.from(lista.children).forEach(item => { item.hidden = !item.textContent.toLocaleLowerCase().includes(texto); });
-        });
-        sincronizarQuimicas();
-        restaurarQuimicas = function () {
-            try {
-                seleccion = JSON.parse(orden.value).filter(clave => opciones.some(item => item.clave === clave));
-            } catch (error) { return; }
-            lista.querySelectorAll('[data-clave-quimica]').forEach(check => { check.checked = seleccion.includes(check.dataset.claveQuimica); });
-            sincronizarQuimicas();
-        };
-    }
+    });
 
     const recoveredDraft = readLocalDraft();
     if (recoveredDraft) {
