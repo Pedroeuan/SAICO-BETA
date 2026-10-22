@@ -309,19 +309,19 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="subtotal">Subtotal</label>
-                                            <input id="subtotal" type="text" class="form-control inputForm" name="Subtotal" value="{{ number_format((float) $totales['subtotal'], 2, '.', '') }}" readonly>
+                                            <input id="subtotal" type="text" class="form-control inputForm" name="Subtotal" value="{{ number_format((float) $totales['subtotal'], 2, '.', '') }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="iva">IVA (16%)</label>
-                                            <input id="iva" type="text" class="form-control inputForm" name="IVA" value="{{ number_format((float) $totales['iva'], 2, '.', '') }}" readonly>
+                                            <input id="iva" type="text" class="form-control inputForm" name="IVA" value="{{ number_format((float) $totales['iva'], 2, '.', '') }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="total">Total</label>
-                                            <input id="total" type="text" class="form-control inputForm" name="Total" value="{{ number_format((float) $totales['total'], 2, '.', '') }}" readonly>
+                                            <input id="total" type="text" class="form-control inputForm" name="Total" value="{{ number_format((float) $totales['total'], 2, '.', '') }}">
                                         </div>
                                     </div>
                                     

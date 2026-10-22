@@ -529,14 +529,22 @@ class OCController extends Controller
 
     public function OC_PDF($id)
     {
-    $OC  = OC::find($id);
+        $OC  = OC::find($id);
         $cliente = clientes::find($OC->idClientes);
         $OC->cliente = $cliente; // Agregar el cliente al objeto OC
         $detallesRegistro = detallesOC::where('idOC', $id)->first();
-        $detallesOC = collect($detallesRegistro
-            ? json_decode($detallesRegistro->Detalles, true)
-            : []
-        )->map(fn ($detalle) => (object) $detalle);
+        // El JSON se guarda como {detallesOC:[...], totales:{...}}.
+        // Se soporta también el formato anterior (lista plana de detalles).
+        $datosGuardados = $detallesRegistro ? json_decode($detallesRegistro->Detalles, true) : [];
+        $detallesOC = $datosGuardados['detallesOC'] ?? $datosGuardados;
+        $detallesOC = is_array($detallesOC) ? array_values($detallesOC) : [];
+        $detallesOC = collect($detallesOC)->map(fn ($detalle) => (object) $detalle);
+        $totales = $datosGuardados['totales'] ?? [];
+        $totales = array_merge([
+            'subtotal' => 0,
+            'iva' => 0,
+            'total' => 0,
+        ], is_array($totales) ? $totales : []);
         $firmantes = Firmantes_OC::where('idOC', $id)->first();
         $Firmas_Reportes = $firmantes ? json_decode($firmantes->Nombre_Cargo, true) : [];
         $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
@@ -550,6 +558,8 @@ class OCController extends Controller
             'title' => 'Manifiesto PDF',
             'OC' => $OC,
             'detallesOC' => $detallesOC,
+            'totales' => $totales,
+            'detallesRegistro' => $detallesRegistro,
             'numFirmas' => $numFirmas,
             'Firmas_Reportes' => $Firmas_Reportes,
             'Logo' => $Logo,
@@ -564,7 +574,7 @@ class OCController extends Controller
         $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
     
         $canvas = $dompdf->getCanvas();
-        $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+        /*$canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
             // Usar una fuente válida predefinida en DomPDF
             $font = $fontMetrics->getFont('Arial', 'normal');
             $size = 8;
@@ -578,7 +588,7 @@ class OCController extends Controller
                 $text = "$pageNumber de $pageCount";
                 $canvas->text($x, $y, $text, $font, $size);
             }
-        });
+        });*/
     
         return $pdf->stream('OC.PDF');
     }
