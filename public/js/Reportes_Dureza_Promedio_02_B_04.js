@@ -96,6 +96,16 @@
     }
 
     /** Mantiene sincronizados el select, el calculo y el titulo que se guardara. */
+    function mostrarFlechaSelector(selector) {
+            // Identifica visualmente los campos que permiten elegir o escribir una opción nueva.
+            selector.style.appearance = 'none';
+            selector.style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%278%27 viewBox=%270 0 12 8%27%3E%3Cpath d=%27M1 1l5 5 5-5%27 fill=%27none%27 stroke=%27%233674b5%27 stroke-width=%272%27/%3E%3C/svg%3E")';
+            selector.style.backgroundRepeat = 'no-repeat';
+            selector.style.backgroundPosition = 'right 8px center';
+            selector.style.paddingRight = '28px';
+            selector.style.cursor = 'pointer';
+    }
+
     function inicializarEtapa(formulario) {
         var selector = formulario.querySelector('[data-dureza-etapa-select]');
 
@@ -103,6 +113,7 @@
             return;
         }
 
+        mostrarFlechaSelector(selector);
         formulario.setAttribute('data-dureza-etapa', selector.value === 'DESPUES' ? 'DESPUES' : 'ANTES');
         selector.addEventListener('change', function () {
             formulario.setAttribute('data-dureza-etapa', selector.value === 'DESPUES' ? 'DESPUES' : 'ANTES');
@@ -117,6 +128,7 @@
      */
     function inicializarCatalogosEditables(formulario) {
         formulario.querySelectorAll('[data-catalogo-selector]').forEach(function (selector) {
+            mostrarFlechaSelector(selector);
             var clave = selector.getAttribute('data-catalogo-selector');
             var valor = formulario.querySelector('[data-catalogo-valor="' + clave + '"]');
             var entradaNueva = formulario.querySelector('[data-catalogo-nuevo="' + clave + '"]');
@@ -230,6 +242,35 @@
             return;
         }
 
+        // Completa la descripción desde el nombre, manteniendo las modificaciones manuales por fila.
+        var nombrePieza = formulario.querySelector('[name="Detalles_Generales[Nom_Pieza]"]');
+        var descripciones = new WeakMap();
+        function actualizarDescripciones() {
+            if (!nombrePieza) return;
+            formulario.querySelectorAll('#durezaBrinellBody input[name$="[descripcion]"]').forEach(function (entrada) {
+                var anterior = descripciones.get(entrada);
+                if (!anterior) {
+                    // Los guiones del autorrelleno son marcadores, no descripciones escritas por el técnico.
+                    var vacia = /^(?:\s*|-{1,3})$/.test(entrada.value.trim());
+                    anterior = { manual: !vacia && entrada.value !== nombrePieza.value, ultimo: entrada.value };
+                    descripciones.set(entrada, anterior);
+                }
+                // Combinar celdas también cambia valores por código; eso no debe cortar el enlace.
+                if (!anterior.manual) {
+                    entrada.value = nombrePieza.value;
+                    anterior.ultimo = entrada.value;
+                }
+            });
+        }
+        formulario.addEventListener('input', function (evento) {
+            if (evento.target === nombrePieza) actualizarDescripciones();
+            else if (evento.target.matches('#durezaBrinellBody input[name$="[descripcion]"]')) {
+                descripciones.set(evento.target, {manual: true, ultimo: evento.target.value});
+            }
+        });
+        if (nombrePieza) nombrePieza.addEventListener('change', actualizarDescripciones);
+        actualizarDescripciones();
+
         inicializarCatalogosEditables(formulario);
         inicializarEtapa(formulario);
         inicializarEtiquetasMaterial(formulario);
@@ -258,12 +299,14 @@
          * MutationObserver recalcula cuando cambia la estructura de la tabla.
          */
         observador = new MutationObserver(function () {
+            actualizarDescripciones();
             calcularPromedios(formulario);
         });
         observador.observe(cuerpo, { childList: true, subtree: true });
 
         // Realiza un ultimo calculo antes de enviar los datos al servidor.
         formulario.addEventListener('submit', function () {
+            actualizarDescripciones();
             calcularPromedios(formulario);
         }, true);
 
@@ -275,6 +318,7 @@
          * efectuados durante la inicializacion por otros scripts del formulario.
          */
         window.setTimeout(function () {
+            actualizarDescripciones();
             calcularPromedios(formulario);
         }, 0);
     });

@@ -12,6 +12,44 @@ use Tests\TestCase;
 
 class ServicioSerieReportesTest extends TestCase
 {
+    public function test_0204_solo_vincula_y_numera_sin_cambiar_los_datos_antes_despues(): void
+    {
+        $this->crearReportes(901, 902, 903);
+        $antes = json_encode(['DUREZA_ETAPA' => 'ANTES', 'ANTES_A' => 167]);
+        $despues = json_encode(['DUREZA_ETAPA' => 'DESPUES', 'ANTES_A' => 167, 'DESPUES_A' => 149]);
+        reporte::whereKey(901)->update(['Datos_Equipo' => $antes]);
+        reporte::whereKey(902)->update(['Datos_Equipo' => $despues]);
+        $series = app(ServicioSerieReportes::class);
+        // Un reporte anterior sin serie puede seguir usando el botón de siempre.
+        $vinculada = $series->vincularConsecutivo0204(901, 902);
+        $this->assertSame(ServicioSerieReportes::FORMATO_02_B_04, $vinculada->formato);
+        $this->assertSame(2, $vinculada->numero_orden);
+        $series->registrarPaginas(901, 2);
+        $this->assertSame(['pagina_inicial' => 3, 'pagina_final' => 5, 'total_estimado' => 5], $series->registrarPaginas(902, 3));
+        // Copiar desde un origen previo no bloquea ni transforma su lógica Antes/Después.
+        $tercera = $series->vincularConsecutivo0204(901, 903);
+        $this->assertSame(3, $tercera->numero_orden);
+        $this->assertSame(3, $tercera->cantidad_planificada);
+        $this->assertSame($antes, reporte::findOrFail(901)->Datos_Equipo);
+        $this->assertSame($despues, reporte::findOrFail(902)->Datos_Equipo);
+        $this->assertSame('dato conservado', json_decode(reporte::findOrFail(901)->Detalles_Generales, true)['OTRO_DATO']);
+    }
+
+    public function test_0203_numera_tres_piezas_y_actualiza_el_total_si_una_ocupa_dos_hojas(): void
+    {
+        $this->crearReportes(801, 802, 803);
+        $series = app(ServicioSerieReportes::class);
+        $series->iniciar(801, 3, ServicioSerieReportes::FORMATO_02_B_03);
+        $this->assertSame(['pagina_inicial' => 1, 'pagina_final' => 1, 'total_estimado' => 3], $series->registrarPaginas(801, 1));
+        $series->registrarConsecutivo(801, 802);
+        $series->registrarPaginas(802, 2);
+        $series->registrarConsecutivo(802, 803);
+        $this->assertSame(['pagina_inicial' => 4, 'pagina_final' => 4, 'total_estimado' => 4], $series->registrarPaginas(803, 1));
+        $this->assertSame(ServicioSerieReportes::FORMATO_02_B_03, $series->obtener(803)->formato);
+        $this->assertSame(4, $series->registrarPaginas(801, 1)['total_estimado']);
+        $this->assertFalse($series->puedeCrearSiguiente(803));
+    }
+
     public function test_0501_continua_hojas_y_no_copia_resultados_al_siguiente(): void
     {
         $this->crearReportes(701, 702);

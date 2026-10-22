@@ -1,3 +1,5 @@
+(function () {
+    // Aisla las variables del editor para no colisionar con el modulo compartido de Crear.
     /*Prevenir el Enter*/
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('input, select, button, textarea').forEach(function (element) {
@@ -31,7 +33,7 @@
     });
 
     // El 05_B_01 usa un editor propio; esta bandera evita que ambos módulos manipulen la misma imagen.
-    const usaEditorImagenes05B01 = document.getElementById('FOR-PIMP-05_B_01') !== null;
+    const usaEditorImagenes05B01 = document.getElementById('FOR-PIMP-05_B_01') !== null || document.getElementById('FOR-PIMP-02_B_03') !== null || document.getElementById('FOR-PIMP-02_B_04') !== null;
 
     /*Modal para las imagenes que ya estan subidos */
     document.addEventListener('change', function (e) {
@@ -426,6 +428,7 @@
             // Eventos de cambio para inputs
             document.querySelectorAll('.image-input').forEach(input => {
                 input.addEventListener('change', function (e) {
+                    if (usaEditorImagenes05B01) return;
                     const file = e.target.files[0];
                     if (!file) return;
                     
@@ -880,3 +883,5 @@
         document.getElementById('numFirmas').addEventListener('change', actualizarValidacion);
 
         actualizarValidacion();*/
+
+})();

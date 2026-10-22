@@ -427,7 +427,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
     const ordenSerie = $(this).data('serie-orden');
     const totalSerie = $(this).data('serie-total');
     let idReporteSeleccionado = idReporte;
-        const detalleSerie = ['FOR-PIMP-06_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-03_B/01', 'FOR-PIMP-05_B/01'].includes(formato) && ordenSerie && totalSerie
+        const detalleSerie = ['FOR-PIMP-06_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-03_B/01', 'FOR-PIMP-05_B/01', 'FOR-PIMP-02_B/03'].includes(formato) && ordenSerie && totalSerie
             ? `<br><small class="text-muted">Serie actual: reporte ${ordenSerie} de ${totalSerie}. Los resultados XRF y las fotograf&iacute;as iniciar&aacute;n vac&iacute;os.</small>`
             : '';
         Swal.fire({

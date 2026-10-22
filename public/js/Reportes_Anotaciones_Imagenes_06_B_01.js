@@ -4,7 +4,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const formulario = document.getElementById('FOR-PIMP-06_B_01')
             || document.getElementById('FOR-PIMP-04_02')
-            || document.getElementById('FOR-PIMP-04_03') || document.getElementById('FOR-PIMP-03_B_01') || document.getElementById('FOR-PIMP-05_B_01');
+            || document.getElementById('FOR-PIMP-04_03') || document.getElementById('FOR-PIMP-03_B_01') || document.getElementById('FOR-PIMP-05_B_01') || document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-02_B_04');
         const modal = document.getElementById('cropperModal');
         const imagenCropper = document.getElementById('cropperImage');
 
@@ -103,9 +103,12 @@
                 editandoImagenGuardada = false;
                 restaurarEditor();
         };
-        if (formulario.id === 'FOR-PIMP-05_B_01') {
+        if (['FOR-PIMP-05_B_01', 'FOR-PIMP-02_B_03', 'FOR-PIMP-02_B_04'].includes(formulario.id)) {
             // Este formato utiliza Bootstrap 5 con eventos nativos en su editor propio.
             modal.addEventListener('hidden.bs.modal', alCerrarModal);
+            if (formulario.id === 'FOR-PIMP-02_B_04' && window.jQuery) {
+                window.jQuery(modal).on('hidden.bs.modal', alCerrarModal);
+            }
         } else if (window.jQuery) {
             window.jQuery(modal).on('hidden.bs.modal', alCerrarModal);
         }
@@ -508,6 +511,7 @@
             destino.vistaPrevia.appendChild(imagen);
             destino.vistaPrevia.appendChild(insignia);
 
+            modal.dispatchEvent(new Event('saico:imagen-confirmada'));
             cerrarModal();
         }
 
@@ -571,8 +575,9 @@
         }
 
         function cerrarModal() {
-            if (formulario.id === 'FOR-PIMP-05_B_01' && window.bootstrap?.Modal) {
-                window.bootstrap.Modal.getOrCreateInstance(modal).hide();
+            const instanciaBootstrap = window.bootstrap?.Modal?.getInstance?.(modal);
+            if (instanciaBootstrap) {
+                instanciaBootstrap.hide();
             } else if (window.jQuery && typeof window.jQuery.fn.modal === 'function') {
                 window.jQuery(modal).modal('hide');
             } else {

@@ -217,21 +217,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Botón: Rotar -90° (Antihorario)
     document.getElementById('rotateLeftBtn').addEventListener('click', function () {
+        if (document.getElementById('FOR-PIMP-02_B_03')) return;
         if (cropper) cropper.rotate(-90);
     });
 
     // Botón: Rotar +90° (Horario)
     document.getElementById('rotateRightBtn').addEventListener('click', function () {
+        if (document.getElementById('FOR-PIMP-02_B_03')) return;
         if (cropper) cropper.rotate(90);
     });
 
     // Botón: Cancelar
     document.getElementById('cancelBtn').addEventListener('click', function () {
+        if (document.getElementById('FOR-PIMP-02_B_03')) return;
         $('#cropperModal').modal('hide');
     });
 
     // Botón: Guardar sin recortar (manteniendo rotación)
     document.getElementById('saveWithoutCropBtn').addEventListener('click', function () {
+        if (document.getElementById('FOR-PIMP-02_B_03')) return;
 
         try {
             // Obtener los datos de la imagen original (incluyendo rotación)
@@ -277,6 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Botón: Recortar y guardar
     document.getElementById('cropImageBtn').addEventListener('click', function () {
+        if (document.getElementById('FOR-PIMP-02_B_03')) return;
         if (cropper && currentInput) {
             const croppedCanvas = cropper.getCroppedCanvas();
             if (croppedCanvas) {
@@ -590,6 +595,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Asignar eventos a los nuevos inputs
             document.querySelectorAll('.image-input').forEach(input => {
                 input.addEventListener('change', function (e) {
+                    if (document.getElementById('FOR-PIMP-02_B_03')) return;
                     const file = e.target.files[0];
                     if (!file) return;
                     
@@ -1071,4 +1077,30 @@ $(document).ready(function () {
         submitButton.append(' <i class="fa fa-spinner fa-spin"></i>');
     });
 
+});
+// El 02_03 comparte este archivo en Crear y Editar: sincroniza ID y nombre de cada firma.
+document.addEventListener('DOMContentLoaded', function () {
+    queueMicrotask(function () {
+        const form = document.getElementById('FOR-PIMP-02_B_03');
+        if (!form) return;
+        for (let numero = 1; numero <= 4; numero++) {
+            const sufijo = numero === 1 ? '' : String(numero);
+            const selector = form.querySelector('#tecnicosSelect' + sufijo);
+            const nombre = form.querySelector('#NOMBRE_TECNICO' + sufijo);
+            const id = form.querySelector('#IDTECNICO' + sufijo);
+            if (!selector || !nombre) continue;
+            if (id?.defaultValue) selector.value = id.defaultValue;
+            function sincronizar() {
+                const opcion = selector.selectedOptions[0];
+                if (id) id.value = selector.value || '';
+                nombre.value = opcion?.dataset.name || '';
+            }
+            selector.addEventListener('change', sincronizar);
+            // Un técnico histórico fuera del catálogo conserva el nombre ya guardado.
+            if (selector.value) sincronizar();
+            form.addEventListener('submit', function () {
+                if (selector.value) sincronizar();
+            }, true);
+        }
+    });
 });

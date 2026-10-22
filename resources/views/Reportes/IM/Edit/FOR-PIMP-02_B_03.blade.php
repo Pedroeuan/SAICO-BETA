@@ -72,8 +72,9 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-02_B_03" action="{{route('Reportes_FOR_PIMP_02_B_03.update', $id)}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-02_B_03" data-modo="edit" action="{{route('Reportes_FOR_PIMP_02_B_03.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
+                @include('Reportes.IM.partials.serie-reportes-0402', ['serieFormato' => '02_03'])
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
@@ -462,7 +463,7 @@
 
                                                             @foreach($Tecnicos as $Tecnico)
                                                                 <option value="{{ $Tecnico->id }}"
-                                                                        data-name="{{ $Tecnico->name }}">
+                                                                        data-name="{{ $Tecnico->name }}" @selected((string) old('Firmas_Reportes1.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '') === (string) $Tecnico->id)>
                                                                     {{ $Tecnico->name }}
                                                                 </option>
                                                             @endforeach
@@ -514,7 +515,7 @@
 
                                                         @foreach($Tecnicos as $Tecnico)
                                                             <option value="{{ $Tecnico->id }}"
-                                                                    data-name="{{ $Tecnico->name }}">
+                                                                    data-name="{{ $Tecnico->name }}" @selected((string) old('Firmas_Reportes2.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '') === (string) $Tecnico->id)>
                                                                 {{ $Tecnico->name }}
                                                             </option>
                                                         @endforeach
@@ -578,7 +579,7 @@
 
                                                         @foreach($Tecnicos as $Tecnico)
                                                             <option value="{{ $Tecnico->id }}"
-                                                                    data-name="{{ $Tecnico->name }}">
+                                                                    data-name="{{ $Tecnico->name }}" @selected((string) old('Firmas_Reportes3.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '') === (string) $Tecnico->id)>
                                                                 {{ $Tecnico->name }}
                                                             </option>
                                                         @endforeach
@@ -663,7 +664,7 @@
 
                                                         @foreach($Tecnicos as $Tecnico)
                                                             <option value="{{ $Tecnico->id }}"
-                                                                    data-name="{{ $Tecnico->name }}">
+                                                                    data-name="{{ $Tecnico->name }}" @selected((string) old('Firmas_Reportes4.ID_TECNICO', $Firmas['ID_TECNICO'] ?? '') === (string) $Tecnico->id)>
                                                                 {{ $Tecnico->name }}
                                                             </option>
                                                         @endforeach
@@ -875,9 +876,9 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Create-For-02-06-IM.js') }}"></script>
+<script src="{{ asset('js/Reportes_Create-For-02-06-IM.js') }}?v={{ filemtime(public_path('js/Reportes_Create-For-02-06-IM.js')) }}"></script>
 <script src="{{ asset('js/promedio-dureza-02-b-03.js') }}?v={{ filemtime(public_path('js/promedio-dureza-02-b-03.js')) }}"></script>
-<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}?v={{ filemtime(public_path('js/Reportes_Edit.js')) }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -1219,4 +1220,7 @@ $(document).ready(function() {
     });
 
 </script>
+{{-- Las flechas se incorporan a la misma fotografia que recibe el PDF. --}}
+<script src="{{ asset('js/Reportes_Editor_Imagenes_05_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Editor_Imagenes_05_B_01.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 @endsection

@@ -21,6 +21,7 @@ class ServicioSerieReportes
     public const FORMATO_04_03 = 'FOR-PIMP-04/03';
     public const FORMATO_03_B_01 = 'FOR-PIMP-03_B/01';
     public const FORMATO_05_B_01 = 'FOR-PIMP-05_B/01';
+    public const FORMATO_02_B_03 = 'FOR-PIMP-02_B/03';
 
     /** Formato de dureza: su tabla de juntas y sus resultados viven en Juntas_Grupo_Re. */
     public const FORMATO_02_B_04 = 'FOR-PIMP-02_B/04';
@@ -153,6 +154,20 @@ class ServicioSerieReportes
         });
     }
 
+    /** Vincula la copia Antes/Después sin modificar sus mediciones ni limitar el botón histórico. */
+    public function vincularConsecutivo0204(int $idOrigen, int $idNuevo): Fluent
+    {
+        return DB::transaction(function () use ($idOrigen, $idNuevo): Fluent {
+            $serie = $this->obtener($idOrigen) ?? $this->iniciar($idOrigen, 2, self::FORMATO_02_B_04);
+            $miembros = $this->reportesDeSerie((string) $serie->serie_uuid, true);
+            $ultimo = $miembros->sortByDesc(fn (reporte $item) => (int) ($this->datosSerie($item)['numero_orden'] ?? 0))->first();
+            if ($miembros->count() >= (int) $serie->cantidad_planificada) {
+                $this->actualizarCantidad($idOrigen, $miembros->count() + 1);
+            }
+            return $this->registrarConsecutivo((int) $ultimo->idReportes, $idNuevo);
+        });
+    }
+
     public function puedeCrearSiguiente(int $idReporte): bool
     {
         $actual = $this->obtener($idReporte);
@@ -231,7 +246,7 @@ class ServicioSerieReportes
     /** El 03_01 integra datos y fotos en una hoja; los demás parten de dos hasta conocer su total real. */
     private function paginasIniciales(array $serie): int
     {
-        return ($serie['formato'] ?? null) === self::FORMATO_03_B_01 ? 1 : 2;
+        return in_array($serie['formato'] ?? null, [self::FORMATO_03_B_01, self::FORMATO_02_B_03], true) ? 1 : 2;
     }
 
     private function ultimoOrden(string $serieUuid): int

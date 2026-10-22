@@ -20,6 +20,32 @@ use Illuminate\Support\Str;
  */
 class ServicioPdfGenerado
 {
+    /** Mide el texto sin cargar las fotos y reparte el espacio restante entre las dos filas. */
+    public function generarAnexoFotos(string $vista, array $data, float $separacionFirmasMm = 0): string
+    {
+        $medicion = $data;
+        $medicion['Fotos'] = array_slice($data['Fotos'], 0, 1);
+        $medicion['medirDistribucionFotos'] = true;
+        $finTitulo = null;
+        $pdfMedicion = \Barryvdh\DomPDF\Facade\Pdf::loadView($vista, $medicion)->setPaper('letter', 'portrait');
+        $pdfMedicion->getDomPDF()->setCallbacks([['event' => 'end_frame', 'f' => function ($frame) use (&$finTitulo) {
+            $nodo = $frame->get_node();
+            if ($nodo instanceof \DOMElement && in_array('fotoPiezaTitulo', explode(' ', $nodo->getAttribute('class')), true)) {
+                $caja = $frame->get_border_box();
+                $finTitulo = $caja['y'] + $caja['h'];
+            }
+        }]]);
+        $pdfMedicion->render();
+        if ($finTitulo === null) throw new \RuntimeException('No fue posible medir el espacio de las fotografías.');
+        $altoPagina = $pdfMedicion->getDomPDF()->getCanvas()->get_height();
+        // Puntos a píxeles CSS; reserva el margen inferior y los comentarios de cada fila.
+        $disponible = ($altoPagina - 2.1 * 72 / 2.54 - $finTitulo) * 96 / 72;
+        // Reserva espacio antes de las firmas sin cambiar su posicion ni los comentarios.
+        $disponible -= max(0, $separacionFirmasMm) * 96 / 25.4;
+        $data['alturaFotoCuadrante'] = max(40, min(300, (int) floor($disponible / 2 - 38)));
+        return \Barryvdh\DomPDF\Facade\Pdf::loadView($vista, $data)->setPaper('letter', 'portrait')->output();
+    }
+
     private const VERSION = 1;
 
     /** @var array<string, array<int, string>> */

@@ -2103,29 +2103,12 @@ class FOR_PIMP_05_B_01Controller extends Controller
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
-    /** Mide el texto sin cargar las fotos y reparte el espacio restante entre las dos filas. */
+    /** Reutiliza el ajuste de fotos al espacio disponible de la hoja. */
     protected function generarAnexoFotos(array $data): string
     {
-        $vista = 'Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_05_B_01_PDF';
-        $medicion = $data;
-        $medicion['Fotos'] = array_slice($data['Fotos'], 0, 1);
-        $medicion['medirDistribucionFotos'] = true;
-        $finTitulo = null;
-        $pdfMedicion = PDF::loadView($vista, $medicion)->setPaper('letter', 'portrait');
-        $pdfMedicion->getDomPDF()->setCallbacks([['event' => 'end_frame', 'f' => function ($frame) use (&$finTitulo) {
-            $nodo = $frame->get_node();
-            if ($nodo instanceof \DOMElement && $nodo->getAttribute('class') === 'fotoPiezaTitulo') {
-                $caja = $frame->get_border_box();
-                $finTitulo = $caja['y'] + $caja['h'];
-            }
-        }]]);
-        $pdfMedicion->render();
-        if ($finTitulo === null) throw new \RuntimeException('No fue posible medir el espacio de las fotografías.');
-        $altoPagina = $pdfMedicion->getDomPDF()->getCanvas()->get_height();
-        // Puntos a píxeles CSS; reserva el margen inferior y los comentarios de cada fila.
-        $disponible = ($altoPagina - 2.1 * 72 / 2.54 - $finTitulo) * 96 / 72;
-        $data['alturaFotoCuadrante'] = max(40, min(300, (int) floor($disponible / 2 - 38)));
-        return PDF::loadView($vista, $data)->setPaper('letter', 'portrait')->output();
+        return app(\App\Services\ServicioPdfGenerado::class)->generarAnexoFotos(
+            'Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_05_B_01_PDF', $data
+        );
     }
 
     public function FOR_PIMP_05_B_01($id)
