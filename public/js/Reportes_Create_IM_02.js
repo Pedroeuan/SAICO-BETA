@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
         rellenarBtn.addEventListener('click', function () {
             fields.forEach(function (field) {
                 // Autorrelleno no debe modificar archivos, identificadores, cálculos ni lecturas numéricas.
-                if (field.type === 'hidden' || field.type === 'file' || field.type === 'number'
+                if (field.type === 'hidden' || field.type === 'file' || field.type === 'number' || field.type === 'time'
                     || field.readOnly || field.tagName === 'SELECT'
                     || field.getAttribute('inputmode') === 'decimal') return;
 
@@ -178,6 +178,24 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem(formId + '_numFirmas', this.value);
             mostrarFirmas(this.value);
         });
+    }
+
+    // En 07 sincroniza el campo enviado, ademas del nombre visible del selector.
+    if (formId === 'FOR-PIMP-07_B_01') {
+        const sincronizarTecnicos = function () {
+            for (let numero = 1; numero <= 4; numero++) {
+                const sufijo = numero === 1 ? '' : String(numero);
+                const select = document.getElementById('tecnicosSelect' + sufijo);
+                const nombre = document.getElementById('NOMBRE_TECNICO' + sufijo);
+                if (select && nombre) nombre.value = select.selectedOptions[0]?.dataset.name || '';
+            }
+        };
+        for (let numero = 1; numero <= 4; numero++) {
+            const select = document.getElementById('tecnicosSelect' + (numero === 1 ? '' : numero));
+            select?.addEventListener('change', sincronizarTecnicos);
+        }
+        queueMicrotask(sincronizarTecnicos);
+        form.addEventListener('submit', sincronizarTecnicos);
     }
 
     function configurarSelectEquipo(selectId, marcaId, modeloId, nsId, idEquipoId, localStorageName) {
@@ -367,6 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         imageFieldsContainer.querySelectorAll('.image-input').forEach(function (input) {
             input.addEventListener('change', function (event) {
+                if (formId === 'FOR-PIMP-07_B_01') return; // Reutiliza el editor de recorte y flechas.
                 const file = event.target.files[0];
                 if (!file) return;
 
@@ -423,23 +442,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const saveWithoutCropBtn = document.getElementById('saveWithoutCropBtn');
         const cropImageBtn = document.getElementById('cropImageBtn');
 
-        if (rotateLeftBtn) {
+        if (rotateLeftBtn && formId !== 'FOR-PIMP-07_B_01') {
             rotateLeftBtn.addEventListener('click', function () {
                 if (cropper) cropper.rotate(-90);
             });
         }
 
-        if (rotateRightBtn) {
+        if (rotateRightBtn && formId !== 'FOR-PIMP-07_B_01') {
             rotateRightBtn.addEventListener('click', function () {
                 if (cropper) cropper.rotate(90);
             });
         }
 
-        if (cancelBtn) {
+        if (cancelBtn && formId !== 'FOR-PIMP-07_B_01') {
             cancelBtn.addEventListener('click', hideCropperModal);
         }
 
-        if (saveWithoutCropBtn) {
+        if (saveWithoutCropBtn && formId !== 'FOR-PIMP-07_B_01') {
             saveWithoutCropBtn.addEventListener('click', function () {
                 if (!cropper) return;
 
@@ -452,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        if (cropImageBtn) {
+        if (cropImageBtn && formId !== 'FOR-PIMP-07_B_01') {
             cropImageBtn.addEventListener('click', function () {
                 if (!cropper) return;
 

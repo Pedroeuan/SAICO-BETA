@@ -20,11 +20,38 @@ use Illuminate\Support\Str;
  */
 class ServicioPdfGenerado
 {
+    /** Mide el texto sin cargar las fotos y reparte el espacio restante entre las dos filas. */
+    public function generarAnexoFotos(string $vista, array $data, float $separacionFirmasMm = 0): string
+    {
+        $medicion = $data;
+        $medicion['Fotos'] = array_slice($data['Fotos'], 0, 1);
+        $medicion['medirDistribucionFotos'] = true;
+        $finTitulo = null;
+        $pdfMedicion = \Barryvdh\DomPDF\Facade\Pdf::loadView($vista, $medicion)->setPaper('letter', 'portrait');
+        $pdfMedicion->getDomPDF()->setCallbacks([['event' => 'end_frame', 'f' => function ($frame) use (&$finTitulo) {
+            $nodo = $frame->get_node();
+            if ($nodo instanceof \DOMElement && in_array('fotoPiezaTitulo', explode(' ', $nodo->getAttribute('class')), true)) {
+                $caja = $frame->get_border_box();
+                $finTitulo = $caja['y'] + $caja['h'];
+            }
+        }]]);
+        $pdfMedicion->render();
+        if ($finTitulo === null) throw new \RuntimeException('No fue posible medir el espacio de las fotografías.');
+        $altoPagina = $pdfMedicion->getDomPDF()->getCanvas()->get_height();
+        // Puntos a píxeles CSS; reserva el margen inferior y los comentarios de cada fila.
+        $disponible = ($altoPagina - 2.1 * 72 / 2.54 - $finTitulo) * 96 / 72;
+        // Reserva espacio antes de las firmas sin cambiar su posicion ni los comentarios.
+        $disponible -= max(0, $separacionFirmasMm) * 96 / 25.4;
+        $data['alturaFotoCuadrante'] = max(40, min(300, (int) floor($disponible / 2 - 38)));
+        return \Barryvdh\DomPDF\Facade\Pdf::loadView($vista, $data)->setPaper('letter', 'portrait')->output();
+    }
+
     private const VERSION = 1;
 
     /** @var array<string, array<int, string>> */
     private const ARCHIVOS_GENERADOR = [
         '03_B_01' => [
+            'app/Services/ServicioSerieReportes.php',
             'app/Http/Controllers/Reporte/IM/FOR_PIMP_03_B_01Controller.php',
             'resources/views/Reportes/ReportesPDFIM/Reporte_FOR_PIMP_03_B_01_PDF.blade.php',
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_03_B_01_PDF.blade.php',
@@ -49,11 +76,19 @@ class ServicioPdfGenerado
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_04_B_03_PDF.blade.php',
         ],
         '05_B_01' => [
+            'app/Services/ServicioSerieReportes.php',
+            // Los límites coloreados y sus referencias también determinan la vigencia del PDF.
+            'app/Services/ReferenciasQuimicas0501.php',
+            'app/Services/ComposicionesReferencias0402.php',
+            'resources/views/Reportes/IM/partials/limites-quimicos-0403-pdf.blade.php',
             'app/Http/Controllers/Reporte/IM/FOR_PIMP_05_B_01Controller.php',
             'resources/views/Reportes/ReportesPDFIM/Reporte_FOR_PIMP_05_B_01_PDF.blade.php',
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_05_B_01_PDF.blade.php',
         ],
         '06_B_01' => [
+            'app/Services/ReferenciasQuimicas0501.php',
+            'app/Services/ComposicionesReferencias0402.php',
+            'resources/views/Reportes/IM/partials/limites-quimicos-0403-pdf.blade.php',
             'app/Http/Controllers/Reporte/IM/FOR_PIMP_06_B_01Controller.php',
             'resources/views/Reportes/ReportesPDFIM/Reporte_FOR_PIMP_06_B_01_PDF.blade.php',
             'resources/views/Reportes/ReportesFotosPDFIM/Reporte_FOTOS_FOR_PIMP_06_B_01_PDF.blade.php',
@@ -93,7 +128,7 @@ class ServicioPdfGenerado
             'fotos' => $fotos,
             // La numeracion visible del 06_B_01 depende tambien de cuantos
             // integrantes/paginas tenga el resto de su serie.
-            'serie' => in_array($formato, ['06_B_01', '04_02', '04_03'], true) ? $this->estadoSerie($reporte) : null,
+            'serie' => in_array($formato, ['06_B_01', '04_02', '04_03', '03_B_01', '05_B_01'], true) ? $this->estadoSerie($reporte) : null,
             // 04_02 también guarda evidencias en Juntas: deben invalidar el PDF
             // cuando cambien el recorte XRF, la micrografía o el patrón de grano.
             'archivos_reporte' => $this->metadatosArchivos($formato === '04_02'

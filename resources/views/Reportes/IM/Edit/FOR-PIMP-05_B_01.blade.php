@@ -72,9 +72,10 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-05_B_01" action="{{route('Reportes_FOR_PIMP_05_B_01.update', $id)}}" method="post" enctype="multipart/form-data"
+            <form id="FOR-PIMP-05_B_01" data-modo="edit" action="{{route('Reportes_FOR_PIMP_05_B_01.update', $id)}}" method="post" enctype="multipart/form-data"
                 data-validation-errors="{{ $errors->any() ? 1 : 0 }}">
                 @csrf
+                @include('Reportes.IM.partials.serie-reportes-0402', ['serieFormato' => '05_01'])
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
@@ -336,7 +337,8 @@
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">
                         NORMA Y RESULTADOS DEL ANÁLISIS QUÍMICO
                     </div>
-                    <div class="col-sm-6">
+                    @include('Reportes.IM.partials.referencias-quimicas-0501')
+                    <div class="col-sm-6 d-none">
                         <div class="form-group">
                             <label for="normaIMNombre">Norma/Especificación:</label>
                             <select class="form-control" id="normaIMNombre">
@@ -347,7 +349,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 d-none">
                         <div class="form-group">
                             <label for="normaIMRegistro">Tabla/Variable/Subtítulo:</label>
                             <select class="form-control @error('Norma_IM.idnormas_im') is-invalid @enderror"
@@ -742,6 +744,7 @@
                             <div class="row">
                                 @foreach($Fotos_Comentarios as $index => $foto)
                                     <div class="col-sm-6" id="image-container-{{ $index }}"
+                                        data-foto-sin-imagen="{{ !empty($foto['sin_fotografia']) ? 1 : 0 }}"
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
                                         data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}"
@@ -1024,4 +1027,7 @@ $(document).ready(function() {
 @php($xrfExtractionRoute = route('Reportes_FOR_PIMP_05_B_01.extraer_analisis'))
 @php($xrfDetectColumnsOnFileChange = true)
 @include('Reportes.IM.partials.script-columnas-pdf-xrf-05-b-01')
+{{-- Herramientas adicionales: conservan las posiciones y comentarios enviados al PDF. --}}
+<script src="{{ asset('js/fotos-sin-imagen-0402.js') }}?v={{ filemtime(public_path('js/fotos-sin-imagen-0402.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 @endsection

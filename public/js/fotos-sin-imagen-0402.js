@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('FOR-PIMP-04_02') || document.getElementById('FOR-PIMP-04_03');
+    const form = document.getElementById('FOR-PIMP-04_02') || document.getElementById('FOR-PIMP-04_03') || document.getElementById('FOR-PIMP-03_B_01') || document.getElementById('FOR-PIMP-05_B_01');
     if (!form) return;
     const canvas = document.createElement('canvas'); canvas.width = 1000; canvas.height = 700;
     const ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 1000, 700);

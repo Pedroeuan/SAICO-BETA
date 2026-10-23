@@ -364,7 +364,8 @@
             if (tarjetaActiva && tarjetaActiva.contains(evento.target)) sincronizarLayout(tarjetaActiva);
         });
 
-        if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].includes(formulario.id)) {
+        // El selector junto a la micrografía debe activar el mismo patrón que la tarjeta de fotos.
+        if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03', 'FOR-PIMP-03_B_01'].includes(formulario.id)) {
             formulario.addEventListener('saico:grain-pattern-select', function (evento) {
                 const id = String(evento.detail?.id || '');
                 if (!catalogo.some(item => String(item.id) === id) && String(historico.id || '') !== id) return;

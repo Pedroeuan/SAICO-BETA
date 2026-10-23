@@ -15,9 +15,10 @@
     <title>FOR-PIMP-03_B/01</title>
     <style>
         @page { 
-            margin-top: 3cm;     /* ARRIBA */
+            /* Gana espacio para las dos filas de fotos sin reducir imágenes ni tipografía. */
+            margin-top: 2.4cm;     /* Baja 2 mm el encabezado y el contenido juntos. */
             margin-right: 1.5cm;   /* DERECHA */
-            margin-bottom: 2.7cm;  /* ABAJO */
+            margin-bottom: 2cm;  /* ABAJO */
             margin-left: 1.5cm;    /* IZQUIERDA */
         }
 
@@ -30,14 +31,15 @@
 
         header {
             position: fixed;
-            top: -70px;
+            /* Deja separación entre el borde inferior del encabezado y Datos generales. */
+            top: -80px;
             left: 0;
             right: 0;
         }
 
         footer {
             position: fixed;
-            bottom: -68px;
+            bottom: -62px;
             left: 0;
             right: 0;
         }
@@ -73,7 +75,7 @@
         }
 
         .tabla-datos {
-            margin-top: 15px;
+            margin-top: 5px;
             font-size: 8px;
         }
         .tabla-datos th,
@@ -242,7 +244,8 @@
          */
         .imagenes-reporte {
             width: 687.5px;
-            margin: 0px 0px;
+            /* Acerca las fotografías a las firmas aprovechando el espacio blanco inferior. */
+            margin: 8px 0px 0px;
             border-collapse: separate;
             /* Separacion horizontal y vertical entre fotografias. 
             border-spacing: 85px 10px;
@@ -349,17 +352,26 @@
             content: counter(page); 
         }
         /* Igualación tipográfica con FOR-PIMP-02_B/03 sin modificar el parcial compartido. */
+        /* Baja únicamente el bloque de firmas de este formato, sin cambiar el parcial común. */
+        .firmas-im[class] {
+            top: 3px;
+        }
         .firmas-im[class] td {
             font-size: 8px;
         }
         .firmas-im[class] .firma-titulo {
+            /* El parcial común desplaza el título hacia el nombre; aquí permanece arriba. */
+            position: static;
+            top: 0;
             line-height: 8px;
-            min-height: 5px;
+            height: 12px;
+            min-height: 12px;
         }
         .firmas-im[class] .firma-linea {
-            height: 8px;
+            top: 0;
+            height: 14px;
             line-height: 8px;
-            padding-top: 8px;
+            padding-top: 0;
         }
         .firmas-im[class] .firma-dato,
         .firmas-im[class] .firma-ficha {
@@ -402,7 +414,8 @@
             </tr>
             <tr>
                 <th>PÁGINA<br>Page:</th>
-                <th><span class="numero-pagina-actual"></span> DE {{ $totalPaginasPdf }}<br><span class="numero-pagina-actual"></span> Of {{ $totalPaginasPdf }}</th>
+                {{-- El controlador numera la serie sobre esta celda después de conocer las hojas reales. --}}
+                <th id="numero-pagina-serie">@if(empty($numeracionSerieExterna))<span class="numero-pagina-actual"></span> DE {{ $totalPaginasPdf }}<br><span class="numero-pagina-actual"></span> Of {{ $totalPaginasPdf }}@else &nbsp;<br>&nbsp; @endif</th>
             </tr>
         </thead>
     </table>

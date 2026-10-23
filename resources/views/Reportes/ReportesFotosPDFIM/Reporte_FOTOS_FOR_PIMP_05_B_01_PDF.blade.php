@@ -278,7 +278,7 @@
 
         .cuadriculaFotos td {
             width: 50%;
-            padding: 0;
+            padding: 0 5px;
             vertical-align:top;
             /*border: 1px solid #ffd500;*/
         }
@@ -293,19 +293,23 @@
         
         .fotoCuadrante {
             display:inline-block;
-            width:300px;
+            width:100%;
             margin:0;
             padding:0;
             border: 0 !important;  
             overflow:hidden;
+            text-align:center;
         }
 
         .fotoCuadrante img {
-            display: block;
-            max-width: 298px;
+            /* Las fotos verticales no deben alargar una fila y desplazar la siguiente hoja. */
+            display: inline-block;
+            max-width: 100%;
+            max-height: {{ $alturaFotoCuadrante ?? 240 }}px;
+            width: auto;
             height: auto;
             object-fit: contain;
-            margin: 0 0 0 0;
+            margin: 0 auto;
             border: 1px solid #000;
         }
 
@@ -322,8 +326,8 @@
         }
 
         .fotoCuadranteTexto {
-            width: 270px;
-            height: 205px;
+            width: 100%;
+            height: {{ $alturaFotoCuadrante ?? 205 }}px;
             border: 1px solid #000 !important;
             box-sizing: border-box;
             overflow: hidden;
@@ -642,6 +646,8 @@
             </tr>
         </table>
 
+        {{-- La medición previa omite las imágenes y conserva solo encabezado y datos generales. --}}
+        @unless(!empty($medirDistribucionFotos))
         @if($esHojaCompleta)
             <table class="fotosExcelLayout">
                 <tr>
@@ -680,6 +686,7 @@
                 @endforeach
             </table>
         @endif
+        @endunless
     </div>
 
     @if(!$loop->last)

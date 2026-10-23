@@ -73,8 +73,20 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-07_B_01" action="{{route('Reportes_FOR_PIMP_07_B_01.update', $id)}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-07_B_01" data-modo="edit" action="{{route('Reportes_FOR_PIMP_07_B_01.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
+                @if ($errors->any())
+                    <div class="alert alert-danger" role="alert" tabindex="-1" id="errores-guardado-0701">
+                        <strong>No se pudo guardar el reporte. Revise los siguientes campos:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->messages() as $campo => $mensajes)
+                                @foreach ($mensajes as $mensaje)
+                                    <li><strong>{{ str_replace(['Detalles_Generales.', 'Datos_Equipo.', '_'], ['', '', ' '], $campo) }}:</strong> {{ $mensaje }}</li>
+                                @endforeach
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
@@ -83,8 +95,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Fecha:</label>
-                            <input type="date" class="form-control  inputForm @error('Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha', $Detalles_Generales['Fecha'] ?? '')}}">
-                            @error('Fecha')
+                            <input type="date" class="form-control  inputForm @error('Detalles_Generales.Fecha') is-invalid @enderror" name="Detalles_Generales[Fecha]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Detalles_Generales.Fecha', $Detalles_Generales['Fecha'] ?? '')}}">
+                            @error('Detalles_Generales.Fecha')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -399,7 +411,18 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Hora Inicio de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaInputP" name="Datos_Equipo[HORA_INICIO]" placeholder="" value="{{old('Datos_Equipo.HORA_INICIO', $Datos_Equipo['HORA_INICIO'] ?? '')}}">
+                            @php
+                                // Mantiene texto historico; las horas nuevas usan el selector del navegador.
+                                $horaPrueba = (string) (old('Datos_Equipo.HORA_INICIO', $Datos_Equipo['HORA_INICIO'] ?? '') ?? '');
+                                $horaSeleccionable = $horaPrueba === '' || preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/', $horaPrueba);
+                            @endphp
+                            <input type="{{ $horaSeleccionable ? 'time' : 'text' }}" step="1" class="form-control inputForm @error('Datos_Equipo.HORA_INICIO') is-invalid @enderror" id="horaInputP" name="Datos_Equipo[HORA_INICIO]" value="{{ $horaPrueba }}">
+                            @if (!$horaSeleccionable)
+                                <button type="button" class="btn btn-link btn-sm p-0" onclick="const campo = document.getElementById('horaInputP'); campo.value = ''; campo.type = 'time'; campo.focus();">Elegir una hora</button>
+                            @endif
+                            @error('Datos_Equipo.HORA_INICIO')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
@@ -413,7 +436,18 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Hora Final de Prueba:</label>
-                            <input type="text" class="form-control  inputForm" id="horaFinalInputP" name="Datos_Equipo[HORA_FINAL]" placeholder="" value="{{old('Datos_Equipo.HORA_FINAL', $Datos_Equipo['HORA_FINAL'] ?? '')}}">
+                            @php
+                                // Mantiene texto historico; las horas nuevas usan el selector del navegador.
+                                $horaPrueba = (string) (old('Datos_Equipo.HORA_FINAL', $Datos_Equipo['HORA_FINAL'] ?? '') ?? '');
+                                $horaSeleccionable = $horaPrueba === '' || preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/', $horaPrueba);
+                            @endphp
+                            <input type="{{ $horaSeleccionable ? 'time' : 'text' }}" step="1" class="form-control inputForm @error('Datos_Equipo.HORA_FINAL') is-invalid @enderror" id="horaFinalInputP" name="Datos_Equipo[HORA_FINAL]" value="{{ $horaPrueba }}">
+                            @if (!$horaSeleccionable)
+                                <button type="button" class="btn btn-link btn-sm p-0" onclick="const campo = document.getElementById('horaFinalInputP'); campo.value = ''; campo.type = 'time'; campo.focus();">Elegir una hora</button>
+                            @endif
+                            @error('Datos_Equipo.HORA_FINAL')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
@@ -427,8 +461,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Día de inicio de Prueba:</label>
-                            <input type="date" class="form-control  inputForm @error('DIA_INICIO') is-invalid @enderror" name="Datos_Equipo[DIA_INICIO]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Datos_Equipo.DIA_INICIO', $Datos_Equipo['DIA_INICIO'] ?? '')}}">
-                            @error('DIA_INICIO')
+                            <input type="date" class="form-control  inputForm @error('Datos_Equipo.DIA_INICIO') is-invalid @enderror" name="Datos_Equipo[DIA_INICIO]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Datos_Equipo.DIA_INICIO', $Datos_Equipo['DIA_INICIO'] ?? '')}}">
+                            @error('Datos_Equipo.DIA_INICIO')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -444,8 +478,8 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label" for="inputSuccess">Día de Finalización de Prueba:</label>
-                            <input type="date" class="form-control  inputForm @error('DIA_FINAL') is-invalid @enderror" name="Datos_Equipo[DIA_FINAL]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Datos_Equipo.DIA_FINAL', $Datos_Equipo['DIA_FINAL'] ?? '')}}">
-                            @error('DIA_FINAL')
+                            <input type="date" class="form-control  inputForm @error('Datos_Equipo.DIA_FINAL') is-invalid @enderror" name="Datos_Equipo[DIA_FINAL]"  placeholder="Ejemplo: DD/MM/AAAA" value="{{old('Datos_Equipo.DIA_FINAL', $Datos_Equipo['DIA_FINAL'] ?? '')}}">
+                            @error('Datos_Equipo.DIA_FINAL')
                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                             @enderror
                         </div>
@@ -933,6 +967,8 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script src="{{ asset('js/Reportes_Editor_Imagenes_05_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Editor_Imagenes_05_B_01.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {

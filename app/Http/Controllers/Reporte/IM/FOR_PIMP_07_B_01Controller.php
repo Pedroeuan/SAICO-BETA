@@ -44,6 +44,17 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PIMP_07_B_01Controller extends Controller
 {
+    /** Guarda el nombre del tecnico seleccionado aunque el campo oculto llegue vacio. */
+    protected function completarTecnicoFirma(array &$datos): void
+    {
+        $numero = (int) ($datos['numFirmas'] ?? 1);
+        $clave = 'Firmas_Reportes' . $numero;
+        $id = $datos[$clave]['ID_TECNICO'] ?? null;
+        if (!$id) return;
+        $nombre = Usuario::where('id', $id)->value('name');
+        if ($nombre !== null) $datos[$clave]['NOMBRE_TECNICO'] = $nombre;
+    }
+
     /** Devuelve las rutas posibles de un PDF guardado en BD sin asumir un solo prefijo. */
     private function getPdfCandidatePaths($rutaDb)
     {
@@ -630,7 +641,8 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Datos_Equipo.TEMPERATURA_INICIAL' => 'nullable|string',
             'Datos_Equipo.HORA_INICIO' => 'nullable|string',
             'Datos_Equipo.VELOCIDAD_CALENTAMIENTO' => 'nullable|string',
-            'Datos_Equipo.HORA_FINAL' => 'nullable|date_format:H:i',
+                // Es texto en Create/Edit: admite la hora reportada y "---" cuando no aplica.
+            'Datos_Equipo.HORA_FINAL' => 'nullable|string',
             'Datos_Equipo.TEMPERATURA_SOSTENIMIENTO' => 'nullable|string',
             'Datos_Equipo.DIA_INICIO' => 'nullable|date',
             'Datos_Equipo.TIEMPO_SOSTENIMIENTO' => 'nullable|string',
@@ -714,6 +726,8 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
+
+        $this->completarTecnicoFirma($validatedData);
 
         /*Detalles Generales y Datos del Equipo */
         $Reportes = new reporte();  // Modelo de la tabla donde guardas los datos
@@ -1123,6 +1137,8 @@ class FOR_PIMP_07_B_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NUMERO_FICHA' => 'nullable|string',
         ]);
+
+        $this->completarTecnicoFirma($validatedData);
 
         $detallesRequest = $request->input('Detalles_Generales', []);
         $validatedData['Detalles_Generales']['Codigo_Diseno'] = $validatedData['Detalles_Generales']['Codigo_Diseno']
@@ -1552,7 +1568,8 @@ class FOR_PIMP_07_B_01Controller extends Controller
                 $detalles = $getDetallesJunta($index);
 
                 $imagenesGuardadas[] = [
-                    'ruta' => $rutaNueva ?? $ruta,
+                    // Cada foto sin editar conserva su ruta; rutaNueva pertenece a la foto anterior.
+                    'ruta' => $ruta,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => $imagenHoja[$index] ?? 0,
                     'detalles_junta' => $detalles['detalles_junta'],
