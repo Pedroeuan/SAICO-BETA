@@ -33,7 +33,7 @@
     });
 
     // El 05_B_01 usa un editor propio; esta bandera evita que ambos módulos manipulen la misma imagen.
-    const usaEditorImagenes05B01 = document.getElementById('FOR-PIMP-05_B_01') !== null || document.getElementById('FOR-PIMP-02_B_03') !== null || document.getElementById('FOR-PIMP-02_B_04') !== null;
+    const usaEditorImagenes05B01 = document.getElementById('FOR-PIMP-05_B_01') !== null || document.getElementById('FOR-PIMP-02_B_03') !== null || document.getElementById('FOR-PIMP-02_B_04') !== null || document.getElementById('FOR-PIMP-07_B_01') !== null;
 
     /*Modal para las imagenes que ya estan subidos */
     document.addEventListener('change', function (e) {
@@ -685,7 +685,7 @@
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
                     // Conserva campos técnicos, de cálculo y valores ya capturados al usar autorrelleno.
-                    if (input.type === "hidden" || input.type === "file" || input.type === "number"
+                    if (input.type === "hidden" || input.type === "file" || input.type === "number" || input.type === "time"
                         || input.readOnly || input.tagName === "SELECT"
                         || input.getAttribute("inputmode") === "decimal") return;
 

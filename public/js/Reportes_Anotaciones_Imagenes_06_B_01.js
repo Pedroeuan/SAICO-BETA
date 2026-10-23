@@ -4,7 +4,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const formulario = document.getElementById('FOR-PIMP-06_B_01')
             || document.getElementById('FOR-PIMP-04_02')
-            || document.getElementById('FOR-PIMP-04_03') || document.getElementById('FOR-PIMP-03_B_01') || document.getElementById('FOR-PIMP-05_B_01') || document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-02_B_04');
+            || document.getElementById('FOR-PIMP-04_03') || document.getElementById('FOR-PIMP-03_B_01') || document.getElementById('FOR-PIMP-05_B_01') || document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-02_B_04') || document.getElementById('FOR-PIMP-07_B_01');
         const modal = document.getElementById('cropperModal');
         const imagenCropper = document.getElementById('cropperImage');
 
@@ -103,7 +103,7 @@
                 editandoImagenGuardada = false;
                 restaurarEditor();
         };
-        if (['FOR-PIMP-05_B_01', 'FOR-PIMP-02_B_03', 'FOR-PIMP-02_B_04'].includes(formulario.id)) {
+        if (['FOR-PIMP-05_B_01', 'FOR-PIMP-02_B_03', 'FOR-PIMP-02_B_04', 'FOR-PIMP-07_B_01'].includes(formulario.id)) {
             // Este formato utiliza Bootstrap 5 con eventos nativos en su editor propio.
             modal.addEventListener('hidden.bs.modal', alCerrarModal);
             if (formulario.id === 'FOR-PIMP-02_B_04' && window.jQuery) {

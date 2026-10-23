@@ -3,7 +3,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Este módulo se activa únicamente en 05_B_01 para no interferir con editores de otros formatos.
-        const formulario = document.getElementById('FOR-PIMP-05_B_01') || document.getElementById('FOR-PIMP-02_B_03') || document.querySelector('#FOR-PIMP-02_B_04[data-modo="edit"]');
+        const formulario = document.getElementById('FOR-PIMP-05_B_01') || document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-07_B_01') || document.querySelector('#FOR-PIMP-02_B_04[data-modo="edit"]');
         const modalElemento = document.getElementById('cropperModal');
         const imagenRecorte = document.getElementById('cropperImage');
         const botonCancelar = document.getElementById('cancelBtn');

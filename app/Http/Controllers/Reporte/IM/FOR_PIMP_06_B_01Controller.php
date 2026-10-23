@@ -797,8 +797,8 @@ class FOR_PIMP_06_B_01Controller extends Controller
         $numFirmas = $Firmas_Reportes['numFirmas'] ?? 1;
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
-        $qrPdf = ! empty($Datos_Equipo['QR_PDF']) ? public_path($Datos_Equipo['QR_PDF']) : null;
-        $qrPdf = ($qrPdf && File::exists($qrPdf)) ? $qrPdf : null;
+        // Lee el SVG desde su archivo real sin depender del enlace public/storage.
+        $qrPdf = ! empty($Datos_Equipo['QR_PDF']) ? $this->resolvePdfPath($Datos_Equipo['QR_PDF']) : null;
         $Fotos = [];
         $Disparos = [];
         // Obtener las fotos con su comentario
