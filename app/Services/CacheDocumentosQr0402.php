@@ -10,7 +10,15 @@ class CacheDocumentosQr0402
     public function firma(array $parametros, array $documentos): string
     {
         $archivos = [];
-        foreach ($documentos as $ruta) $archivos[$ruta] = is_file($ruta) ? hash_file('sha256', $ruta) : null;
+        foreach ($documentos as $ruta) {
+            if (is_file($ruta)) {
+                // Incluir el hash del contenido Y la fecha de modificación
+                // para que al sobrescribir un archivo (mismo path) se invalide el caché
+                $archivos[$ruta] = hash_file('sha256', $ruta) . '|' . filemtime($ruta);
+            } else {
+                $archivos[$ruta] = null;
+            }
+        }
         return hash('sha256', serialize([1, $parametros, $archivos]));
     }
 
