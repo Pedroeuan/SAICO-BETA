@@ -685,7 +685,7 @@ class FOR_PINS_16_01Controller extends Controller
         $firmas = json_decode($firmasReporte->Firmas, true) ?: [];
         $fotos = $this->obtenerFotosParaPdf($fotosReporte);
         $qrPdf = !empty($datosEquipo['QR_PDF']) ? PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($datosEquipo['QR_PDF']) : null;
-
+        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
         return [
             'Detalles_Generales' => $detallesGenerales,
             'Datos_Equipo' => $datosEquipo,
