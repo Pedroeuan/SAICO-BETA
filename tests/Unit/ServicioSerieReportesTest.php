@@ -12,6 +12,88 @@ use Tests\TestCase;
 
 class ServicioSerieReportesTest extends TestCase
 {
+    public function test_0204_solo_vincula_y_numera_sin_cambiar_los_datos_antes_despues(): void
+    {
+        $this->crearReportes(901, 902, 903);
+        $antes = json_encode(['DUREZA_ETAPA' => 'ANTES', 'ANTES_A' => 167]);
+        $despues = json_encode(['DUREZA_ETAPA' => 'DESPUES', 'ANTES_A' => 167, 'DESPUES_A' => 149]);
+        reporte::whereKey(901)->update(['Datos_Equipo' => $antes]);
+        reporte::whereKey(902)->update(['Datos_Equipo' => $despues]);
+        $series = app(ServicioSerieReportes::class);
+        // Un reporte anterior sin serie puede seguir usando el botón de siempre.
+        $vinculada = $series->vincularConsecutivo0204(901, 902);
+        $this->assertSame(ServicioSerieReportes::FORMATO_02_B_04, $vinculada->formato);
+        $this->assertSame(2, $vinculada->numero_orden);
+        $series->registrarPaginas(901, 2);
+        $this->assertSame(['pagina_inicial' => 3, 'pagina_final' => 5, 'total_estimado' => 5], $series->registrarPaginas(902, 3));
+        // Copiar desde un origen previo no bloquea ni transforma su lógica Antes/Después.
+        $tercera = $series->vincularConsecutivo0204(901, 903);
+        $this->assertSame(3, $tercera->numero_orden);
+        $this->assertSame(3, $tercera->cantidad_planificada);
+        $this->assertSame($antes, reporte::findOrFail(901)->Datos_Equipo);
+        $this->assertSame($despues, reporte::findOrFail(902)->Datos_Equipo);
+        $this->assertSame('dato conservado', json_decode(reporte::findOrFail(901)->Detalles_Generales, true)['OTRO_DATO']);
+    }
+
+    public function test_0203_numera_tres_piezas_y_actualiza_el_total_si_una_ocupa_dos_hojas(): void
+    {
+        $this->crearReportes(801, 802, 803);
+        $series = app(ServicioSerieReportes::class);
+        $series->iniciar(801, 3, ServicioSerieReportes::FORMATO_02_B_03);
+        $this->assertSame(['pagina_inicial' => 1, 'pagina_final' => 1, 'total_estimado' => 3], $series->registrarPaginas(801, 1));
+        $series->registrarConsecutivo(801, 802);
+        $series->registrarPaginas(802, 2);
+        $series->registrarConsecutivo(802, 803);
+        $this->assertSame(['pagina_inicial' => 4, 'pagina_final' => 4, 'total_estimado' => 4], $series->registrarPaginas(803, 1));
+        $this->assertSame(ServicioSerieReportes::FORMATO_02_B_03, $series->obtener(803)->formato);
+        $this->assertSame(4, $series->registrarPaginas(801, 1)['total_estimado']);
+        $this->assertFalse($series->puedeCrearSiguiente(803));
+    }
+
+    public function test_0501_continua_hojas_y_no_copia_resultados_al_siguiente(): void
+    {
+        $this->crearReportes(701, 702);
+        $series = app(ServicioSerieReportes::class);
+        $series->iniciar(701, 2, ServicioSerieReportes::FORMATO_05_B_01);
+        $this->assertSame(['pagina_inicial' => 1, 'pagina_final' => 2, 'total_estimado' => 4], $series->registrarPaginas(701, 2));
+        $series->registrarConsecutivo(701, 702);
+        $this->assertSame(['pagina_inicial' => 3, 'pagina_final' => 5, 'total_estimado' => 5], $series->registrarPaginas(702, 3));
+        $this->assertSame(ServicioSerieReportes::FORMATO_05_B_01, $series->obtener(702)->formato);
+        $this->assertSame(5, $series->registrarPaginas(701, 2)['total_estimado']);
+        $this->assertFalse($series->puedeCrearSiguiente(702));
+        $norma = ['Seleccion_Quimica' => ['1:base'], 'Tabla' => [['Elemento' => 'C', 'Promedio' => '0.1234']], 'Analisis_PDF' => [['archivo' => 'anterior.pdf']]];
+        $juntas = app(\App\Services\ServicioJuntasReporteIM::class)->armar([], $norma, null);
+        $metodo = new \ReflectionMethod(\App\Http\Controllers\Reporte\ReporteController::class, 'clonarJuntasParaNuevoReporte');
+        $metodo->setAccessible(true);
+        $nuevo = json_decode($metodo->invoke(new \App\Http\Controllers\Reporte\ReporteController, $juntas, []), true);
+        $this->assertSame(['1:base'], $nuevo['Norma_IM']['Seleccion_Quimica']);
+        $this->assertSame('', $nuevo['Norma_IM']['Tabla'][0]['Promedio']);
+        $this->assertSame([], $nuevo['Norma_IM']['Analisis_PDF']);
+    }
+
+    public function test_0301_numera_pdf_con_hojas_reales_y_conserva_datos_previos(): void
+    {
+        $this->crearReportes(601, 602, 603);
+        $series = app(ServicioSerieReportes::class);
+        $series->iniciar(601, 3, ServicioSerieReportes::FORMATO_03_B_01);
+        $this->assertSame(3, $series->registrarPaginas(601, 1)['total_estimado']);
+        $series->registrarConsecutivo(601, 602);
+        $series->registrarPaginas(602, 2);
+        $series->registrarConsecutivo(602, 603);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadHTML('<html><body><table><tr><th id="numero-pagina-serie" style="width:100px;height:25px">&nbsp;</th></tr></table><p>PIEZA TRES</p></body></html>');
+        $controlador = app(\App\Http\Controllers\Reporte\IM\FOR_PIMP_03_B_01Controller::class);
+        $metodo = new \ReflectionMethod($controlador, 'numerarPdfSerie');
+        $metodo->setAccessible(true);
+        $metodo->invoke($controlador, $pdf, 603);
+        $texto = (new \Smalot\PdfParser\Parser())->parseContent($pdf->output())->getText();
+        $this->assertStringContainsString('4 DE 4', $texto);
+        $this->assertStringContainsString('4 Of 4', $texto);
+        $this->assertStringContainsString('PIEZA TRES', $texto);
+        $this->assertSame('dato conservado', json_decode(reporte::findOrFail(603)->Detalles_Generales, true)['OTRO_DATO']);
+        $this->assertSame(ServicioSerieReportes::FORMATO_03_B_01, $series->obtener(603)->formato);
+    }
+
     public function test_serie_0403_numera_tres_piezas_y_recalcula_al_agregar_fotos(): void
     {
         $this->crearReportes(501, 502, 503);

@@ -3,7 +3,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Este módulo se activa únicamente en 05_B_01 para no interferir con editores de otros formatos.
-        const formulario = document.getElementById('FOR-PIMP-05_B_01');
+        const formulario = document.getElementById('FOR-PIMP-05_B_01') || document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-07_B_01') || document.querySelector('#FOR-PIMP-02_B_04[data-modo="edit"]');
         const modalElemento = document.getElementById('cropperModal');
         const imagenRecorte = document.getElementById('cropperImage');
         const botonCancelar = document.getElementById('cancelBtn');
@@ -22,6 +22,21 @@
         let inputActivo = null;
         let imagenOriginal = '';
         let modalBootstrap = null;
+        let estadoAnterior = null;
+
+        // El cierre sin guardar devuelve la tarjeta al estado previo a abrir el editor.
+        function restaurarSeleccionAnterior() {
+            if (!estadoAnterior || !inputActivo) return;
+            const campos = camposImagen(inputActivo);
+            if (campos.preview) campos.preview.replaceChildren(...estadoAnterior.nodos);
+            if (campos.base64) campos.base64.value = estadoAnterior.base64;
+            inputActivo.value = '';
+            estadoAnterior = null;
+        }
+
+        modalElemento.addEventListener('saico:imagen-confirmada', function () {
+            estadoAnterior = null;
+        });
 
         /** Devuelve el siguiente indice libre sin asumir que las fotos existentes son consecutivas. */
         function siguienteIndiceImagen() {
@@ -209,6 +224,11 @@
             const lector = new FileReader();
             lector.addEventListener('load', function () {
                 inputActivo = input;
+                const campos = camposImagen(input);
+                estadoAnterior = {
+                    nodos: campos.preview ? Array.from(campos.preview.childNodes) : [],
+                    base64: campos.base64 ? campos.base64.value : ''
+                };
                 imagenOriginal = String(lector.result || '');
                 actualizarImagen(imagenOriginal, 'Vista previa');
                 iniciarRecortador(imagenOriginal);
@@ -232,6 +252,7 @@
             if (!canvas) return;
 
             actualizarImagen(canvas.toDataURL('image/jpeg', 0.92), 'Recortada');
+            estadoAnterior = null;
             ocultarModal();
         });
 
@@ -239,17 +260,13 @@
         botonGuardarOriginal?.addEventListener('click', function () {
             if (!inputActivo || !imagenOriginal) return;
             actualizarImagen(imagenOriginal, 'Sin recortar');
+            estadoAnterior = null;
             ocultarModal();
         });
 
-        /** Cancelar limpia archivo, vista previa y base64 para no enviar una selección descartada. */
+        /** Cancelar conserva la foto anterior y descarta solamente la edicion pendiente. */
         function cancelarSeleccion() {
-            if (inputActivo) {
-                const campos = camposImagen(inputActivo);
-                inputActivo.value = '';
-                if (campos.preview) campos.preview.replaceChildren();
-                if (campos.base64) campos.base64.value = '';
-            }
+            restaurarSeleccionAnterior();
             ocultarModal();
         }
 
@@ -258,6 +275,8 @@
 
         // Al cerrar se destruye Cropper y después se habilita el generador de nuevas tarjetas.
         modalElemento.addEventListener('hidden.bs.modal', destruirRecortador);
-        inicializarSelectorImagenes();
+        modalElemento.addEventListener('hidden.bs.modal', restaurarSeleccionAnterior);
+        // El 02_03 conserva su generador de tarjetas; solo reutiliza la apertura y guardado del editor.
+        if (formulario.id === 'FOR-PIMP-05_B_01') inicializarSelectorImagenes();
     });
 }(window, document));

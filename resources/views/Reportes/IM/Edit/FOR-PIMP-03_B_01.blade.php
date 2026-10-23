@@ -151,8 +151,10 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-03_B_01" action="{{route('Reportes_FOR_PIMP_03_B_01.update', $id)}}" method="post" enctype="multipart/form-data">
+            <form id="FOR-PIMP-03_B_01" data-modo="edit" action="{{route('Reportes_FOR_PIMP_03_B_01.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
+                {{-- La serie agrupa piezas distintas y comparte la numeracion de sus hojas. --}}
+                @include('Reportes.IM.partials.serie-reportes-0402', ['serieFormato' => '03_01'])
                 <div class="row">
                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                 <div style="margin-bottom: 2px;"></div>
@@ -722,6 +724,7 @@
                                 @foreach($Fotos_Comentarios as $index => $foto)
                                     <div class="col-sm-6"
                                         id="image-container-{{ $index }}"
+                                        data-foto-sin-imagen="{{ !empty($foto['sin_fotografia']) ? 1 : 0 }}"
                                         data-foto-pagina="{{ $foto['pagina'] ?? (intdiv($index, 4) + 1) }}"
                                         data-foto-posicion="{{ $foto['posicion'] ?? (!empty($foto['una_hoja']) ? 'pagina_completa' : ['arriba_izquierda', 'arriba_derecha', 'abajo_izquierda', 'abajo_derecha'][$index % 4]) }}"
                                         data-foto-hoja-completa="{{ !empty($foto['una_hoja']) ? 1 : 0 }}"
@@ -1160,4 +1163,7 @@ $(document).ready(function() {
         }
     });
 </script>
+{{-- Las marcas y la equis se guardan en el archivo de imagen usado por el PDF. --}}
+<script src="{{ asset('js/fotos-sin-imagen-0402.js') }}?v={{ filemtime(public_path('js/fotos-sin-imagen-0402.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 @endsection

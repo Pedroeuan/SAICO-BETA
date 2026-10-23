@@ -247,6 +247,7 @@
         <div class="card-body w-100">
             <form id="FOR-PIMP-02_B_04" data-dureza-etapa="ANTES" action="{{route('Reportes_FOR_PIMP_02_B_04.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
+                @include('Reportes.IM.partials.serie-reportes-0402', ['serieFormato' => '02_04', 'cantidadSeriePredeterminada' => 2, 'serieInstrucciones' => 'El consecutivo conserva el funcionamiento de Antes y Despues del relevado. Este conjunto solo organiza la numeracion de sus hojas.'])
                 <div class="row">
                     <button id="preFormBtn" type="button" class="btn btn-warning my-2">Rellenar Campos Vacios "---"</button>
                     <div style="margin-bottom: 2px;"></div>
@@ -1965,6 +1966,8 @@
     });
 
 </script>
+{{-- Reutiliza la herramienta de flechas; guarda las marcas en la fotografia del reporte. --}}
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 @endsection
 
 

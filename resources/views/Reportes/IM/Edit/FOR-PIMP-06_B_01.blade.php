@@ -391,10 +391,11 @@
                     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded my-2">
                         NORMA Y RESULTADOS DEL ANALISIS QUIMICO
                     </div>
-                    <div class="col-sm-6">
+                    @include('Reportes.IM.partials.referencias-quimicas-0501')
+                    <div class="col-sm-6 d-none">
                         <div class="form-group">
                             <label for="normaIMNombre">Norma/Especificacion:</label>
-                            <select class="form-control" id="normaIMNombre">
+                            <select class="form-control" id="normaIMNombre" hidden>
                                 <option value="">Seleccione una norma</option>
                                 @foreach($nombresNormasIM as $nombreNorma)
                                     <option value="{{ $nombreNorma }}">{{ $nombreNorma }}</option>
@@ -402,7 +403,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 d-none">
                         <div class="form-group">
                             <label for="normaIMRegistro">Tabla/Variable/Subtitulo:</label>
                             <select class="form-control @error('Norma_IM.idnormas_im') is-invalid @enderror" id="normaIMRegistro" name="Norma_IM[idnormas_im]" disabled>
