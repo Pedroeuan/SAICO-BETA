@@ -1956,7 +1956,7 @@ class FOR_PINS_13_01Controller extends Controller
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
         $qrPdf = null;
-
+        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
         if (!empty($Datos_Equipo['QR_PDF'])) {
             $qrPdf = public_path(
                 str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
