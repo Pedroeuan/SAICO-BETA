@@ -1851,7 +1851,7 @@ class FOR_PINS_05_02Controller extends Controller
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
         $qrPdf = null;
-
+        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
             $fotos = json_decode($Fotos_Reportes->Fotos_Reportes, true);
