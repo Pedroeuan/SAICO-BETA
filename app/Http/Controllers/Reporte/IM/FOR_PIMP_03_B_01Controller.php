@@ -724,6 +724,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999',
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
@@ -1014,6 +1015,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
         
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
+        app(\App\Services\ServicioSerieReportes::class)->iniciar((int) $idReportes, (int) $request->input('Serie_Reportes.cantidad_planificada', 1), \App\Services\ServicioSerieReportes::FORMATO_03_B_01);
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -1146,7 +1148,8 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
             $imagenesGuardadas[] = [
                 'ruta' => $rutaPublicaFoto,
-                'comentario' => $request->comments[$index] ?? null,
+                'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
+                    'comentario' => $request->comments[$index] ?? null,
                 'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                 'una_hoja' => $distribucionFoto['una_hoja'],
                 'pagina' => $distribucionFoto['pagina'],
@@ -1411,6 +1414,17 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
+        $request->validate(['Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999', 'Serie_Reportes.nueva_cantidad' => 'nullable|integer|min:1|max:999']);
+        $series = app(\App\Services\ServicioSerieReportes::class);
+        $serie = $series->obtener((int) $id);
+        if (!$serie) {
+            $series->iniciar((int) $id, (int) $request->input('Serie_Reportes.cantidad_planificada', 1), \App\Services\ServicioSerieReportes::FORMATO_03_B_01);
+        } elseif ($request->filled('Serie_Reportes.nueva_cantidad')) {
+            $cantidad = (int) $request->input('Serie_Reportes.nueva_cantidad');
+            if ($cantidad <= $serie->cantidad_planificada) throw \Illuminate\Validation\ValidationException::withMessages(['Serie_Reportes.nueva_cantidad' => 'El nuevo total debe ser mayor que el actual.']);
+            $series->actualizarCantidad((int) $id, $cantidad);
+        }
+        $Reporte->refresh();
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
@@ -1856,6 +1870,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 $distribucionFoto = $getDistribucionFoto($index);
                 $imagenesGuardadas[] = [
                     'ruta' => null,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'es_cuadro_texto' => 1,
                     'una_hoja' => $distribucionFoto['una_hoja'],
@@ -1888,6 +1903,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
                     'pagina' => $getDistribucionFoto($index)['pagina'],
@@ -1913,6 +1929,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
                     'pagina' => $getDistribucionFoto($index)['pagina'],
@@ -1929,6 +1946,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
                 $imagenesGuardadas[] = [
                     'ruta' => $ruta,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
                     'pagina' => $getDistribucionFoto($index)['pagina'],
@@ -1954,6 +1972,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
                 $distribucionFoto = $getDistribucionFoto($index);
                 $imagenesGuardadas[] = [
                     'ruta' => null,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'es_cuadro_texto' => 1,
                     'una_hoja' => $distribucionFoto['una_hoja'],
@@ -1979,6 +1998,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
 
                 $imagenesGuardadas[] = [
                     'ruta' => $rutaNueva ?? $ruta,
+                    'sin_fotografia' => $request->boolean("foto_sin_imagen.$index") ? 1 : 0,
                     'comentario' => $comments[$index] ?? '',
                     'una_hoja' => $getDistribucionFoto($index)['una_hoja'],
                     'pagina' => $getDistribucionFoto($index)['pagina'],
@@ -2130,10 +2150,45 @@ class FOR_PIMP_03_B_01Controller extends Controller
         ];
 
         // El reporte y sus fotografías pertenecen a una sola hoja.
+        $data['numeracionSerieExterna'] = true;
         $pdf = PDF::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_B_01_PDF', $data)->setPaper('letter', 'portrait');
+        $this->numerarPdfSerie($pdf, (int) $id);
 
         return response($pdf->output(), 200)
             ->header('Content-Type', 'application/pdf');
+    }
+
+    /** Numera las hojas reales sin volver a renderizar fotos ni modificar su distribución. */
+    protected function numerarPdfSerie($pdf, int $idReporte): void
+    {
+        $celda = null;
+        $dompdf = $pdf->getDomPDF();
+        // La posición se obtiene de la propia celda; no depende de coordenadas fijas del encabezado.
+        $dompdf->setCallbacks([['event' => 'end_frame', 'f' => function ($frame) use (&$celda) {
+            $nodo = $frame->get_node();
+            if ($nodo instanceof \DOMElement && $nodo->getAttribute('id') === 'numero-pagina-serie') {
+                $celda = $frame->get_border_box();
+            }
+        }]]);
+        $pdf->render();
+        $canvas = $dompdf->getCanvas();
+        $paginacion = app(\App\Services\ServicioSerieReportes::class)
+            ->registrarPaginas($idReporte, $canvas->get_page_count());
+        if (!$celda) {
+            throw new \RuntimeException('No se encontró la celda de numeración del reporte 03_01.');
+        }
+        $canvas->page_script(function ($pagina, $total, $lienzo, $fuentes) use ($celda, $paginacion) {
+            $numero = $paginacion['pagina_inicial'] + $pagina - 1;
+            $fuente = $fuentes->getFont('Helvetica', 'bold');
+            $tamano = 6;
+            $altoLinea = 7;
+            $y = $celda['y'] + ($celda['h'] - 2 * $altoLinea) / 2;
+            foreach (['DE', 'Of'] as $indice => $separador) {
+                $texto = $numero . ' ' . $separador . ' ' . $paginacion['total_estimado'];
+                $ancho = $fuentes->getTextWidth($texto, $fuente, $tamano);
+                $lienzo->text($celda['x'] + ($celda['w'] - $ancho) / 2, $y + $indice * $altoLinea, $texto, $fuente, $tamano);
+            }
+        });
     }
 
     /**

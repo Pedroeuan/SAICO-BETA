@@ -635,11 +635,22 @@ class FOR_PIMP_02_B_03Controller extends Controller
 
     }
 
+    /** Guarda el nombre real del técnico aunque el navegador no haya llenado el campo derivado. */
+    protected function completarTecnicoFirma(array &$datos, int $numero): void
+    {
+        $clave = 'Firmas_Reportes' . max(1, min(4, $numero));
+        $id = $datos[$clave]['ID_TECNICO'] ?? null;
+        if (!$id) return;
+        $tecnico = \App\Models\Admin\Usuario::find($id);
+        if ($tecnico) $datos[$clave]['NOMBRE_TECNICO'] = $tecnico->name;
+    }
+
     public function FOR_PIMP_02_B_03_store(Request $request)
     {
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999',
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
@@ -878,6 +889,7 @@ class FOR_PIMP_02_B_03Controller extends Controller
         
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
+        app(\App\Services\ServicioSerieReportes::class)->iniciar((int) $idReportes, (int) $request->input('Serie_Reportes.cantidad_planificada', 1), \App\Services\ServicioSerieReportes::FORMATO_02_B_03);
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -972,7 +984,8 @@ class FOR_PIMP_02_B_03Controller extends Controller
 
         /*Firmas */
         // Guardar las firmas
-        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
+        $numFirmas = $request->input('numFirmas');
+        $this->completarTecnicoFirma($validatedData, (int) ($numFirmas ?: 4)); // Obtener el número de firmas seleccionadas
         
         if ($numFirmas == 1) {
             $validatedData['Firmas_Reportes1']['numFirmas'] = $numFirmas;
@@ -1267,7 +1280,19 @@ class FOR_PIMP_02_B_03Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
+        $request->validate(['Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999', 'Serie_Reportes.nueva_cantidad' => 'nullable|integer|min:1|max:999']);
+        $series = app(\App\Services\ServicioSerieReportes::class);
+        $serie = $series->obtener((int) $id);
+        if (!$serie) {
+            $series->iniciar((int) $id, (int) $request->input('Serie_Reportes.cantidad_planificada', 1), \App\Services\ServicioSerieReportes::FORMATO_02_B_03);
+        } elseif ($request->filled('Serie_Reportes.nueva_cantidad')) {
+            $cantidad = (int) $request->input('Serie_Reportes.nueva_cantidad');
+            if ($cantidad <= $serie->cantidad_planificada) throw \Illuminate\Validation\ValidationException::withMessages(['Serie_Reportes.nueva_cantidad' => 'El nuevo total debe ser mayor que el actual.']);
+            $series->actualizarCantidad((int) $id, $cantidad);
+        }
+        $Reporte->refresh();
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
+        $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $detallesActuales['SERIE_REPORTES'];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
@@ -1549,7 +1574,8 @@ class FOR_PIMP_02_B_03Controller extends Controller
 
         /*Firmas */
         // Guardar las firmas
-        $numFirmas = $request->input('numFirmas'); // Obtener el número de firmas seleccionadas
+        $numFirmas = $request->input('numFirmas');
+        $this->completarTecnicoFirma($validatedData, (int) ($numFirmas ?: 4)); // Obtener el número de firmas seleccionadas
         
         if ($numFirmas == 1) {
             $validatedData['Firmas_Reportes1']['numFirmas'] = $numFirmas;
@@ -1670,7 +1696,8 @@ class FOR_PIMP_02_B_03Controller extends Controller
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
+            // La imagen anotada en el editor prevalece sobre el archivo original seleccionado.
+            if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
 
@@ -1820,6 +1847,13 @@ class FOR_PIMP_02_B_03Controller extends Controller
 
         $Firmas_Reportes = json_decode($Firmas_Reportes->Firmas, true);
         $numFirmas = $Firmas_Reportes['numFirmas'];
+        // Compatibilidad con reportes que guardaron el ID pero dejaron vacío el nombre.
+        if (empty($Firmas_Reportes['NOMBRE_TECNICO']) && !empty($Firmas_Reportes['ID_TECNICO'])) {
+            $claveFirma = 'Firmas_Reportes' . $numFirmas;
+            $firmaHistorica = [$claveFirma => $Firmas_Reportes];
+            $this->completarTecnicoFirma($firmaHistorica, (int) $numFirmas);
+            $Firmas_Reportes = $firmaHistorica[$claveFirma];
+        }
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
         //$qrPdf = !empty($Datos_Equipo['QR_PDF']) ? public_path(str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])) : null;
@@ -1898,6 +1932,10 @@ class FOR_PIMP_02_B_03Controller extends Controller
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
         $totalPageCount = $pageCount1;
+        // El PDF del 02_03 integra la fotografia en su plantilla principal.
+        $paginacion = app(\App\Services\ServicioSerieReportes::class)->registrarPaginas((int) $id, $totalPageCount);
+        $paginaInicial = $paginacion['pagina_inicial'];
+        $totalSerie = $paginacion['total_estimado'];
 
         // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
@@ -1907,7 +1945,8 @@ class FOR_PIMP_02_B_03Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(125.5, -266);
-            $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
+            $paginaSerie = $paginaInicial + $i - 1;
+            $combinedPdf->Cell(0, 10, "$paginaSerie de $totalSerie", 0, 0, 'C');
         }
 
         /* Añadir páginas del segundo PDF

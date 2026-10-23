@@ -36,7 +36,7 @@
 
         footer {
             position: fixed;
-            bottom: -30px;
+            bottom: -90px;
             left: 0;
             right: 0;
             height: auto;
@@ -170,6 +170,10 @@
             border-bottom: .5px solid black;
             height: 23px;
         }
+        /* Misma posicion de observaciones y firmas que en el anexo fotografico. */
+        footer table.firmas-im {
+            top: 0;
+        }
         .observacionesBox {
             width: 100%;
             border: 1px solid black;
@@ -177,7 +181,7 @@
             table-layout: fixed;
             margin-bottom: 4px;
             position: relative;
-            top: -35px;
+            top: 5mm;
         }
 
         .observacionesBox td {

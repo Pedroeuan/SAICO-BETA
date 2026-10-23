@@ -355,6 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
         warningBox.classList.toggle('d-none', warnings.length === 0);
         preview.classList.remove('d-none');
         applyAverages(averages);
+        form.dispatchEvent(new CustomEvent('saico:xrf-analizado', {detail: analyses}));
         renderShotCrops(payload.recortes_disparos || []);
     }
 

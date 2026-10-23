@@ -16,9 +16,9 @@
             </details>
         @else
             <label for="cantidad-formatos-0402">Cantidad total de formatos de esta serie</label>
-            <input id="cantidad-formatos-0402" class="form-control" style="max-width:200px" type="number" name="Serie_Reportes[cantidad_planificada]" value="{{ old('Serie_Reportes.cantidad_planificada', 1) }}" min="1" max="999" required>
+            <input id="cantidad-formatos-0402" class="form-control" style="max-width:200px" type="number" name="Serie_Reportes[cantidad_planificada]" value="{{ old('Serie_Reportes.cantidad_planificada', $cantidadSeriePredeterminada ?? 1) }}" min="1" max="999" required>
         @endif
-        <small class="d-block text-muted mt-2">Usa «Siguiente reporte → Consecutivo» para crear cada formato. Las mediciones, análisis y fotografías se capturan nuevamente.</small>
+        <small class="d-block text-muted mt-2">@if(isset($serieInstrucciones)){{ $serieInstrucciones }}@else Usa «Siguiente reporte → Consecutivo» para crear cada formato. Las mediciones, análisis y fotografías se capturan nuevamente.@endif</small>
         @error('Serie_Reportes.cantidad_planificada')<div class="text-danger">{{ $message }}</div>@enderror
         @error('Serie_Reportes.nueva_cantidad')<div class="text-danger">{{ $message }}</div>@enderror
     </div>

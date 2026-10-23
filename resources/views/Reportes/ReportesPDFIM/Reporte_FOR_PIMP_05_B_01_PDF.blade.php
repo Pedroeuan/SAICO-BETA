@@ -259,9 +259,9 @@
             border: 1px solid black;
             border-collapse: collapse;
             table-layout: fixed;
+            margin-top: 12px;
             margin-bottom: 4px;
-            position: relative;
-            top: -30px;
+            page-break-inside: avoid;
         }
 
         .observacionesBox td {
@@ -278,7 +278,7 @@
         }
 
         .observacionesLineas {
-            height: 38px;
+            min-height: 38px;
             background-image: linear-gradient(to bottom, transparent 11px, black 11px, black 12px, transparent 12px);
             background-size: 100% 12px;
             background-repeat: repeat-y;
@@ -469,14 +469,7 @@
     </table>
 </header>
 <footer>
-        <table class="observacionesBox">
-            <tr>
-                <td>
-                    <div class="observacionesTitulo">OBSERVACIONES O CONCLUSIONES:<br>Remarks:</div>
-                    <div class="observacionesLineas">{{ $Datos_Equipo['Observaciones'] ?? '' }}</div>
-                </td>
-            </tr>
-        </table>
+
 
         <div class="firmasArriba">
             @include('Reportes.partials.firmas_im_pdf')
@@ -915,7 +908,8 @@
                             <tr>
                                 <th>{{ $filaNorma['Elemento'] ?? '' }}</th>
                                 <td>{{ $filaNorma['Promedio'] ?? '' }}</td>
-                                <td>{{ $filaNorma['Composicion'] ?? '' }}</td>
+                                {{-- Los límites conservan el color y orden de las normas químicas seleccionadas. --}}
+                                <td>@include('Reportes.IM.partials.limites-quimicos-0403-pdf')</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -928,7 +922,14 @@
                             <div class="etiquetaReferenciaContenido">NORMA DE REFERENCIA O ESPECIFICACIÓN APROXIMADA DEL MATERIAL:<br>Reference standard or approximate material specification:</div>
                         </th>
                         <td class="valorReferencia">
-                            <div class="valorReferenciaCaja">{{ $NormaIM['Nombre_Espe'] ?? ($NormaIM['Variable'] ?? '') }}</div>
+                            <div class="valorReferenciaCaja">
+                                @forelse(($NormaIM['Referencias_Quimicas'] ?? []) as $indiceReferencia => $referencia)
+                                    @php($coloresQuimicos = ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'])
+                                    <div style="color:{{ $coloresQuimicos[$indiceReferencia % count($coloresQuimicos)] }}">{{ $referencia['norma'] }}</div>
+                                @empty
+                                    {{ $NormaIM['Nombre_Espe'] ?? ($NormaIM['Variable'] ?? '') }}
+                                @endforelse
+                            </div>
                         </td>
                     </tr>
                     <tr><td style="height:2px;"></td></tr>
@@ -955,5 +956,14 @@
     </tbody>
 </table>
 
+{{-- Las observaciones siguen a los resultados en el flujo: crecen sin pegarse a la captura. --}}
+        <table class="observacionesBox">
+            <tr>
+                <td>
+                    <div class="observacionesTitulo">OBSERVACIONES O CONCLUSIONES:<br>Remarks:</div>
+                    <div class="observacionesLineas">{{ $Datos_Equipo['Observaciones'] ?? '' }}</div>
+                </td>
+            </tr>
+        </table>
 </body>
 </html>

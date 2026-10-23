@@ -21,7 +21,7 @@ class ProcesamientoPdfController extends Controller
         $descargar = $request->boolean('download');
         // Impide mostrar un PDF antiguo del navegador. La copia vigente del
         // servidor sí se reutiliza; estas cabeceras no fuerzan otra generación.
-        $cabeceras = $formato === '04_02' ? [
+        $cabeceras = in_array($formato, ['04_02', '05_B_01'], true) ? [
             'Cache-Control' => 'private, no-store, no-cache, must-revalidate, max-age=0',
             'Pragma' => 'no-cache',
             'Expires' => '0',
@@ -41,7 +41,7 @@ class ProcesamientoPdfController extends Controller
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => ($descargar ? 'attachment' : 'inline') . '; filename="reporte.pdf"',
             ]));
-            return $formato === '04_02' ? $respuesta->setPrivate() : $respuesta;
+            return in_array($formato, ['04_02', '05_B_01'], true) ? $respuesta->setPrivate() : $respuesta;
         }
 
         $trabajo = $pdfGenerado->programar(
@@ -58,7 +58,7 @@ class ProcesamientoPdfController extends Controller
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'inline; filename="reporte.pdf"',
             ]));
-            return $formato === '04_02' ? $respuesta->setPrivate() : $respuesta;
+            return in_array($formato, ['04_02', '05_B_01'], true) ? $respuesta->setPrivate() : $respuesta;
         }
 
         abort_unless($trabajo, 409);
