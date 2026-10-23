@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Algunos formatos deben ocultar los checks hasta conocer los disparos que realmente contiene el PDF.
     const detectColumnsOnFileChange = @json($xrfDetectColumnsOnFileChange ?? false);
     let processed = false;
+    let referenciasQuimicas0501 = null;
 
     /*
      * Borrador local del FOR-PIMP-05_B_01.
@@ -240,10 +241,10 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', actualizarSumas0402, true);
     function renderNorm(norm, averages) {
         ultimaNorma0402 = norm;
-        if (form.id === 'FOR-PIMP-04_02' && Array.isArray(window.referenciasQuimicas0402)) {
+        if ((form.id === 'FOR-PIMP-04_02' && Array.isArray(window.referenciasQuimicas0402)) || referenciasQuimicas0501 !== null) {
             resultsBody.querySelectorAll('input[data-elemento]').forEach(input => promediosReferencias0402.set(input.dataset.elemento.trim().toLowerCase(), { valor: input.value, origen: input.dataset.autoXrf === '1' ? 'calculado' : 'manual' }));
             const filas = new Map();
-            window.referenciasQuimicas0402.forEach((referencia, indice) => {
+            (referenciasQuimicas0501 ?? window.referenciasQuimicas0402).forEach((referencia, indice) => {
                 (referencia.composicion_seleccionada?.Tabla || []).forEach(fila => {
                     const clave = (fila.Elemento || '').trim().toLowerCase();
                     if (!clave) return;
@@ -275,8 +276,8 @@ document.addEventListener('DOMContentLoaded', function () {
             average.appendChild(input);
             setRowState(input, row.Origen || 'manual');
             const composition = document.createElement('td');
-            if (form.id === 'FOR-PIMP-04_02' && row.Referencias?.length) {
-                const colores = ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
+            if (row.Referencias?.length && ['FOR-PIMP-04_02', 'FOR-PIMP-05_B_01'].includes(form.id)) {
+                const colores = form.id === 'FOR-PIMP-05_B_01' ? ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'] : ['#c62828', '#1565c0', '#111111', '#6a1b9a', '#2e7d32', '#ad5700'];
                 row.Referencias.forEach((referencia, indice) => {
                     if (indice) composition.append(document.createTextNode(' / '));
                     const valor = document.createElement('span'); valor.style.color = colores[referencia.indice % colores.length]; valor.style.fontWeight = '600';
@@ -456,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function applyResults(results) {
-        if (form.id === 'FOR-PIMP-04_02') {
+        if (['FOR-PIMP-04_02', 'FOR-PIMP-05_B_01'].includes(form.id)) {
             resultadosPdf0402 = results || {};
             promediosReferencias0402.clear();
             sumasManuales0402.clear();
@@ -691,9 +692,27 @@ document.addEventListener('DOMContentLoaded', function () {
         aviso?.scrollIntoView({behavior: 'smooth', block: 'center'});
     }
 
+    const restaurarQuimicas = window.iniciarReferenciasQuimicasIM?.(form, function (referencias) {
+            const colores = ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'];
+            referenciasQuimicas0501 = referencias;
+            const primera = referencias[0];
+            recordSelect.replaceChildren(new Option(primera?.norma || '', primera?.idnormas_im || ''));
+            recordSelect.disabled = false;
+            renderNorm(historical || {Tabla: []}, null);
+            observations.replaceChildren();
+            referenciasQuimicas0501.forEach((item, indice) => {
+                const texto = item.composicion_seleccionada?.Observaciones || '';
+                if (!texto) return;
+                const nota = document.createElement('div'); nota.style.color = colores[indice % colores.length];
+                nota.textContent = item.norma + ': ' + texto; observations.append(nota);
+            });
+            observationsBox.classList.toggle('d-none', !observations.childElementCount);
+    });
+
     const recoveredDraft = readLocalDraft();
     if (recoveredDraft) {
         restoreLocalDraft(recoveredDraft);
+        if (restaurarQuimicas) restaurarQuimicas();
         showRecoveredDraftNotice();
     }
 

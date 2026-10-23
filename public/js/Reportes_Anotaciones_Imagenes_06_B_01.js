@@ -4,11 +4,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         const formulario = document.getElementById('FOR-PIMP-06_B_01')
             || document.getElementById('FOR-PIMP-04_02')
-            || document.getElementById('FOR-PIMP-04_03');
+            || document.getElementById('FOR-PIMP-04_03') || document.getElementById('FOR-PIMP-03_B_01') || document.getElementById('FOR-PIMP-05_B_01') || document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-02_B_04') || document.getElementById('FOR-PIMP-07_B_01');
         const modal = document.getElementById('cropperModal');
         const imagenCropper = document.getElementById('cropperImage');
 
-        // Los tres formatos guardan las flechas sobre los píxeles de la foto enviada al reporte.
+        // Los formatos compatibles guardan las marcas en la foto; sus editores de recorte siguen activos.
         if (!formulario || !modal || !imagenCropper || modal.dataset.anotadorInicializado === '1') return;
         modal.dataset.anotadorInicializado = '1';
 
@@ -91,8 +91,7 @@
         interfaz.canvas.addEventListener('pointercancel', cancelarTrazo);
 
         // Siempre se restaura la vista normal para que la siguiente fotografía no herede marcas.
-        if (window.jQuery) {
-            window.jQuery(modal).on('hidden.bs.modal', function () {
+        const alCerrarModal = function () {
                 /*
                  * Al editar una fotografía existente, el File temporal solo sirve para que
                  * Cropper lea el archivo original. La imagen que se enviará es el Base64
@@ -103,7 +102,15 @@
                 }
                 editandoImagenGuardada = false;
                 restaurarEditor();
-            });
+        };
+        if (['FOR-PIMP-05_B_01', 'FOR-PIMP-02_B_03', 'FOR-PIMP-02_B_04', 'FOR-PIMP-07_B_01'].includes(formulario.id)) {
+            // Este formato utiliza Bootstrap 5 con eventos nativos en su editor propio.
+            modal.addEventListener('hidden.bs.modal', alCerrarModal);
+            if (formulario.id === 'FOR-PIMP-02_B_04' && window.jQuery) {
+                window.jQuery(modal).on('hidden.bs.modal', alCerrarModal);
+            }
+        } else if (window.jQuery) {
+            window.jQuery(modal).on('hidden.bs.modal', alCerrarModal);
         }
 
         function agregarBotonesImagenesGuardadas() {
@@ -504,6 +511,7 @@
             destino.vistaPrevia.appendChild(imagen);
             destino.vistaPrevia.appendChild(insignia);
 
+            modal.dispatchEvent(new Event('saico:imagen-confirmada'));
             cerrarModal();
         }
 
@@ -567,7 +575,10 @@
         }
 
         function cerrarModal() {
-            if (window.jQuery) {
+            const instanciaBootstrap = window.bootstrap?.Modal?.getInstance?.(modal);
+            if (instanciaBootstrap) {
+                instanciaBootstrap.hide();
+            } else if (window.jQuery && typeof window.jQuery.fn.modal === 'function') {
                 window.jQuery(modal).modal('hide');
             } else {
                 modal.classList.remove('show');

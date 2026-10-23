@@ -167,8 +167,8 @@
             text-align: center;
             vertical-align: middle;
             overflow: hidden;
-            width: 310px;
-            height: auto;
+            width: 47.5%;
+            height: {{ ($alturaFotoCuadrante ?? 180) + 32 }}px;
             /*line-height: 0;*/
             position: relative;
         }
@@ -195,8 +195,10 @@
          */
         .foto-container img {
             display: block;
-            max-width: 310px;
-            max-height: auto;
+            max-width: 100%;
+            max-height: {{ $alturaFotoCuadrante ?? 180 }}px;
+            width: auto;
+            height: auto;
             object-fit: contain;
             margin: 0 auto;
         }
@@ -253,12 +255,13 @@
          */
         .foto-full {
             width: 100% !important;
-            height: 300px !important;
+            height: auto !important;
         }
 
         .foto-full img {
-            width: 100% !important;
-            height: 272px !important;
+            width: auto !important;
+            height: auto !important;
+            max-height: {{ 2 * ($alturaFotoCuadrante ?? 180) }}px;
             object-fit: contain;
         }
 
@@ -587,7 +590,7 @@
         <div style="margin-bottom: 6px;"></div>
         @endif
 
-        <table class="datosgenerales">
+        <table class="fotoPiezaTitulo datosgenerales">
             <thead class="encabezadoAzul">
                 <tr>
                     <th>
@@ -599,6 +602,7 @@
         </table>
 
 
+        @unless(!empty($medirDistribucionFotos))
         <table class="imagenes-reporte" style="width:100%" border="0">
             @if($esHojaCompleta)
                 <tr>
@@ -644,6 +648,7 @@
                     @endforeach
             @endif
         </table>
+        @endunless
     </div>
 
     @if(!$loop->last)

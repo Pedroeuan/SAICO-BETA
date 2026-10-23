@@ -29,7 +29,7 @@
 
         footer {
             position: fixed;
-            bottom: -30px;
+            bottom: -90px;
             left: 0;
             right: 0;
             text-align: center;
@@ -209,6 +209,10 @@
             text-align: center;
             vertical-align: middle;
         }
+        /* Solo baja las firmas en esta hoja; conserva el tamano original de las fotos. */
+        footer table.firmas-im {
+            top: 0;
+        }
         .observacionesBox {
             width: 100%;
             border: 1px solid black;
@@ -216,7 +220,8 @@
             table-layout: fixed;
             margin-bottom: 4px;
             position: relative;
-            top: -10px;
+            /* Separa el cuadro de los pies de foto sin desplazar las firmas. */
+            top: 5mm;
         }
 
         .observacionesBox td {

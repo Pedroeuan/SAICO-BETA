@@ -1209,7 +1209,13 @@ class FOR_PIMP_06_B_01Controller extends Controller
     /** Genera una copia histórica de la norma para que el reporte no cambie si cambia el catálogo. */
     private function construirNormaIM(Request $request, ?array $normaHistorica = null): ?array
     {
+        $request->validate(['Norma_IM.Seleccion_Quimica' => 'nullable|array|max:100', 'Norma_IM.Seleccion_Quimica.*' => 'string|max:80']);
+        // Mismo selector y copia histórica de composiciones que utiliza el 05_01.
+        $referencias = $request->has('Norma_IM.seleccion_multiple')
+            ? \App\Services\ReferenciasQuimicas0501::resolver($request->input('Norma_IM.Seleccion_Quimica', []), $normaHistorica)
+            : ($normaHistorica['Referencias_Quimicas'] ?? []);
         $idNorma = (int) $request->input('Norma_IM.idnormas_im', 0);
+        if ($referencias) $idNorma = (int) $referencias[0]['idnormas_im'];
 
         if ($idNorma <= 0) {
             return null;
@@ -1238,6 +1244,11 @@ class FOR_PIMP_06_B_01Controller extends Controller
         }
 
         $filasCatalogo = is_array($filasCatalogo) ? $filasCatalogo : [];
+        if ($referencias) {
+            $filasCatalogo = \App\Services\ComposicionesReferencias0402::filas($referencias);
+            $nombreEspecificacion = implode(' / ', array_column($referencias, 'norma'));
+            $observaciones = implode("\n", array_column(\App\Services\ComposicionesReferencias0402::notas($referencias), 'texto'));
+        }
         $promedios = $request->input('Norma_IM.Promedio', []);
         $analisisPdf = [];
 
@@ -1267,8 +1278,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 // promedio parcial engañoso: el resultado oficial queda como ND.
                 $promedios[$indice] = (string) ($resultado['valor_reporte'] ?? 'ND');
             }
-        } elseif (is_array($normaHistorica)
-            && (int) ($normaHistorica['idnormas_im'] ?? 0) === $idNorma) {
+        } elseif (is_array($normaHistorica)) {
             $analisisPdf = is_array($normaHistorica['Analisis_PDF'] ?? null)
                 ? $normaHistorica['Analisis_PDF']
                 : [];
@@ -1288,12 +1298,15 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 // Evita celdas vacias en la edicion y en el PDF historico.
                 'Promedio' => $promedioGuardado !== '' ? $promedioGuardado : 'ND',
                 'Composicion' => (string) ($filaCatalogo['Composicion'] ?? ''),
+                'Referencias' => $filaCatalogo['Referencias'] ?? [],
             ];
         }
 
         return [
             'idnormas_im' => $idNorma,
             'Nombre_Espe' => $nombreEspecificacion,
+            'Referencias_Quimicas' => $referencias,
+            'Seleccion_Quimica' => array_column($referencias, 'clave'),
             'Variable' => $variable,
             'Observaciones' => $observaciones,
             'Tabla' => $filas,
