@@ -11,6 +11,19 @@ use Tests\TestCase;
 /** Protege la distribución 2x2 del PDF metalográfico FOR-PIMP-03_B/01. */
 class FORPIMP03B01DistribucionFotosTest extends TestCase
 {
+    public function test_descripcion_extensa_conserva_las_cuatro_fotos_en_la_primera_hoja(): void
+    {
+        $datos = $this->datosVista($this->crearCuatroFotografias());
+        $datos['Detalles_Generales']['Proyecto'] = 'MANTENIMIENTO, REHABILITACIÓN E INFRAESTRUCTURAS COMPLEMENTARIAS EN INSTALACIONES DE LAS REGIONES MARINAS';
+        $datos['Detalles_Generales']['Partida'] = str_repeat('HABILITADO DE SPOOLES, AISLAMIENTOS MECÁNICOS, SOPORTES Y VÁLVULAS EN LA PLATAFORMA. ', 8);
+        $datos['Detalles_Generales']['Observaciones'] = 'SIN OBSERVACIONES';
+        $pdf = Pdf::loadView('Reportes.ReportesPDFIM.Reporte_FOR_PIMP_03_B_01_PDF', $datos)->setPaper('letter', 'portrait');
+        $contenido = $pdf->output();
+        $this->assertSame(1, (new Fpdi())->setSourceFile(StreamReader::createByString($contenido)));
+        $texto = (new Parser())->parseContent($contenido)->getText();
+        $this->assertSame(4, substr_count($texto, 'FOTOGRAFÍA DE PRUEBA'));
+    }
+
     /** Cuatro fotografías manuales deben conservarse en una sola hoja física. */
     public function test_cuatro_fotografias_manuales_caben_en_una_hoja(): void
     {

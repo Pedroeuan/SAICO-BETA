@@ -602,7 +602,7 @@ class ReporteController extends Controller
         $EscalasDureza0204 = $CatalogosDureza0204['escalas'];
         $CatalogosMetalografiaIM = $this->catalogosMetalografiaIM($Nombre_Formato);
         // Solo 06_B_01 consume este control; los demas formatos reciben null.
-        $SerieReporte = in_array($Nombre_Formato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03], true)
+        $SerieReporte = in_array($Nombre_Formato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03, ServicioSerieReportes::FORMATO_03_B_01, ServicioSerieReportes::FORMATO_05_B_01, ServicioSerieReportes::FORMATO_02_B_03, ServicioSerieReportes::FORMATO_02_B_04], true)
             ? app(ServicioSerieReportes::class)->obtener((int) $id)
             : null;
         
@@ -626,6 +626,8 @@ class ReporteController extends Controller
         // Norma_IM, Patron_Grano y bloques viven en Juntas_Grupo_Re (o en Detalles_Generales si el
         // reporte es anterior). Se reinyectan para que las vistas no cambien. Los formatos 04_02 y
         // 04_03 suman ademas el analisis de Fiji y el conteo lineal, propios de esos modulos.
+        // El 05_B/01 también guarda su selección química y evidencia XRF en el grupo.
+        // Restaurarla aquí permite que Editar reciba los mismos datos que utiliza su PDF.
         if (in_array($Nombre_Formato, ServicioSerieReportes::FORMATOS_TECNICA_EN_JUNTAS, true)) {
             $juntasIM = app(ServicioJuntasReporteIM::class)->normalizar(
                 $Grupo_Juntas_Detalles_Re?->Juntas_Grupo_Re,
@@ -1303,7 +1305,12 @@ class ReporteController extends Controller
         }
         elseif($Nombre_Formato == "FOR-PIMP-05_B/01")
         {
-            return redirect()->route('procesamientos.pdf.pagina', ['reporte' => $id, 'formato' => '05_B_01', 'download' => $request->boolean('download') ? 1 : null]);
+            // Cambia la URL cuando cambian los datos para evitar reutilizar el visor de un PDF anterior.
+            return redirect()->route('procesamientos.pdf.pagina', [
+                'reporte' => $id, 'formato' => '05_B_01',
+                'v' => app(\App\Services\ServicioPdfGenerado::class)->firma((int) $id, '05_B_01'),
+                'download' => $request->boolean('download') ? 1 : null,
+            ])->header('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
         }
         elseif($Nombre_Formato == "FOR-PIMP-06_B/01")
         {
@@ -1581,7 +1588,7 @@ class ReporteController extends Controller
 
             $servicioSeries = app(ServicioSerieReportes::class);
             $juntasSiguiente = null;
-            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03], true)) {
+            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03, ServicioSerieReportes::FORMATO_03_B_01, ServicioSerieReportes::FORMATO_05_B_01, ServicioSerieReportes::FORMATO_02_B_03], true)) {
                 $serie = $servicioSeries->obtener((int) $id);
                 if (!$serie) {
                     throw new \RuntimeException('Este reporte anterior no tiene una serie configurada. Abra Editar y guarde la cantidad de reportes antes de continuar.');
@@ -1600,7 +1607,7 @@ class ReporteController extends Controller
                     Grupo_Juntas_Detalles_Re::where('idReportes', $id)->value('Juntas_Grupo_Re'),
                     $Detalles_Generales
                 );
-                if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03], true)) {
+                if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03, ServicioSerieReportes::FORMATO_03_B_01, ServicioSerieReportes::FORMATO_05_B_01, ServicioSerieReportes::FORMATO_02_B_03], true)) {
                     $grupoLimpio = json_decode($juntasSiguiente, true);
                     if (is_array($grupoLimpio['Norma_IM'] ?? null)) {
                         $grupoLimpio['Norma_IM']['Captura_XRF'] = [];
@@ -1624,19 +1631,23 @@ class ReporteController extends Controller
                 $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
             }
 
-            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03], true)) {
+            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03, ServicioSerieReportes::FORMATO_03_B_01, ServicioSerieReportes::FORMATO_05_B_01, ServicioSerieReportes::FORMATO_02_B_03], true)) {
                 unset($Detalles_Generales['SERIE_REPORTES'], $Detalles_Generales['Reporte_Firmado']);
                 $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
 
                 $datosEquipo = json_decode($ReporteOriginal->Datos_Equipo, true) ?? [];
                 unset($datosEquipo['QR_TOKEN'], $datosEquipo['QR_PDF'], $datosEquipo['PDF_UNIFICADO']);
-                if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03], true)) {
+                if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03, ServicioSerieReportes::FORMATO_03_B_01, ServicioSerieReportes::FORMATO_05_B_01, ServicioSerieReportes::FORMATO_02_B_03], true)) {
                     foreach (['VALORES_DUREZA', 'PROMEDIO_DUREZA', 'DUREZA_BRINELL', 'DESCRIPCION_MATERIAL', 'RESISTENCIA_TENSION', 'RESISTENCIA_CEDENCIA', 'TAMANO_GRANO'] as $campo) unset($datosEquipo[$campo]);
                 }
+                if ($nombreFormato === ServicioSerieReportes::FORMATO_02_B_03) unset($datosEquipo['DUREZA_PROMEDIO_MEDIDO']);
                 $NuevoReporte->Datos_Equipo = json_encode($datosEquipo);
             }
 
             if ($nombreFormato === ServicioSerieReportes::FORMATO_02_B_04) {
+                // La copia conserva la logica Antes/Despues; la serie se vincula despues de guardarla.
+                unset($Detalles_Generales['SERIE_REPORTES']);
+                $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
                 // Los resultados de dureza ahora viven en el grupo, no en Datos_Equipo.
                 $servicioJuntas = app(ServicioJuntasReporteIM::class);
                 $grupoOriginal = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->value('Juntas_Grupo_Re');
@@ -1668,7 +1679,11 @@ class ReporteController extends Controller
 
             $nuevoId = $NuevoReporte->idReportes;
 
-            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03], true)) {
+            if ($nombreFormato === ServicioSerieReportes::FORMATO_02_B_04) {
+                $servicioSeries->vincularConsecutivo0204((int) $id, (int) $nuevoId);
+            }
+
+            if (in_array($nombreFormato, [ServicioSerieReportes::FORMATO_06_B_01, ServicioSerieReportes::FORMATO_04_02, ServicioSerieReportes::FORMATO_04_03, ServicioSerieReportes::FORMATO_03_B_01, ServicioSerieReportes::FORMATO_05_B_01, ServicioSerieReportes::FORMATO_02_B_03], true)) {
                 $servicioSeries->registrarConsecutivo((int) $id, (int) $nuevoId);
             }
 

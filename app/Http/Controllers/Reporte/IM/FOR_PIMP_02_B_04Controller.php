@@ -905,6 +905,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999',
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
@@ -1165,6 +1166,7 @@ class FOR_PIMP_02_B_04Controller extends Controller
         
         // Obtener el idReportes del registro recién creado
         $idReportes = $Reportes->idReportes;
+        app(\App\Services\ServicioSerieReportes::class)->iniciar((int) $idReportes, (int) $request->input('Serie_Reportes.cantidad_planificada', 2), \App\Services\ServicioSerieReportes::FORMATO_02_B_04);
         $Grupo_Juntas_Detalles_Re->idReportes = $idReportes;
 
         $titulos_json = $request->input('titulos_data', '[]');
@@ -1494,6 +1496,17 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $Contrato = $validatedData['Detalles_Generales']['Contrato'];
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
+        $request->validate(['Serie_Reportes.cantidad_planificada' => 'nullable|integer|min:1|max:999', 'Serie_Reportes.nueva_cantidad' => 'nullable|integer|min:1|max:999']);
+        $series = app(\App\Services\ServicioSerieReportes::class);
+        $serie = $series->obtener((int) $id);
+        if (!$serie) {
+            $series->iniciar((int) $id, (int) $request->input('Serie_Reportes.cantidad_planificada', 2), \App\Services\ServicioSerieReportes::FORMATO_02_B_04);
+        } elseif ($request->filled('Serie_Reportes.nueva_cantidad')) {
+            $cantidad = (int) $request->input('Serie_Reportes.nueva_cantidad');
+            if ($cantidad <= $serie->cantidad_planificada) throw \Illuminate\Validation\ValidationException::withMessages(['Serie_Reportes.nueva_cantidad' => 'El nuevo total debe ser mayor que el actual.']);
+            $series->actualizarCantidad((int) $id, $cantidad);
+        }
+        $Reporte->refresh();
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
@@ -2164,8 +2177,9 @@ class FOR_PIMP_02_B_04Controller extends Controller
         $pageCount2 = 0;
 
         if (!empty($Fotos)) {
-            $pdf2 = PDF::loadView('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_02_B_04_PDF', $data)->setPaper('letter', 'portrait');
-            $pdf2Content = $pdf2->output();
+            $pdf2Content = app(\App\Services\ServicioPdfGenerado::class)->generarAnexoFotos(
+                'Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_02_B_04_PDF', $data, 8
+            );
         }
 
         // Generar el PDF adicional en orientación vertical
@@ -2186,6 +2200,10 @@ class FOR_PIMP_02_B_04Controller extends Controller
         // Ahora sí combinamos
         $combinedPdf = new Fpdi();
         $totalPageCount = $pageCount1 + $pageCount2;
+        // Solo numera el conjunto; no transforma las etapas ni sus mediciones.
+        $paginacion = app(\App\Services\ServicioSerieReportes::class)->registrarPaginas((int) $id, $totalPageCount);
+        $paginaInicial = $paginacion['pagina_inicial'];
+        $totalSerie = $paginacion['total_estimado'];
 
         // Añadir páginas del primer PDF
         $combinedPdf->setSourceFile(StreamReader::createByString($pdf1Content));
@@ -2195,7 +2213,8 @@ class FOR_PIMP_02_B_04Controller extends Controller
             $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
             $combinedPdf->SetFont('Arial', 'B', 8);
             $combinedPdf->SetXY(151.5, 34);
-            $combinedPdf->MultiCell(24, 3.5, "$i DE $totalPageCount", 0, 'C');
+            $paginaSerie = $paginaInicial + $i - 1;
+            $combinedPdf->MultiCell(24, 3.5, "$paginaSerie DE $totalSerie", 0, 'C');
         }
 
         // Añadir páginas del segundo PDF
@@ -2207,9 +2226,9 @@ class FOR_PIMP_02_B_04Controller extends Controller
                 $combinedPdf->AddPage('P');
                 $combinedPdf->useTemplate($tplId, 0, 0, 210, 297);
                 $combinedPdf->SetFont('Arial', 'B', 8);
-                $paginaActual = $i + $pageCount1;
+                $paginaActual = $paginaInicial + $i + $pageCount1 - 1;
                 $combinedPdf->SetXY(151.5, 34);
-                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalPageCount", 0, 'C');
+                $combinedPdf->MultiCell(24, 3.5, "$paginaActual DE $totalSerie", 0, 'C');
             }
         }
 

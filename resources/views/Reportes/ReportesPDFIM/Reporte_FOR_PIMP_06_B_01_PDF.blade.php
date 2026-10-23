@@ -1078,7 +1078,7 @@
                                                 <tr>
                                                     <th>{{ $filaNorma['Elemento'] ?? '' }}</th>
                                                     <td>{{ trim((string) ($filaNorma['Promedio'] ?? '')) !== '' ? $filaNorma['Promedio'] : 'ND' }}</td>
-                                                    <td>{{ $filaNorma['Composicion'] ?? '' }}</td>
+                                                    <td>@include('Reportes.IM.partials.limites-quimicos-0403-pdf')</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -1091,10 +1091,17 @@
                                         <th class="observacionesTitulo">ESPECIFICACION APROX. DEL MATERIAL:<br>
                                             Approx. Material Specification:</th>
                                         <td class="observacionesLineas">
+                                            @forelse(($NormaIM['Referencias_Quimicas'] ?? []) as $indiceReferencia => $referencia)
+                                                @php
+                                                    $coloresReferencias = ['#111111', '#1565c0', '#c62828', '#6a1b9a', '#2e7d32', '#ad5700'];
+                                                @endphp
+                                                <div style="color:{{ $coloresReferencias[$indiceReferencia % count($coloresReferencias)] }}">{{ $referencia['norma'] }}</div>
+                                            @empty
                                             {{ $nombreNormaPdf }}
                                             @if ($variableNormaPdf !== '')
                                                 <br>{{ $variableNormaPdf }}
                                             @endif
+                                            @endforelse
                                         </td>
                                     </tr>
                                 </table>

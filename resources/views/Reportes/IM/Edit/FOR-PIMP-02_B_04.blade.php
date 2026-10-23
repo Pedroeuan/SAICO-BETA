@@ -239,10 +239,11 @@
 <section class="content w-100">
     <div class="card w-100 p-3">
         <div class="card-body w-100">
-            <form id="FOR-PIMP-02_B_04"
+            <form id="FOR-PIMP-02_B_04" data-modo="edit"
                 data-dureza-etapa="{{ ($Datos_Equipo['DUREZA_ETAPA'] ?? 'ANTES') === 'DESPUES' ? 'DESPUES' : 'ANTES' }}"
                 action="{{route('Reportes_FOR_PIMP_02_B_04.update', $id)}}" method="post" enctype="multipart/form-data">
                 @csrf
+                @include('Reportes.IM.partials.serie-reportes-0402', ['serieFormato' => '02_04', 'cantidadSeriePredeterminada' => 2, 'serieInstrucciones' => 'El consecutivo conserva el funcionamiento de Antes y Despues del relevado. Este conjunto solo organiza la numeracion de sus hojas.'])
                 <div class="row">
                     <button id="preFormBtn" type="button" class="btn btn-warning my-2">Rellenar Campos Vacios "---"</button>
                     <div style="margin-bottom: 2px;"></div>
@@ -1232,7 +1233,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
-<script src="{{ asset('js/Reportes_Edit.js') }}"></script>
+<script src="{{ asset('js/Reportes_Edit.js') }}?v={{ filemtime(public_path('js/Reportes_Edit.js')) }}"></script>
 
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
@@ -1463,6 +1464,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 </script>
+{{-- Reutiliza la herramienta de flechas; guarda las marcas en la fotografia del reporte. --}}
+<script src="{{ asset('js/Reportes_Editor_Imagenes_05_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Editor_Imagenes_05_B_01.js')) }}"></script>
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 @endsection
 
 
