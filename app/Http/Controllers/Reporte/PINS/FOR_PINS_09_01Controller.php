@@ -2121,7 +2121,7 @@ class FOR_PINS_09_01Controller extends Controller
         }
 
         $qrPdf = null;
-
+        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
         if (!empty($Datos_Equipo['QR_PDF'])) {
             $qrPdf = public_path(
                 str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
