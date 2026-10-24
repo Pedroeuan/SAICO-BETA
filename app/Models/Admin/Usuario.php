@@ -28,6 +28,7 @@ class Usuario extends Model
     ];
     protected $table = 'users';
     protected $primaryKey = 'id';
+    protected $casts = ['documentos_reportes' => 'array'];
     //public $timestamps = false; 
 
     public function getFormattedDateAttribute()

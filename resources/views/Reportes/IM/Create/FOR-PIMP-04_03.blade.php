@@ -990,6 +990,7 @@
                                 </div>
                             </div>
                         </div>
+                        @include('Reportes.IM.partials.documentos-usuario', ['formatoDocumentos' => 'FOR-PIMP-04/03'])
                         <div class="container">
                             <div class="float-right">
                                 <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
