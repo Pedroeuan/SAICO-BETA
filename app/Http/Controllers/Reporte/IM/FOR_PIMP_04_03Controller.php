@@ -828,13 +828,13 @@ class FOR_PIMP_04_03Controller extends Controller
                 ->toArray()
             : [];
 
-        // Igual que en PINS, si se seleccionó un técnico se anexa su CV al PDF vinculado por QR.
-        $tecnicos = $idTecnico
-            ? Usuario::where('id', $idTecnico)
-                ->whereNotNull('cv_pdf')
-                ->pluck('cv_pdf')
-                ->toArray()
-            : [];
+        // Adjuntar únicamente la documentación del técnico elegida para este reporte.
+        $tecnicos = app(\App\Services\DocumentosUsuarioReporte::class)->rutas(
+            $idTecnico ? Usuario::find($idTecnico) : null,
+            $datosParaCrearQR['Documentos_Usuario'] ?? null,
+            'FOR-PIMP-04/03',
+            $idProcedimiento ? (int) $idProcedimiento : null
+        );
 
         $todasLasRutas = array_values(array_merge($facturas, $certificados, $procedimientos, $tecnicos));
 
@@ -1296,6 +1296,11 @@ class FOR_PIMP_04_03Controller extends Controller
             'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string|max:100',
             'Datos_Equipo.FASES_PRESENTES' => 'nullable|string|max:1000',
             'Datos_Equipo.ESPECIFICACION_MATERIAL' => 'nullable|string|max:1000',
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
@@ -1534,6 +1539,7 @@ class FOR_PIMP_04_03Controller extends Controller
         $datosParaCrearQR = [
             'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             'idEquipo1' => $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? null,
@@ -1843,6 +1849,11 @@ class FOR_PIMP_04_03Controller extends Controller
             'Datos_Equipo.TIEMPO_ATAQUE' => 'nullable|string|max:100',
             'Datos_Equipo.FASES_PRESENTES' => 'nullable|string|max:1000',
             'Datos_Equipo.ESPECIFICACION_MATERIAL' => 'nullable|string|max:1000',
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
@@ -2090,6 +2101,7 @@ class FOR_PIMP_04_03Controller extends Controller
         $datosParaCrearQR = [
             'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             'idEquipo1' => $validatedData['Datos_Equipo']['ID_EQUIPO1'] ?? null,
