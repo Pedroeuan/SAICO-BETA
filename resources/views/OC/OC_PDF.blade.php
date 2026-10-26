@@ -725,13 +725,13 @@
                         <td class="celdaColor" style="width: 120px;">CONDICIONES DE PAGO:</td>
                     </tr>
                     <tr>
-                        <td style="width: 120px; text-align: left;">{{ $detallesRegistro?->Condiciones_pago ?? '' }}</td>
+                        <td style="width: 120px; text-align: left; white-space: pre-line;">{{ $detallesRegistro?->Condiciones_pago ?? '' }}</td>
                     </tr>
                     <tr>
                         <td class="celdaColor" style="width: 120px;">CONDICIONES DE GENERALES:</td>
                     </tr>
                     <tr>
-                        <td style="width: 120px; text-align: left;">{{ $detallesRegistro?->Condiciones_generales ?? '' }}</td>
+                        <td style="width: 120px; text-align: left; white-space: pre-line;">{{ $detallesRegistro?->Condiciones_generales ?? '' }}</td>
                     </tr>
                 </table> 
             </div>
