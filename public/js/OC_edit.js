@@ -147,3 +147,26 @@ $(function () {
     updateRowNumbers();
     calculateTotals();
 });
+    /*Selección de Firmas */
+    document.addEventListener('DOMContentLoaded', function() {
+    const numFirmasSelect = document.getElementById('numFirmas');
+    const firmas1 = document.getElementById('firmas1');
+    const firmas2 = document.getElementById('firmas2');
+    const firmas3 = document.getElementById('firmas3');
+    const firmas4 = document.getElementById('firmas4');
+
+    if (!numFirmasSelect || !firmas1 || !firmas2 || !firmas3 || !firmas4) return;
+
+    function mostrarFirmas(valor) {
+        firmas1.style.display = valor == '1' ? 'block' : 'none';
+        firmas2.style.display = valor == '2' ? 'block' : 'none';
+        firmas3.style.display = valor == '3' ? 'block' : 'none';
+        firmas4.style.display = valor == '4' ? 'block' : 'none';
+    }
+
+    numFirmasSelect.addEventListener('change', function() {
+        mostrarFirmas(this.value);
+    });
+
+    mostrarFirmas(numFirmasSelect.value || '1');
+    });
