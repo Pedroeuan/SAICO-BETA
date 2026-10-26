@@ -1036,6 +1036,7 @@
                             @endif
                         </div>
 
+                        @include('Reportes.IM.partials.documentos-usuario', ['formatoDocumentos' => 'FOR-PIMP-04/02'])
                         <div class="container">
                             <div class="float-right">
                                 <button type="submit" class="btn btn-info bg-primary">Actualizar</button>

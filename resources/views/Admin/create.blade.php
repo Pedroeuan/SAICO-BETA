@@ -17,6 +17,7 @@
         word-break: break-word;
     }
 </style>
+@include('Admin.partials.usuario-estilos')
 @endsection
 
 @section('content')
@@ -27,12 +28,12 @@
 <br>
 <form id="UsuarioForm" method="post" enctype="multipart/form-data" action="{{route('registro.storeUsuarios')}}">
     @csrf
-    <section class="content">
+    <section class="content usuario-content">
 
-        <div class="card">
+        <div class="card usuario-card">
             <div class="card-body row">
 
-                    <div class="col-5 text-center d-flex align-items-center justify-content-center">
+                    <div class="col-md-4 text-center d-flex align-items-center justify-content-center usuario-identidad">
                         <div>
                             <h2>Registrar un nuevo usuario</h2>
                             <br>
@@ -40,7 +41,13 @@
                         </div>
                     </div>
 
-                    <div class="col-7">
+                    <div class="col-md-8 usuario-editor">
+                        <div class="usuario-tabs" role="tablist" aria-label="Secciones del usuario">
+                        <button type="button" class="usuario-tab active" id="tab-datos" role="tab" aria-controls="panel-datos" aria-selected="true" data-usuario-tab="panel-datos"><i class="fas fa-user" aria-hidden="true"></i> Datos del usuario</button>
+                        <button type="button" class="usuario-tab" id="tab-licencia" role="tab" aria-controls="panel-licencia" aria-selected="false" tabindex="-1" data-usuario-tab="panel-licencia"><i class="fas fa-id-card" aria-hidden="true"></i> Licencia</button>
+                        <button type="button" class="usuario-tab" id="tab-documentos" role="tab" aria-controls="panel-documentos" aria-selected="false" tabindex="-1" data-usuario-tab="panel-documentos"><i class="fas fa-folder-open" aria-hidden="true"></i> Documentos</button>
+                    </div>
+                    <div id="panel-datos" class="usuario-panel usuario-campos" role="tabpanel" aria-labelledby="tab-datos">
 
                         <div class="form-group">
                             <label for="NombreUsuario">Nombre de Usuario cliente</label>
@@ -113,8 +120,8 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <hr>
-
+                        </div>
+                        <div id="panel-licencia" class="usuario-panel" role="tabpanel" aria-labelledby="tab-licencia" hidden>
                         <h5>Documentación para Vehículos</h5>
                         <div class="form-group">
                             <label>Número de Licenica</label>
@@ -128,15 +135,20 @@
                         
                         <div class="form-group">
                             <label>Subir PDF Licencia</label>
-                            <input type="file" name="licencia_pdf" class="form_control" accept="application/pdf">
+                            <input type="file" name="licencia_pdf" class="form-control" accept="application/pdf">
                         </div>
 
+                        </div>
+                        <div id="panel-documentos" class="usuario-panel" role="tabpanel" aria-labelledby="tab-documentos" hidden>
+                        <h5>Documentos del usuario</h5>
                         <div class="form-group">
-                            <label>Subir CV (PDF)</label>
-                            <input type="file" name="cv_pdf" class="form-cotrol" accept="application/pdf">
+                            <label>C.V. completo (PDF)</label>
+                            <input type="file" name="cv_pdf" class="form-control" accept="application/pdf">
                         </div>
 
-                        <div class="form-group">
+                        @include('Admin.partials.documentos-reportes')
+                        </div>
+                        <div class="usuario-acciones">
                             <input type="submit" class="btn btn-primary" value="Registrar">
                         </div>
                     </div>
@@ -150,6 +162,7 @@
 
 
 @section('js')
+@include('Admin.partials.usuario-tabs-js')
 <!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
@@ -173,7 +186,7 @@
 <script>
 /*Prevenir el Enter*/
 document.getElementById('UsuarioForm').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && event.target.matches('input, select')) {
             event.preventDefault();
         }
     });

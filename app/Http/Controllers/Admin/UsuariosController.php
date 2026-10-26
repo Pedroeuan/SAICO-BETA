@@ -44,7 +44,9 @@ class UsuariosController extends Controller
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
         
-        return view('Admin.create', compact('rol'));
+        $procedimientosDocumentos = \App\Models\Procedimientos\Procedimiento::orderBy('Nombre')->get();
+        $serviciosDocumentos = app(\App\Services\DocumentosUsuarioReporte::class)->catalogo();
+        return view('Admin.create', compact('rol', 'procedimientosDocumentos', 'serviciosDocumentos'));
     }
 
     /**
@@ -52,6 +54,9 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
+        $documentos = app(\App\Services\DocumentosUsuarioReporte::class);
+        $documentos->validar($request);
+        $rol = Auth::user()->rol;
         //dd($request->all());
         // Obtener el usuario autenticado
         /*$user = Auth::user();
@@ -203,6 +208,7 @@ class UsuariosController extends Controller
             $Usuario->cv_pdf = $EsperaDato;
         }
         // Guardar el usuario en la base de datos
+        $documentos->guardar($request, $Usuario);
         $Usuario->save();
 
         // Redirigir a la página de administración
@@ -231,7 +237,9 @@ class UsuariosController extends Controller
         $Nombre = $user->name;
         $rol = Auth::user()->rol;
         
-        return view('Admin.edit', compact('id','Usuario','rol'));
+        $procedimientosDocumentos = \App\Models\Procedimientos\Procedimiento::orderBy('Nombre')->get();
+        $serviciosDocumentos = app(\App\Services\DocumentosUsuarioReporte::class)->catalogo();
+        return view('Admin.edit', compact('id','Usuario','rol', 'procedimientosDocumentos', 'serviciosDocumentos'));
     }
 
     /**
@@ -239,6 +247,8 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $documentos = app(\App\Services\DocumentosUsuarioReporte::class);
+        $documentos->validar($request);
         //dd($request->all());
         // Obtener el usuario autenticado
         $user = Auth::user();
@@ -304,6 +314,7 @@ class UsuariosController extends Controller
         }
 
         // Actualizar los datos del usuario
+        $documentos->guardar($request, $Usuario);
         $Usuario ->update([
             'name' => $request->input('NombreUsuario'),
             'email' => $request->input('CorreoUsuario'),
@@ -363,6 +374,7 @@ class UsuariosController extends Controller
         }
 
         // Actualizar los datos del usuario
+        $documentos->guardar($request, $Usuario);
         $Usuario ->update([
             'name' => $request->input('NombreUsuario'),
             'email' => $request->input('CorreoUsuario'),
