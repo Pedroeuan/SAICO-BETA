@@ -397,7 +397,13 @@ class OCController extends Controller
             'total' => 0,
         ], is_array($totales) ? $totales : []);
 
-        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales'));
+    $Firmantes = Firmantes_OC::where('idOC',$OC->idOC)->first();
+    // Decodificar JSON de la columna 'Detalles'
+        $Firmas = $Firmantes ? json_decode($Firmantes->Nombre_Cargo, true) : [];
+        // Obtener el numero de firmas
+        $numFirmas = $Firmas['numFirmas'] ?? 1;
+
+        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas'));
     }
 
     /**
