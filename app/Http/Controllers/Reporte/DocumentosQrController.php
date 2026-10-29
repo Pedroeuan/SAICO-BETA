@@ -8,7 +8,7 @@ use App\Services\DocumentosUsuarioReporte;
 use Illuminate\Http\Request;
 
 /**
- * Vista previa de C.V. y certificados desde los formularios de Integridad Mecánica.
+ * Vista previa de C.V. y certificados desde Integridad Mecánica y PINS 03_02.
  * Consulta los mismos documentos que el generador del QR, sin guardar ni generar reportes.
  * La ruta utiliza el middleware auth; este controlador excluye además el rol Cliente.
  */
@@ -21,7 +21,7 @@ class DocumentosQrController extends Controller
         // Comprueba técnico y formato del catálogo; archivo es el índice del PDF en la selección actual.
         $datos = $request->validate([
             'tecnico' => 'required|integer|exists:users,id',
-            'formato' => ['required', 'string', 'exists:Formato,Nombre', 'regex:#^FOR-PIMP-#'],
+            'formato' => ['required', 'string', 'exists:Formato,Nombre', 'regex:#^(?:FOR-PIMP-|FOR-PINS-(?:03-02|04-01|16-01)$)#'],
             'procedimiento' => 'nullable|integer',
             'categoria' => 'required|in:cv_completo,cv_reporte,certificados',
             'tipo_cv_reporte' => 'required|in:general,servicio',

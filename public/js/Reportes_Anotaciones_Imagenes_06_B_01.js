@@ -2,7 +2,10 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function () {
-        const formulario = document.getElementById('FOR-PIMP-06_B_01')
+        // Los formatos nuevos se registran con este atributo, sin ampliar la lista de IDs.
+        // Se mantienen los IDs anteriores para no modificar los reportes ya integrados.
+        const formulario = document.querySelector('form[data-anotaciones-fotos]')
+            || document.getElementById('FOR-PIMP-06_B_01')
             || document.getElementById('FOR-PIMP-04_02')
             || document.getElementById('FOR-PIMP-04_03') || document.getElementById('FOR-PIMP-03_B_01') || document.getElementById('FOR-PIMP-05_B_01') || document.getElementById('FOR-PIMP-02_B_03') || document.getElementById('FOR-PIMP-02_B_04') || document.getElementById('FOR-PIMP-07_B_01');
         const modal = document.getElementById('cropperModal');

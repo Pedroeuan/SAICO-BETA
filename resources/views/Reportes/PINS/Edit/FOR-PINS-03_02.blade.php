@@ -190,7 +190,8 @@
                 <section class="content w-100">
                     <div class="card w-100">
                         <div class="card-body row w-100">
-                            <form id="FOR-PINS-03_02" action="{{ route('Reportes_FOR_PINS_03_02.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                            {{-- Edit permite marcar tanto fotos guardadas como reemplazos y fotos nuevas. --}}
+                            <form id="FOR-PINS-03_02" data-anotaciones-fotos data-modo="edit" action="{{ route('Reportes_FOR_PINS_03_02.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -1274,6 +1275,7 @@
                                                 </div>
                                             @endif
                                         </div>
+                                        @include('Reportes.IM.partials.documentos-usuario', ['formatoDocumentos' => 'FOR-PINS-03-02'])
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -1316,6 +1318,8 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+{{-- El editor escribe el PNG con las marcas en images_base64 del índice correspondiente. --}}
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 <script>
