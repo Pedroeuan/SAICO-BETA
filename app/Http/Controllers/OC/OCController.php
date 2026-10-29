@@ -533,6 +533,39 @@ class OCController extends Controller
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
     }
 
+    /**
+     * Envía la orden de compra a revisión.
+     * Toma el valor de la columna Revision; si está vacío o nulo se usa "V1".
+     */
+    public function enviarRevision($id)
+    {
+        $OC = OC::find($id);
+
+        if (!$OC) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Orden de compra no encontrada',
+            ], 404);
+        }
+
+        $revision = trim((string) $OC->Revision);
+
+        if ($revision === '') {
+            $revision = 'V1';
+            $OC->Revision = $revision;
+        }
+
+        $OC->Estatus = 'Revisión: ' . $revision;
+        $OC->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'La orden de compra fue enviada a revisión.',
+            'estatus' => $OC->Estatus,
+            'revision' => $OC->Revision,
+        ]);
+    }
+
     public function OC_PDF($id)
     {
         $OC  = OC::find($id);

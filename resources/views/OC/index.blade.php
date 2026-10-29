@@ -45,6 +45,7 @@
                         <th>Estatus</th>
                         <th>OC Original</th>
                         <th>OC AICO</th>
+                        <th>Enviar a revisión</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
@@ -62,7 +63,7 @@
                                 <td>{{ $OCS->formatted_date }}</td>                   
                         @endif
                         <td>{{ $OCS->Tipo_servicio }}</td>
-                        <td>{{ $OCS->Estatus }}</td>
+                        <td class="estatusOC">{{ $OCS->Estatus }}</td>
                         @if($OCS->OC_archivo == 'ESPERA DE DATO' || $OCS->OC_archivo == 'ESPERA DE DATOS')
                                 <td>
                                     <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>
@@ -73,6 +74,10 @@
                         <!--PDF GENERADO-->
                         <td>
                             <a class="btn btn-primary" href="{{ route('OC.PDF', ['id' => $OCS->idOC]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
+                        </td>
+                        <!--ENVIO A REVISIÓN-->
+                        <td>
+                            <button type="button" class="btn btn-info btnEnviar" idOC="{{$OCS->idOC}}"><i class="far fa-envelope-open" aria-hidden="true"></i></button>
                         </td>
                         <td>
                             <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
@@ -140,6 +145,46 @@ let table = new DataTable('#tablaJs', {
                 }
 });
 
+
+    $(document).on("click", ".btnEnviar", function() {
+        var idOC = $(this).attr("idOC");
+        var fila = $(this).closest("tr");
+
+        Swal.fire({
+            title: "¿Enviar esta OC a revisión?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Sí",
+            denyButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/OC/enviarRevision/' + idOC,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            fila.find(".estatusOC").text(response.estatus);
+                            Swal.fire({
+                                title: "Enviado!",
+                                text: response.message,
+                                icon: "success"
+                            });
+                        } else {
+                            Swal.fire("Error!", response.message, "error");
+                        }
+                    },
+                    error: function() {
+                        Swal.fire("Error!", "No se pudo enviar la OC a revisión, consultar al Administrador.", "error");
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Cancelado", "", "error");
+            }
+        });
+    });
 
     $(document).on("click", ".btnEliminarOC", function() {
         var idOC = $(this).attr("idOC");

@@ -22,6 +22,7 @@ class OC extends Model
         'Proyecto',
         'Estatus',
         'OC_archivo',
+        'Revision',
     ];
     protected $table = 'OC';
     protected $primaryKey = 'idOC';
