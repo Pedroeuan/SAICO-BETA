@@ -40,7 +40,87 @@
         if (!esFormularioEdicion) {
             pieModal.insertBefore(interfaz.botonPrepararRecorte, botonRecortar || pieModal.firstChild);
         }
+        if (formulario.id === 'FOR-PIMP-04_02') mejorarBotonesEditor();
         agregarBotonesImagenesGuardadas();
+
+        /** Reordena los mismos controles; conserva sus eventos de giro, recorte y guardado. */
+        function mejorarBotonesEditor() {
+            modal.classList.add('editor-foto-0402');
+            const titulo = modal.querySelector('.modal-title');
+            if (titulo) titulo.textContent = 'Editar fotografía';
+            const herramientas = document.createElement('div');
+            herramientas.className = 'editor-foto-herramientas';
+            function grupo(etiqueta, botones) {
+                const bloque = document.createElement('div');
+                bloque.className = 'editor-foto-grupo';
+                const rotulo = document.createElement('span');
+                rotulo.className = 'editor-foto-rotulo';
+                rotulo.textContent = etiqueta;
+                bloque.appendChild(rotulo);
+                botones.filter(Boolean).forEach(boton => bloque.appendChild(boton));
+                herramientas.appendChild(bloque);
+            }
+            [botonRotarIzquierda, botonRotarDerecha].filter(Boolean).forEach(boton => {
+                boton.classList.remove('btn-info');
+                boton.classList.add('btn-outline-secondary');
+            });
+            if (botonRotarIzquierda) botonRotarIzquierda.textContent = '↶ Izquierda 90°';
+            if (botonRotarDerecha) botonRotarDerecha.textContent = '↷ Derecha 90°';
+            interfaz.botonPreparar.className = 'btn btn-outline-primary';
+            interfaz.botonPreparar.textContent = 'Flechas y texto';
+            interfaz.botonPreparar.title = 'Dibujar flechas y escribir sobre la fotografía completa';
+            interfaz.botonPrepararRecorte.classList.remove('btn-outline-warning');
+            interfaz.botonPrepararRecorte.classList.add('btn-outline-primary');
+            interfaz.botonPrepararRecorte.textContent = 'Anotar el recorte';
+            grupo('Girar imagen', [botonRotarIzquierda, botonRotarDerecha]);
+            grupo('Marcar imagen', [interfaz.botonPreparar, ...(!esFormularioEdicion ? [interfaz.botonPrepararRecorte] : [])]);
+            const acciones = document.createElement('div');
+            acciones.className = 'editor-foto-acciones';
+            const cancelar = modal.querySelector('#cancelBtn');
+            if (cancelar) {
+                cancelar.classList.remove('btn-danger');
+                cancelar.classList.add('btn-outline-secondary');
+                acciones.appendChild(cancelar);
+            }
+            const guardar = document.createElement('div');
+            guardar.className = 'editor-foto-guardar';
+            if (botonRecortar) {
+                botonRecortar.classList.remove('btn-primary');
+                botonRecortar.classList.add('btn-outline-primary');
+                botonRecortar.textContent = 'Guardar recorte';
+                guardar.appendChild(botonRecortar);
+            }
+            if (botonGuardarOriginal) {
+                botonGuardarOriginal.textContent = 'Guardar imagen completa';
+                guardar.appendChild(botonGuardarOriginal);
+            }
+            acciones.appendChild(guardar);
+            pieModal.append(herramientas, acciones);
+            const estilo = document.createElement('style');
+            estilo.textContent = `
+                .editor-foto-0402 .modal-content{border:0;border-radius:12px;overflow:hidden}
+                .editor-foto-0402 .modal-header{padding:16px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+                .editor-foto-0402 .modal-title{font-style:normal;font-weight:600;color:#24364b}
+                .editor-foto-0402 .modal-footer{display:block;padding:16px 20px;background:#fff;border-top:1px solid #e2e8f0}
+                .editor-foto-0402 .modal-footer>*{margin:0}
+                .editor-foto-0402 .editor-foto-herramientas{display:flex;gap:24px;flex-wrap:wrap;padding-bottom:14px}
+                .editor-foto-0402 .editor-foto-grupo{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+                .editor-foto-0402 .editor-foto-rotulo{flex-basis:100%;font-size:12px;font-weight:600;color:#526479}
+                .editor-foto-0402 .modal-footer .btn{min-height:38px;padding:8px 14px;border-radius:7px;font-weight:600;font-size:13px;line-height:1.3}
+                .editor-foto-0402 .modal-footer .btn:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+                .editor-foto-0402 #rotateLeftBtn,.editor-foto-0402 #rotateRightBtn{background:#0dcaf0;border-color:#0dcaf0;color:#000}
+                .editor-foto-0402 #prepararAnotacionImagenBtn{background:#ffc107;border-color:#ffc107;color:#000}
+                .editor-foto-0402 #prepararAnotacionRecorteBtn{background:#fff;border-color:#ffc107;color:#ffc107}
+                .editor-foto-0402 #cancelBtn{background:#dc3545;border-color:#dc3545;color:#fff}
+                .editor-foto-0402 #cropImageBtn{background:#0d6efd;border-color:#0d6efd;color:#fff}
+                .editor-foto-0402 #saveWithoutCropBtn{background:#198754;border-color:#198754;color:#fff}
+                .editor-foto-0402 .modal-footer .btn:hover:not(:disabled){filter:brightness(.88)}
+                .editor-foto-0402 .editor-foto-acciones{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:14px;border-top:1px solid #e2e8f0}
+                .editor-foto-0402 .editor-foto-guardar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+                @media(max-width:575px){.editor-foto-0402 .editor-foto-acciones{align-items:stretch;flex-direction:column}.editor-foto-0402 .editor-foto-guardar{display:grid;grid-template-columns:1fr}.editor-foto-0402 .editor-foto-herramientas{gap:14px}}
+            `;
+            document.head.appendChild(estilo);
+        }
 
         // La captura delegada identifica correctamente tanto tarjetas nuevas como reemplazos de Edit.
         document.addEventListener('change', function (evento) {

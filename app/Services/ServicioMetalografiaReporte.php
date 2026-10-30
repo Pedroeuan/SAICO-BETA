@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\File;
  */
 class ServicioMetalografiaReporte
 {
+    /** Oculta el resumen de conteo en la presentacion, sin modificar sus datos almacenados. */
+    public function sinDescripcionConteoLineal(string $texto): string
+    {
+        return trim(preg_replace('/^\h*(?:CONTEO LINEAL DE GRANOS|Conteo lineal de granos:[^\r\n]*|Regla: cada grano completo[^\r\n]*|L\d+: cruces[^\r\n]*|Resumen: \d+ l[ií]neas; suma[^\r\n]*)\h*\R?/mu', '', $texto));
+    }
+
     /** Normaliza las posiciones editables de Imagen 1 e Imagen 2 antes de conservarlas. */
     public function normalizarLayoutAnalisis($layout): array
     {
