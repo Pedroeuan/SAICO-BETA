@@ -856,6 +856,8 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        {{-- Los documentos seleccionados se consultan por QR, separados del reporte descargado. --}}
+                                        @include('Reportes.IM.partials.documentos-usuario', ['formatoDocumentos' => 'FOR-PINS-16-01'])
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>

@@ -577,6 +577,11 @@ class ReporteController extends Controller
         /*Obtener el Nombre del Formato */
         $Nombre_Formato = $Buscar_idFormato->Nombre;
         $idProcedimiento = $Buscar_idFormato->idProcedimiento;
+        if ($Nombre_Formato === 'FOR-PINS-16-01') {
+            $procedimiento16 = Procedimiento::find($idProcedimiento);
+            $Detalles_Generales['idProcedimiento'] = $procedimiento16?->idProcedimiento;
+            $Detalles_Generales['Procedimiento'] = $procedimiento16?->Nombre ?? '';
+        }
         //$Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)->first();
         /* Llamar a la función formatoNombrePersonalizado */
         $formatoNombrePersonalizado = $this->formatoNombrePersonalizado($Nombre_Formato);
@@ -1097,10 +1102,6 @@ class ReporteController extends Controller
                 ? formato::where('idFormato', $pruebaAplica->idFormato)->value('Nombre')
                 : null;
 
-            if ($formatoActual === 'FOR-PINS-16-01') {
-                app(\App\Http\Controllers\Reporte\PINS\FOR_PINS_16_01Controller::class)->FOR_PINS_16_01($reporteEncontrado->idReportes);
-            }
-
             if ($formatoActual === 'FOR-PINS-25-01') {
                 app(\App\Http\Controllers\Reporte\PINS\FOR_PINS_25_01Controller::class)->FOR_PINS_25_01($reporteEncontrado->idReportes);
             }
@@ -1489,6 +1490,18 @@ class ReporteController extends Controller
             ]);
 
             $NuevoReporte->idPrueba_Aplica = $Prueba_Aplica->idPrueba_Aplica;
+            $formatoDestino = formato::where('idFormato', $idFormato)->value('Nombre');
+            if ($formatoDestino === 'FOR-PINS-16-01') {
+                $procedimientoDestinoId = formato::where('idFormato', $idFormato)->value('idProcedimiento');
+                $procedimientoDestino = $procedimientoDestinoId ? Procedimiento::find($procedimientoDestinoId) : null;
+                $Detalles_Generales['idProcedimiento'] = $procedimientoDestino?->idProcedimiento;
+                $Detalles_Generales['Procedimiento'] = $procedimientoDestino?->Nombre ?? '';
+                // El nuevo 16 no comparte rutas de QR ni caché con el reporte de origen.
+                $equipoNuevo = json_decode($NuevoReporte->Datos_Equipo, true) ?: [];
+                unset($equipoNuevo['QR_TOKEN'], $equipoNuevo['QR_PDF'], $equipoNuevo['PDF_UNIFICADO'],
+                    $equipoNuevo['PDF_REPORTE_CACHE'], $equipoNuevo['PDF_REPORTE_VERSION'], $equipoNuevo['DOCUMENTOS_QR_FIRMA']);
+                $NuevoReporte->Datos_Equipo = json_encode($equipoNuevo);
+            }
             $NuevoReporte->Detalles_Generales = json_encode($Detalles_Generales);
             $NuevoReporte->Estatus = 'CREADO';
             $NuevoReporte->save();
@@ -1522,6 +1535,14 @@ class ReporteController extends Controller
 
             $grupoOriginal = Grupo_Juntas_Detalles_Re::where('idReportes', $id)->first();
             $formatoOriginal = $this->formatoDelReporte((int) $id);
+
+            if ($formatoDestino === 'FOR-PINS-16-01') {
+                Grupo_Juntas_Detalles_Re::create([
+                    'idReportes' => $nuevoId,
+                    'Juntas_Grupo_Re' => json_encode(['componentes' => [], 'inspeccion' => []]),
+                ]);
+                return;
+            }
 
             if ($formatoOriginal === ServicioSerieReportes::FORMATO_02_B_04) {
                 // El duplicado conserva su captura de dureza, pero ya dentro del grupo.

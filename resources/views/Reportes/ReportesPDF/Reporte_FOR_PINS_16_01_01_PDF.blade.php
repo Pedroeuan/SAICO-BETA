@@ -13,10 +13,10 @@
                 }
                 header {
                     position: fixed;
-                    top: -65px; /* Ajusta para que no interfiera con el margen de la pÃ¡gina */
+                    top: -60px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
-                    height: auto; /* Permite que el header crezca dinÃ¡micamente */
+                    height: auto; /* Permite que el header crezca dinámicamente */
                     text-align: center;
                     /*background-color:rgb(226, 45, 45); /* Fondo para que sea visible */
                     font-family: 'arial', sans-serif;
@@ -24,7 +24,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posiciÃ³n */
+                    bottom: -30px; /* Ajusta la posición */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -76,7 +76,7 @@
                     border-spacing: 0px;        /* Espacio entre celdas */
                     width: 100%;
                     text-align: center;
-                    font-size: 10px;
+                    font-size: 9px;
                 }
                     
                 /* Aplica el borde a las celdas de la tabla */
@@ -192,7 +192,7 @@
         .rotar-texto-dividido {
             text-align: center; /* Centra el texto horizontalmente */
             padding: 0;
-            display: inline-block; /* Necesario para la rotaciÃ³n */
+            display: inline-block; /* Necesario para la rotación */
             transform: rotate(270deg); /* Rota solo el texto */
             white-space: normal;
         }
@@ -200,10 +200,10 @@
         .rotar-texto-sin-dividir {
             text-align: center; /* Centra el texto horizontalmente */
             padding: 0;
-            display: inline-block; /* Necesario para la rotaciÃ³n */
+            display: inline-block; /* Necesario para la rotación */
             transform: rotate(270deg); /* Rota solo el texto */
-            white-space: nowrap; /* Evita que el texto se divida en varias lÃ­neas */
-            max-width: 20px; /* Ajusta al ancho mÃ¡ximo deseado */
+            white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+            max-width: 20px; /* Ajusta al ancho máximo deseado */
         }
             </style>
         </head>
@@ -213,15 +213,15 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th rowspan="4" style="width: 400%; font-size: 9pt;">
-                                INFORME DE INSPECCIÃ“N VISUAL A ELEMENTOS DE TUBERÃAS DE PROCESO
+                            <th rowspan="4" style="width: 450%; font-size: 9pt;">
+                                INFORME DE INSPECCIÓN VISUAL A ELEMENTOS DE TUBERÍAS DE PROCESO
                             </th>
-                            <th rowspan="4" style="width: 80%;">
+                            <th rowspan="4" style="width: 90%; text-align:center; vertical-align:middle;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:60px; height:60px; display:block; margin:0 auto; padding:0;">
                                 @endif
                             </th>
-                            <th style="width: 90%;">CÃ³digo:</th>
+                            <th style="width: 70%;">Código:</th>
                             <th style="width: 100%;">FOR-PINS-16/01</th>
                             <th rowspan="4" style="width: 90%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 60%; height: auto;"></th>
                         </tr>
@@ -229,15 +229,15 @@
 
                     <tbody>
                         <tr>
-                            <th>VersiÃ³n</th>
+                            <th>Versión</th>
                             <th>0</th>
                         </tr>
                         <tr>
-                            <th style="width: 90%;">Fecha de elaboraciÃ³n</th>
+                            <th style="width: 90%;">Fecha de elaboración</th>
                             <th>18-may-26</th>
                         </tr>
                         <tr>
-                            <th>PÃ¡gina</th>
+                            <th>Página</th>
                             <th></th>
                         </tr>
                     </tbody>
@@ -276,7 +276,7 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>AsesorÃ­a e InspecciÃ³n en ConstrucciÃ³n Costa Fuera, S.C.</strong></td>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
                                 </tr>
                             @elseif( $numFirmas == 2)
                             <!-- 2 Firmas -->
@@ -311,7 +311,7 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>AsesorÃ­a e InspecciÃ³n en ConstrucciÃ³n Costa Fuera, S.C.</strong></td>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
                                 </tr>
@@ -356,7 +356,7 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>AsesorÃ­a e InspecciÃ³n en ConstrucciÃ³n Costa Fuera, S.C.</strong></td>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
                                     <td></td>
@@ -414,7 +414,7 @@
 
                                 <tr>
                                     <th></th>
-                                    <td><strong>AsesorÃ­a e InspecciÃ³n en ConstrucciÃ³n Costa Fuera, S.C.</strong></td>
+                                    <td><strong>Asesoría e Inspección en Construcción Costa Fuera, S.C.</strong></td>
                                     <td></td>
                                     <td><strong>{{ $Firmas_Reportes['EMPRESA_ENCARGADO'] }}</strong></td>
                                     <td></td>
@@ -486,7 +486,7 @@
                     ['field' => 'Componentes_0', 'valueKey' => '0'],
                     ['field' => 'Componentes_Longitud_m', 'valueKey' => 'Longitud_(m)'],
                     ['field' => 'Componentes_Clase', 'valueKey' => 'Clase'],
-                    ['field' => 'Componentes_Especificacion', 'valueKey' => 'EspecificaciÃ³n'],
+                    ['field' => 'Componentes_Especificacion', 'valueKey' => 'Especificación'],
                     ['field' => 'Componentes_Observaciones', 'valueKey' => 'Observaciones'],
                 ];
 
@@ -560,12 +560,12 @@
                         <thead>
                             <tr class="celdaGris">
                                 <th style="width: 30px;">ID</th>
-                                <th style="width: 50px;">DESCRIPCIÃ“N DEL ELEMENTO</th>
+                                <th style="width: 50px;">DESCRIPCIÓN DEL ELEMENTO</th>
                                 <th style="width: 30px;">NIVEL</th>
-                                <th style="width: 30px;">Ã˜</th>
+                                <th style="width: 30px;">Ø</th>
                                 <th style="width: 30px;">LONGITUD (m)</th>
                                 <th style="width: 30px;">CLASE</th>
-                                <th style="width: 50px;">ESPECIFICACIÃ“N</th>
+                                <th style="width: 50px;">ESPECIFICACIÓN</th>
                                 <th style="width: 100px;">OBSERVACIONES</th>
                             </tr>
                         </thead>
