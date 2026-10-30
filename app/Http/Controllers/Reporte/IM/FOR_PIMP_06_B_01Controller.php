@@ -154,6 +154,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
         $datosParaCrearQR = [
             'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
             'idEquipo' => $validatedData['Datos_Equipo']['ID_EQUIPO'] ?? null,
             // El técnico seleccionado permite anexar su CV al QR, igual que en PINS.
@@ -474,6 +475,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
         $validatedData['Datos_Equipo']['QR_TOKEN'] = $validatedData['Datos_Equipo']['QR_TOKEN'] ?? ($datosEquipoActuales['QR_TOKEN'] ?? (string) Str::uuid());
 
         $datosParaCrearQR = [
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
             'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? null,
             'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? null,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
@@ -485,8 +487,7 @@ class FOR_PIMP_06_B_01Controller extends Controller
 
         $resultadoQR = $this->Datos_QR($datosParaCrearQR);
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? ($datosEquipoActuales['QR_PDF'] ?? null);
-        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? ($datosEquipoActuales['PDF_UNIFICADO'] ?? null);
-
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
         // Norma y patron se guardan en Juntas_Grupo_Re; elimina las copias antiguas.
         unset($validatedData['Detalles_Generales']['Norma_IM'], $validatedData['Detalles_Generales']['PATRON_GRANO']);
 
@@ -1354,13 +1355,13 @@ class FOR_PIMP_06_B_01Controller extends Controller
                 ->toArray()
             : [];
 
-        // Igual que en PINS, si se seleccionó un técnico se anexa su CV al PDF vinculado por QR.
-        $tecnicos = $idTecnico
-            ? Usuario::where('id', $idTecnico)
-                ->whereNotNull('cv_pdf')
-                ->pluck('cv_pdf')
-                ->toArray()
-            : [];
+        // Adjuntar la documentación del técnico elegida para este servicio y procedimiento.
+        $tecnicos = app(\App\Services\DocumentosUsuarioReporte::class)->rutas(
+            $idTecnico ? Usuario::find($idTecnico) : null,
+            $datosParaCrearQR['Documentos_Usuario'] ?? null,
+            'FOR-PIMP-06_B/01',
+            $idProcedimiento ? (int) $idProcedimiento : null
+        );
 
         $todasLasRutas = array_values(array_merge($facturas, $certificados, $procedimientos, $tecnicos));
 
@@ -1691,6 +1692,11 @@ class FOR_PIMP_06_B_01Controller extends Controller
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string',
             'Datos_Equipo.ID_EQUIPO' => 'nullable|string',
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
 
             'Norma_IM' => 'nullable|array',
             'Norma_IM.idnormas_im' => 'nullable|required_with:Analisis_PDF|integer|exists:Normas_IM,idnormas_im',

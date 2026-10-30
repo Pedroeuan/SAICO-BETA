@@ -211,7 +211,7 @@
         }
         .photo-text-cell-inner {
             padding: 12px 16px;
-            text-align: justify;
+            text-align: left;
             vertical-align: middle;
             font-size: 8px;
             line-height: 11px;
@@ -322,7 +322,7 @@
             width: 100%;
             height: 185px;
             padding: 12px 16px;
-            text-align: justify;
+            text-align: left;
             vertical-align: middle;
             font-size: 7px;
             line-height: 11px;
@@ -369,6 +369,106 @@
         .photo-page {
             page-break-inside: avoid;
         }
+
+        /* Medidas del formato impreso: 8 x 5.5 cm y 6.5 mm exclusivos para el pie. */
+        .photo-grid-cuadrantes {
+            width: 18cm;
+            margin-left: auto;
+            margin-right: auto;
+            table-layout: auto;
+            border-spacing: 0;
+        }
+        .photo-grid-cuadrantes .photo-slot {
+            width: 8cm;
+            height: 6.15cm;
+            padding: 0;
+            vertical-align: top;
+        }
+        .photo-grid-cuadrantes 
+        .photo-gap { 
+            width: 2cm; 
+        }
+        .photo-grid-cuadrantes 
+        .photo-slot > table {
+            position: static;
+            top: 0;
+        }
+        .photo-grid-cuadrantes 
+        .photo-content 
+        {
+            width: 8cm;
+            max-width: 8cm;
+            height: 6.15cm;
+        }
+        .photo-grid-cuadrantes 
+        .photo-content 
+        .photo-image-cell 
+        {
+            height: 5.5cm;
+            padding: 0;
+            vertical-align: middle;
+            text-align: center;
+            overflow: hidden;
+        }
+        .photo-grid-cuadrantes 
+        .photo-slot img {
+            /* Reserva los bordes dentro del recuadro, sin recortar ni remuestrear el archivo. */
+            max-width: 7.94cm;
+            max-height: 5.44cm;
+            width: auto;
+            height: auto;
+            margin: auto;
+        }
+        .photo-grid-cuadrantes 
+        .photo-comment {
+            height: 6.5mm;
+            padding: 1mm 0.5mm 0;
+            vertical-align: top;
+            box-sizing: border-box;
+        }
+        /* Sube imagen y comentario inferiores, conservando las medidas de la fotografia. */
+        .photo-grid-cuadrantes 
+        .photo-slot.abajo_izquierda > table,
+        .photo-grid-cuadrantes 
+        .photo-slot.abajo_derecha > table {
+            position: relative;
+            top: -1.5mm;
+        }
+        /* El texto comparte los limites del recuadro de la micrografia contigua. */
+        .photo-grid-cuadrantes 
+        .photo-slot-text > 
+        .photo-content {
+            position: relative;
+            top: 0.3mm;
+            height: 6.09cm;
+        }
+        .photo-grid-cuadrantes 
+        .photo-slot-text 
+        .photo-image-cell.photo-text-cell {
+            height: 5.44cm;
+        }
+        .photo-grid-cuadrantes 
+        .photo-slot-text.abajo_izquierda > .photo-content,
+        .photo-grid-cuadrantes .photo-slot-text.abajo_derecha > .photo-content {
+            position: relative;
+            top: -1.2mm;
+        }
+        /* La foto derecha conserva su proporcion dentro de un marco igual al izquierdo. */
+        .photo-grid-cuadrantes .photo-slot.abajo_derecha .photo-image-cell {
+            border: 1px solid #000;
+            box-sizing: border-box;
+        }
+        .photo-grid-cuadrantes .photo-slot.abajo_derecha .photo-image-cell img {
+            border: 0;
+        }
+        .photo-cross { 
+            width: 100%; 
+            height: 5.5cm; 
+        }
+        .photo-full .photo-cross { 
+            height: 390px; 
+        }
+        .photo-grid-cuadrantes .photo-slot.abajo_derecha .photo-image-cell.photo-cross-cell { border: 0; }
     </style>
 </head>
 <body>
@@ -770,7 +870,10 @@
         </table>
 
         {{-- Una posición puede contener una imagen o un cuadro de texto del mismo tamaño. --}}
-        <table class="photo-grid">
+        <table class="photo-grid {{ $fotoCompleta ? 'photo-grid-full' : 'photo-grid-cuadrantes' }}">
+            @unless($fotoCompleta)
+                <colgroup><col style="width:8cm"><col style="width:2cm"><col style="width:8cm"></colgroup>
+            @endunless
             @if($fotoCompleta)
                 <tr>
                     <td class="photo-slot photo-full {{ !empty($fotoCompleta['es_cuadro_texto']) ? 'photo-slot-text' : '' }}" colspan="3">
@@ -783,8 +886,12 @@
                         @else
                             <table class="photo-content {{ ($fotoCompleta['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                 <tr>
-                                    <td class="photo-image-cell">
-                                        <img src="{{ $fotoCompleta['path'] }}" alt="Fotografía">
+                                    <td class="photo-image-cell {{ !empty($fotoCompleta['sin_fotografia']) ? 'photo-cross-cell' : '' }}">
+                                        @if(!empty($fotoCompleta['sin_fotografia']))
+                                            <div class="photo-cross" data-photo-cross="1"></div>
+                                        @else
+                                            <img src="{{ $fotoCompleta['path'] }}" alt="Fotografía">
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>
@@ -814,8 +921,12 @@
                                 @else
                                     <table class="photo-content {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                         <tr>
-                                            <td class="photo-image-cell">
-                                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                                            <td class="photo-image-cell {{ !empty($espacios[$posicion]['sin_fotografia']) ? 'photo-cross-cell' : '' }}">
+                                        @if(!empty($espacios[$posicion]['sin_fotografia']))
+                                            <div class="photo-cross" data-photo-cross="1"></div>
+                                        @else
+                                            <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                                        @endif
                                             </td>
                                         </tr>
                                         <tr>
@@ -852,8 +963,12 @@
                                 @else
                                     <table class="photo-content {{ ($espacios[$posicion]['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'photo-content-grain' : '' }}">
                                         <tr>
-                                            <td class="photo-image-cell">
-                                                <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                                            <td class="photo-image-cell {{ !empty($espacios[$posicion]['sin_fotografia']) ? 'photo-cross-cell' : '' }}">
+                                        @if(!empty($espacios[$posicion]['sin_fotografia']))
+                                            <div class="photo-cross" data-photo-cross="1"></div>
+                                        @else
+                                            <img src="{{ $espacios[$posicion]['path'] }}" alt="Fotografía">
+                                        @endif
                                             </td>
                                         </tr>
                                         <tr>

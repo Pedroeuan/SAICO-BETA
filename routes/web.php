@@ -135,6 +135,8 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
 
     /*QR de Reportes Publicos*/
     Route::get('/qr/reporte/{token}',[ReporteController::class, 'VerPdfQR'])->name('qr.reporte');
+    Route::get('/reportes/documentos-qr/preview', [\App\Http\Controllers\Reporte\DocumentosQrController::class, 'index'])
+        ->middleware('auth')->name('reportes.documentos-qr');
 
     //solicitud_AD
     Route::middleware('auth')->group(function () {

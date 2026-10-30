@@ -2117,7 +2117,7 @@ class FOR_PIMP_04_03Controller extends Controller
 
         $resultadoQR = $this->Datos_QR($datosParaCrearQR);
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? ($datosEquipoActuales['QR_PDF'] ?? null);
-        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? ($datosEquipoActuales['PDF_UNIFICADO'] ?? null);
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([

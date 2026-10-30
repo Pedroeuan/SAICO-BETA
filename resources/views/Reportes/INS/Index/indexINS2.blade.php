@@ -89,7 +89,7 @@
 <br>
 <br>
 <!-- form start -->
-<form role="form">
+<form role="form" data-navegacion-reportes>
     <div class="box ">
             <br>
         <div class="box-body">
@@ -256,6 +256,7 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
 <script>
 @php
     $pruebas = \App\Models\Prueba\prueba::with('norma_codigo.formato')->get();
