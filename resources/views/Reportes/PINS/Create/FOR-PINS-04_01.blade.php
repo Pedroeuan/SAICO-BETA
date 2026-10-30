@@ -74,7 +74,7 @@
                 <section class="content w-100">
                     <div class="card w-100 p-3">
                         <div class="card-body  w-100">
-                            <form id="FOR-PINS-04_01" action="{{route('Reportes_FOR_PINS_04_01.store')}}" method="post" enctype="multipart/form-data">
+                            <form id="FOR-PINS-04_01" data-anotaciones-fotos data-modo="create" action="{{route('Reportes_FOR_PINS_04_01.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
@@ -1044,6 +1044,8 @@
                                             </div>
                                         </div>
 
+                                        {{-- Selección y vista previa de los documentos del técnico para el QR. --}}
+                                        @include('Reportes.IM.partials.documentos-usuario', ['formatoDocumentos' => 'FOR-PINS-04-01'])
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
@@ -1087,6 +1089,8 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+{{-- Editor compartido de flechas y texto; se activa mediante data-anotaciones-fotos. --}}
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 

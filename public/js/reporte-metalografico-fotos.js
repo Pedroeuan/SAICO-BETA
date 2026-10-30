@@ -33,6 +33,11 @@
                 const nombre = comparacion.querySelector('[data-comparison-name]');
                 const vacio = comparacion.querySelector('[data-comparison-empty]');
                 const selector = comparacion.querySelector('[data-comparison-select]');
+                if (formulario.id === 'FOR-PIMP-04_02') {
+                    selector.options[0].disabled = false;
+                    selector.options[0].textContent = 'Sin patrón en el PDF';
+                    comparacion.querySelector('.card-header strong').textContent = 'Patrón de tamaño de grano — Comparativa y ubicación en el PDF';
+                }
                 const configuracion = formulario.querySelector('[data-grain-pattern-config]');
                 let patrones = [];
                 let historico = {};
@@ -48,6 +53,59 @@
                 });
                 function actualizarComparacion() {
                     const tarjeta = formulario.querySelector('[data-grain-mode="1"]');
+                    // En 04/02 la comparativa y su distribucion son la misma tarjeta, sin copiar campos.
+                    const unificar = formulario.id === 'FOR-PIMP-04_02' && tarjeta?.hasAttribute('data-grain-history-card');
+                    if (unificar) {
+                        const filaGrano = tarjeta.closest('.grain-history-row');
+                        const destino = comparacion.querySelector('.card-body');
+                        if (filaGrano && filaGrano.parentElement !== destino) {
+                            tarjeta.classList.replace('col-sm-6', 'col-12');
+                            const etiqueta = tarjeta.querySelector('.form-group > label');
+                            if (etiqueta) etiqueta.hidden = true;
+                            const checkGrano = tarjeta.querySelector('.foto-grain-checkbox');
+                            if (checkGrano) checkGrano.closest('.form-check').hidden = true;
+                            const grupo = tarjeta.querySelector('.form-group');
+                            const panel = tarjeta.querySelector('[data-grain-card-panel]');
+                            const selectorPatron = panel?.querySelector('[data-grain-card-select]');
+                            if (selectorPatron?.options[0]) selectorPatron.options[0].textContent = 'Sin patrón en el PDF';
+                            const comentario = tarjeta.querySelector('[data-grain-card-description]');
+                            const etiquetaComentario = tarjeta.querySelector('[data-grain-description-label]');
+                            const layout = tarjeta.querySelector('.foto-layout-manual');
+                            if (grupo && panel && comentario && layout) {
+                                grupo.classList.remove('border', 'rounded');
+                                grupo.style.textAlign = 'left';
+                                grupo.appendChild(panel);
+                                if (etiquetaComentario) {
+                                    etiquetaComentario.textContent = 'Comentario del patrón';
+                                    grupo.appendChild(etiquetaComentario);
+                                }
+                                comentario.rows = 2;
+                                grupo.appendChild(comentario);
+                                const ubicacion = document.createElement('details');
+                                ubicacion.className = 'mt-3';
+                                const resumen = document.createElement('summary');
+                                resumen.className = 'font-weight-bold';
+                                resumen.textContent = 'Ubicación en el PDF: hoja ' + (layout.querySelector('.foto-pagina')?.value || '1');
+                                ubicacion.append(resumen, layout);
+                                grupo.appendChild(ubicacion);
+                                layout.addEventListener('change', function () {
+                                    const posicion = layout.querySelector('input[type="radio"]:checked');
+                                    const texto = posicion?.parentElement.textContent.trim() || '';
+                                    resumen.textContent = 'Ubicación en el PDF: hoja ' + layout.querySelector('.foto-pagina').value + (texto ? ' · ' + texto : '');
+                                });
+                            }
+                            destino.appendChild(filaGrano);
+                        }
+                    }
+                    selector.hidden = Boolean(unificar);
+                    selector.previousElementSibling.hidden = Boolean(unificar);
+                    if (unificar) {
+                        vista.classList.add('d-none');
+                        nombre.classList.add('d-none');
+                        vacio.classList.add('d-none');
+                        return;
+                    }
+                    nombre.classList.remove('d-none');
                     const original = tarjeta?.querySelector('[data-grain-card-preview]');
                     const ruta = original?.getAttribute('src') || '';
                     if (ruta && vista.getAttribute('src') !== ruta) vista.setAttribute('src', ruta);
@@ -67,6 +125,10 @@
         }
         let analisisActual = {};
         let ultimoToken = contenedor.dataset.analysisReportToken || '';
+        // Solo oculta el texto del conteo; el JSON de lineas y mediciones permanece intacto.
+        if (formulario?.id === 'FOR-PIMP-04_02') {
+            descripcion.value = descripcion.value.replace(/^\s*(?:CONTEO LINEAL DE GRANOS|Conteo lineal de granos:[^\r\n]*|Regla: cada grano completo[^\r\n]*|L\d+: cruces[^\r\n]*|Resumen: \d+ l[i\u00ed]neas; suma[^\r\n]*)[ \t]*\r?\n?/gm, '').trim();
+        }
         let descripcionEditada = descripcion.value.trim() !== '';
 
         /** Activa los controles de distribución únicamente cuando el análisis fue enviado al PDF. */
@@ -139,6 +201,7 @@
                 'Especificación aproximada de la pieza: ' + obtenerDatoEquipo('ESPECIFICACION_MATERIAL', '---'),
                 'Analizador: Fiji',
             ];
+            if (formulario?.id === 'FOR-PIMP-04_02') return lineas.join('\n');
             const conteo = obtenerConteo();
             const lineasConteo = Array.isArray(conteo.lineas) ? conteo.lineas : [];
 
@@ -225,6 +288,22 @@
                 descripcion.value = construirDescripcion();
             }
         });
+
+        // Sincroniza solo la especificacion; conserva las demas anotaciones del tecnico.
+        const sincronizarEspecificacion = function (evento) {
+            if (formulario?.id !== 'FOR-PIMP-04_02'
+                || evento.target.name !== 'Datos_Equipo[ESPECIFICACION_MATERIAL]') return;
+            if (!descripcionEditada && !contenedor.classList.contains('d-none')) {
+                descripcion.value = construirDescripcion();
+            } else if (descripcion.value.trim()) {
+                descripcion.value = descripcion.value.replace(
+                    /^Especificación aproximada de la pieza:.*$/m,
+                    () => 'Especificación aproximada de la pieza: ' + obtenerDatoEquipo('ESPECIFICACION_MATERIAL', '---')
+                );
+            }
+        };
+        formulario?.addEventListener('change', sincronizarEspecificacion);
+        formulario?.addEventListener('input', sincronizarEspecificacion);
 
         const activoInicial = !contenedor.classList.contains('d-none');
         actualizarControlesDistribucion(activoInicial);

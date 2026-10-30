@@ -90,6 +90,12 @@
             else tarjeta.querySelector('.form-group')?.appendChild(panel);
 
             panel.querySelector('[data-grain-card-select]').addEventListener('change', function () {
+                if (formulario.id === 'FOR-PIMP-04_02' && tarjeta.hasAttribute('data-grain-history-card') && !this.value) {
+                    const check = tarjeta.querySelector('.foto-grain-checkbox');
+                    check.checked = false;
+                    check.dispatchEvent(new Event('change', {bubbles: true}));
+                    return;
+                }
                 // Cambiar el select significa que el técnico eligió conscientemente la versión actual del catálogo.
                 usarActualInput.value = this.value ? '1' : '0';
                 idInput.value = this.value;
@@ -368,6 +374,21 @@
         if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03', 'FOR-PIMP-03_B_01'].includes(formulario.id)) {
             formulario.addEventListener('saico:grain-pattern-select', function (evento) {
                 const id = String(evento.detail?.id || '');
+                if (formulario.id === 'FOR-PIMP-04_02' && !id) {
+                    const tarjetaAnterior = tarjetaActiva;
+                    if (tarjetaAnterior) desactivarTarjeta(tarjetaAnterior, true);
+                    else {
+                        activoInput.value = '0';
+                        idInput.value = '';
+                        descripcionInput.value = '';
+                        usarActualInput.value = '0';
+                    }
+                    if (tarjetaAnterior?.hasAttribute('data-grain-history-card')) {
+                        tarjetaAnterior.closest('.grain-history-row')?.remove();
+                    }
+                    document.dispatchEvent(new CustomEvent('saico:grain-pattern-updated'));
+                    return;
+                }
                 if (!catalogo.some(item => String(item.id) === id) && String(historico.id || '') !== id) return;
                 if (!tarjetaActiva) {
                     activoInput.value = '1';
