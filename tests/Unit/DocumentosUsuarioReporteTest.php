@@ -17,6 +17,12 @@ class DocumentosUsuarioReporteTest extends TestCase
             'driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '',
         ]]);
         $schema = \Illuminate\Support\Facades\Schema::connection('documentos_test');
+        $schema->create('users', function ($table) {
+            $table->integer('id')->primary();
+            $table->string('name');
+            $table->string('cv_pdf')->nullable();
+            $table->text('documentos_reportes')->nullable();
+        });
         $schema->create('Formato', function ($table) {
             $table->integer('idFormato')->primary();
             $table->string('Nombre');
@@ -40,6 +46,47 @@ class DocumentosUsuarioReporteTest extends TestCase
             ['idProcedimiento' => 8, 'Nombre' => 'Procedimiento 8'],
         ]);
         \Illuminate\Support\Facades\DB::table('Prueba')->insert(['idPrueba' => 1, 'Nombre' => 'Servicio del catálogo']);
+    }
+
+    public function test_preview_abre_solo_el_cv_del_servicio_y_tecnico_seleccionados(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+        $usuario = $this->usuario();
+        $usuario->id = 10;
+        $usuario->name = 'Técnico de prueba';
+        $usuario->timestamps = false;
+        $usuario->save();
+        \Illuminate\Support\Facades\Storage::disk('public')->put('servicio.pdf', '%PDF-1.4');
+        $controlador = new \App\Http\Controllers\Reporte\DocumentosQrController;
+        $parametros = ['tecnico' => 10, 'formato' => 'FOR-PIMP-04/03', 'procedimiento' => 7,
+            'categoria' => 'cv_reporte', 'tipo_cv_reporte' => 'servicio'];
+        $crearRequest = function (array $datos) {
+            $request = Request::create('/', 'GET', $datos);
+            $request->setUserResolver(fn () => new \App\Models\User(['rol' => 'Técnicos']));
+            return $request;
+        };
+        $resultado = $controlador->index($crearRequest($parametros), new DocumentosUsuarioReporte)->getData(true);
+        $this->assertCount(1, $resultado['archivos']);
+        $this->assertTrue($resultado['archivos'][0]['disponible']);
+        $archivo = $controlador->index($crearRequest($parametros + ['archivo' => 0]), new DocumentosUsuarioReporte);
+        $this->assertSame(realpath(\Illuminate\Support\Facades\Storage::disk('public')->path('servicio.pdf')), $archivo->getFile()->getRealPath());
+        $general = $controlador->index($crearRequest(array_replace($parametros, ['tipo_cv_reporte' => 'general'])), new DocumentosUsuarioReporte)->getData(true);
+        $this->assertFalse($general['archivos'][0]['disponible']);
+        $this->assertNotSame($general['archivos'][0]['url'], $resultado['archivos'][0]['url']);
+    }
+
+    public function test_preview_informa_si_el_tecnico_no_tiene_cv_del_servicio(): void
+    {
+        $usuario = new Usuario;
+        $usuario->id = 20;
+        $usuario->name = 'Sin C.V.';
+        $usuario->timestamps = false;
+        $usuario->save();
+        $request = Request::create('/', 'GET', ['tecnico' => 20, 'formato' => 'FOR-PIMP-04/03',
+            'categoria' => 'cv_reporte', 'tipo_cv_reporte' => 'servicio']);
+        $request->setUserResolver(fn () => new \App\Models\User(['rol' => 'Técnicos']));
+        $resultado = (new \App\Http\Controllers\Reporte\DocumentosQrController)->index($request, new DocumentosUsuarioReporte)->getData(true);
+        $this->assertSame([], $resultado['archivos']);
     }
 
     private function usuario(): Usuario

@@ -1,4 +1,6 @@
 (() => {
+    // Captura las rutas y el formulario indicados por Blade antes de que currentScript cambie.
+    // El mismo modulo atiende Crear/Editar de 04_02 y 04_03 sin compartir su estado entre paginas.
     const url = document.currentScript.dataset.coincidenciasUrl;
     const crearNormaUrl = document.currentScript.dataset.crearNormaUrl;
     const editarNormaUrl = document.currentScript.dataset.editarNormaUrl;
@@ -6,15 +8,19 @@
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById(formularioId);
         if (!form) return;
+        // La tabla original sirve de ancla; sus filas se reconstruyen segun el modo seleccionado.
         const campo = nombre => form.querySelector(`[name="Datos_Equipo[${nombre}]"]`);
         const tabla = campo('NORMA_REFERENCIA')?.closest('table');
         if (!tabla) return;
         const cuerpo = tabla.querySelector('tbody');
         const estado = document.createElement('p'); estado.className = 'text-muted my-2'; estado.setAttribute('role', 'status');
         tabla.after(estado);
+        // Recupera el historico o los valores reenviados por old() tras un error de validacion.
         const inicial = JSON.parse(document.getElementById('referencias-manuales-0402-inicial')?.textContent || '{}');
         let manuales;
         try { manuales = JSON.parse(inicial.filas || '[]'); } catch { manuales = []; }
+        // Modo automatico: seleccion del catalogo. Modo manual: filas escritas por el tecnico.
+        // Los campos ocultos conservan el contrato de envio esperado por los controladores.
         const controles = document.createElement('div'); controles.className = 'd-flex flex-wrap align-items-end my-2'; controles.style.gap = '10px';
         const etiqueta = document.createElement('label'); etiqueta.htmlFor = 'modo-referencias-0402'; etiqueta.textContent = 'Origen de las normas de referencia';
         const modo = document.createElement('select'); modo.className = 'form-control'; modo.style.width = 'auto'; modo.style.maxWidth = '100%'; modo.id = 'modo-referencias-0402'; modo.name = 'Modo_Referencias_0402';
@@ -27,8 +33,10 @@
         const seleccionPayload = document.createElement('input'); seleccionPayload.type = 'hidden'; seleccionPayload.name = 'Referencias_Seleccionadas_0402';
         let seleccionInicial;
         try { seleccionInicial = JSON.parse(inicial.seleccion || '[]'); } catch { seleccionInicial = []; }
+        // Set evita duplicados y mantiene el orden de seleccion, usado tambien para los colores.
         const seleccionadas = new Set(seleccionInicial);
         let candidatas = []; let consultando = false;
+        // Una norma puede tener varios grados: se identifica cada opcion por norma y numero de fila.
         const clave = fila => `${fila.idnormas_im}:${fila.fila}`;
         const panelSeleccion = document.createElement('details'); panelSeleccion.className = 'referencias-seleccion-0402 mb-3';
         const resumenCatalogo = document.createElement('summary'); resumenCatalogo.className = 'referencias-desplegable';
@@ -67,6 +75,8 @@
         const paginaInfo = document.createElement('span'); paginaInfo.className = 'small'; paginaInfo.setAttribute('aria-live', 'polite');
         paginacion.append(anterior, paginaInfo, siguiente);
         const nombreNorma = fila => fila.nombre_norma || fila.norma.split(' / ')[0];
+        // Filtra sin perder selecciones ocultas y muestra hasta doce tarjetas por pagina.
+        // La busqueda ignora mayusculas y acentos; todas las palabras deben coincidir.
         const aplicarFiltros = () => {
             const palabras = normalizar(busqueda.value).split(/\s+/).filter(Boolean);
             const visibles = [...tarjetas.children].filter(card => palabras.every(p => card.dataset.busqueda.includes(p))
@@ -126,16 +136,20 @@
         const titulos = ['Norma / grado', 'Dureza máxima HB/HBW', 'Tensión mínima (ksi)', 'Cedencia mínima (ksi)', 'Tensión máxima (ksi)'];
         let especificacionEditada = false;
         let primeraEspecificacion = true;
-        const entradaEspecificacion = form.id === 'FOR-PIMP-04_03' ? campo('ESPECIFICACION_MATERIAL') : null;
+        // La sugerencia de material deja de actualizarse cuando el tecnico escribe su propia redaccion.
+        const entradaEspecificacion = ['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].includes(form.id) ? campo('ESPECIFICACION_MATERIAL') : null;
         entradaEspecificacion?.addEventListener('input', () => { especificacionEditada = true; });
         const vincularEspecificacion = filas => {
-            if (form.id === 'FOR-PIMP-04_03') {
+            if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].includes(form.id)) {
                 const especificacion = campo('ESPECIFICACION_MATERIAL');
                 if (especificacion) {
                     especificacion.readOnly = false;
-                    const sugerencia = [...new Set(filas.map(fila => String(fila.norma || '').trim()).filter(Boolean))].join(' / ');
+                    const sugerencia = [...new Set(filas.map(fila => (form.id === 'FOR-PIMP-04_02' ? String(fila.norma || '').replace(/\s*\/\s*/g, ' ') : String(fila.norma || '')).trim()).filter(Boolean))].join(' / ');
                     // Edit conserva una redacción distinta de la sugerencia del catálogo.
-                    if (primeraEspecificacion && especificacion.value.trim() && especificacion.value !== sugerencia) especificacionEditada = true;
+                    if (primeraEspecificacion && especificacion.value.trim() && especificacion.value !== sugerencia) {
+                        if (form.id === 'FOR-PIMP-04_03') especificacionEditada = true;
+                        else { primeraEspecificacion = false; return; }
+                    }
                     primeraEspecificacion = false;
                     if (!especificacionEditada && especificacion.value !== sugerencia) {
                         especificacion.value = sugerencia;
@@ -144,6 +158,7 @@
                 }
             }
         };
+        // Resume las referencias en una sola fila; cada color conserva su norma y limites asociados.
         const pintar = filas => {
             vincularEspecificacion(filas);
             cuerpo.replaceChildren();
@@ -162,6 +177,8 @@
             });
             cuerpo.append(tr);
         };
+        // Sincroniza el envio, la tabla y los consumidores de composicion quimica.
+        // El evento permite actualizar otros bloques sin acoplarlos a las tarjetas del catalogo.
         const actualizarSeleccion = () => {
             seleccionPayload.value = JSON.stringify([...seleccionadas]);
             const filas = [...seleccionadas].map(id => candidatas.find(fila => clave(fila) === id)).filter(Boolean);
@@ -197,6 +214,7 @@
                 ['HB', 'HBW', 'HRC', 'HRB', 'HV'].forEach(valor => escala.add(new Option(valor, valor)));
                 escala.value = inicial.escalas?.[clave(fila)] || '';
                 const durezaOriginal = fila.dureza_max;
+                // Cambia la etiqueta de escala sobre el valor original; no convierte unidades de dureza.
                 const aplicarEscala = () => {
                     fila.dureza_max = escala.value && durezaOriginal ? `${String(durezaOriginal).replace(/\b(?:HBW|HB|HRC|HRB|HV)\b/gi, '').trim()} ${escala.value}` : durezaOriginal;
                     escala.disabled = !check.checked;
@@ -227,6 +245,7 @@
                 opciones.forEach(opcion => composicion.add(new Option(opcion.Variable, opcion.configuracion)));
                 composicion.value = inicial.composiciones?.[clave(fila)] ?? (opciones.length === 1 ? String(opciones[0].configuracion) : '');
                 composicion.title = 'Composición química: grado, producto y espesor';
+                // Solo envia controles de referencias marcadas; recuerda su variante al desmarcar.
                 const actualizarComposicion = () => {
                     fila.composicion_seleccionada = opciones.find(opcion => String(opcion.configuracion) === composicion.value) || null;
                     composicion.disabled = !check.checked || !opciones.length;
@@ -245,11 +264,13 @@
             });
             actualizarSeleccion();
         };
+        // Serializa las filas manuales y mantiene la sugerencia de material con sus nombres actuales.
         const actualizarManual = () => {
             vincularEspecificacion(manuales);
             payload.value = JSON.stringify(manuales);
             estado.textContent = 'Escribe directamente en la tabla. Cada color identifica una referencia y sus límites; el PDF conserva el mismo orden y los separadores /.';
         };
+        // Reconstruye las columnas editables; los atributos data relacionan cada input con su fila.
         const dibujarEditor = () => {
             cuerpo.replaceChildren();
             if (!manuales.length) { actualizarManual(); return; }
@@ -277,6 +298,7 @@
             cuerpo.append(row); actualizarManual();
         };
         agregar.addEventListener('click', () => { if (manuales.length < 30) { manuales.push({ norma: '', dureza_max: '', tension_min: '', cedencia_min: '', tension_max: '' }); dibujarEditor(); } });
+        // Cancela consultas anteriores y descarta respuestas tardias para no reemplazar el catalogo vigente.
         let peticion = 0; let temporizador; let controlador;
         const buscar = async () => {
             const turno = ++peticion;
@@ -306,6 +328,7 @@
                 filtroNorma.replaceChildren(new Option('Todas las normas', ''));
                 [...new Set(candidatas.map(nombreNorma))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })).forEach(nombre => filtroNorma.add(new Option(nombre, nombre)));
                 filtroNorma.value = [...filtroNorma.options].some(opcion => opcion.value === filtroAnterior) ? filtroAnterior : '';
+                // Retira selecciones que ya no existen en la respuesta actual del servidor.
                 const validas = new Set(candidatas.map(clave));
                 [...seleccionadas].forEach(id => { if (!validas.has(id)) seleccionadas.delete(id); });
                 dibujarCandidatas();
@@ -315,6 +338,8 @@
         };
         modo.addEventListener('change', () => { clearTimeout(temporizador); buscar(); });
         actualizarCatalogo.addEventListener('click', () => { if (!consultando) buscar(); });
+        // Antes de enviar, toma los ultimos valores visibles. No guarda una seleccion aun en consulta.
+        // La captura del evento actualiza los campos ocultos antes de otros manejadores de submit.
         form.addEventListener('submit', event => {
             if (modo.value === 'automatico') {
                 if (consultando) { event.preventDefault(); estado.textContent = 'Espera a que termine la consulta y confirma las normas antes de guardar.'; }
@@ -328,6 +353,7 @@
             });
             payload.value = JSON.stringify(manuales);
         }, true);
+        // Espera a que los demas inicializadores del formulario terminen de restaurar sus campos.
         setTimeout(buscar, 0);
     });
 })();

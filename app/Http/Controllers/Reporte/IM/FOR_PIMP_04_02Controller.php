@@ -348,14 +348,16 @@ class FOR_PIMP_04_02Controller extends Controller
         $fotos[] = [
             'path' => null,
             // El texto revisado en Create/Edit tiene prioridad; el generador queda como respaldo histórico.
-            'comment' => trim((string) ($analisis['descripcion_reporte'] ?? '')) !== ''
+            'comment' => app(ServicioMetalografiaReporte::class)->sinDescripcionConteoLineal(
+                trim((string) ($analisis['descripcion_reporte'] ?? '')) !== ''
                 ? (string) $analisis['descripcion_reporte']
                 : $this->construirTextoResultadosMetalograficos(
                     $analisis,
                     is_array($detallesGenerales['CONTEO_GRANOS'] ?? null)
                         ? $detallesGenerales['CONTEO_GRANOS']
                         : []
-                ),
+                )
+            ),
             'es_cuadro_texto' => 1,
             'una_hoja' => $layout['resultados']['posicion'] === 'pagina_completa' ? 1 : 0,
             'pagina' => $layout['resultados']['pagina'],
@@ -2211,7 +2213,12 @@ class FOR_PIMP_04_02Controller extends Controller
             (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? ''),
             $patronHistorico
-        ) ?? $patronHistorico;
+        );
+        // Una baja explicita no debe recuperar el patron anterior. Formularios antiguos
+        // que no envian este control conservan su historico.
+        if (!$request->has('Patron_Grano.activo')) {
+            $patronGrano = $patronHistorico;
+        }
 
         // Un token nuevo reemplaza el análisis anterior; si no llega, se conserva el histórico.
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
@@ -2867,7 +2874,7 @@ class FOR_PIMP_04_02Controller extends Controller
             foreach ($fotos as $indiceFoto => $foto) {
                 $esCuadroTexto = !empty($foto['es_cuadro_texto']);
                 $rutaFoto = null;
-                if (!$esCuadroTexto) {
+                if (!$esCuadroTexto && empty($foto['sin_fotografia'])) {
                     $rutaFoto = storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
 
                     if (!File::exists($rutaFoto)) {
@@ -2885,6 +2892,7 @@ class FOR_PIMP_04_02Controller extends Controller
 
                 $Fotos[] = [
                     'path' => $rutaFoto,
+                    'sin_fotografia' => !empty($foto['sin_fotografia']),
                     'comment' => $foto['comentario'] ?? '',
                     'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
                     'una_hoja' => $distribucionFoto['una_hoja'],
@@ -2947,7 +2955,20 @@ class FOR_PIMP_04_02Controller extends Controller
             // Si cambia un dato general visible en ambos, se regeneran ambos PDFs.
             $htmlFotos = view('Reportes.ReportesFotosPDFIM.Reporte_FOTOS_FOR_PIMP_04_02_PDF', $data)->render();
             $pdf2Content = $secciones->obtener((int) $id, 'fotos', $htmlFotos,
-                fn () => PDF::loadHTML($htmlFotos)->setPaper('letter', 'portrait')->output());
+                function () use ($htmlFotos) {
+                    $pdf = PDF::loadHTML($htmlFotos)->setPaper('letter', 'portrait');
+                    // Traza la equis y su unico marco con vectores del PDF, sin usar la imagen PNG.
+                    $pdf->getDomPDF()->setCallbacks([['event' => 'end_frame', 'f' => function ($frame, $canvas) {
+                        $nodo = $frame->get_node();
+                        if (!$nodo instanceof \DOMElement || $nodo->getAttribute('data-photo-cross') !== '1') return;
+                        $caja = $frame->get_border_box();
+                        $x = $caja['x']; $y = $caja['y']; $w = $caja['w']; $h = $caja['h'];
+                        $canvas->rectangle($x, $y, $w, $h, [0, 0, 0], 0.75);
+                        $canvas->line($x, $y, $x + $w, $y + $h, [0, 0, 0], 0.75);
+                        $canvas->line($x + $w, $y, $x, $y + $h, [0, 0, 0], 0.75);
+                    }]]);
+                    return $pdf->output();
+                });
         }
 
         // Generar el PDF adicional en orientación vertical

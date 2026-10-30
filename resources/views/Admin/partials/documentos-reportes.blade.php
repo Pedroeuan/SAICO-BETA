@@ -1,3 +1,8 @@
+{{--
+    Carga y consulta de C.V. y certificados en alta y edición de usuarios.
+    Recibe Usuario al editar, serviciosDocumentos y procedimientosDocumentos desde el controlador.
+    Los documentos nuevos se envían junto al formulario principal; el servidor asigna nombre y formato.
+--}}
 <section class="usuario-documentos" aria-label="C.V. para reportes y certificados">
     <div class="usuario-documentos-encabezado">
         <div>
@@ -8,6 +13,7 @@
     </div>
     <div>
         @if(!empty($Usuario->documentos_reportes ?? []))
+        {{-- Mantiene compacta la lista; abre si se recuperan documentos marcados para retirar. --}}
         <details class="usuario-pdf-desplegable" @if(old('documentos_eliminar')) open @endif>
             <summary>
                 <i class="far fa-folder-open" aria-hidden="true"></i>
@@ -50,6 +56,7 @@
         @endif
     </div>
 </section>
+{{-- Cada fila nueva recibe un índice propio para asociar su tipo, servicio, procedimiento y PDF. --}}
 <template id="plantilla-documento-reporte">
     <div class="border rounded p-3 mb-3 usuario-documento-nuevo">
         <small class="d-block mb-3">Seleccione el servicio y suba su PDF. El nombre y la referencia del formato se asignan automáticamente.</small>
@@ -89,6 +96,7 @@
         <button type="button" class="btn btn-outline-danger mt-3" data-quitar-documento>Quitar</button>
     </div>
 </template>
+{{-- Solo organiza las filas y sus campos; la validación definitiva y los vínculos se aplican en el servidor. --}}
 <script>
 (() => {
     let indice = 0;

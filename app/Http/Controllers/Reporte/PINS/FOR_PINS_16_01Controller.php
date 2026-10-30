@@ -40,9 +40,43 @@ use App\Support\Reportes\PinsEquiposQrSupport;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Barryvdh\DomPDF\Facade\Pdf;
+use RuntimeException;
+use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\Process\Process;
 
 class FOR_PINS_16_01Controller extends Controller
 {
+    /** El procedimiento del 16 siempre procede del catálogo del formato visual. */
+    private function procedimientoReporte16(): ?\App\Models\Procedimientos\Procedimiento
+    {
+        $id = formato::where('Nombre', 'FOR-PINS-16-01')->value('idProcedimiento');
+        return $id ? \App\Models\Procedimientos\Procedimiento::find($id) : null;
+    }
+
+    private function aplicarProcedimientoReporte16(array &$detalles): void
+    {
+        $procedimiento = $this->procedimientoReporte16();
+        $detalles['idProcedimiento'] = $procedimiento?->idProcedimiento;
+        $detalles['Procedimiento'] = $procedimiento?->Nombre ?? '';
+    }
+    /** Admite tablas antiguas y descarta metadatos o valores que no sean filas del reporte. */
+    public static function normalizarBloques16($datos): array
+    {
+        if (!is_array($datos)) return [];
+        if (isset($datos[0]['tipo'])) $datos = [$datos];
+        $bloques = [];
+        foreach ($datos as $bloque) {
+            if (!is_array($bloque)) continue;
+            $filas = [];
+            foreach ($bloque as $item) {
+                if (!is_array($item) || !in_array($item['tipo'] ?? null, ['titulo', 'fila', 'longitud'], true)) continue;
+                if (($item['tipo'] ?? null) === 'fila' && !is_array($item['data'] ?? null)) $item['data'] = [];
+                $filas[] = $item;
+            }
+            if ($filas) $bloques[] = $filas;
+        }
+        return $bloques;
+    }
     // Sanea la configuracion enviada desde la tabla con combinacion de celdas.
     private function sanitizarConfiguracionCombinacionTabla($configuracionCruda)
     {
@@ -108,8 +142,144 @@ class FOR_PINS_16_01Controller extends Controller
 
     private function invalidarPdfCacheReporte16(array &$datosEquipo): void
     {
+        if (!empty($datosEquipo['PDF_REPORTE_CACHE'])) {
+            Storage::disk('public')->delete(preg_replace('#^storage/#', '', $datosEquipo['PDF_REPORTE_CACHE']));
+        }
+        $datosEquipo['PDF_REPORTE_CACHE'] = null;
+        if (!empty($datosEquipo['PDF_UNIFICADO'])) {
+            Storage::disk('public')->delete(preg_replace('#^storage/#', '', $datosEquipo['PDF_UNIFICADO']));
+        }
         PinsEquiposQrSupport::eliminarArchivoPublico($datosEquipo['PDF_UNIFICADO'] ?? null);
         $datosEquipo['PDF_UNIFICADO'] = null;
+    }
+
+    /** Genera únicamente los documentos del técnico para el enlace público del QR. */
+    public function Datos_QR(array $datosParaCrearQR): array
+    {
+        $detalles = ['Contrato' => $datosParaCrearQR['Contrato'] ?? '', 'No_Reporte' => $datosParaCrearQR['No_Reporte'] ?? '',
+            'idProcedimiento' => $datosParaCrearQR['idProcedimiento'] ?? null];
+        $this->aplicarProcedimientoReporte16($detalles);
+        $anexos = $this->documentosTecnicoReporte16($detalles,
+            ['Documentos_Usuario' => $datosParaCrearQR['Documentos_Usuario'] ?? null],
+            ['ID_TECNICO' => $datosParaCrearQR['ID_TECNICO'] ?? null]);
+        // El procedimiento se anexa aunque no se haya elegido ningún C.V.
+        $pdfProcedimiento = $this->procedimientoReporte16()?->PDF;
+        if ($pdfProcedimiento && !in_array(strtoupper(trim($pdfProcedimiento)), ['ESPERA DE DATO', 'EN ESPERA DE DATOS', 'N/A'], true)) {
+            $anexos['rutas'][] = $pdfProcedimiento;
+        }
+        $qr = PinsEquiposQrSupport::generarQrPublico('FOR_PINS_16_01', $detalles['Contrato'], $detalles['No_Reporte'], $datosParaCrearQR['qr_token']);
+
+        $ruta = null;
+        if ($anexos['rutas']) {
+            $pdf = new Fpdi;
+            $this->anexarDocumentosTecnico16($pdf, $anexos['rutas']);
+            $ruta = str_replace('/PDF_CACHE/', '/DOCUMENTOS_QR/', PinsEquiposQrSupport::obtenerRutaPdfCachePublica(
+                'FOR_PINS_16_01', $detalles['Contrato'] ?? '', $detalles['No_Reporte'] ?? ''
+            ));
+            if (!Storage::disk('public')->put(preg_replace('#^storage/#', '', $ruta), $pdf->Output('S'))) {
+                throw new RuntimeException('No se pudo guardar el PDF de documentos del QR.');
+            }
+        }
+        return ['qr' => $qr, 'pdf' => $ruta];
+    }
+
+    // Funciones exclusivas del 16_01: firma de caché, anexado de PDF y compatibilidad con Ghostscript.
+    private function firmaDocumentosTecnico16(array $rutas, array $seleccion): string
+    {
+        $archivos = [];
+        foreach ($rutas as $ruta) {
+            $real = $this->resolverDocumentoTecnico16($ruta);
+            $archivos[$ruta] = $real ? hash_file('sha256', $real) : null;
+        }
+        return hash('sha256', serialize([1, $seleccion, $archivos]));
+    }
+
+    private function anexarDocumentosTecnico16(Fpdi $pdf, array $rutas): void
+    {
+        foreach (array_unique($rutas) as $ruta) {
+            $real = $this->resolverDocumentoTecnico16($ruta);
+            if (!$real) throw new RuntimeException('No se encontró un C.V. o certificado seleccionado para el QR. Revise los documentos del técnico.');
+            $temporal = null;
+            $carpetaTemporal = null;
+            try {
+                // Comprueba la lectura antes de añadir páginas; convierte solo si FPDI lo necesita.
+                try {
+                    $paginas = $pdf->setSourceFile($real);
+                } catch (\Exception $error) {
+                    $gs = $this->ghostscriptDocumentosTecnico16();
+                    if (!$gs) throw new RuntimeException('El PDF del técnico requiere Ghostscript para poder anexarse al reporte.', 0, $error);
+                    // Apache puede heredar TEMP/TMPDIR vacíos o inaccesibles para Ghostscript.
+                    // Cada conversión usa su propia carpeta privada y variables de entorno explícitas.
+                    $carpetaTemporal = storage_path('app/temp_pdfs/FOR_PINS_16_01/anexos_' . Str::uuid());
+                    File::ensureDirectoryExists($carpetaTemporal, 0755, true);
+                    if (!is_writable($carpetaTemporal)) throw new RuntimeException('No se puede escribir en la carpeta temporal de anexos del reporte 16_01.');
+                    $temporal = $carpetaTemporal . DIRECTORY_SEPARATOR . 'compatible.pdf';
+                    $directorioGs = str_replace('\\', '/', $carpetaTemporal);
+                    $proceso = new Process([$gs, '-dSAFER', '-dBATCH', '-dNOPAUSE', '-sDEVICE=pdfwrite',
+                        '-dCompatibilityLevel=1.4', '-sOutputFile=' . str_replace('\\', '/', $temporal),
+                        str_replace('\\', '/', $real)], $carpetaTemporal,
+                        ['TMPDIR' => $directorioGs, 'TEMP' => $directorioGs, 'TMP' => $directorioGs]);
+                    $proceso->setTimeout(60);
+                    $proceso->mustRun();
+                    // FPDI conserva el lector hasta Output(); cargar en memoria permite limpiar
+                    // la carpeta inmediatamente sin archivos pendientes de borrado en Windows.
+                    $paginas = $pdf->setSourceFile(StreamReader::createByString(File::get($temporal)));
+                }
+                for ($pagina = 1; $pagina <= $paginas; $pagina++) {
+                    $plantilla = $pdf->importPage($pagina);
+                    $tamano = $pdf->getTemplateSize($plantilla);
+                    $pdf->AddPage($tamano['orientation'], [$tamano['width'], $tamano['height']]);
+                    $pdf->useTemplate($plantilla);
+                }
+            } finally {
+                if (is_string($temporal) && is_file($temporal)) unlink($temporal);
+                if ($carpetaTemporal !== null && is_dir($carpetaTemporal)) File::deleteDirectory($carpetaTemporal);
+            }
+        }
+    }
+
+    private function resolverDocumentoTecnico16(string $ruta): ?string
+    {
+        $relativa = ltrim(str_replace('\\', '/', $ruta), '/');
+        $relativa = preg_replace('#^(?:public/)?storage/#', '', $relativa);
+        foreach ([Storage::disk('public')->path($relativa), storage_path($relativa)] as $candidato) {
+            $real = realpath($candidato);
+            $base = realpath(storage_path());
+            if ($real && $base && str_starts_with($real, $base . DIRECTORY_SEPARATOR) && is_file($real)) return $real;
+        }
+        return null;
+    }
+
+    private function ghostscriptDocumentosTecnico16(): ?string
+    {
+        $configurado = (string) config('xrf.ghostscript_binary', '');
+        if ($configurado && is_file($configurado)) return $configurado;
+        $finder = new ExecutableFinder;
+        foreach (array_filter([$configurado, 'gs', 'gswin64c', 'gswin32c']) as $nombre) {
+            if ($ruta = $finder->find($nombre)) return $ruta;
+        }
+        $instalados = glob('C:/Program Files/gs/gs*/bin/gswin64c.exe') ?: [];
+        natsort($instalados);
+        return $instalados ? end($instalados) : null;
+    }
+
+    /** Usa el ID guardado en la firma activa y la misma selección que la vista previa. */
+    private function documentosTecnicoReporte16(array $detalles, array $equipo, array $firmas): array
+    {
+        $id = $firmas['ID_TECNICO'] ?? null;
+        $seleccion = $equipo['Documentos_Usuario'] ?? null;
+        $procedimiento = !empty($detalles['idProcedimiento']) ? (int) $detalles['idProcedimiento'] : null;
+        $rutas = app(\App\Services\DocumentosUsuarioReporte::class)->rutas(
+            $id ? \App\Models\Admin\Usuario::find($id) : null,
+            $seleccion, 'FOR-PINS-16-01', $procedimiento
+        );
+        // Algunos usuarios antiguos tienen textos de espera en lugar de una ruta de C.V.
+        $rutas = array_values(array_filter($rutas, fn ($ruta) => $ruta && !in_array(
+            strtoupper(trim($ruta)), ['ESPERA DE DATO', 'EN ESPERA DE DATOS', 'N/A'], true
+        )));
+        return ['rutas' => $rutas, 'firma' => $this->firmaDocumentosTecnico16(
+            $rutas, [$id, $procedimiento, $seleccion]
+        )];
     }
 
     private function obtenerRespuestaPdfCacheadoReporte16($id)
@@ -121,13 +291,10 @@ class FOR_PINS_16_01Controller extends Controller
         }
 
         $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
-        $rutaPublica = $datosEquipo['PDF_UNIFICADO'] ?? null;
+        $rutaPublica = $datosEquipo['PDF_REPORTE_CACHE'] ?? null;
+        if (($datosEquipo['PDF_REPORTE_VERSION'] ?? null) !== $this->versionPdfReporte16()) return null;
 
-        if (!PinsEquiposQrSupport::existeArchivoPublico($rutaPublica)) {
-            return null;
-        }
-
-        $rutaAbsoluta = PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($rutaPublica);
+        $rutaAbsoluta = $rutaPublica ? Storage::disk('public')->path(preg_replace('#^storage/#', '', $rutaPublica)) : null;
 
         if (!$rutaAbsoluta || !File::exists($rutaAbsoluta)) {
             return null;
@@ -135,23 +302,38 @@ class FOR_PINS_16_01Controller extends Controller
 
         return response(File::get($rutaAbsoluta), 200)
             ->header('Content-Type', 'application/pdf')
+            ->header('Cache-Control', 'no-store')
             ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_16_01.PDF"');
     }
 
     private function guardarPdfCacheadoReporte16($id, $pdfOutput, array $detallesGenerales, array $datosEquipo): void
     {
-        $rutaPublica = PinsEquiposQrSupport::guardarPdfCacheado(
-            $pdfOutput,
+        $rutaPublica = PinsEquiposQrSupport::obtenerRutaPdfCachePublica(
             'FOR_PINS_16_01',
             $detallesGenerales['Contrato'] ?? '',
             $detallesGenerales['No_Reporte'] ?? ''
         );
+        if (!Storage::disk('public')->put(preg_replace('#^storage/#', '', $rutaPublica), $pdfOutput)) {
+            throw new \RuntimeException('No se pudo guardar el PDF del reporte 16_01.');
+        }
 
-        $datosEquipo['PDF_UNIFICADO'] = $rutaPublica;
+        $datosEquipo['PDF_REPORTE_CACHE'] = $rutaPublica;
+        $datosEquipo['PDF_REPORTE_VERSION'] = $this->versionPdfReporte16();
 
         reporte::where('idReportes', $id)->update([
             'Datos_Equipo' => json_encode($datosEquipo),
         ]);
+    }
+
+    /** Una corrección en las plantillas debe descartar también el PDF anterior. */
+    private function versionPdfReporte16(): string
+    {
+        $archivos = [
+            resource_path('views/Reportes/ReportesPDF/Reporte_FOR_PINS_16_01_01_PDF.blade.php'),
+            resource_path('views/Reportes/ReportesPDF/Reporte_FOR_PINS_16_01_PDF.blade.php'),
+            resource_path('views/Reportes/ReportesFotosPDF/Reporte_FOTOS_FOR_PINS_16_01_PDF.blade.php'),
+        ];
+        return hash('sha256', serialize(['reporte-sin-cv-v3-procedimiento-catalogo', array_map('hash_file', array_fill(0, count($archivos), 'sha256'), $archivos)]));
     }
 
     public function OS_OC($datosParaCrearOS_OC)
@@ -674,18 +856,18 @@ class FOR_PINS_16_01Controller extends Controller
         }
 
         $detallesGenerales = json_decode($reporte->Detalles_Generales, true) ?: [];
+        $this->aplicarProcedimientoReporte16($detallesGenerales);
         $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
         $catalogoEquiposHerramientas = PinsEquiposQrSupport::obtenerCatalogoEquiposHerramientasPorSolicitud($detallesGenerales['idSolicitud'] ?? null);
         $datosEquipo = PinsEquiposQrSupport::normalizarDatosEquipoSeleccionadosExistentes($datosEquipo, $catalogoEquiposHerramientas);
         $tablaCombinacionConfig = json_decode($datosEquipo['TABLA_COMBINACION_CONFIG'] ?? '[]', true) ?: [];
         $tablaCombinacionConfigComponentes = json_decode($datosEquipo['TABLA_COMBINACION_CONFIG_COMPONENTES'] ?? '[]', true) ?: [];
         $juntasGrupoRe = json_decode($grupoJuntas->Juntas_Grupo_Re, true) ?: [];
-        $componentesDetalles = $juntasGrupoRe['componentes'] ?? [];
-        $inspeccionDetalles = $juntasGrupoRe['inspeccion'] ?? $juntasGrupoRe;
+        $componentesDetalles = self::normalizarBloques16($juntasGrupoRe['componentes'] ?? []);
+        $inspeccionDetalles = self::normalizarBloques16($juntasGrupoRe['inspeccion'] ?? $juntasGrupoRe);
         $firmas = json_decode($firmasReporte->Firmas, true) ?: [];
         $fotos = $this->obtenerFotosParaPdf($fotosReporte);
-        $qrPdf = !empty($datosEquipo['QR_PDF']) ? PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($datosEquipo['QR_PDF']) : null;
-        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
+        $qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($datosEquipo['QR_PDF'] ?? null);
         return [
             'Detalles_Generales' => $detallesGenerales,
             'Datos_Equipo' => $datosEquipo,
@@ -774,6 +956,12 @@ class FOR_PINS_16_01Controller extends Controller
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.Observaciones' => 'nullable|string',
             'Datos_Equipo.REQUIERE_EQUIPOS' => 'nullable|string|in:si,no',
@@ -823,6 +1011,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|integer|exists:users,id',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -832,6 +1021,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|integer|exists:users,id',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -847,6 +1037,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|integer|exists:users,id',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -866,6 +1057,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|integer|exists:users,id',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -886,6 +1078,7 @@ class FOR_PINS_16_01Controller extends Controller
         // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
         // cuando tienes campos opcionales en tu formulario.
 
+        $this->aplicarProcedimientoReporte16($validatedData['Detalles_Generales']);
         /*Detalles Generales y Datos del Equipo */
         $Reportes = new reporte();  // Modelo de la tabla donde guardas los datos
         $Grupo_Juntas_Detalles_Re = new Grupo_Juntas_Detalles_Re();  // Modelo de la tabla donde guardas los datos
@@ -1148,6 +1341,19 @@ class FOR_PINS_16_01Controller extends Controller
 
         $Firmas_Reportes->idReportes = $idReportes;
         $Firmas_Reportes->save();
+        // Como en los demás PINS, preparar los documentos del QR al guardar el reporte.
+        $datosParaCrearQR = [
+            'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? '',
+            'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? '',
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
+            'ID_TECNICO' => (json_decode($Firmas_Reportes->Firmas, true) ?: [])['ID_TECNICO'] ?? null,
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ];
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'];
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
+        $Reportes->update(['Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])]);
 
         /* Fotos y Comentarios */
         $imageCount = $request->input('imageCount'); // Número de imágenes
@@ -1262,6 +1468,12 @@ class FOR_PINS_16_01Controller extends Controller
             'Detalles_Generales.Nombre_Soldador' => 'nullable|string',
 
             /*DATOS DEL EQUIPO Y OBSERVACIONES*/
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
+            'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.Observaciones' => 'nullable|string',
 
@@ -1304,6 +1516,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes1' => 'required|array',  // Asegura que es un array
 
             'Firmas_Reportes1.Realizo' => 'nullable|string',
+            'Firmas_Reportes1.ID_TECNICO' => 'nullable|integer|exists:users,id',
             'Firmas_Reportes1.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.CARGO_TECNICO' => 'nullable|string',
             'Firmas_Reportes1.EMPRESA_TECNICO' => 'nullable|string',
@@ -1313,6 +1526,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes2.Realizo' => 'nullable|string',
             'Firmas_Reportes2.Vobo1' => 'nullable|string',
 
+            'Firmas_Reportes2.ID_TECNICO' => 'nullable|integer|exists:users,id',
             'Firmas_Reportes2.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes2.NOMBRE_ENCARGADO' => 'nullable|string',
 
@@ -1328,6 +1542,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes3.Vobo1' => 'nullable|string',
             'Firmas_Reportes3.Vobo2' => 'nullable|string',
 
+            'Firmas_Reportes3.ID_TECNICO' => 'nullable|integer|exists:users,id',
             'Firmas_Reportes3.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes3.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1347,6 +1562,7 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes4.Vobo2' => 'nullable|string',
             'Firmas_Reportes4.Vobo3' => 'nullable|string',
 
+            'Firmas_Reportes4.ID_TECNICO' => 'nullable|integer|exists:users,id',
             'Firmas_Reportes4.NOMBRE_TECNICO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.NOMBRE_2DO_ENCARGADO' => 'nullable|string',
@@ -1374,6 +1590,7 @@ class FOR_PINS_16_01Controller extends Controller
         $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
+        $this->aplicarProcedimientoReporte16($validatedData['Detalles_Generales']);
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
 
         if ($request->hasFile('Detalles_Generales.Reporte_Firmado')) {
@@ -1607,6 +1824,19 @@ class FOR_PINS_16_01Controller extends Controller
         $Firmas->update([
             'Firmas' => $this->obtenerPayloadFirmas($request, $validatedData)
         ]);
+        // Regenerar con el técnico y las opciones actuales, antes de consultar el QR.
+        $datosParaCrearQR = [
+            'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? '',
+            'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? '',
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
+            'ID_TECNICO' => (json_decode($Firmas->Firmas, true) ?: [])['ID_TECNICO'] ?? null,
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+        ];
+        $resultadoQR = $this->Datos_QR($datosParaCrearQR);
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'];
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
+        reporte::where('idReportes', $id)->update(['Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])]);
 
         /* Fotos y Comentarios */
         // Obtener los valores necesarios para la ruta personalizada
@@ -1852,7 +2082,7 @@ class FOR_PINS_16_01Controller extends Controller
                 'orientation' => 'P',
                 'width' => 210,
                 'height' => 297,
-                'page_number_x' => 118.5,
+                'page_number_x' => 122.5,
                 'page_number_y' => -266.5,
             ],
             [
@@ -1873,12 +2103,14 @@ class FOR_PINS_16_01Controller extends Controller
             ],
         ]);
 
+        // El reporte descargado conserva solo sus secciones; los C.V. se sirven desde el QR.
         $pdfOutput = $combinedPdf->Output('Reporte_FOR_PINS_16_01.PDF', 'S');
         $this->guardarPdfCacheadoReporte16($id, $pdfOutput, $data['Detalles_Generales'], $data['Datos_Equipo']);
         Log::info('PDF combinado y listo para enviar', ['segundos' => round(microtime(true) - $t0, 2)]);
 
         return response($pdfOutput, 200)
             ->header('Content-Type', 'application/pdf')
+            ->header('Cache-Control', 'no-store')
             ->header('Content-Disposition', 'inline; filename="Reporte_FOR_PINS_16_01.PDF"');
     }
 
