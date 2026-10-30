@@ -53,7 +53,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final session = ref.watch(sessionProvider);
     final isLoading = authState.isLoading;
     final size = MediaQuery.sizeOf(context);
-    final topPanelHeight = size.height * 0.34;
 
     if (!session.isLoading && session.isAuthenticated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -64,16 +63,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     return AdaptivePageScaffold(
-      title: 'Acceso movil',
+      title: 'SAICO',
       child: session.isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
               children: <Widget>[
                 SaicoBrandHeader(
-                  height: topPanelHeight.clamp(250, 330).toDouble(),
-                  title: 'Gestion movil de vehiculos',
-                  subtitle:
-                      'Solicitudes, checklist de salida y checklist de entrada con el mismo flujo operativo del sistema SAICO.',
+                  title: 'Vehículos',
+                  subtitle: '',
                 ),
                 const SizedBox(height: 20),
                 Center(
@@ -81,7 +78,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     constraints: const BoxConstraints(maxWidth: 420),
                     child: AppCard(
                       child: Padding(
-                        padding: const EdgeInsets.all(24),
+                        padding: EdgeInsets.all(size.width < 600 ? 0 : 12),
                         child: Form(
                           key: _formKey,
                           child: Column(
@@ -89,14 +86,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               Text(
-                                'Iniciar sesion',
+                                'Iniciar sesión',
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                               const SizedBox(height: 18),
                               TextFormField(
                                 controller: _emailController,
                                 keyboardType: TextInputType.emailAddress,
-                                decoration: const InputDecoration(labelText: 'Correo'),
+                                decoration: const InputDecoration(
+                                    labelText: 'Correo',
+                                    prefixIcon: Icon(Icons.mail_outline)),
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
                                     return 'Ingresa tu correo.';
@@ -109,10 +108,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 controller: _passwordController,
                                 obscureText: _hidePassword,
                                 decoration: InputDecoration(
-                                  labelText: 'Contrasena',
+                                  labelText: 'Contraseña',
+                                  prefixIcon: const Icon(Icons.lock_outline),
                                   suffixIcon: IconButton(
+                                    tooltip: _hidePassword
+                                        ? 'Mostrar contraseña'
+                                        : 'Ocultar contraseña',
                                     onPressed: () {
-                                      setState(() => _hidePassword = !_hidePassword);
+                                      setState(
+                                          () => _hidePassword = !_hidePassword);
                                     },
                                     icon: Icon(
                                       _hidePassword
@@ -130,7 +134,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                               const SizedBox(height: 20),
                               AppButton(
-                                label: isLoading ? 'Ingresando...' : 'Entrar al modulo',
+                                label: isLoading ? 'Ingresando...' : 'Ingresar',
+                                icon: Icons.login,
                                 isLoading: isLoading,
                                 onPressed: _submit,
                               ),

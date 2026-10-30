@@ -117,6 +117,12 @@ label {
 
         <form method="POST" action="{{ route('salidas.checklist.entrada.store', $salida->id) }}" enctype="multipart/form-data">
         @csrf
+<div class="mb-3">
+    <label for="fecha_operativa" class="form-label">Fecha y hora real de regreso</label>
+    <input id="fecha_operativa" name="fecha_operativa" type="datetime-local" class="form-control" required value="{{ old('fecha_operativa') }}">
+    <small>Indica cuando ocurrio, aunque estes registrando el checklist despues. Hora de {{ config('app.timezone') }}.</small>
+    @error('fecha_operativa') <div class="text-danger">{{ $message }}</div> @enderror
+</div>
 
         <div class="mb-3">
             <label>Nivel de gasolina al regresar</label>

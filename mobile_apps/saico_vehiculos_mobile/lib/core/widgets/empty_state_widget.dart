@@ -18,7 +18,8 @@ class EmptyStateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ConstrainedBox(
+      child: SingleChildScrollView(
+          child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 420),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -30,19 +31,22 @@ class EmptyStateWidget extends StatelessWidget {
                 color: AppColors.primarySoft,
                 borderRadius: BorderRadius.circular(28),
               ),
-              child: const Icon(Icons.directions_car_outlined, size: 40, color: AppColors.primary),
+              child: const Icon(Icons.directions_car_outlined,
+                  size: 40, color: AppColors.primary),
             ),
             const SizedBox(height: 18),
-            Text(title, style: AppTextStyles.sectionTitle, textAlign: TextAlign.center),
+            Text(title,
+                style: AppTextStyles.sectionTitle, textAlign: TextAlign.center),
             const SizedBox(height: 10),
-            Text(message, style: AppTextStyles.body, textAlign: TextAlign.center),
+            Text(message,
+                style: AppTextStyles.body, textAlign: TextAlign.center),
             if (action != null) ...<Widget>[
               const SizedBox(height: 18),
               action!,
             ],
           ],
         ),
-      ),
+      )),
     );
   }
 }

@@ -28,11 +28,12 @@ class AppButton extends StatelessWidget {
             height: 18,
             child: CircularProgressIndicator(strokeWidth: 2),
           )
-        else if (icon != null) ...<Widget>[
-          Icon(icon, size: 18),
+        else ...<Widget>[
+          Icon(icon ?? Icons.check_circle_outline, size: 20),
           const SizedBox(width: 8),
         ],
-        Text(label),
+        if (isLoading) const SizedBox(width: 8),
+        Flexible(child: Text(label, textAlign: TextAlign.center)),
       ],
     );
 

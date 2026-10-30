@@ -9,7 +9,6 @@ import '../../../core/network/network_error_formatter.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/empty_state_widget.dart';
-import '../../../core/widgets/saico_brand_header.dart';
 import '../../../core/widgets/vehicle_card.dart';
 import '../../auth/application/session_provider.dart';
 import '../application/vehicle_operations_controller.dart';
@@ -19,7 +18,8 @@ class RequestVehicleScreen extends ConsumerStatefulWidget {
   const RequestVehicleScreen({super.key});
 
   @override
-  ConsumerState<RequestVehicleScreen> createState() => _RequestVehicleScreenState();
+  ConsumerState<RequestVehicleScreen> createState() =>
+      _RequestVehicleScreenState();
 }
 
 class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
@@ -45,7 +45,9 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
 
     if (_departureAt.isBefore(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('La fecha de salida no puede ser menor a la actual.')),
+        const SnackBar(
+            content:
+                Text('La fecha de salida no puede ser menor a la actual.')),
       );
       return;
     }
@@ -97,11 +99,13 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
           if (data.activeExit != null) {
             return const EmptyStateWidget(
               title: 'Ya existe una salida activa',
-              message: 'Primero finaliza la salida actual antes de registrar una nueva solicitud.',
+              message:
+                  'Primero finaliza la salida actual antes de registrar una nueva solicitud.',
             );
           }
 
-          _requestedById ??= _findInitialRequesterId(data.users, session.currentUser?.id);
+          _requestedById ??=
+              _findInitialRequesterId(data.users, session.currentUser?.id);
 
           final selectedVehicle = _findVehicle(data.vehicles, _vehicleId);
           final selectedDriver = _findUser(data.users, _driverId);
@@ -114,31 +118,21 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                 final isWide = constraints.maxWidth >= 900;
 
                 final leftColumn = <Widget>[
-                  const SaicoBrandHeader(
-                    compact: true,
-                    height: 220,
-                    title: 'Solicitud de vehiculo',
-                    subtitle:
-                        'Captura la solicitud con el mismo criterio del modulo web y deja visibles las validaciones de operacion.',
-                  ),
-                  const SizedBox(height: 16),
                   AppCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Nueva salida de vehiculo',
+                          'Vehículo y responsables',
                           style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Replica del formulario web original para registrar la solicitud y asignacion de vehiculo.',
-                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(height: 20),
                         DropdownButtonFormField<int>(
+                          isExpanded: true,
+                          itemHeight: null,
                           value: _vehicleId,
-                          decoration: const InputDecoration(labelText: 'Vehiculo'),
+                          decoration:
+                              const InputDecoration(labelText: 'Vehiculo'),
                           items: data.vehicles
                               .map(
                                 (vehicle) => DropdownMenuItem<int>(
@@ -147,7 +141,8 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                                 ),
                               )
                               .toList(growable: false),
-                          onChanged: (value) => setState(() => _vehicleId = value),
+                          onChanged: (value) =>
+                              setState(() => _vehicleId = value),
                           validator: (value) =>
                               value == null ? 'Selecciona un vehiculo.' : null,
                         ),
@@ -160,8 +155,11 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                         ],
                         const SizedBox(height: 16),
                         DropdownButtonFormField<int>(
+                          isExpanded: true,
+                          itemHeight: null,
                           value: _driverId,
-                          decoration: const InputDecoration(labelText: 'Chofer'),
+                          decoration:
+                              const InputDecoration(labelText: 'Chofer'),
                           items: data.users
                               .map(
                                 (user) => DropdownMenuItem<int>(
@@ -170,14 +168,18 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                                 ),
                               )
                               .toList(growable: false),
-                          onChanged: (value) => setState(() => _driverId = value),
+                          onChanged: (value) =>
+                              setState(() => _driverId = value),
                           validator: (value) =>
                               value == null ? 'Selecciona un chofer.' : null,
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<int>(
+                          isExpanded: true,
+                          itemHeight: null,
                           value: _requestedById,
-                          decoration: const InputDecoration(labelText: 'Solicitado por'),
+                          decoration: const InputDecoration(
+                              labelText: 'Solicitado por'),
                           items: data.users
                               .map(
                                 (user) => DropdownMenuItem<int>(
@@ -186,7 +188,8 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                                 ),
                               )
                               .toList(growable: false),
-                          onChanged: (value) => setState(() => _requestedById = value),
+                          onChanged: (value) =>
+                              setState(() => _requestedById = value),
                           validator: (value) => value == null
                               ? 'Selecciona quien solicita el vehiculo.'
                               : null,
@@ -198,16 +201,19 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                           subtitle: Text(
                             DateFormat('dd/MM/yyyy HH:mm').format(_departureAt),
                           ),
-                          trailing: FilledButton.tonal(
+                          trailing: IconButton(
+                            tooltip: 'Editar fecha de salida',
                             onPressed: _pickDepartureDateTime,
-                            child: const Text('Editar'),
+                            icon: const Icon(Icons.edit_calendar_outlined),
                           ),
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _reasonController,
+                          minLines: 2,
                           maxLines: 4,
-                          decoration: const InputDecoration(labelText: 'Motivo'),
+                          decoration:
+                              const InputDecoration(labelText: 'Motivo'),
                           validator: (value) {
                             final text = value?.trim() ?? '';
                             if (text.isEmpty) {
@@ -256,17 +262,11 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text(
-                          'Confirmacion',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Al guardar, la salida quedara disponible para checklist de salida desde la pantalla principal.',
-                        ),
-                        const SizedBox(height: 18),
                         AppButton(
-                          label: _isSubmitting ? 'Guardando salida...' : 'Guardar salida',
+                          icon: Icons.check_circle_outline,
+                          label: _isSubmitting
+                              ? 'Guardando salida...'
+                              : 'Guardar salida',
                           isLoading: _isSubmitting,
                           onPressed: _submit,
                         ),
@@ -280,12 +280,14 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                     children: <Widget>[
                       ...leftColumn,
                       const SizedBox(height: 16),
-                      ...rightColumn.expand((item) => <Widget>[item, const SizedBox(height: 16)]),
+                      ...rightColumn.expand(
+                          (item) => <Widget>[item, const SizedBox(height: 16)]),
                     ],
                   );
                 }
 
-                return Row(
+                return SingleChildScrollView(
+                    child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Expanded(
@@ -297,12 +299,13 @@ class _RequestVehicleScreenState extends ConsumerState<RequestVehicleScreen> {
                       flex: 4,
                       child: Column(
                         children: rightColumn
-                            .expand((item) => <Widget>[item, const SizedBox(height: 16)])
+                            .expand((item) =>
+                                <Widget>[item, const SizedBox(height: 16)])
                             .toList(growable: false),
                       ),
                     ),
                   ],
-                );
+                ));
               },
             ),
           );
@@ -410,8 +413,10 @@ class _InfoAlertCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final background = isSuccess ? const Color(0xFFE8F4EE) : const Color(0xFFFCEAEA);
-    final border = isSuccess ? const Color(0xFF2D7B52) : const Color(0xFFAF2A2A);
+    final background =
+        isSuccess ? const Color(0xFFE8F4EE) : const Color(0xFFFCEAEA);
+    final border =
+        isSuccess ? const Color(0xFF2D7B52) : const Color(0xFFAF2A2A);
 
     return AppCard(
       padding: EdgeInsets.zero,

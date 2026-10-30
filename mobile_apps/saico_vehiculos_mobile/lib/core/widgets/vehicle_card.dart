@@ -21,57 +21,57 @@ class VehicleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(18),
-            child: SizedBox(
+      child: LayoutBuilder(builder: (context, constraints) {
+        final compact = constraints.maxWidth < 280 ||
+            MediaQuery.textScalerOf(context).scale(15) > 20;
+        final photo = ClipRRect(
+          borderRadius: BorderRadius.circular(18),
+          child: SizedBox(
               width: 96,
               height: 96,
               child: vehicle.photoUrl != null && vehicle.photoUrl!.isNotEmpty
                   ? CachedNetworkImage(
                       imageUrl: vehicle.photoUrl!,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => const _VehiclePlaceholder(),
-                    )
-                  : const _VehiclePlaceholder(),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  vehicle.plate,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 6),
-                Text('${vehicle.brand} ${vehicle.model} ${vehicle.yearLabel}'.trim()),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: <Widget>[
-                    StatusBadge(label: vehicle.statusLabel),
-                    if (vehicle.currentMileage != null)
-                      Text('${vehicle.currentMileage} km'),
-                  ],
-                ),
-                if (subtitle != null) ...<Widget>[
-                  const SizedBox(height: 10),
-                  Text(subtitle!),
-                ],
-              ],
-            ),
-          ),
-          if (trailing != null) ...<Widget>[
-            const SizedBox(width: 12),
-            trailing!,
+                      errorWidget: (_, __, ___) => const _VehiclePlaceholder())
+                  : const _VehiclePlaceholder()),
+        );
+        final details = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(vehicle.plate, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 6),
+            Text('${vehicle.brand} ${vehicle.model} ${vehicle.yearLabel}'
+                .trim()),
+            const SizedBox(height: 8),
+            Wrap(spacing: 8, runSpacing: 8, children: [
+              StatusBadge(label: vehicle.statusLabel),
+              if (vehicle.currentMileage != null)
+                Text('${vehicle.currentMileage} km')
+            ]),
+            if (subtitle != null) ...[
+              const SizedBox(height: 10),
+              Text(subtitle!)
+            ],
           ],
-        ],
-      ),
+        );
+        if (compact) {
+          return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                photo,
+                const SizedBox(height: 12),
+                details,
+                if (trailing != null) ...[const SizedBox(height: 12), trailing!]
+              ]);
+        }
+        return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          photo,
+          const SizedBox(width: 16),
+          Expanded(child: details),
+          if (trailing != null) ...[const SizedBox(width: 12), trailing!],
+        ]);
+      }),
     );
   }
 }
@@ -82,13 +82,7 @@ class _VehiclePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: <Color>[AppColors.primarySoft, Color(0xFFFDEDEE)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      color: AppColors.primarySoft,
       child: const Icon(
         Icons.directions_car_filled_outlined,
         size: 36,

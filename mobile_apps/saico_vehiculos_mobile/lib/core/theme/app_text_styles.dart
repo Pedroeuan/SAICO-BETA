@@ -6,15 +6,15 @@ class AppTextStyles {
   const AppTextStyles._();
 
   static const TextStyle appTitle = TextStyle(
-    fontSize: 31,
-    fontWeight: FontWeight.w500,
+    fontSize: 26,
+    fontWeight: FontWeight.w600,
     color: AppColors.ink,
     height: 1.08,
   );
 
   static const TextStyle sectionTitle = TextStyle(
-    fontSize: 21,
-    fontWeight: FontWeight.w500,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
     color: AppColors.ink,
   );
 

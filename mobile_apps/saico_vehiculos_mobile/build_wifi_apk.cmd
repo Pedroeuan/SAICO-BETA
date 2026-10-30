@@ -5,7 +5,7 @@ set "FLUTTER_HOME=%USERPROFILE%\development\flutter"
 set "ANDROID_SDK_ROOT=%USERPROFILE%\AppData\Local\Android\Sdk"
 set "JAVA_HOME=%USERPROFILE%\development\jdk17"
 set "PATH=%JAVA_HOME%\bin;%FLUTTER_HOME%\bin;%ANDROID_SDK_ROOT%\platform-tools;%PATH%"
-set "API_HOST=192.168.1.242"
+set "API_HOST=192.168.0.16"
 set "API_BASE_URL=http://%API_HOST%:8000/api/mobile/v1"
 set "LOG_FILE=%~dp0build_wifi_apk.log"
 

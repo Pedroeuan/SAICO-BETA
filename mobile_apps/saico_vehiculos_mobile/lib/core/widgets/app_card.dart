@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import '../theme/app_metrics.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
     required this.child,
-    this.padding = const EdgeInsets.all(20),
+    this.padding,
     this.backgroundColor,
     super.key,
   });
 
   final Widget child;
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
   final Color? backgroundColor;
 
   @override
@@ -21,7 +22,7 @@ class AppCard extends StatelessWidget {
       color: backgroundColor,
       clipBehavior: Clip.antiAlias,
       child: Padding(
-        padding: padding,
+        padding: padding ?? const EdgeInsets.all(AppMetrics.page),
         child: child,
       ),
     );

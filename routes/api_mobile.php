@@ -16,6 +16,9 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/analitica/vehiculos', [\App\Http\Controllers\Mobile\Vehiculos\MobileAnalyticsController::class, 'vehicles']);
+    Route::get('/analitica/kpis', [\App\Http\Controllers\Mobile\Vehiculos\MobileAnalyticsController::class, 'index']);
+
     Route::prefix('catalogos')->group(function () {
         Route::get('/vehiculos-disponibles', [MobileCatalogController::class, 'availableVehicles']);
         Route::get('/usuarios-operativos', [MobileCatalogController::class, 'operationalUsers']);

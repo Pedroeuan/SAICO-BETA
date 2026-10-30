@@ -14,6 +14,7 @@ class MobileChecklistSalidaRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'fecha_operativa' => ['nullable', 'date'],
             'nivel_gasolina' => ['required', 'string'],
             'kilometraje' => ['required', 'integer', 'min:0'],
             'limpio_exterior' => ['nullable', 'in:0,1'],

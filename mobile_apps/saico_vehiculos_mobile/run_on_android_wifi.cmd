@@ -8,7 +8,7 @@ set "PATH=%JAVA_HOME%\bin;%FLUTTER_HOME%\bin;%ANDROID_SDK_ROOT%\platform-tools;%
 set "LOG_FILE=%~dp0run_on_android_wifi.log"
 set "PROJECT_ROOT=%~dp0..\.."
 set "DEVICE_ID=%~1"
-set "API_HOST=192.168.1.242"
+set "API_HOST=192.168.0.16"
 set "API_BASE_URL=http://%API_HOST%:8000/api/mobile/v1"
 
 if "%DEVICE_ID%"=="" (

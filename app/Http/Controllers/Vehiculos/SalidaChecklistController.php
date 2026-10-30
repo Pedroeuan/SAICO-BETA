@@ -96,6 +96,7 @@ class SalidaChecklistController extends Controller
     public function store(Request $request, SalidaVehiculo $salida)
     {
         $request->validate([
+            'fecha_operativa' => ['nullable', 'date'],
             // valores de cada campo
             'nivel_gasolina'  => 'required|string',
             'kilometraje'     => 'required|integer|min:0',
@@ -118,6 +119,7 @@ class SalidaChecklistController extends Controller
         ]);
 
         DB::transaction(function () use ($request, $salida) {
+            app(\App\Services\Analytics\OperationalTimeService::class)->record($salida, 'salida', $request->input('fecha_operativa'), 'web');
 
             //  Crear checklist de salida
             $checklist = SalidaChecklist::create([
@@ -223,6 +225,7 @@ class SalidaChecklistController extends Controller
         $kmSalida = (int) $checklistSalida->condicion->kilometraje;
 
         $request->validate([
+            'fecha_operativa' => ['nullable', 'date'],
             'nivel_gasolina'  => 'required|string',
             'kilometraje'     => "required|integer|gt:$kmSalida",
             'limpio_exterior' => 'nullable|in:0,1',
@@ -242,6 +245,7 @@ class SalidaChecklistController extends Controller
         ]);
 
         DB::transaction(function () use ($request, $salida) {
+            app(\App\Services\Analytics\OperationalTimeService::class)->record($salida, 'entrada', $request->input('fecha_operativa'), 'web');
 
             $checklist = SalidaChecklist::create([
                 'salida_vehiculo_id' => $salida->id,

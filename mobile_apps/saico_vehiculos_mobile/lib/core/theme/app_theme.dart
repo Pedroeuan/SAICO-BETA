@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 import 'app_text_styles.dart';
+import 'app_metrics.dart';
+import 'saico_page_transition.dart';
 
 class AppTheme {
   static ThemeData light() {
@@ -14,12 +16,20 @@ class AppTheme {
 
     return ThemeData(
       useMaterial3: true,
+      pageTransitionsTheme: const PageTransitionsTheme(builders: {
+        TargetPlatform.android: SaicoPageTransition(),
+        TargetPlatform.iOS: SaicoPageTransition(),
+        TargetPlatform.windows: SaicoPageTransition(),
+        TargetPlatform.linux: SaicoPageTransition(),
+        TargetPlatform.macOS: SaicoPageTransition(),
+      }),
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.canvas,
       appBarTheme: const AppBarTheme(
         centerTitle: false,
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.canvas,
+        surfaceTintColor: Colors.transparent,
         foregroundColor: AppColors.ink,
       ),
       textTheme: const TextTheme(
@@ -41,20 +51,23 @@ class AppTheme {
         labelLarge: AppTextStyles.label,
       ),
       inputDecorationTheme: InputDecorationTheme(
+        errorMaxLines: 3,
+        helperMaxLines: 3,
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         labelStyle: const TextStyle(color: AppColors.slate),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(AppMetrics.radius),
           borderSide: const BorderSide(color: AppColors.line),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(AppMetrics.radius),
           borderSide: const BorderSide(color: AppColors.line),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(AppMetrics.radius),
           borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
         ),
       ),
@@ -63,7 +76,7 @@ class AppTheme {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(24)),
+          borderRadius: BorderRadius.all(Radius.circular(AppMetrics.radius)),
           side: BorderSide(color: AppColors.line),
         ),
       ),
@@ -109,6 +122,24 @@ class AppTheme {
       ),
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
+      ),
+      tabBarTheme: const TabBarTheme(
+        labelColor: AppColors.primary,
+        unselectedLabelColor: AppColors.slate,
+        indicatorColor: AppColors.primary,
+        dividerColor: AppColors.line,
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.primary,
+        linearTrackColor: AppColors.primarySoft,
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        showDragHandle: true,
+        backgroundColor: AppColors.card,
+      ),
+      tooltipTheme: const TooltipThemeData(
+        preferBelow: false,
+        waitDuration: Duration(milliseconds: 350),
       ),
     );
   }

@@ -1,0 +1,78 @@
+{
+    "generado_en": "2026-10-06T23:08:55-06:00",
+    "zona_horaria": "America\/Mexico_City",
+    "version_reglas": "1.0.0",
+    "alcance": "todas_las_salidas",
+    "filtros": {
+        "desde": null,
+        "hasta": null,
+        "vehiculo_id": null,
+        "campo_fecha": "fecha_salida",
+        "limites_inclusivos": true
+    },
+    "sin_datos": false,
+    "indicadores": {
+        "salidas_total": {
+            "valor": 17,
+            "unidad": "salidas"
+        },
+        "salidas_finalizadas": {
+            "valor": 16,
+            "unidad": "salidas"
+        },
+        "salidas_activas": {
+            "valor": 1,
+            "unidad": "salidas"
+        },
+        "kilometros_registrados": {
+            "valor": 151,
+            "unidad": "km",
+            "registros_validos": 16,
+            "registros_excluidos": 0
+        },
+        "duracion_promedio": {
+            "valor": 17780.34,
+            "unidad": "minutos",
+            "registros_validos": 15,
+            "registros_excluidos": 1,
+            "intervalos_mayores_24h": 9,
+            "requiere_revision": true,
+            "descripcion": "Intervalo registrado entre salida y cierre; no certifica tiempo fisico de viaje."
+        },
+        "cobertura_checklists": {
+            "valor": 100,
+            "unidad": "porcentaje",
+            "numerador": 16,
+            "denominador": 16,
+            "descripcion": "Finalizadas con un checklist unico de salida y otro de entrada; no mide completitud de campos."
+        }
+    },
+    "serie_mensual": [
+        {
+            "mes": "2026-03",
+            "salidas": 7,
+            "finalizadas": 7
+        },
+        {
+            "mes": "2026-04",
+            "salidas": 8,
+            "finalizadas": 8
+        },
+        {
+            "mes": "2026-05",
+            "salidas": 2,
+            "finalizadas": 1
+        }
+    ],
+    "calidad": {
+        "conteos_por_alerta": {
+            "activa_mayor_30_dias": 1,
+            "duracion_mayor_24h_revisar": 9,
+            "duracion_no_positiva": 1,
+            "entrada_liquido_frenos_faltante": 6,
+            "salida_liquido_frenos_faltante": 6,
+            "solicitud_registrada_despues_de_salida": 13
+        },
+        "nota": "Las alertas pueden coincidir en una misma salida; no sumar como registros distintos."
+    }
+}

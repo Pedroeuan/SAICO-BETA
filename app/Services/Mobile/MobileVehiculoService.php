@@ -147,6 +147,7 @@ class MobileVehiculoService
         }
 
         return DB::transaction(function () use ($salida, $payload) {
+            app(\App\Services\Analytics\OperationalTimeService::class)->record($salida, 'salida', $payload['fecha_operativa'] ?? null, 'mobile');
             $checklist = SalidaChecklist::create([
                 'salida_vehiculo_id' => $salida->id,
                 'tipo' => 'salida',
@@ -208,6 +209,7 @@ class MobileVehiculoService
         }
 
         return DB::transaction(function () use ($salida, $payload, $userId) {
+            app(\App\Services\Analytics\OperationalTimeService::class)->record($salida, 'entrada', $payload['fecha_operativa'] ?? null, 'mobile');
             $checklist = SalidaChecklist::create([
                 'salida_vehiculo_id' => $salida->id,
                 'tipo' => 'entrada',

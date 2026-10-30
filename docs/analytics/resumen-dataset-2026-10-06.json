@@ -1,0 +1,51 @@
+{
+  "rule_version": "1.0.0",
+  "generated_at": "2026-10-06T23:01:28-06:00",
+  "timezone": "America/Mexico_City",
+  "source": "Configured Laravel connection; read-only consistent transaction; minimal allowlisted columns",
+  "source_counts": {
+    "salidas": 17,
+    "checklists": 33,
+    "condiciones": 33
+  },
+  "prepared_rows": 17,
+  "completed_rows": 16,
+  "duration_kpi_rows": 15,
+  "mileage_kpi_rows": 16,
+  "valid_total_km": 151,
+  "exploratory_duration_candidates": 2,
+  "quality_counts": {
+    "activa_mayor_30_dias": 1,
+    "checklist_entrada_ausente_o_duplicado": 1,
+    "duracion_mayor_24h_revisar": 9,
+    "duracion_no_positiva": 1,
+    "entrada_liquido_frenos_faltante": 6,
+    "km_entrada_ausente_o_invalido": 1,
+    "no_finalizada": 1,
+    "salida_liquido_frenos_faltante": 6,
+    "solicitud_registrada_despues_de_salida": 13
+  },
+  "training_feature_allowlist": [
+    "vehiculo_id",
+    "salida_hora",
+    "salida_dia_semana",
+    "salida_mes"
+  ],
+  "training_target": "duracion_calculada_minutos",
+  "split_performed": false,
+  "operationally_validated": false,
+  "limitations": [
+    "Small sample; no reliable held-out evaluation yet.",
+    "Long durations and record provenance require review.",
+    "Feature availability inferred from application flow; mutable historical timestamps are not independently audited.",
+    "No imputation, scaling, classification labels or clustering performed.",
+    "Internal IDs are pseudonymous, not anonymous; files remain local and outside public storage."
+  ],
+  "sha256": {
+    "fuente_minima.json": "85c6fd3da09af52692bd95d3b85ae3484c17b3ab646826288a5c830e54fa728b",
+    "salidas_preparadas.csv": "7e53ac2455d196622aa912c0beb87a77b546482c124987ef39196aa95f447eab",
+    "candidatos_duracion.csv": "28390fb9b6c3774ea3dd99a9c5ccd1ea55309c0e48c76d58ab1feddcef8d9fe2",
+    "incidencias_calidad.csv": "1e77564a74fa868c45f414bad0301e252cce0b54dc51a95462571017722f54f7",
+    "diccionario.json": "c2f523c5ea2ab5f9082d7bde717bc08b2e0d73b1f0c1c91dc875153c4deae8d5"
+  }
+}

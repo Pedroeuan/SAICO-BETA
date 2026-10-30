@@ -51,8 +51,10 @@ class ChecklistPayload {
     required this.observations,
     required this.photos,
     this.tools = const <ChecklistToolOption>[],
+    this.operationalAt,
   });
 
+  final DateTime? operationalAt;
   final String exitId;
   final String fuelLevel;
   final int mileage;

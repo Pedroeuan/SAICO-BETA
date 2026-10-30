@@ -51,6 +51,8 @@ class ChecklistRepository {
     required bool includeTools,
   }) {
     final formData = FormData.fromMap(<String, dynamic>{
+      if (payload.operationalAt != null)
+        'fecha_operativa': payload.operationalAt!.toUtc().toIso8601String(),
       'nivel_gasolina': payload.fuelLevel,
       'kilometraje': payload.mileage,
       'limpio_exterior': payload.cleanedExterior ? '1' : '0',

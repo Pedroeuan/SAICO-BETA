@@ -1,0 +1,510 @@
+{
+  "audited_at": "2026-10-06T22:55:45-06:00",
+  "scope": "Configured Laravel database; aggregate data only; read-only transaction",
+  "tables": {
+    "vehiculos": {
+      "rows": 9,
+      "columns": [
+        "id",
+        "placa",
+        "marca",
+        "modelo",
+        "anio",
+        "estatus",
+        "kilometraje_actual",
+        "poliza_seguro_pdf",
+        "poliza_seguro_vencimiento",
+        "tarjeta_circulacion_pdf",
+        "tarjeta_circulacion_vencimiento",
+        "documentacion_estatus",
+        "foto_principal",
+        "tenencia_vencimiento",
+        "tenencia_estatus",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "salidas_vehiculos": {
+      "rows": 17,
+      "columns": [
+        "id",
+        "vehiculo_id",
+        "chofer_id",
+        "solicitado_por",
+        "creado_por",
+        "finalizado_por",
+        "fecha_salida",
+        "fecha_regreso",
+        "duracion_minutos",
+        "motivo",
+        "estatus",
+        "created_at",
+        "updated_at",
+        "Num_Reporte"
+      ]
+    },
+    "salidas_checklists": {
+      "rows": 33,
+      "columns": [
+        "id",
+        "salida_vehiculo_id",
+        "tipo",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "checklist_condiciones": {
+      "rows": 33,
+      "columns": [
+        "id",
+        "salida_checklist_id",
+        "nivel_gasolina",
+        "kilometraje",
+        "limpio_exterior",
+        "limpio_interior",
+        "observaciones",
+        "liquido_limpiaparabrisas",
+        "aceite",
+        "anticongelante",
+        "liquido_frenos",
+        "estado_llantas",
+        "llanta_delantera_izq_calibracion",
+        "llanta_delantera_der_calibracion",
+        "llanta_trasera_izq_calibracion",
+        "llanta_trasera_der_calibracion",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "cargas_combustible": {
+      "rows": 1,
+      "columns": [
+        "id",
+        "vehiculo_id",
+        "fecha_carga",
+        "kilometraje",
+        "litros",
+        "costo_total",
+        "precio_por_litro",
+        "tipo_combustible",
+        "proveedor",
+        "tanque_lleno",
+        "ticket_url",
+        "observaciones",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "mantenimientos": {
+      "rows": 2,
+      "columns": [
+        "id",
+        "vehiculo_id",
+        "tipo",
+        "descripcion",
+        "fecha",
+        "kilometraje",
+        "costo",
+        "proxima_revision_fecha",
+        "proxima_revision_km",
+        "factura_pdf",
+        "factura_numero",
+        "factura_fecha",
+        "factura_monto",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "salidas_eventos_flujo": {
+      "missing": true
+    }
+  },
+  "duration_review": [
+    {
+      "first_return": "2026-03-13 16:22:51",
+      "latest_return": "2026-10-05 21:40:18",
+      "over_24_hours": "9",
+      "over_7_days": "3",
+      "over_30_days": "2",
+      "active_older_than_30_days": "1"
+    }
+  ],
+  "duration_distribution": [
+    {
+      "duration_band": "0-60 minutes",
+      "total": 2
+    },
+    {
+      "duration_band": "1-24 hours",
+      "total": 4
+    },
+    {
+      "duration_band": "1-7 days",
+      "total": 6
+    },
+    {
+      "duration_band": "negative",
+      "total": 1
+    },
+    {
+      "duration_band": "over 7 days",
+      "total": 3
+    }
+  ],
+  "exit_status": [
+    {
+      "estatus": "activo",
+      "total": 1
+    },
+    {
+      "estatus": "finalizado",
+      "total": 16
+    }
+  ],
+  "vehicle_status": [
+    {
+      "estatus": "disponible",
+      "total": 8
+    },
+    {
+      "estatus": "ocupado",
+      "total": 1
+    }
+  ],
+  "exit_months": [
+    {
+      "month": "2026-03",
+      "total": 7
+    },
+    {
+      "month": "2026-04",
+      "total": 8
+    },
+    {
+      "month": "2026-05",
+      "total": 2
+    }
+  ],
+  "exit_dates": [
+    {
+      "earliest": "2026-03-13 16:00:00",
+      "latest": "2026-05-25 16:57:00",
+      "vehicles_used": 5,
+      "missing_departure": "0",
+      "completed_without_return": "0",
+      "inverted_dates": "1",
+      "zero_duration": "0",
+      "active_with_return": "0",
+      "future_departures": "0",
+      "future_returns": "0",
+      "missing_completed_duration": "0",
+      "negative_stored_duration": "1",
+      "duration_mismatch_over_one_minute": "0"
+    }
+  ],
+  "valid_date_duration": [
+    {
+      "eligible": 15,
+      "min_minutes": "22.8500",
+      "max_minutes": "191803.3000",
+      "avg_minutes": "17780.34000000",
+      "under_one_minute": "0"
+    }
+  ],
+  "relations": [
+    {
+      "orphan_vehicles": 0,
+      "orphan_drivers": 0,
+      "orphan_requesters": 0,
+      "orphan_checklists": 0,
+      "orphan_conditions": 0
+    }
+  ],
+  "checklist_types": [
+    {
+      "tipo": "salida",
+      "total": 17
+    },
+    {
+      "tipo": "entrada",
+      "total": 16
+    }
+  ],
+  "duplicates": [
+    {
+      "duplicate_checklist_groups": 0,
+      "duplicate_condition_groups": 0,
+      "vehicles_with_multiple_active_exits": 0,
+      "duplicate_plate_groups": 0
+    }
+  ],
+  "checklist_coverage": [
+    {
+      "estatus": "activo",
+      "exits_count": 1,
+      "with_departure": "1",
+      "with_arrival": "0",
+      "with_both": "0"
+    },
+    {
+      "estatus": "finalizado",
+      "exits_count": 16,
+      "with_departure": "16",
+      "with_arrival": "16",
+      "with_both": "16"
+    }
+  ],
+  "vehicle_history_distribution": [
+    {
+      "exit_count": 0,
+      "vehicles": 4
+    },
+    {
+      "exit_count": 1,
+      "vehicles": 1
+    },
+    {
+      "exit_count": 2,
+      "vehicles": 2
+    },
+    {
+      "exit_count": 3,
+      "vehicles": 1
+    },
+    {
+      "exit_count": 9,
+      "vehicles": 1
+    }
+  ],
+  "vehicle_quality": [
+    {
+      "missing_year": "0",
+      "missing_mileage": "0",
+      "negative_mileage": "0"
+    }
+  ],
+  "fuel_quality": [
+    {
+      "total": 1,
+      "vehicles": 1,
+      "earliest": "2026-05-21",
+      "latest": "2026-05-21",
+      "invalid_liters": "0",
+      "invalid_cost": "0",
+      "invalid_mileage": "0",
+      "full_tanks": "1"
+    }
+  ],
+  "maintenance_quality": [
+    {
+      "total": 2,
+      "vehicles": 2,
+      "earliest": "2026-03-09",
+      "latest": "2026-05-26",
+      "invalid_cost": "0"
+    }
+  ],
+  "mileage_pairs": [
+    {
+      "completed": 16,
+      "unique_pairs": "16",
+      "decreasing_pairs": "0",
+      "unchanged_pairs": "0",
+      "valid_pairs": "16",
+      "total_valid_km": "151",
+      "max_trip_km": 44
+    }
+  ],
+  "joint_candidates": [
+    {
+      "total": 15
+    }
+  ],
+  "missing_values": {
+    "salidas_vehiculos": {
+      "vehiculo_id": 0,
+      "chofer_id": 0,
+      "solicitado_por": 0,
+      "fecha_salida": 0,
+      "fecha_regreso": 1,
+      "duracion_minutos": 1,
+      "motivo": 0
+    },
+    "checklist_condiciones": {
+      "kilometraje": 0,
+      "nivel_gasolina": 0,
+      "aceite": 0,
+      "anticongelante": 0,
+      "liquido_frenos": 0,
+      "estado_llantas": 0
+    }
+  },
+  "blank_values": {
+    "salidas_vehiculos": {
+      "vehiculo_id": 0,
+      "chofer_id": 0,
+      "solicitado_por": 0,
+      "fecha_salida": 0,
+      "fecha_regreso": 0,
+      "duracion_minutos": 0,
+      "motivo": 0
+    },
+    "checklist_condiciones": {
+      "kilometraje": 0,
+      "nivel_gasolina": 0,
+      "aceite": 0,
+      "anticongelante": 0,
+      "liquido_frenos": 12,
+      "estado_llantas": 0
+    }
+  },
+  "arrival_condition_distribution": {
+    "aceite": [
+      {
+        "value": "escaso",
+        "total": 1
+      },
+      {
+        "value": "suficiente",
+        "total": 15
+      }
+    ],
+    "anticongelante": [
+      {
+        "value": "escaso",
+        "total": 1
+      },
+      {
+        "value": "no_hay",
+        "total": 1
+      },
+      {
+        "value": "suficiente",
+        "total": 14
+      }
+    ],
+    "liquido_frenos": [
+      {
+        "value": "",
+        "total": 6
+      },
+      {
+        "value": "escaso",
+        "total": 1
+      },
+      {
+        "value": "suficiente",
+        "total": 9
+      }
+    ],
+    "liquido_limpiaparabrisas": [
+      {
+        "value": "escaso",
+        "total": 10
+      },
+      {
+        "value": "no_hay",
+        "total": 1
+      },
+      {
+        "value": "suficiente",
+        "total": 5
+      }
+    ],
+    "estado_llantas": [
+      {
+        "value": "buen_estado",
+        "total": 7
+      },
+      {
+        "value": "malo",
+        "total": 2
+      },
+      {
+        "value": "regular",
+        "total": 7
+      }
+    ],
+    "llanta_delantera_izq_calibracion": [
+      {
+        "value": "alta",
+        "total": 4
+      },
+      {
+        "value": "baja",
+        "total": 1
+      },
+      {
+        "value": "normal",
+        "total": 11
+      }
+    ],
+    "llanta_delantera_der_calibracion": [
+      {
+        "value": "alta",
+        "total": 3
+      },
+      {
+        "value": "normal",
+        "total": 13
+      }
+    ],
+    "llanta_trasera_izq_calibracion": [
+      {
+        "value": "alta",
+        "total": 3
+      },
+      {
+        "value": "baja",
+        "total": 1
+      },
+      {
+        "value": "normal",
+        "total": 12
+      }
+    ],
+    "llanta_trasera_der_calibracion": [
+      {
+        "value": "alta",
+        "total": 3
+      },
+      {
+        "value": "baja",
+        "total": 1
+      },
+      {
+        "value": "normal",
+        "total": 12
+      }
+    ],
+    "nivel_gasolina": [
+      {
+        "value": "1/2",
+        "total": 4
+      },
+      {
+        "value": "1/4",
+        "total": 2
+      },
+      {
+        "value": "3/4",
+        "total": 3
+      },
+      {
+        "value": "Lleno",
+        "total": 7
+      }
+    ]
+  },
+  "fuel_relations": [
+    {
+      "orphans": 0
+    }
+  ],
+  "maintenance_relations": [
+    {
+      "orphans": 0
+    }
+  ],
+  "median_valid_date_minutes": 1449.0167
+}

@@ -26,11 +26,12 @@ class ChecklistDetailScreen extends ConsumerWidget {
     final detailState = ref.watch(exitDetailProvider(exitId));
 
     return AdaptivePageScaffold(
-      title: _isDeparture ? 'Ver checklist salida' : 'Ver checklist entrada',
+      title: _isDeparture ? 'Detalle de salida' : 'Detalle de entrada',
       child: detailState.when(
         data: (detail) {
-          final checklist =
-              _isDeparture ? detail.exit.departureChecklist : detail.exit.arrivalChecklist;
+          final checklist = _isDeparture
+              ? detail.exit.departureChecklist
+              : detail.exit.arrivalChecklist;
 
           if (checklist == null || detail.exit.vehicle == null) {
             return const EmptyStateWidget(
@@ -58,9 +59,10 @@ class ChecklistDetailScreen extends ConsumerWidget {
                     SaicoBrandHeader(
                       compact: true,
                       height: 210,
-                      title: _isDeparture ? 'Ver checklist salida' : 'Ver checklist entrada',
-                      subtitle:
-                          'Consulta el registro guardado sin editar datos, siguiendo la misma regla del sistema principal.',
+                      title: _isDeparture
+                          ? 'Checklist de salida'
+                          : 'Checklist de entrada',
+                      subtitle: '',
                     ),
                     const SizedBox(height: 16),
                     summary,
@@ -70,7 +72,8 @@ class ChecklistDetailScreen extends ConsumerWidget {
                 );
               }
 
-              return Row(
+              return SingleChildScrollView(
+                  child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
@@ -80,9 +83,10 @@ class ChecklistDetailScreen extends ConsumerWidget {
                         SaicoBrandHeader(
                           compact: true,
                           height: 210,
-                          title: _isDeparture ? 'Ver checklist salida' : 'Ver checklist entrada',
-                          subtitle:
-                              'Consulta el registro guardado sin editar datos, siguiendo la misma regla del sistema principal.',
+                          title: _isDeparture
+                              ? 'Checklist de salida'
+                              : 'Checklist de entrada',
+                          subtitle: '',
                         ),
                         const SizedBox(height: 16),
                         summary,
@@ -92,7 +96,7 @@ class ChecklistDetailScreen extends ConsumerWidget {
                   const SizedBox(width: 16),
                   Expanded(flex: 6, child: detailCard),
                 ],
-              );
+              ));
             },
           );
         },
@@ -123,13 +127,18 @@ class _SummaryPanel extends StatelessWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 16),
-          _InfoRow(label: 'Vehiculo', value: exit.vehicle?.displayLabel ?? exit.vehicleLabel),
+          _InfoRow(
+              label: 'Vehiculo',
+              value: exit.vehicle?.displayLabel ?? exit.vehicleLabel),
           _InfoRow(label: 'Chofer', value: exit.driverName),
           _InfoRow(label: 'Solicitado por', value: exit.requestedByName),
           if ((exit.departureAtLabel ?? '').isNotEmpty)
             _InfoRow(label: 'Fecha salida', value: exit.departureAtLabel!),
-          _InfoRow(label: 'Nivel gasolina', value: checklist.condition.fuelLevel),
-          _InfoRow(label: 'Kilometraje', value: checklist.condition.mileage.toString()),
+          _InfoRow(
+              label: 'Nivel gasolina', value: checklist.condition.fuelLevel),
+          _InfoRow(
+              label: 'Kilometraje',
+              value: checklist.condition.mileage.toString()),
         ],
       ),
     );
@@ -153,19 +162,41 @@ class _ChecklistDetailCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Estado del vehiculo', style: Theme.of(context).textTheme.titleLarge),
+          Text('Estado del vehiculo',
+              style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 16),
-          _InfoRow(label: 'Liquido limpia parabrisas', value: _normalize(checklist.condition.windshieldWasherFluid)),
-          _InfoRow(label: 'Aceite', value: _normalize(checklist.condition.oilLevel)),
-          _InfoRow(label: 'Anticongelante', value: _normalize(checklist.condition.coolantLevel)),
-          _InfoRow(label: 'Liquido de frenos', value: _normalize(checklist.condition.brakeFluidLevel)),
-          _InfoRow(label: 'Estado llantas', value: _normalize(checklist.condition.tireCondition)),
-          _InfoRow(label: 'Delantera izquierda', value: _normalize(checklist.condition.frontLeftTirePressure)),
-          _InfoRow(label: 'Delantera derecha', value: _normalize(checklist.condition.frontRightTirePressure)),
-          _InfoRow(label: 'Trasera izquierda', value: _normalize(checklist.condition.rearLeftTirePressure)),
-          _InfoRow(label: 'Trasera derecha', value: _normalize(checklist.condition.rearRightTirePressure)),
-          _InfoRow(label: 'Limpio exterior', value: checklist.condition.cleanedExterior ? 'Si' : 'No'),
-          _InfoRow(label: 'Limpio interior', value: checklist.condition.cleanedInterior ? 'Si' : 'No'),
+          _InfoRow(
+              label: 'Liquido limpia parabrisas',
+              value: _normalize(checklist.condition.windshieldWasherFluid)),
+          _InfoRow(
+              label: 'Aceite', value: _normalize(checklist.condition.oilLevel)),
+          _InfoRow(
+              label: 'Anticongelante',
+              value: _normalize(checklist.condition.coolantLevel)),
+          _InfoRow(
+              label: 'Liquido de frenos',
+              value: _normalize(checklist.condition.brakeFluidLevel)),
+          _InfoRow(
+              label: 'Estado llantas',
+              value: _normalize(checklist.condition.tireCondition)),
+          _InfoRow(
+              label: 'Delantera izquierda',
+              value: _normalize(checklist.condition.frontLeftTirePressure)),
+          _InfoRow(
+              label: 'Delantera derecha',
+              value: _normalize(checklist.condition.frontRightTirePressure)),
+          _InfoRow(
+              label: 'Trasera izquierda',
+              value: _normalize(checklist.condition.rearLeftTirePressure)),
+          _InfoRow(
+              label: 'Trasera derecha',
+              value: _normalize(checklist.condition.rearRightTirePressure)),
+          _InfoRow(
+              label: 'Limpio exterior',
+              value: checklist.condition.cleanedExterior ? 'Si' : 'No'),
+          _InfoRow(
+              label: 'Limpio interior',
+              value: checklist.condition.cleanedInterior ? 'Si' : 'No'),
           _InfoRow(
             label: 'Observaciones',
             value: (checklist.condition.observations ?? '').trim().isEmpty
@@ -174,7 +205,8 @@ class _ChecklistDetailCard extends StatelessWidget {
           ),
           if (showTools && checklist.tools.isNotEmpty) ...<Widget>[
             const SizedBox(height: 20),
-            Text('Herramientas', style: Theme.of(context).textTheme.titleMedium),
+            Text('Herramientas',
+                style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             Wrap(
               spacing: 10,
@@ -255,22 +287,12 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            width: 140,
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
+        children: [
+          Text(label, style: Theme.of(context).textTheme.bodyMedium),
+          const SizedBox(height: 4),
+          Text(value, style: Theme.of(context).textTheme.titleSmall),
         ],
       ),
     );
@@ -290,7 +312,8 @@ class _BadgeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isPositive ? const Color(0xFF2D7B52) : const Color(0xFFAF2A2A);
+    final color =
+        isPositive ? const Color(0xFF2D7B52) : const Color(0xFFAF2A2A);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -301,7 +324,7 @@ class _BadgeCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text(label),
+          Flexible(child: Text(label)),
           const SizedBox(width: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

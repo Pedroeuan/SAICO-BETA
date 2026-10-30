@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,10 +6,7 @@ import '../../../core/layout/adaptive_page_scaffold.dart';
 import '../../../core/network/network_error_formatter.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_card.dart';
-import '../../../core/widgets/empty_state_widget.dart';
-import '../../../core/widgets/saico_brand_header.dart';
 import '../../../core/widgets/status_badge.dart';
-import '../../../core/widgets/vehicle_card.dart';
 import '../../auth/application/session_provider.dart';
 import '../application/vehicle_operations_controller.dart';
 import '../domain/vehicle_exit_models.dart';
@@ -22,270 +18,245 @@ class VehicleOperationsHomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(sessionProvider);
     final operationsState = ref.watch(vehicleOperationsControllerProvider);
-
-    return AdaptivePageScaffold(
-      title: 'Salidas y checklists',
-      child: operationsState.when(
-        data: (data) {
-          final activeExit = data.activeExit;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Hola, ${session.userName ?? 'operador'}',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Administra las salidas, el checklist de salida y el checklist de entrada desde una vista alineada al modulo web.',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final wide = constraints.maxWidth >= 920;
-                    final hero = const SaicoBrandHeader(
-                      compact: true,
-                      height: 230,
-                      title: 'Modulo gestion de vehiculos',
-                      subtitle:
-                          'Consulta salidas activas, registra solicitudes y completa checklists con la misma logica del sistema principal.',
-                    );
-                    final summary = _SummaryCard(
-                      role: session.currentUser?.role ?? 'Operativo',
-                      activeExits: data.exits.where((item) => item.status == 'activo').length,
-                      availableVehicles: data.vehicles.length,
-                    );
-                    final focalCard = activeExit != null
-                        ? _ActiveExitCard(activeExit: activeExit)
-                        : _NoActiveExitCard(
-                            onCreate: () {
-                              HapticFeedback.selectionClick();
-                              context.push('/request');
-                            },
-                          );
-                    final history = _HistorySection(exits: data.exits);
-
-                    if (!wide) {
-                      return ListView(
-                        children: <Widget>[
-                          hero,
-                          const SizedBox(height: 16),
-                          summary,
-                          const SizedBox(height: 16),
-                          focalCard,
-                          const SizedBox(height: 16),
-                          history,
-                        ],
-                      );
-                    }
-
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 4,
-                            child: Column(
-                              children: <Widget>[
-                                hero,
-                                const SizedBox(height: 16),
-                                summary,
-                                const SizedBox(height: 16),
-                                focalCard,
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          flex: 6,
-                          child: history,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-        error: (error, _) => Center(child: Text(formatAppError(error))),
-        loading: () => const Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-}
-
-class _SummaryCard extends StatelessWidget {
-  const _SummaryCard({
-    required this.role,
-    required this.activeExits,
-    required this.availableVehicles,
-  });
-
-  final String role;
-  final int activeExits;
-  final int availableVehicles;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEAF2FF),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: const Icon(Icons.dashboard_customize_outlined, color: Color(0xFF0D6EFD)),
-              ),
-              const SizedBox(width: 12),
-              Text('Resumen operativo', style: Theme.of(context).textTheme.titleLarge),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text('Rol actual: $role'),
-          const SizedBox(height: 8),
-          Text('Salidas activas: $activeExits'),
-          const SizedBox(height: 8),
-          Text('Vehiculos disponibles: $availableVehicles'),
+    return DefaultTabController(
+      length: 3,
+      animationDuration: MediaQuery.disableAnimationsOf(context)
+          ? Duration.zero
+          : const Duration(milliseconds: 180),
+      child: AdaptivePageScaffold(
+        title: 'SAICO',
+        actions: [
+          TextButton.icon(
+              onPressed: () => context.push('/analytics'),
+              icon: const Icon(Icons.insights),
+              label: const Text('Analítica'))
         ],
-      ),
-    );
-  }
-}
-
-class _ActiveExitCard extends StatelessWidget {
-  const _ActiveExitCard({required this.activeExit});
-
-  final VehicleExitSummary activeExit;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Vehiculo activo', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 16),
-          if (activeExit.vehicle != null)
-            VehicleCard(
-              vehicle: activeExit.vehicle!,
-              subtitle: 'Hora de salida: ${activeExit.departureAtLabel ?? 'Sin dato'}',
-              trailing: StatusBadge(label: activeExit.status),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('Hola, ${session.userName ?? 'operador'}',
+                style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 12),
+            TabBar(
+              labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+              labelStyle: Theme.of(context).textTheme.labelMedium,
+              tabs: [
+                _tab(context, 'Solicitar', Icons.add_circle_outline),
+                _tab(context, 'Salida y\nentrada', Icons.swap_horiz),
+                _tab(context, 'Historial', Icons.history),
+              ],
             ),
-          const SizedBox(height: 12),
-          Text('Chofer: ${activeExit.driverName}'),
-          const SizedBox(height: 6),
-          Text('Solicitado por: ${activeExit.requestedByName}'),
-          if ((activeExit.reason ?? '').isNotEmpty) ...<Widget>[
-            const SizedBox(height: 6),
-            Text('Motivo: ${activeExit.reason}'),
-          ],
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: <Widget>[
-              AppButton(
-                label: activeExit.departureChecklistCompleted
-                    ? 'Ver checklist salida'
-                    : 'Registrar checklist salida',
-                isSecondary: true,
-                onPressed: () => context.push(
-                  activeExit.departureChecklistCompleted
-                      ? '/checklists/view/salida/${activeExit.id}'
-                      : '/checklists/departure/${activeExit.id}',
-                ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: operationsState.when(
+                data: (data) => TabBarView(children: [
+                  _RequestTab(data: data),
+                  _MovementTab(activeExit: data.activeExit),
+                  _HistoryTab(exits: data.exits),
+                ]),
+                error: (error, _) => Center(child: Text(formatAppError(error))),
+                loading: () => const Center(child: CircularProgressIndicator()),
               ),
-              if (activeExit.departureChecklistCompleted)
-                AppButton(
-                  label: activeExit.arrivalChecklistCompleted
-                      ? 'Ver checklist entrada'
-                      : 'Registrar checklist entrada',
-                  onPressed: () => context.push(
-                    activeExit.arrivalChecklistCompleted
-                        ? '/checklists/view/entrada/${activeExit.id}'
-                        : '/checklists/arrival/${activeExit.id}',
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _NoActiveExitCard extends StatelessWidget {
-  const _NoActiveExitCard({required this.onCreate});
-
-  final VoidCallback onCreate;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      child: EmptyStateWidget(
-        title: 'No hay vehiculo asignado',
-        message: 'Cuando no exista una salida activa puedes generar una nueva solicitud desde aqui.',
-        action: AppButton(
-          label: 'Nueva solicitud',
-          onPressed: onCreate,
+            ),
+          ],
         ),
       ),
     );
   }
+
+  Widget _tab(BuildContext context, String label, IconData icon) {
+    return Tab(
+      height: MediaQuery.textScalerOf(context).scale(12) <= 15
+          ? 80
+          : 36 + MediaQuery.textScalerOf(context).scale(60),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Icon(icon, size: 24),
+        const SizedBox(height: 4),
+        Text(label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 12, height: 1.2)),
+      ]),
+    );
+  }
 }
 
-class _HistorySection extends StatelessWidget {
-  const _HistorySection({required this.exits});
+class _RequestTab extends StatelessWidget {
+  const _RequestTab({required this.data});
+  final VehicleOperationsState data;
 
+  @override
+  Widget build(BuildContext context) {
+    final hasActiveExit = data.activeExit != null;
+    return ListView(
+      key: const PageStorageKey('request-tab'),
+      children: [
+        AppCard(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const _SectionTitle(
+                icon: Icons.directions_car_outlined,
+                text: 'Solicitar vehículo'),
+            const SizedBox(height: 16),
+            Text(hasActiveExit
+                ? 'Tienes una salida activa. Finalízala antes de solicitar otro vehículo.'
+                : '${data.vehicles.length} vehículos disponibles'),
+            const SizedBox(height: 20),
+            AppButton(
+              icon: hasActiveExit ? Icons.swap_horiz : Icons.add,
+              label:
+                  hasActiveExit ? 'Ir a salida y entrada' : 'Nueva solicitud',
+              onPressed: () {
+                if (hasActiveExit) {
+                  DefaultTabController.of(context).animateTo(1);
+                } else {
+                  context.push('/request');
+                }
+              },
+            ),
+          ],
+        )),
+      ],
+    );
+  }
+}
+
+class _MovementTab extends StatelessWidget {
+  const _MovementTab({required this.activeExit});
+  final VehicleExitSummary? activeExit;
+
+  @override
+  Widget build(BuildContext context) {
+    final exit = activeExit;
+    return ListView(
+      key: const PageStorageKey('movement-tab'),
+      children: [
+        AppCard(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const _SectionTitle(
+                icon: Icons.fact_check_outlined, text: 'Salida y entrada'),
+            const SizedBox(height: 16),
+            if (exit == null) ...[
+              const Text('No tienes una salida activa.'),
+              const SizedBox(height: 20),
+              AppButton(
+                  label: 'Solicitar vehículo',
+                  icon: Icons.add,
+                  onPressed: () =>
+                      DefaultTabController.of(context).animateTo(0)),
+            ] else ...[
+              Text(exit.vehicleLabel,
+                  style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              Text('Chofer: ${exit.driverName}'),
+              if (exit.departureAtLabel != null) ...[
+                const SizedBox(height: 6),
+                Text('Salida: ${exit.departureAtLabel}'),
+              ],
+              const SizedBox(height: 16),
+              AppButton(
+                icon: Icons.logout,
+                label: exit.departureChecklistCompleted
+                    ? 'Ver salida'
+                    : 'Registrar salida',
+                isSecondary: exit.departureChecklistCompleted,
+                onPressed: () => context.push(exit.departureChecklistCompleted
+                    ? '/checklists/view/salida/${exit.id}'
+                    : '/checklists/departure/${exit.id}'),
+              ),
+              const SizedBox(height: 12),
+              AppButton(
+                icon: Icons.login,
+                label: exit.arrivalChecklistCompleted
+                    ? 'Ver entrada'
+                    : 'Registrar entrada',
+                onPressed: !exit.departureChecklistCompleted
+                    ? null
+                    : () => context.push(exit.arrivalChecklistCompleted
+                        ? '/checklists/view/entrada/${exit.id}'
+                        : '/checklists/arrival/${exit.id}'),
+              ),
+              if (!exit.departureChecklistCompleted) ...[
+                const SizedBox(height: 8),
+                const Text(
+                    'Registra primero la salida para habilitar la entrada.'),
+              ],
+            ],
+          ],
+        )),
+      ],
+    );
+  }
+}
+
+class _HistoryTab extends StatelessWidget {
+  const _HistoryTab({required this.exits});
   final List<VehicleExitSummary> exits;
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Ultimas salidas', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 16),
-          if (exits.isEmpty)
-            const EmptyStateWidget(
-              title: 'Sin historial',
-              message: 'Las salidas registradas apareceran aqui para consulta rapida.',
-            ),
-          ...exits.take(5).map((item) {
-            final route = item.arrivalChecklistCompleted
-                ? '/checklists/view/entrada/${item.id}'
-                : item.departureChecklistCompleted
-                    ? '/checklists/view/salida/${item.id}'
-                    : '/checklists/departure/${item.id}';
-
-            return ListTile(
-              contentPadding: const EdgeInsets.symmetric(vertical: 6),
-              title: Text(item.vehicleLabel),
-              subtitle: Text('${item.driverName} - ${item.folio}'),
-              trailing: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  StatusBadge(label: item.status),
-                  const SizedBox(height: 6),
-                  Text(item.departureAtLabel ?? ''),
-                ],
-              ),
-              onTap: () => context.push(route),
-            );
-          }),
-        ],
-      ),
+    return ListView.separated(
+      key: const PageStorageKey('history-tab'),
+      itemCount: exits.isEmpty ? 1 : exits.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        if (exits.isEmpty) {
+          return const AppCard(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _SectionTitle(icon: Icons.history, text: 'Historial de salidas'),
+              SizedBox(height: 16),
+              Text('Aún no hay salidas registradas.'),
+            ],
+          ));
+        }
+        final exit = exits[index];
+        final route = exit.arrivalChecklistCompleted
+            ? '/checklists/view/entrada/${exit.id}'
+            : exit.departureChecklistCompleted
+                ? '/checklists/view/salida/${exit.id}'
+                : '/checklists/departure/${exit.id}';
+        return AppCard(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _SectionTitle(
+                icon: Icons.directions_car_outlined, text: exit.vehicleLabel),
+            const SizedBox(height: 8),
+            Text('${exit.folio} · ${exit.driverName}'),
+            const SizedBox(height: 8),
+            Wrap(spacing: 12, runSpacing: 8, children: [
+              StatusBadge(label: exit.status),
+              if (exit.departureAtLabel != null) Text(exit.departureAtLabel!),
+            ]),
+            const SizedBox(height: 12),
+            AppButton(
+                label: exit.departureChecklistCompleted
+                    ? 'Ver registro'
+                    : 'Registrar salida',
+                icon: Icons.assignment_outlined,
+                isSecondary: true,
+                onPressed: () => context.push(route)),
+          ],
+        ));
+      },
     );
   }
+}
+
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle({required this.icon, required this.text});
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Row(children: [
+        Icon(icon, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(width: 10),
+        Expanded(
+            child: Text(text, style: Theme.of(context).textTheme.titleMedium)),
+      ]);
 }

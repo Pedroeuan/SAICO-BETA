@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/config/app_config.dart';
 import '../domain/vehicle_exit_models.dart';
 import 'vehicle_request_repository.dart';
 

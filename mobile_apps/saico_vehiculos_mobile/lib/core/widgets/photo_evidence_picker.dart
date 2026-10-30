@@ -38,7 +38,8 @@ class _PhotoEvidencePickerState extends State<PhotoEvidencePicker> {
     if (remainingSlots != null && remainingSlots <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Solo puedes adjuntar ${widget.maximumPhotos} evidencias.'),
+          content:
+              Text('Solo puedes adjuntar ${widget.maximumPhotos} evidencias.'),
         ),
       );
       return;
@@ -46,9 +47,8 @@ class _PhotoEvidencePickerState extends State<PhotoEvidencePicker> {
 
     if (source == ImageSource.gallery) {
       final files = await _picker.pickMultiImage(imageQuality: 88);
-      final selectedFiles = remainingSlots == null
-          ? files
-          : files.take(remainingSlots);
+      final selectedFiles =
+          remainingSlots == null ? files : files.take(remainingSlots);
       for (final file in selectedFiles) {
         final compressed = await _compress(file);
         updated.add(compressed);
@@ -119,20 +119,17 @@ class _PhotoEvidencePickerState extends State<PhotoEvidencePicker> {
                     Positioned(
                       right: 6,
                       top: 6,
-                      child: InkWell(
-                        onTap: () {
-                          final updated = List<File>.from(widget.photos)..removeAt(entry.key);
+                      child: IconButton(
+                        tooltip: 'Eliminar fotografía ${entry.key + 1}',
+                        onPressed: () {
+                          final updated = List<File>.from(widget.photos)
+                            ..removeAt(entry.key);
                           widget.onPhotosChanged(updated);
                         },
-                        child: Container(
-                          width: 28,
-                          height: 28,
-                          decoration: const BoxDecoration(
-                            color: Colors.black54,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.close, color: Colors.white, size: 18),
-                        ),
+                        style: IconButton.styleFrom(
+                            backgroundColor: Colors.black54,
+                            foregroundColor: Colors.white),
+                        icon: const Icon(Icons.close, size: 20),
                       ),
                     ),
                   ],
@@ -164,7 +161,7 @@ class _ActionTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: Ink(
         width: 108,
-        height: 108,
+        padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           border: Border.all(color: const Color(0xFFD8E0DE)),
           borderRadius: BorderRadius.circular(16),
@@ -174,7 +171,9 @@ class _ActionTile extends StatelessWidget {
           children: <Widget>[
             Icon(icon),
             const SizedBox(height: 8),
-            Text(label),
+            Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(label, textAlign: TextAlign.center)),
           ],
         ),
       ),

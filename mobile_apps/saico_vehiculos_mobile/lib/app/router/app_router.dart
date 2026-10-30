@@ -1,3 +1,4 @@
+import '../../features/analytics/presentation/analytics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,6 +12,9 @@ import '../../features/vehicle_requests/presentation/vehicle_operations_home_scr
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: <RouteBase>[
+    GoRoute(
+        path: '/analytics',
+        builder: (context, state) => const AnalyticsScreen()),
     GoRoute(
       path: '/',
       builder: (context, state) => const _StartupScreen(),

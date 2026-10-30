@@ -53,9 +53,23 @@ class ChecklistFormShell extends StatefulWidget {
 }
 
 class _ChecklistFormShellState extends State<ChecklistFormShell> {
-  static const List<String> _fuelLevels = <String>['Lleno', '3/4', '1/2', '1/4', 'Vacio'];
-  static const List<String> _fluidLevels = <String>['suficiente', 'escaso', 'no_hay'];
-  static const List<String> _tireConditions = <String>['buen_estado', 'regular', 'malo'];
+  static const List<String> _fuelLevels = <String>[
+    'Lleno',
+    '3/4',
+    '1/2',
+    '1/4',
+    'Vacio'
+  ];
+  static const List<String> _fluidLevels = <String>[
+    'suficiente',
+    'escaso',
+    'no_hay'
+  ];
+  static const List<String> _tireConditions = <String>[
+    'buen_estado',
+    'regular',
+    'malo'
+  ];
   static const List<String> _tirePressures = <String>['baja', 'normal', 'alta'];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -78,6 +92,7 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
   List<File> _photos = <File>[];
   int _activeTab = 0;
   bool _isSubmitting = false;
+  DateTime? _operationalAt;
 
   bool get _isArrival => widget.mode == ChecklistMode.arrival;
 
@@ -98,7 +113,8 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
     _rearRightTirePressure = seed?.rearRightTirePressure ?? 'normal';
     _cleanedExterior = seed?.cleanedExterior ?? false;
     _cleanedInterior = seed?.cleanedInterior ?? false;
-    _mileageController.text = (seed?.mileage ?? widget.currentMileage).toString();
+    _mileageController.text =
+        (seed?.mileage ?? widget.currentMileage).toString();
     _observationsController.text = seed?.observations ?? '';
     _tools = (seed?.tools.isNotEmpty ?? false) ? seed!.tools : _defaultTools();
   }
@@ -114,11 +130,60 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
     return const <ChecklistToolOption>[
       ChecklistToolOption(keyName: 'llantas', label: 'Llantas'),
       ChecklistToolOption(keyName: 'extintor', label: 'Extintor'),
-      ChecklistToolOption(keyName: 'cables_corriente', label: 'Cables para corriente'),
+      ChecklistToolOption(
+          keyName: 'cables_corriente', label: 'Cables para corriente'),
       ChecklistToolOption(keyName: 'gato_hidraulico', label: 'Gato hidraulico'),
       ChecklistToolOption(keyName: 'llave_cruz', label: 'Llave de cruz'),
-      ChecklistToolOption(keyName: 'llanta_refaccion', label: 'Llanta de refaccion'),
+      ChecklistToolOption(
+          keyName: 'llanta_refaccion', label: 'Llanta de refaccion'),
     ];
+  }
+
+  Widget _buildOperationalTime(BuildContext context) {
+    return FormField<DateTime>(
+      validator: (_) => _operationalAt == null
+          ? 'Selecciona la fecha y hora real.'
+          : (_operationalAt!.isAfter(DateTime.now())
+              ? 'La hora no puede ser futura.'
+              : null),
+      builder: (field) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          OutlinedButton.icon(
+            icon: const Icon(Icons.schedule),
+            onPressed: _isSubmitting
+                ? null
+                : () async {
+                    final now = DateTime.now();
+                    final day = await showDatePicker(
+                      context: context,
+                      initialDate: _operationalAt ?? now,
+                      firstDate: DateTime(2020),
+                      lastDate: now,
+                    );
+                    if (day == null || !context.mounted) return;
+                    final time = await showTimePicker(
+                      context: context,
+                      initialTime:
+                          TimeOfDay.fromDateTime(_operationalAt ?? now),
+                    );
+                    if (time == null || !mounted) return;
+                    setState(() => _operationalAt = DateTime(
+                        day.year, day.month, day.day, time.hour, time.minute));
+                    field.didChange(_operationalAt);
+                  },
+            label: Text(_operationalAt == null
+                ? (_isArrival ? 'Hora real de regreso' : 'Hora real de salida')
+                : '${_isArrival ? "Regreso" : "Salida"}: ${MaterialLocalizations.of(context).formatShortDate(_operationalAt!)} ${TimeOfDay.fromDateTime(_operationalAt!).format(context)}'),
+          ),
+          const Text(
+              'Indica cuando ocurrio. Se usa la hora local de tu celular.'),
+          if (field.hasError)
+            Text(field.errorText!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error)),
+        ],
+      ),
+    );
   }
 
   Future<void> _submit() async {
@@ -134,7 +199,9 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
       return;
     }
 
-    if (_isArrival && widget.referenceMileage != null && mileage <= widget.referenceMileage!) {
+    if (_isArrival &&
+        widget.referenceMileage != null &&
+        mileage <= widget.referenceMileage!) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -148,7 +215,8 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
     if (_photos.length != 3) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Debes adjuntar exactamente 3 evidencias fotograficas.'),
+          content:
+              Text('Debes adjuntar exactamente 3 evidencias fotograficas.'),
         ),
       );
       return;
@@ -161,6 +229,7 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
       await widget.onSubmit(
         ChecklistPayload(
           exitId: widget.exitId,
+          operationalAt: _operationalAt,
           fuelLevel: _fuelLevel,
           mileage: mileage,
           cleanedExterior: _cleanedExterior,
@@ -199,7 +268,7 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
             title: widget.title,
             subtitle: _isArrival
                 ? 'Confirma condiciones de regreso, kilometraje final y evidencia fotografica.'
-                : 'Captura la salida con el mismo orden operativo del sistema SAICO.',
+                : 'Revisa las condiciones del vehículo y adjunta exactamente tres fotografías.',
           );
           final vehiclePanel = _VehiclePanel(
             vehicleLabel: widget.vehicleLabel,
@@ -208,7 +277,16 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
             departureAtLabel: widget.departureAtLabel,
             vehiclePhotoUrl: widget.vehiclePhotoUrl,
           );
-          final content = _isArrival ? _buildArrivalContent(context) : _buildDepartureContent(context);
+          final content = Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildOperationalTime(context),
+              const SizedBox(height: 16),
+              _isArrival
+                  ? _buildArrivalContent(context)
+                  : _buildDepartureContent(context),
+            ],
+          );
 
           if (!isWide) {
             return ListView(
@@ -223,7 +301,8 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
             );
           }
 
-          return Row(
+          return SingleChildScrollView(
+              child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
@@ -239,7 +318,7 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
               const SizedBox(width: 16),
               Expanded(flex: 7, child: content),
             ],
-          );
+          ));
         },
       ),
     );
@@ -250,8 +329,6 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(widget.title, style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 16),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -297,8 +374,6 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(widget.title, style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 16),
           _buildGeneralSection(context),
           const SizedBox(height: 16),
           _buildEvidenceSection(context),
@@ -312,7 +387,9 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _SelectField(
-          label: _isArrival ? 'Nivel de gasolina al regresar' : 'Nivel de gasolina',
+          label: _isArrival
+              ? 'Nivel de gasolina al regresar'
+              : 'Nivel de gasolina',
           value: _fuelLevel,
           items: _fuelLevels,
           onChanged: (value) => setState(() => _fuelLevel = value!),
@@ -353,7 +430,8 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
               label: 'Liquido limpia parabrisas',
               value: _windshieldWasherFluid,
               items: _fluidLevels,
-              onChanged: (value) => setState(() => _windshieldWasherFluid = value!),
+              onChanged: (value) =>
+                  setState(() => _windshieldWasherFluid = value!),
             ),
             _SelectField(
               label: 'Aceite',
@@ -389,25 +467,29 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
               label: 'Delantera izquierda',
               value: _frontLeftTirePressure,
               items: _tirePressures,
-              onChanged: (value) => setState(() => _frontLeftTirePressure = value!),
+              onChanged: (value) =>
+                  setState(() => _frontLeftTirePressure = value!),
             ),
             _SelectField(
               label: 'Delantera derecha',
               value: _frontRightTirePressure,
               items: _tirePressures,
-              onChanged: (value) => setState(() => _frontRightTirePressure = value!),
+              onChanged: (value) =>
+                  setState(() => _frontRightTirePressure = value!),
             ),
             _SelectField(
               label: 'Trasera izquierda',
               value: _rearLeftTirePressure,
               items: _tirePressures,
-              onChanged: (value) => setState(() => _rearLeftTirePressure = value!),
+              onChanged: (value) =>
+                  setState(() => _rearLeftTirePressure = value!),
             ),
             _SelectField(
               label: 'Trasera derecha',
               value: _rearRightTirePressure,
               items: _tirePressures,
-              onChanged: (value) => setState(() => _rearRightTirePressure = value!),
+              onChanged: (value) =>
+                  setState(() => _rearRightTirePressure = value!),
             ),
           ],
         ),
@@ -479,7 +561,8 @@ class _ChecklistFormShellState extends State<ChecklistFormShell> {
                 onChanged: (value) {
                   setState(() {
                     _tools = List<ChecklistToolOption>.from(_tools)
-                      ..[entry.key] = option.copyWith(isAvailable: value ?? false);
+                      ..[entry.key] =
+                          option.copyWith(isAvailable: value ?? false);
                   });
                 },
               ),
@@ -593,9 +676,10 @@ class _VehiclePanel extends StatelessWidget {
         children: <Widget>[
           Container(
             width: double.infinity,
-            height: 260,
+            constraints: BoxConstraints(
+                maxHeight: (vehiclePhotoUrl?.isNotEmpty ?? false) ? 160 : 72),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(16),
               gradient: const LinearGradient(
                 colors: <Color>[AppColors.primarySoft, Color(0xFFFCEFF1)],
                 begin: Alignment.topLeft,
@@ -603,7 +687,7 @@ class _VehiclePanel extends StatelessWidget {
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(16),
               child: _VehicleIllustration(photoUrl: vehiclePhotoUrl),
             ),
           ),
@@ -637,17 +721,11 @@ class _VehicleInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        children: <Widget>[
-          SizedBox(width: 110, child: Text(label)),
-          Expanded(
-            child: Text(
-              value,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-        ],
-      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(label),
+        const SizedBox(height: 4),
+        Text(value, style: Theme.of(context).textTheme.titleSmall),
+      ]),
     );
   }
 }
@@ -702,6 +780,8 @@ class _SelectField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
+      isExpanded: true,
+      itemHeight: null,
       value: value,
       decoration: InputDecoration(labelText: label),
       items: items
@@ -729,7 +809,9 @@ class _ResponsiveGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final columns = constraints.maxWidth >= 720 ? 2 : 1;
-        final itemWidth = columns == 1 ? constraints.maxWidth : (constraints.maxWidth - 16) / 2;
+        final itemWidth = columns == 1
+            ? constraints.maxWidth
+            : (constraints.maxWidth - 16) / 2;
 
         return Wrap(
           spacing: 16,
@@ -765,9 +847,11 @@ class _DocumentTile extends StatelessWidget {
         border: Border.all(color: AppColors.line),
         color: Colors.white,
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(child: Text(label)),
+          Text(label),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
@@ -806,26 +890,8 @@ class _VehicleIllustration extends StatelessWidget {
   }
 
   Widget _fallback() {
-    return Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
-        Image.asset(
-          'assets/branding/saico_wave_bg.png',
-          fit: BoxFit.cover,
-        ),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.72),
-          ),
-        ),
-        Center(
-          child: Image.asset(
-            'assets/branding/saico_logo.png',
-            height: 74,
-            fit: BoxFit.contain,
-          ),
-        ),
-      ],
-    );
+    return const Center(
+        child: Icon(Icons.directions_car_outlined,
+            size: 40, color: AppColors.primary));
   }
 }
