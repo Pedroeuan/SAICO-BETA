@@ -807,6 +807,8 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
     /*Ruta de botón Enviar a revisión-index*/
     Route::post('/OC/enviarRevision/{id}', [OCController::class, 'enviarRevision'])->name('OC.enviarRevision');
+    /*Ruta de Vista de OC-index para admin*/
+    Route::get('/OC/indexOC_AD', [OCController::class, 'index_AD'])->name('OC.indexOC_AD');
 
     /*Ruta de Vista del catálogo de OC*/
     Route::get('/OC/catalogo', [CatalogoOCController::class, 'create'])->name('OC.catalogo');

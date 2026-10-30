@@ -23,6 +23,15 @@ class OCController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index_AD()
+    {
+        $OC = OC::all();
+
+        return view('OC.index_AD', compact('OC'));
+    }
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $OC = OC::all();

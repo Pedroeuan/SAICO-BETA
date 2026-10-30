@@ -839,6 +839,11 @@ return [
                             'url' => '/ADsolicitud/index',
                             //can => 'nombre-ruta'
                         ],
+                        [
+                            'text' => 'Revisiones OC',
+                            'url' => '/ADsolicitud/index',
+                            //can => 'nombre-ruta'
+                        ],
                     ],
                 ],
                 // Sidebar Vehiculo
