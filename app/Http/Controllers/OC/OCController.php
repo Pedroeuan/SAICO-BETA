@@ -25,7 +25,8 @@ class OCController extends Controller
      */
     public function index_AD()
     {
-        $OC = OC::all();
+        // Solo las OC que ya fueron enviadas a revisión (Revisión: V1, V2, ...).
+        $OC = OC::where('Estatus', 'like', 'Revisi%')->get();
 
         return view('OC.index_AD', compact('OC'));
     }

@@ -841,7 +841,7 @@ return [
                         ],
                         [
                             'text' => 'Revisiones OC',
-                            'url' => '/ADsolicitud/index',
+                            'url' => '/OC/indexOC_AD',
                             //can => 'nombre-ruta'
                         ],
                     ],
