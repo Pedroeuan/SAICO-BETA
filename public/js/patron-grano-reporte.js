@@ -45,6 +45,16 @@
         let historico = {};
         let tarjetaActiva = null;
 
+        /** El dato del material usa el mismo valor del patron, no una segunda captura. */
+        function sincronizarTamanoMaterial(valor) {
+            if (formulario.id !== 'FOR-PIMP-04_02') return;
+            const entrada = formulario.querySelector('[name="Datos_Equipo[TAMANO_GRANO]"]');
+            if (!entrada) return;
+            entrada.value = valor || '---';
+            entrada.readOnly = Boolean(valor);
+            entrada.dispatchEvent(new Event('change', {bubbles: true}));
+        }
+
         try {
             catalogo = JSON.parse(configuracion.querySelector('[data-grain-pattern-catalog]')?.textContent || '[]');
             historico = JSON.parse(configuracion.querySelector('[data-grain-pattern-historical]')?.textContent || '{}');
@@ -182,6 +192,7 @@
             if (!valor) valor = valorSeleccionado;
             const comentarioCompleto = comentarioGranoDesdeValor(valor);
             descripcionInput.value = comentarioCompleto || valor;
+            sincronizarTamanoMaterial(valor);
 
             if (comentario && comentario.value !== comentarioCompleto) {
                 comentario.value = comentarioCompleto;
@@ -287,6 +298,7 @@
                 idInput.value = '';
                 descripcionInput.value = '';
                 usarActualInput.value = '0';
+                sincronizarTamanoMaterial('');
             }
             document.dispatchEvent(new CustomEvent('saico:report-layout-updated'));
         }
@@ -382,6 +394,7 @@
                         idInput.value = '';
                         descripcionInput.value = '';
                         usarActualInput.value = '0';
+                        sincronizarTamanoMaterial('');
                     }
                     if (tarjetaAnterior?.hasAttribute('data-grain-history-card')) {
                         tarjetaAnterior.closest('.grain-history-row')?.remove();
