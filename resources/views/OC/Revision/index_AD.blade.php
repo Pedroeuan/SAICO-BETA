@@ -45,9 +45,9 @@
                         <th>Estatus</th>
                         <th>OC Original</th>
                         <th>OC AICO</th>
-                        <th>Enviar a revisión</th>
-                        <th>Editar</th>
-                        <th>Eliminar</th>
+                        <th>Enviar Revisión</th>
+                        <th>Revisar</th>
+                        {{--<th>Eliminar</th>--}}
                     </tr>
                 </thead>
                 <tbody>
@@ -83,9 +83,9 @@
                             <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
 
-                        <td>
+                        {{--<td>
                             <button type="button" class="btn btn-danger btnEliminarOC" idOC="{{$OCS->idOC}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-                        </td>
+                        </td>--}}
                     </tr>
                 @endforeach
             </tbody>

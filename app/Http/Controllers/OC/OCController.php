@@ -28,7 +28,7 @@ class OCController extends Controller
         // Solo las OC que ya fueron enviadas a revisión (Revisión: V1, V2, ...).
         $OC = OC::where('Estatus', 'like', 'Revisi%')->get();
 
-        return view('OC.index_AD', compact('OC'));
+        return view('OC.Revision.index_AD', compact('OC'));
     }
     /**
      * Display a listing of the resource.
