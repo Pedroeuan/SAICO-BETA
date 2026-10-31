@@ -76,8 +76,9 @@
                         <form id="FOR-PINS-16_01" action="{{ route('Reportes_FOR_PINS_16_01.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 @php
-                                    $Componentes_Grupo_Juntas_Re = $Grupo_Juntas_Re['componentes'] ?? [];
-                                    $Grupo_Juntas_Re = $Grupo_Juntas_Re['inspeccion'] ?? $Grupo_Juntas_Re;
+                                    $grupos16 = is_array($Grupo_Juntas_Re) ? $Grupo_Juntas_Re : [];
+                                    $Componentes_Grupo_Juntas_Re = \App\Http\Controllers\Reporte\PINS\FOR_PINS_16_01Controller::normalizarBloques16($grupos16['componentes'] ?? []);
+                                    $Grupo_Juntas_Re = \App\Http\Controllers\Reporte\PINS\FOR_PINS_16_01Controller::normalizarBloques16($grupos16['inspeccion'] ?? $grupos16);
                                 @endphp
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
@@ -207,7 +208,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Procedimiento</label>
-                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{old('Detalles_Generales.Procedimiento', $Detalles_Generales['Procedimiento'] ?? '')}}" readonly>
+                                            <input type="text" class="form-control  inputForm @error('Procedimiento') is-invalid @enderror" name="Detalles_Generales[Procedimiento]"  placeholder="Ejemplo:  " value="{{ $Detalles_Generales['Procedimiento'] ?? '' }}" readonly>
                                             @error('Procedimiento')
                                                     <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                             @enderror
@@ -983,6 +984,8 @@
                                             @endif
                                         </div>
 
+                                        {{-- Al actualizar, se invalida el PDF cacheado para reflejar la nueva selección. --}}
+                                        @include('Reportes.IM.partials.documentos-usuario', ['formatoDocumentos' => 'FOR-PINS-16-01'])
                                         <div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>

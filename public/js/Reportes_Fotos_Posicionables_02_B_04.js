@@ -863,6 +863,172 @@
             return;
         }
 
+        // La tabla proviene del servicio PHP: una sola fuente para navegador y servidor.
+        // Blade publica esta configuracion en la seccion de scripts, fuera del elemento form.
+        var configA370 = formulario.id === 'FOR-PIMP-04_02' ? document.querySelector('[data-conversion-a370]') : null;
+        var conversion = configA370 ? JSON.parse(configA370.textContent) : null;
+        var tension = formulario.querySelector('[name="Datos_Equipo[RESISTENCIA_TENSION]"]');
+        var cedencia = formulario.querySelector('[name="Datos_Equipo[RESISTENCIA_CEDENCIA]"]');
+        var metodo, aviso, detalleOperacion, pasosOperacion;
+        if (conversion && tension && cedencia) {
+            var controles = document.createElement('div');
+            controles.className = 'calculo-a370 mb-3';
+            var etiqueta = document.createElement('label');
+            etiqueta.className = 'font-weight-bold mb-1';
+            etiqueta.htmlFor = 'metodo-calculo-dureza-0402';
+            etiqueta.textContent = '¿Cómo quieres obtener los resultados?';
+            metodo = document.createElement('select');
+            metodo.id = etiqueta.htmlFor;
+            metodo.name = 'Datos_Equipo[METODO_CALCULO_DUREZA]';
+            metodo.className = 'form-control';
+            metodo.add(new Option('Cálculo automático de tensión y cedencia', 'a370_tabla3'));
+            metodo.add(new Option('Captura manual', 'manual'));
+            metodo.value = conversion.metodo === 'manual' ? 'manual' : 'a370_tabla3';
+            aviso = document.createElement('small');
+            aviso.className = 'calculo-a370-aviso';
+            aviso.setAttribute('role', 'status');
+            detalleOperacion = document.createElement('details');
+            detalleOperacion.className = 'calculo-a370-detalle';
+            var resumenOperacion = document.createElement('summary');
+            resumenOperacion.textContent = 'Ver cómo se calcularon la tensión y la cedencia';
+            pasosOperacion = document.createElement('div');
+            pasosOperacion.className = 'calculo-a370-pasos';
+            detalleOperacion.append(resumenOperacion, pasosOperacion);
+            controles.append(etiqueta, metodo, aviso, detalleOperacion);
+            var estiloCalculo = document.createElement('style');
+            estiloCalculo.textContent = `
+                .calculo-a370{background:#fff;border:1px solid #dbe3ee;border-radius:10px;padding:14px 16px;text-align:left;box-shadow:0 2px 5px rgba(22,43,69,.04)}
+                .calculo-a370>label{display:block;color:#243b53;font-size:13px}
+                .calculo-a370>select{max-width:560px;border-radius:6px;font-size:13px;min-height:36px}
+                .calculo-a370-aviso{background:#fff4db;color:#72510c;padding:9px 12px;border-radius:6px;margin-top:10px;font-size:12px}
+                .calculo-a370-detalle{margin-top:12px;border-top:1px solid #e4eaf2;padding-top:10px}
+                .calculo-a370-detalle>summary{cursor:pointer;color:#175ba6;background:#edf4ff;border:1px solid #cbdcf5;border-radius:7px;font-weight:600;font-size:14px;padding:12px}
+                .calculo-a370-detalle>summary:focus-visible{outline:2px solid #2563eb;outline-offset:3px}
+                .calculo-a370-pasos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:16px;align-items:stretch}
+                .calculo-a370-paso{background:#fff;border:1px solid #d9e2ec;border-radius:9px;overflow:hidden;min-width:0}
+                .calculo-a370-paso h6{background:#f0f5fc;color:#204b7d;font-size:15px;font-weight:700;margin:0;padding:14px 16px;border-bottom:1px solid #d9e2ec}
+                .calculo-a370-tabla{width:100%;border-collapse:collapse;margin:0;font-size:13px}
+                .calculo-a370-tabla th,.calculo-a370-tabla td{padding:9px 14px;border-bottom:1px solid #e6ebf1;vertical-align:middle}
+                .calculo-a370-tabla th{text-align:left!important;font-weight:600;color:#43566b;background:#f8fafc;font-size:12px;width:66%}
+                .calculo-a370-tabla td{text-align:right!important;color:#172b4d;font-variant-numeric:tabular-nums;font-weight:600}
+                .calculo-a370-formula{margin:12px;padding:11px;background:#f3f6fa;border-left:3px solid #3974b6;border-radius:4px}
+                .calculo-a370-formula p{margin:5px 0;font-size:13px;line-height:1.7;overflow-wrap:anywhere;color:#243b53}
+                .calculo-a370-formula p:first-child{font-size:12px;font-weight:700;color:#526479}
+                .calculo-a370-resultado{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#e8f5ed;border-top:1px solid #c5e4d0;color:#155c35;font-size:12px;font-weight:700}
+                .calculo-a370-resultado strong{font-size:20px;font-variant-numeric:tabular-nums}
+                @media(max-width:850px){.calculo-a370-pasos{grid-template-columns:1fr}}
+            `;
+            document.head.appendChild(estiloCalculo);
+            tension.closest('table').before(controles);
+            // Actualiza desde la primera seleccion, tambien al usar el teclado.
+            // Repite al terminar el evento para recoger otros autollenados del formulario.
+            function actualizarMetodo() {
+                calcular();
+                queueMicrotask(calcular);
+            }
+            metodo.addEventListener('input', actualizarMetodo);
+            metodo.addEventListener('change', actualizarMetodo);
+            formulario.addEventListener('submit', calcular, true);
+        }
+
+        /** Presenta las mismas variables que el tecnico consulta en su hoja de calculo. */
+        function mostrarOperacion(hb, ksi, interpolado, h0, h1) {
+            pasosOperacion.replaceChildren();
+            function tarjeta(titulo, filas, formulas, nombreResultado, resultado) {
+                var bloque = document.createElement('section');
+                bloque.className = 'calculo-a370-paso';
+                var encabezado = document.createElement('h6'); encabezado.textContent = titulo;
+                var tabla = document.createElement('table'); tabla.className = 'calculo-a370-tabla';
+                var cuerpo = document.createElement('tbody');
+                filas.forEach(function (fila) {
+                    var tr = document.createElement('tr');
+                    var etiqueta = document.createElement('th'); etiqueta.scope = 'row'; etiqueta.textContent = fila[0];
+                    var valor = document.createElement('td'); valor.textContent = fila[1];
+                    tr.append(etiqueta, valor); cuerpo.appendChild(tr);
+                });
+                tabla.appendChild(cuerpo);
+                var operacion = document.createElement('div'); operacion.className = 'calculo-a370-formula';
+                formulas.forEach(function (linea) {
+                    var texto = document.createElement('p'); texto.textContent = linea; operacion.appendChild(texto);
+                });
+                var salida = document.createElement('div'); salida.className = 'calculo-a370-resultado';
+                var etiquetaSalida = document.createElement('span'); etiquetaSalida.textContent = nombreResultado;
+                var numeroSalida = document.createElement('strong'); numeroSalida.textContent = resultado + ' ksi';
+                salida.append(etiquetaSalida, numeroSalida);
+                bloque.append(encabezado, salida, tabla, operacion); pasosOperacion.appendChild(bloque);
+            }
+            var filasTension = [['Dureza utilizada', hb + ' HB']];
+            var formulasTension;
+            if (hb >= 100 && hb <= 115) {
+                var tensionPsi = conversion.factorTensionBaja * hb;
+                filasTension.push(['Multiplicar la dureza por', String(conversion.factorTensionBaja)],
+                    ['Resultado en PSI', tensionPsi.toFixed(3) + ' PSI'], ['Pasar de PSI a ksi', 'Dividir entre 1000']);
+                formulasTension = ['Operación para durezas de 100 a 115 HB · criterio técnico',
+                    'Tensión (PSI) = ' + conversion.factorTensionBaja + ' × dureza promedio',
+                    conversion.factorTensionBaja + ' × ' + hb + ' = ' + tensionPsi.toFixed(3) + ' PSI',
+                    tensionPsi.toFixed(3) + ' ÷ 1000 = ' + Number(ksi).toFixed(3) + ' ksi'];
+            } else if (interpolado) {
+                var t0 = conversion.tabla[h0], t1 = conversion.tabla[h1];
+                filasTension.push(['Dureza inferior en la tabla', h0 + ' HB'], ['Dureza superior en la tabla', h1 + ' HB'],
+                    ['Tensión de la dureza inferior', t0 + ' ksi'], ['Tensión de la dureza superior', t1 + ' ksi']);
+                formulasTension = ['INTERPOLACIÓN · ASTM A370-20, TABLA 3',
+                    'La dureza queda entre dos valores de la tabla. Se calcula el valor intermedio con esos dos puntos.',
+                    'Tensión = (' + t1 + ' − ' + t0 + ') ÷ (' + h1 + ' − ' + h0 + ') × (' + hb + ' − ' + h0 + ') + ' + t0];
+            } else {
+                filasTension.push(['Dureza encontrada en la tabla', hb + ' HB'], ['Tensión indicada en la tabla', conversion.tabla[hb] + ' ksi']);
+                formulasTension = ['VALOR TABULADO · ASTM A370-20, TABLA 3',
+                    'La dureza promedio coincide con la tabla; se toma directamente su tensión.',
+                    hb + ' HB = ' + Number(ksi).toFixed(3) + ' ksi'];
+            }
+            tarjeta('Resistencia a la tensión', filasTension, formulasTension, 'Resultado', Number(ksi).toFixed(3));
+            var psi = conversion.interceptoCedencia + conversion.pendienteCedencia * hb;
+            tarjeta('Resistencia a la cedencia', [
+                ['Dureza utilizada', hb + ' HB'],
+                ['Multiplicar la dureza por', String(conversion.pendienteCedencia)],
+                ['Después restar', String(Math.abs(conversion.interceptoCedencia))],
+                ['Resultado en PSI', psi.toFixed(3) + ' PSI'],
+                ['Pasar de PSI a ksi', 'Dividir entre 1000']
+            ], ['Operación de cedencia · fórmula de referencia',
+                'YS = ' + conversion.interceptoCedencia + ' + ' + conversion.pendienteCedencia + ' × dureza promedio',
+                'YS = ' + conversion.interceptoCedencia + ' + ' + conversion.pendienteCedencia + ' × ' + hb,
+                'YS = ' + psi.toFixed(3) + ' ÷ 1000 = ' + cedencia.value + ' ksi'
+            ], 'Resultado', cedencia.value);
+        }
+
+        function convertirA370() {
+            if (!metodo) return;
+            var automatico = metodo.value === 'a370_tabla3';
+            tension.readOnly = cedencia.readOnly = automatico;
+            aviso.hidden = true;
+            detalleOperacion.hidden = true;
+            if (!automatico) return;
+            var hb = Number(promedio.value);
+            tension.value = cedencia.value = '---';
+            if (!promedio.value || !Number.isFinite(hb) || promedio.value === '---') {
+                aviso.textContent = 'Capture las lecturas Brinell para calcular las resistencias.';
+                aviso.hidden = false;
+                return;
+            }
+            var puntos = Object.keys(conversion.tabla).map(Number).sort(function (a, b) { return a - b; });
+            if (hb < 100 || hb > puntos[puntos.length - 1]) {
+                aviso.textContent = 'Fuera del rango de cálculo automático (100–240 HB). Requiere revisión del técnico.';
+                aviso.hidden = false;
+                return;
+            }
+            var ksi = hb <= 115 ? conversion.factorTensionBaja * hb / 1000 : conversion.tabla[hb];
+            var interpolado = ksi === undefined;
+            if (interpolado) {
+                var indice = puntos.findIndex(function (valor) { return valor > hb; });
+                var h0 = puntos[indice - 1], h1 = puntos[indice];
+                ksi = conversion.tabla[h0] + (conversion.tabla[h1] - conversion.tabla[h0]) / (h1 - h0) * (hb - h0);
+            }
+            tension.value = Number(ksi).toFixed(3);
+            cedencia.value = ((conversion.interceptoCedencia + conversion.pendienteCedencia * hb) / 1000).toFixed(3);
+            aviso.textContent = '';
+            detalleOperacion.hidden = false;
+            mostrarOperacion(hb, ksi, interpolado, h0, h1);
+        }
+
         function calcular() {
             var capturas = valores.map(function (input) {
                 return input.value.trim();
@@ -881,6 +1047,7 @@
             if (todasSonGuiones) {
                 promedio.value = '---';
                 if (brinell) brinell.value = promedio.value;
+                convertirA370();
                 return;
             }
 
@@ -890,13 +1057,17 @@
                 ? String(Math.round(numeros.reduce(function (total, valor) { return total + valor; }, 0) / numeros.length))
                 : '';
             if (brinell) brinell.value = promedio.value;
+            convertirA370();
         }
 
         promedio.dataset.promedioInicializado = '1';
         valores.forEach(function (input) {
             input.addEventListener('input', calcular);
+            input.addEventListener('change', calcular);
         });
         calcular();
+        // Los borradores pueden restaurarse en otros manejadores de DOMContentLoaded.
+        queueMicrotask(calcular);
     }
 
     /* Inicializa el modulo cuando el formulario ya existe en el DOM. */
@@ -937,5 +1108,46 @@
                 evento.stopImmediatePropagation();
             }
         }, true);
+    });
+    // Navegacion compartida por Crear/Editar del 04/02 y la lista de reportes PDF.
+    document.addEventListener('DOMContentLoaded', function () {
+        var formulario = document.getElementById('FOR-PIMP-04_02')
+            || document.querySelector('[data-navegacion-reportes]');
+        if (!formulario || document.getElementById('navegacion-formulario-0402')) return;
+        var boton = document.createElement('button');
+        boton.id = 'navegacion-formulario-0402';
+        boton.type = 'button';
+        boton.className = 'btn btn-primary shadow';
+        boton.style.cssText = 'position:fixed;z-index:1030;width:42px;height:42px;border-radius:50%;font-size:25px;line-height:1;padding:0;';
+        document.body.appendChild(boton);
+        var estilo = document.createElement('style');
+        estilo.textContent = '@media print { #navegacion-formulario-0402 { display:none !important; } }';
+        document.head.appendChild(estilo);
+        var subir = false;
+        function actualizar() {
+            var caja = formulario.getBoundingClientRect();
+            var borde = (formulario.closest('.card') || formulario).getBoundingClientRect();
+            // Sigue el lateral del contenido y permanece accesible durante el desplazamiento.
+            var limiteDerecho = document.documentElement.clientWidth - 50;
+            boton.style.left = Math.max(8, Math.min(borde.right + 10, limiteDerecho)) + 'px';
+            boton.style.top = Math.max(100, Math.min(borde.top + 16, window.innerHeight - 58)) + 'px';
+            var recorrido = Math.max(0, caja.height - window.innerHeight);
+            subir = recorrido > 0 && -caja.top > recorrido / 2;
+            boton.textContent = subir ? '\u2191' : '\u2193';
+            var zona = formulario.hasAttribute('data-navegacion-reportes') ? 'listado de reportes' : 'formulario';
+            var etiqueta = (subir ? 'Ir al inicio del ' : 'Ir al final del ') + zona;
+            boton.title = etiqueta;
+            boton.setAttribute('aria-label', etiqueta);
+        }
+        boton.addEventListener('click', function () {
+            var caja = formulario.getBoundingClientRect();
+            var destino = window.scrollY + (subir ? caja.top - 70 : caja.bottom - window.innerHeight + 20);
+            var reducirMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({top: Math.max(0, destino), behavior: reducirMovimiento ? 'auto' : 'smooth'});
+        });
+        window.addEventListener('scroll', actualizar, {passive: true});
+        window.addEventListener('resize', actualizar);
+        if (window.ResizeObserver) new ResizeObserver(actualizar).observe(formulario);
+        actualizar();
     });
 }(window, document));

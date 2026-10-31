@@ -138,6 +138,12 @@ class ServicioPatronGranoReporte
         ];
     }
 
+    /** Mismo valor que el comentario de la imagen, incluidos los historicos anteriores. */
+    public function tamanoParaMaterial(array $patron): string
+    {
+        return $this->normalizarValorGrano((string) ($patron['descripcion'] ?? $patron['valor_grano'] ?? $patron['nombre'] ?? ''));
+    }
+
     /** Retira una copia sustituida solo cuando el reporte ya apunta a otra ruta. */
     public function eliminarCopiaSustituida(string $rutaAnterior, string $rutaNueva): void
     {

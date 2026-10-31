@@ -198,14 +198,22 @@ class FOR_PINS_10_01Controller extends Controller
 
         return null;
     }
+
+    /** El C.V. debe pertenecer al técnico del grupo de firmas visible. */
+    private function tecnicoQrSeleccionado(Request $request): ?string
+    {
+        $numero = (int) ($request->input('numFirmas') ?: 1);
+        $id = $request->input("Firmas_Reportes{$numero}.ID_TECNICO");
+        return filled($id) ? (string) $id : null;
+    }
     
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
-        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'] ?? null;
         $idsConsumibles = $datosParaCrearQR['idsConsumibles'] ?? [];
-        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? [];
+        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? null;
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -230,10 +238,13 @@ class FOR_PINS_10_01Controller extends Controller
             ->pluck('Certificado_Actual')
             ->toArray();
 
-        $tecnicos = Usuario::where('id', $ID_TECNICO)
-            ->whereNotNull('cv_pdf')
-            ->pluck('cv_pdf')
-            ->toArray();
+        // Adjuntar la documentación del técnico elegida para este servicio y procedimiento.
+        $tecnicos = app(\App\Services\DocumentosUsuarioReporte::class)->rutas(
+            $ID_TECNICO ? Usuario::find($ID_TECNICO) : null,
+            $datosParaCrearQR['Documentos_Usuario'] ?? null,
+            'FOR-PINS-10-01',
+            $idProcedimiento ? (int) $idProcedimiento : null
+        );
 
         $Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)
             ->whereNotNull('PDF')
@@ -768,6 +779,11 @@ class FOR_PINS_10_01Controller extends Controller
             'Datos_Equipo.RETARDO' => 'nullable|string',
             'Datos_Equipo.ESPESOR' => 'nullable|string',
             'Datos_Equipo.OBS' => 'nullable|string',
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
@@ -957,13 +973,10 @@ class FOR_PINS_10_01Controller extends Controller
             $validatedData['Datos_Equipo']['QR_TOKEN'] = (string) Str::uuid();
         }
 
-        $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
-            ?? null;
+        $ID_TECNICO = $this->tecnicoQrSeleccionado($request);
 
         $datosParaCrearQR = [
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
             'idSolicitud' => $idSolicitud,
@@ -1270,7 +1283,8 @@ class FOR_PINS_10_01Controller extends Controller
         // Regenera el PDF final con la tabla, firmas y fotos ya guardadas.
         $resultadoQR = $this->Datos_QR($datosParaCrearQR);
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? ($validatedData['Datos_Equipo']['QR_PDF'] ?? null);
-        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? ($validatedData['Datos_Equipo']['PDF_UNIFICADO'] ?? null);
+        // No recuperar un PDF anterior cuando se retiran los anexos del QR.
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
 
         $Reportes->update([
             'Datos_Equipo' => json_encode(array_merge(
@@ -1344,6 +1358,11 @@ class FOR_PINS_10_01Controller extends Controller
             'Datos_Equipo.RETARDO' => 'nullable|string',
             'Datos_Equipo.ESPESOR' => 'nullable|string',
             'Datos_Equipo.OBS' => 'nullable|string',
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string',
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
@@ -1518,6 +1537,7 @@ class FOR_PINS_10_01Controller extends Controller
         */
 
         $datosParaCrearQR = [
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
             'idSolicitud' => $validatedData['Detalles_Generales']['idSolicitud'] ?? null,
@@ -1526,11 +1546,7 @@ class FOR_PINS_10_01Controller extends Controller
             'idBlock' => $validatedData['Datos_Equipo']['ID_BLOCK'],
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
             'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
-            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
-            ?? null,
+            'ID_TECNICO' => $this->tecnicoQrSeleccionado($request),
         ];
 
         /*
@@ -1787,7 +1803,8 @@ class FOR_PINS_10_01Controller extends Controller
 
         // **1️⃣ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
-            if (isset($existingImages[$index])) {
+            // Las marcas ya están integradas en el PNG: priorizarlo sobre el archivo original.
+            if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
 
                 // Eliminar del almacenamiento
