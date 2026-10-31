@@ -276,9 +276,17 @@
             }
         });
 
-        // Los catálogos y el patrón comparativo alimentan el texto mientras el técnico no lo haya editado.
+        // El grano es un dato vinculado: actualiza solo su renglon aun si se editaron otras observaciones.
+        function actualizarGranoEnDescripcion() {
+            descripcion.value = descripcion.value.replace(
+                /^([ \t]*Tamaño de grano[ \t]*:)[^\r\n]*/m,
+                (_, etiqueta) => etiqueta + ' ' + obtenerTamanoGrano()
+            );
+        }
         document.addEventListener('saico:grain-pattern-updated', function () {
-            if (!contenedor.classList.contains('d-none') && !descripcionEditada) {
+            if (formulario?.id === 'FOR-PIMP-04_02' && descripcion.value.trim()) {
+                actualizarGranoEnDescripcion();
+            } else if (!contenedor.classList.contains('d-none') && !descripcionEditada) {
                 descripcion.value = construirDescripcion();
             }
         });
@@ -291,6 +299,10 @@
 
         // Sincroniza solo la especificacion; conserva las demas anotaciones del tecnico.
         const sincronizarEspecificacion = function (evento) {
+            if (formulario?.id === 'FOR-PIMP-04_02' && evento.target.name === 'Datos_Equipo[TAMANO_GRANO]') {
+                actualizarGranoEnDescripcion();
+                return;
+            }
             if (formulario?.id !== 'FOR-PIMP-04_02'
                 || evento.target.name !== 'Datos_Equipo[ESPECIFICACION_MATERIAL]') return;
             if (!descripcionEditada && !contenedor.classList.contains('d-none')) {
@@ -306,6 +318,7 @@
         formulario?.addEventListener('input', sincronizarEspecificacion);
 
         const activoInicial = !contenedor.classList.contains('d-none');
+        if (formulario?.id === 'FOR-PIMP-04_02' && activoInicial) actualizarGranoEnDescripcion();
         actualizarControlesDistribucion(activoInicial);
         if (activoInicial) mostrarImagen();
     }

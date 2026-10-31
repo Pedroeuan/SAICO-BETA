@@ -42,6 +42,19 @@
     script cuando los nombres o valores contienen caracteres especiales de HTML.
 --}}
 <script type="application/json" id="referencias-manuales-0402-inicial">{!! json_encode(['composiciones' => old('Composiciones_Referencias_0402', $composicionesReferencias), 'escalas' => old('Escalas_Referencias_0402', $escalasReferencias), 'modo' => $modoReferencias, 'filas' => old('Referencias_Manuales_0402', json_encode($referenciasManuales)), 'seleccion' => old('Referencias_Seleccionadas_0402', json_encode($referenciasSeleccionadas))], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
+@if(($referenciasFormId ?? 'FOR-PIMP-04_02') === 'FOR-PIMP-04_02')
+    {{-- A370 es un metodo de conversion, separado del catalogo de composicion y limites del material. --}}
+    @php
+    $configConversionA370 = [
+        'tabla' => \App\Services\ReferenciasMecanicasIM::A370_TABLA3,
+        'interceptoCedencia' => \App\Services\ReferenciasMecanicasIM::CEDENCIA_INTERCEPTO,
+        'pendienteCedencia' => \App\Services\ReferenciasMecanicasIM::CEDENCIA_PENDIENTE,
+        'factorTensionBaja' => \App\Services\ReferenciasMecanicasIM::FACTOR_TENSION_100_115_PSI,
+        'metodo' => old('Datos_Equipo.METODO_CALCULO_DUREZA', $Datos_Equipo['METODO_CALCULO_DUREZA'] ?? (!empty($Datos_Equipo) ? 'manual' : 'a370_tabla3')),
+    ];
+    @endphp
+    <script type="application/json" data-conversion-a370>@json($configConversionA370)</script>
+@endif
 {{--
     Carga el modulo compartido y le entrega el formulario y las rutas de consulta y catalogo.
     __NORMA__ es el marcador que JavaScript sustituye por el ID al abrir la edicion de una norma.

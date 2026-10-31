@@ -880,6 +880,7 @@ class FOR_PIMP_04_02Controller extends Controller
         }
         $datosEquipo['ESCALA_DUREZA'] = $escala;
         $datosEquipo['DUREZA_BRINELL'] = $datosEquipo['PROMEDIO_DUREZA'];
+        app(\App\Services\ReferenciasMecanicasIM::class)->guardarConversionDureza($request, $datosEquipo);
         $datosEquipo['DESCRIPCION_MATERIAL'] = trim((string) $request->input('Detalles_Generales.Nombre_Pieza', ''));
     }
 
@@ -1638,6 +1639,10 @@ class FOR_PIMP_04_02Controller extends Controller
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? '')
         );
 
+        if ($patronGrano !== null) {
+            $validatedData['Datos_Equipo']['TAMANO_GRANO'] = $servicioPatronGrano->tamanoParaMaterial($patronGrano);
+        }
+
         // Adjunta únicamente un análisis previamente generado por el mismo usuario autenticado.
         $analisisImagen = null;
         if (!empty($validatedData['Analisis_Imagen_Token'])) {
@@ -2218,6 +2223,11 @@ class FOR_PIMP_04_02Controller extends Controller
         // que no envian este control conservan su historico.
         if (!$request->has('Patron_Grano.activo')) {
             $patronGrano = $patronHistorico;
+        }
+        if ($patronGrano !== null) {
+            $validatedData['Datos_Equipo']['TAMANO_GRANO'] = $servicioPatronGrano->tamanoParaMaterial($patronGrano);
+        } elseif ($patronHistorico !== null && $request->has('Patron_Grano.activo')) {
+            $validatedData['Datos_Equipo']['TAMANO_GRANO'] = '---';
         }
 
         // Un token nuevo reemplaza el análisis anterior; si no llega, se conserva el histórico.
