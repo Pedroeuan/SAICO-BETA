@@ -3,15 +3,16 @@
 use App\Services\ServicioAnalisisColumnasPdfXrf;
 use Smalot\PdfParser\Parser;
 
-it('propone un promedio numerico editable para disparos mixtos con C menor', function () {
+it('excluye los limites C menor de la suma y del divisor', function () {
     $service = new ServicioAnalisisColumnasPdfXrf(new Parser());
     $analysis = $service->parseText("1 2 3\nS % Conc 0.0063 [C<]0.0020 [C<]0.0020\nP % Conc 0.0063 -- [C<]0.0020");
     $results = $service->calculateForColumns($analysis, [1, 2, 3]);
-    expect($results['S']['calculable'])->toBeFalse()
-        ->and($results['S']['valor_sugerido'])->toBe('0.0034')
+    expect($results['S']['calculable'])->toBeTrue()
+        ->and($results['S']['promedio'])->toBe(0.0063)
+        ->and($results['S']['valor_sugerido'])->toBeNull()
         ->and($results['S']['valores'][2])->toBe('[C<]0.0020')
-        ->and($service->resolveAverage($results['S'], ''))->toBe(['promedio' => '0.0034', 'origen' => 'manual'])
-        ->and($service->resolveAverage($results['S'], '0.0040'))->toBe(['promedio' => '0.0040', 'origen' => 'manual'])
+        ->and($service->resolveAverage($results['S'], ''))->toBe(['promedio' => '0.0063', 'origen' => 'calculado'])
+        ->and($results['P']['calculable'])->toBeFalse()
         ->and($results['P']['valor_sugerido'])->toBeNull();
 });
 
@@ -152,5 +153,18 @@ PDF;
         ->and($results['Mn']['promedio'])->toBe(0.9033)
         ->and($results['P']['promedio'])->toBe(0.0133)
         ->and($results['Fe']['promedio'])->toBe(98.2333)
-        ->and($results['S']['calculable'])->toBeFalse();
+        ->and($results['S']['calculable'])->toBeTrue()
+        ->and($results['S']['promedio'])->toBe(0.0028);
+});
+
+it('calcula As con dos disparos numericos sin sumar el tercer limite', function () {
+    $service = new ServicioAnalisisColumnasPdfXrf(new Parser());
+    $analysis = $service->parseText("1 2 3\nAs % Conc 0.0059 0.0077 [C<]0.0050\nCu % Conc 0 [C<]0.0020 0.0040");
+    $results = $service->calculateForColumns($analysis, [1, 2, 3]);
+    expect($results['As']['promedio'])->toBe(0.0068)
+        ->and($results['As']['lecturas_utilizadas'])->toBe(2)
+        ->and($results['As']['limites_excluidos'])->toBe(1)
+        ->and($results['As']['valores'][3])->toBe('[C<]0.0050')
+        ->and($service->resolveAverage($results['As'], '0.0062')['promedio'])->toBe('0.0068')
+        ->and($results['Cu']['promedio'])->toBe(0.002);
 });

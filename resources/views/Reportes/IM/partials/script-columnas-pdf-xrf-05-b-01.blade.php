@@ -181,7 +181,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const sumasManuales0402 = new Set(Object.keys(sumasManualesIniciales0402 || {}).filter(clave => Boolean(sumasManualesIniciales0402[clave])));
     const valoresPrevios0402 = @json(old('Norma_IM.Valores_Elementos', $Detalles_Generales['Norma_IM']['Valores_Elementos'] ?? []));
     Object.entries(valoresPrevios0402 || {}).forEach(([elemento, valor]) => promediosReferencias0402.set(elemento.toLowerCase(), { valor: valor ?? '', origen: 'manual' }));
-    let resultadosPdf0402 = historical?.Resultados_XRF || {};
+    // Recalcula tambien resultados historicos para no restaurar sugerencias que sumaban limites.
+    function excluirLimitesDelPromedio(results) {
+        return Object.fromEntries(Object.entries(results || {}).map(([clave, fila]) => {
+            if (!fila.valores) return [clave, fila];
+            const valores = Object.values(fila.valores).map(valor => String(valor ?? '').trim().replace(',', '.'));
+            const numericos = valores.filter(valor => /^\d+(?:\.\d+)?$/.test(valor)).map(Number);
+            const limites = valores.filter(valor => /^\[C<\]\d+(?:\.\d+)?$/.test(valor)).length;
+            const calculable = numericos.length > 0 && numericos.length + limites === valores.length;
+            return [clave, {...fila, calculable, valor_sugerido: null,
+                promedio: calculable ? Number((numericos.reduce((suma, valor) => suma + valor, 0) / numericos.length).toFixed(4)) : null,
+                lecturas_utilizadas: numericos.length, limites_excluidos: limites}];
+        }));
+    }
+    let resultadosPdf0402 = excluirLimitesDelPromedio(historical?.Resultados_XRF);
     const valorExtraido0402 = elemento => {
         const resultado = Object.values(resultadosPdf0402).find(fila => String(fila.elemento).trim().toLowerCase() === elemento);
         if (resultado?.calculable) return { valor: Number(resultado.promedio).toFixed(4), origen: 'calculado' };
@@ -457,6 +470,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function applyResults(results) {
+        results = excluirLimitesDelPromedio(results);
         if (['FOR-PIMP-04_02', 'FOR-PIMP-05_B_01'].includes(form.id)) {
             resultadosPdf0402 = results || {};
             promediosReferencias0402.clear();
@@ -506,6 +520,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     function renderPreview(payload) {
+        payload.resultados = excluirLimitesDelPromedio(payload.resultados);
         syncAvailableColumns(payload.columnas_disponibles, payload.columnas_seleccionadas);
         const columns = payload.columnas_seleccionadas;
         const rows = Object.values(payload.resultados || {});
