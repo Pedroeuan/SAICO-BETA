@@ -938,6 +938,21 @@
             {{ $Datos_Equipo['TAMANO_GRANO'] ?? '' }}
         </td>
     </tr>
+    @if(($Datos_Equipo['METODO_CALCULO_DUREZA'] ?? '') === 'a370_tabla3')
+        <tr>
+            <td colspan="5" style="text-align:left; font-size:7px; padding:2px 3px;">
+                @if(($Datos_Equipo['CALCULO_DUREZA']['estado'] ?? '') === 'formula_tecnico')
+                    Tensión estimada: fórmula técnica (500 × HB) / 1000, en ksi.
+                @else
+                    Tensión aproximada: ASTM A370-20, tabla 3.
+                @endif
+                Cedencia estimada: fórmula de referencia.
+                @if(($Datos_Equipo['CALCULO_DUREZA']['estado'] ?? '') === 'fuera_rango')
+                    Fuera del rango de cálculo (100–240 HB); valores pendientes de revisión.
+                @endif
+            </td>
+        </tr>
+    @endif
     </tbody>
 </table>
 

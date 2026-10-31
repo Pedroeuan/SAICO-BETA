@@ -153,23 +153,20 @@ class ServicioAnalisisColumnasPdfXrf
                 $numeric = $this->plainNumericValue($raw);
                 if ($numeric !== null) $numericValues[] = $numeric;
             }
-            $calculable = count($numericValues) === count($selectedColumns);
+            // Un limite de deteccion no es una medicion: se omite de la suma y del divisor.
+            // Las celdas ausentes o ilegibles siguen requiriendo revision manual.
+            $limites = count(array_filter($rawValues, fn ($raw) => preg_match('/^\[C<\]\d+(?:[.,]\d+)?$/', $raw)));
+            $calculable = count($numericValues) > 0 && count($numericValues) + $limites === count($selectedColumns);
             $unicos = array_values(array_unique($rawValues));
             $repetido = !$calculable && count($unicos) === 1 && preg_match('/^\[C<\]\d+(?:[.,]\d+)?$/', $unicos[0]) ? $unicos[0] : null;
             $sugerido = null;
-            if (!$calculable && $repetido === null) {
-                $partes = [];
-                foreach ($rawValues as $raw) {
-                    if (!preg_match('/^(?:\[C<\])?(\d+(?:[.,]\d+)?)$/', $raw, $m)) break;
-                    $partes[] = (float) str_replace(',', '.', $m[1]);
-                }
-                if (count($partes) === count($selectedColumns)) $sugerido = number_format(array_sum($partes) / count($partes), 4, '.', '');
-            }
             $results[$element] = [
                 'elemento' => $element,
                 'valores' => $rawValues,
                 'calculable' => $calculable,
-                'promedio' => $calculable ? round(array_sum($numericValues) / count($selectedColumns), 4) : null,
+                'promedio' => $calculable ? round(array_sum($numericValues) / count($numericValues), 4) : null,
+                'lecturas_utilizadas' => count($numericValues),
+                'limites_excluidos' => $limites,
                 'valor_repetido' => $repetido,
                 'valor_sugerido' => $sugerido,
                 'motivo' => $calculable ? null : 'Capture el valor manual únicamente para este elemento.',
