@@ -811,6 +811,10 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::post('/OC/enviarRevision/{id}', [OCController::class, 'enviarRevision'])->name('OC.enviarRevision');
     /*Ruta de Vista de OC-index para Revisiones*/
     Route::get('/OC/indexOC_AD', [OCController::class, 'index_AD'])->name('OC.indexOC_AD');
+    /*Rutas de Vista de Revisión*/
+    Route::get('/OC/edit_revisar/{id}', [OCController::class, 'edit_revisar'])->name('OC.edit_revisar');
+    /*Ruta de Actualizar OC*/
+    Route::post('/OC/updateOC_Revision/{id}', [OCController::class, 'updateOC_Revision'])->name('OC.updateOC_Revision');
 
     /*Ruta de Vista del catálogo de OC*/
     Route::get('/OC/catalogo', [CatalogoOCController::class, 'create'])->name('OC.catalogo');

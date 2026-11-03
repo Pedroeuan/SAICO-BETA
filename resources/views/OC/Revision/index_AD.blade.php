@@ -80,7 +80,7 @@
                             <button type="button" class="btn btn-info btnEnviar" idOC="{{$OCS->idOC}}"><i class="far fa-envelope-open" aria-hidden="true"></i></button>
                         </td>
                         <td>
-                            <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+                            <a href="{{ route('OC.edit_revisar', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="	far fa-eye" aria-hidden="true"></i></a>
                         </td>
 
                         {{--<td>

@@ -21,6 +21,57 @@ use Illuminate\Support\Facades\Hash;
 class OCController extends Controller
 {
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit_revisar($id)
+    {
+        $OC = OC::where('idOC', $id)->first();
+        $detallesOCM = detallesOC::where('idOC',$OC->idOC)->first();
+        $catalogo = DB::table('Catalogo_OC')->get();
+        $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
+        $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
+        $idCliente = $OC->idClientes;
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Cliente = clientes::where('idClientes', $idCliente)->first(); 
+        $Nombre_Cliente = $Cliente->Cliente;
+        // Soporta tanto el formato anterior (lista de detalles) como el formato
+        // actual que guarda los detalles junto con sus totales.
+        $datosGuardados = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
+        $detallesOC = $datosGuardados['detallesOC'] ?? $datosGuardados;
+        $detallesOC = is_array($detallesOC) ? array_values($detallesOC) : [];
+        $totales = $datosGuardados['totales'] ?? [];
+
+        if (empty($totales) && !empty($detallesOC)) {
+            $subtotalCentavos = 0;
+            foreach ($detallesOC as $detalle) {
+                $cantidad = (float) ($detalle['cantidad'] ?? 0);
+                $valorUnitario = (float) ($detalle['valor_unitario'] ?? 0);
+                $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+            }
+
+            $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+            $totales = [
+                'subtotal' => $subtotalCentavos / 100,
+                'iva' => $ivaCentavos / 100,
+                'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+            ];
+        }
+
+        $totales = array_merge([
+            'subtotal' => 0,
+            'iva' => 0,
+            'total' => 0,
+        ], is_array($totales) ? $totales : []);
+
+    $Firmantes = Firmantes_OC::where('idOC',$OC->idOC)->first();
+    // Decodificar JSON de la columna 'Detalles'
+        $Firmas = $Firmantes ? json_decode($Firmantes->Nombre_Cargo, true) : [];
+        // Obtener el numero de firmas
+        $numFirmas = $Firmas['numFirmas'] ?? 1;
+
+        return view('OC.revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas'));
+    }
+    /**
      * Display a listing of the resource.
      */
     public function index_AD()
