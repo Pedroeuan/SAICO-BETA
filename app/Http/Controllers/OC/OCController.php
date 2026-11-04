@@ -69,7 +69,7 @@ class OCController extends Controller
         // Obtener el numero de firmas
         $numFirmas = $Firmas['numFirmas'] ?? 1;
 
-        return view('OC.revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas'));
+        return view('OC.Revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas'));
     }
     /**
      * Display a listing of the resource.
@@ -562,6 +562,105 @@ class OCController extends Controller
         $detallesOCModel->save();
 
         return redirect()->route('OC.indexOC');
+    }
+
+    /**
+     * Guarda los cambios realizados durante la revisión de la OC,
+     * incluyendo el texto largo de observaciones (Revision_OC).
+     */
+    public function updateOC_Revision(Request $request, $id)
+    {
+        $request->validate([
+            'Numero_OC' => 'required',
+            'Requisicion' => 'required|string',
+            'Proyecto' => 'required|string',
+            'Lugar_trabajo' => 'required|string',
+            'Revision_OC' => 'nullable|string',
+            'dynamicTableData' => 'required|json',
+        ]);
+
+        $OC = OC::find($id);
+
+        if (!$OC) {
+            return redirect()->route('OC.indexOC_AD')
+                ->with('error', 'Orden de compra no encontrada.');
+        }
+
+        $OC->update([
+            'Contrato' => $request->input('Contrato'),
+            'Num_OC' => $request->input('Numero_OC'),
+            'Requisicion' => $request->input('Requisicion'),
+            'Proyecto' => $request->input('Proyecto'),
+            'Lugar_trabajo' => $request->input('Lugar_trabajo'),
+            'Fecha_solicitud' => $request->input('Fecha_solicitud'),
+            'Tipo_servicio' => $request->input('Tipo_servicio'),
+            'Revision_OC' => $request->input('Revision_OC'),
+        ]);
+
+        // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo.
+        if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
+            $rutaAnterior = $OC->OC_archivo;
+            if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
+                Storage::disk('public')->delete($rutaAnterior);
+            }
+
+            $pdf = $request->file('OC_archivo');
+            $lastFile = collect(Storage::disk('public')->files('Ventas/OC'))
+                ->filter(function ($file) {
+                    return preg_match('/^\d+_/', basename($file));
+                })
+                ->sort()
+                ->last();
+
+            $lastNumber = 0;
+            if ($lastFile) {
+                $lastNumber = (int) explode('_', basename($lastFile))[0];
+            }
+
+            $newNumber = $lastNumber + 1;
+            $newFileNameOC = $newNumber . '_' . $pdf->getClientOriginalName();
+            $pdfPath = $pdf->storeAs('Ventas/OC', $newFileNameOC, 'public');
+
+            $OC->OC_archivo = $pdfPath;
+            $OC->save();
+        }
+
+        // Guardar los detalles de la orden.
+        $detallesOC = json_decode($request->input('dynamicTableData'), true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($detallesOC) || !array_is_list($detallesOC)) {
+            return back()->withErrors([
+                'dynamicTableData' => 'Los detalles de la orden tienen un formato inválido.',
+            ])->withInput();
+        }
+
+        $subtotalCentavos = 0;
+        foreach ($detallesOC as $detalle) {
+            $cantidad = is_array($detalle) && is_numeric($detalle['cantidad'] ?? null)
+                ? (float) $detalle['cantidad']
+                : 0;
+            $valorUnitario = is_array($detalle) && is_numeric($detalle['valor_unitario'] ?? null)
+                ? (float) $detalle['valor_unitario']
+                : 0;
+
+            $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+        }
+
+        $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+        $detallesJSON = json_encode([
+            'detallesOC' => $detallesOC,
+            'totales' => [
+                'subtotal' => $subtotalCentavos / 100,
+                'iva' => $ivaCentavos / 100,
+                'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+            ],
+        ], JSON_THROW_ON_ERROR);
+
+        $detallesOCModel = detallesOC::firstOrNew(['idOC' => $OC->idOC]);
+        $detallesOCModel->Detalles = $detallesJSON;
+        $detallesOCModel->save();
+
+        return redirect()->route('OC.indexOC_AD')
+            ->with('success', 'La revisión de la orden de compra se guardó correctamente.');
     }
 
     /**

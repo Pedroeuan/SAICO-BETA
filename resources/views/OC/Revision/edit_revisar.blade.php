@@ -53,6 +53,57 @@
 <h3 align="center">Revisión de la Orden de Compra</h3>
 <br>
                 <section class="content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- VISTA PREVIA DE LA OC AICO (PDF GENERADO) -->
+                            <div class="card card-outline card-primary h-100">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0"><i class="far fa-file-pdf"></i> Vista previa OC AICO</h3>
+                                    <div class="card-tools">
+                                        <a href="{{ route('OC.PDF', ['id' => $id]) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-external-link-alt"></i> Abrir en nueva pestaña
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-secondary" id="togglePreviewOC">
+                                            <i class="fas fa-compress"></i> Mostrar/Ocultar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="previewOCAico" class="collapse show">
+                                    <div class="card-body p-0">
+                                        <iframe src="{{ route('OC.PDF', ['id' => $id]) }}"
+                                                title="Vista previa de la OC AICO"
+                                                style="width: 100%; height: 80vh; border: 0; display: block;">
+                                            <p class="p-3 mb-0">
+                                                Tu navegador no puede mostrar el PDF.
+                                                <a href="{{ route('OC.PDF', ['id' => $id]) }}" target="_blank">Ábrelo en una nueva pestaña</a>.
+                                            </p>
+                                        </iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <!-- TEXTO LARGO DE LA REVISIÓN -->
+                            <div class="card card-outline card-primary h-100">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Revisión OC</h3>
+                                </div>
+                                <div class="card-body p-2">
+                                    <textarea form="OC"
+                                              name="Revision_OC"
+                                              id="Revision_OC"
+                                              class="form-control @error('Revision_OC') is-invalid @enderror"
+                                              placeholder="Escribe aquí las observaciones de la revisión..."
+                                              style="height: 80vh; resize: vertical;">{{ old('Revision_OC', $OC->Revision_OC) }}</textarea>
+                                    @error('Revision_OC')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <div class="card-body row">
                             <form id="OC" action="{{ route('OC.updateOC_Revision', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
@@ -624,8 +675,10 @@
 </script>
 <script src="{{ asset('js/OC_edit.js') }}"></script>
 <script>
-
-
-    </script>
+    // Mostrar u ocultar la vista previa de la OC AICO.
+    $('#togglePreviewOC').on('click', function () {
+        $('#previewOCAico').slideToggle();
+    });
+</script>
 @endsection
 

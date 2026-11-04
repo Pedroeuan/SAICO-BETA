@@ -226,6 +226,22 @@ let table = new DataTable('#tablaJs', {
             }
         });
     });
+
+    @if(session('success'))
+        Swal.fire({
+            title: "Guardado!",
+            text: @json(session('success')),
+            icon: "success"
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            title: "Error!",
+            text: @json(session('error')),
+            icon: "error"
+        });
+    @endif
 </script>
 
 @endsection
