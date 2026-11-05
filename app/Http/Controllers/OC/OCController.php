@@ -69,7 +69,16 @@ class OCController extends Controller
         // Obtener el numero de firmas
         $numFirmas = $Firmas['numFirmas'] ?? 1;
 
-        return view('OC.Revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas'));
+        // Marcas (anotaciones) guardadas previamente sobre el PDF.
+        $marcas = [];
+        if (!empty($OC->Revision_Marcas)) {
+            $marcasDecodificadas = json_decode($OC->Revision_Marcas, true);
+            if (is_array($marcasDecodificadas)) {
+                $marcas = $marcasDecodificadas;
+            }
+        }
+
+        return view('OC.Revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas','marcas'));
     }
 
     /**
@@ -595,6 +604,17 @@ class OCController extends Controller
             $revision = 'V1';
         }
 
+        // Solo se guardan las marcas si el JSON recibido es válido y no está vacío.
+        $marcasGuardadas = null;
+        $marcasInput = $request->input('Revision_Marcas');
+
+        if (is_string($marcasInput)) {
+            $marcasDecodificadas = json_decode($marcasInput, true);
+            if (is_array($marcasDecodificadas) && !empty($marcasDecodificadas)) {
+                $marcasGuardadas = $marcasInput;
+            }
+        }
+
         $OC->update([
             /*'Contrato' => $request->input('Contrato'),
             'Num_OC' => $request->input('Numero_OC'),
@@ -604,6 +624,7 @@ class OCController extends Controller
             'Fecha_solicitud' => $request->input('Fecha_solicitud'),
             'Tipo_servicio' => $request->input('Tipo_servicio'),*/
             'Revision_OC' => $request->input('Revision_OC'),
+            'Revision_Marcas' => $marcasGuardadas,
             'Revision' => $revision,
             'Estatus' => 'Revisado ' . $revision,
         ]);

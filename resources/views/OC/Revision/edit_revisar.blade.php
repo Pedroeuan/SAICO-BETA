@@ -42,6 +42,41 @@
     overflow-y: auto;
     }
 
+    /* Visor de PDF con marcas */
+    #pdfMarcasContenedor {
+        height: 80vh;
+        overflow: auto;
+        background: #525659;
+        padding: 10px;
+        position: relative;
+    }
+    .pdf-marca-pagina {
+        position: relative;
+        margin: 0 auto 12px;
+        background: #fff;
+        box-shadow: 0 0 6px rgba(0, 0, 0, .45);
+    }
+    .pdf-marca-pagina canvas {
+        display: block;
+    }
+    .pdf-marca-dibujo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: crosshair;
+        touch-action: none;
+    }
+    #marcasToolbar .btn.active {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #fff;
+    }
+    #pdfMarcasMensaje {
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+
     </style>
 @endsection
 
@@ -56,6 +91,7 @@
         <div class="card-body row">
             <form id="OC" action="{{ route('OC.updateOC_Revision', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
             @csrf 
+                <input type="hidden" id="Revision_Marcas" name="Revision_Marcas">
                 <section class="content">
                     <div class="row">
                         <div class="col-lg-8">
@@ -74,14 +110,29 @@
                                 </div>
                                 <div id="previewOCAico" class="collapse show">
                                     <div class="card-body p-0">
-                                        <iframe src="{{ route('OC.PDF', ['id' => $id]) }}"
-                                                title="Vista previa de la OC AICO"
-                                                style="width: 100%; height: 80vh; border: 0; display: block;">
-                                            <p class="p-3 mb-0">
-                                                Tu navegador no puede mostrar el PDF.
-                                                <a href="{{ route('OC.PDF', ['id' => $id]) }}" target="_blank">Ábrelo en una nueva pestaña</a>.
-                                            </p>
-                                        </iframe>
+                                        <div id="marcasToolbar" class="d-flex flex-wrap align-items-center p-2 border-bottom" style="gap: 6px;">
+                                            <button type="button" class="btn btn-sm btn-outline-danger active" data-marca-tool="free" title="Mano alzada">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-marca-tool="ellipse" title="Círculo">
+                                                <i class="far fa-circle"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-marca-tool="rect" title="Rectángulo">
+                                                <i class="far fa-square"></i>
+                                            </button>
+                                            <input type="color" id="marcaColor" value="#e00000" title="Color de la marca"
+                                                   style="width: 38px; height: 31px; padding: 2px; border: 1px solid #ced4da; border-radius: 4px;">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" id="marcaDeshacer" title="Deshacer">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" id="marcaLimpiar" title="Limpiar todas las marcas">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            <span id="marcaEstado" class="text-muted small ml-2"></span>
+                                        </div>
+                                        <div id="pdfMarcasContenedor">
+                                            <div id="pdfMarcasMensaje">Cargando vista previa...</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -675,6 +726,17 @@
     const catalogo = @json($catalogo);
 </script>
 <script src="{{ asset('js/OC_edit.js') }}"></script>
+<!-- Visor de PDF con marcas (anotaciones) -->
+<script src="{{ asset('js/pdfjs/pdf.min.js') }}"></script>
+<script>
+    window.OCRevisionMarcas = {
+        pdfUrl: @json(route('OC.PDF', ['id' => $id])),
+        workerSrc: @json(asset('js/pdfjs/pdf.worker.min.js')),
+        standardFontDataUrl: @json(asset('js/pdfjs/standard_fonts/')),
+        marcas: @json($marcas ?? []),
+    };
+</script>
+<script src="{{ asset('js/OC_revision_marcas.js') }}"></script>
 <script>
     // Mostrar u ocultar la vista previa de la OC AICO.
     $('#togglePreviewOC').on('click', function () {

@@ -24,6 +24,7 @@ class OC extends Model
         'OC_archivo',
         'Revision',
         'Revision_OC',
+        'Revision_Marcas',
     ];
     protected $table = 'OC';
     protected $primaryKey = 'idOC';

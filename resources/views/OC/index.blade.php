@@ -80,7 +80,7 @@
                         <td>
                             <button type="button" class="btn btn-info btnEnviar" idOC="{{$OCS->idOC}}"><i class="far fa-envelope-open" aria-hidden="true"></i></button>
                         </td>
-                        <td>{{ $OCS->Revision_OC }}</td>
+                        <td>@if($OCS->Revision_OC){{ $OCS->Revision_OC }} @else EN ESPERA . . . @endif</td>
                         <td>
                             <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>
