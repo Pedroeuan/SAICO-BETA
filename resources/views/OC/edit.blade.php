@@ -251,7 +251,14 @@
                                             @endif 
                                         </div>
                                     </div>
-                                    
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Comentarios de Revisión</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Revision_OC" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen" readonly>{{$OC->Revision_OC}}</textarea>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->

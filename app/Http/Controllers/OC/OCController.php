@@ -71,13 +71,14 @@ class OCController extends Controller
 
         return view('OC.Revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas'));
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index_AD()
     {
-        // Solo las OC que ya fueron enviadas a revisión (Revisión: V1, V2, ...).
-        $OC = OC::where('Estatus', 'like', 'Revisi%')->get();
+        // OC en revisión y ya revisadas (Revisión: V1, Revisado V1, V2, ...).
+        $OC = OC::where('Estatus', 'like', 'Revis%')->get();
 
         return view('OC.Revision.index_AD', compact('OC'));
     }
@@ -570,7 +571,8 @@ class OCController extends Controller
      */
     public function updateOC_Revision(Request $request, $id)
     {
-        $request->validate([
+        $OC = OC::find($id);
+        /*$request->validate([
             'Numero_OC' => 'required',
             'Requisicion' => 'required|string',
             'Proyecto' => 'required|string',
@@ -584,21 +586,30 @@ class OCController extends Controller
         if (!$OC) {
             return redirect()->route('OC.indexOC_AD')
                 ->with('error', 'Orden de compra no encontrada.');
+        }*/
+
+        // La versión de Revision define el estatus final: Revisado V1, V2, etc.
+        $revision = trim((string) $OC->Revision);
+
+        if ($revision === '') {
+            $revision = 'V1';
         }
 
         $OC->update([
-            'Contrato' => $request->input('Contrato'),
+            /*'Contrato' => $request->input('Contrato'),
             'Num_OC' => $request->input('Numero_OC'),
             'Requisicion' => $request->input('Requisicion'),
             'Proyecto' => $request->input('Proyecto'),
             'Lugar_trabajo' => $request->input('Lugar_trabajo'),
             'Fecha_solicitud' => $request->input('Fecha_solicitud'),
-            'Tipo_servicio' => $request->input('Tipo_servicio'),
+            'Tipo_servicio' => $request->input('Tipo_servicio'),*/
             'Revision_OC' => $request->input('Revision_OC'),
+            'Revision' => $revision,
+            'Estatus' => 'Revisado ' . $revision,
         ]);
 
         // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo.
-        if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
+        /*if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
             $rutaAnterior = $OC->OC_archivo;
             if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
                 Storage::disk('public')->delete($rutaAnterior);
@@ -657,7 +668,7 @@ class OCController extends Controller
 
         $detallesOCModel = detallesOC::firstOrNew(['idOC' => $OC->idOC]);
         $detallesOCModel->Detalles = $detallesJSON;
-        $detallesOCModel->save();
+        $detallesOCModel->save();*/
 
         return redirect()->route('OC.indexOC_AD')
             ->with('success', 'La revisión de la orden de compra se guardó correctamente.');

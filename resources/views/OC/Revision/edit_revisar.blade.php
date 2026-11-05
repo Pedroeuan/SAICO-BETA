@@ -52,6 +52,10 @@
 <br>
 <h3 align="center">Revisión de la Orden de Compra</h3>
 <br>
+    <div class="card">
+        <div class="card-body row">
+            <form id="OC" action="{{ route('OC.updateOC_Revision', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+            @csrf 
                 <section class="content">
                     <div class="row">
                         <div class="col-lg-8">
@@ -104,10 +108,7 @@
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-body row">
-                            <form id="OC" action="{{ route('OC.updateOC_Revision', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
-                                @csrf 
+
                             {{--<div class="row">
 
                                     <div class="col-sm-4">
