@@ -73,8 +73,10 @@
                 <section class="content w-100">
                     <div class="card w-100 p-3">
                         <div class="card-body row w-100">
-                        <form id="FOR-PINS-23-01" action="{{ route('Reportes_FOR_PINS_23_01.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
-                                @csrf 
+                        <form id="FOR-PINS-23-01" data-anotaciones-fotos data-modo="edit" action="{{ route('Reportes_FOR_PINS_23_01.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                @include('Reportes.PINS.partials.serie-reportes', ['formatoSeriePnd' => 'FOR-PINS-23-01'])
+
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -1314,7 +1316,9 @@
                                             @endif
                                         </div>
 
-                                        <div class="container">
+                                        {{-- Documentos del tecnico que se consultan al escanear el QR. --}}
+@include('Reportes.IM.partials.documentos-usuario', ['formatoDocumentos' => 'FOR-PINS-23-01'])
+<div class="container">
                                             <div class="float-right">
                                                 <button type="submit" class="btn btn-info bg-primary">Guardar</button>
                                             </div>
@@ -1333,6 +1337,9 @@
 
 
 @section('js')
+{{-- Navegacion al inicio/final con el mismo tamano y posicion de IM. --}}
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
+
 <!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
@@ -1357,6 +1364,8 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+{{-- Editor compartido: guarda flechas y texto dentro de la fotografia. --}}
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 <script>
 /*Juntas-Resultados */
 $(document).ready(function() {

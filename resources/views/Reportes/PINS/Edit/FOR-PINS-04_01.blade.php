@@ -73,7 +73,9 @@
                     <div class="card w-100 p-3">
                         <div class="card-body  w-100">
                             <form id="FOR-PINS-04_01" data-anotaciones-fotos data-modo="edit" action="{{ route('Reportes_FOR_PINS_04_01.update', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
-                                @csrf 
+                                @csrf
+                                @include('Reportes.PINS.partials.serie-reportes', ['formatoSeriePnd' => 'FOR-PINS-04-01'])
+
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn my-2">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -1177,6 +1179,9 @@
 @stop
 
 @section('js')
+{{-- Navegacion al inicio/final con el mismo tamano y posicion de IM. --}}
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
+
 <!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->

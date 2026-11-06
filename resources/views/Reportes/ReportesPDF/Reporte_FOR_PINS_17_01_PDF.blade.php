@@ -205,8 +205,8 @@
                 <table class="tablaheader">
                     <thead>
                         <tr>
-                            <th style="width: 10%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 50%; height: auto;"></th>
-                            <th style="font-size: 12pt;">  ASESORIA E INSPECCIÓN EN CONTRUCCIÓN COSTA FUERA S.C. </th>
+                            <th style="width: 12%; padding: 6px; text-align:center; vertical-align:middle;"><img src="{{ $Logo }}" alt="Logo" style="width: 52px; height: auto;"></th>
+                            <th style="font-size: 12pt; padding: 8px 4px; vertical-align:middle; white-space:nowrap;">  ASESORIA E INSPECCIÓN EN CONTRUCCIÓN COSTA FUERA S.C. </th>
                         </tr>
                     </thead>
                 </table>
@@ -223,7 +223,7 @@
                 <p style="text-align: left;">FOR-PINS-17/01</p>
             </footer>
 
-            <div class="content" style="text-align: center;">
+            <div class="content" style="text-align: center; padding-top:60px;">
                 <div class="content">
                     <br>
                     <br>
@@ -261,13 +261,13 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
+                            <th rowspan="3" style="width: 80%; padding:0; text-align:center; vertical-align:middle; line-height:0;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:57px; height:57px; display:inline-block; vertical-align:middle; margin:0; padding:0; border:4px solid #fff;">
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 90%;">FOR-PINS-17/01</th>
+                            <th style="width: 90%; white-space:nowrap;">FOR-PINS-17/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>

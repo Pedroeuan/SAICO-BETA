@@ -193,7 +193,9 @@
                         <div class="card-body row w-100">
                             {{-- Activa el editor compartido de flechas y texto para las fotos nuevas. --}}
                             <form id="FOR-PINS-03_02" data-anotaciones-fotos data-modo="create" action="{{route('Reportes_FOR_PINS_03_02.store')}}" method="post" enctype="multipart/form-data">
-                                @csrf 
+                                @csrf
+                                @include('Reportes.PINS.partials.serie-reportes', ['formatoSeriePnd' => 'FOR-PINS-03-02'])
+
                                 <div class="row">
                                 <button id="preFormBtn" type="button" class="btn btn-warning custom-btn">Rellenar Campos Vacios "---"</button>
                                 <div style="margin-bottom: 2px;"></div>
@@ -1155,6 +1157,9 @@
 @stop
 
 @section('js')
+{{-- Navegacion al inicio/final con el mismo tamano y posicion de IM. --}}
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
+
 <!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
