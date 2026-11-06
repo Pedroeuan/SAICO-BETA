@@ -280,12 +280,16 @@
                             <th class="celdaColor2" style="width: 100%;">Num. De Cotizacion</th>
                         </tr>
                         <tr>
-                            <th style="width: 100%;">1</th>
+                            @php
+                                //dd($detallesRegistro);
+                            @endphp
+                            <th style="width: 100%;">{{ $detallesRegistro?->NumCotizacion ?? '****' }}</th>
+                        </tr>
                         <tr>
                             <th class="celdaColor2" style="width: 100%;">Solicitud del cliente</th>
                         </tr>
                         <tr>
-                            <th style="width: 100%;">2</th>
+                            <th style="width: 100%;">{{ $detallesRegistro?->SolicitudCliente ?? '' }}</th>
                         </tr>
                         </tr>
                         {{--<tr>
