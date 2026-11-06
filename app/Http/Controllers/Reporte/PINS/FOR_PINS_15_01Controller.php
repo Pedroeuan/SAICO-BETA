@@ -957,7 +957,7 @@ class FOR_PINS_15_01Controller extends Controller
             'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
             'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string|max:255',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
             'Detalles_Generales.Pieza' => 'nullable|string|max:255',
@@ -1168,6 +1168,11 @@ class FOR_PINS_15_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, null);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
         // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
@@ -1570,6 +1575,8 @@ class FOR_PINS_15_01Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $idReportes, 'FOR-PINS-15-01');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1587,7 +1594,7 @@ class FOR_PINS_15_01Controller extends Controller
             'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
             'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string|max:255',
             'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
             'Detalles_Generales.Pieza' => 'nullable|string|max:255',
@@ -1800,6 +1807,11 @@ class FOR_PINS_15_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string|max:255',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string|max:255',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, (int) $id);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -1926,7 +1938,7 @@ class FOR_PINS_15_01Controller extends Controller
 
         // Ruta del PDF unificado
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
-            $resultadoQR['pdf'] ?? ($datosEquipoActuales['PDF_UNIFICADO'] ?? null);
+            $resultadoQR['pdf'] ?? null;
 
         /*
         |--------------------------------------------------------------------------
@@ -2300,6 +2312,8 @@ class FOR_PINS_15_01Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $id, 'FOR-PINS-15-01');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -2355,13 +2369,8 @@ class FOR_PINS_15_01Controller extends Controller
             }
         }
 
-        $qrPdf = null;
-        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
-        if (!empty($Datos_Equipo['QR_PDF'])) {
-            $qrPdf = public_path(
-                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
-            );
-        }
+        // El PNG permite incrustar el QR en Dompdf con PHP 8.5.
+        $qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
 
         $data = [
             'title' => 'Reporte_FOR_PINS_15_01.PDF',

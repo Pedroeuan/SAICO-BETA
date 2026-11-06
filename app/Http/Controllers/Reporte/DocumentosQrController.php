@@ -21,7 +21,7 @@ class DocumentosQrController extends Controller
         // Comprueba técnico y formato del catálogo; archivo es el índice del PDF en la selección actual.
         $datos = $request->validate([
             'tecnico' => 'required|integer|exists:users,id',
-            'formato' => ['required', 'string', 'exists:Formato,Nombre', 'regex:#^(?:FOR-PIMP-|FOR-PINS-(?:03-02|04-01|16-01)$)#'],
+            'formato' => ['required', 'string', 'exists:Formato,Nombre', 'regex:#^(?:FOR-PIMP-|FOR-PINS-)#'],
             'procedimiento' => 'nullable|integer',
             'categoria' => 'required|in:cv_completo,cv_reporte,certificados',
             'tipo_cv_reporte' => 'required|in:general,servicio',

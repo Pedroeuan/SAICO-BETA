@@ -242,7 +242,7 @@ class FOR_PINS_11_02Controller extends Controller
         $tecnicos = app(\App\Services\DocumentosUsuarioReporte::class)->rutas(
             $ID_TECNICO ? Usuario::find($ID_TECNICO) : null,
             $datosParaCrearQR['Documentos_Usuario'] ?? null,
-            'FOR-PINS-11-01',
+            'FOR-PINS-11-02',
             $idProcedimiento ? (int) $idProcedimiento : null
         );
 
@@ -868,6 +868,11 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, null);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
         // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
@@ -1301,6 +1306,8 @@ class FOR_PINS_11_02Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $idReportes, 'FOR-PINS-11-02');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1464,6 +1471,11 @@ class FOR_PINS_11_02Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, (int) $id);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -1542,9 +1554,7 @@ class FOR_PINS_11_02Controller extends Controller
             ?? $datosEquipoActuales['QR_PDF']
             ?? null;
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
-            $resultadoQR['pdf']
-            ?? $datosEquipoActuales['PDF_UNIFICADO']
-            ?? null;
+            $resultadoQR['pdf'] ?? null;
 
         $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
             $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
@@ -1911,6 +1921,8 @@ class FOR_PINS_11_02Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $id, 'FOR-PINS-11-02');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1967,13 +1979,8 @@ class FOR_PINS_11_02Controller extends Controller
             }
         }
 
-        $qrPdf = null;
-        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
-        if (!empty($Datos_Equipo['QR_PDF'])) {
-            $qrPdf = public_path(
-                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
-            );
-        }
+        // El PNG permite incrustar el QR en Dompdf con PHP 8.5.
+        $qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
 
         $data = [
             'title' => 'Reporte_FOR-PINS-11/02.PDF',
