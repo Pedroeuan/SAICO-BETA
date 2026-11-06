@@ -14,7 +14,7 @@
 
                 header {
                         position: fixed;
-                        top: -30px; /* Ajusta para que no interfiera con el margen de la página */
+                        top: -58px; /* Misma posicion que la hoja despues de la portada. */
                         left: 0;
                         right: 0;
                         height: auto; /* Permite que el header crezca dinámicamente */
@@ -64,13 +64,16 @@
                         border-spacing: 0px;        /* Espacio entre celdas */
                         width: 100%;
                         text-align: center;
-                        font-size: 9px;
+                        font-size: 10px;
                     }
                         
                     /* Aplica el borde a las celdas de la tabla */
                     .tablaheader th {
                         /*width: 70%;*/
                         border: 1px solid black; 
+                        padding: 4px 6px;
+                        vertical-align: middle;
+                        line-height: 1.15;
                     }
 
             .encabezadoAzul{
@@ -251,14 +254,14 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
+                            <th rowspan="3" style="width: 80%; padding:0; text-align:center; vertical-align:middle; line-height:0;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:57px; height:57px; display:inline-block; vertical-align:middle; margin:0; padding:0; border:4px solid #fff;">
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-17-01/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
+                            <th style="width: 80%; white-space:nowrap;">FOR-PINS-17-01/01</th>
+                            <th rowspan="3" style="width:55px; padding:3px; text-align:center; vertical-align:middle;"><img src="{{ $Logo }}" alt="Logo" style="width:45px; height:auto;"></th>
                         </tr>
                     </thead>
 
@@ -402,14 +405,14 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
+                            <th rowspan="3" style="width: 80%; padding:0; text-align:center; vertical-align:middle; line-height:0;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:57px; height:57px; display:inline-block; vertical-align:middle; margin:0; padding:0; border:4px solid #fff;">
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-17-01/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
+                            <th style="width: 80%; white-space:nowrap;">FOR-PINS-17-01/01</th>
+                            <th rowspan="3" style="width:55px; padding:3px; text-align:center; vertical-align:middle;"><img src="{{ $Logo }}" alt="Logo" style="width:45px; height:auto;"></th>
                         </tr>
                     </thead>
 

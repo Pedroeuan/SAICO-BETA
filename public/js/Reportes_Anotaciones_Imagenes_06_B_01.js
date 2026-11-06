@@ -40,12 +40,12 @@
         if (!esFormularioEdicion) {
             pieModal.insertBefore(interfaz.botonPrepararRecorte, botonRecortar || pieModal.firstChild);
         }
-        if (formulario.id === 'FOR-PIMP-04_02') mejorarBotonesEditor();
+        mejorarBotonesEditor();
         agregarBotonesImagenesGuardadas();
 
         /** Reordena los mismos controles; conserva sus eventos de giro, recorte y guardado. */
         function mejorarBotonesEditor() {
-            modal.classList.add('editor-foto-0402');
+            modal.classList.add('editor-foto-organizado');
             const titulo = modal.querySelector('.modal-title');
             if (titulo) titulo.textContent = 'Editar fotografía';
             const herramientas = document.createElement('div');
@@ -76,7 +76,7 @@
             grupo('Marcar imagen', [interfaz.botonPreparar, ...(!esFormularioEdicion ? [interfaz.botonPrepararRecorte] : [])]);
             const acciones = document.createElement('div');
             acciones.className = 'editor-foto-acciones';
-            const cancelar = modal.querySelector('#cancelBtn');
+            const cancelar = pieModal.querySelector('#cancelBtn, [data-dismiss="modal"], [data-bs-dismiss="modal"]');
             if (cancelar) {
                 cancelar.classList.remove('btn-danger');
                 cancelar.classList.add('btn-outline-secondary');
@@ -91,6 +91,7 @@
                 guardar.appendChild(botonRecortar);
             }
             if (botonGuardarOriginal) {
+                botonGuardarOriginal.className = 'btn btn-primary';
                 botonGuardarOriginal.textContent = 'Guardar imagen completa';
                 guardar.appendChild(botonGuardarOriginal);
             }
@@ -98,26 +99,40 @@
             pieModal.append(herramientas, acciones);
             const estilo = document.createElement('style');
             estilo.textContent = `
-                .editor-foto-0402 .modal-content{border:0;border-radius:12px;overflow:hidden}
-                .editor-foto-0402 .modal-header{padding:16px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
-                .editor-foto-0402 .modal-title{font-style:normal;font-weight:600;color:#24364b}
-                .editor-foto-0402 .modal-footer{display:block;padding:16px 20px;background:#fff;border-top:1px solid #e2e8f0}
-                .editor-foto-0402 .modal-footer>*{margin:0}
-                .editor-foto-0402 .editor-foto-herramientas{display:flex;gap:24px;flex-wrap:wrap;padding-bottom:14px}
-                .editor-foto-0402 .editor-foto-grupo{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-                .editor-foto-0402 .editor-foto-rotulo{flex-basis:100%;font-size:12px;font-weight:600;color:#526479}
-                .editor-foto-0402 .modal-footer .btn{min-height:38px;padding:8px 14px;border-radius:7px;font-weight:600;font-size:13px;line-height:1.3}
-                .editor-foto-0402 .modal-footer .btn:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
-                .editor-foto-0402 #rotateLeftBtn,.editor-foto-0402 #rotateRightBtn{background:#0dcaf0;border-color:#0dcaf0;color:#000}
-                .editor-foto-0402 #prepararAnotacionImagenBtn{background:#ffc107;border-color:#ffc107;color:#000}
-                .editor-foto-0402 #prepararAnotacionRecorteBtn{background:#fff;border-color:#ffc107;color:#ffc107}
-                .editor-foto-0402 #cancelBtn{background:#dc3545;border-color:#dc3545;color:#fff}
-                .editor-foto-0402 #cropImageBtn{background:#0d6efd;border-color:#0d6efd;color:#fff}
-                .editor-foto-0402 #saveWithoutCropBtn{background:#198754;border-color:#198754;color:#fff}
-                .editor-foto-0402 .modal-footer .btn:hover:not(:disabled){filter:brightness(.88)}
-                .editor-foto-0402 .editor-foto-acciones{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:14px;border-top:1px solid #e2e8f0}
-                .editor-foto-0402 .editor-foto-guardar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-                @media(max-width:575px){.editor-foto-0402 .editor-foto-acciones{align-items:stretch;flex-direction:column}.editor-foto-0402 .editor-foto-guardar{display:grid;grid-template-columns:1fr}.editor-foto-0402 .editor-foto-herramientas{gap:14px}}
+                .editor-foto-organizado .modal-content{border:0;border-radius:12px;overflow:hidden}
+                .editor-foto-organizado .modal-header{padding:16px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+                .editor-foto-organizado .modal-title{font-style:normal;font-weight:600;color:#24364b}
+                .editor-foto-organizado .modal-footer{display:block;padding:16px 20px;background:#fff;border-top:1px solid #e2e8f0}
+                .editor-foto-organizado .modal-footer>*{margin:0}
+                .editor-foto-organizado .editor-foto-herramientas{display:grid;grid-template-columns:auto 1fr;gap:16px;padding-bottom:16px}
+                .editor-foto-organizado .editor-foto-grupo{display:flex;align-items:center;align-content:start;gap:8px;flex-wrap:wrap;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}
+                .editor-foto-organizado .editor-foto-rotulo{flex-basis:100%;font-size:12px;font-weight:600;color:#526479;margin-bottom:2px}
+                .editor-foto-organizado .modal-footer .btn{min-height:38px;margin:0;padding:9px 14px;border-radius:7px;font-weight:600;font-size:13px;line-height:1.3;white-space:normal}
+                .editor-foto-organizado .modal-footer .btn:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+                .editor-foto-organizado .btn-outline-secondary{background:#fff;color:#475569;border-color:#cbd5e1}
+                .editor-foto-organizado .btn-outline-secondary:hover{background:#e2e8f0;color:#24364b}
+                .editor-foto-organizado .btn-outline-primary{background:#fff;color:#245a93;border-color:#9cb9dc}
+                .editor-foto-organizado .btn-outline-primary:hover{background:#eaf2fc;color:#194575}
+                .editor-foto-organizado .btn-primary{background:#0d6efd;border-color:#0d6efd;color:#fff}
+                .editor-foto-organizado .btn-primary:hover{background:#0b5ed7;border-color:#0a58ca}
+                .editor-foto-organizado #rotateLeftBtn,.editor-foto-organizado #rotateRightBtn{background:#0dcaf0;border-color:#0dcaf0;color:#000}
+                .editor-foto-organizado #rotateLeftBtn:hover,.editor-foto-organizado #rotateRightBtn:hover{background:#31d2f2;border-color:#25cff2;color:#000}
+                .editor-foto-organizado #prepararAnotacionImagenBtn{background:#ffc107;border-color:#ffc107;color:#000}
+                .editor-foto-organizado #prepararAnotacionImagenBtn:hover{background:#ffca2c;border-color:#ffc720;color:#000}
+                .editor-foto-organizado #prepararAnotacionRecorteBtn{background:#fff;border-color:#ffc107;color:#856404}
+                .editor-foto-organizado #prepararAnotacionRecorteBtn:hover{background:#ffc107;border-color:#ffc107;color:#000}
+                .editor-foto-organizado .editor-foto-acciones>button{background:#dc3545;border-color:#dc3545;color:#fff}
+                .editor-foto-organizado .editor-foto-acciones>button:hover{background:#bb2d3b;border-color:#b02a37;color:#fff}
+                .editor-foto-organizado #cropImageBtn{background:#0d6efd;border-color:#0d6efd;color:#fff}
+                .editor-foto-organizado #cropImageBtn:hover{background:#0b5ed7;border-color:#0a58ca;color:#fff}
+                .editor-foto-organizado #saveWithoutCropBtn{background:#198754;border-color:#198754;color:#fff}
+                .editor-foto-organizado #saveWithoutCropBtn:hover{background:#157347;border-color:#146c43;color:#fff}
+                .editor-foto-organizado .editor-foto-acciones{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #e2e8f0}
+                .editor-foto-organizado .editor-foto-guardar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+                .editor-foto-organizado.editor-foto-anotando .editor-foto-herramientas{display:none}
+                .editor-foto-organizado.editor-foto-anotando .editor-foto-acciones{border-top:0;padding-top:0}
+                @media(max-width:767px){.editor-foto-organizado .editor-foto-herramientas{grid-template-columns:1fr}}
+                @media(max-width:575px){.editor-foto-organizado .modal-footer{padding:14px}.editor-foto-organizado .editor-foto-acciones{align-items:stretch;flex-direction:column-reverse}.editor-foto-organizado .editor-foto-guardar{display:grid;grid-template-columns:1fr}.editor-foto-organizado .editor-foto-grupo .btn{flex:1}}
             `;
             document.head.appendChild(estilo);
         }
@@ -197,6 +212,17 @@
         }
 
         function agregarBotonesImagenesGuardadas() {
+            // Termografia usa imagenN_base64 y muestra la foto actual fuera de la vista previa.
+            // Adapta esos campos al editor conservando sus nombres para el controlador.
+            formulario.querySelectorAll('input.image-input').forEach(function (input) {
+                const grupo = input.closest('.form-group');
+                const vistaPrevia = input.id ? document.getElementById(input.id + '-preview') : null;
+                const imagenGuardada = input.id ? document.getElementById(input.id + '-old-preview') : null;
+                if (!grupo || !vistaPrevia || !imagenGuardada) return;
+                if (!grupo.id) grupo.id = 'image-container-' + input.id;
+                vistaPrevia.classList.add('image-preview');
+                if (!vistaPrevia.querySelector('img')) vistaPrevia.appendChild(imagenGuardada);
+            });
             formulario.querySelectorAll('[id^="image-container-"]').forEach(function (tarjeta) {
                 if (tarjeta.dataset.fotoEsTexto === '1') return;
                 if (tarjeta.querySelector('[data-anotar-imagen-guardada]')) return;
@@ -630,6 +656,7 @@
         }
 
         function alternarBotonesRecorte(visibles) {
+            modal.classList.toggle('editor-foto-anotando', !visibles);
             [
                 botonRotarIzquierda,
                 botonRotarDerecha,

@@ -111,9 +111,33 @@ class FOR_PINS_16_01Controller extends Controller
             ->all();
     }
 
-    private function prepararDatosEquipoReporte16(array $datosEquipo, $idSolicitud, array $datosEquipoActuales = [], $contrato = '', $noReporte = ''): array
+    /** Usa las mismas solicitudes y folios relacionados que el selector de captura. */
+    private function catalogoEquiposReporte16($idSolicitud): array
     {
         $catalogo = PinsEquiposQrSupport::obtenerCatalogoEquiposHerramientasPorSolicitud($idSolicitud);
+        if (empty($idSolicitud)) return $catalogo;
+
+        $folio = manifiesto::where('idSolicitud', $idSolicitud)->value('Folio');
+        if (preg_match('/^(.+?\d+)([A-Z]?)\/(\d{2})$/', $folio ?? '', $partes)) {
+            $patron = '/^' . preg_quote($partes[1], '/') . '[A-Z]?\/' . $partes[3] . '$/';
+            $relacionados = manifiesto::where('Folio', 'like', $partes[1] . '%/' . $partes[3])
+                ->get(['idSolicitud', 'Folio']);
+            foreach ($relacionados as $relacionado) {
+                if (preg_match($patron, $relacionado->Folio) && $relacionado->idSolicitud != $idSolicitud) {
+                    $catalogo += PinsEquiposQrSupport::obtenerCatalogoEquiposHerramientasPorSolicitud($relacionado->idSolicitud);
+                }
+            }
+        }
+        return $catalogo;
+    }
+
+    private function prepararDatosEquipoReporte16(array $datosEquipo, $idSolicitud, array $datosEquipoActuales = [], $contrato = '', $noReporte = ''): array
+    {
+        $catalogo = $this->catalogoEquiposReporte16($idSolicitud);
+        // La opcion No prevalece aunque lleguen identificadores de una seleccion anterior.
+        if (($datosEquipo['REQUIERE_EQUIPOS'] ?? 'no') === 'no') {
+            $datosEquipo['EQUIPOS_HERRAMIENTAS_IDS'] = [];
+        }
         $datosEquipo = PinsEquiposQrSupport::prepararDatosEquipoSeleccionados(
             $datosEquipo,
             $catalogo,
@@ -292,6 +316,7 @@ class FOR_PINS_16_01Controller extends Controller
 
         $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
         $rutaPublica = $datosEquipo['PDF_REPORTE_CACHE'] ?? null;
+        if (($datosEquipo['PDF_SERIE_VERSION'] ?? null) !== app(\App\Services\PaginacionReportesPnd::class)->firma((int) $id)) return null;
         if (($datosEquipo['PDF_REPORTE_VERSION'] ?? null) !== $this->versionPdfReporte16()) return null;
 
         $rutaAbsoluta = $rutaPublica ? Storage::disk('public')->path(preg_replace('#^storage/#', '', $rutaPublica)) : null;
@@ -318,6 +343,7 @@ class FOR_PINS_16_01Controller extends Controller
         }
 
         $datosEquipo['PDF_REPORTE_CACHE'] = $rutaPublica;
+        $datosEquipo['PDF_SERIE_VERSION'] = app(\App\Services\PaginacionReportesPnd::class)->firma((int) $id);
         $datosEquipo['PDF_REPORTE_VERSION'] = $this->versionPdfReporte16();
 
         reporte::where('idReportes', $id)->update([
@@ -737,7 +763,8 @@ class FOR_PINS_16_01Controller extends Controller
         }
 
         foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
+            // Conserva el PNG con las marcas cuando tambien llega el archivo original.
+            if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 $newImage = $request->file("replace_images.$index");
                 $rutaImagenPublic = str_replace('storage/', 'public/', $ruta);
 
@@ -858,7 +885,7 @@ class FOR_PINS_16_01Controller extends Controller
         $detallesGenerales = json_decode($reporte->Detalles_Generales, true) ?: [];
         $this->aplicarProcedimientoReporte16($detallesGenerales);
         $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
-        $catalogoEquiposHerramientas = PinsEquiposQrSupport::obtenerCatalogoEquiposHerramientasPorSolicitud($detallesGenerales['idSolicitud'] ?? null);
+        $catalogoEquiposHerramientas = $this->catalogoEquiposReporte16($detallesGenerales['idSolicitud'] ?? null);
         $datosEquipo = PinsEquiposQrSupport::normalizarDatosEquipoSeleccionadosExistentes($datosEquipo, $catalogoEquiposHerramientas);
         $tablaCombinacionConfig = json_decode($datosEquipo['TABLA_COMBINACION_CONFIG'] ?? '[]', true) ?: [];
         $tablaCombinacionConfigComponentes = json_decode($datosEquipo['TABLA_COMBINACION_CONFIG_COMPONENTES'] ?? '[]', true) ?: [];
@@ -1073,6 +1100,11 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, null);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
         // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
@@ -1431,6 +1463,8 @@ class FOR_PINS_16_01Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $idReportes, 'FOR-PINS-16-01');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1476,6 +1510,9 @@ class FOR_PINS_16_01Controller extends Controller
             'Detalles_Generales.idProcedimiento' => 'nullable|integer',
             'Datos_Equipo' => 'required|array',  // Asegura que es un array
             'Datos_Equipo.Observaciones' => 'nullable|string',
+            'Datos_Equipo.REQUIERE_EQUIPOS' => 'nullable|string|in:si,no',
+            'Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS' => 'nullable|array',
+            'Datos_Equipo.EQUIPOS_HERRAMIENTAS_IDS.*' => 'nullable|integer',
 
             /*Titulos Juntas */
             'titulos_data' => 'nullable|string',
@@ -1578,6 +1615,11 @@ class FOR_PINS_16_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, (int) $id);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -1883,7 +1925,8 @@ class FOR_PINS_16_01Controller extends Controller
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
+            // Conserva el PNG con las marcas cuando tambien llega el archivo original.
+            if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
 
@@ -1975,6 +2018,8 @@ class FOR_PINS_16_01Controller extends Controller
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $id, 'FOR-PINS-16-01');
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }

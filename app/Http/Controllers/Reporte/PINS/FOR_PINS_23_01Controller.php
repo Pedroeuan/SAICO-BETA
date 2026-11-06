@@ -200,13 +200,21 @@ class FOR_PINS_23_01Controller extends Controller
         return null;
     }
 
+    /** El C.V. debe pertenecer al técnico del grupo de firmas visible. */
+    private function tecnicoQrSeleccionado(Request $request): ?string
+    {
+        $numero = (int) ($request->input('numFirmas') ?: 1);
+        $id = $request->input("Firmas_Reportes{$numero}.ID_TECNICO");
+        return filled($id) ? (string) $id : null;
+    }
+
     public function Datos_QR($datosParaCrearQR)
     {
         $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
         $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
-        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'];
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'] ?? null;
         $idsConsumibles = $datosParaCrearQR['idsConsumibles'] ?? [];
-        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? [];
+        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? null;
         $token = $datosParaCrearQR['qr_token'] ?? null;
 
         $idsConsumibles = array_filter([
@@ -237,10 +245,12 @@ class FOR_PINS_23_01Controller extends Controller
         ->pluck('Certificado_Actual')
         ->toArray();
 
-        $tecnicos = Usuario::where('id', $ID_TECNICO)
-            ->whereNotNull('cv_pdf')
-            ->pluck('cv_pdf')
-            ->toArray();
+        $tecnicos = app(\App\Services\DocumentosUsuarioReporte::class)->rutas(
+            $ID_TECNICO ? Usuario::find($ID_TECNICO) : null,
+            $datosParaCrearQR['Documentos_Usuario'] ?? null,
+            'FOR-PINS-23-01',
+            $idProcedimiento ? (int) $idProcedimiento : null
+        );
 
         $Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)
             ->whereNotNull('PDF')
@@ -766,6 +776,11 @@ class FOR_PINS_23_01Controller extends Controller
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
@@ -923,6 +938,11 @@ class FOR_PINS_23_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, null);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
         // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
@@ -1267,11 +1287,7 @@ class FOR_PINS_23_01Controller extends Controller
         $idAn2 = $validatedData['Datos_Equipo']['ID_AN2'] ?? null;
         $idProcedimiento = $validatedData['Detalles_Generales']['idProcedimiento'] ?? null;
 
-        $ID_TECNICO = $request->input('Firmas_Reportes1.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
-            ?? null;
+        $ID_TECNICO = $this->tecnicoQrSeleccionado($request);
 
         $datosParaCrearOS_OC = [
             'idPrueba_Aplica' => $idPrueba_Aplica,
@@ -1296,6 +1312,7 @@ class FOR_PINS_23_01Controller extends Controller
         }
 
         $datosParaCrearQR = [
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
             'idSolicitud' => $idSolicitud,
@@ -1314,7 +1331,7 @@ class FOR_PINS_23_01Controller extends Controller
         $validatedData['Datos_Equipo']['QR_PDF'] =
             $resultadoQR['qr'];
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
-            $resultadoQR['pdf'];
+            $resultadoQR['pdf'] ?? null;
 
         $Reportes->update([
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])
@@ -1323,6 +1340,8 @@ class FOR_PINS_23_01Controller extends Controller
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
+
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $idReportes, 'FOR-PINS-23-01');
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
@@ -1339,6 +1358,11 @@ class FOR_PINS_23_01Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
@@ -1497,6 +1521,11 @@ class FOR_PINS_23_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string', 
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, (int) $id);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -1566,6 +1595,7 @@ class FOR_PINS_23_01Controller extends Controller
             ?? ($detallesActuales['idSolicitud'] ?? null);
 
         $datosParaCrearQR = [
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
             'Contrato' => $Contrato,
             'No_Reporte' => $No_Reporte,
             'idSolicitud' => $idSolicitud,
@@ -1574,11 +1604,7 @@ class FOR_PINS_23_01Controller extends Controller
             'idAn2' => $idAn2,
             'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
             'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
-            'ID_TECNICO' => $request->input('Firmas_Reportes1.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes2.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes3.ID_TECNICO')
-            ?? $request->input('Firmas_Reportes4.ID_TECNICO')
-            ?? null,
+            'ID_TECNICO' => $this->tecnicoQrSeleccionado($request),
         ];
 
         /*
@@ -1598,7 +1624,7 @@ class FOR_PINS_23_01Controller extends Controller
         $validatedData['Datos_Equipo']['QR_PDF'] =
             $resultadoQR['qr'] ?? ($datosEquipoActuales['QR_PDF'] ?? null);
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
-            $resultadoQR['pdf'] ?? ($datosEquipoActuales['PDF_UNIFICADO'] ?? null);
+            $resultadoQR['pdf'] ?? null;
 
         $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
             $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
@@ -1866,7 +1892,8 @@ class FOR_PINS_23_01Controller extends Controller
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
+            // Conserva el PNG con las marcas cuando tambien llega el archivo original.
+            if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
 
@@ -1967,6 +1994,8 @@ class FOR_PINS_23_01Controller extends Controller
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $id, 'FOR-PINS-23-01');
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
@@ -2107,13 +2136,8 @@ class FOR_PINS_23_01Controller extends Controller
             }
         }
 
-        $qrPdf = null;
-        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
-        if (!empty($Datos_Equipo['QR_PDF'])) {
-            $qrPdf = public_path(
-                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
-            );
-        }
+        // El PNG permite incrustar el QR en Dompdf con PHP 8.5.
+        $qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
 
         $data = [
             'title' => 'Reporte_FOR-PINS-23-01.PDF',
