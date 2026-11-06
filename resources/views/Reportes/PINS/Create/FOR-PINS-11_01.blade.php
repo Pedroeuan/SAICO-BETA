@@ -68,8 +68,10 @@
     <section class="content w-100">
         <div class="card w-100 p-3">
             <div class="card-body w-100">
-                <form id="FOR-PINS-11_01" action="{{route('Reportes_FOR_PINS_11_01.store')}}" method="post" enctype="multipart/form-data">
+                <form id="FOR-PINS-11_01" action="{{route('Reportes_FOR_PINS_11_01.store')}}" method="post" enctype="multipart/form-data" data-anotaciones-fotos data-modo="create">
                     @csrf
+                                @include('Reportes.PINS.partials.serie-reportes', ['formatoSeriePnd' => 'FOR-PINS-11-01'])
+
                     <h3 align="center">REPORTE DE: {{ $Prueba->Nombre }}</h3>
                     <h3 align="center">FORMATO: {{$Nombre_Formato}}</h3>
                     <h4 align="center">{{$formatoNombrePersonalizado}}</h4>
@@ -1039,7 +1041,9 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="container">
+                            {{-- Documentos del tecnico que se consultan al escanear el QR. --}}
+@include('Reportes.IM.partials.documentos-usuario', ['formatoDocumentos' => 'FOR-PINS-11-01'])
+<div class="container">
                                 <div class="float-right">
                                     <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
                                 </div>
@@ -1058,6 +1062,9 @@
 
 
 @section('js')
+{{-- Navegacion al inicio/final con el mismo tamano y posicion de IM. --}}
+<script src="{{ asset('js/Reportes_Fotos_Posicionables_02_B_04.js') }}?v={{ filemtime(public_path('js/Reportes_Fotos_Posicionables_02_B_04.js')) }}"></script>
+
 <!-- Incluye jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--datatable -->
@@ -1084,6 +1091,8 @@
 <!-- Biblioteca para recorte de imagenes -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+{{-- Editor compartido: guarda flechas y texto dentro de la fotografia. --}}
+<script src="{{ asset('js/Reportes_Anotaciones_Imagenes_06_B_01.js') }}?v={{ filemtime(public_path('js/Reportes_Anotaciones_Imagenes_06_B_01.js')) }}"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
 

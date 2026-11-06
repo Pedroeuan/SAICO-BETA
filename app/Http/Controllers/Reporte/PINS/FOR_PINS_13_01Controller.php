@@ -879,6 +879,11 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, null);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
         // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
@@ -994,7 +999,7 @@ class FOR_PINS_13_01Controller extends Controller
         */
 
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'];
-        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'];
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
 
         $Reportes->update([
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])
@@ -1015,7 +1020,7 @@ class FOR_PINS_13_01Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 10; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = 11; //10 filas de datos y una de longitud inspeccionada.
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -1051,7 +1056,7 @@ class FOR_PINS_13_01Controller extends Controller
         */
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
                 // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
-                $filasPorLongitud = 9;
+                $filasPorLongitud = 10;
 
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
@@ -1291,6 +1296,8 @@ class FOR_PINS_13_01Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $idReportes, 'FOR-PINS-13-01');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1460,6 +1467,11 @@ class FOR_PINS_13_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, (int) $id);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -1576,9 +1588,7 @@ class FOR_PINS_13_01Controller extends Controller
             ?? null;
 
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
-            $resultadoQR['pdf']
-            ?? $datosEquipoActuales['PDF_UNIFICADO']
-            ?? null;
+            $resultadoQR['pdf'] ?? null;
 
         $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
             $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
@@ -1602,7 +1612,7 @@ class FOR_PINS_13_01Controller extends Controller
         $numFilasSin = count($filasSinTitulo);//agregar
 
         // 🔹 cuántas filas debe tener cada bloque
-        $maxFilasPorBloque = 10; //Agregar 1 + que en create y edit para que la longitud entre en el mismo bloque
+        $maxFilasPorBloque = 11; //10 filas de datos y una de longitud inspeccionada.
 
         $bloques = []; //agregar
         $bloqueActual = [];//agregar
@@ -1638,7 +1648,7 @@ class FOR_PINS_13_01Controller extends Controller
         */
                 $longitudesSin = $request->input("Long_Inspecc.$sinTituloKey", []);
                 // Debe coincidir con verificarYAgregarLongitud() del JS: inserta una longitud cada 15 filas
-                $filasPorLongitud = 9;
+                $filasPorLongitud = 10;
                 for ($i = 0; $i < $numFilasSin; $i++) {
                 $agregarElemento([
                     'tipo' => 'fila',
@@ -1931,6 +1941,8 @@ class FOR_PINS_13_01Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $id, 'FOR-PINS-13-01');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1972,13 +1984,8 @@ class FOR_PINS_13_01Controller extends Controller
         $numFirmas = $Firmas_Reportes['numFirmas'];
 
         $Logo = public_path('images/Logo_AICO_R.jpg');
-        $qrPdf = null;
-        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
-        if (!empty($Datos_Equipo['QR_PDF'])) {
-            $qrPdf = public_path(
-                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
-            );
-        }
+        // El PNG permite incrustar el QR en Dompdf con PHP 8.5.
+        $qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
 
         // Obtener las fotos con su comentario
         if ($Fotos_Reportes) {
