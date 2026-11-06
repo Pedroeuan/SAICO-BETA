@@ -1109,9 +1109,10 @@
             }
         }, true);
     });
-    // Navegacion compartida por Crear/Editar del 04/02 y la lista de reportes PDF.
+    // Misma navegacion para Crear/Editar de IM y PND y para el listado de reportes.
     document.addEventListener('DOMContentLoaded', function () {
         var formulario = document.getElementById('FOR-PIMP-04_02')
+            || document.querySelector('form[id^="FOR-PINS-"], form[id^="FOR-PIMP-"]')
             || document.querySelector('[data-navegacion-reportes]');
         if (!formulario || document.getElementById('navegacion-formulario-0402')) return;
         var boton = document.createElement('button');

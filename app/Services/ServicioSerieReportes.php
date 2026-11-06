@@ -69,6 +69,15 @@ class ServicioSerieReportes
         return $reporte ? $this->leerSerie($reporte) : null;
     }
 
+    /** Permite descartar el PDF cacheado si cambia la paginacion de cualquier miembro. */
+    public function firmaPaginacion(int $idReporte): string
+    {
+        $serie = $this->obtener($idReporte);
+        if (!$serie) return 'sin-serie-pnd-v1';
+        $miembros = $this->reportesDeSerie((string) $serie->serie_uuid);
+        return hash('sha256', json_encode($miembros->map(fn (reporte $reporte) => $this->datosSerie($reporte))->all()));
+    }
+
     /** Usa los reportes ya cargados por el listado y evita otra consulta. */
     public function obtenerVarios(iterable $reportes): Collection
     {
@@ -246,6 +255,8 @@ class ServicioSerieReportes
     /** El 03_01 integra datos y fotos en una hoja; los demás parten de dos hasta conocer su total real. */
     private function paginasIniciales(array $serie): int
     {
+        if (($serie['formato'] ?? null) === 'FOR-PINS-20-01') return 1;
+        if (in_array($serie['formato'] ?? null, ['FOR-PINS-16-01', 'FOR-PINS-25-01'], true)) return 3;
         return in_array($serie['formato'] ?? null, [self::FORMATO_03_B_01, self::FORMATO_02_B_03], true) ? 1 : 2;
     }
 

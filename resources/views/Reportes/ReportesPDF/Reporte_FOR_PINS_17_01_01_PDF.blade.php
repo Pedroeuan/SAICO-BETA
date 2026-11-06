@@ -11,7 +11,7 @@
 
                 header {
                     position: fixed;
-                    top: -58px; /* Sube el encabezado para que no se monte con "DATOS GENERALES" */
+                    top: -40px; /* Sube el encabezado para que no se monte con "DATOS GENERALES" */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -261,14 +261,14 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
+                            <th rowspan="3" style="width: 80%; padding:0; text-align:center; vertical-align:middle; line-height:0;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:57px; height:57px; display:inline-block; vertical-align:middle; margin:0; padding:0; border:4px solid #fff;">
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-17-01/01</th>
-                            <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
+                            <th style="width: 80%; white-space:nowrap;">FOR-PINS-17-01/01</th>
+                            <th rowspan="3" style="width:55px; padding:3px; text-align:center; vertical-align:middle;"><img src="{{ $Logo }}" alt="Logo" style="width:45px; height:auto;"></th>
                         </tr>
                     </thead>
 
@@ -386,12 +386,8 @@
                             </tr>
                         </thead>
                 </table>
-                <br>
-                <br>
-                <br>
-                <br>
                 <!-- IMAGEN DE REFERENCIA 1-->
-                <table class="datosresultados">
+                <table class="datosresultados" style="margin-top:8px;">
 
                         <thead class="encabezadoAzul2">
                             <tr><th colspan="2">{{ $Datos_Equipo['Stndr_refe1'] }}</th></tr>

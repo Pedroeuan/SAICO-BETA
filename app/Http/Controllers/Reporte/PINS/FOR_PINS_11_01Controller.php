@@ -260,7 +260,7 @@ class FOR_PINS_11_01Controller extends Controller
         $tecnicos = app(\App\Services\DocumentosUsuarioReporte::class)->rutas(
             $ID_TECNICO ? Usuario::find($ID_TECNICO) : null,
             $datosParaCrearQR['Documentos_Usuario'] ?? null,
-            'FOR-PINS-04-01',
+            'FOR-PINS-11-01',
             $idProcedimiento ? (int) $idProcedimiento : null
         );
 
@@ -892,6 +892,11 @@ class FOR_PINS_11_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, null);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
         // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
@@ -1331,6 +1336,8 @@ class FOR_PINS_11_01Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $idReportes, 'FOR-PINS-11-01');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1500,6 +1507,11 @@ class FOR_PINS_11_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, (int) $id);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -1608,9 +1620,7 @@ class FOR_PINS_11_01Controller extends Controller
             ?? $datosEquipoActuales['QR_PDF']
             ?? null;
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] =
-            $resultadoQR['pdf']
-            ?? $datosEquipoActuales['PDF_UNIFICADO']
-            ?? null;
+            $resultadoQR['pdf'] ?? null;
 
         $validatedData['Datos_Equipo']['TABLA_COMBINACION_CONFIG'] = json_encode(
             $this->sanitizarConfiguracionCombinacionTabla($request->input('Tabla_CombinacionConfig', '[]')),
@@ -1862,8 +1872,7 @@ class FOR_PINS_11_01Controller extends Controller
 
         // **1️⃣ Eliminar imágenes marcadas para borrar**
         foreach ($deletedImages as $index) {
-            // Las marcas ya están integradas en el PNG: priorizarlo sobre el archivo original.
-            if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
+            if (isset($existingImages[$index])) {
                 $rutaImagen = str_replace('storage/', 'public/', $existingImages[$index]);
 
                 // Eliminar del almacenamiento
@@ -1887,7 +1896,8 @@ class FOR_PINS_11_01Controller extends Controller
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
+            // Conserva el PNG con las marcas cuando tambien llega el archivo original.
+            if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
 
@@ -1981,6 +1991,8 @@ class FOR_PINS_11_01Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $id, 'FOR-PINS-11-01');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -2037,13 +2049,8 @@ class FOR_PINS_11_01Controller extends Controller
             }
         }
 
-        $qrPdf = null;
-        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
-        if (!empty($Datos_Equipo['QR_PDF'])) {
-            $qrPdf = public_path(
-                str_replace('storage/', 'storage/', $Datos_Equipo['QR_PDF'])
-            );
-        }
+        // El PNG permite incrustar el QR en Dompdf con PHP 8.5.
+        $qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
 
         $data = [
             'title' => 'Reporte_FOR-INS-10/02.PDF',
@@ -2098,7 +2105,7 @@ class FOR_PINS_11_01Controller extends Controller
             $combinedPdf->AddPage('L');
             $combinedPdf->useTemplate($tplId, 0, 0, 297, 210);
             $combinedPdf->SetFont('Arial', 'B', 8);
-            $combinedPdf->SetXY(173.5, -180.5);
+            $combinedPdf->SetXY(191.5, -180);
             $combinedPdf->Cell(0, 10, "$i de $totalPageCount", 0, 0, 'C');
         }
 

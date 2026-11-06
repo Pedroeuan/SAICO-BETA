@@ -14,7 +14,7 @@
 
                 header {
                     position: fixed;
-                    top: -45px; /* Ajusta para que no interfiera con el margen de la página */
+                    top: -33.5px; /* Ajusta para que no interfiera con el margen de la página */
                     left: 0;
                     right: 0;
                     height: auto; /* Permite que el header crezca dinámicamente */
@@ -196,29 +196,25 @@
                                 INFORME DE  INSPECCIÓN ULTRASÓNICA CON HAZ RECTO PARA METAL BASE
                             </th>
 
-                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                            <th rowspan="4" style="width:55px; padding:0; margin:0; text-align:center; vertical-align:middle; line-height:0; background:#fff;">
                                 @if(!empty($QR_PDF))
-                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
                                         <img
                                             src="{{ $QR_PDF }}"
                                             alt="QR"
-                                            style="width:55px; height:55px; display:block; margin:auto; padding:0;"
+                                            style="width:12.55mm; height:12.55mm; border:1mm solid #fff; display:inline-block; vertical-align:middle; margin:0; padding:0;"
                                         >
-                                    </div>
                                 @endif
                             </th>
 
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 100%;">FOR-PINS-11/01</th>
+                            <th style="width: 100%; white-space:nowrap;">FOR-PINS-11/01</th>
 
-                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
-                                <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
+                            <th rowspan="4" style="width:90%; padding:0; margin:0; text-align:center; vertical-align:middle; line-height:0;">
                                     <img
                                         src="{{ $Logo }}"
                                         alt="Logo"
-                                        style="width:50px; height:50px; display:block; margin:auto; padding:0;"
+                                        style="width:50px; height:50px; display:inline-block; vertical-align:middle; margin:0; padding:0;"
                                     >
-                                </div>
                             </th>
                         </tr>
                     </thead>

@@ -428,8 +428,8 @@ $(document).on("click", ".btnSiguienteReporte", function() {
     const ordenSerie = $(this).data('serie-orden');
     const totalSerie = $(this).data('serie-total');
     let idReporteSeleccionado = idReporte;
-        const detalleSerie = ['FOR-PIMP-06_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-03_B/01', 'FOR-PIMP-05_B/01', 'FOR-PIMP-02_B/03'].includes(formato) && ordenSerie && totalSerie
-            ? `<br><small class="text-muted">Serie actual: reporte ${ordenSerie} de ${totalSerie}. Los resultados XRF y las fotograf&iacute;as iniciar&aacute;n vac&iacute;os.</small>`
+        const detalleSerie = ((formato || '').startsWith('FOR-PINS-') || ['FOR-PIMP-06_B/01', 'FOR-PIMP-04/02', 'FOR-PIMP-04/03', 'FOR-PIMP-03_B/01', 'FOR-PIMP-05_B/01', 'FOR-PIMP-02_B/03'].includes(formato)) && ordenSerie && totalSerie
+            ? `<br><small class="text-muted">Serie actual: reporte ${ordenSerie} de ${totalSerie}. La numeraci&oacute;n continuar&aacute; en el siguiente reporte de la serie.</small>`
             : '';
         Swal.fire({
             title: 'Siguiente Reporte',

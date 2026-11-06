@@ -14,5 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Las fotografias Base64 no deben copiarse a la sesion al fallar una validacion.
+        $exceptions->dontFlash([
+            'images_base64',
+            'imagen1_base64', 'imagen2_base64', 'imagen3_base64', 'imagen4_base64', 'imagen5_base64',
+        ]);
     })->create();
