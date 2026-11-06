@@ -29,6 +29,10 @@
 
         pdfjsLib.GlobalWorkerOptions.workerSrc = cfg.workerSrc;
 
+        // En modo de solo lectura se muestran las marcas, pero no se permite
+        // dibujar ni modificar nada.
+        var readonly = !!cfg.readonly;
+
         var loaded = false;
 
         var state = {
@@ -419,7 +423,10 @@
                             };
 
                             state.pages.push(entry);
-                            attach(entry);
+
+                            if (!readonly) {
+                                attach(entry);
+                            }
 
                             var ctx = base.getContext('2d');
                             ctx.scale(dpr, dpr);
@@ -442,7 +449,9 @@
             });
         }
 
-        bindToolbar();
+        if (!readonly) {
+            bindToolbar();
+        }
 
         if (form) {
             form.addEventListener('submit', function () {

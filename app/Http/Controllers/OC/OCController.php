@@ -9,6 +9,7 @@ use App\Models\OC\OC;
 use App\Models\Clientes\clientes;
 use App\Models\Reporte\reporte;
 use Barryvdh\DomPDF\Facade\Pdf;
+use setasign\Fpdi\Fpdi;
 use Illuminate\Support\Str;
 
 use App\Http\Controllers\Controller;
@@ -791,9 +792,12 @@ class OCController extends Controller
         return 'V1';
     }
 
-    public function OC_PDF($id)
+    /**
+     * Construye los datos que necesita la plantilla OC_PDF.
+     */
+    private function datosPDFOC($id): array
     {
-        $OC  = OC::find($id);
+        $OC = OC::find($id);
         $cliente = clientes::find($OC->idClientes);
         $OC->cliente = $cliente; // Agregar el cliente al objeto OC
         $detallesRegistro = detallesOC::where('idOC', $id)->first();
@@ -812,13 +816,10 @@ class OCController extends Controller
         $firmantes = Firmantes_OC::where('idOC', $id)->first();
         $Firmas_Reportes = $firmantes ? json_decode($firmantes->Nombre_Cargo, true) : [];
         $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
-        
-        //$Grupo_Juntas_Detalles_OS = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $id)->first(); 
-        //$detallesOT = json_decode($Grupo_Juntas_Detalles_OS->Juntas_grupo, true);
-    
+
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
-        $data = [
+        return [
             'title' => 'Manifiesto PDF',
             'OC' => $OC,
             'detallesOC' => $detallesOC,
@@ -827,33 +828,237 @@ class OCController extends Controller
             'numFirmas' => $numFirmas,
             'Firmas_Reportes' => $Firmas_Reportes,
             'Logo' => $Logo,
-            
         ];
-    
-        // Cargar la vista con los datos
-        $pdf = PDF::loadView('OC.OC_PDF', $data);
-    
-        // Renderizar el PDF antes de obtener el canvas
-        $dompdf = $pdf->getDomPDF();
-        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
-    
-        $canvas = $dompdf->getCanvas();
-        /*$canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
-            // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 8;
-    
-            // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 483; // Ajusta esta posición X según sea necesario
-            $y = 57;  // Ajusta esta posición Y según sea necesario
-    
-            // Evitar problemas con valores no válidos para coordenadas
-            if (is_numeric($x) && is_numeric($y)) {
-                $text = "$pageNumber de $pageCount";
-                $canvas->text($x, $y, $text, $font, $size);
-            }
-        });*/
-    
+    }
+
+    public function OC_PDF($id)
+    {
+        $pdf = PDF::loadView('OC.OC_PDF', $this->datosPDFOC($id));
+
         return $pdf->stream('OC.PDF');
+    }
+
+    /**
+     * Devuelve las marcas guardadas de una OC como arreglo.
+     */
+    private function marcasDeOC(OC $OC): array
+    {
+        if (empty($OC->Revision_Marcas)) {
+            return [];
+        }
+
+        $marcasDecodificadas = json_decode($OC->Revision_Marcas, true);
+
+        return is_array($marcasDecodificadas) ? $marcasDecodificadas : [];
+    }
+
+    /**
+     * Genera una copia del PDF de la OC con las marcas de revisión ya
+     * incrustadas, para descargarla o imprimirla.
+     */
+    public function OC_PDF_Marcas($id)
+    {
+        $OC = OC::where('idOC', $id)->first();
+
+        if (!$OC) {
+            abort(404, 'Orden de compra no encontrada.');
+        }
+
+        $marcas = $this->marcasDeOC($OC);
+        $pdfBase = PDF::loadView('OC.OC_PDF', $this->datosPDFOC($id))->output();
+
+        if (empty($marcas)) {
+            return response($pdfBase, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="OC_' . $id . '_marcas.pdf"',
+                'Content-Length' => strlen($pdfBase),
+            ]);
+        }
+
+        $archivoTemporal = tempnam(sys_get_temp_dir(), 'oc_pdf_');
+        file_put_contents($archivoTemporal, $pdfBase);
+
+        try {
+            $pdf = new Fpdi();
+            $totalPaginas = $pdf->setSourceFile($archivoTemporal);
+
+            $marcasPorPagina = [];
+            foreach ($marcas as $marca) {
+                if (!is_array($marca) || !isset($marca['page'], $marca['strokes']) || !is_array($marca['strokes'])) {
+                    continue;
+                }
+
+                $pagina = (int) $marca['page'];
+
+                if ($pagina < 1) {
+                    continue;
+                }
+
+                $marcasPorPagina[$pagina] = array_merge(
+                    $marcasPorPagina[$pagina] ?? [],
+                    $marca['strokes']
+                );
+            }
+
+            for ($numeroPagina = 1; $numeroPagina <= $totalPaginas; $numeroPagina++) {
+                $plantilla = $pdf->importPage($numeroPagina);
+                $tamano = $pdf->getTemplateSize($plantilla);
+
+                $pdf->AddPage($tamano['orientation'], [$tamano['width'], $tamano['height']]);
+                $pdf->useTemplate($plantilla, 0, 0, $tamano['width'], $tamano['height']);
+
+                if (!empty($marcasPorPagina[$numeroPagina])) {
+                    $this->dibujarMarcasEnPDF(
+                        $pdf,
+                        $marcasPorPagina[$numeroPagina],
+                        $tamano['width'],
+                        $tamano['height']
+                    );
+                }
+            }
+
+            $pdfConMarcas = $pdf->Output('S');
+        } finally {
+            @unlink($archivoTemporal);
+        }
+
+        return response($pdfConMarcas, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="OC_' . $id . '_marcas.pdf"',
+            'Content-Length' => strlen($pdfConMarcas),
+        ]);
+    }
+
+    /**
+     * Dibuja las marcas (mano alzada, rectángulos y elipses) sobre una página
+     * del PDF. Las coordenadas guardadas están normalizadas de 0 a 1.
+     */
+    private function dibujarMarcasEnPDF(Fpdi $pdf, array $marcas, float $ancho, float $alto): void
+    {
+        foreach ($marcas as $marca) {
+            if (!is_array($marca)) {
+                continue;
+            }
+
+            $tipo = $marca['type'] ?? 'free';
+            [$r, $g, $b] = $this->colorRGB($marca['color'] ?? '#e00000');
+
+            $pdf->SetDrawColor($r, $g, $b);
+            $pdf->SetLineWidth(max(0.1, ((float) ($marca['width'] ?? 0.003)) * $ancho));
+
+            if ($tipo === 'free') {
+                $puntos = $marca['points'] ?? [];
+
+                if (!is_array($puntos) || empty($puntos)) {
+                    continue;
+                }
+
+                $coordenadas = [];
+                foreach ($puntos as $punto) {
+                    if (!is_array($punto) || count($punto) < 2) {
+                        continue;
+                    }
+
+                    $coordenadas[] = [
+                        ((float) $punto[0]) * $ancho,
+                        ((float) $punto[1]) * $alto,
+                    ];
+                }
+
+                if (count($coordenadas) === 1) {
+                    $pdf->Line($coordenadas[0][0], $coordenadas[0][1], $coordenadas[0][0] + 0.1, $coordenadas[0][1]);
+                    continue;
+                }
+
+                for ($i = 1; $i < count($coordenadas); $i++) {
+                    $pdf->Line(
+                        $coordenadas[$i - 1][0],
+                        $coordenadas[$i - 1][1],
+                        $coordenadas[$i][0],
+                        $coordenadas[$i][1]
+                    );
+                }
+
+                continue;
+            }
+
+            $x1 = ((float) ($marca['x1'] ?? 0)) * $ancho;
+            $y1 = ((float) ($marca['y1'] ?? 0)) * $alto;
+            $x2 = ((float) ($marca['x2'] ?? 0)) * $ancho;
+            $y2 = ((float) ($marca['y2'] ?? 0)) * $alto;
+
+            if ($tipo === 'rect') {
+                $pdf->Rect(min($x1, $x2), min($y1, $y2), abs($x2 - $x1), abs($y2 - $y1));
+            } elseif ($tipo === 'ellipse') {
+                $this->dibujarElipsePDF(
+                    $pdf,
+                    ($x1 + $x2) / 2,
+                    ($y1 + $y2) / 2,
+                    abs($x2 - $x1) / 2,
+                    abs($y2 - $y1) / 2
+                );
+            }
+        }
+    }
+
+    /**
+     * Aproxima una elipse con segmentos de recta (FPDF no trae Ellipse).
+     */
+    private function dibujarElipsePDF(Fpdi $pdf, float $cx, float $cy, float $rx, float $ry): void
+    {
+        $segmentos = 72;
+        $anterior = null;
+
+        for ($i = 0; $i <= $segmentos; $i++) {
+            $angulo = (2 * M_PI * $i) / $segmentos;
+            $x = $cx + $rx * cos($angulo);
+            $y = $cy + $ry * sin($angulo);
+
+            if ($anterior !== null) {
+                $pdf->Line($anterior[0], $anterior[1], $x, $y);
+            }
+
+            $anterior = [$x, $y];
+        }
+    }
+
+    /**
+     * Convierte un color hexadecimal (#rrggbb) a componentes RGB.
+     */
+    private function colorRGB(string $color): array
+    {
+        $hex = ltrim(trim($color), '#');
+
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+
+        if (!preg_match('/^[0-9a-f]{6}$/i', $hex)) {
+            $hex = 'e00000';
+        }
+
+        return [
+            hexdec(substr($hex, 0, 2)),
+            hexdec(substr($hex, 2, 2)),
+            hexdec(substr($hex, 4, 2)),
+        ];
+    }
+
+    /**
+     * Muestra la OC generada junto con las marcas guardadas durante la
+     * revisión. Es una vista de solo lectura para que el editor pueda ver
+     * qué se marcó y corregir la orden.
+     */
+    public function revisionPDF($id)
+    {
+        $OC = OC::where('idOC', $id)->first();
+
+        if (!$OC) {
+            abort(404, 'Orden de compra no encontrada.');
+        }
+
+        $marcas = $this->marcasDeOC($OC);
+
+        return view('OC.Revision.ver_marcas', compact('id', 'OC', 'marcas'));
     }
 }

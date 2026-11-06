@@ -830,6 +830,10 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::delete('/Catalogo_OC/eliminar/{id}', [CatalogoOCController::class, 'destroy'])->name('OC.destroyCatalogo');
     /*Formato PDF Ruta para ver el PDF*/
     Route::get('OC/PDF/{id}', [OCController::class, 'OC_PDF'])->name('OC.PDF');
+    /*Vista del PDF con las marcas de revisión (solo lectura)*/
+    Route::get('/OC/revisionPDF/{id}', [OCController::class, 'revisionPDF'])->name('OC.revisionPDF');
+    /*Descarga del PDF con las marcas de revisión incrustadas*/
+    Route::get('/OC/PDFMarcas/{id}', [OCController::class, 'OC_PDF_Marcas'])->name('OC.PDFMarcas');
 
     /*Ruta de Vista de Condiciones de Pago*/
     Route::get('/OC/indexPago', [CondicionesPagoController::class, 'index'])->name('OC.indexPago');

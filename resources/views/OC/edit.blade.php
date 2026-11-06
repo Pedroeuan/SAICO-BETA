@@ -59,6 +59,19 @@
                                 @csrf 
                                 <div class="row">
 
+                                    @if (!empty($OC->Revision_Marcas) && $OC->Revision_Marcas !== '[]')
+                                        <div class="col-sm-12">
+                                            <div class="alert alert-warning">
+                                                <i class="fas fa-highlighter"></i>
+                                                Esta OC tiene marcas de revisión.
+                                                <a href="{{ route('OC.revisionPDF', ['id' => $id]) }}" target="_blank" class="alert-link">
+                                                    Ver el PDF con marcas
+                                                </a>
+                                                para revisar las observaciones y corregir la orden.
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label class="col-form-label" for="inputSuccess">Contrato</label>
@@ -249,6 +262,18 @@
                                                     <a href="{{ asset('storage/' . $OC->OC_archivo) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                                                                     
                                                 </div>
                                             @endif 
+
+                                            @if (!empty($OC->Revision_Marcas) && $OC->Revision_Marcas !== '[]')
+                                                <label class="col-form-label" for="inputSuccess">Revisión con marcas</label>
+                                                <div>
+                                                    <a href="{{ route('OC.revisionPDF', ['id' => $id]) }}" target="_blank" class="btn btn-danger long-button" role="button" title="Ver el PDF con las marcas de la revisión">
+                                                        <i class="fas fa-highlighter" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a href="{{ route('OC.PDFMarcas', ['id' => $id]) }}" class="btn btn-outline-danger long-button" role="button" title="Descargar el PDF con las marcas incrustadas" download="OC_{{ $id }}_marcas.pdf">
+                                                        <i class="fas fa-download" aria-hidden="true"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
 
