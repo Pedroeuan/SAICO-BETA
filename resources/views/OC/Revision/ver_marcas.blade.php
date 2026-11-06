@@ -60,9 +60,9 @@
     <div class="card-header">
         <h3 class="card-title mb-0">
             <i class="far fa-file-pdf"></i> Orden de Compra
-            @if (!empty($OC->Revision))
-                <span class="badge badge-info ml-2">{{ $OC->Revision }}</span>
-            @endif
+            {{--@if (!empty($OC->Revision_OC))
+                <span class="badge badge-info ml-2">{{ $OC->Revision_OC }}</span>
+            @endif--}}
             @if (!empty($OC->Estatus))
                 <span class="badge badge-secondary ml-1">{{ $OC->Estatus }}</span>
             @endif

@@ -46,6 +46,7 @@
                         <th>OC Original</th>
                         <th>OC AICO</th>
                         <th>Enviar a revisión</th>
+                        <th>Revisión con marcas</th>
                         <th>Comentarios de la Revisión</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
@@ -79,6 +80,20 @@
                         <!--ENVIO A REVISIÓN-->
                         <td>
                             <button type="button" class="btn btn-info btnEnviar" idOC="{{$OCS->idOC}}"><i class="far fa-envelope-open" aria-hidden="true"></i></button>
+                        </td>
+                        <td>
+                            @if (!empty($OCS->Revision_Marcas) && $OCS->Revision_Marcas !== '[]')
+                                <a href="{{ route('OC.revisionPDF', ['id' => $OCS->idOC]) }}" target="_blank" class="btn btn-danger" role="button" title="Ver el PDF con las marcas de la revisión">
+                                    <i class="fas fa-highlighter" aria-hidden="true"></i>
+                                </a>
+                            {{--<a href="{{ route('OC.PDFMarcas', ['id' => $OCS->idOC]) }}" class="btn btn-outline-danger long-button" role="button" title="Descargar el PDF con las marcas incrustadas" download="OC_{{ $OCS->idOC }}_marcas.pdf">
+                                    <i class="fas fa-download" aria-hidden="true"></i>
+                                </a>--}}
+                            @else
+                                <button type="button" class="btn btn-secondary" disabled title="Esta OC no tiene marcas de revisión">
+                                    <i class="fas fa-highlighter" aria-hidden="true"></i>
+                                </button>
+                            @endif
                         </td>
                         <td>@if($OCS->Revision_OC){{ $OCS->Revision_OC }} @else EN ESPERA . . . @endif</td>
                         <td>
