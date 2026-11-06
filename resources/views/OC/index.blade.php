@@ -20,6 +20,62 @@
     overflow-y: auto;
     }
 
+    #tablaJs td {
+        text-align: center; /* Centra el contenido horizontalmente */
+    }
+    #tablaJs th {
+        text-align: center; /* Centra el texto del encabezado horizontalmente */
+    }    
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
+    
+    .tablaheader {
+        border-collapse: collapse; 
+        border-spacing: 0px;        /* Espacio entre celdas */
+        width: 100%;
+        text-align: center;
+        font-size: 10px;
+        }
+                    
+        /* Aplica el borde a las celdas de la tabla */
+        .tablaheader th {
+        /*width: 70%;*/
+        border: 1px solid black; 
+    }
+
+    .dataTables_wrapper {
+        overflow-x: auto;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+    .box {
+        display: flex;
+        justify-content: center;
+    }
+
+    .box-body {
+        display: inline-block;
+    }
+
+    #tablaJs {
+        width: auto !important;
+    }
+    .toggle-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .toggle-container label {
+        font-size: 12px;
+        cursor: pointer;
+    }
+
 </style>
 @endsection
 

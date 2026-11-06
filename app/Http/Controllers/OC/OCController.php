@@ -483,7 +483,7 @@ class OCController extends Controller
      */
     public function updateOC(Request $request, $id)
     {
-        //
+        //dd($request->all());
         $request->validate([
             'Numero_OC' => 'required|integer',
             'Requisicion' => 'required|string',
@@ -492,6 +492,7 @@ class OCController extends Controller
         ]);
 
         $OC = OC::find($id);
+        $detallesOCModel = detallesOC::find($id);
         // Actualizar los datos de la OC
         $OC->update([
             'Contrato' => $request->input('Contrato'),
@@ -503,6 +504,19 @@ class OCController extends Controller
             'Tipo_servicio' => $request->input('Tipo_servicio'),
         ]);
 
+        $detallesOCModel->update([
+            'NumCotizacion' => $request->input('NumCotizacion'),
+            'SolicitudCliente' => $request->input('SolicitudCliente'),
+            'Contacto' => $request->input('Contacto'),
+            'Puesto' => $request->input('Puesto'),
+            'Ciudad' => $request->input('Ciudad'),
+            'Telefono' => $request->input('Telefono'),
+            'Correo' => $request->input('Correo'),
+            'Vigencia' => $request->input('Vigencia'),
+            'Notas' => $request->input('Notas'),
+            'Condiciones_pago' => $request->input('Condiciones_pago'),
+            'Condiciones_generales' => $request->input('Condiciones_generales'),
+        ]);
         // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
         if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
             // Obtener la ruta del archivo anterior desde la base de datos
