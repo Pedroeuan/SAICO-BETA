@@ -251,13 +251,13 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
-                            <th rowspan="3" style="width: 80%;">
+                            <th rowspan="3" style="width: 80%; padding:0; text-align:center; vertical-align:middle; line-height:0;">
                                 @if(!empty($QR_PDF))
-                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:65px; height:65px; display:block; margin:auto; padding:0;">
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:57px; height:57px; display:inline-block; vertical-align:middle; margin:0; padding:0; border:4px solid #fff;">
                                 @endif
                             </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 90%;">FOR-PINS-17/01</th>
+                            <th style="width: 90%; white-space:nowrap;">FOR-PINS-17/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>
@@ -402,8 +402,13 @@
                     <thead>
                         <tr>
                             <th style="width: 500%;">FORMATO</th>
+                            <th rowspan="3" style="width: 80%; padding:0; text-align:center; vertical-align:middle; line-height:0;">
+                                @if(!empty($QR_PDF))
+                                    <img src="{{ $QR_PDF }}" alt="QR" style="width:57px; height:57px; display:inline-block; vertical-align:middle; margin:0; padding:0; border:4px solid #fff;">
+                                @endif
+                            </th>
                             <th style="width: 60%;">Código:</th>
-                            <th style="width: 80%;">FOR-PINS-17/01</th>
+                            <th style="width: 80%; white-space:nowrap;">FOR-PINS-17/01</th>
                             <th rowspan="3" style="width: 80%;"><img  src="{{ $Logo }}" alt="Logo" style="width: 55%; height: auto;"></th>
                         </tr>
                     </thead>

@@ -26,6 +26,9 @@ use App\Models\Reporte\Grupo_Juntas_Detalles_Re;
 use App\Models\OrdenServicio\Orden_Servicio_Prueba;
 use App\Models\OrdenServicio\Grupo_Juntas_Detalles_OS;
 
+use App\Models\Admin\Usuario;
+use App\Models\Procedimientos\Procedimiento;
+use App\Models\EquiposyConsumibles\certificados;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -43,6 +46,542 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PINS_25_01Controller extends Controller
 {
+    private function getPdfCandidatePaths($rutaDb)
+    {
+        if (empty($rutaDb)) {
+            return [];
+        }
+
+        $ruta = trim(str_replace('\\', '/', $rutaDb));
+        if ($ruta === '') {
+            return [];
+        }
+
+        $ruta = preg_replace('#^/?storage/#', '', $ruta);
+        $ruta = preg_replace('#^/?public/#', '', $ruta);
+        $ruta = ltrim($ruta, '/');
+
+        $candidates = [];
+
+        if (preg_match('#^([A-Za-z]:[\\/]|/)#', $rutaDb)) {
+            $candidates[] = $rutaDb;
+        }
+
+        $candidates[] = storage_path('app/public/' . $ruta);
+        $candidates[] = storage_path($ruta);
+        $candidates[] = public_path($ruta);
+        $candidates[] = public_path('storage/' . $ruta);
+        $candidates[] = public_path('public/' . $ruta);
+
+        return array_values(array_unique($candidates));
+    }
+
+    private function resolvePdfPath($rutaDb)
+    {
+        $candidates = $this->getPdfCandidatePaths($rutaDb);
+
+        foreach ($candidates as $candidate) {
+            if ($candidate && is_file($candidate)) {
+                return $candidate;
+            }
+        }
+
+        $ruta = trim(str_replace('\\', '/', $rutaDb));
+        $ruta = preg_replace('#^/?storage/#', '', $ruta);
+        $ruta = preg_replace('#^/?public/#', '', $ruta);
+        $ruta = ltrim($ruta, '/');
+
+        $storagePublicDisk = Storage::disk('public');
+        if ($storagePublicDisk->exists($ruta)) {
+            return $storagePublicDisk->path($ruta);
+        }
+
+        return null;
+    }
+
+    private function detectGhostscriptBinary()
+    {
+        $candidates = [];
+
+        foreach ([getenv('GHOSTSCRIPT_BIN'), getenv('GS_BIN'), getenv('GS_PATH')] as $envCandidate) {
+            if (!empty($envCandidate)) {
+                $candidates[] = $envCandidate;
+            }
+        }
+
+        $candidates = array_merge($candidates, [
+            'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.03.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c',
+            'C:\\Program Files\\gs\\gs9.55.0\\bin\\gswin64c.exe',
+            'C:\\Program Files\\gs\\gs9.55.0\\bin\\gswin64c',
+        ]);
+
+        if (is_dir('C:\\Program Files\\gs')) {
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gswin64c*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gswin32c*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+            foreach (glob('C:\\Program Files\\gs\\*\\bin\\gs*') ?: [] as $path) {
+                $candidates[] = $path;
+            }
+        }
+
+        foreach (['gswin64c.exe', 'gswin64c', 'gswin32c.exe', 'gswin32c', 'gs.exe', 'gs'] as $name) {
+            $candidates[] = $name;
+        }
+
+        foreach (array_unique($candidates) as $candidate) {
+            if (empty($candidate)) {
+                continue;
+            }
+
+            if (is_string($candidate) && is_file($candidate)) {
+                return $candidate;
+            }
+
+            if (PHP_OS_FAMILY === 'Windows') {
+                $command = 'where.exe ' . escapeshellarg($candidate) . ' 2>nul';
+                exec($command, $output, $exitCode);
+
+                if ($exitCode === 0 && !empty($output[0])) {
+                    return trim($output[0]);
+                }
+            } else {
+                $command = 'command -v ' . escapeshellarg($candidate) . ' 2>/dev/null';
+                exec($command, $output, $exitCode);
+
+                if ($exitCode === 0 && !empty($output[0])) {
+                    return trim($output[0]);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /** El C.V. debe pertenecer al técnico del grupo de firmas visible. */
+    private function tecnicoQrSeleccionado(Request $request): ?string
+    {
+        $numero = (int) ($request->input('numFirmas') ?: 1);
+        $id = $request->input("Firmas_Reportes{$numero}.ID_TECNICO");
+        return filled($id) ? (string) $id : null;
+    }
+
+    public function Datos_QR($datosParaCrearQR)
+    {
+        $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
+        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'] ?? null;
+        $idsConsumibles = $datosParaCrearQR['idsConsumibles'] ?? [];
+        $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? null;
+        $token = $datosParaCrearQR['qr_token'] ?? null;
+
+        $idsConsumibles = array_filter($datosParaCrearQR['idsConsumibles'] ?? []);
+
+        /*
+        |--------------------------------------------------------------------------
+        | OBTENER FACTURAS Y CERTIFICADOS
+        |--------------------------------------------------------------------------
+        */
+
+        $facturas = general_eyc::whereIn(
+            'idGeneral_EyC',
+            $idsConsumibles
+        )
+        ->whereNotNull('Factura')
+        ->pluck('Factura')
+        ->toArray();
+
+        $certificados = certificados::whereIn(
+            'idGeneral_EyC',
+            $idsConsumibles
+        )
+        ->whereNotNull('Certificado_Actual')
+        ->pluck('Certificado_Actual')
+        ->toArray();
+
+        // Adjuntar la documentación del técnico elegida para este servicio y procedimiento.
+        $tecnicos = app(\App\Services\DocumentosUsuarioReporte::class)->rutas(
+            $ID_TECNICO ? Usuario::find($ID_TECNICO) : null,
+            $datosParaCrearQR['Documentos_Usuario'] ?? null,
+            'FOR-PINS-25-01',
+            $idProcedimiento ? (int) $idProcedimiento : null
+        );
+
+        $Procedimiento = Procedimiento::where('idProcedimiento', $idProcedimiento)
+            ->whereNotNull('PDF')
+            ->pluck('PDF')
+            ->toArray();
+
+            $todasLasRutas = array_values(array_merge($facturas, $certificados, $tecnicos, $Procedimiento));
+
+        Log::info('todasLasRutas', $todasLasRutas);
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTRAR RUTAS INVALIDAS
+        |--------------------------------------------------------------------------
+        */
+
+        $rutasInvalidas = [
+            'EN ESPERA DE DATOS',
+            'ESPERA DE DATO',
+            'N/A'
+        ];
+
+        $rutasValidas = array_filter(
+            $todasLasRutas,
+            function ($ruta) use ($rutasInvalidas) {
+
+                if (!$ruta) {
+                    return false;
+                }
+
+                return !in_array(
+                    trim(strtoupper($ruta)),
+                    $rutasInvalidas
+                );
+            }
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO TEMPORAL
+        |--------------------------------------------------------------------------
+        */
+
+        $directorioTemporal = storage_path(
+            "app/temp_pdfs/FOR_PINS_25_01/{$Contrato}/{$No_Reporte}"
+        );
+
+        if (!File::exists($directorioTemporal)) {
+            File::makeDirectory(
+                $directorioTemporal,
+                0777,
+                true
+            );
+        }
+
+        $pdfsTemporales = [];
+
+        if (!is_dir(public_path('storage')) && !is_link(public_path('storage'))) {
+            try {
+                symlink(storage_path('app/public'), public_path('storage'));
+            } catch (\Exception $e) {
+                Log::warning('No se pudo crear el enlace simbólico de storage.', ['error' => $e->getMessage()]);
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | COPIAR PDFs TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($rutasValidas as $rutaPdf) {
+
+            $rutaOriginal = $this->resolvePdfPath($rutaPdf);
+
+            if (!$rutaOriginal || !File::exists($rutaOriginal)) {
+                Log::warning('PDF no encontrado', [
+                    'rutaDb' => $rutaPdf,
+                    'rutaOriginal' => $rutaOriginal,
+                    'rutasProbadas' => $this->getPdfCandidatePaths($rutaPdf),
+                ]);
+                continue;
+            }
+
+            $nombreArchivo = basename($rutaOriginal);
+
+            $rutaTemporal =
+                $directorioTemporal .
+                DIRECTORY_SEPARATOR .
+                $nombreArchivo;
+
+            File::copy(
+                $rutaOriginal,
+                $rutaTemporal
+            );
+
+            $pdfsTemporales[] = $rutaTemporal;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | URL PUBLICA DEL PDF (TOKEN)
+        |--------------------------------------------------------------------------
+        */
+
+        $rutaPublicaPdf = route(
+            'qr.reporte',
+            ['token' => $token]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERAR QR
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreQR =
+            "QR_{$Contrato}_{$No_Reporte}.svg";
+
+        $directorioQR = storage_path(
+            "app/public/Reportes/FOR_PINS_25_01/{$Contrato}/{$No_Reporte}/QR_REPORTES"
+        );
+
+        if (!File::exists($directorioQR)) {
+
+            File::makeDirectory(
+                $directorioQR,
+                0777,
+                true
+            );
+        }
+
+        $rutaQrCompleta =
+            $directorioQR .
+            DIRECTORY_SEPARATOR .
+            $nombreQR;
+
+        \QrCode::format('svg')
+            ->size(300)
+            ->margin(0)
+            ->generate(
+                $rutaPublicaPdf,
+                $rutaQrCompleta
+            );
+
+        $rutaQrPublica =
+            "storage/Reportes/FOR_PINS_25_01/{$Contrato}/{$No_Reporte}/QR_REPORTES/"
+            . $nombreQR;
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDAR PDFs
+        |--------------------------------------------------------------------------
+        */
+
+        if (empty($pdfsTemporales)) {
+
+            Log::warning(
+                'No hay PDFs válidos para unir.'
+            );
+
+            return [
+                'pdf' => null,
+                'qr' => $rutaQrPublica
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | UNIR PDFs
+        |--------------------------------------------------------------------------
+        */
+
+        $pdf = new Fpdi();
+        $paginasImportadas = 0;
+
+        foreach ($pdfsTemporales as $archivoPdf) {
+
+            try {
+
+                /*
+                |--------------------------------------------------------------------------
+                | HACER PDF COMPATIBLE CON FPDI
+                |--------------------------------------------------------------------------
+                */
+
+                $archivoCompatible = str_replace(
+                    '.pdf',
+                    '_compatible.pdf',
+                    $archivoPdf
+                );
+
+                $ghostscriptBin = $this->detectGhostscriptBinary();
+
+                if ($ghostscriptBin) {
+                    $comando = escapeshellarg($ghostscriptBin)
+                        . ' -sDEVICE=pdfwrite '
+                        . '-dCompatibilityLevel=1.4 '
+                        . '-dNOPAUSE '
+                        . '-dQUIET '
+                        . '-dBATCH '
+                        . '-sOutputFile=' . escapeshellarg($archivoCompatible)
+                        . ' ' . escapeshellarg($archivoPdf);
+
+                    exec($comando, $output, $exitCode);
+
+                    if ($exitCode !== 0 || !File::exists($archivoCompatible)) {
+                        throw new \Exception("Ghostscript falló para {$archivoPdf}. Exit code: {$exitCode}");
+                    }
+                } else {
+                    Log::warning('Ghostscript no encontrado. Se intentará reescribir el PDF con FPDI.', [
+                        'archivo' => $archivoPdf,
+                        'busqueda' => 'ruta absoluta o PATH del servicio Apache',
+                    ]);
+                    $archivoCompatible = $archivoPdf;
+                }
+
+                if (!File::exists($archivoCompatible)) {
+                    throw new \Exception("No se pudo generar el PDF compatible para {$archivoPdf}");
+                }
+
+                $pdfTest = new Fpdi();
+                $pdfTest->setSourceFile($archivoCompatible);
+                $paginasTest = $pdfTest->setSourceFile($archivoCompatible);
+                if ($paginasTest < 1) {
+                    throw new \Exception("El archivo no contiene páginas válidas para FPDI: {$archivoCompatible}");
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | IMPORTAR PAGINAS
+                |--------------------------------------------------------------------------
+                */
+
+                $cantidadPaginas =
+                    $pdf->setSourceFile(
+                        $archivoCompatible
+                    );
+
+                for (
+                    $pagina = 1;
+                    $pagina <= $cantidadPaginas;
+                    $pagina++
+                ) {
+
+                    $template =
+                        $pdf->importPage($pagina);
+
+                    $size =
+                        $pdf->getTemplateSize(
+                            $template
+                        );
+
+                    $pdf->AddPage(
+                        $size['orientation'],
+                        [
+                            $size['width'],
+                            $size['height']
+                        ]
+                    );
+
+                    $pdf->useTemplate(
+                        $template
+                    );
+                    $paginasImportadas++;
+                }
+
+            } catch (\Exception $e) {
+
+                Log::error(
+                    'Error procesando PDF',
+                    [
+                        'archivo' => $archivoPdf,
+                        'error' => $e->getMessage()
+                    ]
+                );
+
+                continue;
+            }
+        }
+
+        if ($paginasImportadas === 0) {
+            Log::warning('No se pudieron importar páginas del PDF unificado. Se generará un PDF de fallback.', [
+                'contrato' => $Contrato,
+                'noReporte' => $No_Reporte,
+                'archivos' => $pdfsTemporales,
+            ]);
+
+            $pdf = new Fpdi();
+            $pdf->AddPage();
+            $pdf->SetFont('Helvetica', '', 12);
+            $pdf->MultiCell(0, 7, "No fue posible unir los documentos PDF anexos.\n\nCausa: los archivos anexos no pudieron ser leídos por FPDI, probablemente por compresión no soportada o porque Ghostscript no está instalado en el servidor.\n\nSe recomienda instalar Ghostscript y validar que los PDFs sean compatibles.", 0, 'L');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | DIRECTORIO FINAL
+        |--------------------------------------------------------------------------
+        */
+
+        $directorioFinal =
+            "Reportes/FOR_PINS_25_01/{$Contrato}/{$No_Reporte}/";
+
+        $rutaDirectorioFinal = storage_path(
+            "app/public/" . $directorioFinal
+        );
+
+        if (!File::exists($rutaDirectorioFinal)) {
+
+            File::makeDirectory(
+                $rutaDirectorioFinal,
+                0777,
+                true
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | GUARDAR PDF FINAL
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreArchivoFinal =
+            "QR_FOR_PINS_25_01_{$Contrato}_{$No_Reporte}.pdf";
+
+        $rutaPdfFinal =
+            $rutaDirectorioFinal .
+            $nombreArchivoFinal;
+
+        $pdf->Output(
+            $rutaPdfFinal,
+            'F'
+        );
+
+        $rutaPdfRelativa =
+            "storage/Reportes/FOR_PINS_25_01/{$Contrato}/{$No_Reporte}/"
+            . $nombreArchivoFinal;
+
+        /*
+        |--------------------------------------------------------------------------
+        | LIMPIAR TEMPORALES
+        |--------------------------------------------------------------------------
+        */
+
+        File::deleteDirectory(
+            $directorioTemporal
+        );
+
+        Log::info(
+            'PDF final generado',
+            [
+                'pdf' => $rutaPdfRelativa,
+                'qr' => $rutaQrPublica
+            ]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETORNO
+        |--------------------------------------------------------------------------
+        */
+
+        return [
+            'pdf' => $rutaPdfRelativa,
+            'qr' => $rutaQrPublica
+        ];
+    }
     // Sanea la configuracion enviada desde la tabla con combinacion de celdas.
     private function sanitizarConfiguracionCombinacionTabla($configuracionCruda)
     {
@@ -102,15 +641,15 @@ class FOR_PINS_25_01Controller extends Controller
             PinsEquiposQrSupport::eliminarArchivoPublico($qrAnterior);
         }
 
-        $datosEquipo['PDF_UNIFICADO'] = $datosEquipoActuales['PDF_UNIFICADO'] ?? null;
+        $datosEquipo['PDF_REPORTE_CACHE'] = $datosEquipoActuales['PDF_REPORTE_CACHE'] ?? null;
 
         return $datosEquipo;
     }
 
     private function invalidarPdfCacheReporte25(array &$datosEquipo): void
     {
-        PinsEquiposQrSupport::eliminarArchivoPublico($datosEquipo['PDF_UNIFICADO'] ?? null);
-        $datosEquipo['PDF_UNIFICADO'] = null;
+        PinsEquiposQrSupport::eliminarArchivoPublico($datosEquipo['PDF_REPORTE_CACHE'] ?? null);
+        $datosEquipo['PDF_REPORTE_CACHE'] = null;
     }
 
     private function obtenerRespuestaPdfCacheadoReporte25($id)
@@ -122,13 +661,14 @@ class FOR_PINS_25_01Controller extends Controller
         }
 
         $datosEquipo = json_decode($reporte->Datos_Equipo, true) ?: [];
-        $rutaPublica = $datosEquipo['PDF_UNIFICADO'] ?? null;
+        $rutaPublica = $datosEquipo['PDF_REPORTE_CACHE'] ?? null;
+        if (($datosEquipo['PDF_SERIE_VERSION'] ?? null) !== app(\App\Services\PaginacionReportesPnd::class)->firma((int) $id)) return null;
 
-        if (!PinsEquiposQrSupport::existeArchivoPublico($rutaPublica)) {
+        if (!$rutaPublica) {
             return null;
         }
 
-        $rutaAbsoluta = PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($rutaPublica);
+        $rutaAbsoluta = $this->resolvePdfPath($rutaPublica);
 
         if (!$rutaAbsoluta || !File::exists($rutaAbsoluta)) {
             return null;
@@ -141,20 +681,42 @@ class FOR_PINS_25_01Controller extends Controller
 
     private function guardarPdfCacheadoReporte25($id, $pdfOutput, array $detallesGenerales, array $datosEquipo): void
     {
-        $rutaPublica = PinsEquiposQrSupport::guardarPdfCacheado(
-            $pdfOutput,
+        $rutaPublica = PinsEquiposQrSupport::obtenerRutaPdfCachePublica(
             'FOR_PINS_25_01',
             $detallesGenerales['Contrato'] ?? '',
             $detallesGenerales['No_Reporte'] ?? ''
         );
 
-        $datosEquipo['PDF_UNIFICADO'] = $rutaPublica;
+        Storage::disk('public')->put(preg_replace('#^storage/#', '', $rutaPublica), $pdfOutput);
+        $datosEquipo['PDF_REPORTE_CACHE'] = $rutaPublica;
+        $datosEquipo['PDF_SERIE_VERSION'] = app(\App\Services\PaginacionReportesPnd::class)->firma((int) $id);
 
         reporte::where('idReportes', $id)->update([
             'Datos_Equipo' => json_encode($datosEquipo),
         ]);
     }
 
+
+    /** Regenera anexos de reportes antiguos sin devolver el PDF principal por el QR. */
+    public function regenerarDocumentosQr25($id): void
+    {
+        $reporte = reporte::where('idReportes', $id)->firstOrFail();
+        $datos = json_decode($reporte->Datos_Equipo, true) ?: [];
+        $detalles = json_decode($reporte->Detalles_Generales, true) ?: [];
+        $firmas = json_decode(Firma_Reporte::where('idReportes', $id)->value('Firmas') ?? '{}', true) ?: [];
+        $resultado = $this->Datos_QR([
+            'Contrato' => $detalles['Contrato'] ?? 'SinContrato',
+            'No_Reporte' => $detalles['No_Reporte'] ?? 'SinReporte',
+            'qr_token' => $datos['QR_TOKEN'] ?? (string) Str::uuid(),
+            'ID_TECNICO' => $firmas['ID_TECNICO'] ?? null,
+            'idProcedimiento' => $detalles['idProcedimiento'] ?? null,
+            'idsConsumibles' => $datos['EQUIPOS_HERRAMIENTAS_IDS'] ?? [],
+            'Documentos_Usuario' => $datos['Documentos_Usuario'] ?? null,
+        ]);
+        $datos['QR_PDF'] = $resultado['qr'] ?? null;
+        $datos['PDF_UNIFICADO'] = $resultado['pdf'] ?? null;
+        $reporte->update(['Datos_Equipo' => json_encode($datos)]);
+    }
 
     public function OS_OC($datosParaCrearOS_OC)
     {
@@ -502,8 +1064,8 @@ class FOR_PINS_25_01Controller extends Controller
         $inspeccionDetalles = $juntasGrupoRe['inspeccion'] ?? $juntasGrupoRe;
         $firmas = json_decode($firmasReporte->Firmas, true) ?: [];
         $fotos = $this->obtenerFotosParaPdf($fotosReporte);
-        $qrPdf = !empty($datosEquipo['QR_PDF']) ? PinsEquiposQrSupport::resolverRutaPublicaAbsoluta($datosEquipo['QR_PDF']) : null;
-        //$qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
+        // El PNG permite incrustar el QR en Dompdf con PHP 8.5.
+        $qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($datosEquipo['QR_PDF'] ?? null);
         return [
             'Detalles_Generales' => $detallesGenerales,
             'Datos_Equipo' => $datosEquipo,
@@ -590,6 +1152,11 @@ class FOR_PINS_25_01Controller extends Controller
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
@@ -725,6 +1292,11 @@ class FOR_PINS_25_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, null);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         //En la validación de Laravel, nullable significa que el campo puede estar vacío (nulo) 
         // y no se aplicarán las demás reglas de validación si el campo está vacío. Esto es útil 
@@ -793,7 +1365,20 @@ class FOR_PINS_25_01Controller extends Controller
             $validatedData['Detalles_Generales']['Contrato'] ?? '',
             $validatedData['Detalles_Generales']['No_Reporte'] ?? ''
         );
-        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = null;
+        // Guarda los anexos del tecnico, procedimiento y equipos para el QR.
+        $resultadoQR = $this->Datos_QR([
+            'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? 'SinContrato',
+            'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? 'SinReporte',
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $this->tecnicoQrSeleccionado($request),
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
+            'idsConsumibles' => $validatedData['Datos_Equipo']['EQUIPOS_HERRAMIENTAS_IDS'] ?? [],
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
+        ]);
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? null;
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
+
+        $validatedData['Datos_Equipo']['PDF_REPORTE_CACHE'] = null;
 
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
@@ -1086,6 +1671,8 @@ class FOR_PINS_25_01Controller extends Controller
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         
 
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $idReportes, 'FOR-PINS-25-01');
+
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }
 
@@ -1100,6 +1687,11 @@ class FOR_PINS_25_01Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
+            'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.certificados' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
+            'Datos_Equipo.Documentos_Usuario.tipo_cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|in:general,servicio',
             /*DETALLES GENERALES */
             'Detalles_Generales' => 'required|array',  // Asegura que es un array
             'Detalles_Generales.Fecha' => 'nullable|date',
@@ -1235,6 +1827,11 @@ class FOR_PINS_25_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_2DO_ENCARGADO' => 'nullable|string',
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
+        // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, (int) $id);
+        unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
+        if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
+
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
@@ -1291,6 +1888,19 @@ class FOR_PINS_25_01Controller extends Controller
             $validatedData['Detalles_Generales']['Contrato'] ?? '',
             $validatedData['Detalles_Generales']['No_Reporte'] ?? ''
         );
+        // Guarda los anexos del tecnico, procedimiento y equipos para el QR.
+        $resultadoQR = $this->Datos_QR([
+            'Contrato' => $validatedData['Detalles_Generales']['Contrato'] ?? 'SinContrato',
+            'No_Reporte' => $validatedData['Detalles_Generales']['No_Reporte'] ?? 'SinReporte',
+            'qr_token' => $validatedData['Datos_Equipo']['QR_TOKEN'],
+            'ID_TECNICO' => $this->tecnicoQrSeleccionado($request),
+            'idProcedimiento' => $validatedData['Detalles_Generales']['idProcedimiento'] ?? null,
+            'idsConsumibles' => $validatedData['Datos_Equipo']['EQUIPOS_HERRAMIENTAS_IDS'] ?? [],
+            'Documentos_Usuario' => $validatedData['Datos_Equipo']['Documentos_Usuario'] ?? null,
+        ]);
+        $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'] ?? null;
+        $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
+
 
         // Actualiza los detalles generales como JSON en la base de datos
         $Reporte->update([
@@ -1548,7 +2158,8 @@ class FOR_PINS_25_01Controller extends Controller
 
         // **2️⃣ Procesar imágenes existentes**
         foreach ($existingImages as $index => $ruta) {
-            if ($request->hasFile("replace_images.$index")) {
+            // Conserva el PNG con las marcas cuando tambien llega el archivo original.
+            if ($request->hasFile("replace_images.$index") && empty($imagesBase64[$index])) {
                 // **Reemplazo de imagen existente**
                 $newImage = $request->file("replace_images.$index");
 
@@ -1640,6 +2251,8 @@ class FOR_PINS_25_01Controller extends Controller
         // Obtener el valor de 'Detalles_Generales.Contrato'
         $contratoSeleccionado = $validatedData['Detalles_Generales']['Contrato'];
         $Proyecto = $validatedData['Detalles_Generales']['Proyecto'];
+
+        app(\App\Services\PaginacionReportesPnd::class)->guardarConfiguracion($request, (int) $id, 'FOR-PINS-25-01');
 
         return redirect()->route('indexINS2', ['contratoSeleccionado' => $contratoSeleccionado, 'Proyecto' => $Proyecto]);
     }

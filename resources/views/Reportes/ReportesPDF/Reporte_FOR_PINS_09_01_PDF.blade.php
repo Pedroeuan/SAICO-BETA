@@ -194,15 +194,13 @@
                                 INFORME DE INSPECCIÓN ULTRASÓNICA CON HAZ ANGULAR
                             </th>
 
-                            <th rowspan="4" style="width:90%; padding:0; margin:0;">
+                            <th rowspan="4" style="width:90%; padding:0; margin:0; text-align:center; vertical-align:middle; line-height:0;">
                                 @if(!empty($QR_PDF))
-                                    <div style="width:100%; height:7.2%; text-align:center; vertical-align:middle; padding:0; margin:0;">
                                         <img
                                             src="{{ $QR_PDF }}"
                                             alt="QR"
-                                            style="width:60px; height:60px; display:block; margin:auto; padding:0;"
+                                            style="width:60px; height:60px; display:inline-block; vertical-align:middle; margin:0; padding:0;"
                                         >
-                                    </div>
                                 @endif
                             </th>
 
