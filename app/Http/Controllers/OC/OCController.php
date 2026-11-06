@@ -598,10 +598,16 @@ class OCController extends Controller
         }*/
 
         // La versión de Revision define el estatus final: Revisado V1, V2, etc.
+        // Si la columna está vacía, se intenta recuperar la versión del estatus
+        // actual (por ejemplo "Revisión: V2") antes de usar V1 por defecto.
         $revision = trim((string) $OC->Revision);
 
         if ($revision === '') {
-            $revision = 'V1';
+            if (preg_match('/V\s*(\d+)/i', (string) $OC->Estatus, $coincidencias)) {
+                $revision = 'V' . (int) $coincidencias[1];
+            } else {
+                $revision = 'V1';
+            }
         }
 
         // Solo se guardan las marcas si el JSON recibido es válido y no está vacío.
@@ -727,7 +733,11 @@ class OCController extends Controller
 
     /**
      * Envía la orden de compra a revisión.
-     * Toma el valor de la columna Revision; si está vacío o nulo se usa "V1".
+     *
+     * Si es la primera vez usa "V1". Si la OC ya fue revisada
+     * ("Revisado V1", "Revisado V2", ...) el nuevo envío crea la
+     * siguiente versión ("V2", "V3", ...). Si ya está en revisión,
+     * conserva la versión actual.
      */
     public function enviarRevision($id)
     {
@@ -740,13 +750,24 @@ class OCController extends Controller
             ], 404);
         }
 
+        $estatusActual = trim((string) $OC->Estatus);
         $revision = trim((string) $OC->Revision);
+
+        // Recuperar la versión desde el estatus si la columna está vacía.
+        if ($revision === '' && preg_match('/V\s*(\d+)/i', $estatusActual, $coincidencias)) {
+            $revision = 'V' . (int) $coincidencias[1];
+        }
 
         if ($revision === '') {
             $revision = 'V1';
-            $OC->Revision = $revision;
         }
 
+        // Si la revisión anterior ya terminó, este envío inicia la siguiente.
+        if (stripos($estatusActual, 'Revisado') === 0) {
+            $revision = $this->siguienteRevision($revision);
+        }
+
+        $OC->Revision = $revision;
         $OC->Estatus = 'Revisión: ' . $revision;
         $OC->save();
 
@@ -756,6 +777,18 @@ class OCController extends Controller
             'estatus' => $OC->Estatus,
             'revision' => $OC->Revision,
         ]);
+    }
+
+    /**
+     * Devuelve la siguiente versión a partir de una cadena tipo "V1".
+     */
+    private function siguienteRevision(string $revision): string
+    {
+        if (preg_match('/^V\s*(\d+)$/i', trim($revision), $coincidencias)) {
+            return 'V' . ((int) $coincidencias[1] + 1);
+        }
+
+        return 'V1';
     }
 
     public function OC_PDF($id)

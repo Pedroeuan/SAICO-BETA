@@ -45,7 +45,7 @@
                         <th>Estatus</th>
                         <th>OC Original</th>
                         <th>OC AICO</th>
-                        <th>Enviar Revisión</th>
+                        {{--<th>Enviar Revisión</th>--}}
                         <th>Revisar</th>
                         {{--<th>Eliminar</th>--}}
                     </tr>
@@ -75,10 +75,10 @@
                         <td>
                             <a class="btn btn-primary" href="{{ route('OC.PDF', ['id' => $OCS->idOC]) }}" role="button" target="_blank"><i class="far fa-file-pdf"></i></a>
                         </td>
-                        <!--ENVIO A REVISIÓN-->
+                        <!--ENVIO A REVISIÓN
                         <td>
                             <button type="button" class="btn btn-info btnEnviar" idOC="{{$OCS->idOC}}"><i class="far fa-envelope-open" aria-hidden="true"></i></button>
-                        </td>
+                        </td>-->
                         <td>
                             <a href="{{ route('OC.edit_revisar', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="	far fa-eye" aria-hidden="true"></i></a>
                         </td>
