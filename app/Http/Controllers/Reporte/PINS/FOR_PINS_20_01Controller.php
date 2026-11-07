@@ -599,13 +599,13 @@ class FOR_PINS_20_01Controller extends Controller
             'Detalles_Generales.No_Reporte' => 'required|string|max:255',
             'Detalles_Generales.Cliente' => 'nullable|string|max:255',
             'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string|max:255',
             'Detalles_Generales.tip_ais' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.ins' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
             'Detalles_Generales.Nom_pz' => 'nullable|string|max:255',
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Trazabilidad' => 'nullable|string|max:255',
@@ -625,7 +625,7 @@ class FOR_PINS_20_01Controller extends Controller
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.ID_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string|max:255',
             'Datos_Equipo.QR_PDF' => 'nullable|string|max:255',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string|max:255',
@@ -838,7 +838,8 @@ class FOR_PINS_20_01Controller extends Controller
         {
         $imagenesGuardadas = []; // Para almacenar rutas de imágenes guardadas
 
-        foreach ($request->images_base64 as $index => $base64Image) {
+        foreach ($request->input('images_base64', []) as $index => $base64Image) {
+            if (empty($base64Image)) continue;
             $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
             $Contrato = $validatedData['Detalles_Generales']['Contrato'];
 
@@ -933,13 +934,13 @@ class FOR_PINS_20_01Controller extends Controller
             'Detalles_Generales.No_Reporte' => 'required|string|max:255',
             'Detalles_Generales.Cliente' => 'nullable|string|max:255',
             'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string|max:255',
             'Detalles_Generales.tip_ais' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.ins' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
             'Detalles_Generales.Nom_pz' => 'nullable|string|max:255',
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Trazabilidad' => 'nullable|string|max:255',
@@ -959,7 +960,7 @@ class FOR_PINS_20_01Controller extends Controller
             'Datos_Equipo.MODELO_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.NS_EQUIPO' => 'nullable|string|max:255',
             'Datos_Equipo.ID_EQUIPO' => 'nullable|string|max:255',
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string',
             'Datos_Equipo.QR_TOKEN' => 'nullable|string|max:255',
             'Datos_Equipo.QR_PDF' => 'nullable|string|max:255',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string|max:255',
