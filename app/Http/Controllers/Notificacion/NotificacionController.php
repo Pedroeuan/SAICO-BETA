@@ -137,7 +137,7 @@ class NotificacionController extends Controller
                     ->where(function($query) use ($iso) {
                         $query->whereIn('rol', ['Super Administrador', 'Administrador']);
                         if ($iso == '17025') {
-                            $query->orWhere('rol', 'Laboratorio');
+                            $query->orWhere('rol', ['Laboratorio', 'Equipos']);
                         }
                         if ($iso == '9001') {
                             $query->orWhere('rol', 'Equipos');
@@ -382,7 +382,7 @@ class NotificacionController extends Controller
                     ->where(function($query) use ($iso) {
                         $query->whereIn('rol', ['Super Administrador', 'Administrador']);
                         if ($iso == '17025') {
-                            $query->orWhere('rol', 'Laboratorio');
+                            $query->orWhere('rol', ['Laboratorio', 'Equipos']);
                         }
                         if ($iso == '9001') {
                             $query->orWhere('rol', 'Equipos');
