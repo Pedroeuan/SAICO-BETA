@@ -25,7 +25,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: -8.94mm; /* Baja las firmas 1 mm desde su posicion actual. */
                     left: 0;
                     right: 0;
                     height: auto;
@@ -157,6 +157,8 @@
 
         /* ************** */
         .imagenes-reporte {
+            position: relative;
+            top: -3mm; /* Sube fotos y comentarios sin cambiar su tamano. */
             margin-left: -15.6; /* Asegura que la tabla se alinee al margen izquierdo */
             width: 104%;
             border-collapse: separate;
@@ -578,7 +580,7 @@
                             </tr>
                         </thead>  
                     </table>
-                            <table class="imagenes-reporte">
+                            <table class="imagenes-reporte" @if(count($fotosGrupo) === 1 && !empty($fotosGrupo[0]['una_hoja'])) style="top:-6mm;" @endif>
                                 <tr>
                                     @foreach($fotosGrupo as $index => $foto)
                                         {{-- Caso 1 imagen: ocupa toda la hoja 
@@ -596,8 +598,9 @@
                                             </td>
 
                                             {{-- Comentario derecha --}}
-                                            <td class="foto-container">
-                                                <div class="" style="font-size: 10px; text-align: justify;">
+                                            <td class="foto-container" style="position:relative;">
+                                                <div style="position:absolute; top:-5mm; right:0; font-size:10px; font-weight:bold; text-align:right; white-space:nowrap;">Descripción de los hallazgos</div>
+                                                <div style="font-size:10px; text-align:justify; padding:3mm; overflow-wrap:break-word;">
                                                     {{ $foto['comment'] }}
                                                 </div>
                                             </td>

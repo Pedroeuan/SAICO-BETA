@@ -237,11 +237,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                 Imagen en una hoja
                             </label>
                         </div>
-                        <input type="hidden" name="imagen_hoja[]" id="imagenHojaValue${i}" value="0">
+                        <input type="hidden" name="imagen_hoja[${i - 1}]" id="imagenHojaValue${i}" value="0">
 
                         <!-- Comentario -->
                         <div class="image-preview mt-2" id="image${i}-preview"></div>
-                        <textarea class="form-control mt-2" name="comments[]" placeholder="Comentario"></textarea>
+                        <textarea class="form-control mt-2" name="comments[${i - 1}]" placeholder="Comentario"></textarea>
 
                         <!-- NUEVO CHECK DETALLES JUNTA -->
                         <div class="form-check mt-2">
@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 Detalles Junta
                             </label>
                         </div>
-                        <input type="hidden" name="detalles_junta_check[]" id="detallesJuntaValue${i}" value="0">
+                        <input type="hidden" name="detalles_junta_check[${i - 1}]" id="detallesJuntaValue${i}" value="0">
 
                         <!-- CAMPOS OCULTOS DETALLES JUNTA -->
                         <div class="detalles-junta-container mt-3 d-none" id="detallesContainer${i}">
@@ -264,19 +264,19 @@ document.addEventListener("DOMContentLoaded", function () {
                             Tipo Indicación
                             <input type="text" class="form-control mt-1" name="tipo_indicacion[]" placeholder="Tipo Indicación">
                             Longitud
-                            <input type="text" class="form-control mt-1" name="longitud[]" placeholder="Longitud">
+                            <input type="text" class="form-control mt-1" name="longitud[${i - 1}]" placeholder="Longitud">
                             Profundidad
-                            <input type="text" class="form-control mt-1" name="profundidad[]" placeholder="Profundidad">
+                            <input type="text" class="form-control mt-1" name="profundidad[${i - 1}]" placeholder="Profundidad">
                             Nivel de Referencia
-                            <input type="text" class="form-control mt-1" name="nivel_referencia[]" placeholder="Nivel de Referencia">
+                            <input type="text" class="form-control mt-1" name="nivel_referencia[${i - 1}]" placeholder="Nivel de Referencia">
                             Distancia del Nivel de Referencia
-                            <input type="text" class="form-control mt-1" name="distancia_nivel[]" placeholder="Distancia del Nivel de Referencia">
+                            <input type="text" class="form-control mt-1" name="distancia_nivel[${i - 1}]" placeholder="Distancia del Nivel de Referencia">
                             Dirección de la Sonda
-                            <input type="text" class="form-control mt-1" name="direccion_sonda[]" placeholder="Dirección de la Sonda">
+                            <input type="text" class="form-control mt-1" name="direccion_sonda[${i - 1}]" placeholder="Dirección de la Sonda">
                             Recubrimiento
-                            <input type="text" class="form-control mt-1" name="recubrimiento[]" placeholder="Recubrimiento">
+                            <input type="text" class="form-control mt-1" name="recubrimiento[${i - 1}]" placeholder="Recubrimiento">
                         </div>
-                        <input type="hidden" name="images_base64[]" id="image${i}-base64">
+                        <input type="hidden" name="images_base64[${i - 1}]" id="image${i}-base64">
                         <br>
                         <button type="button" class="btn btn-danger mt-2 remove-image" data-index="${i}">Eliminar</button>
                     </div>
@@ -284,147 +284,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 container.appendChild(col);
             }
 
-            // 🔁 RESTAURAR CHECKS DESPUÉS DE GENERAR
-            const form = document.querySelector("form");
+            // Las casillas, sus campos ocultos y la fotografia comparten el mismo indice.
+            const form = container.closest('form');
             const formId = form.id;
-
-            document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
-                const key = `${formId}_${cb.id}`;
-                const stored = localStorage.getItem(key);
-
-                if (stored !== null) {
-                    cb.checked = stored === "true";
-                    document.getElementById(`imagenHojaValue${cb.dataset.index}`).value = cb.checked ? 1 : 0;
-                }
+            container.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
+                const index = cb.dataset.index;
+                const detalles = document.getElementById(`detallesJunta${index}`);
+                const panel = document.getElementById(`detallesContainer${index}`);
+                const hojaValor = document.getElementById(`imagenHojaValue${index}`);
+                const detallesValor = document.getElementById(`detallesJuntaValue${index}`);
+                cb.checked = localStorage.getItem(`${formId}_${cb.id}`) === 'true';
+                detalles.checked = localStorage.getItem(`${formId}_${detalles.id}`) === 'true';
+                const sincronizar = () => {
+                    if (detalles.checked) cb.checked = true;
+                    hojaValor.value = cb.checked ? '1' : '0';
+                    detallesValor.value = detalles.checked ? '1' : '0';
+                    panel.classList.toggle('d-none', !detalles.checked);
+                    localStorage.setItem(`${formId}_${cb.id}`, String(cb.checked));
+                    localStorage.setItem(`${formId}_${detalles.id}`, String(detalles.checked));
+                };
+                cb.addEventListener('change', sincronizar);
+                detalles.addEventListener('change', sincronizar);
+                sincronizar();
             });
-
-            /*document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
-                const key = `${formId}_${cb.id}`;
-                const stored = localStorage.getItem(key);
-
-                if (stored !== null) {
-                    cb.checked = stored === "true";
-
-                    const index = cb.dataset.index;
-                    const container = document.getElementById(`detallesContainer${index}`);
-                    const hiddenInput = document.getElementById(`detallesJuntaValue${index}`);
-
-                    if (cb.checked) {
-                        container.classList.remove('d-none');
-                        hiddenInput.value = 1;
-                    } else {
-                        container.classList.add('d-none');
-                        hiddenInput.value = 0;
-                    }
-                }
-            });*/
-            
-            document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
-                cb.addEventListener('change', function () {
-
-                    const index = this.dataset.index;
-
-                    const container = document.getElementById(`detallesContainer${index}`);
-                    const hiddenInput = document.getElementById(`detallesJuntaValue${index}`);
-
-                    // CHECKBOX IMAGEN EN HOJA
-                    const imagenHojaCheckbox = document.getElementById(`imagenHoja${index}`);
-                    const imagenHojaValue = document.getElementById(`imagenHojaValue${index}`);
-
-                    const form = document.querySelector("form");
-                    const formId = form.id;
-
-                    if (this.checked) {
-
-                        container.classList.remove('d-none');
-                        hiddenInput.value = 1;
-
-                        // ✅ MARCAR AUTOMÁTICAMENTE
-                        imagenHojaCheckbox.checked = true;
-                        imagenHojaValue.value = 1;
-
-                        // Guardar en localStorage
-                        localStorage.setItem(`${formId}_imagenHoja${index}`, true);
-
-                        // Restaurar valores guardados
-                        container.querySelectorAll('input[type="text"]').forEach(input => {
-                            const key = `${formId}_${input.name}_${container.id}`;
-                            const stored = localStorage.getItem(key);
-
-                            if (stored !== null) {
-                                input.value = stored;
-                            }
-                        });
-
-                    } else {
-
-                        container.classList.add('d-none');
-                        hiddenInput.value = 0;
-
-                        // OPCIONAL: desmarcar también
-                        imagenHojaCheckbox.checked = false;
-                        imagenHojaValue.value = 0;
-
-                        localStorage.setItem(`${formId}_imagenHoja${index}`, false);
-                    }
-
-                    // Guardar estado del checkbox
-                    localStorage.setItem(`${formId}_${this.id}`, this.checked);
-
-                });
-            });
-            // 🔁 RESTAURAR INPUTS DE DETALLES JUNTA
-            document.querySelectorAll('.detalles-junta-container input').forEach(input => {
-                const key = `${formId}_${input.name}_${input.closest('.detalles-junta-container').id}`;
-                const stored = localStorage.getItem(key);
-
-                if (stored !== null) {
-                    input.value = stored;
-                }
-
-                input.addEventListener('input', function() {
-                    localStorage.setItem(key, input.value);
-                });
-            });
-
-            document.querySelectorAll('.imagen-hoja-checkbox').forEach(cb => {
-                cb.addEventListener('change', function () {
-                    const index = this.dataset.index;
-                    document.getElementById(`imagenHojaValue${index}`).value = this.checked ? 1 : 0;
-                });
-            });
-
-            document.querySelectorAll('.detalles-junta-checkbox').forEach(cb => {
-                cb.addEventListener('change', function () {
-                    const index = this.dataset.index;
-                    const container = document.getElementById(`detallesContainer${index}`);
-                    const hiddenInput = document.getElementById(`detallesJuntaValue${index}`);
-                    const form = document.querySelector("form");
-                    const formId = form.id;
-
-                    if (this.checked) {
-                        container.classList.remove('d-none');
-                        hiddenInput.value = 1;
-                        
-                        // Restaurar valores guardados cuando se activa
-                        container.querySelectorAll('input[type="text"]').forEach(input => {
-                            const key = `${formId}_${input.name}_${container.id}`;
-                            const stored = localStorage.getItem(key);
-                            if (stored !== null) {
-                                input.value = stored;
-                            }
-                        });
-                    } else {
-                        container.classList.add('d-none');
-                        hiddenInput.value = 0;
-                    }
-
-                    // Guardar estado del checkbox
-                    localStorage.setItem(`${formId}_${this.id}`, this.checked);
-                });
-            });
-            
-            // Agregar eventos de eliminación a los botones
             document.querySelectorAll('.remove-image').forEach(button => {
                 button.addEventListener('click', function () {
                     const index = this.getAttribute('data-index');
@@ -658,7 +540,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         textareas.forEach(textarea => {
-            // Verificar si es textarea de comentarios (tiene name="comments[]" y id)
+            // Verificar si es textarea de comentarios (tiene name="comments[${i - 1}]" y id)
             if (textarea.name === "comments[]" && textarea.id) {
                 // Guardar usando id como clave
                 const stored = localStorage.getItem(`${formId}_${textarea.id}`);

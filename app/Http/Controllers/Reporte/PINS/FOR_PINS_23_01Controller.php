@@ -776,6 +776,8 @@ class FOR_PINS_23_01Controller extends Controller
         $Estatus = "CREADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'titulos_fotos' => 'nullable|array',
+            'titulos_fotos.*' => 'nullable|string|max:255',
             'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
             'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
             'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
@@ -1248,6 +1250,7 @@ class FOR_PINS_23_01Controller extends Controller
             // Guardar la ruta en el array con su comentario correspondiente
             $imagenesGuardadas[] = [
                 'ruta' => "storage/Reportes/FOR_PINS_23_01/{$Contrato}/{$No_Reporte}/Fotos/{$imageName}",
+                'titulo' => trim((string) $request->input("titulos_fotos.$index", '')),
                 'comentario' => $request->comments[$index] ?? null, // Guardar comentario si existe
                 'una_hoja' => $request->imagen_hoja[$index] ?? 0, 
                 'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
@@ -1358,6 +1361,8 @@ class FOR_PINS_23_01Controller extends Controller
         $Estatus = "ACTUALIZADO";
         // Validar los Detalles_Generales
         $validatedData = $request->validate([
+            'titulos_fotos' => 'nullable|array',
+            'titulos_fotos.*' => 'nullable|string|max:255',
             'Datos_Equipo.Documentos_Usuario' => 'sometimes|array:cv_completo,cv_reporte,tipo_cv_reporte,certificados',
             'Datos_Equipo.Documentos_Usuario.cv_completo' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
             'Datos_Equipo.Documentos_Usuario.cv_reporte' => 'required_with:Datos_Equipo.Documentos_Usuario|boolean',
@@ -1912,6 +1917,7 @@ class FOR_PINS_23_01Controller extends Controller
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
+                        'titulo' => trim((string) $request->input("titulos_fotos.$index", '')),
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
                         'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
@@ -1933,6 +1939,7 @@ class FOR_PINS_23_01Controller extends Controller
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
+                        'titulo' => trim((string) $request->input("titulos_fotos.$index", '')),
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
                         'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
@@ -1945,6 +1952,7 @@ class FOR_PINS_23_01Controller extends Controller
                 if (!in_array($ruta, $rutasGuardadas)) {
                     $imagenesGuardadas[] = [
                         'ruta' => $ruta,
+                        'titulo' => trim((string) $request->input("titulos_fotos.$index", '')),
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
                         'RG_Principal' => $request->RG_Principal[$index] ?? 0, 
@@ -1974,6 +1982,7 @@ class FOR_PINS_23_01Controller extends Controller
                 if (!in_array($rutaNueva, $rutasGuardadas)) {
                     $imagenesGuardadas[] = [
                         'ruta' => $rutaNueva,
+                        'titulo' => trim((string) $request->input("titulos_fotos.$index", '')),
                         'comentario' => $comments[$index] ?? '',
                         'una_hoja' => $imagenHoja[$index] ?? 0,
                         'RG_Principal' => $request->RG_Principal[$index] ?? 0,
@@ -2128,6 +2137,7 @@ class FOR_PINS_23_01Controller extends Controller
 
                 $Fotos[] = [
                     'path' => $rutaFoto,
+                    'titulo' => $foto['titulo'] ?? '',
                     'comment' => $foto['comentario'] ?? '',
                     'una_hoja'  => $foto['una_hoja'] ?? 0,
                     'RG_Principal' => $foto['RG_Principal'] ?? 0,
