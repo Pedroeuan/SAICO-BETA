@@ -384,7 +384,7 @@
                     <table>                               
                         <tr>                                     
                             <th class="datosgenerales" >OBSERVACIONES:</th>                                         
-                            <td class="lineaInferior" style="width: 814px;">{{ $Datos_Equipo['Observaciones'] ?? '' }}</td>                            
+                            <td class="lineaInferior" style="width: 814px; font-size:6px; font-weight:normal;">{{ $Datos_Equipo['Observaciones'] ?? '' }}</td>                            
                         </tr>  
                     </table>
 
