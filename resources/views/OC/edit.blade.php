@@ -82,6 +82,18 @@
                                         </div>
                                     @endif
 
+                                    @if (stripos((string) $OC->Estatus, 'Revisado') === 0)
+                                        <div class="col-sm-12">
+                                            <p class="text-muted mb-2">
+                                                <i class="fas fa-user-check"></i>
+                                                Revisado por: {{ $OC->Revision_Autor ?: 'No registrado' }}
+                                                @if (!empty($OC->Revision_At))
+                                                    · {{ \Carbon\Carbon::parse($OC->Revision_At)->format('d/m/Y H:i') }}
+                                                @endif
+                                            </p>
+                                        </div>
+                                    @endif
+
                                     @if (!empty($OC->Comentario_Ventas))
                                         <div class="col-sm-12">
                                             <div class="alert alert-info">

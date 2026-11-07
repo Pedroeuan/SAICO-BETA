@@ -70,6 +70,11 @@
                                     <i class="fas fa-comment-dots"></i>
                                 </span>
                             @endif
+                            @if (stripos((string) $OCS->Estatus, 'Revisado') === 0)
+                                <div class="small text-muted">
+                                    <i class="fas fa-user-check"></i> {{ $OCS->Revision_Autor ?: 'No registrado' }}
+                                </div>
+                            @endif
                         </td>
                         @if($OCS->OC_archivo == 'ESPERA DE DATO' || $OCS->OC_archivo == 'ESPERA DE DATOS')
                                 <td>

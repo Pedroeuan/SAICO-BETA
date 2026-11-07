@@ -72,6 +72,13 @@
             @if (!empty($OC->Estatus))
                 <span class="badge badge-secondary ml-1">{{ $OC->Estatus }}</span>
             @endif
+            @if (stripos((string) $OC->Estatus, 'Revisado') === 0)
+                <span class="badge badge-info ml-1"
+                      title="{{ !empty($OC->Revision_At) ? 'Fecha de revisión: ' . \Carbon\Carbon::parse($OC->Revision_At)->format('d/m/Y H:i') : '' }}">
+                    <i class="fas fa-user-check"></i>
+                    Revisado por: {{ $OC->Revision_Autor ?: 'No registrado' }}
+                </span>
+            @endif
         </h3>
         <div class="card-tools">
             <a href="{{ route('OC.PDFMarcas', ['id' => $id]) }}" class="btn btn-sm btn-danger" download="OC_{{ $id }}_marcas.pdf">

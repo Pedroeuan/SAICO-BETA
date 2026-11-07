@@ -644,6 +644,8 @@ class OCController extends Controller
             'Revision_Marcas' => $marcasGuardadas,
             'Revision' => $revision,
             'Estatus' => 'Revisado ' . $revision,
+            'Revision_Autor' => auth()->user()->name ?? null,
+            'Revision_At' => now(),
         ]);
 
         return redirect()->route('OC.indexOC_AD')
@@ -748,6 +750,8 @@ class OCController extends Controller
 
         $OC->Revision = $revision;
         $OC->Estatus = 'Revisión: ' . $revision;
+        $OC->Revision_Autor = null;
+        $OC->Revision_At = null;
         $OC->save();
 
         return response()->json([

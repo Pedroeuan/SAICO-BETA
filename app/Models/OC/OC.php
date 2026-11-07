@@ -25,6 +25,8 @@ class OC extends Model
         'Revision',
         'Revision_OC',
         'Revision_Marcas',
+        'Revision_Autor',
+        'Revision_At',
         'Comentario_Ventas',
         'Comentario_Ventas_Autor',
         'Comentario_Ventas_At',

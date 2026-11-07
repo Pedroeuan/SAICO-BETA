@@ -86,6 +86,15 @@
 <br>
 <br>
 <h3 align="center">Revisión de la Orden de Compra</h3>
+@if (!empty($OC->Revision_Autor) || stripos((string) $OC->Estatus, 'Revisado') === 0)
+    <div class="text-center text-muted">
+        <i class="fas fa-user-check"></i>
+        Última revisión por: {{ $OC->Revision_Autor ?: 'No registrado' }}
+        @if (!empty($OC->Revision_At))
+            · {{ \Carbon\Carbon::parse($OC->Revision_At)->format('d/m/Y H:i') }}
+        @endif
+    </div>
+@endif
 <br>
     <div class="card">
         <div class="card-body row">

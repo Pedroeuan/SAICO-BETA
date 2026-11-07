@@ -153,6 +153,12 @@
                         </td>
                         <td>
                             @if($OCS->Revision_OC){{ $OCS->Revision_OC }} @else EN ESPERA . . . @endif
+                            @if (stripos((string) $OCS->Estatus, 'Revisado') === 0)
+                                <div class="small text-muted mt-1">
+                                    <i class="fas fa-user-check"></i>
+                                    Revisado por: {{ $OCS->Revision_Autor ?: 'No registrado' }}
+                                </div>
+                            @endif
                             @if (!empty($OCS->Comentario_Ventas))
                                 <div class="mt-1">
                                     <span class="badge badge-info" title="Ventas agregó un comentario a esta revisión">
