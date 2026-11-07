@@ -151,7 +151,16 @@
                                 </button>
                             @endif
                         </td>
-                        <td>@if($OCS->Revision_OC){{ $OCS->Revision_OC }} @else EN ESPERA . . . @endif</td>
+                        <td>
+                            @if($OCS->Revision_OC){{ $OCS->Revision_OC }} @else EN ESPERA . . . @endif
+                            @if (!empty($OCS->Comentario_Ventas))
+                                <div class="mt-1">
+                                    <span class="badge badge-info" title="Ventas agregó un comentario a esta revisión">
+                                        <i class="fas fa-comment-dots"></i> Comentario de ventas
+                                    </span>
+                                </div>
+                            @endif
+                        </td>
                         <td>
                             <a href="{{ route('OC.edit', ['id' => $OCS->idOC]) }}" class="btn btn-warning" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                         </td>

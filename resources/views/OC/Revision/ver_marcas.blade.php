@@ -56,6 +56,12 @@
 <h3 align="center">OC con marcas de revisión</h3>
 <br>
 
+@if (session('success'))
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i> {{ session('success') }}
+    </div>
+@endif
+
 <div class="card card-outline card-danger">
     <div class="card-header">
         <h3 class="card-title mb-0">
@@ -92,6 +98,56 @@
         </div>
     </div>
 </div>
+
+@if (!empty($OC->Comentario_Ventas))
+    <div class="card card-outline card-info">
+        <div class="card-header">
+            <h3 class="card-title mb-0"><i class="fas fa-comment-dots"></i> Comentario de ventas</h3>
+            <div class="card-tools">
+                <small class="text-muted">
+                    {{ $OC->Comentario_Ventas_Autor ?? 'Ventas' }}
+                    @if (!empty($OC->Comentario_Ventas_At))
+                        · {{ \Carbon\Carbon::parse($OC->Comentario_Ventas_At)->format('d/m/Y H:i') }}
+                    @endif
+                </small>
+            </div>
+        </div>
+        <div class="card-body">
+            <pre class="comentarios-revision">{{ $OC->Comentario_Ventas }}</pre>
+        </div>
+    </div>
+@endif
+
+@can('ventas-access')
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title mb-0"><i class="fas fa-comment"></i> Agregar comentario de ventas</h3>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('OC.comentarioVentas', ['id' => $id]) }}" method="POST">
+                @csrf
+                <div class="form-group mb-2">
+                    <label for="Comentario_Ventas">Escribe tu comentario sobre esta revisión</label>
+                    <textarea
+                        name="Comentario_Ventas"
+                        id="Comentario_Ventas"
+                        class="form-control @error('Comentario_Ventas') is-invalid @enderror"
+                        rows="4"
+                        maxlength="4000"
+                        required
+                        placeholder="Ejemplo: Ya corregí los puntos marcados; favor de revisar...">{{ old('Comentario_Ventas', $OC->Comentario_Ventas) }}</textarea>
+                    @error('Comentario_Ventas')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Guardar comentario
+                </button>
+                <small class="text-muted ml-2">El revisor podrá ver este comentario.</small>
+            </form>
+        </div>
+    </div>
+@endcan
 
 @if (!empty($OC->Revision_OC))
     <div class="card card-outline card-warning">

@@ -63,7 +63,14 @@
                                 <td>{{ $OCS->formatted_date }}</td>                   
                         @endif
                         <td>{{ $OCS->Tipo_servicio }}</td>
-                        <td class="estatusOC">{{ $OCS->Estatus }}</td>
+                        <td class="estatusOC">
+                            {{ $OCS->Estatus }}
+                            @if (!empty($OCS->Comentario_Ventas))
+                                <span class="badge badge-info" title="Ventas agregó un comentario a esta revisión">
+                                    <i class="fas fa-comment-dots"></i>
+                                </span>
+                            @endif
+                        </td>
                         @if($OCS->OC_archivo == 'ESPERA DE DATO' || $OCS->OC_archivo == 'ESPERA DE DATOS')
                                 <td>
                                     <a target="_blank" class="btn btn-secondary" role="button"><i class="fa fa-ban" aria-hidden="true"></i></a>

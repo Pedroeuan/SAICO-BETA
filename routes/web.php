@@ -832,6 +832,10 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::get('OC/PDF/{id}', [OCController::class, 'OC_PDF'])->name('OC.PDF');
     /*Vista del PDF con las marcas de revisión (solo lectura)*/
     Route::get('/OC/revisionPDF/{id}', [OCController::class, 'revisionPDF'])->name('OC.revisionPDF');
+    /*Comentario que agrega ventas a una OC revisada*/
+    Route::post('/OC/comentario/{id}', [OCController::class, 'guardarComentarioVentas'])
+        ->middleware('can:ventas-access')
+        ->name('OC.comentarioVentas');
     /*Descarga del PDF con las marcas de revisión incrustadas*/
     Route::get('/OC/PDFMarcas/{id}', [OCController::class, 'OC_PDF_Marcas'])->name('OC.PDFMarcas');
 

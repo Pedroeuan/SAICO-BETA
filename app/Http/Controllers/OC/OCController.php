@@ -586,6 +586,24 @@ class OCController extends Controller
         $detallesOCModel->Detalles = $detallesJSON;
         $detallesOCModel->save();
 
+        // Buscar las firmas por la orden de servicio; $id no es la clave primaria de Firmantes_OS.
+        $firmantes_OS = Firmantes_OC::firstOrNew([
+            'idOC' => $OC->idOC,
+        ]);
+
+        /* Firmas */
+        $numFirmas = (int) $request->input('numFirmas', 1);
+        $firmasPorCantidad = [
+            1 => $request->input('Firmas_Reportes1', []),
+            2 => $request->input('Firmas_Reportes2', []),
+            3 => $request->input('Firmas_Reportes3', []),
+            4 => $request->input('Firmas_Reportes4', []),
+        ];
+
+        $datosFirmas = $firmasPorCantidad[$numFirmas] ?? [];
+        $datosFirmas['numFirmas'] = $numFirmas;
+        $firmantes_OS->Nombre_Cargo = json_encode($datosFirmas);
+        $firmantes_OS->save();
         return redirect()->route('OC.indexOC');
     }
 
@@ -596,21 +614,6 @@ class OCController extends Controller
     public function updateOC_Revision(Request $request, $id)
     {
         $OC = OC::find($id);
-        /*$request->validate([
-            'Numero_OC' => 'required',
-            'Requisicion' => 'required|string',
-            'Proyecto' => 'required|string',
-            'Lugar_trabajo' => 'required|string',
-            'Revision_OC' => 'nullable|string',
-            'dynamicTableData' => 'required|json',
-        ]);
-
-        $OC = OC::find($id);
-
-        if (!$OC) {
-            return redirect()->route('OC.indexOC_AD')
-                ->with('error', 'Orden de compra no encontrada.');
-        }*/
 
         // La versión de Revision define el estatus final: Revisado V1, V2, etc.
         // Si la columna está vacía, se intenta recuperar la versión del estatus
@@ -637,83 +640,44 @@ class OCController extends Controller
         }
 
         $OC->update([
-            /*'Contrato' => $request->input('Contrato'),
-            'Num_OC' => $request->input('Numero_OC'),
-            'Requisicion' => $request->input('Requisicion'),
-            'Proyecto' => $request->input('Proyecto'),
-            'Lugar_trabajo' => $request->input('Lugar_trabajo'),
-            'Fecha_solicitud' => $request->input('Fecha_solicitud'),
-            'Tipo_servicio' => $request->input('Tipo_servicio'),*/
             'Revision_OC' => $request->input('Revision_OC'),
             'Revision_Marcas' => $marcasGuardadas,
             'Revision' => $revision,
             'Estatus' => 'Revisado ' . $revision,
         ]);
 
-        // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo.
-        /*if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
-            $rutaAnterior = $OC->OC_archivo;
-            if ($rutaAnterior && Storage::disk('public')->exists($rutaAnterior)) {
-                Storage::disk('public')->delete($rutaAnterior);
-            }
-
-            $pdf = $request->file('OC_archivo');
-            $lastFile = collect(Storage::disk('public')->files('Ventas/OC'))
-                ->filter(function ($file) {
-                    return preg_match('/^\d+_/', basename($file));
-                })
-                ->sort()
-                ->last();
-
-            $lastNumber = 0;
-            if ($lastFile) {
-                $lastNumber = (int) explode('_', basename($lastFile))[0];
-            }
-
-            $newNumber = $lastNumber + 1;
-            $newFileNameOC = $newNumber . '_' . $pdf->getClientOriginalName();
-            $pdfPath = $pdf->storeAs('Ventas/OC', $newFileNameOC, 'public');
-
-            $OC->OC_archivo = $pdfPath;
-            $OC->save();
-        }
-
-        // Guardar los detalles de la orden.
-        $detallesOC = json_decode($request->input('dynamicTableData'), true, 512, JSON_THROW_ON_ERROR);
-        if (!is_array($detallesOC) || !array_is_list($detallesOC)) {
-            return back()->withErrors([
-                'dynamicTableData' => 'Los detalles de la orden tienen un formato inválido.',
-            ])->withInput();
-        }
-
-        $subtotalCentavos = 0;
-        foreach ($detallesOC as $detalle) {
-            $cantidad = is_array($detalle) && is_numeric($detalle['cantidad'] ?? null)
-                ? (float) $detalle['cantidad']
-                : 0;
-            $valorUnitario = is_array($detalle) && is_numeric($detalle['valor_unitario'] ?? null)
-                ? (float) $detalle['valor_unitario']
-                : 0;
-
-            $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
-        }
-
-        $ivaCentavos = (int) round($subtotalCentavos * 0.16);
-        $detallesJSON = json_encode([
-            'detallesOC' => $detallesOC,
-            'totales' => [
-                'subtotal' => $subtotalCentavos / 100,
-                'iva' => $ivaCentavos / 100,
-                'total' => ($subtotalCentavos + $ivaCentavos) / 100,
-            ],
-        ], JSON_THROW_ON_ERROR);
-
-        $detallesOCModel = detallesOC::firstOrNew(['idOC' => $OC->idOC]);
-        $detallesOCModel->Detalles = $detallesJSON;
-        $detallesOCModel->save();*/
-
         return redirect()->route('OC.indexOC_AD')
             ->with('success', 'La revisión de la orden de compra se guardó correctamente.');
+    }
+
+    /**
+     * Guarda el comentario que agrega ventas después de revisar una OC.
+     * Se conserva separado de Revision_OC para no perder las observaciones
+     * originales del revisor.
+     */
+    public function guardarComentarioVentas(Request $request, $id)
+    {
+        $request->validate([
+            'Comentario_Ventas' => 'required|string|max:4000',
+        ], [
+            'Comentario_Ventas.required' => 'Escribe un comentario antes de guardarlo.',
+            'Comentario_Ventas.max' => 'El comentario no puede superar los 4000 caracteres.',
+        ]);
+
+        $OC = OC::where('idOC', $id)->first();
+
+        if (!$OC) {
+            abort(404, 'Orden de compra no encontrada.');
+        }
+
+        $OC->Comentario_Ventas = trim((string) $request->input('Comentario_Ventas'));
+        $OC->Comentario_Ventas_Autor = auth()->user()->name ?? null;
+        $OC->Comentario_Ventas_At = now();
+        $OC->save();
+
+        return redirect()
+            ->route('OC.revisionPDF', ['id' => $OC->idOC])
+            ->with('success', 'Tu comentario se guardó correctamente.');
     }
 
     /**

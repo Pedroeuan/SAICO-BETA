@@ -67,7 +67,34 @@
                                                 <a href="{{ route('OC.revisionPDF', ['id' => $id]) }}" target="_blank" class="alert-link">
                                                     Ver el PDF con marcas
                                                 </a>
-                                                para revisar las observaciones y corregir la orden.
+                                                para revisar las observaciones, corregir la orden y agregar un comentario de ventas.
+                                            </div>
+                                        </div>
+                                    @elseif (!empty($OC->Revision_OC) || !empty($OC->Comentario_Ventas) || str_starts_with((string) $OC->Estatus, 'Revisado'))
+                                        <div class="col-sm-12">
+                                            <div class="alert alert-info">
+                                                <i class="fas fa-comment-dots"></i>
+                                                Esta OC ya fue revisada.
+                                                <a href="{{ route('OC.revisionPDF', ['id' => $id]) }}" target="_blank" class="alert-link">
+                                                    Ver la revisión y agregar un comentario
+                                                </a>.
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if (!empty($OC->Comentario_Ventas))
+                                        <div class="col-sm-12">
+                                            <div class="alert alert-info">
+                                                <strong><i class="fas fa-comment-dots"></i> Comentario de ventas:</strong>
+                                                <div style="white-space: pre-wrap;">{{ $OC->Comentario_Ventas }}</div>
+                                                @if (!empty($OC->Comentario_Ventas_Autor) || !empty($OC->Comentario_Ventas_At))
+                                                    <div class="small text-muted mt-1">
+                                                        {{ $OC->Comentario_Ventas_Autor ?? 'Ventas' }}
+                                                        @if (!empty($OC->Comentario_Ventas_At))
+                                                            · {{ \Carbon\Carbon::parse($OC->Comentario_Ventas_At)->format('d/m/Y H:i') }}
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     @endif

@@ -145,12 +145,25 @@
                                     <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Revisión OC</h3>
                                 </div>
                                 <div class="card-body p-2">
+                                    @if (!empty($OC->Comentario_Ventas))
+                                        <div class="alert alert-info">
+                                            <strong><i class="fas fa-comment-dots"></i> Comentario de ventas</strong>
+                                            <div class="small text-muted mb-1">
+                                                {{ $OC->Comentario_Ventas_Autor ?? 'Ventas' }}
+                                                @if (!empty($OC->Comentario_Ventas_At))
+                                                    · {{ \Carbon\Carbon::parse($OC->Comentario_Ventas_At)->format('d/m/Y H:i') }}
+                                                @endif
+                                            </div>
+                                            <div style="white-space: pre-wrap;">{{ $OC->Comentario_Ventas }}</div>
+                                        </div>
+                                    @endif
+
                                     <textarea form="OC"
                                               name="Revision_OC"
                                               id="Revision_OC"
                                               class="form-control @error('Revision_OC') is-invalid @enderror"
                                               placeholder="Escribe aquí las observaciones de la revisión..."
-                                              style="height: 80vh; resize: vertical;">{{ old('Revision_OC', $OC->Revision_OC) }}</textarea>
+                                              style="height: 72vh; resize: vertical;">{{ old('Revision_OC', $OC->Revision_OC) }}</textarea>
                                     @error('Revision_OC')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                     @enderror
