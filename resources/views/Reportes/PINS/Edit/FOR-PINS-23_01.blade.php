@@ -58,10 +58,29 @@
         overflow-y: auto;
         }
 
-    </style>
+    
+</style>
 @endsection
 
 @section('content')
+<style>
+#FOR-PINS-23-01 .foto23-tarjeta { border:1px solid var(--bs-primary, #007bff); border-radius:10px; padding:16px; background:white; margin:12px 0 20px; }
+#FOR-PINS-23-01 .foto23-cabecera { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; color:#27466b; font-weight:600; }
+#FOR-PINS-23-01 .foto23-insignia { font-size:12px; border-radius:12px; padding:4px 10px; background:#edf3fa; color:#35577b; }
+#FOR-PINS-23-01 .foto23-tarjeta .titulo-foto-23 { margin-bottom:14px; }
+#FOR-PINS-23-01 .foto23-tarjeta .image-preview { height:250px; display:flex; align-items:center; justify-content:center; background:#f7f9fc; border:1px solid #e1e7ef; border-radius:6px; overflow:hidden; position:relative; margin-bottom:14px; }
+#FOR-PINS-23-01 .foto23-tarjeta .image-preview img { width:auto !important; height:auto !important; max-width:100% !important; max-height:248px !important; object-fit:contain; border:0; padding:0; }
+#FOR-PINS-23-01 .foto23-opciones { background:#f4f7fb; border-radius:6px; padding:10px 12px; margin-bottom:12px; }
+#FOR-PINS-23-01 .foto23-opciones .form-check { margin:4px 0 !important; }
+#FOR-PINS-23-01 .foto23-tarjeta textarea { min-height:76px; margin-bottom:14px; }
+#FOR-PINS-23-01 .foto23-acciones { display:flex; flex-wrap:wrap; gap:8px; align-items:center; border-top:1px solid #e1e7ef; padding-top:12px; margin-top:12px; }
+#FOR-PINS-23-01 .foto23-acciones .btn { margin:0 !important; }
+#FOR-PINS-23-01 .foto23-acciones [data-anotar-imagen-guardada] { display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:7px; border:1px solid #e0a800; background:#ffc107; color:#322600; font-weight:600; line-height:1.3; box-shadow:0 2px 4px rgba(120,85,0,.14); transition:background .15s, box-shadow .15s; }
+#FOR-PINS-23-01 .foto23-acciones [data-anotar-imagen-guardada]::before { content:'\270E'; font-size:17px; line-height:1; }
+#FOR-PINS-23-01 .foto23-acciones [data-anotar-imagen-guardada]:hover { background:#eeb300; border-color:#c99700; box-shadow:0 3px 6px rgba(120,85,0,.2); }
+#FOR-PINS-23-01 .foto23-acciones [data-anotar-imagen-guardada]:focus-visible { outline:3px solid #805e00; outline-offset:3px; }
+#FOR-PINS-23-01 .foto23-reemplazo { flex-basis:100%; font-size:12px; color:#52657b; }
+</style>
 <br>
 <br>
 <br>
@@ -1153,6 +1172,8 @@
                                                 @foreach($Fotos_Comentarios as $index => $foto)
                                                     <div class="col-sm-6" id="image-container-{{ $index }}">
                                                         <div class="form-group">
+                                                            <label class="mt-2" for="titulo-foto-{{ $index }}">Título de la imagen</label>
+                                                            <input id="titulo-foto-{{ $index }}" type="text" class="form-control titulo-foto-23" name="titulos_fotos[{{ $index }}]" maxlength="255" value="{{ old('titulos_fotos.'.$index, $foto['titulo'] ?? '') }}">
                                                             <!-- Vista previa de la imagen existente -->
                                                             <label for="replace_image_{{ $index }}">Imagen Subida {{ $index + 1 }}:</label>
                                                             <div class="image-preview mt-2">
@@ -1203,6 +1224,7 @@
                                                             <!-- Campo para el comentario -->
                                                             <textarea class="form-control mt-2" name="comments[{{ $index }}]" placeholder="Comentario">{{ $foto['comentario'] }}</textarea>
 
+                                                            
                                                             <!-- Campo oculto para la imagen en base64 -->
                                                             <input type="hidden" name="images_base64[{{ $index }}]" id="replace_image_{{ $index }}-base64">
 
@@ -1581,7 +1603,7 @@ $(document).ready(function() {
             });
 
             function actualizarInputsA1() {
-                var selectedOption = $('#accesoriosSelect1').find('option:selected');
+                var selectedOption = $('#accesoriosSelect').find('option:selected');
 
                 // Extraer los datos de los atributos "data-"
                 var marca = selectedOption.data('marca') || '';
@@ -1589,13 +1611,12 @@ $(document).ready(function() {
                 var ns = selectedOption.data('ns') || '';
 
                 // Rellenar los inputs con los valores obtenidos
-                $('#marcaInputA1').val(marca);
-                $('#modeloInputA1').val(modelo);
-                $('#nsInputA1').val(ns);
+                $('#marcaInputA').val(marca);
+                $('#nsInputA').val(ns);
             }
             
                 // Evento cuando se cambia la selección en el select
-                $('#accesoriosSelect1').on('change', function() {
+                $('#accesoriosSelect').on('change', function() {
                     actualizarInputsA1();
                 });
 
@@ -1783,4 +1804,91 @@ $(document).ready(function() {
 </script>
 <script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas.js') }}"></script>
 <script src="{{ asset('js/Reportes_CombinacionCeldasAgrupadas_Edit.js') }}"></script>
+<script>
+// El titulo se conserva por fotografia y puede adaptarse sin cambiar las casillas.
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('FOR-PINS-23-01');
+    if (!form) return;
+    // Organiza las fotografias sin sustituir controles ni sus eventos.
+    const organizarFoto = (grupo, titulo) => {
+        if (!grupo.classList.contains('foto23-tarjeta')) {
+            grupo.classList.add('foto23-tarjeta');
+            const cabecera = document.createElement('div');
+            cabecera.className = 'foto23-cabecera';
+            const nombre = document.createElement('span');
+            const original = grupo.querySelector('label[for^="replace_image"], label[for^="image"]');
+            nombre.textContent = original?.textContent.trim() || 'Imagen';
+            if (original) original.hidden = true;
+            const insignia = document.createElement('span');
+            insignia.className = 'foto23-insignia';
+            cabecera.append(nombre, insignia);
+            grupo.prepend(cabecera);
+            const opciones = document.createElement('div');
+            opciones.className = 'foto23-opciones';
+            grupo.querySelectorAll('.form-check').forEach(check => opciones.append(check));
+            const preview = grupo.querySelector('.image-preview');
+            if (preview) titulo.after(preview);
+            if (preview) preview.after(opciones); else titulo.after(opciones);
+            const comentario = grupo.querySelector('textarea[name^="comments"]');
+            if (comentario) opciones.after(comentario);
+            const acciones = document.createElement('div');
+            acciones.className = 'foto23-acciones';
+            const archivo = grupo.querySelector('input[type="file"]');
+            if (archivo) {
+                const reemplazo = document.createElement('label');
+                reemplazo.className = 'foto23-reemplazo';
+                reemplazo.append(document.createTextNode('Subir o reemplazar imagen'), archivo);
+                acciones.append(reemplazo);
+            }
+            grupo.querySelectorAll('.remove-image, .delete-image').forEach(boton => acciones.append(boton));
+            grupo.querySelectorAll('br').forEach(salto => salto.remove());
+            grupo.append(acciones);
+        }
+        const acciones = grupo.querySelector('.foto23-acciones');
+        const marcar = grupo.querySelector('[data-anotar-imagen-guardada]');
+        if (marcar && marcar.textContent !== 'Señalar hallazgos') marcar.textContent = 'Señalar hallazgos';
+        if (marcar && marcar.parentElement !== acciones) acciones.prepend(marcar);
+        const insignia = grupo.querySelector('.foto23-insignia');
+        const estado = grupo.querySelector('.RG-Principal-checkbox')?.checked ? 'Principal'
+            : grupo.querySelector('.RG-Secundario-checkbox')?.checked ? 'Secundaria' : 'Fotografia';
+        if (insignia.textContent !== estado) insignia.textContent = estado;
+    };
+    const prepararTitulos = () => {
+        form.querySelectorAll('input[name^="images_base64"]').forEach(base64 => {
+            const grupo = base64.closest('.form-group');
+            if (!grupo) return;
+            let titulo = grupo.querySelector('.titulo-foto-23');
+            if (!titulo) {
+                const etiqueta = document.createElement('label');
+                etiqueta.className = 'mt-2';
+                etiqueta.textContent = 'Título de la imagen';
+                titulo = document.createElement('input');
+                titulo.type = 'text'; titulo.className = 'form-control titulo-foto-23';
+                titulo.name = base64.name.replace('images_base64', 'titulos_fotos');
+                titulo.maxLength = 255;
+                grupo.prepend(etiqueta, titulo);
+            }
+            const predeterminado = () => grupo.querySelector('.RG-Principal-checkbox')?.checked
+                ? 'RESULTADO Y GRAFICAS SONYKS'
+                : grupo.querySelector('.RG-Secundario-checkbox')?.checked
+                    ? 'DIAGRAMA DE TUBERÍA SONYKS' : 'REGISTRO FOTOGRÁFICO';
+            if (!titulo.value.trim()) titulo.value = predeterminado();
+            organizarFoto(grupo, titulo);
+            if (titulo.dataset.preparado) return;
+            titulo.dataset.preparado = '1';
+            let anterior = predeterminado();
+            grupo.querySelectorAll('.RG-Principal-checkbox, .RG-Secundario-checkbox').forEach(check => {
+                check.addEventListener('change', () => {
+                    const nuevo = predeterminado();
+                    if (!titulo.value.trim() || titulo.value === anterior) titulo.value = nuevo;
+                    anterior = nuevo;
+                    organizarFoto(grupo, titulo);
+                });
+            });
+        });
+    };
+    prepararTitulos();
+    new MutationObserver(prepararTitulos).observe(form, {childList:true, subtree:true});
+});
+</script>
 @endsection

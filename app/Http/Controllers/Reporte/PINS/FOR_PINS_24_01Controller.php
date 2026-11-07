@@ -850,12 +850,12 @@ class FOR_PINS_24_01Controller extends Controller
             'Detalles_Generales.No_Reporte' => 'required|string|max:255',
             'Detalles_Generales.Cliente' => 'nullable|string|max:255',
             'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
             'Detalles_Generales.Pieza' => 'nullable|string|max:255',
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
@@ -965,7 +965,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string',
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
@@ -1487,12 +1487,12 @@ class FOR_PINS_24_01Controller extends Controller
             'Detalles_Generales.No_Reporte' => 'required|string|max:255',
             'Detalles_Generales.Cliente' => 'nullable|string|max:255',
             'Detalles_Generales.Contrato' => 'nullable|string|max:255',
-            'Detalles_Generales.Proyecto' => 'nullable|string|max:255',
-            'Detalles_Generales.Orden_Trabajo' => 'nullable|string|max:255',
+            'Detalles_Generales.Proyecto' => 'nullable|string',
+            'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string|max:255',
-            'Detalles_Generales.Partida' => 'nullable|string|max:255',
+            'Detalles_Generales.Partida' => 'nullable|string',
             'Detalles_Generales.Lugar' => 'nullable|string|max:255',
-            'Detalles_Generales.Isometrico_Plano' => 'nullable|string|max:255',
+            'Detalles_Generales.Isometrico_Plano' => 'nullable|string',
             'Detalles_Generales.Pieza' => 'nullable|string|max:255',
             'Detalles_Generales.Material' => 'nullable|string|max:255',
             'Detalles_Generales.Procedimiento' => 'nullable|string|max:255',
@@ -1603,7 +1603,7 @@ class FOR_PINS_24_01Controller extends Controller
             'Datos_Equipo.QR_PDF' => 'nullable|string',
             'Datos_Equipo.PDF_UNIFICADO' => 'nullable|string',
 
-            'Datos_Equipo.Observaciones' => 'nullable|string|max:255',
+            'Datos_Equipo.Observaciones' => 'nullable|string',
 
             /*Resultados_Juntas*/
             /* FILAS DINÁMICAS */
