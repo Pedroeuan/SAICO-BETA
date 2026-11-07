@@ -495,6 +495,8 @@
                             $chunks[] = [
                                 'tipo' => 'rg_doble',
                                 'principal' => $rgTemp['path'],
+                                'titulo_principal' => $rgTemp['titulo'] ?? '',
+                                'titulo_secundario' => $foto['titulo'] ?? '',
                                 'secundario' => $foto['path'],
                             ];
 
@@ -586,7 +588,7 @@
                         </tr>
                         <tr>
                             <th>PROCEDIMIENTO:</th>
-                            <td class="lineaInferior"></td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Procedimiento'] ?? '' }}</td>
                             <th>ESPESOR DIÁMETRO NOMINAL NPS:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Dia_NPS'] ?? '' }}</td>
                         </tr>
@@ -606,9 +608,9 @@
                     <thead class="encabezadoAzul">
                         <tr><th>
                             @if($esRGDoble && $fotosGrupo['principal'] )
-                            RESULTADO Y GRAFICAS SONYKS
+                            {{ trim($fotosGrupo['titulo_principal'] ?? '') ?: 'RESULTADO Y GRAFICAS SONYKS' }}
                             @else
-                            REGISTRO FOTOGRÁFICO
+                            {{ trim($fotosGrupo[0]['titulo'] ?? '') ?: 'REGISTRO FOTOGRÁFICO' }}
                             @endif
                         </th></tr>
                     </thead>  
@@ -626,7 +628,7 @@
                                     <thead class="encabezadoAzul" >
                                         <tr><th >
                                             @if($esRGDoble && $fotosGrupo['secundario'])
-                                            DIAGRAMA DE TUBERÍA SONYKS
+                                            {{ trim($fotosGrupo['titulo_secundario'] ?? '') ?: 'DIAGRAMA DE TUBERÍA SONYKS' }}
                                             @endif
                                         </th></tr>
                                     </thead>
