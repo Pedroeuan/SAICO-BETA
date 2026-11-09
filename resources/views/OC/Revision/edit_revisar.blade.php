@@ -76,6 +76,12 @@
         padding: 20px;
         text-align: center;
     }
+    .comentarios-revision {
+        white-space: pre-wrap;
+        margin: 0;
+        font-family: inherit;
+        font-size: 0.95rem;
+    }
 
     </style>
 @endsection
@@ -96,6 +102,39 @@
     </div>
 @endif
 <br>
+
+@if (!empty($OC->Revision_OC))
+    <div class="card card-outline card-warning">
+        <div class="card-header">
+            <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Comentarios de revisión</h3>
+        </div>
+        <div class="card-body">
+            <pre class="comentarios-revision">{{ $OC->Revision_OC }}</pre>
+        </div>
+    </div>
+    <br>
+@endif
+
+@if (!empty($OC->Comentario_Ventas))
+    <div class="card card-outline card-info">
+        <div class="card-header">
+            <h3 class="card-title mb-0"><i class="fas fa-comment-dots"></i> Comentario de ventas</h3>
+            <div class="card-tools">
+                <small class="text-muted">
+                    {{ $OC->Comentario_Ventas_Autor ?? 'Ventas' }}
+                    @if (!empty($OC->Comentario_Ventas_At))
+                        · {{ \Carbon\Carbon::parse($OC->Comentario_Ventas_At)->format('d/m/Y H:i') }}
+                    @endif
+                </small>
+            </div>
+        </div>
+        <div class="card-body">
+            <pre class="comentarios-revision">{{ $OC->Comentario_Ventas }}</pre>
+        </div>
+    </div>
+    <br>
+@endif
+
     <div class="card">
         <div class="card-body row">
             <form id="OC" action="{{ route('OC.updateOC_Revision', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
@@ -130,7 +169,7 @@
                                                 <i class="far fa-square"></i>
                                             </button>
                                             <input type="color" id="marcaColor" value="#e00000" title="Color de la marca"
-                                                   style="width: 38px; height: 31px; padding: 2px; border: 1px solid #ced4da; border-radius: 4px;">
+                                                style="width: 38px; height: 31px; padding: 2px; border: 1px solid #ced4da; border-radius: 4px;">
                                             <button type="button" class="btn btn-sm btn-outline-secondary" id="marcaDeshacer" title="Deshacer">
                                                 <i class="fas fa-undo"></i>
                                             </button>
@@ -154,25 +193,12 @@
                                     <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Revisión OC</h3>
                                 </div>
                                 <div class="card-body p-2">
-                                    @if (!empty($OC->Comentario_Ventas))
-                                        <div class="alert alert-info">
-                                            <strong><i class="fas fa-comment-dots"></i> Comentario de ventas</strong>
-                                            <div class="small text-muted mb-1">
-                                                {{ $OC->Comentario_Ventas_Autor ?? 'Ventas' }}
-                                                @if (!empty($OC->Comentario_Ventas_At))
-                                                    · {{ \Carbon\Carbon::parse($OC->Comentario_Ventas_At)->format('d/m/Y H:i') }}
-                                                @endif
-                                            </div>
-                                            <div style="white-space: pre-wrap;">{{ $OC->Comentario_Ventas }}</div>
-                                        </div>
-                                    @endif
-
                                     <textarea form="OC"
-                                              name="Revision_OC"
-                                              id="Revision_OC"
-                                              class="form-control @error('Revision_OC') is-invalid @enderror"
-                                              placeholder="Escribe aquí las observaciones de la revisión..."
-                                              style="height: 72vh; resize: vertical;">{{ old('Revision_OC', $OC->Revision_OC) }}</textarea>
+                                            name="Revision_OC"
+                                            id="Revision_OC"
+                                            class="form-control @error('Revision_OC') is-invalid @enderror"
+                                            placeholder="Escribe aquí las observaciones de la revisión..."
+                                            style="height: 72vh; resize: vertical;"></textarea>
                                     @error('Revision_OC')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                     @enderror

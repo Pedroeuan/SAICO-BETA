@@ -74,7 +74,7 @@
             @endif
             @if (stripos((string) $OC->Estatus, 'Revisado') === 0)
                 <span class="badge badge-info ml-1"
-                      title="{{ !empty($OC->Revision_At) ? 'Fecha de revisión: ' . \Carbon\Carbon::parse($OC->Revision_At)->format('d/m/Y H:i') : '' }}">
+                    title="{{ !empty($OC->Revision_At) ? 'Fecha de revisión: ' . \Carbon\Carbon::parse($OC->Revision_At)->format('d/m/Y H:i') : '' }}">
                     <i class="fas fa-user-check"></i>
                     Revisado por: {{ $OC->Revision_Autor ?: 'No registrado' }}
                 </span>
@@ -105,6 +105,17 @@
         </div>
     </div>
 </div>
+
+@if (!empty($OC->Revision_OC))
+    <div class="card card-outline card-warning">
+        <div class="card-header">
+            <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Comentarios de revisión</h3>
+        </div>
+        <div class="card-body">
+            <pre class="comentarios-revision">{{ $OC->Revision_OC }}</pre>
+        </div>
+    </div>
+@endif
 
 @if (!empty($OC->Comentario_Ventas))
     <div class="card card-outline card-info">
@@ -142,7 +153,7 @@
                         rows="4"
                         maxlength="4000"
                         required
-                        placeholder="Ejemplo: Ya corregí los puntos marcados; favor de revisar...">{{ old('Comentario_Ventas', $OC->Comentario_Ventas) }}</textarea>
+                        placeholder="Ejemplo: Ya corregí los puntos marcados; favor de revisar..."></textarea>
                     @error('Comentario_Ventas')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -155,17 +166,6 @@
         </div>
     </div>
 @endcan
-
-@if (!empty($OC->Revision_OC))
-    <div class="card card-outline card-warning">
-        <div class="card-header">
-            <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Comentarios de revisión</h3>
-        </div>
-        <div class="card-body">
-            <pre class="comentarios-revision">{{ $OC->Revision_OC }}</pre>
-        </div>
-    </div>
-@endif
 @stop
 
 @section('js')
@@ -180,4 +180,24 @@
     };
 </script>
 <script src="{{ asset('js/OC_revision_marcas.js') }}"></script>
+
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--datatable -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
+<!--sweet alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
 @endsection

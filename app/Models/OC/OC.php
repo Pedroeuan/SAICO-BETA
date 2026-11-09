@@ -22,7 +22,7 @@ class OC extends Model
         'Proyecto',
         'Estatus',
         'OC_archivo',
-        'Revision',
+        //'Revision',
         'Revision_OC',
         'Revision_Marcas',
         'Revision_Autor',
