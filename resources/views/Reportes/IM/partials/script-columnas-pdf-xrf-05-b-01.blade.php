@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         invalidate();
         preview.classList.add('d-none');
-        setStatus('Selección cambiada. Presione “Extraer datos y calcular promedio”.', false);
+        setStatus('Selección cambiada. Presione “Procesar análisis”.', false);
     }));
     form.addEventListener('submit', function (event) {
         if (requirePreviewBeforeSubmit && file.files.length && !processed) {
