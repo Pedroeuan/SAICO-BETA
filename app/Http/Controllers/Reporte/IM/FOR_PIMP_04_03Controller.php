@@ -773,6 +773,26 @@ class FOR_PIMP_04_03Controller extends Controller
         // Datos obtenidos: conserva el vínculo incluso sin ejecutar JavaScript.
         $datosEquipo['DESCRIPCION_MATERIAL'] = (string) $request->input('Detalles_Generales.Nombre_Pieza', $datosEquipo['DESCRIPCION_MATERIAL'] ?? '');
         $datosEquipo['DUREZA_BRINELL'] = $datosEquipo['PROMEDIO_DUREZA'];
+        // La conversion automatica utiliza lecturas Brinell; otras escalas conservan la captura manual.
+        if ($valoresNumericos && $request->input('Datos_Equipo.METODO_CALCULO_DUREZA') === 'a370_tabla3') {
+            $escala = strtoupper(trim((string) $request->input('Datos_Equipo.ESCALA_DUREZA', 'HBW'))) ?: 'HBW';
+            if (!in_array($escala, ['HB', 'HBW'], true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'Datos_Equipo.ESCALA_DUREZA' => 'Para calcular tensión y cedencia automáticamente capture lecturas en HB o HBW.',
+                ]);
+            }
+            $datosEquipo['ESCALA_DUREZA'] = $escala;
+        }
+        // Reutiliza la conversion del 04_02 en Crear y Editar, recalculada en servidor.
+        app(\App\Services\ReferenciasMecanicasIM::class)->guardarConversionDureza($request, $datosEquipo);
+        // Conserva la ubicacion del espacio sin patron para dibujarlo directamente en el PDF.
+        if ($request->has('Patron_Grano.activo')) {
+            $datosEquipo['ESPACIO_SIN_PATRON'] = $request->boolean('Patron_Grano.activo') ? null : [
+                'pagina' => max(1, (int) $request->input('Patron_Grano.layout.pagina', 1)),
+                'posicion' => $request->input('Patron_Grano.layout.posicion', 'abajo_izquierda'),
+                'comment' => (string) $request->input('Patron_Grano.descripcion', ''),
+            ];
+        }
     }
 
     private function guardarReferenciasMecanicas(Request $request, array &$equipo): void
@@ -2581,7 +2601,7 @@ class FOR_PIMP_04_03Controller extends Controller
             foreach ($fotos as $indiceFoto => $foto) {
                 $esCuadroTexto = !empty($foto['es_cuadro_texto']);
                 $rutaFoto = null;
-                if (!$esCuadroTexto) {
+                if (!$esCuadroTexto && empty($foto['sin_fotografia'])) {
                     $rutaFoto = storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
 
                     if (!File::exists($rutaFoto)) {
@@ -2609,6 +2629,7 @@ class FOR_PIMP_04_03Controller extends Controller
                     'path' => $rutaFoto,
                     'comment' => $foto['comentario'] ?? '',
                     'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
+                    'sin_fotografia' => !empty($foto['sin_fotografia']),
                     'una_hoja' => $distribucionFoto['una_hoja'],
                     'pagina' => $distribucionFoto['pagina'],
                     'posicion' => $distribucionFoto['posicion'],
@@ -2654,6 +2675,19 @@ class FOR_PIMP_04_03Controller extends Controller
             'Firmas_Reportes' => $Firmas_Reportes,
         ];
 
+        // Una fotografia asignada por el tecnico tiene prioridad sobre el espacio vacio.
+        $sinPatron = $Datos_Equipo['ESPACIO_SIN_PATRON'] ?? null;
+        // Reportes guardados antes de incorporar la marca tambien reservan el tercer espacio.
+        if (!is_array($sinPatron) && empty($Detalles_Generales['PATRON_GRANO'])
+            && !empty($Detalles_Generales['ANALISIS_IMAGEN'])) {
+            $sinPatron = ['pagina' => 1, 'posicion' => 'abajo_izquierda', 'comment' => ''];
+        }
+        if (is_array($sinPatron) && !collect($Fotos)->contains(fn ($foto) =>
+            (int) ($foto['pagina'] ?? 1) === (int) $sinPatron['pagina']
+            && ($foto['posicion'] ?? '') === $sinPatron['posicion'])) {
+            $data['Fotos'][] = array_merge($sinPatron, ['path' => null, 'sin_fotografia' => true]);
+            $Fotos = $data['Fotos'];
+        }
         // Generar el PDF principal en orientación horizontal
         $pdf1 = PDF::loadView($vistaPrincipal, $data)->setPaper('letter', 'portrait');
         $pdf2Content = null;
@@ -2661,6 +2695,15 @@ class FOR_PIMP_04_03Controller extends Controller
 
         if (!empty($Fotos)) {
             $pdf2 = PDF::loadView($vistaFotos, $data)->setPaper('letter', 'portrait');
+            $pdf2->getDomPDF()->setCallbacks([['event' => 'end_frame', 'f' => function ($frame, $canvas) {
+                $nodo = $frame->get_node();
+                if (!$nodo instanceof \DOMElement || $nodo->getAttribute('data-photo-cross') !== '1') return;
+                $caja = $frame->get_border_box();
+                $x = $caja['x']; $y = $caja['y']; $w = $caja['w']; $h = $caja['h'];
+                $canvas->rectangle($x, $y, $w, $h, [0, 0, 0], 0.75);
+                $canvas->line($x, $y, $x + $w, $y + $h, [0, 0, 0], 0.75);
+                $canvas->line($x + $w, $y, $x, $y + $h, [0, 0, 0], 0.75);
+            }]]);
             $pdf2Content = $pdf2->output();
         }
 

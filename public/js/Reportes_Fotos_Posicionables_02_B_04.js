@@ -865,7 +865,7 @@
 
         // La tabla proviene del servicio PHP: una sola fuente para navegador y servidor.
         // Blade publica esta configuracion en la seccion de scripts, fuera del elemento form.
-        var configA370 = formulario.id === 'FOR-PIMP-04_02' ? document.querySelector('[data-conversion-a370]') : null;
+        var configA370 = ['FOR-PIMP-04_02', 'FOR-PIMP-04_03'].includes(formulario.id) ? document.querySelector('[data-conversion-a370]') : null;
         var conversion = configA370 ? JSON.parse(configA370.textContent) : null;
         var tension = formulario.querySelector('[name="Datos_Equipo[RESISTENCIA_TENSION]"]');
         var cedencia = formulario.querySelector('[name="Datos_Equipo[RESISTENCIA_CEDENCIA]"]');
@@ -1152,3 +1152,46 @@
         actualizar();
     });
 }(window, document));
+
+// Vista compartida de dureza 02/04; mueve los nodos existentes para conservar sus eventos.
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('FOR-PIMP-02_B_04');
+    const escala = form?.querySelector('#escalaDureza0204');
+    const cabecera = escala?.closest('.bg-primary');
+    const tabla = form?.querySelector('[name="Dureza[ANTES_A]"]')?.closest('table');
+    if (!cabecera || !tabla) return;
+    // Conserva el titulo azul, su texto y el selector con las clases originales de Blade.
+    const bloque = document.createElement('section');
+    bloque.className = 'dureza-resumen-0204';
+    cabecera.before(bloque);
+    bloque.appendChild(cabecera);
+    const ayuda = bloque.nextElementSibling;
+    if (ayuda?.tagName === 'SMALL') {
+        ayuda.className = 'dureza-resumen-ayuda';
+        bloque.appendChild(ayuda);
+    }
+    const contenedor = document.createElement('div');
+    contenedor.className = 'table-responsive';
+    tabla.before(contenedor);
+    contenedor.appendChild(tabla);
+    bloque.appendChild(contenedor);
+    tabla.classList.add('dureza-resumen-tabla');
+    const estilo = document.createElement('style');
+    estilo.textContent = `
+        .dureza-resumen-0204{width:100%;border:1px solid #d5e0ed;border-radius:10px;background:white;margin:12px 0;overflow:hidden;text-align:left}
+        .dureza-resumen-ayuda{display:block;padding:10px 18px;font-size:12px;color:#60758c;line-height:1.5}
+        .dureza-resumen-0204>.table-responsive{margin:0;padding:0 12px 12px;box-sizing:border-box}
+        .dureza-resumen-tabla{margin:0!important;min-width:700px;border-collapse:separate;border-spacing:0;table-layout:fixed}
+        .dureza-resumen-tabla thead th{background:#f4f7fb;color:#354d68;padding:12px 8px!important;font-size:12px;vertical-align:middle!important;border-color:#dce4ef!important;line-height:1.6}
+        .dureza-resumen-tabla thead th:first-child{font-size:13px;color:#23476e}
+        .dureza-resumen-tabla small{font-weight:400;color:#6b8096}
+        .dureza-resumen-tabla select{font-size:12px;border-radius:5px;margin-top:5px}
+        .dureza-resumen-tabla tbody td{padding:12px 8px!important;border-color:#dce4ef!important;vertical-align:middle!important}
+        .dureza-resumen-tabla tbody td:first-child{text-align:left!important;font-size:12px;line-height:1.6;color:#3c536d;background:#f8fafc}
+        .dureza-resumen-tabla tbody tr:first-child td:first-child{border-left:3px solid #1769dc}
+        .dureza-resumen-tabla tbody tr:nth-child(2) td:first-child{border-left:3px solid #198754}
+        .dureza-resumen-tabla input.form-control{text-align:center;font-size:15px;font-weight:600;min-height:38px;border-radius:6px}
+        .dureza-resumen-tabla input[readonly]{background:#f0f4f8;color:#274a70;border-color:#e0e7ef}
+    `;
+    document.head.appendChild(estilo);
+});

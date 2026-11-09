@@ -970,6 +970,14 @@ class FOR_PIMP_03_B_01Controller extends Controller
         // Guardar Detalles_Generales como JSON en la base de datos
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
+
+        if ($request->has('Patron_Grano.activo')) {
+            $validatedData['Datos_Equipo']['ESPACIO_SIN_PATRON'] = $request->boolean('Patron_Grano.activo') ? null : [
+                'pagina' => max(1, (int) $request->input('Patron_Grano.layout.pagina', 1)),
+                'posicion' => $request->input('Patron_Grano.layout.posicion', 'abajo_izquierda'),
+                'comment' => (string) $request->input('Patron_Grano.descripcion', ''),
+            ];
+        }
         $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
 
         $Reportes->Estatus = $Estatus; // Asignar el estatus
@@ -1016,6 +1024,14 @@ class FOR_PIMP_03_B_01Controller extends Controller
         |--------------------------------------------------------------------------
         */
 
+
+        if ($request->has('Patron_Grano.activo')) {
+            $validatedData['Datos_Equipo']['ESPACIO_SIN_PATRON'] = $request->boolean('Patron_Grano.activo') ? null : [
+                'pagina' => max(1, (int) $request->input('Patron_Grano.layout.pagina', 1)),
+                'posicion' => $request->input('Patron_Grano.layout.posicion', 'abajo_izquierda'),
+                'comment' => (string) $request->input('Patron_Grano.descripcion', ''),
+            ];
+        }
         $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
         $Reportes->save();
         
@@ -1488,7 +1504,8 @@ class FOR_PIMP_03_B_01Controller extends Controller
             (string) ($validatedData['Detalles_Generales']['Contrato'] ?? ''),
             (string) ($validatedData['Detalles_Generales']['No_Reporte'] ?? ''),
             $patronHistorico
-        ) ?? $patronHistorico;
+        );
+        if (!$request->has('Patron_Grano.activo')) $patronGrano = $patronHistorico;
 
         $servicioMetalografia = app(ServicioMetalografiaReporte::class);
         // Un token nuevo reemplaza el análisis; sin token se conserva el histórico ya guardado.
@@ -1541,6 +1558,15 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
 
         // Actualiza los detalles generales como JSON en la base de datos
+
+        if ($request->has('Patron_Grano.activo')) {
+            $validatedData['Datos_Equipo']['ESPACIO_SIN_PATRON'] = $request->boolean('Patron_Grano.activo') ? null : [
+                'pagina' => max(1, (int) $request->input('Patron_Grano.layout.pagina', 1)),
+                'posicion' => $request->input('Patron_Grano.layout.posicion', 'abajo_izquierda'),
+                'comment' => (string) $request->input('Patron_Grano.descripcion', ''),
+            ];
+        }
+
         $Reporte->update([
             'Detalles_Generales' => json_encode($validatedData['Detalles_Generales']),
             'Datos_Equipo' => json_encode($validatedData['Datos_Equipo']) 
@@ -2108,7 +2134,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
                     : storage_path('app/public/' . str_replace('storage/', '', $foto['ruta'] ?? ''));
 
                 // Un cuadro de texto no tiene ruta física y aun así debe llegar a la plantilla.
-                if (!$esCuadroTexto && !File::exists($rutaFoto)) {
+                if (!$esCuadroTexto && empty($foto['sin_fotografia']) && !File::exists($rutaFoto)) {
                     continue;
                 }
 
@@ -2119,6 +2145,7 @@ class FOR_PIMP_03_B_01Controller extends Controller
                     'path' => $rutaFoto,
                     'comment' => $foto['comentario'] ?? '',
                     'es_cuadro_texto' => $esCuadroTexto ? 1 : 0,
+                    'sin_fotografia' => !empty($foto['sin_fotografia']),
                     'una_hoja'  => $foto['una_hoja'] ?? 0,
                     'pagina' => max(1, (int) ($foto['pagina'] ?? (intdiv(count($Fotos), 4) + 1))),
                     'posicion' => $foto['posicion']
@@ -2135,6 +2162,13 @@ class FOR_PIMP_03_B_01Controller extends Controller
         app(ServicioMetalografiaReporte::class)->agregarAnalisisAlPdf($Fotos, $Detalles_Generales, $Datos_Equipo);
         // El tamaño de grano usa la misma celda y proporciones que cualquier fotografía del formato.
         app(ServicioPatronGranoReporte::class)->agregarAlPdf($Fotos, $Detalles_Generales);
+        $sinPatron = $Datos_Equipo['ESPACIO_SIN_PATRON'] ?? null;
+        if (is_array($sinPatron) && empty($Detalles_Generales['PATRON_GRANO'])
+            && !collect($Fotos)->contains(fn ($foto) => (int) ($foto['pagina'] ?? 1) === (int) $sinPatron['pagina']
+                && ($foto['posicion'] ?? '') === $sinPatron['posicion'])) {
+            $Fotos[] = array_merge($sinPatron, ['path' => null, 'sin_fotografia' => true]);
+        }
+
         $totalFotos = count($Fotos);
 
         $data = [
@@ -2176,8 +2210,16 @@ class FOR_PIMP_03_B_01Controller extends Controller
         $celda = null;
         $dompdf = $pdf->getDomPDF();
         // La posición se obtiene de la propia celda; no depende de coordenadas fijas del encabezado.
-        $dompdf->setCallbacks([['event' => 'end_frame', 'f' => function ($frame) use (&$celda) {
+        $dompdf->setCallbacks([['event' => 'end_frame', 'f' => function ($frame, $canvas) use (&$celda) {
             $nodo = $frame->get_node();
+            if ($nodo instanceof \DOMElement && $nodo->getAttribute('data-photo-cross') === '1') {
+                $caja = $frame->get_border_box();
+                $x = $caja['x']; $y = $caja['y']; $w = $caja['w']; $h = $caja['h'];
+                $canvas->rectangle($x, $y, $w, $h, [0, 0, 0], 0.75);
+                $canvas->line($x, $y, $x + $w, $y + $h, [0, 0, 0], 0.75);
+                $canvas->line($x + $w, $y, $x, $y + $h, [0, 0, 0], 0.75);
+            }
+
             if ($nodo instanceof \DOMElement && $nodo->getAttribute('id') === 'numero-pagina-serie') {
                 $celda = $frame->get_border_box();
             }

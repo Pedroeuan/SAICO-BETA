@@ -15,7 +15,7 @@
 @endphp
 
 {{-- Bloque único para que 03_B/01, 04_02 y 04_03 compartan campos y comportamiento. --}}
-<div class="col-12 px-0" data-datos-metalograficos>
+<div class="col-12 px-0" data-datos-metalograficos data-normas-url="{{ route('Reportes_FOR_PIMP_04_02.coincidencias_mecanicas') }}">
     <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">ANÁLISIS METALOGRÁFICO</div>
     <div class="table-responsive mb-3">
         <table class="table table-bordered text-center align-middle mb-0">
