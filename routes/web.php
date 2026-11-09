@@ -170,7 +170,7 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     });
 
     Route::middleware('auth')->group(function () {
-    Route::middleware('can:tecnicos-equipos-lab-access')->group(function () {
+    Route::middleware('can:tecnicos-equipos-lab-ventas-access')->group(function () {
         /*Creación de Notificaciones*/
         Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
         /*Obtener Notificaciones*/
@@ -836,6 +836,10 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::post('/OC/comentario/{id}', [OCController::class, 'guardarComentarioVentas'])
         ->middleware('can:ventas-access')
         ->name('OC.comentarioVentas');
+
+    /*Historial de comentarios de una OC para actualizarlo sin recargar*/
+    Route::get('/OC/comentarios/{id}', [OCController::class, 'comentariosOC'])
+        ->name('OC.comentariosOC');
     /*Descarga del PDF con las marcas de revisión incrustadas*/
     Route::get('/OC/PDFMarcas/{id}', [OCController::class, 'OC_PDF_Marcas'])->name('OC.PDFMarcas');
 

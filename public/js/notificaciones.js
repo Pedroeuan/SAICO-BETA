@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const config = {
         updateUrl: updateNotificationUrl, // URL para obtener nuevas notificaciones
         viewAllUrl: viewAllNotificationsUrl, // URL para ver todas las notificaciones
-        updatePeriod: 60000,
+        updatePeriod: 30000,
         previewDuration: 5000,
         // Período de actualización en milisegundos (60 segundos) 
         //si lo agregas aqui, quitarlo del archivo adminlte, porque causa conflicto o viceversa 

@@ -105,10 +105,12 @@
 @endif
 <br>
 
+<div id="oc-comentarios-historial" data-id="{{ $id }}">
 @include('OC.Revision.partials.comentarios', [
     'comentariosRevision' => $comentariosRevision ?? collect(),
     'comentariosVentas' => $comentariosVentas ?? collect(),
 ])
+</div>
 <br>
 
     <div class="card">
@@ -750,6 +752,29 @@
     const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
 <script src="{{ asset('js/notificaciones.js') }}"></script>
+<script>
+(function () {
+    const contenedor = document.getElementById('oc-comentarios-historial');
+    if (!contenedor) return;
+    const url = @json(route('OC.comentariosOC', ['id' => $id]));
+    let timer = null;
+    async function actualizarComentarios() {
+        if (document.hidden) return;
+        const activo = document.activeElement;
+        if (activo && (activo.tagName === 'TEXTAREA' || activo.tagName === 'INPUT')) return;
+        try {
+            const respuesta = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            if (!respuesta.ok) return;
+            const datos = await respuesta.json();
+            if (datos.html && datos.html !== contenedor.innerHTML) {
+                contenedor.innerHTML = datos.html;
+            }
+        } catch (e) {}
+    }
+    timer = setInterval(actualizarComentarios, 30000);
+    window.addEventListener('beforeunload', function () { clearInterval(timer); });
+})();
+</script>
 <script>
     const catalogo = @json($catalogo);
 </script>

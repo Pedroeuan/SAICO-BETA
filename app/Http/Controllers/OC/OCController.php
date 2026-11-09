@@ -8,6 +8,9 @@ use App\Models\Catalogo_OC\Catalogo_OC;
 use App\Models\OC\OC;
 use App\Models\OC\OCComentario;
 use App\Models\Clientes\clientes;
+use App\Models\Notificacion\Notificacion;
+use App\Models\User;
+use App\Notifications\OCComentarioNotification;
 use App\Models\Reporte\reporte;
 use Barryvdh\DomPDF\Facade\Pdf;
 use setasign\Fpdi\Fpdi;
@@ -664,6 +667,20 @@ class OCController extends Controller
                 'autor' => auth()->user()->name ?? null,
                 'idUsers' => auth()->id(),
             ]);
+
+            try {
+                $this->notificarComentarioOC(
+                    $OC,
+                    'revision',
+                    $comentarioRevision,
+                    auth()->user()->name ?? null
+                );
+            } catch (\Throwable $e) {
+                Log::error('No se pudieron enviar las notificaciones del comentario de revisión de OC.', [
+                    'idOC' => $OC->idOC,
+                    'exception' => $e,
+                ]);
+            }
         }
 
         return redirect()->route('OC.indexOC_AD')
@@ -705,6 +722,20 @@ class OCController extends Controller
             'autor' => auth()->user()->name ?? null,
             'idUsers' => auth()->id(),
         ]);
+
+        try {
+            $this->notificarComentarioOC(
+                $OC,
+                'ventas',
+                $comentarioVentas,
+                auth()->user()->name ?? null
+            );
+        } catch (\Throwable $e) {
+            Log::error('No se pudieron enviar las notificaciones del comentario de ventas de OC.', [
+                'idOC' => $OC->idOC,
+                'exception' => $e,
+            ]);
+        }
 
         return redirect()
             ->route('OC.revisionPDF', ['id' => $OC->idOC])
@@ -1092,5 +1123,99 @@ class OCController extends Controller
         $comentariosVentas = $comentarios['ventas'];
 
         return view('OC.Revision.ver_marcas', compact('id', 'OC', 'marcas', 'comentariosRevision', 'comentariosVentas'));
+    }
+
+    /**
+     * Crea la notificación del sistema y envía el correo a los roles
+     * involucrados en la revisión/venta de una OC. Se excluye al autor.
+     */
+    private function notificarComentarioOC(OC $OC, string $tipo, string $comentario, ?string $autor): void
+    {
+        $roles = ['Ventas', 'Administrador', 'Super Administrador'];
+        $autor = trim((string) $autor) ?: 'Un usuario';
+        $numeroOC = trim((string) ($OC->Num_OC ?? ''));
+        $numeroOC = $numeroOC !== '' ? $numeroOC : ('#' . $OC->idOC);
+        $numeroOC = Str::limit($numeroOC, 40);
+        $tipoLabel = $tipo === 'revision' ? 'revisión' : 'ventas';
+
+        $destinatarios = User::query()
+            ->where('Estatus', 'ALTA')
+            ->whereIn('rol', $roles)
+            ->when(auth()->id(), function ($query, $idUsuario) {
+                $query->where('id', '!=', $idUsuario);
+            })
+            ->get();
+
+        if ($destinatarios->isEmpty()) {
+            return;
+        }
+
+        $asunto = 'Nuevo comentario de ' . $tipoLabel . ' en la OC ' . $numeroOC;
+        $mensajeCorto = Str::limit($asunto, 120);
+        $mensajeLargo = Str::limit(
+            $autor . ' agregó un comentario de ' . $tipoLabel . ' a la OC ' . $numeroOC . ': ' . $comentario,
+            250
+        );
+        $mensajeEmail = '<strong>' . e($autor) . '</strong><br>'
+            . 'agregó un comentario de <strong>' . e($tipoLabel) . '</strong> a la Orden de Compra <strong>' . e($numeroOC) . '</strong>.<br><br>'
+            . nl2br(e($comentario));
+        $url = route('OC.revisionPDF', ['id' => $OC->idOC]);
+
+        foreach ($destinatarios as $destinatario) {
+            Notificacion::create([
+                'users_id' => $destinatario->id,
+                'Mensaje_Corto' => $mensajeCorto,
+                'Mensaje_Largo' => $mensajeLargo,
+                'url' => $url,
+                'leida' => false,
+                'prioridad' => 'alta',
+            ]);
+
+            $email = trim((string) $destinatario->email);
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
+
+            try {
+                $destinatario->notify(new OCComentarioNotification(
+                    $asunto,
+                    $mensajeLargo,
+                    $mensajeEmail,
+                    $url,
+                    $destinatario->name,
+                    $tipoLabel,
+                    $numeroOC
+                ));
+            } catch (\Throwable $e) {
+                Log::error('No se pudo enviar el correo de comentario de OC.', [
+                    'idOC' => $OC->idOC,
+                    'usuario_id' => $destinatario->id,
+                    'email' => $email,
+                    'exception' => $e,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Devuelve el historial de comentarios renderizado para actualizar la vista
+     * sin recargar toda la página.
+     */
+    public function comentariosOC($id)
+    {
+        $OC = OC::where('idOC', $id)->first();
+
+        if (!$OC) {
+            abort(404, 'Orden de compra no encontrada.');
+        }
+
+        $comentarios = $this->comentariosDeOC($OC->idOC);
+
+        return response()->json([
+            'html' => view('OC.Revision.partials.comentarios', [
+                'comentariosRevision' => $comentarios['revision'],
+                'comentariosVentas' => $comentarios['ventas'],
+            ])->render(),
+        ]);
     }
 }
