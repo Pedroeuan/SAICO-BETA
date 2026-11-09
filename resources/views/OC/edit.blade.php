@@ -46,6 +46,12 @@
 @endsection
 
 @section('content')
+@php
+    $comentariosRevision = $comentariosRevision ?? collect();
+    $comentariosVentas = $comentariosVentas ?? collect();
+    $ultimoComentarioRevision = $comentariosRevision->last();
+    $ultimoComentarioVentas = $comentariosVentas->last();
+@endphp
 <br>
 <br>
 <br>
@@ -58,6 +64,56 @@
                             <form id="OC" action="{{ route('OC.updateOC', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
                                 @csrf 
                                 <div class="row">
+
+                                    @if (!empty($OC->Revision_Marcas) && $OC->Revision_Marcas !== '[]')
+                                        <div class="col-sm-12">
+                                            <div class="alert alert-warning">
+                                                <i class="fas fa-highlighter"></i>
+                                                Esta OC tiene marcas de revisión.
+                                                <a href="{{ route('OC.revisionPDF', ['id' => $id]) }}" target="_blank" class="alert-link">
+                                                    Ver el PDF con marcas
+                                                </a>
+                                                para revisar las observaciones, corregir la orden y agregar un comentario de ventas.
+                                            </div>
+                                        </div>
+                                    @elseif ($comentariosRevision->isNotEmpty() || $comentariosVentas->isNotEmpty() || str_starts_with((string) $OC->Estatus, 'Revisado'))
+                                        <div class="col-sm-12">
+                                            <div class="alert alert-info">
+                                                <i class="fas fa-comment-dots"></i>
+                                                Esta OC ya fue revisada.
+                                                <a href="{{ route('OC.revisionPDF', ['id' => $id]) }}" target="_blank" class="alert-link">
+                                                    Ver la revisión y agregar un comentario
+                                                </a>.
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if (stripos((string) $OC->Estatus, 'Revisado') === 0)
+                                        <div class="col-sm-12">
+                                            <p class="text-muted mb-2">
+                                                <i class="fas fa-user-check"></i>
+                                                Revisado por: {{ $OC->Revision_Autor ?: 'No registrado' }}
+                                                @if (!empty($OC->Revision_At))
+                                                    · {{ \Carbon\Carbon::parse($OC->Revision_At)->format('d/m/Y H:i') }}
+                                                @endif
+                                            </p>
+                                        </div>
+                                    @endif
+
+                                    @if ($ultimoComentarioVentas)
+                                        <div class="col-sm-12">
+                                            <div class="alert alert-info">
+                                                <strong><i class="fas fa-comment-dots"></i> Último comentario de ventas:</strong>
+                                                <div style="white-space: pre-wrap;">{{ $ultimoComentarioVentas->comentario }}</div>
+                                                <div class="small text-muted mt-1">
+                                                    {{ $ultimoComentarioVentas->autor ?: 'Ventas' }}
+                                                    @if (!empty($ultimoComentarioVentas->created_at))
+                                                        · {{ $ultimoComentarioVentas->created_at->format('d/m/Y H:i') }}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -226,6 +282,23 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+
+                                            @if (!empty($OC->Revision_Marcas) && $OC->Revision_Marcas !== '[]')
+                                                <label class="col-form-label" for="inputSuccess">Revisión con marcas</label>
+                                                <div>
+                                                    <a href="{{ route('OC.revisionPDF', ['id' => $id]) }}" target="_blank" class="btn btn-danger long-button" role="button" title="Ver el PDF con las marcas de la revisión">
+                                                        <i class="fas fa-highlighter" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a href="{{ route('OC.PDFMarcas', ['id' => $id]) }}" class="btn btn-outline-danger long-button" role="button" title="Descargar el PDF con las marcas incrustadas" download="OC_{{ $id }}_marcas.pdf">
+                                                        <i class="fas fa-download" aria-hidden="true"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
@@ -251,7 +324,14 @@
                                             @endif 
                                         </div>
                                     </div>
-                                    
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Último comentario de revisión</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" placeholder="Sin comentarios de revisión" readonly>{{ $ultimoComentarioRevision->comentario ?? '' }}</textarea>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->

@@ -170,7 +170,7 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     });
 
     Route::middleware('auth')->group(function () {
-    Route::middleware('can:tecnicos-equipos-lab-access')->group(function () {
+    Route::middleware('can:tecnicos-equipos-lab-ventas-access')->group(function () {
         /*Creación de Notificaciones*/
         Route::get('notificacion/index', [NotificacionController::class, 'index'])->name('notifications.index');
         /*Obtener Notificaciones*/
@@ -807,6 +807,14 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::get('/OC/edit/{id}', [OCController::class, 'edit'])->name('OC.edit');
     /*Ruta de botón Eliminación-index-Usuarios*/
     Route::delete('/OC/eliminar/{id}', [OCController::class, 'destroy'])->name('OC.destroy');
+    /*Ruta de botón Enviar a revisión-index*/
+    Route::post('/OC/enviarRevision/{id}', [OCController::class, 'enviarRevision'])->name('OC.enviarRevision');
+    /*Ruta de Vista de OC-index para Revisiones*/
+    Route::get('/OC/indexOC_AD', [OCController::class, 'index_AD'])->name('OC.indexOC_AD');
+    /*Rutas de Vista de Revisión*/
+    Route::get('/OC/edit_revisar/{id}', [OCController::class, 'edit_revisar'])->name('OC.edit_revisar');
+    /*Ruta de Actualizar OC*/
+    Route::post('/OC/updateOC_Revision/{id}', [OCController::class, 'updateOC_Revision'])->name('OC.updateOC_Revision');
 
     /*Ruta de Vista del catálogo de OC*/
     Route::get('/OC/catalogo', [CatalogoOCController::class, 'create'])->name('OC.catalogo');
@@ -822,6 +830,18 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::delete('/Catalogo_OC/eliminar/{id}', [CatalogoOCController::class, 'destroy'])->name('OC.destroyCatalogo');
     /*Formato PDF Ruta para ver el PDF*/
     Route::get('OC/PDF/{id}', [OCController::class, 'OC_PDF'])->name('OC.PDF');
+    /*Vista del PDF con las marcas de revisión (solo lectura)*/
+    Route::get('/OC/revisionPDF/{id}', [OCController::class, 'revisionPDF'])->name('OC.revisionPDF');
+    /*Comentario que agrega ventas a una OC revisada*/
+    Route::post('/OC/comentario/{id}', [OCController::class, 'guardarComentarioVentas'])
+        ->middleware('can:ventas-access')
+        ->name('OC.comentarioVentas');
+
+    /*Historial de comentarios de una OC para actualizarlo sin recargar*/
+    Route::get('/OC/comentarios/{id}', [OCController::class, 'comentariosOC'])
+        ->name('OC.comentariosOC');
+    /*Descarga del PDF con las marcas de revisión incrustadas*/
+    Route::get('/OC/PDFMarcas/{id}', [OCController::class, 'OC_PDF_Marcas'])->name('OC.PDFMarcas');
 
     /*Ruta de Vista de Condiciones de Pago*/
     Route::get('/OC/indexPago', [CondicionesPagoController::class, 'index'])->name('OC.indexPago');
