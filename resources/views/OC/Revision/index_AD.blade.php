@@ -65,7 +65,7 @@
                         <td>{{ $OCS->Tipo_servicio }}</td>
                         <td class="estatusOC">
                             {{ $OCS->Estatus }}
-                            @if (!empty($OCS->Comentario_Ventas))
+                            @if ($OCS->comentarios->where('tipo', 'ventas')->isNotEmpty())
                                 <span class="badge badge-info" title="Ventas agregó un comentario a esta revisión">
                                     <i class="fas fa-comment-dots"></i>
                                 </span>

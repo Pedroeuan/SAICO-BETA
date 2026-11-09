@@ -152,14 +152,19 @@
                             @endif
                         </td>
                         <td>
-                            @if($OCS->Revision_OC){{ $OCS->Revision_OC }} @else EN ESPERA . . . @endif
+                            @php $ultimoComentarioRevision = $OCS->comentarios->where('tipo', 'revision')->last(); @endphp
+                            @if($ultimoComentarioRevision)
+                                {{ $ultimoComentarioRevision->comentario }}
+                            @else
+                                EN ESPERA . . .
+                            @endif
                             @if (stripos((string) $OCS->Estatus, 'Revisado') === 0)
                                 <div class="small text-muted mt-1">
                                     <i class="fas fa-user-check"></i>
                                     Revisado por: {{ $OCS->Revision_Autor ?: 'No registrado' }}
                                 </div>
                             @endif
-                            @if (!empty($OCS->Comentario_Ventas))
+                            @if ($OCS->comentarios->where('tipo', 'ventas')->isNotEmpty())
                                 <div class="mt-1">
                                     <span class="badge badge-info" title="Ventas agregó un comentario a esta revisión">
                                         <i class="fas fa-comment-dots"></i> Comentario de ventas

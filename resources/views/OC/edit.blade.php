@@ -46,6 +46,12 @@
 @endsection
 
 @section('content')
+@php
+    $comentariosRevision = $comentariosRevision ?? collect();
+    $comentariosVentas = $comentariosVentas ?? collect();
+    $ultimoComentarioRevision = $comentariosRevision->last();
+    $ultimoComentarioVentas = $comentariosVentas->last();
+@endphp
 <br>
 <br>
 <br>
@@ -70,7 +76,7 @@
                                                 para revisar las observaciones, corregir la orden y agregar un comentario de ventas.
                                             </div>
                                         </div>
-                                    @elseif (!empty($OC->Revision_OC) || !empty($OC->Comentario_Ventas) || str_starts_with((string) $OC->Estatus, 'Revisado'))
+                                    @elseif ($comentariosRevision->isNotEmpty() || $comentariosVentas->isNotEmpty() || str_starts_with((string) $OC->Estatus, 'Revisado'))
                                         <div class="col-sm-12">
                                             <div class="alert alert-info">
                                                 <i class="fas fa-comment-dots"></i>
@@ -94,19 +100,17 @@
                                         </div>
                                     @endif
 
-                                    @if (!empty($OC->Comentario_Ventas))
+                                    @if ($ultimoComentarioVentas)
                                         <div class="col-sm-12">
                                             <div class="alert alert-info">
-                                                <strong><i class="fas fa-comment-dots"></i> Comentario de ventas:</strong>
-                                                <div style="white-space: pre-wrap;">{{ $OC->Comentario_Ventas }}</div>
-                                                @if (!empty($OC->Comentario_Ventas_Autor) || !empty($OC->Comentario_Ventas_At))
-                                                    <div class="small text-muted mt-1">
-                                                        {{ $OC->Comentario_Ventas_Autor ?? 'Ventas' }}
-                                                        @if (!empty($OC->Comentario_Ventas_At))
-                                                            · {{ \Carbon\Carbon::parse($OC->Comentario_Ventas_At)->format('d/m/Y H:i') }}
-                                                        @endif
-                                                    </div>
-                                                @endif
+                                                <strong><i class="fas fa-comment-dots"></i> Último comentario de ventas:</strong>
+                                                <div style="white-space: pre-wrap;">{{ $ultimoComentarioVentas->comentario }}</div>
+                                                <div class="small text-muted mt-1">
+                                                    {{ $ultimoComentarioVentas->autor ?: 'Ventas' }}
+                                                    @if (!empty($ultimoComentarioVentas->created_at))
+                                                        · {{ $ultimoComentarioVentas->created_at->format('d/m/Y H:i') }}
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     @endif
@@ -323,8 +327,8 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label class="col-form-label" for="inputSuccess">Comentarios de Revisión</label>
-                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Revision_OC" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen" readonly>{{$OC->Revision_OC}}</textarea>
+                                            <label class="col-form-label" for="inputSuccess">Último comentario de revisión</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" placeholder="Sin comentarios de revisión" readonly>{{ $ultimoComentarioRevision->comentario ?? '' }}</textarea>
                                         </div>
                                     </div>
 

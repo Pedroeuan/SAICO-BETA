@@ -41,6 +41,8 @@
     }
     .comentarios-revision {
         white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
         margin: 0;
         font-family: inherit;
         font-size: 0.95rem;
@@ -66,9 +68,6 @@
     <div class="card-header">
         <h3 class="card-title mb-0">
             <i class="far fa-file-pdf"></i> Orden de Compra
-            {{--@if (!empty($OC->Revision_OC))
-                <span class="badge badge-info ml-2">{{ $OC->Revision_OC }}</span>
-            @endif--}}
             @if (!empty($OC->Estatus))
                 <span class="badge badge-secondary ml-1">{{ $OC->Estatus }}</span>
             @endif
@@ -106,35 +105,10 @@
     </div>
 </div>
 
-@if (!empty($OC->Revision_OC))
-    <div class="card card-outline card-warning">
-        <div class="card-header">
-            <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Comentarios de revisión</h3>
-        </div>
-        <div class="card-body">
-            <pre class="comentarios-revision">{{ $OC->Revision_OC }}</pre>
-        </div>
-    </div>
-@endif
-
-@if (!empty($OC->Comentario_Ventas))
-    <div class="card card-outline card-info">
-        <div class="card-header">
-            <h3 class="card-title mb-0"><i class="fas fa-comment-dots"></i> Comentario de ventas</h3>
-            <div class="card-tools">
-                <small class="text-muted">
-                    {{ $OC->Comentario_Ventas_Autor ?? 'Ventas' }}
-                    @if (!empty($OC->Comentario_Ventas_At))
-                        · {{ \Carbon\Carbon::parse($OC->Comentario_Ventas_At)->format('d/m/Y H:i') }}
-                    @endif
-                </small>
-            </div>
-        </div>
-        <div class="card-body">
-            <pre class="comentarios-revision">{{ $OC->Comentario_Ventas }}</pre>
-        </div>
-    </div>
-@endif
+@include('OC.Revision.partials.comentarios', [
+    'comentariosRevision' => $comentariosRevision ?? collect(),
+    'comentariosVentas' => $comentariosVentas ?? collect(),
+])
 
 @can('ventas-access')
     <div class="card card-outline card-primary">
@@ -145,7 +119,7 @@
             <form action="{{ route('OC.comentarioVentas', ['id' => $id]) }}" method="POST">
                 @csrf
                 <div class="form-group mb-2">
-                    <label for="Comentario_Ventas">Escribe tu comentario sobre esta revisión</label>
+                    <label for="Comentario_Ventas">Escribe un nuevo comentario sobre esta revisión</label>
                     <textarea
                         name="Comentario_Ventas"
                         id="Comentario_Ventas"
@@ -153,15 +127,17 @@
                         rows="4"
                         maxlength="4000"
                         required
-                        placeholder="Ejemplo: Ya corregí los puntos marcados; favor de revisar..."></textarea>
+                        placeholder="Ejemplo: Ya corregí los puntos marcados; favor de revisar...">{{ old('Comentario_Ventas') }}</textarea>
                     @error('Comentario_Ventas')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Guardar comentario
+                    <i class="fas fa-paper-plane"></i> Agregar comentario
                 </button>
-                <small class="text-muted ml-2">El revisor podrá ver este comentario.</small>
+                <small class="text-muted ml-2">
+                    Cada comentario se guarda por separado y el revisor podrá verlo.
+                </small>
             </form>
         </div>
     </div>

@@ -78,6 +78,8 @@
     }
     .comentarios-revision {
         white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
         margin: 0;
         font-family: inherit;
         font-size: 0.95rem;
@@ -103,37 +105,11 @@
 @endif
 <br>
 
-@if (!empty($OC->Revision_OC))
-    <div class="card card-outline card-warning">
-        <div class="card-header">
-            <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Comentarios de revisión</h3>
-        </div>
-        <div class="card-body">
-            <pre class="comentarios-revision">{{ $OC->Revision_OC }}</pre>
-        </div>
-    </div>
-    <br>
-@endif
-
-@if (!empty($OC->Comentario_Ventas))
-    <div class="card card-outline card-info">
-        <div class="card-header">
-            <h3 class="card-title mb-0"><i class="fas fa-comment-dots"></i> Comentario de ventas</h3>
-            <div class="card-tools">
-                <small class="text-muted">
-                    {{ $OC->Comentario_Ventas_Autor ?? 'Ventas' }}
-                    @if (!empty($OC->Comentario_Ventas_At))
-                        · {{ \Carbon\Carbon::parse($OC->Comentario_Ventas_At)->format('d/m/Y H:i') }}
-                    @endif
-                </small>
-            </div>
-        </div>
-        <div class="card-body">
-            <pre class="comentarios-revision">{{ $OC->Comentario_Ventas }}</pre>
-        </div>
-    </div>
-    <br>
-@endif
+@include('OC.Revision.partials.comentarios', [
+    'comentariosRevision' => $comentariosRevision ?? collect(),
+    'comentariosVentas' => $comentariosVentas ?? collect(),
+])
+<br>
 
     <div class="card">
         <div class="card-body row">
@@ -190,18 +166,22 @@
                             <!-- TEXTO LARGO DE LA REVISIÓN -->
                             <div class="card card-outline card-primary h-100">
                                 <div class="card-header">
-                                    <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Revisión OC</h3>
+                                    <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Nueva observación de revisión</h3>
                                 </div>
                                 <div class="card-body p-2">
+                                    <label for="Revision_OC" class="mb-1">Escribe una nueva observación</label>
                                     <textarea form="OC"
                                             name="Revision_OC"
                                             id="Revision_OC"
                                             class="form-control @error('Revision_OC') is-invalid @enderror"
-                                            placeholder="Escribe aquí las observaciones de la revisión..."
-                                            style="height: 72vh; resize: vertical;"></textarea>
+                                            placeholder="Escribe aquí una nueva observación de la revisión..."
+                                            style="height: 72vh; resize: vertical;">{{ old('Revision_OC') }}</textarea>
                                     @error('Revision_OC')
                                         <div class="invalid-feedback"><span>{{ $message }}</span></div>
                                     @enderror
+                                    <small class="text-muted d-block mt-1">
+                                        Cada observación se guarda por separado en el historial.
+                                    </small>
                                 </div>
                             </div>
                         </div>

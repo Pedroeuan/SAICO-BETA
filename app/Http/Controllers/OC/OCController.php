@@ -6,6 +6,7 @@ use App\Models\detallesOC\detallesOC;
 use App\Models\Firmantes_OC\Firmantes_OC;
 use App\Models\Catalogo_OC\Catalogo_OC;
 use App\Models\OC\OC;
+use App\Models\OC\OCComentario;
 use App\Models\Clientes\clientes;
 use App\Models\Reporte\reporte;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -79,7 +80,11 @@ class OCController extends Controller
             }
         }
 
-        return view('OC.Revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas','marcas'));
+        $comentarios = $this->comentariosDeOC($OC->idOC);
+        $comentariosRevision = $comentarios['revision'];
+        $comentariosVentas = $comentarios['ventas'];
+
+        return view('OC.Revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas','marcas','comentariosRevision','comentariosVentas'));
     }
 
     /**
@@ -88,7 +93,7 @@ class OCController extends Controller
     public function index_AD()
     {
         // OC en revisión y ya revisadas (Revisión: V1, Revisado V1, V2, ...).
-        $OC = OC::where('Estatus', 'like', 'Revis%')->get();
+        $OC = OC::with('comentarios')->where('Estatus', 'like', 'Revis%')->get();
 
         return view('OC.Revision.index_AD', compact('OC'));
     }
@@ -97,7 +102,7 @@ class OCController extends Controller
      */
     public function index()
     {
-        $OC = OC::all();
+        $OC = OC::with('comentarios')->get();
 
         return view('OC.index', compact('OC'));
     }
@@ -475,7 +480,11 @@ class OCController extends Controller
         // Obtener el numero de firmas
         $numFirmas = $Firmas['numFirmas'] ?? 1;
 
-        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas'));
+        $comentarios = $this->comentariosDeOC($OC->idOC);
+        $comentariosRevision = $comentarios['revision'];
+        $comentariosVentas = $comentarios['ventas'];
+
+        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas','comentariosRevision','comentariosVentas'));
     }
 
     /**
@@ -608,24 +617,20 @@ class OCController extends Controller
     }
 
     /**
-     * Guarda los cambios realizados durante la revisión de la OC,
-     * incluyendo el texto largo de observaciones (Revision_OC).
+     * Guarda los cambios realizados durante la revisión de la OC:
+     * marcas del PDF, estatus, autor/fecha y el nuevo comentario del historial.
      */
     public function updateOC_Revision(Request $request, $id)
     {
         $OC = OC::find($id);
 
-        // La versión de Revision define el estatus final: Revisado V1, V2, etc.
-        // Si la columna está vacía, se intenta recuperar la versión del estatus
-        // actual (por ejemplo "Revisión: V2") antes de usar V1 por defecto.
-        $revision = trim((string) $OC->Revision);
+        // La versión se toma del estatus actual (por ejemplo "Revisión: V2").
+        $revision = '';
 
-        if ($revision === '') {
-            if (preg_match('/V\s*(\d+)/i', (string) $OC->Estatus, $coincidencias)) {
-                $revision = 'V' . (int) $coincidencias[1];
-            } else {
-                $revision = 'V1';
-            }
+        if (preg_match('/V\s*(\d+)/i', (string) $OC->Estatus, $coincidencias)) {
+            $revision = 'V' . (int) $coincidencias[1];
+        } else {
+            $revision = 'V1';
         }
 
         // Solo se guardan las marcas si el JSON recibido es válido y no está vacío.
@@ -639,14 +644,27 @@ class OCController extends Controller
             }
         }
 
-        $OC->update([
-            'Revision_OC' => $request->input('Revision_OC'),
+        $comentarioRevision = trim((string) $request->input('Revision_OC'));
+
+        $datosRevision = [
             'Revision_Marcas' => $marcasGuardadas,
-            'Revision' => $revision,
             'Estatus' => 'Revisado ' . $revision,
             'Revision_Autor' => auth()->user()->name ?? null,
             'Revision_At' => now(),
-        ]);
+        ];
+
+        $OC->update($datosRevision);
+
+        if ($comentarioRevision !== '') {
+            OCComentario::create([
+                'idOC' => $OC->idOC,
+                'tipo' => 'revision',
+                'revision' => $revision,
+                'comentario' => $comentarioRevision,
+                'autor' => auth()->user()->name ?? null,
+                'idUsers' => auth()->id(),
+            ]);
+        }
 
         return redirect()->route('OC.indexOC_AD')
             ->with('success', 'La revisión de la orden de compra se guardó correctamente.');
@@ -654,8 +672,7 @@ class OCController extends Controller
 
     /**
      * Guarda el comentario que agrega ventas después de revisar una OC.
-     * Se conserva separado de Revision_OC para no perder las observaciones
-     * originales del revisor.
+     * Cada envío se agrega al historial de OC_Comentarios.
      */
     public function guardarComentarioVentas(Request $request, $id)
     {
@@ -672,10 +689,22 @@ class OCController extends Controller
             abort(404, 'Orden de compra no encontrada.');
         }
 
-        $OC->Comentario_Ventas = trim((string) $request->input('Comentario_Ventas'));
-        $OC->Comentario_Ventas_Autor = auth()->user()->name ?? null;
-        $OC->Comentario_Ventas_At = now();
-        $OC->save();
+        $comentarioVentas = trim((string) $request->input('Comentario_Ventas'));
+
+        $revisionActual = '';
+        if (preg_match('/V\s*(\d+)/i', (string) $OC->Estatus, $coincidencias)) {
+            $revisionActual = 'V' . (int) $coincidencias[1];
+        }
+
+        // Cada envío de ventas se conserva como un comentario independiente.
+        OCComentario::create([
+            'idOC' => $OC->idOC,
+            'tipo' => 'ventas',
+            'revision' => $revisionActual ?: null,
+            'comentario' => $comentarioVentas,
+            'autor' => auth()->user()->name ?? null,
+            'idUsers' => auth()->id(),
+        ]);
 
         return redirect()
             ->route('OC.revisionPDF', ['id' => $OC->idOC])
@@ -707,6 +736,10 @@ class OCController extends Controller
             {
                 $detallesOC->delete();
             }
+
+        // El historial tiene llave foránea hacia OC; se elimina primero.
+        OCComentario::where('idOC', $OC->idOC)->delete();
+
         $OC->delete();
          // Responder con éxito
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
@@ -732,10 +765,9 @@ class OCController extends Controller
         }
 
         $estatusActual = trim((string) $OC->Estatus);
-        $revision = trim((string) $OC->Revision);
+        $revision = '';
 
-        // Recuperar la versión desde el estatus si la columna está vacía.
-        if ($revision === '' && preg_match('/V\s*(\d+)/i', $estatusActual, $coincidencias)) {
+        if (preg_match('/V\s*(\d+)/i', $estatusActual, $coincidencias)) {
             $revision = 'V' . (int) $coincidencias[1];
         }
 
@@ -748,7 +780,6 @@ class OCController extends Controller
             $revision = $this->siguienteRevision($revision);
         }
 
-        $OC->Revision = $revision;
         $OC->Estatus = 'Revisión: ' . $revision;
         $OC->Revision_Autor = null;
         $OC->Revision_At = null;
@@ -758,7 +789,7 @@ class OCController extends Controller
             'success' => true,
             'message' => 'La orden de compra fue enviada a revisión.',
             'estatus' => $OC->Estatus,
-            'revision' => $OC->Revision,
+            'revision' => $revision,
         ]);
     }
 
@@ -832,6 +863,22 @@ class OCController extends Controller
         $marcasDecodificadas = json_decode($OC->Revision_Marcas, true);
 
         return is_array($marcasDecodificadas) ? $marcasDecodificadas : [];
+    }
+
+    /**
+     * Devuelve el historial de comentarios de una OC separado por tipo.
+     */
+    private function comentariosDeOC($id): array
+    {
+        $comentarios = OCComentario::where('idOC', $id)
+            ->orderBy('created_at')
+            ->orderBy('idComentario')
+            ->get();
+
+        return [
+            'revision' => $comentarios->where('tipo', 'revision')->values(),
+            'ventas' => $comentarios->where('tipo', 'ventas')->values(),
+        ];
     }
 
     /**
@@ -1040,7 +1087,10 @@ class OCController extends Controller
         }
 
         $marcas = $this->marcasDeOC($OC);
+        $comentarios = $this->comentariosDeOC($OC->idOC);
+        $comentariosRevision = $comentarios['revision'];
+        $comentariosVentas = $comentarios['ventas'];
 
-        return view('OC.Revision.ver_marcas', compact('id', 'OC', 'marcas'));
+        return view('OC.Revision.ver_marcas', compact('id', 'OC', 'marcas', 'comentariosRevision', 'comentariosVentas'));
     }
 }

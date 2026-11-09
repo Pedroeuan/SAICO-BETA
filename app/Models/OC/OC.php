@@ -22,14 +22,10 @@ class OC extends Model
         'Proyecto',
         'Estatus',
         'OC_archivo',
-        //'Revision',
-        'Revision_OC',
         'Revision_Marcas',
         'Revision_Autor',
         'Revision_At',
-        'Comentario_Ventas',
-        'Comentario_Ventas_Autor',
-        'Comentario_Ventas_At',
+        // El historial de comentarios vive en OC_Comentarios.
     ];
     protected $table = 'OC';
     protected $primaryKey = 'idOC';
@@ -38,6 +34,13 @@ class OC extends Model
     public function detalles_OC()
     {
         return $this->hasMany(detallesOC::class, 'idOC', 'idOC');
+    }
+
+    public function comentarios()
+    {
+        return $this->hasMany(OCComentario::class, 'idOC', 'idOC')
+            ->orderBy('created_at')
+            ->orderBy('idComentario');
     }
 
     public function cliente()
