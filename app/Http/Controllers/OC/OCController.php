@@ -36,7 +36,6 @@ class OCController extends Controller
         $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
         $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
         $idCliente = $OC->idClientes;
-        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Cliente = clientes::where('idClientes', $idCliente)->first(); 
         $Nombre_Cliente = $Cliente->Cliente;
         // Soporta tanto el formato anterior (lista de detalles) como el formato
@@ -115,7 +114,6 @@ class OCController extends Controller
      */
     public function create()
     {
-        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
         $Clientes = clientes::where('Cliente', '!=', 'POR DEFINIR')->get();
         $catalogo = DB::table('Catalogo_OC')->get();
         $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
@@ -145,12 +143,11 @@ class OCController extends Controller
 
         $EsperaDato ='ESPERA DE DATO';
         // ==========================
-        // Lógica para manejar Contrato
         // ==========================
-        // Lógica para manejar el campo Contrato
+        // LÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³gica para manejar el campo Contrato
         if ($request->input('TieneContrato') === "no") {
 
-            // Si el usuario alteró el value o no llegó, se recalcula en backend
+            // Si el usuario alterÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ el value o no llegÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³, se recalcula en backend
             $actual = $request->input('Contrato');
 
             // Verificar que realmente tenga el formato correcto
@@ -165,7 +162,6 @@ class OCController extends Controller
                 $OC->Contrato = $nuevo;
 
             } else {
-                // Si el frontend envió un contrato válido, se utiliza ese
                 $OC->Contrato = $actual;
             }
         } else {
@@ -194,7 +190,6 @@ class OCController extends Controller
             $OC->Tipo_servicio = $request->input('Tipo_servicio');
         }
          // ==========================
-        // Lógica para manejar Cliente
         // ==========================
         $clienteNombre = $request->input('TieneCliente') === 'si'
             ? $request->input('ClienteSelect')
@@ -309,7 +304,6 @@ class OCController extends Controller
         // Validar que se ha enviado el archivo de factura
         if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
             $pdf = $request->file('OC_archivo');
-            // Obtener el último número consecutivo
             $lastFile = collect(Storage::disk('public')->files('Ventas/OC'))
                 ->filter(function ($file) {
                     return preg_match('/^\d+_/', basename($file));
@@ -320,7 +314,6 @@ class OCController extends Controller
             if ($lastFile) {
                 $lastNumber = (int)explode('_', basename($lastFile))[0];
             }
-            // Incrementar el número consecutivo
             $newNumber = $lastNumber + 1;
             $newFileNameOC = $newNumber . '_' . $pdf->getClientOriginalName();
             // Guardar el archivo PDF en la carpeta "public/Ventas/OC"
@@ -331,7 +324,6 @@ class OCController extends Controller
             $OC->OC_archivo = $EsperaDato;
         }
 
-        // Asignar un cliente por defecto si no se capturó ningún cliente
         if (empty($OC->idClientes)) {
             $clientePorDefecto = clientes::first();
             $OC->idClientes = $clientePorDefecto ? $clientePorDefecto->idClientes : 1;
@@ -539,7 +531,6 @@ class OCController extends Controller
             }
             // Guardar el nuevo archivo PDF
             $pdf = $request->file('OC_archivo');
-            // Obtener el último número consecutivo
             $lastFile = collect(Storage::disk('public')->files('Ventas/OC'))
                 ->filter(function ($file) {
                     return preg_match('/^\d+_/', basename($file));
@@ -550,7 +541,6 @@ class OCController extends Controller
             if ($lastFile) {
                 $lastNumber = (int)explode('_', basename($lastFile))[0];
             }
-            // Incrementar el número consecutivo
             $newNumber = $lastNumber + 1;
             $newFileNameOC = $newNumber . '_' . $pdf->getClientOriginalName();
             
@@ -568,7 +558,6 @@ class OCController extends Controller
         $detallesOC = json_decode($request->input('dynamicTableData'), true, 512, JSON_THROW_ON_ERROR);
         if (!is_array($detallesOC) || !array_is_list($detallesOC)) {
             return back()->withErrors([
-                'dynamicTableData' => 'Los detalles de la orden tienen un formato inválido.',
             ])->withInput();
         }
 
@@ -620,14 +609,13 @@ class OCController extends Controller
     }
 
     /**
-     * Guarda los cambios realizados durante la revisión de la OC:
      * marcas del PDF, estatus, autor/fecha y el nuevo comentario del historial.
      */
     public function updateOC_Revision(Request $request, $id)
     {
         $OC = OC::find($id);
 
-        // La versión se toma del estatus actual (por ejemplo "Revisión: V2").
+        // La versiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n se toma del estatus actual (por ejemplo "RevisiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n: V2").
         $revision = '';
 
         if (preg_match('/V\s*(\d+)/i', (string) $OC->Estatus, $coincidencias)) {
@@ -636,7 +624,6 @@ class OCController extends Controller
             $revision = 'V1';
         }
 
-        // Solo se guardan las marcas si el JSON recibido es válido y no está vacío.
         $marcasGuardadas = null;
         $marcasInput = $request->input('Revision_Marcas');
 
@@ -713,7 +700,6 @@ class OCController extends Controller
             $revisionActual = 'V' . (int) $coincidencias[1];
         }
 
-        // Cada enví­o de ventas se conserva como un comentario independiente.
         OCComentario::create([
             'idOC' => $OC->idOC,
             'tipo' => 'ventas',
@@ -768,21 +754,22 @@ class OCController extends Controller
                 $detallesOC->delete();
             }
 
-        // El historial tiene llave foránea hacia OC; se elimina primero.
         OCComentario::where('idOC', $OC->idOC)->delete();
 
         $OC->delete();
-         // Responder con éxito
+         // Responder con ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©xito
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
     }
 
     /**
-     * Envía la orden de compra a revisión.
+     * EnvÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­a la orden de compra a revisiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n.
      *
      * Si es la primera vez usa "V1". Si la OC ya fue revisada
-     * ("Revisado V1", "Revisado V2", ...) el nuevo envío crea la
      * siguiente versión ("V2", "V3", ...). Si ya está en revisión,
      * conserva la versión actual.
+     * ("Revisado V1", "Revisado V2", ...) el nuevo envÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­o crea la
+     * siguiente versiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n ("V2", "V3", ...). Si ya estÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ en revisiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n,
+     * conserva la versiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n actual.
      */
     public function enviarRevision($id)
     {
@@ -806,19 +793,40 @@ class OCController extends Controller
             $revision = 'V1';
         }
 
-        // Si la revisión anterior ya terminó, este envío inicia la siguiente.
+        // Si la revisiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n anterior ya terminÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³, este envÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­o inicia la siguiente.
         if (stripos($estatusActual, 'Revisado') === 0) {
             $revision = $this->siguienteRevision($revision);
         }
 
-        $OC->Estatus = 'Revisión: ' . $revision;
         $OC->Revision_Autor = null;
         $OC->Revision_At = null;
         $OC->save();
 
+        $autorEnvio = auth()->user()->name ?? 'Ventas';
+        $numeroOCEnvio = trim((string) ($OC->Num_OC ?? ''));
+        $numeroOCEnvio = $numeroOCEnvio !== '' ? $numeroOCEnvio : ('#' . $OC->idOC);
+        $numeroOCEnvio = Str::limit($numeroOCEnvio, 40);
+        $mensajeCortoEnvio = Str::limit($asuntoEnvio, 120);
+        $mensajeLargoEnvio = Str::limit($autorEnvio . ' envio la OC ' . $numeroOCEnvio . ' a revision.', 250);
+        $mensajeEmailEnvio = '<strong>' . e($autorEnvio) . '</strong><br>'
+            . 'envio la Orden de Compra <strong>' . e($numeroOCEnvio) . '</strong> a revision.';
+
+        try {
+            $this->enviarNotificacionesOC(
+                $OC,
+                $asuntoEnvio,
+                $mensajeLargoEnvio,
+                $mensajeEmailEnvio,
+                'revision',
+                $urlEnvio
+            );
+                'exception' => $e,
+            ]);
+        }
+
         return response()->json([
             'success' => true,
-            'message' => 'La orden de compra fue enviada a revisión.',
+            'message' => 'La orden de compra fue enviada a revision.',
             'estatus' => $OC->Estatus,
             'revision' => $revision,
         ]);
@@ -826,6 +834,7 @@ class OCController extends Controller
 
     /**
      * Devuelve la siguiente versión a partir de una cadena tipo "V1".
+     * Devuelve la siguiente versiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n a partir de una cadena tipo "V1".
      */
     private function siguienteRevision(string $revision): string
     {
@@ -846,7 +855,7 @@ class OCController extends Controller
         $OC->cliente = $cliente; // Agregar el cliente al objeto OC
         $detallesRegistro = detallesOC::where('idOC', $id)->first();
         // El JSON se guarda como {detallesOC:[...], totales:{...}}.
-        // Se soporta también el formato anterior (lista plana de detalles).
+        // Se soporta tambiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©n el formato anterior (lista plana de detalles).
         $datosGuardados = $detallesRegistro ? json_decode($detallesRegistro->Detalles, true) : [];
         $detallesOC = $datosGuardados['detallesOC'] ?? $datosGuardados;
         $detallesOC = is_array($detallesOC) ? array_values($detallesOC) : [];
@@ -913,7 +922,7 @@ class OCController extends Controller
     }
 
     /**
-     * Genera una copia del PDF de la OC con las marcas de revisión ya
+     * Genera una copia del PDF de la OC con las marcas de revisiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n ya
      * incrustadas, para descargarla o imprimirla.
      */
     public function OC_PDF_Marcas($id)
@@ -990,8 +999,8 @@ class OCController extends Controller
     }
 
     /**
-     * Dibuja las marcas (mano alzada, rectángulos y elipses) sobre una página
-     * del PDF. Las coordenadas guardadas están normalizadas de 0 a 1.
+     * Dibuja las marcas (mano alzada, rectÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ngulos y elipses) sobre una pÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡gina
+     * del PDF. Las coordenadas guardadas estÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡n normalizadas de 0 a 1.
      */
     private function dibujarMarcasEnPDF(Fpdi $pdf, array $marcas, float $ancho, float $alto): void
     {
@@ -1106,8 +1115,8 @@ class OCController extends Controller
 
     /**
      * Muestra la OC generada junto con las marcas guardadas durante la
-     * revisión. Es una vista de solo lectura para que el editor pueda ver
-     * qué se marcó y corregir la orden.
+     * revisiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n. Es una vista de solo lectura para que el editor pueda ver
+     * quÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© se marcÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ y corregir la orden.
      */
     public function revisionPDF($id)
     {
@@ -1126,16 +1135,12 @@ class OCController extends Controller
     }
 
     /**
-     * Crea la notificación del sistema y envía el correo a los roles
-     * involucrados en la revisión/venta de una OC. Se excluye al autor.
+     * Crea la notificaciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n del sistema y envÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­a el correo a los roles
+     * involucrados en la revisiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n/venta de una OC. Se excluye al autor.
      */
-    private function notificarComentarioOC(OC $OC, string $tipo, string $comentario, ?string $autor): void
+    private function enviarNotificacionesOC(OC $OC, string $asunto, string $mensajeCorto, string $mensajeLargo, string $mensajeEmail, string $tipoLabel, string $url, string $prioridad = 'alta'): void
     {
         $roles = ['Ventas', 'Administrador', 'Super Administrador'];
-        $autor = trim((string) $autor) ?: 'Un usuario';
-        $numeroOC = trim((string) ($OC->Num_OC ?? ''));
-        $numeroOC = $numeroOC !== '' ? $numeroOC : ('#' . $OC->idOC);
-        $numeroOC = Str::limit($numeroOC, 40);
         $tipoLabel = $tipo === 'revision' ? 'revisión' : 'ventas';
 
         $destinatarios = User::query()
@@ -1146,17 +1151,8 @@ class OCController extends Controller
             })
             ->get();
 
-        $asunto = 'Nuevo comentario de ' . $tipoLabel . ' en la OC ' . $numeroOC;
-        $mensajeCorto = Str::limit($asunto, 120);
         $mensajeLargo = Str::limit(
             $autor . ' agregó un comentario de ' . $tipoLabel . ' a la OC ' . $numeroOC . ': ' . $comentario,
-            250
-        );
-        $mensajeEmail = '<strong>' . e($autor) . '</strong><br>'
-            . 'agregó un comentario de <strong>' . e($tipoLabel) . '</strong> a la Orden de Compra <strong>' . e($numeroOC) . '</strong>.<br><br>'
-            . nl2br(e($comentario));
-        $url = route('OC.revisionPDF', ['id' => $OC->idOC]);
-
         foreach ($destinatarios as $destinatario) {
             Notificacion::create([
                 'users_id' => $destinatario->id,
@@ -1164,7 +1160,7 @@ class OCController extends Controller
                 'Mensaje_Largo' => $mensajeLargo,
                 'url' => $url,
                 'leida' => false,
-                'prioridad' => 'alta',
+                'prioridad' => $prioridad,
             ]);
 
             $email = trim((string) $destinatario->email);
@@ -1180,10 +1176,10 @@ class OCController extends Controller
                     $url,
                     $destinatario->name,
                     $tipoLabel,
-                    $numeroOC
+                    trim((string) ($OC->Num_OC ?? ('#' . $OC->idOC)))
                 ));
             } catch (\Throwable $e) {
-                Log::error('No se pudo enviar el correo de comentario de OC.', [
+                Log::error('No se pudo enviar el correo de OC.', [
                     'idOC' => $OC->idOC,
                     'usuario_id' => $destinatario->id,
                     'email' => $email,
@@ -1192,14 +1188,11 @@ class OCController extends Controller
             }
         }
 
-        // Copia al buzón remitente (MAIL_FROM_ADDRESS), evitando duplicados
-        // cuando ese correo ya está entre los destinatarios de los roles.
         $correoRemitente = trim((string) config('mail.from.address'));
         $emailsDestinatarios = $destinatarios
             ->pluck('email')
             ->map(fn ($email) => strtolower(trim((string) $email)))
             ->all();
-
 
         if (
             filter_var($correoRemitente, FILTER_VALIDATE_EMAIL)
@@ -1207,23 +1200,84 @@ class OCController extends Controller
         ) {
             $usuarioRemitente = User::where('email', $correoRemitente)->first();
 
-
             if ($usuarioRemitente) {
-                $creada = Notificacion::create([
+                Notificacion::create([
                     'users_id' => $usuarioRemitente->id,
                     'Mensaje_Corto' => $mensajeCorto,
                     'Mensaje_Largo' => $mensajeLargo,
                     'url' => $url,
                     'leida' => false,
-                    'prioridad' => 'alta',
+                    'prioridad' => $prioridad,
+                ]);
+            }
+
+            try {
+                if ($usuarioRemitente) {
+                    $usuarioRemitente->notify(new OCComentarioNotification(
+                        $asunto,
+                        $mensajeLargo,
+                        $mensajeEmail,
+                        $url,
+                        $usuarioRemitente->name ?: 'Buzon remitente',
+                        $tipoLabel,
+                        trim((string) ($OC->Num_OC ?? ('#' . $OC->idOC)))
+                    ));
+                } else {
+                    \Illuminate\Support\Facades\Notification::route('mail', $correoRemitente)
+                        ->notify(new OCComentarioNotification(
+                            $asunto,
+                            $mensajeLargo,
+                            $mensajeEmail,
+                            $url,
+                            'Buzon remitente',
+                            $tipoLabel,
+                            trim((string) ($OC->Num_OC ?? ('#' . $OC->idOC)))
+                        ));
+                }
+            } catch (\Throwable $e) {
+                Log::error('No se pudo enviar la copia de la notificacion de OC al buzÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n remitente.', [
+                    'idOC' => $OC->idOC,
+                    'email' => $correoRemitente,
+                    'exception' => $e,
                 ]);
             }
         }
     }
 
+    private function notificarComentarioOC(OC $OC, string $tipo, string $comentario, ?string $autor): void
+    {
+        $roles = ['Ventas', 'Administrador', 'Super Administrador'];
+        $autor = trim((string) $autor) ?: 'Un usuario';
+        $numeroOC = trim((string) ($OC->Num_OC ?? ''));
+        $numeroOC = $numeroOC !== '' ? $numeroOC : ('#' . $OC->idOC);
+        $numeroOC = Str::limit($numeroOC, 40);
+        $tipoLabel = $tipo === 'revision' ? 'revision' : 'ventas';
+
+        $destinatarios = User::query()
+            ->where('Estatus', 'ALTA')
+            ->whereIn('rol', $roles)
+            ->when(auth()->id(), function ($query, $idUsuario) {
+                $query->where('id', '!=', $idUsuario);
+            })
+            ->get();
+
+        $asunto = 'Nuevo comentario de ' . $tipoLabel . ' en la OC ' . $numeroOC;
+        $mensajeCorto = Str::limit($asunto, 120);
+        $mensajeLargo = Str::limit(
+            $autor . ' agregÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ un comentario de ' . $tipoLabel . ' a la OC ' . $numeroOC . ': ' . $comentario,
+            250
+        );
+        $mensajeEmail = '<strong>' . e($autor) . '</strong><br>'
+            . 'agregÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ un comentario de <strong>' . e($tipoLabel) . '</strong> a la Orden de Compra <strong>' . e($numeroOC) . '</strong>.<br><br>'
+            . nl2br(e($comentario));
+        $url = route('OC.revisionPDF', ['id' => $OC->idOC]);
+
+        $this->enviarNotificacionesOC($OC, $asunto, $mensajeCorto, $mensajeLargo, $mensajeEmail, $tipoLabel, $url);
+    }
+
     /**
      * Devuelve el historial de comentarios renderizado para actualizar la vista
-     * sin recargar toda la página.
+     * sin recargar toda la pÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡gina.
      */
     public function comentariosOC($id)
     {
