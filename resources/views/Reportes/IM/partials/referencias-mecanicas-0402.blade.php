@@ -42,7 +42,7 @@
     script cuando los nombres o valores contienen caracteres especiales de HTML.
 --}}
 <script type="application/json" id="referencias-manuales-0402-inicial">{!! json_encode(['composiciones' => old('Composiciones_Referencias_0402', $composicionesReferencias), 'escalas' => old('Escalas_Referencias_0402', $escalasReferencias), 'modo' => $modoReferencias, 'filas' => old('Referencias_Manuales_0402', json_encode($referenciasManuales)), 'seleccion' => old('Referencias_Seleccionadas_0402', json_encode($referenciasSeleccionadas))], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
-@if(($referenciasFormId ?? 'FOR-PIMP-04_02') === 'FOR-PIMP-04_02')
+@if(in_array(($referenciasFormId ?? 'FOR-PIMP-04_02'), ['FOR-PIMP-04_02', 'FOR-PIMP-04_03'], true))
     {{-- A370 es un metodo de conversion, separado del catalogo de composicion y limites del material. --}}
     @php
     $configConversionA370 = [

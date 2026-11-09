@@ -408,13 +408,13 @@
                     </div>
                     {{-- Carga XRF del 06_B_01: la selección de norma permanece en este formulario. --}}
                     <div class="col-12">
-                        <div class="form-group border rounded p-3 bg-light">
-                            <label for="analisisPdfXrf"><strong>PDF del equipo XRF (1 hoja por archivo)</strong></label>
+                        <div class="form-group xrf-carga-0501">
+                            <label for="analisisPdfXrf" class="xrf-carga-titulo"><i class="far fa-file-pdf mr-2" aria-hidden="true"></i><strong>PDF del equipo XRF (1 hoja por archivo)</strong></label>
                             <input type="file" class="form-control-file @error('Analisis_PDF.*') is-invalid @enderror"
                                 id="analisisPdfXrf" name="Analisis_PDF[]" accept="application/pdf,.pdf" multiple>
                             <small class="form-text text-muted">Seleccione los PDF en orden. Los primeros tres se asignan a los disparos 1, 2 y 3; cada uno genera la tabla y la gráfica. El promedio usa todos los PDF seleccionados.</small>
                             <div class="mt-2">
-                                <button type="button" class="btn btn-outline-primary" id="extraerAnalisisPdfBtn">Extraer datos y calcular promedio</button>
+                                <button type="button" class="btn btn-primary" id="extraerAnalisisPdfBtn"><i class="fas fa-cogs mr-2" aria-hidden="true"></i>Procesar análisis</button>
                                 <span class="ml-2 text-muted d-none" id="estadoAnalisisPdf"></span>
                             </div>
                             @error('Analisis_PDF.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror

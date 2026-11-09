@@ -45,13 +45,13 @@
         let historico = {};
         let tarjetaActiva = null;
 
-        /** El dato del material usa el mismo valor del patron, no una segunda captura. */
+        /** Sugiere el valor del patron; en 04/03 el tecnico puede corregirlo manualmente. */
         function sincronizarTamanoMaterial(valor) {
-            if (formulario.id !== 'FOR-PIMP-04_02') return;
+            if (!['FOR-PIMP-04_02', 'FOR-PIMP-04_03', 'FOR-PIMP-03_B_01'].includes(formulario.id)) return;
             const entrada = formulario.querySelector('[name="Datos_Equipo[TAMANO_GRANO]"]');
             if (!entrada) return;
             entrada.value = valor || '---';
-            entrada.readOnly = Boolean(valor);
+            entrada.readOnly = formulario.id === 'FOR-PIMP-04_02' && Boolean(valor);
             entrada.dispatchEvent(new Event('change', {bubbles: true}));
         }
 
@@ -100,7 +100,7 @@
             else tarjeta.querySelector('.form-group')?.appendChild(panel);
 
             panel.querySelector('[data-grain-card-select]').addEventListener('change', function () {
-                if (formulario.id === 'FOR-PIMP-04_02' && tarjeta.hasAttribute('data-grain-history-card') && !this.value) {
+                if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03', 'FOR-PIMP-03_B_01'].includes(formulario.id) && tarjeta.hasAttribute('data-grain-history-card') && !this.value) {
                     const check = tarjeta.querySelector('.foto-grain-checkbox');
                     check.checked = false;
                     check.dispatchEvent(new Event('change', {bubbles: true}));
@@ -296,7 +296,8 @@
             if (limpiarGlobal) {
                 activoInput.value = '0';
                 idInput.value = '';
-                descripcionInput.value = '';
+                // Sin patron en 04/03 solo sustituye la imagen; conserva el pie escrito.
+                if (!['FOR-PIMP-04_03', 'FOR-PIMP-03_B_01'].includes(formulario.id)) descripcionInput.value = '';
                 usarActualInput.value = '0';
                 sincronizarTamanoMaterial('');
             }
@@ -386,13 +387,13 @@
         if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03', 'FOR-PIMP-03_B_01'].includes(formulario.id)) {
             formulario.addEventListener('saico:grain-pattern-select', function (evento) {
                 const id = String(evento.detail?.id || '');
-                if (formulario.id === 'FOR-PIMP-04_02' && !id) {
+                if (['FOR-PIMP-04_02', 'FOR-PIMP-04_03', 'FOR-PIMP-03_B_01'].includes(formulario.id) && !id) {
                     const tarjetaAnterior = tarjetaActiva;
                     if (tarjetaAnterior) desactivarTarjeta(tarjetaAnterior, true);
                     else {
                         activoInput.value = '0';
                         idInput.value = '';
-                        descripcionInput.value = '';
+                        if (!['FOR-PIMP-04_03', 'FOR-PIMP-03_B_01'].includes(formulario.id)) descripcionInput.value = '';
                         usarActualInput.value = '0';
                         sincronizarTamanoMaterial('');
                     }
