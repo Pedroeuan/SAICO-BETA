@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers\OC;
 
@@ -445,7 +445,7 @@ class OCController extends Controller
         $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
         $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
         $idCliente = $OC->idClientes;
-        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        // Obtener todos los clientes excepto el cliente "POR DEFINIR"
         $Cliente = clientes::where('idClientes', $idCliente)->first(); 
         $Nombre_Cliente = $Cliente->Cliente;
         // Soporta tanto el formato anterior (lista de detalles) como el formato
@@ -713,7 +713,7 @@ class OCController extends Controller
             $revisionActual = 'V' . (int) $coincidencias[1];
         }
 
-        // Cada envío de ventas se conserva como un comentario independiente.
+        // Cada enví­o de ventas se conserva como un comentario independiente.
         OCComentario::create([
             'idOC' => $OC->idOC,
             'tipo' => 'ventas',
@@ -1146,10 +1146,6 @@ class OCController extends Controller
             })
             ->get();
 
-        if ($destinatarios->isEmpty()) {
-            return;
-        }
-
         $asunto = 'Nuevo comentario de ' . $tipoLabel . ' en la OC ' . $numeroOC;
         $mensajeCorto = Str::limit($asunto, 120);
         $mensajeLargo = Str::limit(
@@ -1192,6 +1188,34 @@ class OCController extends Controller
                     'usuario_id' => $destinatario->id,
                     'email' => $email,
                     'exception' => $e,
+                ]);
+            }
+        }
+
+        // Copia al buzón remitente (MAIL_FROM_ADDRESS), evitando duplicados
+        // cuando ese correo ya está entre los destinatarios de los roles.
+        $correoRemitente = trim((string) config('mail.from.address'));
+        $emailsDestinatarios = $destinatarios
+            ->pluck('email')
+            ->map(fn ($email) => strtolower(trim((string) $email)))
+            ->all();
+
+
+        if (
+            filter_var($correoRemitente, FILTER_VALIDATE_EMAIL)
+            && !in_array(strtolower($correoRemitente), $emailsDestinatarios, true)
+        ) {
+            $usuarioRemitente = User::where('email', $correoRemitente)->first();
+
+
+            if ($usuarioRemitente) {
+                $creada = Notificacion::create([
+                    'users_id' => $usuarioRemitente->id,
+                    'Mensaje_Corto' => $mensajeCorto,
+                    'Mensaje_Largo' => $mensajeLargo,
+                    'url' => $url,
+                    'leida' => false,
+                    'prioridad' => 'alta',
                 ]);
             }
         }

@@ -18,7 +18,7 @@
                         </strong>
                         <small class="text-muted text-right">
                             @if (!empty($comentario->revision))
-                                <span class="badge badge-light">{{ $comentario->revision }}</span>
+                                <span class="badge badge-warning">{{ $comentario->revision }}</span>
                             @endif
                             @if (!empty($comentario->created_at))
                                 {{ $comentario->created_at->format('d/m/Y H:i') }}
@@ -47,7 +47,7 @@
                         </strong>
                         <small class="text-muted text-right">
                             @if (!empty($comentario->revision))
-                                <span class="badge badge-light">{{ $comentario->revision }}</span>
+                                <span class="badge badge-info">{{ $comentario->revision }}</span>
                             @endif
                             @if (!empty($comentario->created_at))
                                 {{ $comentario->created_at->format('d/m/Y H:i') }}
