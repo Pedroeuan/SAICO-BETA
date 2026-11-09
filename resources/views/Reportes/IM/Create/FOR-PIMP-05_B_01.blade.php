@@ -399,8 +399,8 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="form-group border rounded p-3 bg-light">
-                            <label for="analisisPdfXrf"><strong>PDF del equipo XRF</strong></label>
+                        <div class="form-group xrf-carga-0501">
+                            <label for="analisisPdfXrf" class="xrf-carga-titulo"><i class="far fa-file-pdf mr-2" aria-hidden="true"></i><strong>PDF del equipo XRF</strong></label>
                             <input type="file" class="form-control-file @error('Analisis_PDF') is-invalid @enderror"
                                 id="analisisPdfXrf" name="Analisis_PDF" accept="application/pdf,.pdf">
                             <small class="form-text text-muted">
@@ -413,7 +413,7 @@
                                 @endforeach
                             </div>
                             <div class="mt-2">
-                                <button type="button" class="btn btn-outline-primary" id="extraerAnalisisPdfBtn">Extraer datos y calcular promedio</button>
+                                <button type="button" class="btn btn-primary" id="extraerAnalisisPdfBtn"><i class="fas fa-cogs mr-2" aria-hidden="true"></i>Procesar análisis</button>
                                 <span class="ml-2 text-muted d-none" id="estadoAnalisisPdf"></span>
                             </div>
                             @error('Analisis_PDF.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror

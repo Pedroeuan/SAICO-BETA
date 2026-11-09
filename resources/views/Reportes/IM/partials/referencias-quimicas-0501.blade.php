@@ -19,23 +19,27 @@
     <input type="hidden" name="Norma_IM[seleccion_multiple]" value="1">
     <div class="quimica-cabecera">
         <div>
-            <label class="font-weight-bold mb-1" for="buscarNormasQuimicas0501">Normas de composición química</label>
-            <small class="d-block text-muted">Selecciona las referencias para comparar los elementos de la pieza.</small>
+            <label class="font-weight-bold mb-1" for="buscarNormasQuimicas0501"><i class="fas fa-flask mr-2" aria-hidden="true"></i>Normas de composición química</label>
         </div>
         {{-- La nueva pestaña conserva el reporte que el técnico está capturando. --}}
+        <div class="d-flex align-items-center" style="gap:8px">
         <a class="btn btn-outline-primary btn-sm" href="{{ route('Normas_IM.Create') }}" target="_blank" rel="noopener">
             <i class="fas fa-plus mr-1" aria-hidden="true"></i> Crear norma
         </a>
+        <button type="button" class="quimica-desplegar" data-quimica-desplegar aria-label="Mostrar normas" title="Mostrar normas" aria-expanded="false" aria-controls="contenidoNormasQuimicas0501"><i class="fas fa-chevron-down" aria-hidden="true"></i></button>
+        </div>
     </div>
+    <div id="contenidoNormasQuimicas0501" data-quimica-contenido hidden>
     <div class="quimica-busqueda">
         <i class="fas fa-search" aria-hidden="true"></i>
         <input type="search" class="form-control" id="buscarNormasQuimicas0501" placeholder="Buscar norma, grado o variante">
     </div>
     <div class="quimica-subtitulo">Referencias seleccionadas <span data-quimica-total class="badge badge-light">0</span></div>
     <div data-quimica-seleccionadas class="quimica-seleccionadas"></div>
-    <div class="quimica-subtitulo">Normas disponibles <small class="text-muted font-weight-normal">Puedes marcar varias</small></div>
+    <div class="quimica-subtitulo">Normas disponibles</div>
     <div data-quimica-opciones class="quimica-opciones"></div>
     @error('Norma_IM.Seleccion_Quimica')<div class="text-danger">{{ $message }}</div>@enderror
+    </div>
     <script type="application/json" data-quimica-config>@json(['opciones' => $opcionesQuimicas0501, 'seleccion' => $seleccionQuimica0501, 'analisis' => $historicaQuimica0501['Analisis_PDF'] ?? []])</script>
     </div>
 </div>
@@ -153,6 +157,97 @@
     }
     @media(max-width:650px) { [data-referencias-quimicas-0501] .quimica-opciones { grid-template-columns:1fr; } }
 
+    /* Colores del sistema aplicados al selector del 05/01. Los colores de cada referencia se conservan. */
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-panel {
+        padding:0;
+        border:1px solid #d3dfed;
+        border-radius:4px;
+        background:#fff;
+        overflow:hidden;
+    }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-cabecera {
+        margin:0;
+        padding:20px 22px;
+        background:#f5f8fc;
+        border-top:4px solid #0d6efd;
+        border-bottom:1px solid #dce5f0;
+    }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-cabecera label {
+        font-size:17px;
+        font-weight:700;
+        letter-spacing:-.2px;
+        color:#243b53;
+    }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-cabecera small { color:#63758a!important; font-size:12px; line-height:1.6; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-cabecera .btn {
+        border:1px solid #0d6efd;
+        background:#0d6efd;
+        color:#fff;
+        border-radius:3px;
+        padding:8px 13px;
+        font-weight:600;
+    }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-cabecera .btn:hover { background:#0b5ed7; border-color:#0b5ed7; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-cabecera .btn:focus-visible { outline:2px solid #86b7fe; outline-offset:3px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-busqueda { margin:18px 22px 16px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-busqueda input {
+        background:#fff;
+        border:1px solid #bdcddd;
+        border-radius:3px;
+        min-height:40px;
+        color:#243b53;
+        font-size:13px;
+    }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-busqueda input:focus { border-color:#86b7fe; box-shadow:0 0 0 2px #e7f0ff; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-busqueda i { color:#6d849e; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-subtitulo { margin:16px 22px 10px; color:#3e536c; font-size:12px; letter-spacing:.2px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-subtitulo small { margin-left:auto; font-size:11px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) [data-quimica-total] { background:#0d6efd; color:white; border-radius:3px; padding:4px 7px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-seleccionadas { margin:0 22px 18px; min-height:30px; align-items:center; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-etiqueta { background:#f8faff; border-radius:2px; border-top-color:#dce5f0; border-right-color:#dce5f0; border-bottom-color:#dce5f0; padding:8px 11px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-opciones { margin:0 22px 22px; padding:0 8px 2px 0; gap:0 20px; max-height:280px; border-top:1px solid #dce5f0; scrollbar-color:#91aaca #f5f8fc; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-opcion {
+        min-height:48px;
+        padding:12px 10px;
+        border:0;
+        border-bottom:1px solid #e0e7f0;
+        border-left:3px solid transparent;
+        border-radius:0;
+        font-size:13px;
+        color:#2b4058;
+        background:#fff;
+        line-height:1.5;
+    }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-opcion:hover { background:#f4f8ff; border-bottom-color:#a9c5ec; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-opcion.is-selected { background:#edf4ff; border-left-color:#0d6efd; font-weight:700; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-opcion input { width:16px; height:16px; accent-color:#0d6efd; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-opcion:focus-within { outline:2px solid #86b7fe; outline-offset:-2px; }
+    @media(max-width:650px) {
+        :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-cabecera { padding:16px; }
+        :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-busqueda,
+        :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-subtitulo,
+        :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-seleccionadas,
+        :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .quimica-opciones { margin-left:16px; margin-right:16px; }
+    }
+
+    /* Archivo nativo accesible: el nombre seleccionado sigue visible sin duplicar controles. */
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .xrf-carga-0501 { background:#fff; border:1px solid #d3dfed; border-radius:6px; padding:20px 22px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .xrf-carga-titulo { display:flex; align-items:center; margin-bottom:14px; font-size:16px; color:#243b53; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .xrf-carga-titulo i { color:#0d6efd; font-size:21px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) #analisisPdfXrf { display:block; width:100%; padding:14px; border:1px dashed #9cb9df; border-radius:5px; background:#f5f8fc; font-size:13px; color:#425c78; box-sizing:border-box; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) #analisisPdfXrf::file-selector-button { border:1px solid #0d6efd; border-radius:4px; background:white; color:#0d6efd; padding:9px 14px; margin-right:14px; font-weight:600; cursor:pointer; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) #analisisPdfXrf::file-selector-button:hover { background:#e7f0ff; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) #analisisPdfXrf:focus-visible { outline:2px solid #0d6efd; outline-offset:3px; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .xrf-carga-0501 .form-text { margin-top:10px; font-size:12px; line-height:1.6; }
+    :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) #extraerAnalisisPdfBtn { margin-top:5px; padding:10px 16px; border-radius:4px; font-size:calc(13px + 2mm); font-weight:600; }
+    @media(max-width:650px) { :is(#FOR-PIMP-05_B_01, #FOR-PIMP-06_B_01) .xrf-carga-0501 { padding:16px; } }
+    [data-referencias-quimicas-0501] .quimica-desplegar {
+        display:inline-flex; align-items:center; justify-content:center;
+        width:32px; height:32px; padding:0; border:0; border-radius:0;
+        background:transparent; color:#62758a; font-size:13px; cursor:pointer;
+    }
+    [data-referencias-quimicas-0501] .quimica-desplegar:hover { color:#0d6efd; }
+    [data-referencias-quimicas-0501] .quimica-desplegar:focus-visible { outline:2px solid #86b7fe; outline-offset:2px; }
 </style>
 <script>
 window.iniciarReferenciasQuimicasIM = function (form, alCambiar) {
@@ -161,6 +256,21 @@ window.iniciarReferenciasQuimicasIM = function (form, alCambiar) {
     const panelQuimico = form.querySelector('[data-referencias-quimicas-0501]');
     let restaurarQuimicas = null;
     if (panelQuimico) {
+        const desplegar = panelQuimico.querySelector('[data-quimica-desplegar]');
+        const contenido = panelQuimico.querySelector('[data-quimica-contenido]');
+        if (desplegar && !desplegar.dataset.inicializado) {
+            desplegar.dataset.inicializado = '1';
+            if (panelQuimico.querySelector('.text-danger')) contenido.hidden = false;
+            const actualizarDesplegable = () => {
+                desplegar.setAttribute('aria-expanded', String(!contenido.hidden));
+                const etiqueta = contenido.hidden ? 'Mostrar normas' : 'Minimizar normas';
+                desplegar.setAttribute('aria-label', etiqueta);
+                desplegar.title = etiqueta;
+                desplegar.querySelector('i').className = contenido.hidden ? 'fas fa-chevron-down' : 'fas fa-chevron-up';
+            };
+            desplegar.addEventListener('click', () => { contenido.hidden = !contenido.hidden; actualizarDesplegable(); });
+            actualizarDesplegable();
+        }
         const configuracion = JSON.parse(panelQuimico.querySelector('[data-quimica-config]').textContent);
         const opciones = configuracion.opciones || [];
         let seleccion = [...(configuracion.seleccion || [])];
@@ -181,7 +291,7 @@ window.iniciarReferenciasQuimicasIM = function (form, alCambiar) {
             });
             if (!referenciasQuimicas0501.length) {
                 const ayuda = document.createElement('small'); ayuda.className = 'text-muted';
-                ayuda.textContent = 'Marca una norma de la lista para comenzar.'; marcadas.append(ayuda);
+                ayuda.textContent = ''; marcadas.append(ayuda);
             }
             referenciasQuimicas0501.forEach((item, indice) => {
                 const etiqueta = document.createElement('div');

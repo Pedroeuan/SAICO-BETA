@@ -1,5 +1,16 @@
 @php
     $patronHistorico = is_array($patronGrano ?? null) ? $patronGrano : [];
+    // El espacio con X conserva el comentario y la ubicacion aunque ya no tenga patron.
+    if (empty($patronHistorico) && is_array($Datos_Equipo['ESPACIO_SIN_PATRON'] ?? null)) {
+        $sinPatronGuardado = $Datos_Equipo['ESPACIO_SIN_PATRON'];
+        $patronHistorico = [
+            'descripcion' => $sinPatronGuardado['comment'] ?? '',
+            'layout' => [
+                'pagina' => $sinPatronGuardado['pagina'] ?? 1,
+                'posicion' => $sinPatronGuardado['posicion'] ?? 'abajo_izquierda',
+            ],
+        ];
+    }
     $catalogoPatrones = collect($PatronesGranoIM ?? [])->values();
     $patronOld = old('Patron_Grano');
     $tienePatronOld = is_array($patronOld);
