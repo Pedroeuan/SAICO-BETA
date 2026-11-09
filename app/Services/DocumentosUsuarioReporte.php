@@ -27,7 +27,7 @@ class DocumentosUsuarioReporte
             'documentos_nuevos.*.tipo' => 'required|in:cv_general,cv_servicio,certificado',
             'documentos_nuevos.*.formato_id' => 'nullable|integer|exists:Formato,idFormato|required_if:documentos_nuevos.*.tipo,cv_servicio',
             'documentos_nuevos.*.procedimiento_id' => 'nullable|integer|exists:procedimiento,idProcedimiento',
-            'documentos_nuevos.*.pdf' => 'required|file|mimes:pdf|max:20480',
+            //'documentos_nuevos.*.pdf' => 'required|file|mimes:pdf|max:20480',
             'documentos_eliminar' => 'nullable|array',
             'documentos_eliminar.*' => 'required|uuid',
         ]);

@@ -45,7 +45,7 @@
             </div>
         @endif
         <div id="documentos-reportes-nuevos"></div>
-        <small class="usuario-documentos-nota"><i class="fas fa-info-circle" aria-hidden="true"></i> Solo PDF · Hasta 20 MB por archivo</small>
+        {{--<small class="usuario-documentos-nota"><i class="fas fa-info-circle" aria-hidden="true"></i> Solo PDF · Hasta 20 MB por archivo</small>--}}
         @foreach($errors->getMessages() as $campo => $mensajes)
             @if(str_starts_with($campo, 'documentos_') || $campo === 'cv_pdf')
                 @foreach($mensajes as $mensaje)<div class="text-danger">{{ $mensaje }}</div>@endforeach

@@ -6,9 +6,14 @@ use App\Models\detallesOC\detallesOC;
 use App\Models\Firmantes_OC\Firmantes_OC;
 use App\Models\Catalogo_OC\Catalogo_OC;
 use App\Models\OC\OC;
+use App\Models\OC\OCComentario;
 use App\Models\Clientes\clientes;
+use App\Models\Notificacion\Notificacion;
+use App\Models\User;
+use App\Notifications\OCComentarioNotification;
 use App\Models\Reporte\reporte;
 use Barryvdh\DomPDF\Facade\Pdf;
+use setasign\Fpdi\Fpdi;
 use Illuminate\Support\Str;
 
 use App\Http\Controllers\Controller;
@@ -21,11 +26,86 @@ use Illuminate\Support\Facades\Hash;
 class OCController extends Controller
 {
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit_revisar($id)
+    {
+        $OC = OC::where('idOC', $id)->first();
+        $detallesOCM = detallesOC::where('idOC',$OC->idOC)->first();
+        $catalogo = DB::table('Catalogo_OC')->get();
+        $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
+        $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
+        $idCliente = $OC->idClientes;
+        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        $Cliente = clientes::where('idClientes', $idCliente)->first(); 
+        $Nombre_Cliente = $Cliente->Cliente;
+        // Soporta tanto el formato anterior (lista de detalles) como el formato
+        // actual que guarda los detalles junto con sus totales.
+        $datosGuardados = $detallesOCM ? json_decode($detallesOCM->Detalles, true) : [];
+        $detallesOC = $datosGuardados['detallesOC'] ?? $datosGuardados;
+        $detallesOC = is_array($detallesOC) ? array_values($detallesOC) : [];
+        $totales = $datosGuardados['totales'] ?? [];
+
+        if (empty($totales) && !empty($detallesOC)) {
+            $subtotalCentavos = 0;
+            foreach ($detallesOC as $detalle) {
+                $cantidad = (float) ($detalle['cantidad'] ?? 0);
+                $valorUnitario = (float) ($detalle['valor_unitario'] ?? 0);
+                $subtotalCentavos += (int) round($cantidad * $valorUnitario * 100);
+            }
+
+            $ivaCentavos = (int) round($subtotalCentavos * 0.16);
+            $totales = [
+                'subtotal' => $subtotalCentavos / 100,
+                'iva' => $ivaCentavos / 100,
+                'total' => ($subtotalCentavos + $ivaCentavos) / 100,
+            ];
+        }
+
+        $totales = array_merge([
+            'subtotal' => 0,
+            'iva' => 0,
+            'total' => 0,
+        ], is_array($totales) ? $totales : []);
+
+    $Firmantes = Firmantes_OC::where('idOC',$OC->idOC)->first();
+    // Decodificar JSON de la columna 'Detalles'
+        $Firmas = $Firmantes ? json_decode($Firmantes->Nombre_Cargo, true) : [];
+        // Obtener el numero de firmas
+        $numFirmas = $Firmas['numFirmas'] ?? 1;
+
+        // Marcas (anotaciones) guardadas previamente sobre el PDF.
+        $marcas = [];
+        if (!empty($OC->Revision_Marcas)) {
+            $marcasDecodificadas = json_decode($OC->Revision_Marcas, true);
+            if (is_array($marcasDecodificadas)) {
+                $marcas = $marcasDecodificadas;
+            }
+        }
+
+        $comentarios = $this->comentariosDeOC($OC->idOC);
+        $comentariosRevision = $comentarios['revision'];
+        $comentariosVentas = $comentarios['ventas'];
+
+        return view('OC.Revision.edit_revisar', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas','marcas','comentariosRevision','comentariosVentas'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index_AD()
+    {
+        // OC en revisión y ya revisadas (Revisión: V1, Revisado V1, V2, ...).
+        $OC = OC::with('comentarios')->where('Estatus', 'like', 'Revis%')->get();
+
+        return view('OC.Revision.index_AD', compact('OC'));
+    }
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $OC = OC::all();
+        $OC = OC::with('comentarios')->get();
 
         return view('OC.index', compact('OC'));
     }
@@ -365,7 +445,7 @@ class OCController extends Controller
         $Condiciones_Pago = DB::table('Condiciones_Pago')->get();
         $Condiciones_Generales = DB::table('Condiciones_Generales')->get();
         $idCliente = $OC->idClientes;
-        // Obtén todos los clientes excepto el cliente "POR DEFINIR"
+        // Obtener todos los clientes excepto el cliente "POR DEFINIR"
         $Cliente = clientes::where('idClientes', $idCliente)->first(); 
         $Nombre_Cliente = $Cliente->Cliente;
         // Soporta tanto el formato anterior (lista de detalles) como el formato
@@ -403,7 +483,11 @@ class OCController extends Controller
         // Obtener el numero de firmas
         $numFirmas = $Firmas['numFirmas'] ?? 1;
 
-        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas'));
+        $comentarios = $this->comentariosDeOC($OC->idOC);
+        $comentariosRevision = $comentarios['revision'];
+        $comentariosVentas = $comentarios['ventas'];
+
+        return view('OC.edit', compact('id','OC','detallesOC','catalogo','detallesOCM','Nombre_Cliente','totales','Condiciones_Pago','Condiciones_Generales','numFirmas','comentariosRevision','comentariosVentas'));
     }
 
     /**
@@ -411,7 +495,7 @@ class OCController extends Controller
      */
     public function updateOC(Request $request, $id)
     {
-        //
+        //dd($request->all());
         $request->validate([
             'Numero_OC' => 'required|integer',
             'Requisicion' => 'required|string',
@@ -420,6 +504,7 @@ class OCController extends Controller
         ]);
 
         $OC = OC::find($id);
+        $detallesOCModel = detallesOC::find($id);
         // Actualizar los datos de la OC
         $OC->update([
             'Contrato' => $request->input('Contrato'),
@@ -431,6 +516,19 @@ class OCController extends Controller
             'Tipo_servicio' => $request->input('Tipo_servicio'),
         ]);
 
+        $detallesOCModel->update([
+            'NumCotizacion' => $request->input('NumCotizacion'),
+            'SolicitudCliente' => $request->input('SolicitudCliente'),
+            'Contacto' => $request->input('Contacto'),
+            'Puesto' => $request->input('Puesto'),
+            'Ciudad' => $request->input('Ciudad'),
+            'Telefono' => $request->input('Telefono'),
+            'Correo' => $request->input('Correo'),
+            'Vigencia' => $request->input('Vigencia'),
+            'Notas' => $request->input('Notas'),
+            'Condiciones_pago' => $request->input('Condiciones_pago'),
+            'Condiciones_generales' => $request->input('Condiciones_generales'),
+        ]);
         // Eliminar el archivo PDF anterior si existe y se proporciona uno nuevo
         if ($request->hasFile('OC_archivo') && $request->file('OC_archivo')->isValid()) {
             // Obtener la ruta del archivo anterior desde la base de datos
@@ -500,7 +598,148 @@ class OCController extends Controller
         $detallesOCModel->Detalles = $detallesJSON;
         $detallesOCModel->save();
 
+        // Buscar las firmas por la orden de servicio; $id no es la clave primaria de Firmantes_OS.
+        $firmantes_OS = Firmantes_OC::firstOrNew([
+            'idOC' => $OC->idOC,
+        ]);
+
+        /* Firmas */
+        $numFirmas = (int) $request->input('numFirmas', 1);
+        $firmasPorCantidad = [
+            1 => $request->input('Firmas_Reportes1', []),
+            2 => $request->input('Firmas_Reportes2', []),
+            3 => $request->input('Firmas_Reportes3', []),
+            4 => $request->input('Firmas_Reportes4', []),
+        ];
+
+        $datosFirmas = $firmasPorCantidad[$numFirmas] ?? [];
+        $datosFirmas['numFirmas'] = $numFirmas;
+        $firmantes_OS->Nombre_Cargo = json_encode($datosFirmas);
+        $firmantes_OS->save();
         return redirect()->route('OC.indexOC');
+    }
+
+    /**
+     * Guarda los cambios realizados durante la revisión de la OC:
+     * marcas del PDF, estatus, autor/fecha y el nuevo comentario del historial.
+     */
+    public function updateOC_Revision(Request $request, $id)
+    {
+        $OC = OC::find($id);
+
+        // La versión se toma del estatus actual (por ejemplo "Revisión: V2").
+        $revision = '';
+
+        if (preg_match('/V\s*(\d+)/i', (string) $OC->Estatus, $coincidencias)) {
+            $revision = 'V' . (int) $coincidencias[1];
+        } else {
+            $revision = 'V1';
+        }
+
+        // Solo se guardan las marcas si el JSON recibido es válido y no está vacío.
+        $marcasGuardadas = null;
+        $marcasInput = $request->input('Revision_Marcas');
+
+        if (is_string($marcasInput)) {
+            $marcasDecodificadas = json_decode($marcasInput, true);
+            if (is_array($marcasDecodificadas) && !empty($marcasDecodificadas)) {
+                $marcasGuardadas = $marcasInput;
+            }
+        }
+
+        $comentarioRevision = trim((string) $request->input('Revision_OC'));
+
+        $datosRevision = [
+            'Revision_Marcas' => $marcasGuardadas,
+            'Estatus' => 'Revisado ' . $revision,
+            'Revision_Autor' => auth()->user()->name ?? null,
+            'Revision_At' => now(),
+        ];
+
+        $OC->update($datosRevision);
+
+        if ($comentarioRevision !== '') {
+            OCComentario::create([
+                'idOC' => $OC->idOC,
+                'tipo' => 'revision',
+                'revision' => $revision,
+                'comentario' => $comentarioRevision,
+                'autor' => auth()->user()->name ?? null,
+                'idUsers' => auth()->id(),
+            ]);
+
+            try {
+                $this->notificarComentarioOC(
+                    $OC,
+                    'revision',
+                    $comentarioRevision,
+                    auth()->user()->name ?? null
+                );
+            } catch (\Throwable $e) {
+                Log::error('No se pudieron enviar las notificaciones del comentario de revisión de OC.', [
+                    'idOC' => $OC->idOC,
+                    'exception' => $e,
+                ]);
+            }
+        }
+
+        return redirect()->route('OC.indexOC_AD')
+            ->with('success', 'La revisión de la orden de compra se guardó correctamente.');
+    }
+
+    /**
+     * Guarda el comentario que agrega ventas después de revisar una OC.
+     * Cada envío se agrega al historial de OC_Comentarios.
+     */
+    public function guardarComentarioVentas(Request $request, $id)
+    {
+        $request->validate([
+            'Comentario_Ventas' => 'required|string|max:4000',
+        ], [
+            'Comentario_Ventas.required' => 'Escribe un comentario antes de guardarlo.',
+            'Comentario_Ventas.max' => 'El comentario no puede superar los 4000 caracteres.',
+        ]);
+
+        $OC = OC::where('idOC', $id)->first();
+
+        if (!$OC) {
+            abort(404, 'Orden de compra no encontrada.');
+        }
+
+        $comentarioVentas = trim((string) $request->input('Comentario_Ventas'));
+
+        $revisionActual = '';
+        if (preg_match('/V\s*(\d+)/i', (string) $OC->Estatus, $coincidencias)) {
+            $revisionActual = 'V' . (int) $coincidencias[1];
+        }
+
+        // Cada enví­o de ventas se conserva como un comentario independiente.
+        OCComentario::create([
+            'idOC' => $OC->idOC,
+            'tipo' => 'ventas',
+            'revision' => $revisionActual ?: null,
+            'comentario' => $comentarioVentas,
+            'autor' => auth()->user()->name ?? null,
+            'idUsers' => auth()->id(),
+        ]);
+
+        try {
+            $this->notificarComentarioOC(
+                $OC,
+                'ventas',
+                $comentarioVentas,
+                auth()->user()->name ?? null
+            );
+        } catch (\Throwable $e) {
+            Log::error('No se pudieron enviar las notificaciones del comentario de ventas de OC.', [
+                'idOC' => $OC->idOC,
+                'exception' => $e,
+            ]);
+        }
+
+        return redirect()
+            ->route('OC.revisionPDF', ['id' => $OC->idOC])
+            ->with('success', 'Tu comentario se guardó correctamente.');
     }
 
     /**
@@ -528,14 +767,81 @@ class OCController extends Controller
             {
                 $detallesOC->delete();
             }
+
+        // El historial tiene llave foránea hacia OC; se elimina primero.
+        OCComentario::where('idOC', $OC->idOC)->delete();
+
         $OC->delete();
          // Responder con éxito
         return response()->json(['success' => true, 'message' => 'Orden de compra eliminada exitosamente']);
     }
 
-    public function OC_PDF($id)
+    /**
+     * Envía la orden de compra a revisión.
+     *
+     * Si es la primera vez usa "V1". Si la OC ya fue revisada
+     * ("Revisado V1", "Revisado V2", ...) el nuevo envío crea la
+     * siguiente versión ("V2", "V3", ...). Si ya está en revisión,
+     * conserva la versión actual.
+     */
+    public function enviarRevision($id)
     {
-        $OC  = OC::find($id);
+        $OC = OC::find($id);
+
+        if (!$OC) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Orden de compra no encontrada',
+            ], 404);
+        }
+
+        $estatusActual = trim((string) $OC->Estatus);
+        $revision = '';
+
+        if (preg_match('/V\s*(\d+)/i', $estatusActual, $coincidencias)) {
+            $revision = 'V' . (int) $coincidencias[1];
+        }
+
+        if ($revision === '') {
+            $revision = 'V1';
+        }
+
+        // Si la revisión anterior ya terminó, este envío inicia la siguiente.
+        if (stripos($estatusActual, 'Revisado') === 0) {
+            $revision = $this->siguienteRevision($revision);
+        }
+
+        $OC->Estatus = 'Revisión: ' . $revision;
+        $OC->Revision_Autor = null;
+        $OC->Revision_At = null;
+        $OC->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'La orden de compra fue enviada a revisión.',
+            'estatus' => $OC->Estatus,
+            'revision' => $revision,
+        ]);
+    }
+
+    /**
+     * Devuelve la siguiente versión a partir de una cadena tipo "V1".
+     */
+    private function siguienteRevision(string $revision): string
+    {
+        if (preg_match('/^V\s*(\d+)$/i', trim($revision), $coincidencias)) {
+            return 'V' . ((int) $coincidencias[1] + 1);
+        }
+
+        return 'V1';
+    }
+
+    /**
+     * Construye los datos que necesita la plantilla OC_PDF.
+     */
+    private function datosPDFOC($id): array
+    {
+        $OC = OC::find($id);
         $cliente = clientes::find($OC->idClientes);
         $OC->cliente = $cliente; // Agregar el cliente al objeto OC
         $detallesRegistro = detallesOC::where('idOC', $id)->first();
@@ -554,13 +860,10 @@ class OCController extends Controller
         $firmantes = Firmantes_OC::where('idOC', $id)->first();
         $Firmas_Reportes = $firmantes ? json_decode($firmantes->Nombre_Cargo, true) : [];
         $numFirmas = (int) ($Firmas_Reportes['numFirmas'] ?? 1);
-        
-        //$Grupo_Juntas_Detalles_OS = Grupo_Juntas_Detalles_OS::where('idOrden_Servicio', $id)->first(); 
-        //$detallesOT = json_decode($Grupo_Juntas_Detalles_OS->Juntas_grupo, true);
-    
+
         $Logo = public_path('images/Logo_AICO_R.jpg');
 
-        $data = [
+        return [
             'title' => 'Manifiesto PDF',
             'OC' => $OC,
             'detallesOC' => $detallesOC,
@@ -569,33 +872,374 @@ class OCController extends Controller
             'numFirmas' => $numFirmas,
             'Firmas_Reportes' => $Firmas_Reportes,
             'Logo' => $Logo,
-            
         ];
-    
-        // Cargar la vista con los datos
-        $pdf = PDF::loadView('OC.OC_PDF', $data);
-    
-        // Renderizar el PDF antes de obtener el canvas
-        $dompdf = $pdf->getDomPDF();
-        $dompdf->render(); // Renderiza el contenido del PDF para calcular todas las páginas
-    
-        $canvas = $dompdf->getCanvas();
-        /*$canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
-            // Usar una fuente válida predefinida en DomPDF
-            $font = $fontMetrics->getFont('Arial', 'normal');
-            $size = 8;
-    
-            // Validar y ajustar las posiciones X e Y según sea necesario
-            $x = 483; // Ajusta esta posición X según sea necesario
-            $y = 57;  // Ajusta esta posición Y según sea necesario
-    
-            // Evitar problemas con valores no válidos para coordenadas
-            if (is_numeric($x) && is_numeric($y)) {
-                $text = "$pageNumber de $pageCount";
-                $canvas->text($x, $y, $text, $font, $size);
-            }
-        });*/
-    
+    }
+
+    public function OC_PDF($id)
+    {
+        $pdf = PDF::loadView('OC.OC_PDF', $this->datosPDFOC($id));
+
         return $pdf->stream('OC.PDF');
+    }
+
+    /**
+     * Devuelve las marcas guardadas de una OC como arreglo.
+     */
+    private function marcasDeOC(OC $OC): array
+    {
+        if (empty($OC->Revision_Marcas)) {
+            return [];
+        }
+
+        $marcasDecodificadas = json_decode($OC->Revision_Marcas, true);
+
+        return is_array($marcasDecodificadas) ? $marcasDecodificadas : [];
+    }
+
+    /**
+     * Devuelve el historial de comentarios de una OC separado por tipo.
+     */
+    private function comentariosDeOC($id): array
+    {
+        $comentarios = OCComentario::where('idOC', $id)
+            ->orderBy('created_at')
+            ->orderBy('idComentario')
+            ->get();
+
+        return [
+            'revision' => $comentarios->where('tipo', 'revision')->values(),
+            'ventas' => $comentarios->where('tipo', 'ventas')->values(),
+        ];
+    }
+
+    /**
+     * Genera una copia del PDF de la OC con las marcas de revisión ya
+     * incrustadas, para descargarla o imprimirla.
+     */
+    public function OC_PDF_Marcas($id)
+    {
+        $OC = OC::where('idOC', $id)->first();
+
+        if (!$OC) {
+            abort(404, 'Orden de compra no encontrada.');
+        }
+
+        $marcas = $this->marcasDeOC($OC);
+        $pdfBase = PDF::loadView('OC.OC_PDF', $this->datosPDFOC($id))->output();
+
+        if (empty($marcas)) {
+            return response($pdfBase, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="OC_' . $id . '_marcas.pdf"',
+                'Content-Length' => strlen($pdfBase),
+            ]);
+        }
+
+        $archivoTemporal = tempnam(sys_get_temp_dir(), 'oc_pdf_');
+        file_put_contents($archivoTemporal, $pdfBase);
+
+        try {
+            $pdf = new Fpdi();
+            $totalPaginas = $pdf->setSourceFile($archivoTemporal);
+
+            $marcasPorPagina = [];
+            foreach ($marcas as $marca) {
+                if (!is_array($marca) || !isset($marca['page'], $marca['strokes']) || !is_array($marca['strokes'])) {
+                    continue;
+                }
+
+                $pagina = (int) $marca['page'];
+
+                if ($pagina < 1) {
+                    continue;
+                }
+
+                $marcasPorPagina[$pagina] = array_merge(
+                    $marcasPorPagina[$pagina] ?? [],
+                    $marca['strokes']
+                );
+            }
+
+            for ($numeroPagina = 1; $numeroPagina <= $totalPaginas; $numeroPagina++) {
+                $plantilla = $pdf->importPage($numeroPagina);
+                $tamano = $pdf->getTemplateSize($plantilla);
+
+                $pdf->AddPage($tamano['orientation'], [$tamano['width'], $tamano['height']]);
+                $pdf->useTemplate($plantilla, 0, 0, $tamano['width'], $tamano['height']);
+
+                if (!empty($marcasPorPagina[$numeroPagina])) {
+                    $this->dibujarMarcasEnPDF(
+                        $pdf,
+                        $marcasPorPagina[$numeroPagina],
+                        $tamano['width'],
+                        $tamano['height']
+                    );
+                }
+            }
+
+            $pdfConMarcas = $pdf->Output('S');
+        } finally {
+            @unlink($archivoTemporal);
+        }
+
+        return response($pdfConMarcas, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="OC_' . $id . '_marcas.pdf"',
+            'Content-Length' => strlen($pdfConMarcas),
+        ]);
+    }
+
+    /**
+     * Dibuja las marcas (mano alzada, rectángulos y elipses) sobre una página
+     * del PDF. Las coordenadas guardadas están normalizadas de 0 a 1.
+     */
+    private function dibujarMarcasEnPDF(Fpdi $pdf, array $marcas, float $ancho, float $alto): void
+    {
+        foreach ($marcas as $marca) {
+            if (!is_array($marca)) {
+                continue;
+            }
+
+            $tipo = $marca['type'] ?? 'free';
+            [$r, $g, $b] = $this->colorRGB($marca['color'] ?? '#e00000');
+
+            $pdf->SetDrawColor($r, $g, $b);
+            $pdf->SetLineWidth(max(0.1, ((float) ($marca['width'] ?? 0.003)) * $ancho));
+
+            if ($tipo === 'free') {
+                $puntos = $marca['points'] ?? [];
+
+                if (!is_array($puntos) || empty($puntos)) {
+                    continue;
+                }
+
+                $coordenadas = [];
+                foreach ($puntos as $punto) {
+                    if (!is_array($punto) || count($punto) < 2) {
+                        continue;
+                    }
+
+                    $coordenadas[] = [
+                        ((float) $punto[0]) * $ancho,
+                        ((float) $punto[1]) * $alto,
+                    ];
+                }
+
+                if (count($coordenadas) === 1) {
+                    $pdf->Line($coordenadas[0][0], $coordenadas[0][1], $coordenadas[0][0] + 0.1, $coordenadas[0][1]);
+                    continue;
+                }
+
+                for ($i = 1; $i < count($coordenadas); $i++) {
+                    $pdf->Line(
+                        $coordenadas[$i - 1][0],
+                        $coordenadas[$i - 1][1],
+                        $coordenadas[$i][0],
+                        $coordenadas[$i][1]
+                    );
+                }
+
+                continue;
+            }
+
+            $x1 = ((float) ($marca['x1'] ?? 0)) * $ancho;
+            $y1 = ((float) ($marca['y1'] ?? 0)) * $alto;
+            $x2 = ((float) ($marca['x2'] ?? 0)) * $ancho;
+            $y2 = ((float) ($marca['y2'] ?? 0)) * $alto;
+
+            if ($tipo === 'rect') {
+                $pdf->Rect(min($x1, $x2), min($y1, $y2), abs($x2 - $x1), abs($y2 - $y1));
+            } elseif ($tipo === 'ellipse') {
+                $this->dibujarElipsePDF(
+                    $pdf,
+                    ($x1 + $x2) / 2,
+                    ($y1 + $y2) / 2,
+                    abs($x2 - $x1) / 2,
+                    abs($y2 - $y1) / 2
+                );
+            }
+        }
+    }
+
+    /**
+     * Aproxima una elipse con segmentos de recta (FPDF no trae Ellipse).
+     */
+    private function dibujarElipsePDF(Fpdi $pdf, float $cx, float $cy, float $rx, float $ry): void
+    {
+        $segmentos = 72;
+        $anterior = null;
+
+        for ($i = 0; $i <= $segmentos; $i++) {
+            $angulo = (2 * M_PI * $i) / $segmentos;
+            $x = $cx + $rx * cos($angulo);
+            $y = $cy + $ry * sin($angulo);
+
+            if ($anterior !== null) {
+                $pdf->Line($anterior[0], $anterior[1], $x, $y);
+            }
+
+            $anterior = [$x, $y];
+        }
+    }
+
+    /**
+     * Convierte un color hexadecimal (#rrggbb) a componentes RGB.
+     */
+    private function colorRGB(string $color): array
+    {
+        $hex = ltrim(trim($color), '#');
+
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+
+        if (!preg_match('/^[0-9a-f]{6}$/i', $hex)) {
+            $hex = 'e00000';
+        }
+
+        return [
+            hexdec(substr($hex, 0, 2)),
+            hexdec(substr($hex, 2, 2)),
+            hexdec(substr($hex, 4, 2)),
+        ];
+    }
+
+    /**
+     * Muestra la OC generada junto con las marcas guardadas durante la
+     * revisión. Es una vista de solo lectura para que el editor pueda ver
+     * qué se marcó y corregir la orden.
+     */
+    public function revisionPDF($id)
+    {
+        $OC = OC::where('idOC', $id)->first();
+
+        if (!$OC) {
+            abort(404, 'Orden de compra no encontrada.');
+        }
+
+        $marcas = $this->marcasDeOC($OC);
+        $comentarios = $this->comentariosDeOC($OC->idOC);
+        $comentariosRevision = $comentarios['revision'];
+        $comentariosVentas = $comentarios['ventas'];
+
+        return view('OC.Revision.ver_marcas', compact('id', 'OC', 'marcas', 'comentariosRevision', 'comentariosVentas'));
+    }
+
+    /**
+     * Crea la notificación del sistema y envía el correo a los roles
+     * involucrados en la revisión/venta de una OC. Se excluye al autor.
+     */
+    private function notificarComentarioOC(OC $OC, string $tipo, string $comentario, ?string $autor): void
+    {
+        $roles = ['Ventas', 'Administrador', 'Super Administrador'];
+        $autor = trim((string) $autor) ?: 'Un usuario';
+        $numeroOC = trim((string) ($OC->Num_OC ?? ''));
+        $numeroOC = $numeroOC !== '' ? $numeroOC : ('#' . $OC->idOC);
+        $numeroOC = Str::limit($numeroOC, 40);
+        $tipoLabel = $tipo === 'revision' ? 'revisión' : 'ventas';
+
+        $destinatarios = User::query()
+            ->where('Estatus', 'ALTA')
+            ->whereIn('rol', $roles)
+            ->when(auth()->id(), function ($query, $idUsuario) {
+                $query->where('id', '!=', $idUsuario);
+            })
+            ->get();
+
+        $asunto = 'Nuevo comentario de ' . $tipoLabel . ' en la OC ' . $numeroOC;
+        $mensajeCorto = Str::limit($asunto, 120);
+        $mensajeLargo = Str::limit(
+            $autor . ' agregó un comentario de ' . $tipoLabel . ' a la OC ' . $numeroOC . ': ' . $comentario,
+            250
+        );
+        $mensajeEmail = '<strong>' . e($autor) . '</strong><br>'
+            . 'agregó un comentario de <strong>' . e($tipoLabel) . '</strong> a la Orden de Compra <strong>' . e($numeroOC) . '</strong>.<br><br>'
+            . nl2br(e($comentario));
+        $url = route('OC.revisionPDF', ['id' => $OC->idOC]);
+
+        foreach ($destinatarios as $destinatario) {
+            Notificacion::create([
+                'users_id' => $destinatario->id,
+                'Mensaje_Corto' => $mensajeCorto,
+                'Mensaje_Largo' => $mensajeLargo,
+                'url' => $url,
+                'leida' => false,
+                'prioridad' => 'alta',
+            ]);
+
+            $email = trim((string) $destinatario->email);
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
+
+            try {
+                $destinatario->notify(new OCComentarioNotification(
+                    $asunto,
+                    $mensajeLargo,
+                    $mensajeEmail,
+                    $url,
+                    $destinatario->name,
+                    $tipoLabel,
+                    $numeroOC
+                ));
+            } catch (\Throwable $e) {
+                Log::error('No se pudo enviar el correo de comentario de OC.', [
+                    'idOC' => $OC->idOC,
+                    'usuario_id' => $destinatario->id,
+                    'email' => $email,
+                    'exception' => $e,
+                ]);
+            }
+        }
+
+        // Copia al buzón remitente (MAIL_FROM_ADDRESS), evitando duplicados
+        // cuando ese correo ya está entre los destinatarios de los roles.
+        $correoRemitente = trim((string) config('mail.from.address'));
+        $emailsDestinatarios = $destinatarios
+            ->pluck('email')
+            ->map(fn ($email) => strtolower(trim((string) $email)))
+            ->all();
+
+
+        if (
+            filter_var($correoRemitente, FILTER_VALIDATE_EMAIL)
+            && !in_array(strtolower($correoRemitente), $emailsDestinatarios, true)
+        ) {
+            $usuarioRemitente = User::where('email', $correoRemitente)->first();
+
+
+            if ($usuarioRemitente) {
+                $creada = Notificacion::create([
+                    'users_id' => $usuarioRemitente->id,
+                    'Mensaje_Corto' => $mensajeCorto,
+                    'Mensaje_Largo' => $mensajeLargo,
+                    'url' => $url,
+                    'leida' => false,
+                    'prioridad' => 'alta',
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Devuelve el historial de comentarios renderizado para actualizar la vista
+     * sin recargar toda la página.
+     */
+    public function comentariosOC($id)
+    {
+        $OC = OC::where('idOC', $id)->first();
+
+        if (!$OC) {
+            abort(404, 'Orden de compra no encontrada.');
+        }
+
+        $comentarios = $this->comentariosDeOC($OC->idOC);
+
+        return response()->json([
+            'html' => view('OC.Revision.partials.comentarios', [
+                'comentariosRevision' => $comentarios['revision'],
+                'comentariosVentas' => $comentarios['ventas'],
+            ])->render(),
+        ]);
     }
 }

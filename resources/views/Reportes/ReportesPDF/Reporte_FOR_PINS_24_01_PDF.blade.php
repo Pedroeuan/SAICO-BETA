@@ -29,7 +29,7 @@
 
                 footer {
                     position: fixed;
-                    bottom: -30px; /* Ajusta la posición */
+                    bottom: -14.94mm; /* Baja solo Observaciones y firmas 7 mm en total; no altera el flujo del contenido. */
                     left: 0;
                     right: 0;
                     height: auto;

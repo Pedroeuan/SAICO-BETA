@@ -307,6 +307,16 @@
 
                                     <div class="col-sm-4">
                                         <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Versión</label>
+                                            <input type="text" class="form-control inputForm @error('Version') is-invalid @enderror" name="Version"  value="{{old('Version' , 'V1')}}" readonly>
+                                            @error('Version')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
                                         <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
                                             <input type="hidden" class="form-control inputForm" placeholder="" name="Estatus" value="OC">
                                         </div>
