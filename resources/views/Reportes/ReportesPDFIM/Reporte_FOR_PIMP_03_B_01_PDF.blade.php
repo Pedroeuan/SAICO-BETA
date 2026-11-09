@@ -390,6 +390,73 @@
         .tablaheader th {
             border: 1px solid #000;
         }
+
+        /* Misma cuadricula impresa del 04/02: fotos completas, sin deformacion. */
+        .tabla-fotos { 
+            width:18cm; 
+            margin-left:auto; 
+            margin-right:auto; 
+            table-layout:auto; 
+            border-spacing:0; 
+        }
+        .tabla-fotos .foto-container { 
+            width:8cm; 
+            height:6.15cm; 
+            padding:0; 
+            vertical-align:top; 
+            overflow:visible; 
+        }
+        .tabla-fotos 
+        .foto-separador { 
+            width:2cm; 
+            padding:0; 
+        }
+        .tabla-fotos 
+        .foto-visual { 
+            width:8cm; 
+            height:5.5cm; 
+        }
+        .tabla-fotos .foto-visual td { 
+            height:5.5cm; 
+            padding:0; 
+            text-align:center; 
+            vertical-align:middle; 
+        }
+        .tabla-fotos .foto-visual img { 
+            max-width:7.94cm; 
+            max-height:5.44cm; 
+            width:auto; 
+            height:auto; 
+        }
+        .tabla-fotos 
+        .foto-texto { 
+            width:8cm; 
+            height:5.5cm; 
+        }
+        .tabla-fotos 
+        .foto-texto td { 
+            height:5.08cm; 
+            padding:0.2cm; 
+            text-align:left; 
+        }
+        .tabla-fotos 
+        .foto-container 
+        .comment { 
+            height:6.5mm; 
+            padding:1mm .5mm 0; 
+            box-sizing:border-box; 
+        }
+        .tabla-fotos .abajo_izquierda > table, .tabla-fotos .abajo_derecha > table { position:relative; top:-1.5mm; }
+        .foto-cross { 
+            width:100%; 
+            height:5.5cm; 
+        }
+        .foto-completa .foto-cross { 
+            height:390px; 
+        }
+        .tabla-fotos .foto-visual.foto-sin-imagen { 
+            border:0; 
+        }
     </style>
 </head>
 <body>
@@ -577,9 +644,9 @@
     @endif
     <table class="imagenes-reporte" style="width:100%" border="0">
         <colgroup>
-            <col style="width:47%">
-            <col style="width:6%">
-            <col style="width:47%">
+            <col style="width:8cm">
+            <col style="width:2cm">
+            <col style="width:8cm">
         </colgroup>
         @if($configuracionFotos['completa'])
             <tr>
@@ -587,7 +654,7 @@
                     @if(!empty($configuracionFotos['completa']['es_cuadro_texto']))
                         <table class="foto-texto foto-texto-completa"><tr><td>{!! nl2br(e($configuracionFotos['completa']['comment'] ?? '')) !!}</td></tr></table>
                     @else
-                        <div class="foto-marco {{ ($configuracionFotos['completa']['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'foto-visual-grain' : '' }}"><img src="{{ $configuracionFotos['completa']['path'] }}" alt="Fotografía"></div>
+                        <div class="foto-marco {{ ($configuracionFotos['completa']['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'foto-visual-grain' : '' }}">@if(!empty($configuracionFotos['completa']['sin_fotografia']))<div class="foto-cross" data-photo-cross="1"></div>@else<img src="{{ $configuracionFotos['completa']['path'] }}" alt="Fotografía">@endif</div>
                         <div class="comentario-foto">{{ $configuracionFotos['completa']['comment'] ?? '' }}</div>
                     @endif
                 </td>
@@ -610,7 +677,7 @@
                                 <table class="foto-texto"><tr><td>{!! nl2br(e($foto['comment'] ?? '')) !!}</td></tr></table>
                             @else
                                 {{-- Una tabla interior conserva el centrado y el tamaño uniforme en DomPDF. --}}
-                                <table class="foto-visual {{ ($foto['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'foto-visual-grain' : '' }}"><tr><td><img src="{{ $foto['path'] }}" alt="Fotografía"></td></tr></table>
+                                <table class="foto-visual {{ !empty($foto['sin_fotografia']) ? 'foto-sin-imagen' : '' }} {{ ($foto['origen_automatico'] ?? '') === 'patron_grano_historico' ? 'foto-visual-grain' : '' }}"><tr><td>@if(!empty($foto['sin_fotografia']))<div class="foto-cross" data-photo-cross="1"></div>@else<img src="{{ $foto['path'] }}" alt="Fotografía">@endif</td></tr></table>
                                 <div class="comment">{{ $foto['comment'] ?? '' }}</div>
                             @endif
                         @endif

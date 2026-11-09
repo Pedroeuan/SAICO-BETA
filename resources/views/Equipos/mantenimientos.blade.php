@@ -58,9 +58,9 @@
 <br>
 <br>
 <!-- form start -->
-    <div class="box">
+    <div class="box equipos-agenda-layout">
         <div class="box-body d-flex justify-content-center">
-        <div style="display: inline-block;">
+        <div class="equipos-agenda-contenido equipos-vista-mantenimientos">
         <h3 align="center">Mantenimientos</h3>
         <!--<div class="table-responsive">-->
                 <!--<table class="tablaheader">
@@ -85,6 +85,8 @@
                         </tr>
                     </tbody>
                 </table> -->
+                {{-- Reutilizar el calendario: el modo determina qué actividades se representan. --}}
+                @include('Equipos.partials.calendario', ['modoCalendario' => 'mantenimiento'])
                 <!-- BOTONES DE FILTRADO -->
                 <div class="mb-3 text-center">
                     <label style="margin-left:20px;">
@@ -315,8 +317,11 @@ let table = new DataTable('#tablaJs', {
         }
     }
 });
+// Estos filtros pertenecen a la tabla; el calendario mantiene sus propios controles.
+// Limitar el callback a esta tabla porque DataTables registra los filtros globalmente.
 // Filtro personalizado
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+    if (settings.nTable.id !== 'tablaJs') return true;
 
     let filtrarMes = $('#checkMes').is(':checked');
 
@@ -330,7 +335,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 
         if (!fechaISO) return false;
 
-        let fecha = new Date(fechaISO);
+        let fecha = new Date(fechaISO.slice(0, 10) + 'T00:00:00');
         let hoy = new Date();
 
         let mismoMes = fecha.getMonth() === hoy.getMonth();
@@ -341,6 +346,8 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 
     return true;
 });
+// Aplicar los filtros iniciales después de registrar el callback.
+table.draw();
 //Detectar cambios en los checkboxes
 $('#checkMes').on('change', function () {
     table.draw();
