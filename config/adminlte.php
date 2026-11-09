@@ -829,7 +829,7 @@ return [
                     'can' => 'administrador-access',  // Define una política en Laravel para controlar el acceso
                     //'topnav' => true,
                     'submenu' => [
-                        [
+                        /*[
                             'text' => 'Solicitar',
                             'url' => '/ADsolicitud/create',
                             //can => 'nombre-ruta'
@@ -837,6 +837,12 @@ return [
                         [
                             'text' => 'Ver solicitudes',
                             'url' => '/ADsolicitud/index',
+                            //can => 'nombre-ruta'
+                        ],*/
+                        [
+                            'text' => 'Revisiones OC',
+                            'icon' => 'fas fa-eye',
+                            'url' => '/OC/indexOC_AD',
                             //can => 'nombre-ruta'
                         ],
                     ],

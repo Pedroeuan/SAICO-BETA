@@ -1,0 +1,800 @@
+
+@extends('adminlte::page')
+
+@section('title', 'Orden de Compra')
+
+@section('css')
+<!--datatable -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css">
+
+<style>
+        table {
+            width: 100%; /* Opcional: Para que ocupe todo el ancho disponible */
+            border-collapse: collapse; /* Elimina los espacios entre bordes */
+        }
+
+        table th, table td {
+            text-align: center; /* Centra el texto horizontalmente */
+            vertical-align: middle; /* Centra el texto verticalmente */
+            padding: 8px; /* Espaciado interno para mayor claridad */
+        }
+
+        table input {
+            text-align: center; /* Centra el texto dentro de los inputs */
+            box-sizing: border-box; /* Garantiza que los inputs respeten los bordes */
+        }
+        #addRowBtn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #addRowBtn:hover {
+            background-color: #0056b3;
+        }
+    #my-notification .dropdown-menu {
+    max-height: 200px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    }
+
+    /* Visor de PDF con marcas */
+    #pdfMarcasContenedor {
+        height: 80vh;
+        overflow: auto;
+        background: #525659;
+        padding: 10px;
+        position: relative;
+    }
+    .pdf-marca-pagina {
+        position: relative;
+        margin: 0 auto 12px;
+        background: #fff;
+        box-shadow: 0 0 6px rgba(0, 0, 0, .45);
+    }
+    .pdf-marca-pagina canvas {
+        display: block;
+    }
+    .pdf-marca-dibujo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: crosshair;
+        touch-action: none;
+    }
+    #marcasToolbar .btn.active {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #fff;
+    }
+    #pdfMarcasMensaje {
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+    .comentarios-revision {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        margin: 0;
+        font-family: inherit;
+        font-size: 0.95rem;
+    }
+
+    </style>
+@endsection
+
+@section('content')
+<br>
+<br>
+<br>
+<br>
+<h3 align="center">Revisión de la Orden de Compra</h3>
+@if (!empty($OC->Revision_Autor) || stripos((string) $OC->Estatus, 'Revisado') === 0)
+    <div class="text-center text-muted">
+        <i class="fas fa-user-check"></i>
+        Última revisión por: {{ $OC->Revision_Autor ?: 'No registrado' }}
+        @if (!empty($OC->Revision_At))
+            · {{ \Carbon\Carbon::parse($OC->Revision_At)->format('d/m/Y H:i') }}
+        @endif
+    </div>
+@endif
+<br>
+
+<div id="oc-comentarios-historial" data-id="{{ $id }}">
+@include('OC.Revision.partials.comentarios', [
+    'comentariosRevision' => $comentariosRevision ?? collect(),
+    'comentariosVentas' => $comentariosVentas ?? collect(),
+])
+</div>
+<br>
+
+    <div class="card">
+        <div class="card-body row">
+            <form id="OC" action="{{ route('OC.updateOC_Revision', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+            @csrf 
+                <input type="hidden" id="Revision_Marcas" name="Revision_Marcas">
+                <section class="content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- VISTA PREVIA DE LA OC AICO (PDF GENERADO) -->
+                            <div class="card card-outline card-primary h-100">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0"><i class="far fa-file-pdf"></i> Vista previa OC AICO</h3>
+                                    <div class="card-tools">
+                                        <a href="{{ route('OC.PDF', ['id' => $id]) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-external-link-alt"></i> Abrir en nueva pestaña
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-secondary" id="togglePreviewOC">
+                                            <i class="fas fa-compress"></i> Mostrar/Ocultar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="previewOCAico" class="collapse show">
+                                    <div class="card-body p-0">
+                                        <div id="marcasToolbar" class="d-flex flex-wrap align-items-center p-2 border-bottom" style="gap: 6px;">
+                                            <button type="button" class="btn btn-sm btn-outline-danger active" data-marca-tool="free" title="Mano alzada">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-marca-tool="ellipse" title="Círculo">
+                                                <i class="far fa-circle"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-marca-tool="rect" title="Rectángulo">
+                                                <i class="far fa-square"></i>
+                                            </button>
+                                            <input type="color" id="marcaColor" value="#e00000" title="Color de la marca"
+                                                style="width: 38px; height: 31px; padding: 2px; border: 1px solid #ced4da; border-radius: 4px;">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" id="marcaDeshacer" title="Deshacer">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" id="marcaLimpiar" title="Limpiar todas las marcas">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            <span id="marcaEstado" class="text-muted small ml-2"></span>
+                                        </div>
+                                        <div id="pdfMarcasContenedor">
+                                            <div id="pdfMarcasMensaje">Cargando vista previa...</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <!-- TEXTO LARGO DE LA REVISIÓN -->
+                            <div class="card card-outline card-primary h-100">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0"><i class="fas fa-pen"></i> Nueva observación de revisión</h3>
+                                </div>
+                                <div class="card-body p-2">
+                                    <label for="Revision_OC" class="mb-1">Escribe una nueva observación</label>
+                                    <textarea form="OC"
+                                            name="Revision_OC"
+                                            id="Revision_OC"
+                                            class="form-control @error('Revision_OC') is-invalid @enderror"
+                                            placeholder="Escribe aquí una nueva observación de la revisión..."
+                                            style="height: 72vh; resize: vertical;">{{ old('Revision_OC') }}</textarea>
+                                    @error('Revision_OC')
+                                        <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                    @enderror
+                                    <small class="text-muted d-block mt-1">
+                                        Cada observación se guarda por separado en el historial.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                            {{--<div class="row">
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contrato</label>
+                                            <input type="text" class="form-control inputForm" name="Contrato" placeholder="Ejemplo: 640853841" value="{{ $OC->Contrato}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Num. De Cotizacion</label>
+                                            <input type="text" class="form-control inputForm @error('NumCotizacion') is-invalid @enderror" name="NumCotizacion"  placeholder="Ejemplo: 12345" value="{{ $detallesOCM->NumCotizacion}}">
+                                            @error('NumCotizacion')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Solicitud del cliente</label>
+                                            <input type="text" class="form-control inputForm @error('SolicitudCliente') is-invalid @enderror" name="SolicitudCliente"  placeholder="Ejemplo: 12345" value="{{ $detallesOCM->SolicitudCliente }}">
+                                            @error('SolicitudCliente')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Objetivo del servicio:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Tipo_servicio" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen">{{old('Tipo_servicio', $OC->Tipo_servicio)}}</textarea>
+                                            @error('Tipo_servicio')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Cliente</label>
+                                            <input type="text" class="form-control inputForm" name="Cliente" placeholder="Ejemplo: 640853841" value="{{ $Nombre_Cliente}}" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Contacto</label>
+                                            <input type="text" class="form-control inputForm @error('Contacto') is-invalid @enderror" name="Contacto"  placeholder="Ejemplo: Juan Pérez" value="{{$detallesOCM->Contacto}}">
+                                            @error('Contacto')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Puesto</label>
+                                            <input type="text" class="form-control inputForm @error('Puesto') is-invalid @enderror" name="Puesto"  placeholder="Ejemplo: Ingeniero de Software" value="{{ $detallesOCM->Puesto }}">
+                                            @error('Puesto')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Fecha</label>
+                                            @if($OC->Fecha_solicitud == '2001-01-01')
+                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud">
+                                                @else
+                                                    <input type="date" class="form-control inputForm" name="Fecha_solicitud" value="{{ $OC->Fecha_solicitud }}">
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Ciudad</label>
+                                            <input type="text" class="form-control inputForm @error('Ciudad') is-invalid @enderror" name="Ciudad"  placeholder="Ejemplo: Ciudad de México" value="{{ $detallesOCM->Ciudad }}">
+                                            @error('Ciudad')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Teléfono</label>
+                                            <input type="text" class="form-control inputForm @error('Telefono') is-invalid @enderror" name="Telefono"  placeholder="Ejemplo: 555-1234" value="{{ $detallesOCM->Telefono }}">
+                                            @error('Telefono')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+
+                                            <label class="col-form-label">
+                                                Correo
+                                            </label>
+
+                                            <input type="email"
+                                                class="form-control inputForm @error('Correo') is-invalid @enderror"
+                                                value="{{ $detallesOCM->Correo }}"
+                                                name="Correo"
+                                                placeholder="Ejemplo: hola@protexa.mx">
+
+                                            @error('Correo')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Lugar/Trabajo</label>
+                                            <input type="text" class="form-control inputForm @error('Lugar_trabajo') is-invalid @enderror" name="Lugar_trabajo" placeholder="Ejemplo: OT-03 INGENIERÍA, PROCURA, CONSTRUCCIÓN DE UN OLEOGASODUCTO . . . " value="{{ $OC->Lugar_trabajo }}">
+                                            @error('Lugar_trabajo')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Vigencia</label>
+                                            <input type="text" class="form-control inputForm @error('Vigencia') is-invalid @enderror" name="Vigencia"  placeholder="Ejemplo: 1 año" value="{{ $detallesOCM->Vigencia }}">
+                                            @error('Vigencia')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Número de Orden de Compra</label>
+                                            <input type="text" class="form-control inputForm @error('Numero_OC') is-invalid @enderror" name="Numero_OC"  placeholder="Ejemplo: 76810" value="{{ $OC->Num_OC }}">
+                                            @error('Numero_OC')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Requisición</label>
+                                            <input type="text" class="form-control inputForm @error('Proyecto') is-invalid @enderror" name="Requisicion" placeholder="Ejemplo: 107068-2" value="{{$OC->Requisicion}}">
+                                            @error('Requisicion')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Proyecto</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Proyecto" placeholder="Ejemplo: Patio de fabricación" value="Muelle, Ciudad del Carmen">{{$OC->Proyecto}}</textarea>
+                                            @error('Proyecto')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">Actualizar Orden de Compra Actual</label>
+                                            <input type="file" class="form-control inputForm @if ($errors->any()) is-invalid @endif" name="OC_archivo" placeholder="">
+                                            @if ($errors->any())
+                                                <div class="invalid-feedback">Por favor, vuelva a cargar el archivo de ser necesario.</div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @if ($OC->OC_archivo === 'ESPERA DE DATOS' || $OC->OC_archivo === 'ESPERA DE DATO')
+                                            <label class="col-form-label" for="inputSuccess">No se encontro Orden de Compra</label>                                              
+                                                <a target="_blank" role="button" class="btn btn-secondary long-button"><i class="fa fa-ban" aria-hidden="true"></i></a>                                                 
+                                            @else
+                                            
+                                                <label class="col-form-label" for="inputSuccess">Ver Orden de Compra Actual</label>  
+                                                <div>                                            
+                                                    <a href="{{ asset('storage/' . $OC->OC_archivo) }}" target="_blank" class="btn btn-primary long-button" role="button"><i class="fa fa-eye" aria-hidden="true"></i></a>                                                                                     
+                                                </div>
+                                            @endif 
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                        <!--<label class="col-form-label" for="inputSuccess">Tipo</label>-->
+                                            <input type="hidden" class="form-control inputForm" placeholder="" name="Estatus" value="OC">
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" id="dynamicTableData" name="dynamicTableData">
+
+                                    <button id="addRowBtn" type="button" class="btn-redondo">Agregar Detalles</button>
+                                    <table id="dynamicTable" class="table table-bordered table-striped dt-responsive tablas">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Item</th>
+                                                <th>Catalogo</th>
+                                                <th>Descripción</th>
+                                                <th>Imagen</th>
+                                                <th>Cantidad</th>
+                                                <th>Unidad/Medida</th>
+                                                <th>Valor Unitario</th>
+                                                <th>Valor Total</th>
+                                                <th>Eliminar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($detallesOC ?? [] as $indice => $detalle)
+                                                <tr>
+                                                    <td>{{ $indice + 1 }}</td>
+                                                    <td><input type="text" class="form-control item-input" name="item[]" placeholder="1,2,2 . . . 5.4" value="{{ $detalle['item'] ?? '' }}"></td>
+                                                    <td>
+                                                        <select class="form-control catalogo-select" name="catalogo[]">
+                                                            <option value="">-- Seleccionar --</option>
+                                                            @foreach($catalogo as $item)
+                                                                <option value="{{ $item->idCatalogo_OC }}" data-descripcion="{{ $item->Descripcion }}" data-unidad="{{ $item->Unidad }}" data-imagen="{{ $item->Imagen ?? '' }}" @selected(($detalle['catalogo_id'] ?? '') == $item->idCatalogo_OC)>{{ $item->Nombre }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td><textarea class="form-control descripcion-input" name="descripcion[]" placeholder="Descripción">{{ $detalle['descripcion'] ?? '' }}</textarea></td>
+                                                    <td class="text-center">
+                                                        <img class="catalogo-preview-img" src="" alt="Imagen del catálogo" style="width: 52px; height: 52px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                                                        <span class="catalogo-preview-placeholder text-muted small" style="display: block;">Sin imagen</span>
+                                                    </td>
+                                                    <td><input type="number" class="form-control cantidad-input" name="cantidad[]" placeholder="Cantidad" min="0" step="any" value="{{ $detalle['cantidad'] ?? '' }}"></td>
+                                                    <td><input type="text" class="form-control unidad-input" name="unidad[]" placeholder="Unidad/Medida" value="{{ $detalle['unidad'] ?? '' }}"></td>
+                                                    <td><input type="number" class="form-control valor-unitario-input" name="valor_unitario[]" placeholder="Valor Unitario" min="0" step="0.01" value="{{ $detalle['valor_unitario'] ?? '' }}"></td>
+                                                    <td><input type="number" class="form-control valor-total-input" name="valor_total[]" placeholder="Valor Total" step="0.01" value="{{ $detalle['valor_total'] ?? '' }}" readonly></td>
+                                                    <td><button type="button" class="btn btn-danger btnEliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Cuenta</div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="subtotal">Subtotal</label>
+                                            <input id="subtotal" type="text" class="form-control inputForm" name="Subtotal" value="{{ number_format((float) $totales['subtotal'], 2, '.', '') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="iva">IVA (16%)</label>
+                                            <input id="iva" type="text" class="form-control inputForm" name="IVA" value="{{ number_format((float) $totales['iva'], 2, '.', '') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="total">Total</label>
+                                            <input id="total" type="text" class="form-control inputForm" name="Total" value="{{ number_format((float) $totales['total'], 2, '.', '') }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <p>
+                                    <p>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">NOTAS:</label>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Notas" placeholder="Ejemplo: Notas" value="Muelle, Ciudad del Carmen">{{ $detallesOCM->Notas ?? old('Notas') }}</textarea>
+                                            @error('Notas')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">CONDICIONES DE PAGO:</label>
+                                            <select id="condicion-pago-select" class="form-select" name="CP">
+                                                <option value="" {{ old('CP') ? '' : 'selected' }} disabled>Seleccione una Condición de Pago</option>
+                                                @foreach($Condiciones_Pago as $CP)
+                                                    <option value="{{ $CP->idCondiciones_Pago }}" data-descripcion="{{ $CP->Descripcion }}" {{ old('CP') == $CP->idCondiciones_Pago ? 'selected' : '' }}>
+                                                        {{ $CP->Nombre }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <br>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_pago" placeholder="Ejemplo: Condiciones de pago">{{ $detallesOCM->Condiciones_pago ?? old('Condiciones_pago') }}</textarea>
+                                            @error('Condiciones_pago')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="inputSuccess">CONDICIONES DE GENERALES:</label>
+                                            <select id="condicion-general-select" class="form-select" name="CG">
+                                                <option value="" {{ old('CG') ? '' : 'selected' }} disabled>Seleccione una Condición General</option>
+                                                @foreach($Condiciones_Generales as $CG)
+                                                    <option value="{{ $CG->idCondiciones_Generales }}" data-descripcion="{{ $CG->Descripcion }}" {{ old('CG') == $CG->idCondiciones_Generales ? 'selected' : '' }}>
+                                                        {{ $CG->Nombre }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <br>
+                                            <textarea class="form-control  is-waning" id="inputSuccess" name="Condiciones_generales" placeholder="Ejemplo: Condiciones generales">{{ $detallesOCM->Condiciones_generales ?? old('Condiciones_generales') }}</textarea>
+                                            @error('Condiciones_generales')
+                                                    <div class="invalid-feedback"><span>{{ $message }}</span></div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <p>
+                                    <p>--}}
+                                        <!-- Select para elegir el número de firmas -->
+                                    {{--<div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">Número de Firmas:</div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <select class="form-select text-center" id="numFirmas" name="numFirmas">
+                                                    <option value="1" {{ $numFirmas == 1 ? 'selected' : '' }}>1 Firma</option>
+                                                    <option value="2" {{ $numFirmas == 2 ? 'selected' : '' }}>2 Firmas</option>
+                                                    <option value="3" {{ $numFirmas == 3 ? 'selected' : '' }}>3 Firmas</option>
+                                                    <option value="4" {{ $numFirmas == 4 ? 'selected' : '' }}>4 Firmas</option>
+                                                </select>
+                                            </div>
+                                        </div>--}}
+
+                                        <!-- 1 UNA FIRMA-->
+                                        {{--<div id="firmas1" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[Realizo]" placeholder="Ejemplo: Realizó" value="{{ $Firmas['Realizo'] ?? '' }}"></th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO1'] ?? '' }}"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[CARGO1]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO1'] ?? '' }}"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes1[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>--}}
+
+                                        <!-- 2 DOS FIRMAS-->
+                                        {{--<div id="firmas2" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Realizo]" placeholder="Ejemplo: Realizó" value="{{ $Firmas['Realizo'] ?? '' }}"></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo1'] ?? '' }}"></th>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO1'] ?? 'ING. JORGE ROGELIO MOO OROPEZA' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[NOMBRE_ENCARGADO2]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO2'] ?? 'ING. CESAR E. GARDUÑO ACOSTA' }}"></td>
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO1]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO1'] ?? 'Responsable del Proceso de Ventas' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[CARGO2]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO2'] ?? 'Director General' }}"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes2[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                    
+                                                </thead>                            
+                                            </table>
+                                        </div>--}}
+
+                                        <!-- 3 TRES FIRMAS-->
+                                        {{--<div id="firmas3" class="col-12">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Realizo]" placeholder="Ejemplo: Realizó" value="{{ $Firmas['Realizo'] ?? '' }}"></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo1'] ?? '' }}"></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo2'] ?? '' }}"></th>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO1'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO2]" placeholder="Ejemplo: NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO2'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[NOMBRE_ENCARGADO3]" placeholder="Ejemplo: NOMBRE DEL SEGUNDO ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO3'] ?? '' }}"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO1]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO1'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO2]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO2'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[CARGO3]" placeholder="Ejemplo: CARGO" value="{{ $Firmas['CARGO3'] ?? '' }}"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes3[EMPRESA_2DO_ENCARGADO]" placeholder="Ejemplo: EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                    
+                                                </thead>                            
+                                            </table>
+                                        </div>--}}
+
+                                        <!-- 4 CUATRO FIRMAS-->
+                                        {{--<div id="firmas4" class="col-12" style="display: none;">
+                                            <table class="table table-bordered table-striped dt-responsive tablas">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Realizo]" placeholder="Ejemplo: Realizó" value="{{ $Firmas['Realizo'] ?? '' }}"></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo1]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo1'] ?? '' }}"></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo2]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo2'] ?? '' }}"></th>
+                                                        <td style="width: 30px;"></td>
+                                                        <th><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[Vobo3]" placeholder="Ejemplo: Vo.Bo." value="{{ $Firmas['Vobo3'] ?? '' }}"></th>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+                                                        <td></td>
+                                                        <td style="width: 200px; height:40px" class="lineaInferior"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO1]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO1'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO2]" placeholder="NOMBRE DEL ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO2'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO3]" placeholder="NOMBRE DEL SEGUNDO ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO3'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[NOMBRE_ENCARGADO4]" placeholder="NOMBRE DEL TERCER ENCARGADO" value="{{ $Firmas['NOMBRE_ENCARGADO4'] ?? '' }}"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO1]" placeholder="CARGO" value="{{ $Firmas['CARGO1'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO2]" placeholder="CARGO" value="{{ $Firmas['CARGO2'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO3]" placeholder="CARGO" value="{{ $Firmas['CARGO3'] ?? '' }}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[CARGO4]" placeholder="CARGO" value="{{ $Firmas['CARGO4'] ?? '' }}"></td>
+
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_TECNICO]" placeholder="" value="Asesoría e Inspección en Construcción Costa Fuera, S.C." readonly></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_ENCARGADO]" placeholder="EMPRESA DEL ENCARGADO" value="{{old('EMPRESA_ENCARGADO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_2DO_ENCARGADO]" placeholder="EMPRESA DEL SEGUNDO ENCARGADO" value="{{old('EMPRESA_2DO_ENCARGADO')}}"></td>
+                                                        <td></td>
+                                                        <td><input type="text" class="form-control  inputForm" name="Firmas_Reportes4[EMPRESA_3RO_ENCARGADO]" placeholder="EMPRESA DEL TERCER ENCARGADO" value="{{old('EMPRESA_3RO_ENCARGADO')}}"></td>
+                                                    </tr>
+                                                    
+                                                </thead>                            
+                                            </table>
+                                        </div>--}}
+                                        
+                                    <div class="container">
+                                        <div class="float-right">
+                                            <button type="submit" class="btn btn-info bg-primary">Finalizar</button>
+                                        </div>
+
+                                        <div class="float-left">
+                                            <!--<button type="button" class="btn btn-info bg-success" id="guardarContinuarOC">Guardar y continuar</button>-->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+@stop
+
+
+@section('js')
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--datatable -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+<!--<script src="https://cdn.datatables.net/2.0.8/js/jquery.dataTables.min.js"></script>-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jqc-1.12.4/dt-2.1.4/datatables.min.js"></script>
+<!--sweet alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{{ asset('js/session-handler.js') }}"></script>
+<script>
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
+</script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+<script>
+(function () {
+    const contenedor = document.getElementById('oc-comentarios-historial');
+    if (!contenedor) return;
+    const url = @json(route('OC.comentariosOC', ['id' => $id]));
+    let timer = null;
+    async function actualizarComentarios() {
+        if (document.hidden) return;
+        const activo = document.activeElement;
+        if (activo && (activo.tagName === 'TEXTAREA' || activo.tagName === 'INPUT')) return;
+        try {
+            const respuesta = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            if (!respuesta.ok) return;
+            const datos = await respuesta.json();
+            if (datos.html && datos.html !== contenedor.innerHTML) {
+                contenedor.innerHTML = datos.html;
+            }
+        } catch (e) {}
+    }
+    timer = setInterval(actualizarComentarios, 30000);
+    window.addEventListener('beforeunload', function () { clearInterval(timer); });
+})();
+</script>
+<script>
+    const catalogo = @json($catalogo);
+</script>
+<script src="{{ asset('js/OC_edit.js') }}"></script>
+<!-- Visor de PDF con marcas (anotaciones) -->
+<script src="{{ asset('js/pdfjs/pdf.min.js') }}"></script>
+<script>
+    window.OCRevisionMarcas = {
+        pdfUrl: @json(route('OC.PDF', ['id' => $id])),
+        workerSrc: @json(asset('js/pdfjs/pdf.worker.min.js')),
+        standardFontDataUrl: @json(asset('js/pdfjs/standard_fonts/')),
+        marcas: @json($marcas ?? []),
+    };
+</script>
+<script src="{{ asset('js/OC_revision_marcas.js') }}"></script>
+<script>
+    // Mostrar u ocultar la vista previa de la OC AICO.
+    $('#togglePreviewOC').on('click', function () {
+        $('#previewOCAico').slideToggle();
+    });
+</script>
+@endsection
+
