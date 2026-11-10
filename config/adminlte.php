@@ -871,6 +871,30 @@ return [
                         ],
                     ],
                 ],
+                // Sidebar TICS
+                [
+                    'text' => 'Gestión de TICS',
+                    'icon' => 'fas fa-network-wired',
+                    'can' => 'tics-access',
+                    'submenu'=> [
+                        [
+                            'text' => 'Inventario',
+                            'icon' => 'fas fa-laptop',
+                            'url' => 'inventario?view=inventario',
+                        ],
+                        [
+                            'text' => 'Salidas de TICS',
+                            'icon' => 'fas fa-sign-out-alt',
+                            'url' => '/salidas-tics',
+                        ],
+                        [
+                            'text' => 'Panel TICS',
+                            'url' => '/salidas-tics/panel',
+                            'icon' => 'fas fa-chart-bar',
+                        ],
+                    ],
+                ],
+                
     ],//Final Menu
 
     /*
