@@ -11,16 +11,38 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    public function updatePhoto(\App\Http\Requests\ProfilePhotoUpdateRequest $request): RedirectResponse
+    /** Guarda la fotografía procesada en el almacenamiento privado del usuario. */
+    public function updatePhoto(\App\Http\Requests\ProfilePhotoUpdateRequest $request): RedirectResponse|\Illuminate\Http\JsonResponse
     {
         $stored = $request->file('photo')->storeAs(
             'profile-photos/'.$request->user()->getKey(), 'photo', 'local'
         );
-        abort_unless($stored, 500, 'No se pudo guardar la fotografía.');
+        if (!$stored) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'photo' => 'No se pudo guardar la fotografía. Intenta de nuevo.',
+            ]);
+        }
+        // El editor usa JSON; el retorno HTML permite reutilizar la ruta sin JavaScript.
+        if ($request->expectsJson()) {
+            $request->session()->flash('status', 'profile-updated');
+            return response()->json(['saved' => true]);
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
+    /** Elimina únicamente la fotografía del usuario que inició sesión. */
+    public function deletePhoto(Request $request): RedirectResponse
+    {
+        $disk = \Illuminate\Support\Facades\Storage::disk('local');
+        $path = 'profile-photos/'.$request->user()->getKey().'/photo';
+        if ($disk->exists($path) && !$disk->delete($path)) {
+            return back()->withErrors(['photo' => 'No se pudo quitar la foto. Intenta de nuevo.']);
+        }
+        return Redirect::route('profile.edit')->with('status', 'profile-photo-removed');
+    }
+
+    /** Entrega la foto privada sin permitir caché compartida entre usuarios. */
     public function photo(Request $request)
     {
         $disk = \Illuminate\Support\Facades\Storage::disk('local');

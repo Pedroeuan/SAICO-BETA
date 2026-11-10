@@ -164,9 +164,11 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::middleware('auth')->group(function () {
+        // Perfil: consulta de datos y administración de la fotografía propia.
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::get('/profile/photo', [ProfileController::class, 'photo'])->name('profile.photo');
         Route::patch('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
+        Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.destroy');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });

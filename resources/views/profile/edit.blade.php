@@ -1,10 +1,95 @@
 @extends('adminlte::page')
+
+{{-- Título mostrado por el navegador y encabezado principal de la página. --}}
 @section('title', 'Mi perfil')
 @section('content_header')
 <div class="profile-heading"><h1>Mi perfil</h1></div>
 @endsection
+
 @section('css')
 <style>
+/* Editor cuadrado: muestra la imagen completa y permite ajustar su encuadre. */
+.profile-crop{
+    margin-bottom:24px;
+    padding:20px;
+    background:#f4f6f9;
+    border:1px solid #dce4ec;
+    border-radius:14px
+}
+.profile-crop canvas{
+    display:block;
+    width:100%;
+    max-width:300px;
+    aspect-ratio:1;
+    border-radius:16px;
+    background:#fff;
+    margin:0 auto;
+    box-shadow:0 0 0 1px #dce4ec,0 6px 18px rgba(0,31,63,.08);
+    cursor:grab;
+    touch-action:none
+}
+.profile-crop canvas:active{
+    cursor:grabbing
+}
+.profile-crop canvas:focus-visible,
+.profile-crop button:focus-visible{
+    outline:3px solid #287dc4;
+    outline-offset:4px
+}
+.profile-crop-hint{
+    text-align:center;
+    color:#526477;
+    font-size:13px;
+    margin:14px 0
+}
+.profile-crop-tools{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px
+}
+.profile-crop-tools button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    border:1px solid #d5dfe8;
+    background:#fff;
+    color:#001f3f;
+    border-radius:10px;
+    cursor:pointer
+}
+.profile-crop-tools button:hover{
+    background:#001f3f;
+    color:#fff;
+    border-color:#001f3f
+}
+.profile-crop-tools input[type=range]{
+    width:130px;
+    min-width:0;
+    height:4px;
+    accent-color:#001f3f;
+    cursor:pointer
+}
+.profile-actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center
+}
+.profile-remove{
+    margin-top:16px
+}
+.profile-save:disabled{
+    opacity:.55;
+    cursor:not-allowed
+}
+#my-notification .dropdown-menu{
+    max-height:200px;
+    overflow-y:auto
+}
+/* Contenedor principal y encabezado del perfil. */
 .profile-heading{
     max-width:880px;
     margin:72px auto 0;
@@ -34,6 +119,7 @@
     display:grid;
     grid-template-columns:280px 1fr
 }
+/* Panel azul con la fotografía, el nombre y el rol del usuario. */
 .profile-preview{
     background:#001f3f;
     padding:40px 24px;
@@ -143,6 +229,7 @@
     margin-top:12px;
     font-size:14px
 }
+/* Datos de la cuenta mostrados únicamente como información de consulta. */
 .profile-information{
     margin:0;
     display:grid;
@@ -182,6 +269,7 @@
 .profile-file{
     margin:0 0 18px
 }
+/* La distribución pasa a una columna en pantallas pequeñas. */
 @media(max-width:400px){
     .profile-information{
         grid-template-columns:1fr
@@ -212,8 +300,10 @@
 }
 </style>
 @endsection
+
 @section('content')
 <div class="card profile-card"><div class="profile-grid">
+{{-- Resumen visual del usuario. --}}
 <div class="profile-preview">
 <img id="profile-preview" src="{{ $user->adminlte_image() }}" alt="Mi foto de perfil" class="profile-avatar" width="180" height="180">
 <strong>{{ $user->name }}</strong>
@@ -221,9 +311,14 @@
 <span id="profile-preview-caption" class="sr-only" aria-live="polite">Foto actual de tu cuenta</span>
 </div>
 <div class="profile-upload">
+{{-- Confirmaciones posteriores a guardar o quitar una fotografía. --}}
 @if(session('status') === 'profile-updated')
 <div class="alert alert-success" role="status">Tu foto se actualizó correctamente.</div>
 @endif
+@if(session('status') === 'profile-photo-removed')
+<div class="alert alert-success" role="status">Se quitó tu foto de perfil.</div>
+@endif
+{{-- Información proveniente de la cuenta; estos campos no se editan aquí. --}}
 <dl class="profile-information">
     <div><dt>Nombre completo</dt><dd>{{ $user->name }}</dd></div>
     <div><dt>Correo institucional</dt><dd>{{ $user->email ?: 'Sin registrar' }}</dd></div>
@@ -231,7 +326,8 @@
     <div><dt>Estado de la cuenta</dt><dd>{{ $user->Estatus ?: 'Sin registrar' }}</dd></div>
     <div><dt>Fecha de registro</dt><dd>{{ $user->created_at ? $user->created_at->format('d/m/Y') : 'Sin registrar' }}</dd></div>
 </dl>
-<form class="profile-photo-form" method="post" action="{{ route('profile.photo.update') }}" enctype="multipart/form-data">
+{{-- Selector y editor de la nueva fotografía. --}}
+<form id="profile-photo-form" class="profile-photo-form" method="post" action="{{ route('profile.photo.update') }}" enctype="multipart/form-data">
 @csrf
 @method('patch')
 <div class="form-group profile-file">
@@ -240,33 +336,43 @@
 <small id="photo-help" class="sr-only">JPG, PNG o WebP. Máximo 2 MB y 4096 × 4096 píxeles.</small>
 @error('photo')<div class="text-danger" role="alert">{{ $message }}</div>@enderror
 </div>
-<button type="submit" class="btn btn-primary profile-save"><i class="fas fa-save mr-2" aria-hidden="true"></i>Guardar foto</button>
-</form></div></div></div>
+{{-- El lienzo se activa después de seleccionar una imagen válida. --}}
+<div id="profile-crop" class="profile-crop" hidden>
+    <canvas id="profile-crop-canvas" width="512" height="512" tabindex="0" role="img" aria-label="Recorte de foto. Arrastra para mover o usa las flechas del teclado."></canvas>
+    <p class="profile-crop-hint">La imagen se muestra completa. Acércala o arrástrala solo si deseas ajustar el encuadre.</p>
+    <div class="profile-crop-tools" role="group" aria-label="Ajustar recorte">
+        <button id="profile-zoom-out" type="button" aria-label="Alejar" title="Alejar"><i class="fas fa-minus" aria-hidden="true"></i></button>
+        <input id="profile-zoom" aria-label="Acercamiento" type="range" min="1" max="3" step="0.01" value="1">
+        <button id="profile-zoom-in" type="button" aria-label="Acercar" title="Acercar"><i class="fas fa-plus" aria-hidden="true"></i></button>
+        <button id="profile-recenter" type="button" aria-label="Restablecer encuadre" title="Restablecer encuadre"><i class="fas fa-undo" aria-hidden="true"></i></button>
+    </div>
+    <input id="profile-x" type="hidden" value="50">
+    <input id="profile-y" type="hidden" value="50">
+</div>
+<div id="profile-photo-message" class="text-danger mb-3" role="alert" aria-live="polite"></div>
+<div class="profile-actions">
+<button id="profile-save" type="submit" class="btn btn-primary profile-save" disabled><i class="fas fa-save mr-2" aria-hidden="true"></i>Guardar foto</button>
+<button id="profile-cancel" type="button" class="btn btn-outline-secondary" hidden>Cancelar</button>
+</div>
+</form>
+{{-- La opción de quitar la foto solo aparece cuando existe una foto guardada. --}}
+@if(\Illuminate\Support\Facades\Storage::disk('local')->exists('profile-photos/'.$user->getKey().'/photo'))
+<form id="profile-remove-form" class="profile-remove" method="post" action="{{ route('profile.photo.destroy') }}">
+    @csrf
+    @method('delete')
+    <button type="submit" class="btn btn-outline-danger">Quitar foto</button>
+</form>
+@endif
+</div></div></div>
 @endsection
+
 @section('js')
+{{-- Configuración compartida por el contador y el menú de notificaciones. --}}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const input = document.getElementById('photo');
-    const preview = document.getElementById('profile-preview');
-    const caption = document.getElementById('profile-preview-caption');
-    const original = preview.src;
-    let previewUrl;
-    input.addEventListener('change', function () {
-        if (previewUrl) URL.revokeObjectURL(previewUrl);
-        input.setCustomValidity('');
-        const file = input.files[0];
-        preview.src = original;
-        caption.textContent = 'Foto actual de tu cuenta';
-        if (!file) return;
-        if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 2 * 1024 * 1024) {
-            input.setCustomValidity('Selecciona una imagen JPG, PNG o WebP de hasta 2 MB.');
-            input.reportValidity();
-            return;
-        }
-        previewUrl = URL.createObjectURL(file);
-        preview.src = previewUrl;
-        caption.textContent = 'Vista previa · pendiente de guardar';
-    });
-});
+    const updateNotificationUrl = "{{ url('notificaciones/update') }}";
+    const viewAllNotificationsUrl = "{{ url('notificacion/index') }}";
 </script>
+<script src="{{ asset('js/notificaciones.js') }}"></script>
+{{-- Vista previa, encuadre, validación y guardado de la foto de perfil. --}}
+<script src="{{ asset('js/Profile_Photo.js') }}?v={{ filemtime(public_path('js/Profile_Photo.js')) }}"></script>
 @endsection
