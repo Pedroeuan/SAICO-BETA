@@ -11,6 +11,28 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function updatePhoto(\App\Http\Requests\ProfilePhotoUpdateRequest $request): RedirectResponse
+    {
+        $stored = $request->file('photo')->storeAs(
+            'profile-photos/'.$request->user()->getKey(), 'photo', 'local'
+        );
+        abort_unless($stored, 500, 'No se pudo guardar la fotografía.');
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function photo(Request $request)
+    {
+        $disk = \Illuminate\Support\Facades\Storage::disk('local');
+        $path = 'profile-photos/'.$request->user()->getKey().'/photo';
+        abort_unless($disk->exists($path), 404);
+
+        return response()->file($disk->path($path), [
+            'Cache-Control' => 'private, no-store',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
+    }
+
     /**
      * Display the user's profile form.
      */

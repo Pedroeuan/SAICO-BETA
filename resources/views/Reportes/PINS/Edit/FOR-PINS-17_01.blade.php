@@ -282,7 +282,8 @@
                                     <option value="{{ $equipo->idGeneral_EyC }}"
                                             data-marca="{{ $equipo->Marca }}"
                                             data-modelo="{{ $equipo->Modelo }}"
-                                            data-ns="{{ $equipo->Serie }}">
+                                            data-ns="{{ $equipo->Serie }}"
+                                            data-fecha-calibracion="{{ $equipo->certificados?->Fecha_calibracion ? \Carbon\Carbon::parse($equipo->certificados->Fecha_calibracion)->format('d-m-Y') : '' }}">
                                         {{ $equipo->Nombre_E_P_BP }}
                                     </option>
                                 @endforeach 
@@ -1033,7 +1034,8 @@
 <script>
 
     $(document).ready(function() {
-        function actualizarInputsE() {
+        function actualizarInputsE(cambioEquipo = false) {
+            if (!$('#equiposSelect').val()) return;
             var selectedOption = $('#equiposSelect').find('option:selected');
 
             // Extraer los datos de los atributos "data-"
@@ -1045,20 +1047,22 @@
             $('#marcaInputE').val(marca);
             $('#modeloInputE').val(modelo);
             $('#nsInputE').val(ns);
+            if (cambioEquipo || !$('#fechaInputE').val()) {
+                $('#fechaInputE').val(selectedOption.attr('data-fecha-calibracion') || '');
+            }
             $('#IDInputE').val($('#equiposSelect').val() || $('#IDInputE').val() || '');
         }
 
-        const selectedOptionLocalE = localStorage.getItem(document.querySelectorAll("form")[1].id+'_equipos');
-        $('#equiposSelect').val($('#IDInputE').val());
-        if (!$('#equiposSelect').val() && selectedOptionLocalE != null) {
-            $('#equiposSelect').val(selectedOptionLocalE);
+        const formEquipo = document.getElementById('FOR-PINS-17_01');
+        const selectedOptionLocalE = localStorage.getItem(formEquipo.id + '_equipos');
+        const equipoActual = $('#IDInputE').val() || selectedOptionLocalE;
+        if (equipoActual) {
+            $('#equiposSelect').val(equipoActual);
+            actualizarInputsE();
         }
-        actualizarInputsE();
-
-            // Evento cuando se cambia la selección en el select
-            $('#equiposSelect').on('change', function() {
-                actualizarInputsE();
-            });
+        $('#equiposSelect').on('change', function() {
+            actualizarInputsE(true);
+        });
                 });
     /*FOR-PINS-17_01*/
     document.addEventListener('DOMContentLoaded', function () {
