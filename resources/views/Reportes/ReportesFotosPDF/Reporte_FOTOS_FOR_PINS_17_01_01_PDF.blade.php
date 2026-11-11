@@ -247,6 +247,11 @@
             </style>
         </head>
         <body>
+        @php
+            $bloquesPdf = \App\Http\Controllers\Reporte\PINS\FOR_PINS_17_01_01Controller::paraPdf($Datos_Equipo, $Fotos ?? []);
+            $bloquesAdicionales = array_slice($bloquesPdf, 1);
+        @endphp
+        @foreach($bloquesAdicionales as $bloquePdf)
         {{-- Pagina 3 --}}
         <div class="page">
             <header>
@@ -290,49 +295,40 @@
                 <br>
                 <br>
                 <!-- IMAGEN DE REFERENCIA 2-->
-                <table class="datosresultados">
+                @if($bloquePdf)
+                    {{-- INICIO BLOQUE PDF --}}
+            <div class="bloque-termografia-pdf" style="position:relative; width:100%; height:8.5cm; margin:0; padding:0; page-break-inside:avoid; font-family:Arial,sans-serif; font-size:9px;">
+                <div style="position:absolute; top:0; left:0; width:100%; height:0.7cm; overflow:hidden; background:#215e99; color:white; text-align:center; font-size:14px; font-weight:bold; line-height:0.7cm; outline:0.5pt solid black;">
+                    {{ $bloquePdf['titulo'] ?? '' }}
+                </div>
+                @foreach($bloquePdf['fotos'] as $fotoBloque)
+                    <div style="position:absolute; top:0.7cm; left:{{ $loop->index * 50 }}%; width:50%; height:7cm; overflow:hidden; text-align:center; line-height:7cm; outline:0.5pt solid black; font-size:0;">
+                        @if($fotoBloque)
+                            @php
+                                $medidasFoto = @getimagesize($fotoBloque);
+                                $proporcionFoto = $medidasFoto ? $medidasFoto[0] / max(1, $medidasFoto[1]) : 1;
+                                $anchoFoto = min(8.48, 6.98 * $proporcionFoto);
+                                $altoFoto = $anchoFoto / $proporcionFoto;
+                            @endphp
+                            <img src="{{ $fotoBloque }}" style="position:absolute; left:50%; margin-left:-{{ $anchoFoto / 2 }}cm; top:{{ (7 - $altoFoto) / 2 }}cm; width:{{ $anchoFoto }}cm; height:{{ $altoFoto }}cm;">
+                        @endif
+                    </div>
+                @endforeach
+                @foreach(['termograma' => 'Termograma:', 'emisividad' => 'Emisividad:'] as $campoBloque => $etiquetaBloque)
+                    <div style="position:absolute; top:{{ $loop->first ? '7.7' : '8.1' }}cm; left:0; width:50%; height:0.4cm; overflow:hidden; text-align:center; line-height:0.4cm; background:#bfbfbf; font-weight:bold; outline:0.5pt solid black;">{{ $etiquetaBloque }}</div>
+                    <div style="position:absolute; top:{{ $loop->first ? '7.7' : '8.1' }}cm; left:50%; width:50%; height:0.4cm; overflow:hidden; text-align:center; line-height:0.4cm; outline:0.5pt solid black;">{{ $bloquePdf[$campoBloque] ?? '' }}</div>
+                @endforeach
+            </div>
 
-                        <thead class="encabezadoAzul2">
-                            <tr><th colspan="2">{{ $Datos_Equipo['Stndr_refe2'] }}</th></tr>
-                        </thead>
-
-                        <thead><tr class="sinBordeth"><th colspan="2"></th></tr></thead> <!-- Fila vacia -->
-
-                        <thead>
-                            <tr>
-                                <th style="width: 10%;">        
-                                    @if(isset($Fotos[3]))
-                                        <img src="{{ $Fotos[3] }}" style="width:100%; height:auto;">
-                                    @endif
-                                </th>
-
-                                <th style="width: 10%;">        
-                                    @if(isset($Fotos[4]))
-                                        <img src="{{ $Fotos[4] }}" style="width:100%; height:auto;">
-                                    @endif
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Termograma:</th>
-
-                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma2'] }}</th>
-
-                            </tr>
-                            <tr>
-                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Emisividad:</th>
-
-                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['emisividad2'] }}</th>
-
-                            </tr>
-                        </thead>
-                </table>
-                <br>
+                {{-- FIN BLOQUE PDF --}}
+                @endif
+                @if($loop->last)
+                    <br>
                 <br>
                 <!-- DATOS DE OPERACIÓN -->
-                <table class="datosresultados">
+                <table class="datosresultados" style="width:100%; font-size:10px; margin-top:-5mm; page-break-inside:avoid;">
 
-                        <thead class="encabezadoAzul3">
+                        <thead class="encabezadoAzul3" style="background:#0070c0; color:white; font-size:14px;">
                             <tr><th colspan="4">DATOS DE OPERACIÓN</th></tr>
                         </thead>
 
@@ -355,9 +351,9 @@
                 <br>
                 <br>
                 <!-- TABLA DE SEVERIDAD -->
-                <table class="datosresultados">
+                <table class="datosresultados" style="width:100%; font-size:10px; margin-top:-8mm; page-break-inside:avoid;">
 
-                        <thead class="encabezadoAzul3">
+                        <thead class="encabezadoAzul3" style="background:#0070c0; color:white; font-size:14px;">
                             <tr><th colspan="6">TABLA DE SEVERIDAD</th></tr>
                         </thead>
 
@@ -365,38 +361,42 @@
 
                         <thead>
                             <tr>
-                                <th class="" style="width: 20%; color: #00b050;">BUENO:</th>
+                                <th class="" style="font-weight:normal; width: 20%; color: #00b050;">BUENO:</th>
 
-                                <th class="" style="width: 15%; @if($Datos_Equipo['severidad'] == 'bueno') background-color: #00b050; @endif"></th>
+                                <th class="" style="font-weight:normal; width: 15%; @if($Datos_Equipo['severidad'] == 'bueno') background-color: #00b050; @endif"></th>
 
-                                <th class="" style="width: 25%;">El equipo se encuentra en condiciones de operación optimas.</th>
+                                <th class="" style="font-weight:normal; width: 25%;">El equipo se encuentra en condiciones de operación optimas.</th>
 
-                                <th class="" style="width: 20%; color: #ff6600;">PREVENTIVO</th>
+                                <th class="" style="font-weight:normal; width: 20%; color: #ff6600;">PREVENTIVO</th>
 
-                                <th class="" style="width: 15%; @if($Datos_Equipo['severidad'] == 'preventivo') background-color: #ff6600; @endif"></th>
+                                <th class="" style="font-weight:normal; width: 15%; @if($Datos_Equipo['severidad'] == 'preventivo') background-color: #ff6600; @endif"></th>
 
-                                <th class="" style="width: 25%;">Media anomalía programar el paro del equipo para su reparación.</th>
+                                <th class="" style="font-weight:normal; width: 25%;">Media anomalía programar el paro del equipo para su reparación.</th>
                             </tr>
 
                             <tr>
-                                <th class="" style="width: 20%; color: #ffcc00;">MODERADO:</th>
+                                <th class="" style="font-weight:normal; width: 20%; color: #ffcc00;">MODERADO:</th>
 
-                                <th class="" style="width: 15%; @if($Datos_Equipo['severidad'] == 'moderado') background-color: #ffcc00; @endif"></th>
+                                <th class="" style="font-weight:normal; width: 15%; @if($Datos_Equipo['severidad'] == 'moderado') background-color: #ffcc00; @endif"></th>
 
-                                <th class="" style="width: 25%;">Ligera anomalía, mantener en observación y programar reparación.</th>
+                                <th class="" style="font-weight:normal; width: 25%;">Ligera anomalía, mantener en observación y programar reparación.</th>
 
-                                <th class="" style="width: 20%; color: #ff0000;">NO ACEPTABLE:</th>
+                                <th class="" style="font-weight:normal; width: 20%; color: #ff0000;">NO ACEPTABLE:</th>
 
-                                <th class="" style="width: 15%; @if($Datos_Equipo['severidad'] == 'no_aceptable') background-color: #ff0000; @endif"></th>
+                                <th class="" style="font-weight:normal; width: 15%; @if($Datos_Equipo['severidad'] == 'no_aceptable') background-color: #ff0000; @endif"></th>
 
-                                <th class="" style="width: 25%;">Anomalía severa, se recomienda parar el equipo para su intervención.</th>
+                                <th class="" style="font-weight:normal; width: 25%;">Anomalía severa, se recomienda parar el equipo para su intervención.</th>
                             </tr>
                         </thead>
                 </table>
+
+                @endif
             </div>
         </div>
 
-        <div class="page-break"></div>
+        @if(!$loop->last)<div class="page-break"></div>@endif
+        @endforeach
+        @if(count($bloquesAdicionales))<div class="page-break"></div>@endif
 
         {{-- Pagina 4 --}}
         <div class="page">
@@ -598,7 +598,7 @@
 
                         <thead>
                             <tr>
-                                <th class="" style="">{{ $Datos_Equipo['Observaciones'] }}</th>
+                                <th class="" style="">{!! nl2br(e($Datos_Equipo['Observaciones'] ?? '')) !!}</th>
                             </tr>
                         </thead>
                 </table>
@@ -609,7 +609,7 @@
                 <table class="datosgenerales">
                     <tbody>
                         <tr>
-                            <th style="">NOTA: {{ $Datos_Equipo['Nota'] }}</th>
+                            <th style="">NOTA: {!! nl2br(e($Datos_Equipo['Nota'] ?? '')) !!}</th>
                         </tr>
                     </tbody>
                 </table>
@@ -627,7 +627,7 @@
 
                         <thead>
                             <tr>
-                                <th class="" style="">{{ $Datos_Equipo['Recomendaciones'] }}</th>
+                                <th class="" style="">{!! nl2br(e($Datos_Equipo['Recomendaciones'] ?? '')) !!}</th>
                             </tr>
                         </thead>
                 </table>
