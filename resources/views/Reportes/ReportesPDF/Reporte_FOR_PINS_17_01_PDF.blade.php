@@ -387,10 +387,6 @@
                             </tr>
                         </thead>
                 </table>
-                <br>
-                <br>
-                <br>
-                <br>
                 <!-- IMAGEN DE REFERENCIA 1-->
                 @php
                     $bloquesPdf = \App\Http\Controllers\Reporte\PINS\FOR_PINS_17_01Controller::paraPdf($Datos_Equipo, $Fotos ?? []);
