@@ -138,7 +138,7 @@ return [
     'usermenu_header_class' => 'bg-navy',
     'usermenu_image' => true,
     'usermenu_desc' => true,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -932,6 +932,16 @@ return [
     */
 
     'plugins' => [
+        'SaicoUserPhoto' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'css/saico-user-photo.css',
+                ],
+            ],
+        ],
         'Datatables' => [
             'active' => true,
             'files' => [
