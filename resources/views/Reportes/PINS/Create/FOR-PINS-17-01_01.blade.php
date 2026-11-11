@@ -149,7 +149,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="col-form-label">
-                                ¿Contrato existente?
+                                ¿Contrato interno existente?
                                 <span class="ml-3">
                                     <label class="mr-2">
                                         <input type="radio" name="TieneContrato" value="si" checked> Sí
@@ -168,6 +168,11 @@
                                 placeholder="Ejemplo: 640853841"
                                 value="{{ old('Detalles_Generales.Contrato') }}"
                                 required>
+                            <label class="col-form-label">Contrato para imprimir en PDF</label>
+                            <input type="text" class="form-control inputForm"
+                                name="Detalles_Generales[Contrato_Reporte]"
+                                placeholder="Ejemplo: N/A"
+                                value="{{ old('Detalles_Generales.Contrato_Reporte', $Detalles_Generales['Contrato_Reporte'] ?? (isset($Detalles_Generales['Contrato']) ? (str_starts_with($Detalles_Generales['Contrato'], 'AICO-INT-') ? 'N/A' : $Detalles_Generales['Contrato']) : 'N/A')) }}">
                         </div>
                     </div>
 
@@ -360,103 +365,138 @@
                     
                     <!--***************************************** FIN DATOS DEL EQUIPO *****************************************-->
                     <!--***************************************** INICIO RESULTADOS *****************************************-->
-                    <div class="col-12">
-                        <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                            <input type="text"
-                                class="form-control inputForm @error('Datos_Equipo.Stndr_refe1') is-invalid @enderror"
-                                name="Datos_Equipo[Stndr_refe1]"
-                                placeholder="IMAGEN DE REFERENCIA"
-                                value="{{ old('Datos_Equipo.Stndr_refe1', 'IMAGEN DE REFERENCIA . . .') }}">
-
-                            @error('Datos_Equipo.Stndr_refe1')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
+                    {{-- INICIO BLOQUES TERMOGRAFIA --}}
+                        @php
+                            $fotosBloques = $imagenesPorNumero ?? [];
+                            foreach (($imagenes ?? []) as $fotoBloque) {
+                                if (is_array($fotoBloque) && isset($fotoBloque['imagen'], $fotoBloque['ruta'])) $fotosBloques[$fotoBloque['imagen']] = $fotoBloque['ruta'];
+                            }
+                            $bloquesTermografia = old('Datos_Equipo.Bloques_Termografia', $Datos_Equipo['Bloques_Termografia'] ?? null);
+                            if ($bloquesTermografia === null) {
+                                $bloquesTermografia = [];
+                                foreach ([1, 2] as $numeroBloque) {
+                                    if ($numeroBloque === 2 && empty($fotosBloques[3]) && empty($fotosBloques[4])) continue;
+                                    $bloquesTermografia[$numeroBloque] = [
+                                        'titulo' => $Datos_Equipo['Stndr_refe'.$numeroBloque] ?? 'IMAGEN DE REFERENCIA',
+                                        'termograma' => $Datos_Equipo['termograma'.$numeroBloque] ?? '',
+                                        'emisividad' => $Datos_Equipo['emisividad'.$numeroBloque] ?? '',
+                                    ];
+                                }
+                            }
+                        @endphp
+                        <div class="col-12" data-bloques-termografia>
+                            <div data-lista-bloques>
+                            @foreach($bloquesTermografia as $numeroBloque => $bloque)
+                                @php
+                            $esPlantilla = $numeroBloque === '__NUMERO__';
+                            $primeraImagen = $esPlantilla ? '__IMAGEN_A__' : ($numeroBloque <= 2 ? ($numeroBloque * 2 - 1) : ($numeroBloque * 2));
+                            $segundaImagen = $esPlantilla ? '__IMAGEN_B__' : $primeraImagen + 1;
+                        @endphp
+                        <div class="border rounded p-3 mb-3" data-bloque-termografia="{{ $numeroBloque }}">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Bloque de imágenes</strong>
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-quitar-bloque>Quitar bloque</button>
+                            </div>
+                            <label>Título</label>
+                            <input class="form-control mb-2" name="Datos_Equipo[Bloques_Termografia][{{ $numeroBloque }}][titulo]" value="{{ $bloque['titulo'] ?? 'IMAGEN DE REFERENCIA' }}">
+                            <div class="row">
+                            @foreach([$primeraImagen, $segundaImagen] as $indiceImagen)
+                                <div class="col-sm-6">
+                                    <label>Imagen {{ $loop->iteration }}</label>
+                                    <input type="file" class="form-control image-input" id="imagen{{ $indiceImagen }}" name="imagen{{ $indiceImagen }}" accept="image/*">
+                                    <input type="hidden" id="imagen{{ $indiceImagen }}-base64" name="imagen{{ $indiceImagen }}_base64">
+                                    <input type="hidden" name="imagen{{ $indiceImagen }}_old" value="{{ $fotosBloques[$indiceImagen] ?? '' }}">
+                                    <div id="imagen{{ $indiceImagen }}-preview" class="mt-2"></div>
+                                    @if(!empty($fotosBloques[$indiceImagen]))
+                                        <img id="imagen{{ $indiceImagen }}-old-preview" src="{{ asset($fotosBloques[$indiceImagen]) }}" style="max-width:250px" class="img-fluid mt-2">
+                                    @endif
                                 </div>
-                            @enderror
+                            @endforeach
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-sm-6"><label>Termograma</label><input class="form-control" name="Datos_Equipo[Bloques_Termografia][{{ $numeroBloque }}][termograma]" value="{{ $bloque['termograma'] ?? '' }}"></div>
+                                <div class="col-sm-6"><label>Emisividad</label><input class="form-control" name="Datos_Equipo[Bloques_Termografia][{{ $numeroBloque }}][emisividad]" value="{{ $bloque['emisividad'] ?? '' }}"></div>
+                            </div>
+                        </div>
+
+                        @endforeach
+                        </div>
+                        <button type="button" class="btn btn-primary mb-3" data-agregar-bloque>Agregar bloque de imágenes</button>
+                        @error('Datos_Equipo.Bloques_Termografia') <div class="text-danger">{{ $message }}</div> @enderror
+                    </div>
+                    <template id="plantilla-bloque-termografia">
+                        @php
+                        $numeroBloque = '__NUMERO__';
+                        $bloque = [];
+                        $fotosBloques = [];
+                    @endphp
+                    @php
+                        $esPlantilla = $numeroBloque === '__NUMERO__';
+                        $primeraImagen = $esPlantilla ? '__IMAGEN_A__' : ($numeroBloque <= 2 ? ($numeroBloque * 2 - 1) : ($numeroBloque * 2));
+                        $segundaImagen = $esPlantilla ? '__IMAGEN_B__' : $primeraImagen + 1;
+                    @endphp
+                    <div class="border rounded p-3 mb-3" data-bloque-termografia="{{ $numeroBloque }}">
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Bloque de imágenes</strong>
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-quitar-bloque>Quitar bloque</button>
+                        </div>
+                        <label>Título</label>
+                        <input class="form-control mb-2" name="Datos_Equipo[Bloques_Termografia][{{ $numeroBloque }}][titulo]" value="{{ $bloque['titulo'] ?? 'IMAGEN DE REFERENCIA' }}">
+                        <div class="row">
+                        @foreach([$primeraImagen, $segundaImagen] as $indiceImagen)
+                            <div class="col-sm-6">
+                                <label>Imagen {{ $loop->iteration }}</label>
+                                <input type="file" class="form-control image-input" id="imagen{{ $indiceImagen }}" name="imagen{{ $indiceImagen }}" accept="image/*">
+                                <input type="hidden" id="imagen{{ $indiceImagen }}-base64" name="imagen{{ $indiceImagen }}_base64">
+                                <input type="hidden" name="imagen{{ $indiceImagen }}_old" value="{{ $fotosBloques[$indiceImagen] ?? '' }}">
+                                <div id="imagen{{ $indiceImagen }}-preview" class="mt-2"></div>
+                                @if(!empty($fotosBloques[$indiceImagen]))
+                                    <img id="imagen{{ $indiceImagen }}-old-preview" src="{{ asset($fotosBloques[$indiceImagen]) }}" style="max-width:250px" class="img-fluid mt-2">
+                                @endif
+                            </div>
+                        @endforeach
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-6"><label>Termograma</label><input class="form-control" name="Datos_Equipo[Bloques_Termografia][{{ $numeroBloque }}][termograma]" value="{{ $bloque['termograma'] ?? '' }}"></div>
+                            <div class="col-sm-6"><label>Emisividad</label><input class="form-control" name="Datos_Equipo[Bloques_Termografia][{{ $numeroBloque }}][emisividad]" value="{{ $bloque['emisividad'] ?? '' }}"></div>
                         </div>
                     </div>
 
-                        <!--IMAGEN 1-->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Imagen 1</label>
-                                <input type="file" class="form-control image-input" id="imagen1" name="imagen1" accept="image/*">
-                                <div id="imagen1-preview" class="mt-2"></div>
-                                <input type="hidden" id="imagen1-base64" name="imagen1_base64">
-                            </div>
-                        </div>
-                        <!--IMAGEN 2-->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Imagen 2</label>
-                                <input type="file" class="form-control image-input" id="imagen2" name="imagen2" accept="image/*">
-                                <div id="imagen2-preview" class="mt-2"></div>
-                                <input type="hidden" id="imagen2-base64" name="imagen2_base64">
-                            </div>
-                        </div>
+                        </template>
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const root = document.querySelector('[data-bloques-termografia]');
+                            if (!root) return;
+                            const list = root.querySelector('[data-lista-bloques]');
+                            let next = Math.max(2, ...Array.from(list.children, block => Number(block.dataset.bloqueTermografia))) + 1;
+                            root.querySelector('[data-agregar-bloque]').addEventListener('click', function () {
+                                const number = next++;
+                                const html = document.getElementById('plantilla-bloque-termografia').innerHTML
+                                    .replaceAll('__NUMERO__', number).replaceAll('__IMAGEN_A__', number * 2).replaceAll('__IMAGEN_B__', number * 2 + 1);
+                                list.insertAdjacentHTML('beforeend', html);
+                            });
+                            list.addEventListener('click', function (event) {
+                                const button = event.target.closest('[data-quitar-bloque]');
+                                if (!button) return;
+                                if (list.children.length === 1) { alert('Debe conservar al menos un bloque de dos imágenes.'); return; }
+                                button.closest('[data-bloque-termografia]').remove();
+                            });
+                            root.closest('form').addEventListener('submit', function (event) {
+                                for (const input of list.querySelectorAll('input[type="file"]')) {
+                                    const name = input.id;
+                                    const base64 = list.querySelector('[name="' + name + '_base64"]');
+                                    const old = list.querySelector('[name="' + name + '_old"]');
+                                    if (!(base64 && base64.value) && !(old && old.value)) {
+                                        event.preventDefault();
+                                        alert('Cada bloque debe contener dos imágenes.'); input.focus(); return;
+                                    }
+                                }
+                            });
+                        });
 
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label>Termograma</label>
-                                <input type="text" class="form-control inputForm" name="Datos_Equipo[termograma1]" value="{{old('Datos_Equipo.termograma1')}}">
-                            </div>
+                        </script>
 
-                            <div class="col-md-6">
-                                <label>Emisividad</label>
-                                <input type="text" class="form-control inputForm" name="Datos_Equipo[emisividad1]" value="{{old('Datos_Equipo.emisividad1')}}">
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <div class="col-12">
-                            <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded">
-                                <input type="text"
-                                    class="form-control inputForm @error('Datos_Equipo.Stndr_refe2') is-invalid @enderror"
-                                    name="Datos_Equipo[Stndr_refe2]"
-                                    placeholder="IMAGEN DE REFERENCIA"
-                                    value="{{ old('Datos_Equipo.Stndr_refe2', 'IMAGEN DE REFERENCIA . . .') }}">
-
-                                @error('Datos_Equipo.Stndr_refe2')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <!--IMAGEN 3-->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Imagen 3</label>
-                                <input type="file" class="form-control image-input" id="imagen3" name="imagen3" accept="image/*">
-                                <div id="imagen3-preview" class="mt-2"></div>
-                                <input type="hidden" id="imagen3-base64" name="imagen3_base64">
-                            </div>
-                        </div>
-                        <!--IMAGEN 4-->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-form-label" for="inputSuccess">Imagen 4</label>
-                                <input type="file" class="form-control image-input" id="imagen4" name="imagen4" accept="image/*">
-                                <div id="imagen4-preview" class="mt-2"></div>
-                                <input type="hidden" id="imagen4-base64" name="imagen4_base64">
-                            </div>
-                        </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <label>Termograma</label>
-                            <input type="text" class="form-control inputForm" name="Datos_Equipo[termograma2]" value="{{old('Datos_Equipo.termograma2')}}">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label>Emisividad</label>
-                            <input type="text" class="form-control inputForm" name="Datos_Equipo[emisividad2]" value="{{old('Datos_Equipo.emisividad2')}}">
-                        </div>
-                    </div>
-
+                        {{-- FIN BLOQUES TERMOGRAFIA --}}
                         <!-- Modal para recortar la imagen -->
                         <div class="modal fade" id="cropperModal" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">

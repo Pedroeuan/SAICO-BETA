@@ -44,6 +44,67 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class FOR_PINS_17_01Controller extends Controller
 {
+
+    public static function indices($numero): array
+    {
+        $inicio = $numero <= 2 ? $numero * 2 - 1 : $numero * 2;
+        return [$inicio, $inicio + 1];
+    }
+
+    public static function preparar(Request $request, array &$datos): array
+    {
+        $bloques = $datos['Bloques_Termografia'] ?? null;
+        if ($bloques === null) return [1, 2, 3, 4, 5]; // Capturas anteriores.
+        $indices = [5]; // Imagen de portada, independiente de los bloques.
+        foreach ($bloques as $numero => $bloque) {
+            if (!ctype_digit((string) $numero) || (int) $numero < 1) {
+                throw \Illuminate\Validation\ValidationException::withMessages(['Datos_Equipo.Bloques_Termografia' => 'Bloque de imágenes inválido.']);
+            }
+            foreach (self::indices((int) $numero) as $indice) {
+                if (!$request->filled("imagen{$indice}_base64") && !$request->filled("imagen{$indice}_old")) {
+                    throw \Illuminate\Validation\ValidationException::withMessages(['Datos_Equipo.Bloques_Termografia' => 'Cada bloque debe contener dos imágenes.']);
+                }
+                $indices[] = $indice;
+            }
+        }
+        return $indices;
+    }
+
+    public static function paraPdf(array $datos, array $fotos): array
+    {
+        $bloques = $datos['Bloques_Termografia'] ?? null;
+        if ($bloques === null) {
+            $bloques = [];
+            foreach ([1, 2] as $numero) {
+                [$a, $b] = self::indices($numero);
+                if (!isset($fotos[$a]) && !isset($fotos[$b])) continue;
+                $bloques[$numero] = ['titulo' => $datos['Stndr_refe'.$numero] ?? '', 'termograma' => $datos['termograma'.$numero] ?? '', 'emisividad' => $datos['emisividad'.$numero] ?? ''];
+            }
+        }
+        $resultado = [];
+        foreach ($bloques as $numero => $bloque) {
+            [$a, $b] = self::indices((int) $numero);
+            $bloque['fotos'] = [$fotos[$a] ?? null, $fotos[$b] ?? null];
+            $resultado[] = $bloque;
+        }
+        return $resultado;
+    }
+
+    private function segmentoArchivoTermografia($valor): string
+    {
+        $segmento = str_replace(['\\', '/', '<', '>', ':', '"', '|', '?', '*'], '_', (string) $valor);
+        $segmento = preg_replace('/[\x00-\x1F]/', '_', $segmento);
+        return trim($segmento, " .") ?: 'SinDato';
+    }
+
+    private function contratoReporteTermografia(array $detalles): array
+    {
+        $contrato = $detalles['Contrato'] ?? '';
+        $detalles['Contrato_Reporte'] = trim((string) ($detalles['Contrato_Reporte'] ?? ''))
+            ?: (str_starts_with($contrato, 'AICO-INT-') ? 'N/A' : $contrato);
+        return $detalles;
+    }
+
     private function getPdfCandidatePaths($rutaDb)
     {
         if (empty($rutaDb)) {
@@ -175,8 +236,8 @@ class FOR_PINS_17_01Controller extends Controller
 
     public function Datos_QR($datosParaCrearQR)
     {
-        $Contrato = $datosParaCrearQR['Contrato'] ?? 'SinContrato';
-        $No_Reporte = $datosParaCrearQR['No_Reporte'] ?? 'SinReporte';
+        $Contrato = $this->segmentoArchivoTermografia($datosParaCrearQR['Contrato'] ?? 'SinDato');
+        $No_Reporte = $this->segmentoArchivoTermografia($datosParaCrearQR['No_Reporte'] ?? 'SinDato');
         $ID_TECNICO = $datosParaCrearQR['ID_TECNICO'] ?? null;
         $idsConsumibles = $datosParaCrearQR['idsConsumibles'] ?? [];
         $idProcedimiento = $datosParaCrearQR['idProcedimiento'] ?? null;
@@ -597,6 +658,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Detalles_Generales.No_Reporte' => 'required|string',
             'Detalles_Generales.Cliente' => 'nullable|string',
             'Detalles_Generales.Contrato' => 'nullable|string',
+            'Detalles_Generales.Contrato_Reporte' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string',
@@ -624,6 +686,11 @@ class FOR_PINS_17_01Controller extends Controller
             'Datos_Equipo.CER_POR' => 'nullable|string',
             'Datos_Equipo.RAN_MED' => 'nullable|string',
 
+            'Datos_Equipo.Bloques_Termografia' => 'sometimes|required|array|min:1',
+            'Datos_Equipo.Bloques_Termografia.*' => 'array:titulo,termograma,emisividad',
+            'Datos_Equipo.Bloques_Termografia.*.titulo' => 'nullable|string',
+            'Datos_Equipo.Bloques_Termografia.*.termograma' => 'nullable|string',
+            'Datos_Equipo.Bloques_Termografia.*.emisividad' => 'nullable|string',
             'Datos_Equipo.Stndr_refe1' => 'nullable|string',
             'Datos_Equipo.termograma1' => 'nullable|string',
             'Datos_Equipo.emisividad1' => 'nullable|string',
@@ -714,6 +781,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
         // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $indicesImagenes = self::preparar($request, $validatedData['Datos_Equipo']);
         $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, null);
         unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
         if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
@@ -777,6 +845,7 @@ class FOR_PINS_17_01Controller extends Controller
         }
         //$Reportes->Contrato = json_encode($validatedData['Detalles_Generales']['Contrato']); //Fila Contrato en la Tabla Reportes, Borrar por si acaso
         // Guardar Detalles_Generales como JSON en la base de datos
+        $validatedData['Detalles_Generales'] = $this->contratoReporteTermografia($validatedData['Detalles_Generales']);
         $Reportes->Detalles_Generales = json_encode($validatedData['Detalles_Generales']);
         // Guardar Datos_Equipo como JSON en la base de datos
         $Reportes->Datos_Equipo = json_encode($validatedData['Datos_Equipo']);
@@ -844,8 +913,8 @@ class FOR_PINS_17_01Controller extends Controller
         $Firmas_Reportes->save();
 
         /* Imagenes */
-        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $this->segmentoArchivoTermografia($validatedData['Detalles_Generales']['No_Reporte']);
+        $Contrato = $this->segmentoArchivoTermografia($validatedData['Detalles_Generales']['Contrato']);
 
         $rutaCarpeta = "public/Reportes/FOR_PINS_17_01/{$Contrato}/{$No_Reporte}/Fotos";
         if (!Storage::exists($rutaCarpeta)) {
@@ -854,7 +923,7 @@ class FOR_PINS_17_01Controller extends Controller
 
         $imagenesGuardadas = [];
 
-        for ($i = 1; $i <= 5; $i++) {
+        foreach ($indicesImagenes as $i) {
 
             $base64 = $request->input("imagen{$i}_base64");
 
@@ -947,6 +1016,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Detalles_Generales.No_Reporte' => 'required|string',
             'Detalles_Generales.Cliente' => 'nullable|string',
             'Detalles_Generales.Contrato' => 'nullable|string',
+            'Detalles_Generales.Contrato_Reporte' => 'nullable|string',
             'Detalles_Generales.Proyecto' => 'nullable|string',
             'Detalles_Generales.Orden_Trabajo' => 'nullable|string',
             'Detalles_Generales.Folio' => 'nullable|string',
@@ -972,6 +1042,11 @@ class FOR_PINS_17_01Controller extends Controller
             'Datos_Equipo.CER_POR' => 'nullable|string',
             'Datos_Equipo.RAN_MED' => 'nullable|string',
 
+            'Datos_Equipo.Bloques_Termografia' => 'sometimes|required|array|min:1',
+            'Datos_Equipo.Bloques_Termografia.*' => 'array:titulo,termograma,emisividad',
+            'Datos_Equipo.Bloques_Termografia.*.titulo' => 'nullable|string',
+            'Datos_Equipo.Bloques_Termografia.*.termograma' => 'nullable|string',
+            'Datos_Equipo.Bloques_Termografia.*.emisividad' => 'nullable|string',
             'Datos_Equipo.Stndr_refe1' => 'nullable|string',
             'Datos_Equipo.termograma1' => 'nullable|string',
             'Datos_Equipo.emisividad1' => 'nullable|string',
@@ -1060,6 +1135,7 @@ class FOR_PINS_17_01Controller extends Controller
             'Firmas_Reportes4.EMPRESA_3RO_ENCARGADO' => 'nullable|string',
         ]);
         // Recupera la serie del servidor para conservarla al actualizar los datos generales.
+        $indicesImagenes = self::preparar($request, $validatedData['Datos_Equipo']);
         $seriePnd = app(\App\Services\PaginacionReportesPnd::class)->prepararCaptura($request, (int) $id);
         unset($validatedData['Detalles_Generales']['SERIE_REPORTES']);
         if ($seriePnd) $validatedData['Detalles_Generales']['SERIE_REPORTES'] = $seriePnd;
@@ -1067,13 +1143,14 @@ class FOR_PINS_17_01Controller extends Controller
 
         // Encontrar el Reporte, Fotos_Reportes, Firmas_Reportes, Grupo_Juntas_Detalles_Re para actualizar los datos en la base de datos
         $Reporte = reporte::where('idReportes',$id)->first();
+        $validatedData['Detalles_Generales'] = $this->contratoReporteTermografia($validatedData['Detalles_Generales']);
         $Grupo_Juntas_Detalles_Re = Grupo_Juntas_Detalles_Re::where('idReportes',$id)->first();
         $Firmas = Firma_Reporte::where('idReportes',$id)->first();
         $Fotos_Reportes = Fotos_Reporte::where('idReportes',$id)->first();
 
         // Obtener el valor de 'Detalles_Generales.Contrato'
-        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
-        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
+        $Contrato = $this->segmentoArchivoTermografia($validatedData['Detalles_Generales']['Contrato']);
+        $No_Reporte = $this->segmentoArchivoTermografia($validatedData['Detalles_Generales']['No_Reporte']);
         // 1. Obtener los detalles actuales que ya están en la base de datos
         $detallesActuales = json_decode($Reporte->Detalles_Generales, true) ?? [];
         $datosEquipoActuales = json_decode($Reporte->Datos_Equipo, true) ?? [];
@@ -1173,8 +1250,8 @@ class FOR_PINS_17_01Controller extends Controller
         } 
         
         /* Imagenes */
-        $No_Reporte = $validatedData['Detalles_Generales']['No_Reporte'];
-        $Contrato = $validatedData['Detalles_Generales']['Contrato'];
+        $No_Reporte = $this->segmentoArchivoTermografia($validatedData['Detalles_Generales']['No_Reporte']);
+        $Contrato = $this->segmentoArchivoTermografia($validatedData['Detalles_Generales']['Contrato']);
 
         $rutaCarpeta = "public/Reportes/FOR_PINS_17_01/{$Contrato}/{$No_Reporte}/Fotos";
 
@@ -1184,7 +1261,7 @@ class FOR_PINS_17_01Controller extends Controller
 
         $imagenesGuardadas = [];
 
-        for ($i = 1; $i <= 5; $i++) {
+        foreach ($indicesImagenes as $i) {
 
             $base64 = $request->input("imagen{$i}_base64");
             $imagenOld = $request->input("imagen{$i}_old");
@@ -1287,6 +1364,7 @@ class FOR_PINS_17_01Controller extends Controller
         // Convierte el SVG a PNG para que Dompdf pueda mostrar el QR en PHP 8.5.
         $qrPdf = app(\App\Services\QrParaPdf::class)->rutaParaDompdf($Datos_Equipo['QR_PDF'] ?? null);
         // Obtener las fotos con su comentario
+        $Fotos = [];
         if ($Fotos_Reportes) {
                 $Fotos = [];
 
