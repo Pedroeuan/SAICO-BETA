@@ -18,9 +18,51 @@ document.addEventListener('DOMContentLoaded', function () {
     const original = preview.src;
     const saveLabel = save.innerHTML;
     let image = null;
+    let imageWidth = 0;
+    let imageHeight = 0;
     let revision = 0;
     let saving = false;
     let drag = null;
+
+    function releaseImage() {
+        if (image && typeof image.close === 'function') image.close();
+        image = null;
+        imageWidth = 0;
+        imageHeight = 0;
+    }
+
+    function loadWithFileReader(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onerror = () => reject(new Error('No se pudo leer el archivo seleccionado.'));
+            reader.onload = () => {
+                const candidate = new Image();
+                candidate.onload = () => resolve(candidate);
+                candidate.onerror = () => reject(new Error('El archivo no contiene una imagen compatible.'));
+                candidate.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function loadImage(file) {
+        // Lee el archivo directamente; evita depender de URL blob bloqueadas por
+        // políticas de seguridad que suelen estar activas solo en producción.
+        if (typeof createImageBitmap === 'function') {
+            try {
+                return await createImageBitmap(file, { imageOrientation: 'from-image' });
+            } catch (firstError) {
+                try {
+                    return await createImageBitmap(file);
+                } catch (secondError) {
+                    console.warn('No fue posible leer la foto con createImageBitmap.', secondError);
+                }
+            }
+        }
+
+        // Compatibilidad para navegadores que todavía no implementan ImageBitmap.
+        return loadWithFileReader(file);
+    }
 
     // Herramientas de acercamiento y restablecimiento del encuadre.
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -46,9 +88,9 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.addEventListener('pointermove', function (event) {
         if (!drag || drag.id !== event.pointerId || saving || !image) return;
         const bounds = canvas.getBoundingClientRect();
-        const baseScale = Math.min(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
-        const drawnWidth = image.naturalWidth * baseScale * Number(zoom.value);
-        const drawnHeight = image.naturalHeight * baseScale * Number(zoom.value);
+        const baseScale = Math.min(canvas.width / imageWidth, canvas.height / imageHeight);
+        const drawnWidth = imageWidth * baseScale * Number(zoom.value);
+        const drawnHeight = imageHeight * baseScale * Number(zoom.value);
         const overflowX = Math.max(0, drawnWidth - canvas.width);
         const overflowY = Math.max(0, drawnHeight - canvas.height);
         const moveX = (event.clientX - drag.x) * canvas.width / bounds.width;
@@ -80,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function reset() {
         revision++;
-        image = null;
+        releaseImage();
         input.value = '';
         input.setCustomValidity('');
         panel.hidden = true;
@@ -95,10 +137,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!image || !context) return;
         // El nivel 1 muestra la fotografía completa y conserva fondo blanco
         // cuando su proporción no es cuadrada.
-        const baseScale = Math.min(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+        const baseScale = Math.min(canvas.width / imageWidth, canvas.height / imageHeight);
         const scale = baseScale * Number(zoom.value);
-        const width = image.naturalWidth * scale;
-        const height = image.naturalHeight * scale;
+        const width = imageWidth * scale;
+        const height = imageHeight * scale;
         const overflowX = Math.max(0, width - canvas.width);
         const overflowY = Math.max(0, height - canvas.height);
         const x = overflowX > 0
@@ -117,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     input.addEventListener('change', async function () {
         const file = input.files[0];
         const currentRevision = ++revision;
-        image = null;
+        releaseImage();
         save.disabled = true;
         panel.hidden = true;
         cancel.hidden = !file;
@@ -130,17 +172,25 @@ document.addEventListener('DOMContentLoaded', function () {
             input.setCustomValidity(message.textContent);
             return;
         }
-        const url = URL.createObjectURL(file);
-        const candidate = new Image();
-        candidate.src = url;
         try {
-            await candidate.decode();
-            if (currentRevision !== revision) return;
-            if (candidate.naturalWidth > 4096 || candidate.naturalHeight > 4096) {
+            const candidate = await loadImage(file);
+            if (currentRevision !== revision) {
+                if (typeof candidate.close === 'function') candidate.close();
+                return;
+            }
+            const candidateWidth = candidate.naturalWidth || candidate.width;
+            const candidateHeight = candidate.naturalHeight || candidate.height;
+            if (!candidateWidth || !candidateHeight) {
+                throw new Error('No se pudieron obtener las dimensiones de la imagen.');
+            }
+            if (candidateWidth > 4096 || candidateHeight > 4096) {
+                if (typeof candidate.close === 'function') candidate.close();
                 throw new Error('La imagen debe medir como máximo 4096 × 4096 píxeles.');
             }
             if (!context) throw new Error('Tu navegador no permite ajustar esta imagen.');
             image = candidate;
+            imageWidth = candidateWidth;
+            imageHeight = candidateHeight;
             zoom.value = '1';
             horizontal.value = vertical.value = '50';
             panel.hidden = false;
@@ -149,10 +199,9 @@ document.addEventListener('DOMContentLoaded', function () {
             caption.textContent = 'Vista previa del recorte, pendiente de guardar';
         } catch (error) {
             if (currentRevision !== revision) return;
-            image = null;
-            message.textContent = error instanceof DOMException ? 'No se pudo abrir la imagen. Selecciona otra.' : error.message;
-        } finally {
-            URL.revokeObjectURL(url);
+            releaseImage();
+            console.error('No se pudo preparar la foto de perfil.', error);
+            message.textContent = error.message || 'No se pudo abrir la imagen. Selecciona otra.';
         }
     });
 
