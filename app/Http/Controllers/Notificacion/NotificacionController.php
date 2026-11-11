@@ -618,8 +618,10 @@ class NotificacionController extends Controller
                 ->where(function ($query) use ($notificacion, $reintentos) {
                     $query->whereNull('preview_shown_at');
 
-                    if ($reintentos[$notificacion->prioridad] !== null) {
-                        $query->orWhere('preview_shown_at', '<=', $reintentos[$notificacion->prioridad]);
+                    // Notificaciones históricas pueden no tener prioridad; se tratan como normales.
+                    $reintento = $reintentos[$notificacion->prioridad] ?? null;
+                    if ($reintento !== null) {
+                        $query->orWhere('preview_shown_at', '<=', $reintento);
                     }
                 });
             $reclamada = $reclamo->update(['preview_shown_at' => now()]);

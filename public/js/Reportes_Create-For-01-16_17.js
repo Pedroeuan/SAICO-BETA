@@ -198,9 +198,9 @@ document.addEventListener("DOMContentLoaded", function () {
         /* ACTIVAR INPUTS */
         function activateImageEvents(){
 
-            document.querySelectorAll('.image-input').forEach(input => {
+            document.addEventListener('change', function(e){
+                    if (!e.target.matches('.image-input')) return;
 
-                input.addEventListener('change', function(e){
 
                     const file = e.target.files[0];
                     if(!file) return;
@@ -218,10 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     };
 
                     reader.readAsDataURL(file);
-
                 });
-
-            });
 
         }
 

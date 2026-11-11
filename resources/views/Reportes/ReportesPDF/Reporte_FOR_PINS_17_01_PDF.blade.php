@@ -312,7 +312,7 @@
                             <th>CLIENTE:</th>
                             <td class="lineaInferior">{{ $Detalles_Generales['Cliente'] }}</td>
                             <th>CONTRATO:</th>
-                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato'] }}</td>
+                            <td class="lineaInferior">{{ $Detalles_Generales['Contrato_Reporte'] ?? $Detalles_Generales['Contrato'] }}</td>
                         </tr>
                         <tr>
                             <th>PROYECTO: </th>
@@ -354,7 +354,8 @@
                 <div style="margin-bottom: 6px;"></div>
 
                 <!-- DATOS Y AJUSTES DEL EQUIPO -->
-                <table class="datosresultados">
+                <table class="datosresultados" style="table-layout:fixed; width:100%;">
+                    <colgroup><col style="width:12%"><col style="width:33%"><col style="width:25%"><col style="width:30%"></colgroup>
 
                         <thead class="encabezadoAzul">
                             <tr><th colspan="4">DATOS Y AJUSTES DEL EQUIPO</th></tr>
@@ -367,67 +368,128 @@
                                 <th colspan="4" style="border: 1px solid black; border-left: 2px solid black; border-top: 2px solid black;">EQUIPO</th>
                             </tr>
                             <tr>
-                                <th class="celdaGris" style="width: 80px; border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MARCA:</th>
+                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black; white-space:nowrap; padding:3px 2px;">MARCA:</th>
                                 <th style="border: 1px solid black;">{{ $Datos_Equipo['MARCA_EQUIPO'] }}</th>
-                                <th class="celdaGris" style="width: 80px; border: 1px solid black;">FECHA DE CALIBRACIÓN:</th>
+                                <th class="celdaGris" style="border: 1px solid black; white-space:nowrap; padding:3px 2px;">FECHA DE CALIBRACIÓN:</th>
                                 <th style="border: 1px solid black;">{{ $Datos_Equipo['FEC_CAL'] }}</th>
                             </tr>
                             <tr>
-                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">MODELO:</th>
+                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black; white-space:nowrap; padding:3px 2px;">MODELO:</th>
                                 <th style="border: 1px solid black;">{{ $Datos_Equipo['MODELO_EQUIPO'] }}</th>
-                                <th class="celdaGris" style="border: 1px solid black;">CERTIFICADO POR:</th>
+                                <th class="celdaGris" style="border: 1px solid black; white-space:nowrap; padding:3px 2px;">CERTIFICADO POR:</th>
                                 <th style="border: 1px solid black;">{{ $Datos_Equipo['CER_POR'] }}</th>
                             </tr>
                             <tr>
-                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">SERIE:</th>
+                                <th class="celdaGris" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black; white-space:nowrap; padding:3px 2px;">SERIE:</th>
                                 <th style="border: 1px solid black;">{{ $Datos_Equipo['NS_EQUIPO'] }}</th>
-                                <th class="celdaGris" style="border: 1px solid black;">RANGO DE MEDICIÓN:</th>
+                                <th class="celdaGris" style="border: 1px solid black; white-space:nowrap; padding:3px 2px;">RANGO DE MEDICIÓN:</th>
                                 <th style="border: 1px solid black;">{{ $Datos_Equipo['RAN_MED'] }}</th>
                             </tr>
                         </thead>
                 </table>
-                <br>
-                <br>
-                <br>
-                <br>
                 <!-- IMAGEN DE REFERENCIA 1-->
-                <table class="datosresultados">
+                @php
+                    $bloquesPdf = \App\Http\Controllers\Reporte\PINS\FOR_PINS_17_01Controller::paraPdf($Datos_Equipo, $Fotos ?? []);
+                @endphp
+                                        @if(count($bloquesPdf))
+                                            @php
+                    $bloquePdf = $bloquesPdf[0];
+                @endphp
+                {{-- INICIO BLOQUE PDF --}}
+                <div class="bloque-termografia-pdf" style="position:relative; width:100%; height:8.5cm; margin:0; padding:0; page-break-inside:avoid; font-family:Arial,sans-serif; font-size:9px;">
+                    <div style="position:absolute; top:0; left:0; width:100%; height:0.7cm; overflow:hidden; background:#215e99; color:white; text-align:center; font-size:14px; font-weight:bold; line-height:0.7cm; outline:0.5pt solid black;">
+                        {{ $bloquePdf['titulo'] ?? '' }}
+                    </div>
+                    @foreach($bloquePdf['fotos'] as $fotoBloque)
+                        <div style="position:absolute; top:0.7cm; left:{{ $loop->index * 50 }}%; width:50%; height:7cm; overflow:hidden; text-align:center; line-height:7cm; outline:0.5pt solid black; font-size:0;">
+                            @if($fotoBloque)
+                                @php
+                                    $medidasFoto = @getimagesize($fotoBloque);
+                                    $proporcionFoto = $medidasFoto ? $medidasFoto[0] / max(1, $medidasFoto[1]) : 1;
+                                    $anchoFoto = min(8.48, 6.98 * $proporcionFoto);
+                                    $altoFoto = $anchoFoto / $proporcionFoto;
+                                @endphp
+                                <img src="{{ $fotoBloque }}" style="position:absolute; left:50%; margin-left:-{{ $anchoFoto / 2 }}cm; top:{{ (7 - $altoFoto) / 2 }}cm; width:{{ $anchoFoto }}cm; height:{{ $altoFoto }}cm;">
+                            @endif
+                        </div>
+                    @endforeach
+                    @foreach(['termograma' => 'Termograma:', 'emisividad' => 'Emisividad:'] as $campoBloque => $etiquetaBloque)
+                        <div style="position:absolute; top:{{ $loop->first ? '7.7' : '8.1' }}cm; left:0; width:50%; height:0.4cm; overflow:hidden; text-align:center; line-height:0.4cm; background:#bfbfbf; font-weight:bold; outline:0.5pt solid black;">{{ $etiquetaBloque }}</div>
+                        <div style="position:absolute; top:{{ $loop->first ? '7.7' : '8.1' }}cm; left:50%; width:50%; height:0.4cm; overflow:hidden; text-align:center; line-height:0.4cm; outline:0.5pt solid black;">{{ $bloquePdf[$campoBloque] ?? '' }}</div>
+                    @endforeach
+                </div>
 
-                        <thead class="encabezadoAzul2">
-                            <tr><th colspan="2">{{ $Datos_Equipo['Stndr_refe1'] }}</th></tr>
+                {{-- FIN BLOQUE PDF --}}
+                            @if(count($bloquesPdf) === 1)
+                                <br>
+                <br>
+                <!-- DATOS DE OPERACIÓN -->
+                <table class="datosresultados" style="width:100%; font-size:10px; margin-top:-5mm; page-break-inside:avoid;">
+
+                        <thead class="encabezadoAzul3" style="background:#0070c0; color:white; font-size:14px;">
+                            <tr><th colspan="4">DATOS DE OPERACIÓN</th></tr>
                         </thead>
 
-                        <thead><tr class="sinBordeth"><th colspan="2"></th></tr></thead> <!-- Fila vacia -->
+                        <thead><tr class="sinBordeth"><th colspan="4"></th></tr></thead> <!-- Fila vacia -->
 
                         <thead>
                             <tr>
-                                <th style="width: 10%;">        
-                                    @if(isset($Fotos[1]))
-                                        <img src="{{ $Fotos[1] }}" style="width:100%; height:auto;">
-                                    @endif
-                                </th>
+                                <th class="" style="width: 25%;">VOLTAJE:</th>
 
-                                <th style="width: 10%;">        
-                                    @if(isset($Fotos[2]))
-                                        <img src="{{ $Fotos[2] }}" style="width:100%; height:auto;">
-                                    @endif
-                                </th>
+                                <th class="" style="width: 25%;">{{ $Datos_Equipo['voltaje'] }}</th>
 
-                            </tr>
-                            <tr>
-                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Termograma:</th>
+                                <th class="" style="width: 25%;">CARGA AMP:</th>
 
-                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['termograma1'] }}</th>
-
-                            </tr>
-                            <tr>
-                                <th class="celdaGrisOscuro" style="border: 1px solid black; border-left: 2px solid black; border-bottom: 2px solid black;">Emisividad:</th>
-
-                                <th class="celdaGrisOscuro" style="border: 1px solid black;">{{ $Datos_Equipo['emisividad1'] }}</th>
-
+                                <th class="" style="width: 25%;">{{ $Datos_Equipo['CARGA_AMP'] }}</th>
                             </tr>
                         </thead>
                 </table>
+
+
+                <br>
+                <br>
+                <!-- TABLA DE SEVERIDAD -->
+                <table class="datosresultados" style="width:100%; font-size:10px; margin-top:-8mm; page-break-inside:avoid;">
+
+                        <thead class="encabezadoAzul3" style="background:#0070c0; color:white; font-size:14px;">
+                            <tr><th colspan="6">TABLA DE SEVERIDAD</th></tr>
+                        </thead>
+
+                        <thead><tr class="sinBordeth"><th colspan="6"></th></tr></thead> <!-- Fila vacia -->
+
+                        <thead>
+                            <tr>
+                                <th class="" style="font-weight:normal; width: 20%; color: #00b050;">BUENO:</th>
+
+                                <th class="" style="font-weight:normal; width: 15%; @if($Datos_Equipo['severidad'] == 'bueno') background-color: #00b050; @endif"></th>
+
+                                <th class="" style="font-weight:normal; width: 25%;">El equipo se encuentra en condiciones de operación optimas.</th>
+
+                                <th class="" style="font-weight:normal; width: 20%; color: #ff6600;">PREVENTIVO</th>
+
+                                <th class="" style="font-weight:normal; width: 15%; @if($Datos_Equipo['severidad'] == 'preventivo') background-color: #ff6600; @endif"></th>
+
+                                <th class="" style="font-weight:normal; width: 25%;">Media anomalía programar el paro del equipo para su reparación.</th>
+                            </tr>
+
+                            <tr>
+                                <th class="" style="font-weight:normal; width: 20%; color: #ffcc00;">MODERADO:</th>
+
+                                <th class="" style="font-weight:normal; width: 15%; @if($Datos_Equipo['severidad'] == 'moderado') background-color: #ffcc00; @endif"></th>
+
+                                <th class="" style="font-weight:normal; width: 25%;">Ligera anomalía, mantener en observación y programar reparación.</th>
+
+                                <th class="" style="font-weight:normal; width: 20%; color: #ff0000;">NO ACEPTABLE:</th>
+
+                                <th class="" style="font-weight:normal; width: 15%; @if($Datos_Equipo['severidad'] == 'no_aceptable') background-color: #ff0000; @endif"></th>
+
+                                <th class="" style="font-weight:normal; width: 25%;">Anomalía severa, se recomienda parar el equipo para su intervención.</th>
+                            </tr>
+                        </thead>
+                </table>
+
+                            @endif
+                        @endif
         </div>
 
         </body>
