@@ -50,7 +50,11 @@ class User extends Authenticatable
 
     public function adminlte_image()
     {
-        return 'https://picsum.photos/300/300';
+        $path = 'profile-photos/'.$this->getKey().'/photo';
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists($path)) {
+            return route('profile.photo', ['v' => \Illuminate\Support\Facades\Storage::disk('local')->lastModified($path)]);
+        }
+        return asset('img/default-user.svg');
     }
 
     public function adminlte_desc()
@@ -65,7 +69,7 @@ class User extends Authenticatable
 
     public function adminlte_profile_url()
     {
-        return 'profile/username';
+        return 'profile';
     }
 
      // salidas usuario como chofer

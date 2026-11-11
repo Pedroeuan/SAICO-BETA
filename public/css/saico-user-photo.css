@@ -1,0 +1,9 @@
+.navbar .user-menu > .nav-link > .user-image {
+    border-radius: 7px;
+    object-fit: cover;
+}
+
+.navbar .user-menu .user-header > img {
+    border-radius: 16px;
+    object-fit: cover;
+}
