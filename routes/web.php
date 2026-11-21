@@ -1030,11 +1030,21 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     Route::get('/salidas-vehiculos/checklist/{salida}/{tipo}', [SalidaChecklistController::class, 'show'])->name('salidas.checklist.show');
     /*Ruta de PDF de Checklist*/
     Route::get('/salidas-vehiculos/checklist-pdf/{salida}', [SalidaChecklistController::class, 'pdf'])->name('salidas.checklist.pdf');
+    }); 
 
-
-
-
-}); 
-
-
+    /*TICS PRESTAMO Y REGUARDO DE EQUIPOS DE TICS*/
+    Route::middleware('can:tics-access')->group(function () {
+    /*Ruta de Vista de create TICS*/
+    Route::get('/salidas-tics/index', [OCController::class, 'index'])->name('TICS.indexOC');
+    /*Ruta de Vista de Registro de TICS*/
+    Route::get('/salidas-tics/create', [OCController::class, 'create'])->name('TICS.createOC');
+    /*Ruta de Guardado*/
+    Route::post('/salidas-tics/store', [OCController::class, 'storeOC'])->name('TICS.storeOC'); 
+    /*Ruta de Actualizar TICS*/
+    Route::post('/salidas-tics/update/{id}', [OCController::class, 'updateOC'])->name('TICS.updateOC');
+    /*Rutas de Vista de Edición-index*/
+    Route::get('/TICS/edit/{id}', [OCController::class, 'edit'])->name('TICS.edit');
+    /*Ruta de botón Eliminación-index-TICS*/
+    Route::delete('/TICS/eliminar/{id}', [OCController::class, 'destroy'])->name('TICS.destroy');
+    });
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
