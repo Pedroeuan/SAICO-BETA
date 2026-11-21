@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const container = document.getElementById('imageFieldsContainer');
         const cropperImage = document.getElementById('cropperImage');
 
-        const selImgCountLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount');
+        const selImgCountLocal = document.getElementById('F-SGLE-708-02-PT') ? null : localStorage.getItem(document.querySelectorAll("form")[1].id+'_imageCount');
         //selImgCountLocal != null ?  ($('#imageCountSelect').val(selImgCountLocal),generateImageFields(selImgCountLocal),document.getElementById('msgImgNoSave').classList.remove('d-none')):"";
 
         if (selImgCountLocal != null) {
@@ -441,6 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const inputFields = document.querySelectorAll(".default-input");
 
         inputFields.forEach(input => {
+            if (input.closest('#dynamicTable') && document.getElementById('F-SGLE-708-02-PT')) return;
             input.addEventListener("input", function () {
                 const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
                 if (isNaN(column)) return; // Evitar errores si no es válido
@@ -458,7 +459,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
-    const formularios = ["FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01",
+    const formularios = ["F-SGLE-708-02-PT", "F-SGLE-708-04-PAUT", "F-SGLE-708-06-MT", "F-SGLE-708-08-UT-HR", "F-SGLE-708-10-UT-HA", "FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01",
         "FOR-PINS-12_01", "FOR-PINS-13_01", "FOR-PINS-14_01", "FOR-PINS-15_01", "FOR-PINS-16_01", "FOR-PINS-17_01", "FOR-PINS-18_01", "FOR-PINS-19_01", "FOR-PINS-20_01",
         "FOR-PINS-21_01", "FOR-PINS-22_01", "FOR-PINS-22_01", "FOR-PINS-23_01", "FOR-PINS-24_01", "FOR-PINS-25-01", "FOR-PINS-03_02", "FOR-PINS-05_02", "FOR-PINS-11_02",
         "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15"
@@ -466,17 +467,18 @@ document.addEventListener("DOMContentLoaded", function () {
     formularios.forEach(formId => {
         const form = document.getElementById(formId);
         if (!form) return; // Saltar si no existe
+        const esPt = formId === "F-SGLE-708-02-PT";
 
         const inputs = form.querySelectorAll(".inputForm");
         const textareas = form.querySelectorAll("textarea");
 
         // Restaurar valores desde localStorage
         inputs.forEach(input => {
-            const stored = localStorage.getItem(`${formId}_${input.name}`);
+            const stored = esPt ? null : localStorage.getItem(`${formId}_${input.name}`);
             if (stored !== null) input.value = stored;
 
             input.addEventListener("input", () => {
-                localStorage.setItem(`${formId}_${input.name}`, input.value);
+                if (!esPt) localStorage.setItem(`${formId}_${input.name}`, input.value);
             });
         });
 
@@ -485,19 +487,19 @@ document.addEventListener("DOMContentLoaded", function () {
             // Verificar si es textarea de comentarios (tiene name="comments[]" y id)
             if (textarea.name === "comments[]" && textarea.id) {
                 // Guardar usando id como clave
-                const stored = localStorage.getItem(`${formId}_${textarea.id}`);
+                const stored = esPt ? null : localStorage.getItem(`${formId}_${textarea.id}`);
                 if (stored !== null) textarea.value = stored;
 
                 textarea.addEventListener("input", () => {
-                    localStorage.setItem(`${formId}_${textarea.id}`, textarea.value);
+                    if (!esPt) localStorage.setItem(`${formId}_${textarea.id}`, textarea.value);
                 });
             } else {
                 // Para otros textareas (que no son comentarios), usar name
-                const stored = localStorage.getItem(`${formId}_${textarea.name}`);
+                const stored = esPt ? null : localStorage.getItem(`${formId}_${textarea.name}`);
                 if (stored !== null) textarea.value = stored;
 
                 textarea.addEventListener("input", () => {
-                    localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+                    if (!esPt) localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
                 });
             }
         });
@@ -508,6 +510,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (rellenarBtn) {
             rellenarBtn.addEventListener("click", function () {
                 inputs.forEach(input => {
+                    if (esPt && (input.type === "hidden" || input.readOnly)) return;
                     if (input.value.trim() === "") {
                         if (input.type === "date") {
                             // poner fecha actual
@@ -515,13 +518,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         } else if (input.type !== "file") {
                             input.value = "---";
                         }
-                        localStorage.setItem(`${formId}_${input.name}`, input.value);
+                        if (!esPt) localStorage.setItem(`${formId}_${input.name}`, input.value);
                     }
                 });
                 textareas.forEach(textarea => {
                     if (textarea.value.trim() === "") {
                         textarea.value = "---";
-                        localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
+                        if (!esPt) localStorage.setItem(`${formId}_${textarea.name}`, textarea.value);
                     }
                 });
             });
@@ -532,18 +535,19 @@ document.addEventListener("DOMContentLoaded", function () {
         checkboxes.length > 0 ? checkboxes.forEach(checkbox => {
             const key = checkbox.id ? `${formId}_${checkbox.id}` : `${formId}_${checkbox.name}`;
 
-            const stored = localStorage.getItem(key);
+            const stored = esPt ? null : localStorage.getItem(key);
             if (stored !== null) {
                 checkbox.checked = stored === "true";
             }
 
             checkbox.addEventListener("change", () => {
-                localStorage.setItem(key, checkbox.checked);
+                if (!esPt) localStorage.setItem(key, checkbox.checked);
             });
         }) : null;
 
         // Limpiar localStorage al enviar el formulario
         form.addEventListener("submit", function () {
+            if (esPt) return;
             inputs.forEach(input => localStorage.removeItem(`${formId}_${input.name}`));
             textareas.forEach(textarea => localStorage.removeItem(`${formId}_${textarea.name}`));
             
@@ -558,7 +562,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /*Selección de Firmas */
     document.addEventListener('DOMContentLoaded', function() {
-    const numFirmasLocal = localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
+    const numFirmasLocal = document.getElementById('F-SGLE-708-02-PT') ? null : localStorage.getItem(document.querySelectorAll("form")[1].id+'_numFirmas');
     const numFirmasSelect = document.getElementById('numFirmas');
     const firmas1 = document.getElementById('firmas1');
     const firmas2 = document.getElementById('firmas2');
@@ -568,7 +572,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //numFirmasSelect.value = numFirmasLocal;
 
-    numFirmasLocal ? numFirmasSelect.value = numFirmasLocal : numFirmasSelect.value = '1'; // Valor por defecto si no hay en localStorage
+    if (numFirmasLocal) numFirmasSelect.value = numFirmasLocal;
+    else if (!document.getElementById('F-SGLE-708-02-PT')) numFirmasSelect.value = '1';
     
     numFirmasSelect.addEventListener('change', function() {
         if (this.value == '1') {
@@ -635,7 +640,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $('#NOMBRE_TECNICO').val(name);
         }
 
-            const selectedOptionLocalT = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos');
+            const selectedOptionLocalT = document.getElementById('F-SGLE-708-02-PT') ? null : localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos');
             selectedOptionLocalT != null ?  ($('#tecnicosSelect').val(selectedOptionLocalT),actualizarTecnicos()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -656,7 +661,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $('#NOMBRE_TECNICO2').val(name);
         }
 
-            const selectedOptionLocalT2 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos2');
+            const selectedOptionLocalT2 = document.getElementById('F-SGLE-708-02-PT') ? null : localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos2');
             selectedOptionLocalT2 != null ?  ($('#tecnicosSelect2').val(selectedOptionLocalT2),actualizarTecnicos2()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -677,7 +682,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $('#NOMBRE_TECNICO3').val(name);
         }
 
-            const selectedOptionLocalT3 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos3');
+            const selectedOptionLocalT3 = document.getElementById('F-SGLE-708-02-PT') ? null : localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos3');
             selectedOptionLocalT3 != null ?  ($('#tecnicosSelect3').val(selectedOptionLocalT3),actualizarTecnicos3()):"";
 
             // Evento cuando se cambia la selección en el select
@@ -698,7 +703,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $('#NOMBRE_TECNICO4').val(name);
         }
 
-            const selectedOptionLocalT4 = localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos4');
+            const selectedOptionLocalT4 = document.getElementById('F-SGLE-708-02-PT') ? null : localStorage.getItem(document.querySelectorAll("form")[1].id+'_Tecnicos4');
             selectedOptionLocalT4 != null ?  ($('#tecnicosSelect4').val(selectedOptionLocalT4),actualizarTecnicos4()):"";
 
             // Evento cuando se cambia la selección en el select

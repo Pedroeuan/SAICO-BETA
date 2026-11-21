@@ -613,6 +613,7 @@
         const inputFields = document.querySelectorAll(".default-input");
 
         inputFields.forEach(input => {
+            if (input.closest('#dynamicTable') && document.getElementById('F-SGLE-708-02-PT')) return;
             input.addEventListener("input", function () {
                 const column = parseInt(input.getAttribute("data-column")); // Aseguramos que sea número
                 if (isNaN(column)) return; // Evitar errores si no es válido
@@ -632,7 +633,7 @@
     /*Pre-Rellenado del formulario */
     document.addEventListener("DOMContentLoaded", function () {
     // Ambos formatos IM participan en la limpieza del almacenamiento local después de guardar correctamente.
-    const formularios = ["FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01",
+    const formularios = ["F-SGLE-708-02-PT", "F-SGLE-708-04-PAUT", "F-SGLE-708-06-MT", "F-SGLE-708-08-UT-HR", "F-SGLE-708-10-UT-HA", "FOR-PINS-04_01", "FOR-PINS-05_01", "FOR-PINS-06_01", "FOR-PINS-07_01", "FOR-PINS-08_01", "FOR-PINS-09_01", "FOR-PINS-10_01", "FOR-PINS-11_01",
         "FOR-PINS-12_01", "FOR-PINS-13_01", "FOR-PINS-14_01", "FOR-PINS-15_01", "FOR-PINS-16_01", "FOR-PINS-17_01", "FOR-PINS-18_01", "FOR-PINS-19_01", "FOR-PINS-20_01",
         "FOR-PINS-21_01", "FOR-PINS-22_01", "FOR-PINS-22_01", "FOR-PINS-23_01", "FOR-PINS-24_01", "FOR-PINS-25_01", "FOR-PINS-03_02", "FOR-PINS-05_02", "FOR-PINS-11_02",
         "FOR-PINS-17_01_01", "FOR-03-PRO-INS-15", "FOR-PIMP-04_02", "FOR-PIMP-04_03", "FOR-PIMP-03_B_01", "FOR-PIMP-05_B_01"
