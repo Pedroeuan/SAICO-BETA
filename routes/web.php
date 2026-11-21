@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Clientes\ClientesController;
 use App\Http\Controllers\Normas_IM\NormasIMController;
 use App\Http\Controllers\Normas_IM\PatronesGranoIMController;
+use App\Http\Controllers\TICS\PrestamosTICSController;
 use App\Http\Controllers\Manifiesto\ManifiestoController;
 use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\PDFReportes\PDFReportesController;
@@ -998,16 +999,16 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     /*TICS PRESTAMO Y REGUARDO DE EQUIPOS DE TICS*/
     Route::middleware('can:tics-access')->group(function () {
     /*Ruta de Vista de create TICS*/
-    Route::get('/salidas-tics/index', [OCController::class, 'index'])->name('TICS.indexOC');
+    Route::get('/salidas-tics/index', [PrestamosTICSController::class, 'index'])->name('TICS.indexOC');
     /*Ruta de Vista de Registro de TICS*/
-    Route::get('/salidas-tics/create', [OCController::class, 'create'])->name('TICS.createOC');
+    Route::get('/salidas-tics/create', [PrestamosTICSController::class, 'create'])->name('TICS.createOC');
     /*Ruta de Guardado*/
-    Route::post('/salidas-tics/store', [OCController::class, 'storeOC'])->name('TICS.storeOC'); 
+    Route::post('/salidas-tics/store', [PrestamosTICSController::class, 'storeOC'])->name('TICS.storeOC'); 
     /*Ruta de Actualizar TICS*/
-    Route::post('/salidas-tics/update/{id}', [OCController::class, 'updateOC'])->name('TICS.updateOC');
+    Route::post('/salidas-tics/update/{id}', [PrestamosTICSController::class, 'updateOC'])->name('TICS.updateOC');
     /*Rutas de Vista de Edición-index*/
-    Route::get('/TICS/edit/{id}', [OCController::class, 'edit'])->name('TICS.edit');
+    Route::get('/TICS/edit/{id}', [PrestamosTICSController::class, 'edit'])->name('TICS.edit');
     /*Ruta de botón Eliminación-index-TICS*/
-    Route::delete('/TICS/eliminar/{id}', [OCController::class, 'destroy'])->name('TICS.destroy');
+    Route::delete('/TICS/eliminar/{id}', [PrestamosTICSController::class, 'destroy'])->name('TICS.destroy');
     });
 //Route::get('/home',[App\Http\Controller\HomeController::class,'index'])->name('home');
