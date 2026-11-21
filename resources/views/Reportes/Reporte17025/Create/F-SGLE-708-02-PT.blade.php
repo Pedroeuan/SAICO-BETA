@@ -281,33 +281,6 @@
         max-height: 80vh;
         object-fit: contain;
     }
-    .pt-navegacion-form {
-        position: fixed;
-        right: 18px;
-        bottom: 26px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        z-index: 1040;
-    }
-    .pt-navegacion-form button {
-        width: 44px;
-        height: 44px;
-        border: 1px solid #fff;
-        border-radius: 50%;
-        background: #285b89;
-        color: #fff;
-        box-shadow: 0 3px 10px #0003;
-        font-size: 25px;
-        line-height: 1;
-    }
-    .pt-navegacion-form button:hover {
-        background: #C04040;
-    }
-    .pt-navegacion-form button:focus-visible {
-        outline: 3px solid #e6a931;
-        outline-offset: 3px;
-    }
     </style>
     <style>
         #F-SGLE-708-02-PT .foto-pt-tarjeta {
@@ -2337,19 +2310,9 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <script>
-/* Navegación y vista ampliada de las fotografías. */
+/* Vista ampliada de las fotografías. */
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('F-SGLE-708-02-PT');
-    const navigation = document.createElement('nav'); navigation.className = 'pt-navegacion-form'; navigation.setAttribute('aria-label', 'Navegación del formulario');
-    [['↑','Ir al inicio',false],['↓','Ir al final',true]].forEach(([symbol,label,bottom]) => {
-        const button = document.createElement('button'); button.type = 'button'; button.textContent = symbol; button.title = label; button.setAttribute('aria-label', label);
-        button.addEventListener('click', () => {
-            const box = form.getBoundingClientRect();
-            const top = window.scrollY + (bottom ? box.bottom - window.innerHeight + 30 : box.top - 90);
-            window.scrollTo({top:Math.max(0,top),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
-        }); navigation.append(button);
-    });
-    document.body.append(navigation);
     const dialog = document.createElement('dialog'); dialog.className = 'pt-foto-visor'; dialog.setAttribute('aria-label', 'Vista ampliada de la imagen');
     const header = document.createElement('div'); header.className = 'pt-visor-cabecera';
     const title = document.createElement('strong'); title.textContent = 'Vista previa de la imagen';
@@ -2367,4 +2330,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+@include('Reportes.Reporte17025.partials.navegacion-pt')
 @endsection

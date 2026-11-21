@@ -405,7 +405,15 @@ class ReporteController extends Controller
             $contratoSeleccionado = $request->input('selectedContrato_Proyecto');
 
             // Obtener todos los reportes que coincidan con el contrato seleccionado
-            $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $contratoSeleccionado)->get();
+            // MariaDB puede tratar de forma distinta los caracteres Unicode y sus
+            // escapes JSON (por ejemplo, "–" y "\u2013") al usar JSON_CONTAINS.
+            // Decodificamos el contrato y comparamos exactamente sus bytes, sin
+            // modificar el valor guardado ni confundir guiones o mayúsculas.
+            // JSON_TYPE conserva la búsqueda solo para contratos de tipo texto.
+            $reportesEncontrados = reporte::whereRaw(
+                "JSON_TYPE(JSON_EXTRACT(Detalles_Generales, '$.Contrato')) = 'STRING' AND BINARY JSON_UNQUOTE(JSON_EXTRACT(Detalles_Generales, '$.Contrato')) = BINARY ?",
+                [$contratoSeleccionado]
+            )->get();
 
             // Decodificar el campo Detalles_Generales para cada reporte encontrado
             foreach ($reportesEncontrados as $reporte) {
@@ -972,7 +980,12 @@ class ReporteController extends Controller
         $contratoSeleccionado = $request->input('contratoSeleccionado');
         $Proyecto = $request->input('Proyecto');
 
-        $reportesEncontrados = reporte::whereJsonContains('Detalles_Generales->Contrato', $contratoSeleccionado)->get();
+        // Repetir la misma comparación del paso de selección: esta vista vuelve
+        // a consultar los reportes y debe encontrar también contratos con Unicode.
+        $reportesEncontrados = reporte::whereRaw(
+            "JSON_TYPE(JSON_EXTRACT(Detalles_Generales, '$.Contrato')) = 'STRING' AND BINARY JSON_UNQUOTE(JSON_EXTRACT(Detalles_Generales, '$.Contrato')) = BINARY ?",
+            [$contratoSeleccionado]
+        )->get();
         // Obtener solo las rutas de los archivos firmados
         /*$Rerpote_Firmado = $reportesEncontrados->map(function ($reporte) {
             $detalles = json_decode($reporte->Detalles_Generales, true);
