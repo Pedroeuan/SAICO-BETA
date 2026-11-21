@@ -281,33 +281,6 @@
         max-height: 80vh;
         object-fit: contain;
     }
-    .pt-navegacion-form {
-        position: fixed;
-        right: 18px;
-        bottom: 26px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        z-index: 1040;
-    }
-    .pt-navegacion-form button {
-        width: 44px;
-        height: 44px;
-        border: 1px solid #fff;
-        border-radius: 50%;
-        background: #285b89;
-        color: #fff;
-        box-shadow: 0 3px 10px #0003;
-        font-size: 25px;
-        line-height: 1;
-    }
-    .pt-navegacion-form button:hover {
-        background: #C04040;
-    }
-    .pt-navegacion-form button:focus-visible {
-        outline: 3px solid #e6a931;
-        outline-offset: 3px;
-    }
     </style>
     <style>
         #F-SGLE-708-02-PT .foto-pt-tarjeta {
@@ -454,38 +427,12 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-form-label">
-                                ¿Cliente existente?
-                                <span class="ml-3">
-                                    <label class="mr-2">
-                                        <input type="radio" name="TieneCliente"
-                                            value="si" @checked(old('TieneCliente', $Clientes->contains('Cliente', $Detalles_Generales['Cliente'] ?? '') ? 'si' : 'no') === 'si')> Sí
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="TieneCliente"
-                                            value="no" @checked(old('TieneCliente', $Clientes->contains('Cliente', $Detalles_Generales['Cliente'] ?? '') ? 'si' : 'no') === 'no')> No
-                                    </label>
-                                </span>
-                            </label>
-
-                            <!-- SELECT cuando es SI -->
-                            <select id="campoClienteSelect"
-                                    class="form-select"
-                                    name="ClienteSelect">
-                                <option value="" selected disabled>Seleccione un Cliente</option>
-                                @foreach($Clientes as $Cliente)
-                                    <option value="{{ $Cliente->Cliente }}" @selected(old('ClienteSelect', $Detalles_Generales['Cliente'] ?? '') === $Cliente->Cliente)>
-                                        {{ $Cliente->Cliente }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            <!-- INPUT cuando es NO -->
+                            <label class="col-form-label" for="campoClienteInput">Cliente</label>
+                            <input type="hidden" name="TieneCliente" value="no">
                             <input type="text" id="campoClienteInput"
-                                class="form-control inputForm mt-2"
+                                class="form-control inputForm"
                                 name="ClienteInput"
-                                value="{{ old('ClienteInput', $Detalles_Generales['Cliente'] ?? '') }}"
-                                placeholder="Ingrese nombre del cliente" style="display:none;">
+                                value="{{ $Detalles_Generales['Cliente'] ?? '' }}" readonly>
                         </div>
                     </div>
 
@@ -610,24 +557,12 @@
 
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-form-label">
-                                ¿Contrato existente?
-                                <span class="ml-3">
-                                    <label class="mr-2">
-                                        <input type="radio" name="TieneContrato" value="si" checked> Sí
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="TieneContrato" value="no"> No
-                                    </label>
-                                </span>
-                            </label>
-
-                            <!-- Input visible solo si es "SI" -->
+                            <label class="col-form-label" for="campoContrato">Contrato</label>
                             <input type="text" id="campoContrato"
                                 class="form-control inputForm"
                                 name="Detalles_Generales[Contrato]"
                                 placeholder="Ejemplo: 640853841"
-                                value="{{ old('Detalles_Generales.Contrato', $Detalles_Generales['Contrato'] ?? '') }}" required>
+                                value="{{ $Detalles_Generales['Contrato'] ?? '' }}" readonly>
                         </div>
                     </div>
 
@@ -2333,31 +2268,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('F-SGLE-708-02-PT');
-    const clienteSelect = document.getElementById('campoClienteSelect');
-    const clienteInput = document.getElementById('campoClienteInput');
-    function mostrarCliente() {
-        const existente = form.querySelector('input[name="TieneCliente"]:checked')?.value === 'si';
-        clienteSelect.style.display = existente ? 'block' : 'none';
-        clienteInput.style.display = existente ? 'none' : 'block';
-    }
-    form.querySelectorAll('input[name="TieneCliente"]').forEach(radio => radio.addEventListener('change', mostrarCliente));
-    mostrarCliente();
-    const contrato = document.getElementById('campoContrato');
-    form.querySelectorAll('input[name="TieneContrato"]').forEach(radio => radio.addEventListener('change', async function () {
-        contrato.readOnly = this.value === 'no';
-        contrato.required = this.value === 'si';
-        if (this.value !== 'no' || contrato.value.trim()) return;
-        try {
-            const response = await fetch(@json(url('/api/siguiente-contrato-interno')));
-            if (!response.ok) throw new Error('No se pudo generar el contrato interno');
-            const data = await response.json(); contrato.value = data.siguiente;
-        } catch (error) { contrato.readOnly = false; console.error(error); }
-    }));
-});
-</script>
-<script>
 /* Envío de PT: valida el formulario activo y evita bloqueos del manejador genérico. */
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('F-SGLE-708-02-PT');
@@ -2416,8 +2326,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         event.stopImmediatePropagation();
         sincronizarFirmasPt();
-        const existingClient = form.querySelector('input[name="TieneCliente"]:checked')?.value !== 'no';
-        const client = document.getElementById(existingClient ? 'campoClienteSelect' : 'campoClienteInput');
+        const client = document.getElementById('campoClienteInput');
         if (!client.value.trim()) { mostrarErrorGuardado('Selecciona o escribe el cliente del reporte.', client); return; }
         const invalid = Array.from(form.elements).find(field => field.willValidate && !field.checkValidity());
         if (invalid) {
@@ -2490,19 +2399,9 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <script>
-/* Navegación y vista ampliada de las fotografías. */
+/* Vista ampliada de las fotografías. */
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('F-SGLE-708-02-PT');
-    const navigation = document.createElement('nav'); navigation.className = 'pt-navegacion-form'; navigation.setAttribute('aria-label', 'Navegación del formulario');
-    [['↑','Ir al inicio',false],['↓','Ir al final',true]].forEach(([symbol,label,bottom]) => {
-        const button = document.createElement('button'); button.type = 'button'; button.textContent = symbol; button.title = label; button.setAttribute('aria-label', label);
-        button.addEventListener('click', () => {
-            const box = form.getBoundingClientRect();
-            const top = window.scrollY + (bottom ? box.bottom - window.innerHeight + 30 : box.top - 90);
-            window.scrollTo({top:Math.max(0,top),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
-        }); navigation.append(button);
-    });
-    document.body.append(navigation);
     const dialog = document.createElement('dialog'); dialog.className = 'pt-foto-visor'; dialog.setAttribute('aria-label', 'Vista ampliada de la imagen');
     const header = document.createElement('div'); header.className = 'pt-visor-cabecera';
     const title = document.createElement('strong'); title.textContent = 'Vista previa de la imagen';
@@ -2520,4 +2419,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+@include('Reportes.Reporte17025.partials.navegacion-pt')
 @endsection
