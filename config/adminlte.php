@@ -883,15 +883,27 @@ return [
                             'url' => 'inventario?view=inventario',
                         ],
                         [
-                            'text' => 'Salidas de TICS',
+                            'text' => 'P y E de TICS',
                             'icon' => 'fas fa-sign-out-alt',
-                            'url' => '/salidas-tics',
+                            //'url' => '/salidas-tics',
+                            'submenu'=> [
+                                [
+                                    'text' => 'Crear Nuevo',
+                                    'icon' => 'fas fa-plus-square',
+                                    'url' => '/salidas-tics/create',
+                                ],
+                                [
+                                    'text' => 'Desde manifiesto',
+                                    'icon' => 'far fa-file-alt',
+                                    'url' => '/salidas-tics/desde-manifiesto',
+                                ],
+                            ],
                         ],
-                        [
+                        /*[
                             'text' => 'Panel TICS',
                             'url' => '/salidas-tics/panel',
                             'icon' => 'fas fa-chart-bar',
-                        ],
+                        ],*/
                     ],
                 ],
                 
