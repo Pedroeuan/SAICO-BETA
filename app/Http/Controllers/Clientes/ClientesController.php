@@ -21,6 +21,8 @@ use App\Models\Notificacion\Notificacion;
 use App\Models\Encuesta\Encuesta;
 use App\Models\User;
 use App\Jobs\Procesamiento\GenerarReportePdfJob;
+use App\Jobs\GenerarPdfCacheJob;
+use App\Services\ServicioPdfCache;
 use App\Notifications\ComentarioReporteNotification;
 
 class ClientesController extends Controller
@@ -284,10 +286,20 @@ class ClientesController extends Controller
                 $ruta = app('router')->getRoutes()->getByName($rutasPdf[$nombreFormato]);
                 abort_unless($ruta, 404, 'Generador de PDF no encontrado');
 
-                return app()->call([
-                    $ruta->getController(),
-                    $ruta->getActionMethod(),
-                ], ['id' => (int) $reporte->idReportes]);
+                $reporteId = (int) $reporte->idReportes;
+
+                if (ServicioPdfCache::existe($reporteId)) {
+                    return ServicioPdfCache::respuesta($reporteId);
+                }
+
+                if (ServicioPdfCache::marcarPendiente($reporteId)) {
+                    GenerarPdfCacheJob::dispatch($reporteId, $rutasPdf[$nombreFormato]);
+                }
+
+                return response()->view('pdf.en_proceso', [
+                    'reporteId' => $reporteId,
+                    'url' => request()->fullUrl(),
+                ], 202);
             }
 
             $formatosProcesados = [
@@ -302,9 +314,20 @@ class ClientesController extends Controller
 
             abort_unless($generador, 404, 'Formato de PDF no disponible');
 
-            return app()->call([app($generador[0]), $generador[1]], [
-                'id' => (int) $reporte->idReportes,
-            ]);
+            $reporteId = (int) $reporte->idReportes;
+
+            if (ServicioPdfCache::existe($reporteId)) {
+                return ServicioPdfCache::respuesta($reporteId);
+            }
+
+            if (ServicioPdfCache::marcarPendiente($reporteId)) {
+                GenerarPdfCacheJob::dispatch($reporteId, null, $generador[0], $generador[1]);
+            }
+
+            return response()->view('pdf.en_proceso', [
+                'reporteId' => $reporteId,
+                'url' => request()->fullUrl(),
+            ], 202);
         }
 
         public function guardarComentario(Request $request, $token, $idReporte)
