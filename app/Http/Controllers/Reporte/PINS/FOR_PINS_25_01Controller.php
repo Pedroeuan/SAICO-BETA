@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Reporte\PINS;
 
 use App\Http\Controllers\Controller;
+use App\Services\ServicioPdfCache;
 
 use App\Models\OC\OC;
 use App\Models\Prueba\prueba;
@@ -694,6 +695,8 @@ class FOR_PINS_25_01Controller extends Controller
         reporte::where('idReportes', $id)->update([
             'Datos_Equipo' => json_encode($datosEquipo),
         ]);
+
+        ServicioPdfCache::invalidar((int) $id);
     }
 
 

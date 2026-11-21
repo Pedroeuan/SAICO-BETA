@@ -50,7 +50,7 @@ class GenerarPdfCacheJob implements ShouldQueue
 
             $destino = [$ruta->getController(), $ruta->getActionMethod()];
         } else {
-            $destino = [$this->controllerClass, $this->controllerMethod];
+            $destino = [app($this->controllerClass), $this->controllerMethod];
         }
 
         if (!$destino[0] || !$destino[1]) {

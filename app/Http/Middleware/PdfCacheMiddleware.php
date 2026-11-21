@@ -36,6 +36,13 @@ class PdfCacheMiddleware
             return $next($request);
         }
 
+        // Regeneracion manual: ?fresh=1 descarta el PDF vigente y encola otro.
+        $fresh = $request->query('fresh') === '1';
+
+        if ($fresh) {
+            ServicioPdfCache::invalidar($reporteId);
+        }
+
         // Modo interno usado por el job: genera y guarda, sin devolver la vista.
         if ($request->header('X-SAICO-PDF-GENERAR') === '1') {
             $nivel = ob_get_level();
@@ -73,7 +80,7 @@ class PdfCacheMiddleware
             return $respuesta ?? $next($request);
         }
 
-        if (ServicioPdfCache::existe($reporteId)) {
+        if (!$fresh && ServicioPdfCache::existe($reporteId)) {
             return ServicioPdfCache::respuesta($reporteId);
         }
 
@@ -83,7 +90,7 @@ class PdfCacheMiddleware
 
         return response()->view('pdf.en_proceso', [
             'reporteId' => $reporteId,
-            'url' => $request->fullUrl(),
+            'url' => ServicioPdfCache::urlPolling($request),
         ], 202);
     }
 }

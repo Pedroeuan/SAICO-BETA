@@ -287,8 +287,13 @@ class ClientesController extends Controller
                 abort_unless($ruta, 404, 'Generador de PDF no encontrado');
 
                 $reporteId = (int) $reporte->idReportes;
+                $fresh = request()->query('fresh') === '1';
 
-                if (ServicioPdfCache::existe($reporteId)) {
+                if ($fresh) {
+                    ServicioPdfCache::invalidar($reporteId);
+                }
+
+                if (!$fresh && ServicioPdfCache::existe($reporteId)) {
                     return ServicioPdfCache::respuesta($reporteId);
                 }
 
@@ -298,7 +303,7 @@ class ClientesController extends Controller
 
                 return response()->view('pdf.en_proceso', [
                     'reporteId' => $reporteId,
-                    'url' => request()->fullUrl(),
+                    'url' => ServicioPdfCache::urlPolling(request()),
                 ], 202);
             }
 
@@ -315,8 +320,13 @@ class ClientesController extends Controller
             abort_unless($generador, 404, 'Formato de PDF no disponible');
 
             $reporteId = (int) $reporte->idReportes;
+            $fresh = request()->query('fresh') === '1';
 
-            if (ServicioPdfCache::existe($reporteId)) {
+            if ($fresh) {
+                ServicioPdfCache::invalidar($reporteId);
+            }
+
+            if (!$fresh && ServicioPdfCache::existe($reporteId)) {
                 return ServicioPdfCache::respuesta($reporteId);
             }
 
@@ -326,7 +336,7 @@ class ClientesController extends Controller
 
             return response()->view('pdf.en_proceso', [
                 'reporteId' => $reporteId,
-                'url' => request()->fullUrl(),
+                'url' => ServicioPdfCache::urlPolling(request()),
             ], 202);
         }
 

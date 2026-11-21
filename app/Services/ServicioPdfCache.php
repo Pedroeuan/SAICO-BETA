@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -63,5 +64,38 @@ class ServicioPdfCache
     public static function limpiarPendiente(int $reporteId): void
     {
         Cache::forget("pdf_cache_pendiente_{$reporteId}");
+    }
+
+    /**
+     * Descarta el PDF vigente de un reporte para que la proxima peticion lo regenere.
+     * Se llama cuando cambian el reporte o cualquiera de sus tablas relacionadas.
+     */
+    public static function invalidar(int $reporteId): void
+    {
+        $ruta = self::ruta($reporteId);
+
+        if (file_exists($ruta)) {
+            @unlink($ruta);
+        }
+
+        $temporal = glob($ruta . '.tmp.*') ?: [];
+
+        foreach ($temporal as $archivo) {
+            @unlink($archivo);
+        }
+
+        self::limpiarPendiente($reporteId);
+    }
+
+    /**
+     * URL usada por la vista de espera: conserva los demas parametros pero quita
+     * `fresh` para que el polling no invalide y reencole indefinidamente.
+     */
+    public static function urlPolling(Request $request): string
+    {
+        $query = $request->query();
+        unset($query['fresh']);
+
+        return $request->url() . ($query ? '?' . http_build_query($query) : '');
     }
 }
