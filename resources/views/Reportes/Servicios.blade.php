@@ -48,10 +48,7 @@
 @endsection
 
 @section('content')
-<br>
-<br>
-<br>
-<br>
+@include('Reportes.Reporte17025.Partials.tabs')
 <h3 align="center">SELECCIÓN DE PRUEBA, NORMA O CODIGO Y FORMATO</h3>
 <br>
                 <section class="content">
@@ -191,6 +188,9 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
+    const normaInicial17025 = @json($formatoSeleccionado17025?->idNorma_codigo);
+    const formatoInicial17025 = @json($formatoSeleccionado17025?->idFormato);
+    let seleccionInicial17025 = true;
     const pruebaSelect = document.getElementById('PruebaSelect');
     const normaSelect = document.getElementById('NormaCodigoSelect');
     const formatoSelect = document.getElementById('FormatoSelect');
@@ -213,6 +213,11 @@
 
     // Objeto de mapeo para los nombres personalizados
     const nombresPersonalizados = {
+        "F-SGLE-708-02-PT": "LÍQUIDOS PENETRANTES",
+        "F-SGLE-708-04-PAUT": "ENSAYO DE ULTRASONIDO CON ARREGLO DE FASES",
+        "F-SGLE-708-06-MT": "PARTÍCULAS MAGNÉTICAS",
+        "F-SGLE-708-08-UT-HR": "ENSAYO DE ULTRASONIDO CON HAZ RECTO",
+        "F-SGLE-708-10-UT-HA": "ENSAYO DE ULTRASONIDO CON HAZ ANGULAR",
         "FOR-PINS-03-02": "INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS",
         "FOR-PINS-04-01": "INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES",
         "FOR-PINS-05-01": "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES",
@@ -289,7 +294,7 @@
         formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
 
         if (pruebaId) {
-            fetch(`/Obtener/normas/${pruebaId}`)
+            fetch(`/Obtener/normas/${pruebaId}?categoria={{ $categoria }}`)
                 .then(response => response.json()) //Espera la respuesta del servidor y la convierte en un objeto JSON.
                 .then(data => {
                     if (data.length > 0) {
@@ -298,7 +303,9 @@
                             option.value = norma.idNorma_codigo;
                             option.textContent = norma.Nombre;
                             normaSelect.appendChild(option);
+                            if (seleccionInicial17025 && String(norma.idNorma_codigo) === String(normaInicial17025)) option.selected = true;
                         });
+                        if (seleccionInicial17025 && normaInicial17025) normaSelect.dispatchEvent(new Event('change'));
                     } else {
                         normaSelect.innerHTML = '<option value="">No hay normas disponibles</option>';
                     }
@@ -314,7 +321,7 @@
         formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
 
         if (pruebaId) {
-            fetch(`/Obtener/formatos/${pruebaId}`)
+            fetch(`/Obtener/formatos/${pruebaId}?categoria={{ $categoria }}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.length > 0) {
@@ -324,7 +331,12 @@
                             option.textContent = formato.Nombre;
                             option.setAttribute('data-nombre-personalizado', nombresPersonalizados[formato.Nombre] || formato.Nombre); // Agregar nombre personalizado como atributo de datos
                             formatoSelect.appendChild(option);
+                            if (seleccionInicial17025 && String(formato.idFormato) === String(formatoInicial17025)) option.selected = true;
                         });
+                        if (seleccionInicial17025 && formatoInicial17025) {
+                            formatoSelect.dispatchEvent(new Event('change'));
+                            seleccionInicial17025 = false;
+                        }
                     } else {
                         formatoSelect.innerHTML = '<option value="">No hay formatos disponibles</option>';
                     }

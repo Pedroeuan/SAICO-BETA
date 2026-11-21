@@ -420,14 +420,17 @@ class ReporteController extends Controller
 
     public function ObtenerNormas($id)
     {
-        $normas = norma_codigo::where('idPrueba', $id)->get(); // Ajusta según tu estructura de base de datos
+        $normas = norma_codigo::where('idPrueba', $id)->whereHas('formato', function ($query) {
+            $query->where('Nombre', request('categoria') === '17025' ? 'like' : 'not like', 'F-SGLE-708-%');
+        })->get(); // Ajusta según tu estructura de base de datos
         return response()->json($normas); // Devuelve las normas como JSON
     }
 
     public function ObtenerFormatos($id)
     {
         //$formatos = formato::where('idPrueba', $id)->get();
-        $formatos = formato::where('idNorma_codigo', $id)->get();
+        $formatos = formato::where('idNorma_codigo', $id)
+            ->where('Nombre', request('categoria') === '17025' ? 'like' : 'not like', 'F-SGLE-708-%')->get();
         return response()->json($formatos);
     }
 
@@ -441,15 +444,31 @@ class ReporteController extends Controller
         // Obtener el valor de 'service' del cuerpo de la solicitud
         $service = $request->input('service');
 
-        return redirect()->route('Seleccion.Servicios.Pruebas', ['service' => $service]);
+        return redirect()->route('Seleccion.Servicios.Pruebas', ['service' => $service, 'categoria' => $request->input('categoria') === 'im' ? 'im' : 'general']);
     }   
 
     public function Seleccion_Servicios_Pruebas(Request $request)
     {
         $service = $request->query('service');
-        $Pruebas = prueba::with('norma_codigo.formato')->get();
+        $categoria = in_array($request->query('categoria'), ['im', '17025'], true) ? $request->query('categoria') : 'general';
+        $ultrasonido17025 = $categoria === '17025' && $request->query('servicio17025') === 'ULTRASONIDO';
+        if ($categoria === '17025' && !$request->filled('formato17025') && !$ultrasonido17025) {
+            return redirect()->route('Menu.Servicios', ['categoria' => '17025']);
+        }
+        $formatoSeleccionado17025 = null;
+        if ($ultrasonido17025) {
+            $service = 'ULTRASONIDO';
+        } elseif ($categoria === '17025') {
+            $formatoSeleccionado17025 = formato::where('Nombre', $request->query('formato17025'))
+                ->whereIn('Nombre', ['F-SGLE-708-02-PT', 'F-SGLE-708-04-PAUT', 'F-SGLE-708-06-MT', 'F-SGLE-708-08-UT-HR', 'F-SGLE-708-10-UT-HA'])
+                ->firstOrFail();
+            $service = prueba::where('idPrueba', $formatoSeleccionado17025->idPrueba)->value('Nombre');
+        }
+        $Pruebas = prueba::with('norma_codigo.formato')->whereHas('norma_codigo.formato', function ($query) use ($categoria) {
+            $query->where('Nombre', $categoria === '17025' ? 'like' : 'not like', 'F-SGLE-708-%');
+        })->get();
 
-        return view('Reportes.Servicios', compact('service', 'Pruebas'));
+        return view('Reportes.Servicios', compact('service', 'Pruebas', 'categoria', 'formatoSeleccionado17025'));
     }
 
     public function Edicion_Reportes($id)
@@ -667,6 +686,11 @@ class ReporteController extends Controller
     public function formatoNombrePersonalizado ($Nombre_Formato)
     {
         $nombresPersonalizados = [
+            'F-SGLE-708-02-PT' => 'LÍQUIDOS PENETRANTES',
+            'F-SGLE-708-04-PAUT' => 'ENSAYO DE ULTRASONIDO CON ARREGLO DE FASES',
+            'F-SGLE-708-06-MT' => 'PARTÍCULAS MAGNÉTICAS',
+            'F-SGLE-708-08-UT-HR' => 'ENSAYO DE ULTRASONIDO CON HAZ RECTO',
+            'F-SGLE-708-10-UT-HA' => 'ENSAYO DE ULTRASONIDO CON HAZ ANGULAR',
             "FOR-PINS-03-02" => "INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS",
             "FOR-PINS-04-01" => "INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES",
             "FOR-PINS-05-01" => "INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES",
@@ -1168,6 +1192,21 @@ class ReporteController extends Controller
         $Formato = formato::where('idFormato',$idFormato)->first();
         $Nombre_Formato = $Formato->Nombre;
 
+        if ($Nombre_Formato === 'F-SGLE-708-02-PT') {
+            return redirect()->route('Reporte_F_SGLE_708_02_PT.PDF', ['id' => $id]);
+        }
+        if ($Nombre_Formato === 'F-SGLE-708-04-PAUT') {
+            return redirect()->route('Reporte_F_SGLE_708_04_PAUT.PDF', ['id' => $id]);
+        }
+        if ($Nombre_Formato === 'F-SGLE-708-06-MT') {
+            return redirect()->route('Reporte_F_SGLE_708_06_MT.PDF', ['id' => $id]);
+        }
+        if ($Nombre_Formato === 'F-SGLE-708-08-UT-HR') {
+            return redirect()->route('Reporte_F_SGLE_708_08_UT_HR.PDF', ['id' => $id]);
+        }
+        if ($Nombre_Formato === 'F-SGLE-708-10-UT-HA') {
+            return redirect()->route('Reporte_F_SGLE_708_10_UT_HA.PDF', ['id' => $id]);
+        }
         if($Nombre_Formato == "FOR-PINS-04-01")
         {
             return redirect()->route('Reporte_FOR_PINS_04_01.PDF', ['id' => $id]);

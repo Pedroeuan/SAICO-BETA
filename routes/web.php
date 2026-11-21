@@ -78,6 +78,11 @@ use App\Http\Controllers\Reporte\PINS\FOR_PINS_03_02Controller;
 use App\Http\Controllers\Reporte\PINS\FOR_PINS_05_02Controller;
 use App\Http\Controllers\Reporte\PINS\FOR_PINS_11_02Controller;
 use App\Http\Controllers\Reporte\INS\FOR_03_PRO_INS_15Controller;
+use App\Http\Controllers\Reporte\Reporte17025\F_SGLE_708_02_PTController;
+use App\Http\Controllers\Reporte\Reporte17025\F_SGLE_708_04_PAUTController;
+use App\Http\Controllers\Reporte\Reporte17025\F_SGLE_708_06_MTController;
+use App\Http\Controllers\Reporte\Reporte17025\F_SGLE_708_08_UT_HRController;
+use App\Http\Controllers\Reporte\Reporte17025\F_SGLE_708_10_UT_HAController;
 use App\Http\Controllers\solicitud_AD\SolicitudADController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\Procedimientos\ProcedimientoController;
@@ -315,6 +320,38 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
 
         /*API para obtener el siguiente contrato interno*/
         Route::get('/api/siguiente-contrato-interno', [ReporteController::class, 'obtenerSiguienteContratoInterno']);
+
+        /* Reportes 17025 */
+        /*Ruta de Guardado Reportes/17025 F_SGLE_708_02_PT*/
+        Route::post('/Reportes_F_SGLE_708_02_PT/store', [F_SGLE_708_02_PTController::class, 'F_SGLE_708_02_PT_store'])->name('Reportes_F_SGLE_708_02_PT.store');
+        /*Ruta de Actualización Reportes/17025 F_SGLE_708_02_PT*/
+        Route::post('/Reportes_F_SGLE_708_02_PT/update/{id}', [F_SGLE_708_02_PTController::class, 'F_SGLE_708_02_PT_update'])->name('Reportes_F_SGLE_708_02_PT.update');
+        /*Ruta de PDF Reportes/17025 F_SGLE_708_02_PT*/
+        Route::get('/Reporte/F-SGLE-708-02-PT/PDF/{id}', [F_SGLE_708_02_PTController::class, 'F_SGLE_708_02_PT'])->name('Reporte_F_SGLE_708_02_PT.PDF');
+        /*Ruta de Guardado Reportes/17025 F_SGLE_708_04_PAUT*/
+        Route::post('/Reportes_F_SGLE_708_04_PAUT/store', [F_SGLE_708_04_PAUTController::class, 'F_SGLE_708_04_PAUT_store'])->name('Reportes_F_SGLE_708_04_PAUT.store');
+        /*Ruta de Actualización Reportes/17025 F_SGLE_708_04_PAUT*/
+        Route::post('/Reportes_F_SGLE_708_04_PAUT/update/{id}', [F_SGLE_708_04_PAUTController::class, 'F_SGLE_708_04_PAUT_update'])->name('Reportes_F_SGLE_708_04_PAUT.update');
+        /*Ruta de PDF Reportes/17025 F_SGLE_708_04_PAUT*/
+        Route::get('/Reporte/F-SGLE-708-04-PAUT/PDF/{id}', [F_SGLE_708_04_PAUTController::class, 'F_SGLE_708_04_PAUT'])->name('Reporte_F_SGLE_708_04_PAUT.PDF');
+        /*Ruta de Guardado Reportes/17025 F_SGLE_708_06_MT*/
+        Route::post('/Reportes_F_SGLE_708_06_MT/store', [F_SGLE_708_06_MTController::class, 'F_SGLE_708_06_MT_store'])->name('Reportes_F_SGLE_708_06_MT.store');
+        /*Ruta de Actualización Reportes/17025 F_SGLE_708_06_MT*/
+        Route::post('/Reportes_F_SGLE_708_06_MT/update/{id}', [F_SGLE_708_06_MTController::class, 'F_SGLE_708_06_MT_update'])->name('Reportes_F_SGLE_708_06_MT.update');
+        /*Ruta de PDF Reportes/17025 F_SGLE_708_06_MT*/
+        Route::get('/Reporte/F-SGLE-708-06-MT/PDF/{id}', [F_SGLE_708_06_MTController::class, 'F_SGLE_708_06_MT'])->name('Reporte_F_SGLE_708_06_MT.PDF');
+        /*Ruta de Guardado Reportes/17025 F_SGLE_708_08_UT_HR*/
+        Route::post('/Reportes_F_SGLE_708_08_UT_HR/store', [F_SGLE_708_08_UT_HRController::class, 'F_SGLE_708_08_UT_HR_store'])->name('Reportes_F_SGLE_708_08_UT_HR.store');
+        /*Ruta de Actualización Reportes/17025 F_SGLE_708_08_UT_HR*/
+        Route::post('/Reportes_F_SGLE_708_08_UT_HR/update/{id}', [F_SGLE_708_08_UT_HRController::class, 'F_SGLE_708_08_UT_HR_update'])->name('Reportes_F_SGLE_708_08_UT_HR.update');
+        /*Ruta de PDF Reportes/17025 F_SGLE_708_08_UT_HR*/
+        Route::get('/Reporte/F-SGLE-708-08-UT-HR/PDF/{id}', [F_SGLE_708_08_UT_HRController::class, 'F_SGLE_708_08_UT_HR'])->name('Reporte_F_SGLE_708_08_UT_HR.PDF');
+        /*Ruta de Guardado Reportes/17025 F_SGLE_708_10_UT_HA*/
+        Route::post('/Reportes_F_SGLE_708_10_UT_HA/store', [F_SGLE_708_10_UT_HAController::class, 'F_SGLE_708_10_UT_HA_store'])->name('Reportes_F_SGLE_708_10_UT_HA.store');
+        /*Ruta de Actualización Reportes/17025 F_SGLE_708_10_UT_HA*/
+        Route::post('/Reportes_F_SGLE_708_10_UT_HA/update/{id}', [F_SGLE_708_10_UT_HAController::class, 'F_SGLE_708_10_UT_HA_update'])->name('Reportes_F_SGLE_708_10_UT_HA.update');
+        /*Ruta de PDF Reportes/17025 F_SGLE_708_10_UT_HA*/
+        Route::get('/Reporte/F-SGLE-708-10-UT-HA/PDF/{id}', [F_SGLE_708_10_UT_HAController::class, 'F_SGLE_708_10_UT_HA'])->name('Reporte_F_SGLE_708_10_UT_HA.PDF');
 
         /*Ruta de Guardado Reportes/INS*/
         /*Ruta de Guardado Reportes/PINS FOR_PINS_04_01*/

@@ -247,6 +247,11 @@ class ClientesController extends Controller
             )->value('Nombre');
 
             $rutasPdf = [
+                'F-SGLE-708-02-PT' => 'Reporte_F_SGLE_708_02_PT.PDF',
+                'F-SGLE-708-04-PAUT' => 'Reporte_F_SGLE_708_04_PAUT.PDF',
+                'F-SGLE-708-06-MT' => 'Reporte_F_SGLE_708_06_MT.PDF',
+                'F-SGLE-708-08-UT-HR' => 'Reporte_F_SGLE_708_08_UT_HR.PDF',
+                'F-SGLE-708-10-UT-HA' => 'Reporte_F_SGLE_708_10_UT_HA.PDF',
                 'FOR-PINS-04-01' => 'Reporte_FOR_PINS_04_01.PDF',
                 'FOR-PINS-05-01' => 'Reporte_FOR_PINS_05_01.PDF',
                 'FOR-PINS-06-01' => 'Reporte_FOR_PINS_06_01.PDF',

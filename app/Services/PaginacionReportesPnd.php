@@ -15,7 +15,7 @@ class PaginacionReportesPnd
     public static function admite(?string $formato): bool
     {
         // El 12 no tiene vistas de edicion ni plantillas PDF en el proyecto.
-        return $formato !== 'FOR-PINS-12-01' && str_starts_with($formato ?? '', 'FOR-PINS-');
+        return $formato !== 'FOR-PINS-12-01' && (str_starts_with($formato ?? '', 'FOR-PINS-') || in_array($formato, ['F-SGLE-708-02-PT', 'F-SGLE-708-04-PAUT', 'F-SGLE-708-06-MT', 'F-SGLE-708-08-UT-HR', 'F-SGLE-708-10-UT-HA'], true));
     }
 
     /** Valida antes de guardar y recupera la serie del servidor, nunca del formulario. */
