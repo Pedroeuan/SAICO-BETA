@@ -478,6 +478,10 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                         </div>
                         <form id="formModalServicios" action="{{ route('Nuevo.Reporte.DesdeModal', ['id' => 0]) }}" method="post" enctype="multipart/form-data">
                             @csrf
+                            <div class="nav nav-tabs mb-3" id="categoriasReporteModal">
+                                <button type="button" class="nav-link active" data-categoria="general">PINS e IM</button>
+                                <button type="button" class="nav-link" data-categoria="17025">17025</button>
+                            </div>
                             <div class="row g-3">
                                 <div class="col-12">
                                     <label class="form-label">Prueba Seleccionada</label>
@@ -562,6 +566,11 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                     };
 
                     const nombresPersonalizados = {
+                        'F-SGLE-708-02-PT': 'LÍQUIDOS PENETRANTES',
+                        'F-SGLE-708-04-PAUT': 'ENSAYO DE ULTRASONIDO CON ARREGLO DE FASES',
+                        'F-SGLE-708-06-MT': 'PARTÍCULAS MAGNÉTICAS',
+                        'F-SGLE-708-08-UT-HR': 'ENSAYO DE ULTRASONIDO CON HAZ RECTO',
+                        'F-SGLE-708-10-UT-HA': 'ENSAYO DE ULTRASONIDO CON HAZ ANGULAR',
                         'FOR-PINS-03-02': 'INFORME DE INSPECCIÓN CON PARTÍCULAS MAGNÉTICAS',
                         'FOR-PINS-04-01': 'INFORME DE INSPECCIÓN CON LÍQUIDOS PENETRANTES',
                         'FOR-PINS-05-01': 'INFORME DE INSPECCIÓN DE SOLDADURAS CON ULTRASONIDO DE ACUERDO CON AWS D1.1 PARA COMPONENTES NO TUBULARES',
@@ -593,6 +602,17 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                     idReporteOriginalInput.value = idReporteSeleccionado;
                     modalForm.action = '/Nuevo/Reporte/DesdeModal/' + idReporteSeleccionado;
 
+                    let categoriaReporte = 'general';
+                    document.querySelectorAll('#categoriasReporteModal [data-categoria]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            categoriaReporte = button.dataset.categoria;
+                            document.querySelectorAll('#categoriasReporteModal .nav-link').forEach(tab => tab.classList.toggle('active', tab === button));
+                            pruebaSelect.value = '';
+                            pruebaSelect.dispatchEvent(new Event('change'));
+                            formatoNombrePersonalizadoInput.value = '';
+                            formatoNombreLabel.textContent = 'SELECCIONE UN FORMATO';
+                        });
+                    });
                     pruebaSelect.addEventListener('change', function () {
                         const pruebaId = this.value;
                         const selectedText = this.options[this.selectedIndex]?.text || '';
@@ -600,7 +620,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                         formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
 
                         if (pruebaId) {
-                            fetch(`/Obtener/normas/${pruebaId}`)
+                            fetch(`/Obtener/normas/${pruebaId}?categoria=${categoriaReporte}`)
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.length > 0) {
@@ -635,7 +655,7 @@ $(document).on("click", ".btnSiguienteReporte", function() {
                         formatoSelect.innerHTML = '<option value="">Seleccione un Formato</option>';
 
                         if (pruebaId) {
-                            fetch(`/Obtener/formatos/${pruebaId}`)
+                            fetch(`/Obtener/formatos/${pruebaId}?categoria=${categoriaReporte}`)
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.length > 0) {

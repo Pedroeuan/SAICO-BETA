@@ -26,15 +26,48 @@
 @endsection
 
 @section('content')
-<br>  
-<br>
-<br>
-    <div class="row" data-masonry="{&quot;percentPosition&quot;: true }" style="position: relative; height: 690px;">
-
-        <!-- 1ra columna -->
-        <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 0%; top: 0px;">
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+@include('Reportes.Reporte17025.Partials.tabs')
+@if(request('categoria') === '17025')
+    @php
+        $servicios17025 = [
+            ['F-SGLE-708-02-PT', 'LÍQUIDOS PENETRANTES', 'LIQUIDOS_PENETRANTES.svg'],
+            ['F-SGLE-708-04-PAUT', 'ULTRASONIDO CON ARREGLO DE FASES', 'ARREGLO_FASES.svg'],
+            ['F-SGLE-708-06-MT', 'PARTÍCULAS MAGNÉTICAS', 'PARTICULAS_MAGNETICAS.svg'],
+            ['ULTRASONIDO', 'ULTRASONIDO', 'ULTRASONIDO.svg'],
+        ];
+    @endphp
+    <style>
+        .services17025-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; padding-bottom:32px; }
+        .service17025-card { display:block; background:#C04040; color:white; text-decoration:none; transition:transform .3s ease; }
+        .service17025-card:hover { transform:scale(1.03); color:white; text-decoration:none; }
+        .service17025-card:focus-visible { outline:3px solid #0869ad; outline-offset:4px; }
+        @media(max-width:991px) { .services17025-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+        @media(max-width:575px) { .services17025-grid { grid-template-columns:1fr; } }
+    </style>
+    <div class="services17025-grid">
+        @foreach($servicios17025 as [$codigo, $nombre, $imagen])
+            <a class="service17025-card" href="{{ route('Seleccion.Servicios.Pruebas', ['categoria' => '17025', ($codigo === 'ULTRASONIDO' ? 'servicio17025' : 'formato17025') => $codigo]) }}">
+                <svg width="100%" height="200" role="img" aria-label="{{ $nombre }} — {{ $codigo }}" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+                    <title>{{ $nombre }} — {{ $codigo }}</title>
+                    <rect width="100%" height="100%" fill="#C04040" />
+                    <image href="{{ asset('images/Menu Servicios SVG/' . $imagen) }}" x="10%" y="8%" width="80%" height="68%" />
+                    <text x="50%" y="88%" fill="white" font-size="18" font-weight="bold" text-anchor="middle">
+                        @if(str_starts_with($nombre, 'ULTRASONIDO CON '))
+                            <tspan x="50%">ULTRASONIDO</tspan>
+                            <tspan x="50%" dy="20">{{ str_replace('ULTRASONIDO ', '', $nombre) }}</tspan>
+                        @else
+                            {{ $nombre }}
+                        @endif
+                    </text>
+                </svg>
+            </a>
+        @endforeach
+    </div>
+@else
+<div class="row">
+    @if(request('categoria') === 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="ANÁLISIS QUÍMICO" 
@@ -49,10 +82,11 @@
                         x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ANÁLISIS QUÍMICO</text>
                 </svg>
-                
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="CORRIENTES EDDY"
@@ -66,10 +100,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/CORRIENTES_EDDY.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CORRIENTES EDDY</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') === 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="METALOGRAFÍA"
@@ -82,10 +117,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/METALOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">METALOGRAFÍA</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="ULTRASONIDO" 
@@ -98,10 +134,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/ULTRASONIDO.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ULTRASONIDO</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="TERMOGRAFÍA" 
@@ -114,10 +151,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/TERMOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TERMOGRAFÍA</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="ACFM" 
@@ -130,14 +168,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/ACFM.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ACFM</text>
                 </svg>
-
         </div>
-
-        <!-- 2da columna -->
-        
-        <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 33.3333%; top: 0px;">         
-            
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="ARREGLO DE FASES" 
@@ -150,10 +185,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/ARREGLO_FASES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ARREGLO DE FASES</text>
                 </svg>
-
-            <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') === 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="DUREZAS" 
@@ -167,10 +203,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/DUREZAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">DUREZAS</text>
                 </svg>
-
-            <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="PARTÍCULAS MAGNÉTICAS" 
@@ -183,9 +220,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/PARTICULAS_MAGNETICAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PARTÍCULAS MAGNÉTICAS</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-                    <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') === 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                         width="100%" height="200" 
                         role="img" aria-label="TRATAMIENTO TÉRMICO DE PWHT" 
@@ -198,10 +237,11 @@
                         <image href="{{ asset('images/Menu Servicios SVG/RELEVADO_ESFUERZOS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                         <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TRATAMIENTO TÉRMICO DE PWHT</text>
                     </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="ONDAS GUIADAS" 
@@ -214,10 +254,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/ONDAS_GUIADAS.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">ONDAS GUIADAS</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="OTROS" 
@@ -231,12 +272,10 @@
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">OTROS</text>
                 </svg>
         </div>
-
-            <!-- 3ra columna -->
-            
-            <div class="col-sm-6 col-lg-4 mb-4" style="position: absolute; left: 66.6667%; top: 0px;">
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+    @endif
+    @if(request('categoria') === 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="CARACTERIZACIÓN DE MATERIALES" 
@@ -249,10 +288,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/CARACTERIZACION_MATERIALES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">CARACTERIZACIÓN DE MATERIALES</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="LÍQUIDOS PENETRANTES" 
@@ -265,10 +305,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/LIQUIDOS_PENETRANTES.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">LÍQUIDOS PENETRANTES</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') === 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="PMI" 
@@ -281,19 +322,21 @@
                     <image href="{{ asset('images/Menu Servicios SVG/PMI.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">PMI</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="RADIOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect" width="100%" height="200" role="img" aria-label="RADIOGRAFIA" focusable="false" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                     <title>RADIOGRAFIA</title>
                     <rect width="100%" height="100%" fill="#C04040"></rect>
                     <image href="{{ asset('images/Menu Servicios SVG/RADIOGRAFIA.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">RADIOGRAFIA</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="VISUAL" 
@@ -306,10 +349,11 @@
                     <image href="{{ asset('images/Menu Servicios SVG/Inspección_Visual.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">VISUAL</text>
                 </svg>
-
-                <div style="margin-bottom: 15px;"></div>
-
-                <svg class="bd-placeholder-img card-img-top expansive-effect"
+        </div>
+    @endif
+    @if(request('categoria') !== 'im')
+        <div class="col-sm-6 col-lg-4 mb-3">
+<svg class="bd-placeholder-img card-img-top expansive-effect"
 
                     width="100%" height="200" 
                     role="img" aria-label="TOFD" 
@@ -322,11 +366,10 @@
                     <image href="{{ asset('images/Menu Servicios SVG/TOFD.svg') }}" x="10%" y="10%" width="80%" height="70%" />
                     <text x="50%" y="95%" fill="white" font-size="20" text-anchor="middle" font-weight="bold">TOFD</text>
                 </svg>
-
         </div>
-
-
-    </div>
+    @endif
+</div>
+@endif
 @stop
 
 @section('js')
@@ -358,7 +401,7 @@
         const serviceName = element.getAttribute('data-name');
 
         // Preparamos los datos que enviaremos en la solicitud POST
-        const data = { service: serviceName };
+        const data = { service: serviceName, categoria: @json(request('categoria') === 'im' ? 'im' : 'general') };
         //console.log('Datos a enviar:', data);
 
         // Enviamos la solicitud POST con Fetch API
