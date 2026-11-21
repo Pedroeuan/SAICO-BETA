@@ -133,7 +133,7 @@ class OCController extends Controller
         $request->validate([
             'Contrato' => 'required|string',
             'TieneCliente' => 'required|in:si,no',
-            'Numero_OC' => 'required|integer',
+            'Numero_OC' => 'required|string',
             'Requisicion' => 'required|string',
             //'Proyecto' => 'required|string',
             //'Lugar_trabajo' => 'required|string',
@@ -497,7 +497,7 @@ class OCController extends Controller
     {
         //dd($request->all());
         $request->validate([
-            'Numero_OC' => 'required|integer',
+            'Numero_OC' => 'required|string',
             'Requisicion' => 'required|string',
             'Proyecto' => 'required|string',
             'Lugar_trabajo' => 'required|string',
