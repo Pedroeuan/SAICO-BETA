@@ -11,7 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Cachea los PDF de reportes y los genera en la cola cuando no existen.
+        $middleware->web(append: [\App\Http\Middleware\PdfCacheMiddleware::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Las fotografias Base64 no deben copiarse a la sesion al fallar una validacion.
