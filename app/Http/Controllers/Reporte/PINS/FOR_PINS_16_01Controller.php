@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Reporte\PINS;
 
 use App\Http\Controllers\Controller;
+use App\Services\ServicioPdfCache;
 
 use App\Models\OC\OC;
 use App\Models\Prueba\prueba;
@@ -349,6 +350,8 @@ class FOR_PINS_16_01Controller extends Controller
         reporte::where('idReportes', $id)->update([
             'Datos_Equipo' => json_encode($datosEquipo),
         ]);
+
+        ServicioPdfCache::invalidar((int) $id);
     }
 
     /** Una corrección en las plantillas debe descartar también el PDF anterior. */
@@ -1879,6 +1882,7 @@ class FOR_PINS_16_01Controller extends Controller
         $validatedData['Datos_Equipo']['QR_PDF'] = $resultadoQR['qr'];
         $validatedData['Datos_Equipo']['PDF_UNIFICADO'] = $resultadoQR['pdf'] ?? null;
         reporte::where('idReportes', $id)->update(['Datos_Equipo' => json_encode($validatedData['Datos_Equipo'])]);
+        ServicioPdfCache::invalidar((int) $id);
 
         /* Fotos y Comentarios */
         // Obtener los valores necesarios para la ruta personalizada
