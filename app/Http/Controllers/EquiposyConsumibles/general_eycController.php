@@ -99,10 +99,6 @@ class general_eycController extends Controller
 
     public function createEquipos()
     {
-        // Obtener el usuario autenticado
-        $user = Auth::user();
-        // Obtener el nombre del usuario
-        $Nombre = $user->name;
         $rol = Auth::user()->rol;
         $general = general_eyc::get();
         //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();

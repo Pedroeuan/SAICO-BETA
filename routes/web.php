@@ -999,13 +999,13 @@ use App\Http\Controllers\OrdenServicio\OrdenServicioController;
     /*TICS PRESTAMO Y REGUARDO DE EQUIPOS DE TICS*/
     Route::middleware('can:tics-access')->group(function () {
     /*Ruta de Vista de create TICS*/
-    Route::get('/salidas-tics/index', [PrestamosTICSController::class, 'index'])->name('TICS.indexOC');
+    Route::get('/salidas-tics/index', [PrestamosTICSController::class, 'index'])->name('TICS.index');
     /*Ruta de Vista de Registro de TICS*/
-    Route::get('/salidas-tics/create', [PrestamosTICSController::class, 'create'])->name('TICS.createOC');
+    Route::get('/salidas-tics/create', [PrestamosTICSController::class, 'create'])->name('TICS.create');
     /*Ruta de Guardado*/
-    Route::post('/salidas-tics/store', [PrestamosTICSController::class, 'storeOC'])->name('TICS.storeOC'); 
+    Route::post('/salidas-tics/store', [PrestamosTICSController::class, 'storeOC'])->name('TICS.store'); 
     /*Ruta de Actualizar TICS*/
-    Route::post('/salidas-tics/update/{id}', [PrestamosTICSController::class, 'updateOC'])->name('TICS.updateOC');
+    Route::post('/salidas-tics/update/{id}', [PrestamosTICSController::class, 'updateOC'])->name('TICS.update');
     /*Rutas de Vista de Edición-index*/
     Route::get('/TICS/edit/{id}', [PrestamosTICSController::class, 'edit'])->name('TICS.edit');
     /*Ruta de botón Eliminación-index-TICS*/

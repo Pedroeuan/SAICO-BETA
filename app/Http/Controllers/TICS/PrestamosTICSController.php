@@ -2,9 +2,19 @@
 
 namespace App\Http\Controllers\TICS;
 
-use App\Models\TICS\Prestamos_TICS;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+use App\Models\TICS\Prestamos_TICS;
+use App\Models\EquiposyConsumibles\general_eyc;
 class PrestamosTICSController extends Controller
 {
     /**
@@ -20,7 +30,16 @@ class PrestamosTICSController extends Controller
      */
     public function create()
     {
-        return view('TICS.create');
+        $rol = Auth::user()->rol;
+        $general = general_eyc::get();
+        //$generalConCertificados = general_eyc::with('certificados')->where('Disponibilidad_Estado', 'DISPONIBLE')->get();
+        $generalConCertificados = general_eyc::with('certificados')
+        ->where(function ($query) {
+            $query->where('Disponibilidad_Estado', 'DISPONIBLE')
+                ->where('Tipo', 'TICS');
+                })
+        ->get();
+        return view('TICS.create', compact('general','generalConCertificados','rol'));
     }
 
     /**
