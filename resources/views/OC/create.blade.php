@@ -50,7 +50,7 @@
 <br>
 <br>
 <br>
-<h3 align="center">Registro de Orden de Compra</h3>
+<h3 align="center">Registro de Cotización</h3>
 <br>
                 <section class="content">
                     <div class="card">

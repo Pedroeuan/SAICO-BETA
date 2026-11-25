@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (this.value === "no") {
                 //console.log("Seleccionado: no");
-                campoContrato.readOnly = true;
+                campoContrato.readOnly = false;
                 campoContrato.required = false;
                 campoContrato.placeholder = "Generando contrato interno...";
 

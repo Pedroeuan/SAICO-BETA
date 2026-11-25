@@ -103,7 +103,32 @@
         @endif
     </div>
 @endif
+@php
+    $errors = $errors ?? new \Illuminate\Support\ViewErrorBag();
+@endphp
 <br>
+
+<div class="card card-outline card-primary mb-3">
+    <div class="card-header">
+        <h3 class="card-title mb-0">
+            <i class="fas fa-edit"></i> Editar datos de la Orden de Compra
+        </h3>
+    </div>
+    <div class="card-body">
+        @include('OC.partials.edit_form', [
+            'id' => $id,
+            'OC' => $OC,
+            'detallesOC' => $detallesOC,
+            'catalogo' => $catalogo,
+            'detallesOCM' => $detallesOCM,
+            'Nombre_Cliente' => $Nombre_Cliente,
+            'totales' => $totales,
+            'Condiciones_Pago' => $Condiciones_Pago,
+            'Condiciones_Generales' => $Condiciones_Generales,
+            'numFirmas' => $numFirmas,
+        ])
+    </div>
+</div>
 
 <div id="oc-comentarios-historial" data-id="{{ $id }}">
 @include('OC.Revision.partials.comentarios', [
@@ -115,7 +140,7 @@
 
     <div class="card">
         <div class="card-body row">
-            <form id="OC" action="{{ route('OC.updateOC_Revision', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
+            <form id="OCRevision" action="{{ route('OC.updateOC_Revision', ['id' => $id]) }}" method="post" enctype="multipart/form-data">
             @csrf 
                 <input type="hidden" id="Revision_Marcas" name="Revision_Marcas">
                 <section class="content">
@@ -172,7 +197,7 @@
                                 </div>
                                 <div class="card-body p-2">
                                     <label for="Revision_OC" class="mb-1">Escribe una nueva observación</label>
-                                    <textarea form="OC"
+                                    <textarea form="OCRevision"
                                             name="Revision_OC"
                                             id="Revision_OC"
                                             class="form-control @error('Revision_OC') is-invalid @enderror"

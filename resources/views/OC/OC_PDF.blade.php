@@ -698,8 +698,8 @@
                                 </td>
                                 <td>{{ $detalle->cantidad ?? '' }}</td>
                                 <td>{{ $detalle->unidad ?? '' }}</td>
-                                <td>{{ $detalle->valor_unitario ?? '' }}</td>
-                                <td>{{ $detalle->valor_total ?? '' }}</td>
+                                <td>${{ number_format((float) ($detalle->valor_unitario ?? 0), 2) }}</td>
+                                <td>${{ number_format((float) ($detalle->valor_total ?? 0), 2) }}</td>
                             </tr>
                         @endforeach
                         <tr>

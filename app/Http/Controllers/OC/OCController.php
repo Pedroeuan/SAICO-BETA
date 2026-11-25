@@ -131,10 +131,10 @@ class OCController extends Controller
         //
         //$request->all();
         $request->validate([
-            'Contrato' => 'required|string',
+            //'Contrato' => 'required|string',
             'TieneCliente' => 'required|in:si,no',
-            'Numero_OC' => 'required|string',
-            'Requisicion' => 'required|string',
+            //'Numero_OC' => 'required|string',
+            //'Requisicion' => 'required|string',
             //'Proyecto' => 'required|string',
             //'Lugar_trabajo' => 'required|string',
         ]);
@@ -152,7 +152,9 @@ class OCController extends Controller
 
             // Si el usuario altera el value o no llegue, se recalcula en backend
             $actual = $request->input('Contrato');
-
+            if($actual === 'N/A' || $actual === 'n/a' || $actual === null || $actual === '') {
+                $actual = null;
+            }
             // Verificar que realmente tenga el formato correcto
             if (!$actual || !preg_match('/^AICO-INT-[0-9]{4}$/', $actual)) {
 
