@@ -154,6 +154,7 @@ class OCController extends Controller
             $actual = $request->input('Contrato');
             if($actual === 'N/A' || $actual === 'n/a' || $actual === null || $actual === '') {
                 $actual = 'N/A';
+                $OC->Contrato = $actual;
             }
             // Verificar que realmente tenga el formato correcto
             if (!$actual || !preg_match('/^AICO-INT-[0-9]{4}$/', $actual)) {
